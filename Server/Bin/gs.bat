@@ -1,0 +1,1 @@
+dotnet GateServer.dll -c Config/GSCfg.json

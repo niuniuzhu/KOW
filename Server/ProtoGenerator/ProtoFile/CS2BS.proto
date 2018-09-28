@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+
+message CS2BS_GCLoginRet{
+	enum EResult{
+		Success = 0;
+		Failed = 1;
+	}
+	MsgOpts opts = 1;
+	EResult result = 2;
+}
+
+message BS_PlayerInfo{
+	uint32 gsid = 1;
+}
+
+//房间信息
+message CS2BS_RoomInfo{
+	MsgOpts opts = 1;
+	repeated BS_PlayerInfo playerInfo = 2;
+}

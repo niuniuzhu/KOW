@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CentralServer": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Config/CSCfg.json -d Config/CSDBCfg.json"
+    }
+  }
+}

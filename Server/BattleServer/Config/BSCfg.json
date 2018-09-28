@@ -1,0 +1,12 @@
+{
+    "ID": 40001,
+    "externalIP": "127.0.0.1",
+    "externalPort": 40001,
+    "csIP": "127.0.0.1",
+    "csPort": 10003,
+    "reportInterval": 10000,
+    "pingInterval": 10000,
+    "gcLive": 15000,
+    "frameRate": 20,
+    "keyFrameStep": 4 
+}

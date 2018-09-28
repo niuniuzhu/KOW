@@ -1,0 +1,13 @@
+{
+    "gsID": 30001,
+    "name": "local",
+    "externalIP": "127.0.0.1",
+    "externalPort": 30001,
+    "password": "123456",
+    "maxConnection": 10000,
+    "csIP": "127.0.0.1",
+    "csPort": 10002,
+    "reportInterval": 10000,
+    "pingInterval": 10000,
+    "gcLive": 15000 
+}

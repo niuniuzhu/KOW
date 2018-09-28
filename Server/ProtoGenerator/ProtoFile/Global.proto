@@ -1,0 +1,120 @@
+﻿syntax = "proto3";
+package Protos;
+
+enum MsgID {
+	Undefine = 0;
+
+	eG_AskPing = 10;
+	eG_AskPingRet = 11;
+
+	//gc
+	eGC2LS_AskRegister = 1000;
+	eGC2LS_AskLogin = 1001;
+
+	eGC2GS_AskLogin = 1100;
+	eGC2GS_KeepAlive = 1101;
+
+	eGC2BS_AskLogin = 1200;
+	eGC2BS_KeepAlive = 1201;
+
+	eGC2CS_BeginMatch = 1300;
+	
+	//ls
+	eLS2GC_GSInfo = 2000;
+	eLS2GC_AskRegRet = 2001;
+	eLS2GC_AskLoginRet = 2002;
+
+	eLS2CS_GCLogin = 2100;
+
+	eLS2DB_QueryAccount = 2200;
+	eLS2DB_QueryLogin = 2201;
+	eLS2DB_Exec = 2202;
+
+	//gs
+	eGS2CS_ReportState = 3000;
+	eGS2CS_GCAskLogin = 3001;
+	eGS2CS_GCLost = 3002;
+
+	eGS2GC_LoginRet = 3100;
+
+	//bs
+	eBS2CS_ReportState = 4000;
+	eBS2CS_GCAskLogin = 4001;
+	eBS2CS_GCLost = 4002;
+	eBS2CS_RommInfoRet = 4003;
+
+	eBS2GC_LoginRet = 4100;
+
+	//cs
+	eCS2LS_GSInfos = 5000;
+	eCS2LS_GSInfo = 5001;
+	eCS2LS_GSLost = 5002;
+	eCS2LS_GCLoginRet = 5003;
+
+	eCS2GS_GCLoginRet = 5100;
+
+	eCS2BS_GCLoginRet = 5200;
+	eCS2BS_RoomInfo = 5201;
+
+	eCS2GC_BeginMatchRet = 5300;
+
+	//db
+	eDB2LS_QueryAccountRet = 8000;
+	eDB2LS_QueryLoginRet = 8001;
+	eDB2LS_ExecRet = 8002;
+}
+
+message MsgOpts {
+	enum Flag {
+		Norm = 0;
+		RPC = 1;
+		RESP = 2;
+		TRANS = 4;
+	}
+	enum TransTarget{
+		GC = 0;
+		CS = 1;
+		BS = 2;
+		LS = 3;
+		DB = 4;
+		GS = 5;
+	}
+	//protobuf是变长编码的,数值在0-127就只会用花费一个byte
+	uint32 flag = 1;		//消息标记,每个位用途,0:正常消息,1:是否rpc消息,2:是否回应rpc的消息,3:是否转发消息,4-5:转发目标
+	uint32 pid = 2;			//运行时消息pid
+	uint32 rpid = 3;		//回应对应请求的消息的pid
+	uint64 transid = 4;		//转发的网络id
+}
+
+message G_AskPing {
+	MsgOpts opts = 1;
+	int64 time = 2;
+}
+
+message G_AskPingRet {
+	MsgOpts opts = 1;
+	int64 stime = 2;
+	int64 time = 3;
+}
+
+/*
+<ext>
+{
+	"RespID": {
+		"G_AskPing": "G_AskPingRet",
+		"LS2CS_GCLogin":"CS2LS_GCLoginRet",
+		"GC2LS_AskRegister": "LS2GC_AskRegRet",
+		"GC2LS_AskLogin": "LS2GC_AskLoginRet",
+		"GC2GS_AskLogin": "GS2GC_LoginRet",
+		"GS2CS_GCAskLogin": "CS2GS_GCLoginRet",
+		"BS2CS_GCAskLogin": "CS2BS_GCLoginRet",
+		"GC2BS_AskLogin": "BS2GC_LoginRet",
+		"LS2DB_QueryAccount":"DB2LS_QueryAccountRet",
+		"LS2DB_QueryLogin":"DB2LS_QueryLoginRet",
+		"LS2DB_Exec":"DB2LS_ExecRet",
+		"GC2CS_BeginMatch":"CS2GC_BeginMatchRet",
+		"CS2BS_RoomInfo":"BS2CS_RommInfoRet"
+	}
+}
+</ext>
+*/

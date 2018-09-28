@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+
+message CS2GS_GCLoginRet{
+	enum EResult{
+		Success = 0;
+		Failed = 1;
+	}
+	MsgOpts opts = 1;
+	EResult result = 2;
+}

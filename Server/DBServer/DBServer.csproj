@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>netcoreapp2.1</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>..\Bin\</OutputPath>
+		<Version>1.0.0</Version>
+		<Authors>Ron</Authors>
+		<Company>RC</Company>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CommandLineParser" Version="2.2.1" />
+	  <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Core\Core.csproj" />
+	  <ProjectReference Include="..\Protocol\Protocol.csproj" />
+	  <ProjectReference Include="..\Shared\Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Config\DBCfg.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Config\DBLogCfg.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

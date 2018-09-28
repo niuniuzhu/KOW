@@ -1,0 +1,11 @@
+{
+    "csID": 1,
+    "lsPort": 10001,
+    "gsPort": 10002,
+    "bsPort": 10003,
+    "maxGSNum": 10,
+    "redisIP": "127.0.0.1",
+    "redisPort": 7000,
+    "redisPwd": "159753",
+    "sessionExpTime": 60000
+}

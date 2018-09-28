@@ -1,0 +1,1 @@
+SQL的主键和外键的作用 https://www.jianshu.com/p/394f8aa724f4

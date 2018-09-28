@@ -1,0 +1,38 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+import "GS2CS.proto";
+
+//通知客户端GS信息
+message LS2GC_GSInfo {
+	MsgOpts opts = 1;
+	repeated Protos.GSInfo gsInfos = 2;
+}
+
+//返回注册结果
+message LS2GC_AskRegRet {
+	enum EResult{
+		Success = 0;
+		Failed = 1;
+		UnameExists = 2;
+		UnameIllegal = 3;
+		PwdIllegal = 4;
+	}
+	MsgOpts opts = 1;
+	EResult result = 2;
+}
+
+//返回登陆结果
+message LS2GC_AskLoginRet {
+	enum EResult{
+		Success = 0;
+		Failed = 1;
+		InvalidUname = 3;
+		InvalidPwd = 4;
+	}
+	MsgOpts opts = 1;
+	EResult result = 2;
+	uint64 sessionID = 3;
+	repeated Protos.GSInfo gsInfos = 4;
+}

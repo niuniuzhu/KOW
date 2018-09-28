@@ -1,0 +1,1 @@
+dotnet DBServer.dll -c Config/DBCfg.json

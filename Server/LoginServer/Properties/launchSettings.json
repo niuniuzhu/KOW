@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LoginServer": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Config/LSCfg.json"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DBServer": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Config/DBCfg.json"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "lsPort": 20001,
+    "csPort": 20002,
+    "dbs": [
+        {
+            "ip": "127.0.0.1",
+            "port": "3306",
+            "user": "root",
+            "pwd": "ron159753",
+            "dbname": "df_accountdb"
+        },
+        {
+            "ip": "127.0.0.1",
+            "port": "3306",
+            "user": "root",
+            "pwd": "ron159753",
+            "dbname": "df_gamedb"
+        }
+    ]
+}

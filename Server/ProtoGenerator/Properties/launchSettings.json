@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ProtoGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "csharp .\\ProtoFile ..\\Protocol",
+      "workingDirectory": "D:\\Projects\\H5\\Project\\DarkForest\\Server\\ProtoGenerator"
+    }
+  }
+}

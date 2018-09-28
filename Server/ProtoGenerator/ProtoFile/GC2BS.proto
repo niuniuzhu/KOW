@@ -1,0 +1,14 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+
+message GC2BS_AskLogin{
+	MsgOpts opts = 1;
+	string pwd = 2;
+	uint64 sessionID = 3;
+}
+
+message GC2BS_KeepAlive{
+	MsgOpts opts = 1;
+}

@@ -1,0 +1,33 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+import "GS2CS.proto";
+
+//GS信息
+message CS2LS_GSInfos{
+	MsgOpts opts = 1;
+	repeated Protos.GSInfo gsInfo = 2;
+}
+
+//GS信息
+message CS2LS_GSInfo{
+	MsgOpts opts = 1;
+	Protos.GSInfo gsInfo = 2;
+}
+
+//GS关服
+message CS2LS_GSLost{
+	MsgOpts opts = 1;
+	uint32 gsid = 2;
+}
+
+//返回登陆结果
+message CS2LS_GCLoginRet {
+	enum EResult{
+		Success = 0;
+		Failed = 1;
+	}
+	MsgOpts opts = 1;
+	EResult result = 2;
+}

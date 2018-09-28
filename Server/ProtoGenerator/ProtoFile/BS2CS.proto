@@ -1,0 +1,36 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+
+message BSInfo{
+	enum State{
+		Free = 0;
+		Busy = 1;
+		Full = 2;
+		Close = 3;
+	}
+	uint32 id = 1;
+	string ip = 3;
+	int32 port = 4;
+	State state = 6;
+}
+
+message BS2CS_ReportState{
+	MsgOpts opts = 1;
+	BSInfo bsInfo = 2;
+}
+
+message BS2CS_GCAskLogin{
+	MsgOpts opts = 1;
+	uint64 sessionID = 2;
+}
+
+message BS2CS_GCLost{
+	MsgOpts opts = 1;
+	uint64 sessionID = 2;
+}
+
+message BS2CS_RommInfoRet{
+	MsgOpts opts = 1;
+}

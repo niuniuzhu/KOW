@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.1</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>..\Bin\</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="log4net" Version="2.0.8" />
+	</ItemGroup>
+
+</Project>

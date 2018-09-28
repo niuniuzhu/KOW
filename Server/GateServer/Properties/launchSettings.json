@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GateServer": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Config/GSCfg.json"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+dotnet BattleServer.dll -c Config/BSCfg.json

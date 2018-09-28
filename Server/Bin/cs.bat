@@ -1,0 +1,1 @@
+dotnet CentralServer.dll -c Config/CSCfg.json -d Config/CSDBCfg.json

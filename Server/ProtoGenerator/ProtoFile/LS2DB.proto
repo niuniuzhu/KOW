@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+
+message LS2DB_QueryAccount{
+	MsgOpts opts = 1;
+	string name = 2;
+}
+
+message LS2DB_QueryLogin{
+	MsgOpts opts = 1;
+	string name = 2;
+	string pwd = 3;
+}
+
+message LS2DB_Exec {
+	MsgOpts opts = 1;
+	string cmd = 2;
+}

@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+
+//匹配回应
+message CS2GC_BeginMatchRet {
+	MsgOpts opts = 1;
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="dvbmzwcp" jpegQuality="80" compressPNG="true">
+  <resources>
+    <component id="ypb40" name="Main.xml" path="/" exported="true"/>
+  </resources>
+  <publish name="Cutscene"/>
+</packageDescription>

@@ -1,0 +1,18 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "client",
+			"type": "chrome",
+			"request": "launch",
+			"file": "${workspaceRoot}/Bin/index.html",
+			"runtimeArgs": [
+				"--allow-file-access-from-files",
+				"--auto-open-devtools-for-tabs"
+			],
+			"sourceMaps": true,
+			"webRoot": "${workspaceRoot}",
+			"disableNetworkCache": true,
+		}
+	]
+}

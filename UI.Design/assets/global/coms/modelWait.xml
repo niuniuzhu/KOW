@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="400,400">
+  <displayList>
+    <graph id="n1_w4k4" name="n1" xy="0,0" size="400,400" alpha="0.7" touchable="false" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <movieclip id="n0_w4k4" name="n0" src="iqcm15" fileName="assets/qtm011.jta" xy="175,184">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </movieclip>
+  </displayList>
+</component>

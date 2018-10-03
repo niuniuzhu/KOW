@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="588,504" designImageLayer="1">
+  <controller name="c1" pages="0,,1,,2," selected="0"/>
+  <displayList>
+    <image id="n1_kqy5" name="n1" src="kqy54" fileName="assets/kuang06.png" xy="0,0"/>
+    <component id="n7_kqy5" name="enter_reg_btn" src="kqy5f" fileName="coms/blue_btn.xml" xy="66,383">
+      <gearDisplay controller="c1" pages="0"/>
+      <Button title="注册" titleColor="#ffffff" titleFontSize="36" controller="c1" page="1"/>
+    </component>
+    <component id="n8_kqy5" name="login_btn" src="kqy5e" fileName="coms/green_btn.xml" xy="302,383">
+      <gearDisplay controller="c1" pages="0"/>
+      <Button title="登陆" titleColor="#ffffff" titleFontSize="36"/>
+    </component>
+    <image id="n13_kqy5" name="n13" src="kqy53" fileName="assets/denglu.png" xy="234,11">
+      <gearDisplay controller="c1" pages="0"/>
+    </image>
+    <image id="n15_kqy5" name="n15" src="kqy58" fileName="assets/zhuce.png" xy="235,12">
+      <gearDisplay controller="c1" pages="1"/>
+    </image>
+    <image id="n16_kqy5" name="n16" src="kqy57" fileName="assets/xuanqu.png" xy="234,12">
+      <gearDisplay controller="c1" pages="2"/>
+    </image>
+    <component id="n17_kqy5" name="cancel_btn" src="kqy5f" fileName="coms/blue_btn.xml" xy="66,383">
+      <gearDisplay controller="c1" pages="1,2"/>
+      <Button title="取消" titleColor="#ffffff" titleFontSize="36" controller="c1" page="0"/>
+    </component>
+    <component id="n18_kqy5" name="reg_btn" src="kqy5e" fileName="coms/green_btn.xml" xy="302,383">
+      <gearDisplay controller="c1" pages="1"/>
+      <Button title="注册" titleColor="#ffffff" titleFontSize="36"/>
+    </component>
+    <component id="n19_kqy5" name="enter_btn" src="kqy5e" fileName="coms/green_btn.xml" xy="302,383">
+      <gearDisplay controller="c1" pages="2"/>
+      <Button title="进入游戏" titleColor="#ffffff" titleFontSize="36"/>
+    </component>
+    <image id="n3_kqy5" name="n3" src="kqy55" fileName="assets/kuang07.png" xy="197,169" group="n20_kqy5"/>
+    <image id="n4_kqy5" name="n4" src="kqy55" fileName="assets/kuang07.png" xy="197,248" group="n20_kqy5"/>
+    <text id="n5_kqy5" name="n5" xy="101,170" size="83,49" group="n20_kqy5" fontSize="38" color="#55acff" bold="true" text="账号"/>
+    <text id="n6_kqy5" name="n6" xy="101,249" size="83,49" group="n20_kqy5" fontSize="38" color="#55acff" bold="true" text="密码"/>
+    <group id="n20_kqy5" name="n20" xy="101,169" size="382,131" advanced="true">
+      <gearDisplay controller="c1" pages="0,1"/>
+    </group>
+    <text id="n11_kqy5" name="name" xy="197,169" size="286,52" input="true" fontSize="30" color="#ffffff" vAlign="middle" autoSize="none" bold="true" text="">
+      <gearDisplay controller="c1" pages="0"/>
+    </text>
+    <text id="n12_kqy5" name="password" xy="197,248" size="286,52" input="true" password="true" fontSize="30" color="#ffffff" vAlign="middle" autoSize="none" bold="true" text="">
+      <gearDisplay controller="c1" pages="0"/>
+    </text>
+    <text id="n23_fwbx" name="reg_name" xy="197,169" size="286,52" input="true" fontSize="30" color="#ffffff" vAlign="middle" autoSize="none" bold="true" text="">
+      <gearDisplay controller="c1" pages="1"/>
+    </text>
+    <text id="n24_fwbx" name="reg_password" xy="197,248" size="286,52" input="true" password="true" fontSize="30" color="#ffffff" vAlign="middle" autoSize="none" bold="true" text="">
+      <gearDisplay controller="c1" pages="1"/>
+    </text>
+    <list id="n25_bwsy" name="alist" xy="140,101" size="307,266" overflow="scroll" lineGap="18" defaultItem="ui://ytr6jf79kqy5g" autoClearItems="true">
+      <gearDisplay controller="c1" pages="2"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

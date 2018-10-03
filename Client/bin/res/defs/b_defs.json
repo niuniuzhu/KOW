@@ -1,0 +1,256 @@
+{
+	"user": {
+		"mine": 300,
+		"energy": 200
+	},
+	"preloads": [
+		"global.fui,0",
+		"global_atlas0.png,1",
+		"login.fui,0",
+		"login_atlas0.png,1",
+		"cutscene.fui,0",
+		"cutscene.png,1"
+	],
+	"maps": {
+		"m0": {
+			"name": "test",
+			"model": "m0",
+			"tile_slope": 45,
+			"tile_aspect": 0.5,
+			"tile_ratio": 108,
+			"size": [
+				2160,
+				1280
+			]
+		}
+	},
+	"entities": {
+		"b0": {
+			"name": "发电厂",
+			"model": "b0",
+			"footprint": [
+				4,
+				0,
+				4
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": 50,
+					"atk": 0,
+					"def": 20
+				}
+			]
+		},
+		"b1": {
+			"name": "test",
+			"model": "b1",
+			"footprint": [
+				5,
+				0,
+				4
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": -10,
+					"atk": 40,
+					"def": 30
+				}
+			]
+		},
+		"b2": {
+			"name": "test",
+			"model": "b2",
+			"footprint": [
+				4,
+				0,
+				4
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": -6,
+					"atk": 14,
+					"def": 10
+				}
+			]
+		},
+		"b3": {
+			"name": "test",
+			"model": "b3",
+			"footprint": [
+				4,
+				0,
+				3
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": -4,
+					"atk": 20,
+					"def": 20
+				}
+			]
+		},
+		"b4": {
+			"name": "test",
+			"model": "b4",
+			"footprint": [
+				4,
+				0,
+				5
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": -4,
+					"atk": 13,
+					"def": 10
+				}
+			]
+		},
+		"b5": {
+			"name": "test",
+			"model": "b5",
+			"footprint": [
+				4,
+				0,
+				4
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": -4,
+					"atk": 13,
+					"def": 10
+				}
+			]
+		},
+		"b6": {
+			"name": "test",
+			"model": "b6",
+			"footprint": [
+				4,
+				0,
+				4
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": -4,
+					"atk": 12,
+					"def": 10
+				}
+			]
+		},
+		"b7": {
+			"name": "test",
+			"model": "b7",
+			"footprint": [
+				4,
+				0,
+				2
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": -4,
+					"atk": 8,
+					"def": 10
+				}
+			]
+		},
+		"b8": {
+			"name": "test",
+			"model": "b8",
+			"footprint": [
+				2,
+				0,
+				2
+			],
+			"lvl": [
+				{
+					"build_time": 15000,
+					"mine": -30,
+					"energy": -20,
+					"power": -4,
+					"atk": 10,
+					"def": 10
+				}
+			]
+		},
+		"b9": {
+			"name": "test",
+			"model": "b9",
+			"footprint": [
+				4,
+				0,
+				6
+			],
+			"lvl": [
+				{
+					"build_time": 150000000,
+					"mine": -30,
+					"energy": -20,
+					"power": -4,
+					"atk": 10,
+					"def": 10
+				}
+			]
+		},
+		"b10": {
+			"name": "test",
+			"model": "b10",
+			"footprint": [
+				4,
+				0,
+				4
+			],
+			"lvl": [
+				{
+					"build_time": 15000000,
+					"mine": -30,
+					"energy": -20,
+					"power": -4,
+					"atk": 10,
+					"def": 10
+				}
+			]
+		}
+	},
+	"task": [
+		"建造一个发电场&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ffffff\">0/1</font><br><br>任务奖励：<font color=\"#ffff00\">获得矿石1000，能源1000。</font>",
+		"建造一个交易所&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ffffff\">0/1</font><br><br>任务奖励：<font color=\"#ffff00\">获得矿石4000，能源4000。</font>",
+		"建造一个科研所&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ffffff\">0/1</font><br><br>任务奖励：<font color=\"#ffff00\">获得矿石3000，能源3000。</font>",
+		"攻击一个星球&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ffffff\">0/1</font><br><br>任务奖励：<font color=\"#ffff00\">获得矿石5000，能源2000。</font>",
+		"获得矿石10000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ffffff\">0/1</font><br><br>任务奖励：<font color=\"#ffff00\">获得矿石5000，能源3000。</font>",
+		"建造一个空间站&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ffffff\">0/1</font><br><br>任务奖励：<font color=\"#ffff00\">获得矿石4000，能源3000。</font>",
+		"建造一个军工厂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ffffff\">0/1</font><br><br>任务奖励：<font color=\"#ffff00\">获得矿石4000，能源3000。</font>"
+	],
+	"message": [
+		"你获得进阶礼包<br><br>恭喜你获得进阶礼包，<font color=\"#ffff00\">矿石+8000，能源+8000。</font>",
+		"你获得新手礼包<br><br>恭喜你获得新手礼包，<font color=\"#ffff00\">矿石+3000，能源+2000。</font>",
+		"系统公告<br><br>庆贺黑暗森林内测，将有一系列狂欢活动，切勿错过。",
+		"你攻击敌方星球<br><br>你成功突破敌方星球的防御，成功缴获<font color=\"#ffff00\">矿石+3400，能源+3200。</font>",
+		"你被敌方星球攻击<br><br>你成功抵御敌方星球的防御，没有任何损失。",
+		"你被敌方星球攻击<br><br>敌方星球的成功突破你的防线，损失<font color=\"#ffff00\">矿石4000，能源+3000。</font>",
+		"欢迎进入黑暗森林<br><br>欢迎进入黑暗森林的星际世界，祝您游戏愉快。"
+	]
+}

@@ -42,7 +42,7 @@ namespace ProtoGenerator
 				sb.AppendLine( $"\t\tvar msg = new {ns}.{kv.Key}();" );
 				sb.AppendLine( $"\t\tmsg.Opts = new {ns}.MsgOpts();" );
 				if ( responseToMsgID.ContainsKey( kv.Key ) )
-					sb.AppendLine( $"\t\tmsg.Opts.Flag |= (uint){ns}.MsgOpts.Types.Flag.Rpc;" );
+					sb.AppendLine( $"\t\tmsg.Opts.Flag |= 1 << (int){ns}.MsgOpts.Types.Flag.Rpc;" );
 				sb.AppendLine( "\t\treturn msg;" );
 				sb.AppendLine( "\t}" );
 				sb.AppendLine();
@@ -58,7 +58,7 @@ namespace ProtoGenerator
 				sb.AppendLine( $"\tpublic static {ns}.{kv.Value} R_{kv.Key}( uint pid ) {{" );
 				sb.AppendLine( $"\t\tvar msg = new {ns}.{kv.Value}();" );
 				sb.AppendLine( $"\t\tmsg.Opts = new {ns}.MsgOpts();" );
-				sb.AppendLine( $"\t\tmsg.Opts.Flag |= (uint){ns}.MsgOpts.Types.Flag.Resp;" );
+				sb.AppendLine( $"\t\tmsg.Opts.Flag |= 1 << (int){ns}.MsgOpts.Types.Flag.Resp;" );
 				sb.AppendLine( "\t\tmsg.Opts.Rpid = pid;" );
 				sb.AppendLine( "\t\treturn msg;" );
 				sb.AppendLine( "\t}" );

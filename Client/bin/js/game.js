@@ -83,7 +83,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static Q_G_AskPing() {
             let msg = new protos_1.Protos.G_AskPing();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_G_AskPingRet() {
@@ -94,19 +94,19 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static Q_GC2LS_AskRegister() {
             let msg = new protos_1.Protos.GC2LS_AskRegister();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_GC2LS_AskLogin() {
             let msg = new protos_1.Protos.GC2LS_AskLogin();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_GC2GS_AskLogin() {
             let msg = new protos_1.Protos.GC2GS_AskLogin();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_GC2GS_KeepAlive() {
@@ -117,7 +117,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static Q_GC2BS_AskLogin() {
             let msg = new protos_1.Protos.GC2BS_AskLogin();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_GC2BS_KeepAlive() {
@@ -128,7 +128,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static Q_GC2CS_BeginMatch() {
             let msg = new protos_1.Protos.GC2CS_BeginMatch();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_LS2GC_GSInfo() {
@@ -149,25 +149,25 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static Q_LS2CS_GCLogin() {
             let msg = new protos_1.Protos.LS2CS_GCLogin();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_LS2DB_QueryAccount() {
             let msg = new protos_1.Protos.LS2DB_QueryAccount();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_LS2DB_QueryLogin() {
             let msg = new protos_1.Protos.LS2DB_QueryLogin();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_LS2DB_Exec() {
             let msg = new protos_1.Protos.LS2DB_Exec();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_GS2CS_ReportState() {
@@ -178,7 +178,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static Q_GS2CS_GCAskLogin() {
             let msg = new protos_1.Protos.GS2CS_GCAskLogin();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_GS2CS_GCLost() {
@@ -199,7 +199,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static Q_BS2CS_GCAskLogin() {
             let msg = new protos_1.Protos.BS2CS_GCAskLogin();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_BS2CS_GCLost() {
@@ -250,7 +250,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static Q_CS2BS_RoomInfo() {
             let msg = new protos_1.Protos.CS2BS_RoomInfo();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RPC;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_CS2GC_BeginMatchRet() {
@@ -276,91 +276,91 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static R_G_AskPing(pid) {
             let msg = new protos_1.Protos.G_AskPingRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_LS2CS_GCLogin(pid) {
             let msg = new protos_1.Protos.CS2LS_GCLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_GC2LS_AskRegister(pid) {
             let msg = new protos_1.Protos.LS2GC_AskRegRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_GC2LS_AskLogin(pid) {
             let msg = new protos_1.Protos.LS2GC_AskLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_GC2GS_AskLogin(pid) {
             let msg = new protos_1.Protos.GS2GC_LoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_GS2CS_GCAskLogin(pid) {
             let msg = new protos_1.Protos.CS2GS_GCLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_BS2CS_GCAskLogin(pid) {
             let msg = new protos_1.Protos.CS2BS_GCLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_GC2BS_AskLogin(pid) {
             let msg = new protos_1.Protos.BS2GC_LoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_LS2DB_QueryAccount(pid) {
             let msg = new protos_1.Protos.DB2LS_QueryAccountRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_LS2DB_QueryLogin(pid) {
             let msg = new protos_1.Protos.DB2LS_QueryLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_LS2DB_Exec(pid) {
             let msg = new protos_1.Protos.DB2LS_ExecRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_GC2CS_BeginMatch(pid) {
             let msg = new protos_1.Protos.CS2GC_BeginMatchRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
         static R_CS2BS_RoomInfo(pid) {
             let msg = new protos_1.Protos.BS2CS_RommInfoRet();
             msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
             return msg;
         }
@@ -1009,7 +1009,7 @@ define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter
             let opts = ProtoHelper_1.ProtoCreator.GetMsgOpts(message);
             RC.Logger.Assert(opts != null, "invalid message options");
             opts.pid = this._pid++;
-            if ((opts.flag & protos_2.Protos.MsgOpts.Flag.RPC) > 0 && rpcHandler != null) {
+            if ((opts.flag & (1 << protos_2.Protos.MsgOpts.Flag.RPC)) > 0 && rpcHandler != null) {
                 if (this._rpcHandlers.has(opts.pid))
                     RC.Logger.Warn("packet id collision!!");
                 this._rpcHandlers.set(opts.pid, rpcHandler);
@@ -1033,7 +1033,7 @@ define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter
             let message = ProtoHelper_1.ProtoCreator.DecodeMsg(msgID, data, data.length - 4);
             let opts = ProtoHelper_1.ProtoCreator.GetMsgOpts(message);
             RC.Logger.Assert(opts != null, "invalid msg options");
-            if ((opts.flag & protos_2.Protos.MsgOpts.Flag.RESP) > 0) {
+            if ((opts.flag & (1 << protos_2.Protos.MsgOpts.Flag.RESP)) > 0) {
                 let rcpHandler = this._rpcHandlers.get(opts.rpid);
                 RC.Logger.Assert(rcpHandler != null, "RPC handler not found");
                 this._rpcHandlers.delete(opts.rpid);
@@ -1399,6 +1399,8 @@ define("UI/UICutscene", ["require", "exports", "Net/Network", "../libs/protos", 
         }
         Enter(param) {
             let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
+            beginMatch.opts.flag |= 1 << 3;
+            beginMatch.opts.flag |= 1 << 4;
             Network_2.Network.Send(protos_5.Protos.GC2CS_BeginMatch, beginMatch, message => {
                 let resp = message;
                 console.log(resp);

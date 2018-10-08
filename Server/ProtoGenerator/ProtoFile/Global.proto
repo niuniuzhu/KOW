@@ -69,7 +69,7 @@ message MsgOpts {
 		Norm = 0;
 		RPC = 1;
 		RESP = 2;
-		TRANS = 4;
+		TRANS = 3;
 	}
 	enum TransTarget{
 		GC = 0;

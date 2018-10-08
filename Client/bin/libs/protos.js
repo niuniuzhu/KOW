@@ -1538,14 +1538,14 @@ define(["libs/protobufjs"], function($protobuf) {
              * @property {number} Norm=0 Norm value
              * @property {number} RPC=1 RPC value
              * @property {number} RESP=2 RESP value
-             * @property {number} TRANS=4 TRANS value
+             * @property {number} TRANS=3 TRANS value
              */
             MsgOpts.Flag = (function() {
                 var valuesById = {}, values = Object.create(valuesById);
                 values[valuesById[0] = "Norm"] = 0;
                 values[valuesById[1] = "RPC"] = 1;
                 values[valuesById[2] = "RESP"] = 2;
-                values[valuesById[4] = "TRANS"] = 4;
+                values[valuesById[3] = "TRANS"] = 3;
                 return values;
             })();
     

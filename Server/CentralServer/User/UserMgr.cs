@@ -1,20 +1,28 @@
 ﻿using Core.Misc;
 using Shared;
 using System.Collections.Generic;
+using Google.Protobuf;
 
 namespace CentralServer.User
 {
 	public class UserMgr
 	{
-		public readonly Dictionary<ulong, User> gcNIDToUser = new Dictionary<ulong, User>();
-		public readonly List<User> users = new List<User>();
+		public readonly Dictionary<ulong, CUser> gcNIDToUser = new Dictionary<ulong, CUser>();
+		public readonly List<CUser> users = new List<CUser>();
+
+		public ErrorCode SendToUser( ulong gcNID, IMessage msg )
+		{
+			if ( !this.gcNIDToUser.TryGetValue( gcNID, out CUser user ) )
+				return ErrorCode.InvalidGcNID;
+			return user.Send( msg );
+		}
 
 		/// <summary>
 		/// 玩家上线
 		/// </summary>
-		public ErrorCode UserOnline( ulong gcNID, uint ukey, uint gsNID, out User user )
+		public ErrorCode UserOnline( ulong gcNID, uint ukey, uint gsNID, out CUser user )
 		{
-			user = new User( gcNID, ukey, gsNID );
+			user = new CUser( gcNID, ukey, gsNID );
 			this.gcNIDToUser[gcNID] = user;
 			this.users.Add( user );
 			Logger.Log( $"user:{gcNID} online" );
@@ -26,7 +34,7 @@ namespace CentralServer.User
 		/// </summary>
 		public ErrorCode UserOffline( ulong gcNID )
 		{
-			if ( !this.gcNIDToUser.TryGetValue( gcNID, out User user ) )
+			if ( !this.gcNIDToUser.TryGetValue( gcNID, out CUser user ) )
 				return ErrorCode.InvalidGcNID;
 			this.gcNIDToUser.Remove( gcNID );
 			this.users.Remove( user );
@@ -34,7 +42,7 @@ namespace CentralServer.User
 			return ErrorCode.Success;
 		}
 
-		public void KickUser( User user )
+		public void KickUser( CUser user )
 		{
 			this.UserOffline( user.gcNID );
 			//todo send to client and cs
@@ -48,7 +56,7 @@ namespace CentralServer.User
 			int count = this.users.Count;
 			for ( int i = 0; i < count; i++ )
 			{
-				User user = this.users[i];
+				CUser user = this.users[i];
 				if ( user.gsNID != gsNID )
 					continue;
 				this.gcNIDToUser.Remove( user.gcNID );

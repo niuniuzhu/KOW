@@ -1,9 +1,8 @@
-﻿using Core.Crypto;
+﻿using CentralServer.Match;
 using Core.Misc;
 using Core.Net;
 using Shared;
 using Shared.Net;
-using System;
 
 namespace CentralServer.Net
 {
@@ -15,6 +14,8 @@ namespace CentralServer.Net
 			this._msgCenter.Register( Protos.MsgID.EGs2CsReportState, this.OnGs2CsReportState );
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGcaskLogin, this.OnGs2CsGcaskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGclost, this.OnGs2CsGclost );
+
+			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, Matcher.instance.OnGc2CsBeginMatch );
 		}
 
 		protected override void OnEstablish()
@@ -35,7 +36,7 @@ namespace CentralServer.Net
 
 		private ErrorCode OnGSAskPing( Google.Protobuf.IMessage message )
 		{
-			Protos.G_AskPing askPing = ( Protos.G_AskPing )message;
+			Protos.G_AskPing askPing = ( Protos.G_AskPing ) message;
 			Protos.G_AskPingRet askPingRet = ProtoCreator.R_G_AskPing( askPing.Opts.Pid );
 			askPingRet.Stime = askPing.Time;
 			askPingRet.Time = TimeUtils.utcTime;
@@ -45,14 +46,14 @@ namespace CentralServer.Net
 
 		private ErrorCode OnGs2CsReportState( Google.Protobuf.IMessage message )
 		{
-			Protos.GS2CS_ReportState reportState = ( Protos.GS2CS_ReportState )message;
+			Protos.GS2CS_ReportState reportState = ( Protos.GS2CS_ReportState ) message;
 			this.logicID = reportState.GsInfo.Id;
-			return CS.instance.GStateReportHandler( reportState.GsInfo );
+			return CS.instance.GStateReportHandler( reportState.GsInfo, this.id );
 		}
 
 		private ErrorCode OnGs2CsGcaskLogin( Google.Protobuf.IMessage message )
 		{
-			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin )message;
+			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin ) message;
 			Protos.CS2GS_GCLoginRet gcAskLoginRet = ProtoCreator.R_GS2CS_GCAskLogin( gcAskLogin.Opts.Pid );
 
 			ErrorCode errorCode = CS.instance.HandleGCAskLoginFromGS( gcAskLogin.SessionID, this.logicID );
@@ -66,7 +67,7 @@ namespace CentralServer.Net
 
 		private ErrorCode OnGs2CsGclost( Google.Protobuf.IMessage message )
 		{
-			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost )message;
+			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost ) message;
 			ErrorCode errorCode = CS.instance.HandleGSGCLost( gcLost.SessionID );
 			return errorCode;
 		}

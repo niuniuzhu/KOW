@@ -23,6 +23,8 @@ namespace Shared
 
 		public const int DEFAULT_PWD_LEN = 3;
 
+		public const int ROOM_MAX_USER = 2;
+
 		public static readonly Regex REGEX_PWD = new Regex( @"" );
 	}
 
@@ -44,7 +46,9 @@ namespace Shared
 		InvalidUname,
 		InvalidPwd,
 		InvalidGcNID,
-		Du
+		InvalidGsNID,
+		MaximumUsers,
+		UserExists
 	}
 
 	public class GSInfo
@@ -57,6 +61,7 @@ namespace Shared
 			Close
 		}
 		public uint id;
+		public uint sessionID;
 		public string name;
 		public string ip;
 		public int port;

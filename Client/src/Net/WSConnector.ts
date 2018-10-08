@@ -60,7 +60,7 @@ export class WSConnector {
 		RC.Logger.Assert(opts != null, "invalid message options");
 		//为消息写入序号
 		opts.pid = this._pid++;
-		if ((opts.flag & Protos.MsgOpts.Flag.RPC) > 0 && rpcHandler != null) //如果是rpc消息,记下消息序号等待回调
+		if ((opts.flag & (1 << Protos.MsgOpts.Flag.RPC)) > 0 && rpcHandler != null) //如果是rpc消息,记下消息序号等待回调
 		{
 			if (this._rpcHandlers.has(opts.pid))
 				RC.Logger.Warn("packet id collision!!");
@@ -93,7 +93,7 @@ export class WSConnector {
 		let opts = ProtoCreator.GetMsgOpts(message);
 		RC.Logger.Assert(opts != null, "invalid msg options");
 		//是否rpc消息
-		if ((opts.flag & Protos.MsgOpts.Flag.RESP) > 0) {
+		if ((opts.flag & (1 << Protos.MsgOpts.Flag.RESP)) > 0) {
 			let rcpHandler = this._rpcHandlers.get(opts.rpid);
 			RC.Logger.Assert(rcpHandler != null, "RPC handler not found");
 			this._rpcHandlers.delete(opts.rpid);

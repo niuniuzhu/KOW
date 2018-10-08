@@ -1,6 +1,8 @@
-﻿using Core.Net;
+﻿using Core.Misc;
+using Core.Net;
 using Google.Protobuf;
 using Protos;
+using Shared;
 using Shared.Net;
 
 namespace CentralServer.Net
@@ -31,6 +33,11 @@ namespace CentralServer.Net
 			return session;
 		}
 
+		public ErrorCode SendToGC( ulong gcNid, IMessage msg, System.Action<IMessage> rpcHandler = null )
+		{
+			return CS.instance.userMgr.SendToUser( gcNid, msg );
+		}
+
 		public override bool IsTransTarget( MsgOpts.Types.TransTarget transTarget )
 		{
 			return transTarget == MsgOpts.Types.TransTarget.Cs;
@@ -38,7 +45,16 @@ namespace CentralServer.Net
 
 		public override void TransMsg( MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage msg )
 		{
-			throw new System.NotImplementedException();
+			ErrorCode errorCode = ErrorCode.Success;
+			switch ( transTarget )
+			{
+				case MsgOpts.Types.TransTarget.Gc:
+					errorCode = this.SendToGC( transID, msg );
+					break;
+			}
+
+			if ( errorCode != ErrorCode.Success )
+				Logger.Warn( $"trans message error:{errorCode}" );
 		}
 	}
 }

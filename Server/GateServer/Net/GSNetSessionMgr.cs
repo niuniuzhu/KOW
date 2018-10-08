@@ -16,12 +16,12 @@ namespace GateServer.Net
 			return session;
 		}
 
-		public void SendToGC( ulong gcNid, IMessage msg, System.Action<IMessage> rpcHandler = null )
+		public void SendToGC( ulong gcNID, IMessage msg, System.Action<IMessage> rpcHandler = null )
 		{
-			GS.instance.GcNidToSid.TryGetValue( gcNid, out uint sid );
+			GS.instance.GcNidToSid.TryGetValue( gcNID, out uint sid );
 			if ( sid <= 0 )
 			{
-				Logger.Warn( $"sid not found by gcNid:{gcNid}" );
+				Logger.Warn( $"sid not found by gcNID:{gcNID}" );
 				return;
 			}
 			this.Send( sid, msg, rpcHandler );
@@ -32,6 +32,19 @@ namespace GateServer.Net
 			return transTarget == MsgOpts.Types.TransTarget.Gs;
 		}
 
-		public override void TransMsg( MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage msg ) => this.SendToGC( transID, msg );
+		public override void TransMsg( MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage msg )
+		{
+			switch ( transTarget )
+			{
+				case MsgOpts.Types.TransTarget.Cs:
+					msg.GetMsgOpts().Transid = transID;
+					this.Send( SessionType.ServerG2CS, msg );
+					break;
+
+				case MsgOpts.Types.TransTarget.Gc:
+					this.SendToGC( transID, msg );
+					break;
+			}
+		}
 	}
 }

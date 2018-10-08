@@ -1,4 +1,4 @@
-import * as $protobuf from "../../node_modules/@types/protobufjs/index";
+import * as $protobuf from "protobufjs";
 export namespace Protos {
 
     interface IBSInfo {
@@ -183,7 +183,7 @@ export namespace Protos {
             Norm = 0,
             RPC = 1,
             RESP = 2,
-            TRANS = 4
+            TRANS = 3
         }
 
         enum TransTarget {

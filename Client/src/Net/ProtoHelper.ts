@@ -86,7 +86,7 @@ export class ProtoCreator {
 	public static Q_G_AskPing(): Protos.G_AskPing {
 		let msg = new Protos.G_AskPing();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -99,21 +99,21 @@ export class ProtoCreator {
 	public static Q_GC2LS_AskRegister(): Protos.GC2LS_AskRegister {
 		let msg = new Protos.GC2LS_AskRegister();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
 	public static Q_GC2LS_AskLogin(): Protos.GC2LS_AskLogin {
 		let msg = new Protos.GC2LS_AskLogin();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
 	public static Q_GC2GS_AskLogin(): Protos.GC2GS_AskLogin {
 		let msg = new Protos.GC2GS_AskLogin();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -126,7 +126,7 @@ export class ProtoCreator {
 	public static Q_GC2BS_AskLogin(): Protos.GC2BS_AskLogin {
 		let msg = new Protos.GC2BS_AskLogin();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -139,7 +139,7 @@ export class ProtoCreator {
 	public static Q_GC2CS_BeginMatch(): Protos.GC2CS_BeginMatch {
 		let msg = new Protos.GC2CS_BeginMatch();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -164,28 +164,28 @@ export class ProtoCreator {
 	public static Q_LS2CS_GCLogin(): Protos.LS2CS_GCLogin {
 		let msg = new Protos.LS2CS_GCLogin();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
 	public static Q_LS2DB_QueryAccount(): Protos.LS2DB_QueryAccount {
 		let msg = new Protos.LS2DB_QueryAccount();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
 	public static Q_LS2DB_QueryLogin(): Protos.LS2DB_QueryLogin {
 		let msg = new Protos.LS2DB_QueryLogin();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
 	public static Q_LS2DB_Exec(): Protos.LS2DB_Exec {
 		let msg = new Protos.LS2DB_Exec();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -198,7 +198,7 @@ export class ProtoCreator {
 	public static Q_GS2CS_GCAskLogin(): Protos.GS2CS_GCAskLogin {
 		let msg = new Protos.GS2CS_GCAskLogin();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -223,7 +223,7 @@ export class ProtoCreator {
 	public static Q_BS2CS_GCAskLogin(): Protos.BS2CS_GCAskLogin {
 		let msg = new Protos.BS2CS_GCAskLogin();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -284,7 +284,7 @@ export class ProtoCreator {
 	public static Q_CS2BS_RoomInfo(): Protos.CS2BS_RoomInfo {
 		let msg = new Protos.CS2BS_RoomInfo();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RPC;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -316,7 +316,7 @@ export class ProtoCreator {
 	public static R_G_AskPing(pid: number): Protos.G_AskPingRet {
 		let msg = new Protos.G_AskPingRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -324,7 +324,7 @@ export class ProtoCreator {
 	public static R_LS2CS_GCLogin(pid: number): Protos.CS2LS_GCLoginRet {
 		let msg = new Protos.CS2LS_GCLoginRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -332,7 +332,7 @@ export class ProtoCreator {
 	public static R_GC2LS_AskRegister(pid: number): Protos.LS2GC_AskRegRet {
 		let msg = new Protos.LS2GC_AskRegRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -340,7 +340,7 @@ export class ProtoCreator {
 	public static R_GC2LS_AskLogin(pid: number): Protos.LS2GC_AskLoginRet {
 		let msg = new Protos.LS2GC_AskLoginRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -348,7 +348,7 @@ export class ProtoCreator {
 	public static R_GC2GS_AskLogin(pid: number): Protos.GS2GC_LoginRet {
 		let msg = new Protos.GS2GC_LoginRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -356,7 +356,7 @@ export class ProtoCreator {
 	public static R_GS2CS_GCAskLogin(pid: number): Protos.CS2GS_GCLoginRet {
 		let msg = new Protos.CS2GS_GCLoginRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -364,7 +364,7 @@ export class ProtoCreator {
 	public static R_BS2CS_GCAskLogin(pid: number): Protos.CS2BS_GCLoginRet {
 		let msg = new Protos.CS2BS_GCLoginRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -372,7 +372,7 @@ export class ProtoCreator {
 	public static R_GC2BS_AskLogin(pid: number): Protos.BS2GC_LoginRet {
 		let msg = new Protos.BS2GC_LoginRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -380,7 +380,7 @@ export class ProtoCreator {
 	public static R_LS2DB_QueryAccount(pid: number): Protos.DB2LS_QueryAccountRet {
 		let msg = new Protos.DB2LS_QueryAccountRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -388,7 +388,7 @@ export class ProtoCreator {
 	public static R_LS2DB_QueryLogin(pid: number): Protos.DB2LS_QueryLoginRet {
 		let msg = new Protos.DB2LS_QueryLoginRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -396,7 +396,7 @@ export class ProtoCreator {
 	public static R_LS2DB_Exec(pid: number): Protos.DB2LS_ExecRet {
 		let msg = new Protos.DB2LS_ExecRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -404,7 +404,7 @@ export class ProtoCreator {
 	public static R_GC2CS_BeginMatch(pid: number): Protos.CS2GC_BeginMatchRet {
 		let msg = new Protos.CS2GC_BeginMatchRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}
@@ -412,7 +412,7 @@ export class ProtoCreator {
 	public static R_CS2BS_RoomInfo(pid: number): Protos.BS2CS_RommInfoRet {
 		let msg = new Protos.BS2CS_RommInfoRet();
 		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= Protos.MsgOpts.Flag.RESP;
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
 		return msg;
 	}

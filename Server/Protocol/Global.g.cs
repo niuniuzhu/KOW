@@ -27,7 +27,7 @@ namespace Protos {
             "CgxHbG9iYWwucHJvdG8SBlByb3RvcyKyAQoHTXNnT3B0cxIMCgRmbGFnGAEg",
             "ASgNEgsKA3BpZBgCIAEoDRIMCgRycGlkGAMgASgNEg8KB3RyYW5zaWQYBCAB",
             "KAQiLgoERmxhZxIICgROb3JtEAASBwoDUlBDEAESCAoEUkVTUBACEgkKBVRS",
-            "QU5TEAQiPQoLVHJhbnNUYXJnZXQSBgoCR0MQABIGCgJDUxABEgYKAkJTEAIS",
+            "QU5TEAMiPQoLVHJhbnNUYXJnZXQSBgoCR0MQABIGCgJDUxABEgYKAkJTEAIS",
             "BgoCTFMQAxIGCgJEQhAEEgYKAkdTEAUiOAoJR19Bc2tQaW5nEh0KBG9wdHMY",
             "ASABKAsyDy5Qcm90b3MuTXNnT3B0cxIMCgR0aW1lGAIgASgDIkoKDEdfQXNr",
             "UGluZ1JldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFc3Rp",
@@ -355,7 +355,7 @@ namespace Protos {
         [pbr::OriginalName("Norm")] Norm = 0,
         [pbr::OriginalName("RPC")] Rpc = 1,
         [pbr::OriginalName("RESP")] Resp = 2,
-        [pbr::OriginalName("TRANS")] Trans = 4,
+        [pbr::OriginalName("TRANS")] Trans = 3,
       }
 
       public enum TransTarget {

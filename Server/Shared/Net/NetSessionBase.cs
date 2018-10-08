@@ -32,10 +32,10 @@ namespace Shared.Net
 			opts.Pid = this._pid++;
 			if ( trans )
 			{
-				opts.Flag |= ( uint ) Protos.MsgOpts.Types.Flag.Trans;
+				opts.Flag |= 1 << ( int ) Protos.MsgOpts.Types.Flag.Trans;
 				opts.Transid = nsid;
 			}
-			if ( ( opts.Flag & ( uint ) Protos.MsgOpts.Types.Flag.Rpc ) > 0 && rpcHandler != null ) //如果是rpc消息,记下消息序号等待回调
+			if ( ( opts.Flag & ( 1 << ( int ) Protos.MsgOpts.Types.Flag.Rpc ) ) > 0 && rpcHandler != null ) //如果是rpc消息,记下消息序号等待回调
 			{
 				if ( this._rpcHandlers.ContainsKey( opts.Pid ) )
 					Logger.Warn( "packet id collision!!" );
@@ -88,7 +88,7 @@ namespace Shared.Net
 			Protos.MsgOpts opts = message.GetMsgOpts();
 			System.Diagnostics.Debug.Assert( opts != null, "invalid msg options" );
 
-			if ( ( opts.Flag & ( uint ) Protos.MsgOpts.Types.Flag.Trans ) > 0 ) //这是一条转发消息
+			if ( ( opts.Flag & ( 1 << ( int ) Protos.MsgOpts.Types.Flag.Trans ) ) > 0 ) //这是一条转发消息
 			{
 				//去掉转发标记
 				//opts.Flag &= ~( uint ) Protos.MsgOpts.Types.Flag.Trans;
@@ -102,7 +102,7 @@ namespace Shared.Net
 				}
 			}
 
-			if ( ( opts.Flag & ( uint ) Protos.MsgOpts.Types.Flag.Resp ) > 0 )//这是一条rpc消息
+			if ( ( opts.Flag & ( 1 << ( int ) Protos.MsgOpts.Types.Flag.Resp ) ) > 0 )//这是一条rpc消息
 			{
 				bool find = this._rpcHandlers.TryGetValue( opts.Rpid, out System.Action<IMessage> rcpHandler );
 				System.Diagnostics.Debug.Assert( find, "RPC handler not found" );

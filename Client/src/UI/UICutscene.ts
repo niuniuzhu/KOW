@@ -16,6 +16,8 @@ export class UICutscene implements IUIModule {
 
 	public Enter(param: any): void {
 		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
+		beginMatch.opts.flag |= 1 << 3//转发消息
+		beginMatch.opts.flag |= 1 << 4//转发到cs
 		Network.Send(Protos.GC2CS_BeginMatch, beginMatch, message=> {
 			let resp: Protos.CS2GC_BeginMatchRet = <Protos.CS2GC_BeginMatchRet>message;
 			console.log(resp);

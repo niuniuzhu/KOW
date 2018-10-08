@@ -5,7 +5,7 @@ namespace CentralServer
 {
 	public partial class CS
 	{
-		public ErrorCode GStateReportHandler( Protos.GSInfo gsInfoRecv )
+		public ErrorCode GStateReportHandler( Protos.GSInfo gsInfoRecv, uint sessionID )
 		{
 			bool hasRecord = this.nIDToGSInfos.TryGetValue( gsInfoRecv.Id, out GSInfo gsInfo );
 			if ( !hasRecord )
@@ -15,6 +15,7 @@ namespace CentralServer
 			}
 			//更新GS信息
 			gsInfo.id = gsInfoRecv.Id;
+			gsInfo.sessionID = sessionID;
 			gsInfo.name = gsInfoRecv.Name;
 			gsInfo.ip = gsInfoRecv.Ip;
 			gsInfo.port = gsInfoRecv.Port;

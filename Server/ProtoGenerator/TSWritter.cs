@@ -38,7 +38,7 @@ namespace ProtoGenerator
 				sb.AppendLine( $"\t\tlet msg = new {ns}.{kv.Key}();" );
 				sb.AppendLine( $"\t\tmsg.opts = new {ns}.MsgOpts();" );
 				if ( responseToMsgID.ContainsKey( kv.Key ) )
-					sb.AppendLine( $"\t\tmsg.opts.flag |= {ns}.MsgOpts.Flag.RPC;" );
+					sb.AppendLine( $"\t\tmsg.opts.flag |= 1 << {ns}.MsgOpts.Flag.RPC;" );
 				sb.AppendLine( "\t\treturn msg;" );
 				sb.AppendLine( "\t}" );
 				sb.AppendLine();
@@ -52,7 +52,7 @@ namespace ProtoGenerator
 				sb.AppendLine( $"\tpublic static R_{kv.Key}(pid: number): {ns}.{kv.Value} {{" );
 				sb.AppendLine( $"\t\tlet msg = new {ns}.{kv.Value}();" );
 				sb.AppendLine( $"\t\tmsg.opts = new {ns}.MsgOpts();" );
-				sb.AppendLine( $"\t\tmsg.opts.flag |= {ns}.MsgOpts.Flag.RESP;" );
+				sb.AppendLine( $"\t\tmsg.opts.flag |= 1 << {ns}.MsgOpts.Flag.RESP;" );
 				sb.AppendLine( "\t\tmsg.opts.rpid = pid;" );
 				sb.AppendLine( "\t\treturn msg;" );
 				sb.AppendLine( "\t}" );

@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using Core.Net;
+using Google.Protobuf;
 using Shared.Net;
 
 namespace GateServer.Net
@@ -53,10 +54,21 @@ namespace GateServer.Net
 		private void OnGSAskPingRet( Google.Protobuf.IMessage message )
 		{
 			long currTime = TimeUtils.utcTime;
-			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
-			long lag = ( long )( ( currTime - askPingRet.Stime ) * 0.5 );
+			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet ) message;
+			long lag = ( long ) ( ( currTime - askPingRet.Stime ) * 0.5 );
 			long timeDiff = askPingRet.Time + lag - currTime;
 			Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
+		}
+
+		protected override void TransMsg( Protos.MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage message )
+		{
+			switch ( transTarget )
+			{
+				case Protos.MsgOpts.Types.TransTarget.Gc:
+					GS.instance.GcNidToSid.TryGetValue( message.GetMsgOpts().Transid, out uint sid );
+					this.owner.Send( sid, message );
+					break;
+			}
 		}
 	}
 }

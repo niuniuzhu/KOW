@@ -92,8 +92,6 @@ namespace Shared.Net
 
 		public abstract bool IsTransTarget( Protos.MsgOpts.Types.TransTarget transTarget );
 
-		public abstract void TransMsg( Protos.MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage msg );
-
 		public void Update()
 		{
 			int count = this._sessionsToRemove.Count;
@@ -131,7 +129,7 @@ namespace Shared.Net
 		/// <param name="rpcHandler">rcp回调函数</param>
 		/// <param name="trans">是否转发消息</param>
 		/// <param name="nsid">转发的网络id</param>
-		public void Send( uint sessionId, IMessage msg, System.Action<IMessage> rpcHandler = null, bool trans = false, uint nsid = 0u )
+		public void Send( uint sessionId, IMessage msg, System.Action<IMessage> rpcHandler = null, bool trans = false, ulong nsid = 0u )
 		{
 			if ( !this.GetSession( sessionId, out INetSession session ) )
 				return;
@@ -147,7 +145,7 @@ namespace Shared.Net
 		/// <param name="trans">是否转发消息</param>
 		/// <param name="nsid">转发的网络id</param>
 		/// <param name="all">是否在查询消息类型时对所有结果生效</param>
-		public void Send( SessionType sessionType, IMessage msg, System.Action<IMessage> rpcHandler = null, bool trans = false, uint nsid = 0u, bool all = true )
+		public void Send( SessionType sessionType, IMessage msg, System.Action<IMessage> rpcHandler = null, bool trans = false, ulong nsid = 0u, bool all = true )
 		{
 			if ( !this._typeToSession.TryGetValue( sessionType, out List<NetSessionBase> sessions ) )
 				return;

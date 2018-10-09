@@ -72,12 +72,13 @@ message MsgOpts {
 		TRANS = 3;
 	}
 	enum TransTarget{
-		GC = 0;
-		CS = 1;
-		BS = 2;
-		LS = 3;
-		DB = 4;
-		GS = 5;
+		Undefine = 0;
+		GC = 1;
+		CS = 2;
+		BS = 3;
+		LS = 4;
+		DB = 5;
+		GS = 6;
 	}
 	//protobuf是变长编码的,数值在0-127就只会用花费一个byte
 	uint32 flag = 1;		//消息标记,每个位用途,0:正常消息,1:是否rpc消息,2:是否回应rpc的消息,3:是否转发消息,4-5:转发目标

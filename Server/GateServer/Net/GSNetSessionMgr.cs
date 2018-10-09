@@ -31,20 +31,5 @@ namespace GateServer.Net
 		{
 			return transTarget == MsgOpts.Types.TransTarget.Gs;
 		}
-
-		public override void TransMsg( MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage msg )
-		{
-			switch ( transTarget )
-			{
-				case MsgOpts.Types.TransTarget.Cs:
-					msg.GetMsgOpts().Transid = transID;
-					this.Send( SessionType.ServerG2CS, msg );
-					break;
-
-				case MsgOpts.Types.TransTarget.Gc:
-					this.SendToGC( transID, msg );
-					break;
-			}
-		}
 	}
 }

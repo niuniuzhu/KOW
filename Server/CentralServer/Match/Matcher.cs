@@ -15,9 +15,13 @@ namespace CentralServer.Match
 		{
 		}
 
-		public ErrorCode OnGc2CsBeginMatch( IMessage message )
+		public ErrorCode OnGc2CsBeginMatch( uint sid, IMessage message )
 		{
 			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch ) message;
+			Protos.CS2GC_BeginMatchRet ret = ProtoCreator.R_GC2CS_BeginMatch( beginMatch.Opts.Pid );
+			ProtoCreator.MakeTransMessage( ret, Protos.MsgOpts.Types.TransTarget.Gc, beginMatch.Opts.Transid );
+			CS.instance.netSessionMgr.Send( sid, ret );
+			return ErrorCode.Success;
 		}
 	}
 }

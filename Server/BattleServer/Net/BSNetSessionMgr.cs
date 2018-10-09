@@ -19,10 +19,5 @@ namespace BattleServer.Net
 		{
 			return transTarget == MsgOpts.Types.TransTarget.Bs;
 		}
-
-		public override void TransMsg( MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage msg )
-		{
-			throw new System.NotImplementedException();
-		}
 	}
 }

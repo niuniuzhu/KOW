@@ -1553,21 +1553,23 @@ define(["libs/protobufjs"], function($protobuf) {
              * TransTarget enum.
              * @name Protos.MsgOpts.TransTarget
              * @enum {string}
-             * @property {number} GC=0 GC value
-             * @property {number} CS=1 CS value
-             * @property {number} BS=2 BS value
-             * @property {number} LS=3 LS value
-             * @property {number} DB=4 DB value
-             * @property {number} GS=5 GS value
+             * @property {number} Undefine=0 Undefine value
+             * @property {number} GC=1 GC value
+             * @property {number} CS=2 CS value
+             * @property {number} BS=3 BS value
+             * @property {number} LS=4 LS value
+             * @property {number} DB=5 DB value
+             * @property {number} GS=6 GS value
              */
             MsgOpts.TransTarget = (function() {
                 var valuesById = {}, values = Object.create(valuesById);
-                values[valuesById[0] = "GC"] = 0;
-                values[valuesById[1] = "CS"] = 1;
-                values[valuesById[2] = "BS"] = 2;
-                values[valuesById[3] = "LS"] = 3;
-                values[valuesById[4] = "DB"] = 4;
-                values[valuesById[5] = "GS"] = 5;
+                values[valuesById[0] = "Undefine"] = 0;
+                values[valuesById[1] = "GC"] = 1;
+                values[valuesById[2] = "CS"] = 2;
+                values[valuesById[3] = "BS"] = 3;
+                values[valuesById[4] = "LS"] = 4;
+                values[valuesById[5] = "DB"] = 5;
+                values[valuesById[6] = "GS"] = 6;
                 return values;
             })();
     

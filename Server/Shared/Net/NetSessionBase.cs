@@ -21,6 +21,13 @@ namespace Shared.Net
 			this._msgCenter = new MsgCenter();
 		}
 
+		/// <summary>
+		/// 发送数据
+		/// </summary>
+		/// <param name="message">消息体</param>
+		/// <param name="rpcHandler">RPC回调函数</param>
+		/// <param name="trans">是否转发消息</param>
+		/// <param name="nsid">转发的网络ID</param>
 		public void Send( IMessage message, System.Action<IMessage> rpcHandler = null, bool trans = false, ulong nsid = 0 )
 		{
 			StreamBuffer buffer = new StreamBuffer();
@@ -28,12 +35,15 @@ namespace Shared.Net
 
 			Protos.MsgOpts opts = message.GetMsgOpts();
 			System.Diagnostics.Debug.Assert( opts != null, "invalid message options" );
-			//为消息写入序号
-			opts.Pid = this._pid++;
 			if ( trans )
 			{
-				opts.Flag |= 1 << ( int ) Protos.MsgOpts.Types.Flag.Trans;
+				//opts.Flag |= 1 << ( int ) Protos.MsgOpts.Types.Flag.Trans;
 				opts.Transid = nsid;
+			}
+			else
+			{
+				//为消息写入序号
+				opts.Pid = this._pid++;
 			}
 			if ( ( opts.Flag & ( 1 << ( int ) Protos.MsgOpts.Types.Flag.Rpc ) ) > 0 && rpcHandler != null ) //如果是rpc消息,记下消息序号等待回调
 			{
@@ -69,6 +79,12 @@ namespace Shared.Net
 				this.owner.RemoveSession( this );
 		}
 
+		/// <summary>
+		/// 接收消息后的处理函数
+		/// </summary>
+		/// <param name="data">接收的数据</param>
+		/// <param name="offset">数据偏移量</param>
+		/// <param name="size">数据长度</param>
 		protected override void OnRecv( byte[] data, int offset, int size )
 		{
 			int len = data.Length;
@@ -97,7 +113,7 @@ namespace Shared.Net
 				//如果不是转发的目标
 				if ( !this.owner.IsTransTarget( transTarget ) )
 				{
-					this.owner.TransMsg( transTarget, opts.Transid, message );
+					this.TransMsg( transTarget, opts.Transid, message );
 					return;
 				}
 			}
@@ -120,6 +136,11 @@ namespace Shared.Net
 				else
 					Logger.Warn( $"unhandle msg:{msgID}." );
 			}
+		}
+
+		protected virtual void TransMsg( Protos.MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage message )
+		{
+			Logger.Warn( "override this method to transpose message" );
 		}
 
 		protected override void OnSend()

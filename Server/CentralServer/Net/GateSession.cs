@@ -15,7 +15,7 @@ namespace CentralServer.Net
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGcaskLogin, this.OnGs2CsGcaskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGclost, this.OnGs2CsGclost );
 
-			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, Matcher.instance.OnGc2CsBeginMatch );
+			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, msg => Matcher.instance.OnGc2CsBeginMatch( this.id, msg ) );
 		}
 
 		protected override void OnEstablish()

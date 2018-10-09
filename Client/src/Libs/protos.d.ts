@@ -187,12 +187,13 @@ export namespace Protos {
         }
 
         enum TransTarget {
-            GC = 0,
-            CS = 1,
-            BS = 2,
-            LS = 3,
-            DB = 4,
-            GS = 5
+            Undefine = 0,
+            GC = 1,
+            CS = 2,
+            BS = 3,
+            LS = 4,
+            DB = 5,
+            GS = 6
         }
     }
 

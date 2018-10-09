@@ -80,6 +80,11 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ProtoCreator {
+        static MakeTransMessage(msg, transTarget, transID) {
+            msg.opts.flag |= 1 << 3;
+            msg.opts.flag |= 1 << (3 + transTarget);
+            msg.opts.transid = transID;
+        }
         static Q_G_AskPing() {
             let msg = new protos_1.Protos.G_AskPing();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -1399,8 +1404,7 @@ define("UI/UICutscene", ["require", "exports", "Net/Network", "../libs/protos", 
         }
         Enter(param) {
             let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
-            beginMatch.opts.flag |= 1 << 3;
-            beginMatch.opts.flag |= 1 << 4;
+            ProtoHelper_4.ProtoCreator.MakeTransMessage(beginMatch, protos_5.Protos.MsgOpts.TransTarget.CS, 0);
             Network_2.Network.Send(protos_5.Protos.GC2CS_BeginMatch, beginMatch, message => {
                 let resp = message;
                 console.log(resp);

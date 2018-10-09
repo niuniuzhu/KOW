@@ -84,6 +84,15 @@ public static class ProtoCreator {
 	};
 	#endregion
 
+	#region construct transpose message
+	public static void MakeTransMessage( Google.Protobuf.IMessage msg, Protos.MsgOpts.Types.TransTarget transTarget, ulong transID ) {
+		var opts = msg.GetMsgOpts();
+		opts.Flag |= 1 << 3;//mark as transpose
+		opts.Flag |= (uint)(1 << (3+( int ) transTarget));//mark the target
+		opts.Transid = transID;
+	}
+	#endregion
+
 	#region proto generator class
 	public static Protos.G_AskPing Q_G_AskPing() {
 		var msg = new Protos.G_AskPing();

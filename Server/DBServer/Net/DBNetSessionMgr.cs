@@ -1,5 +1,4 @@
 ﻿using Core.Net;
-using Google.Protobuf;
 using Protos;
 using Shared.Net;
 
@@ -26,11 +25,6 @@ namespace DBServer.Net
 		public override bool IsTransTarget( MsgOpts.Types.TransTarget transTarget )
 		{
 			return transTarget == MsgOpts.Types.TransTarget.Db;
-		}
-
-		public override void TransMsg( MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage msg )
-		{
-			throw new System.NotImplementedException();
 		}
 	}
 }

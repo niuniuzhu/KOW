@@ -31,6 +31,13 @@ namespace ProtoGenerator
 			sb.AppendLine( "\t]);" );
 			sb.AppendLine();
 
+			//构造转发消息
+			sb.AppendLine( "\tpublic static MakeTransMessage( msg:any, transTarget:number, transID:number ):void {" );
+			sb.AppendLine( "\t\tmsg.opts.flag |= 1 << 3;//mark as transpose" );
+			sb.AppendLine( "\t\tmsg.opts.flag |= 1 << (3+transTarget);//mark the target" );
+			sb.AppendLine( "\t\tmsg.opts.transid = transID;" );
+			sb.AppendLine( "\t}" );
+
 			//proto generator class
 			foreach ( KeyValuePair<string, int> kv in clsToMsgID )
 			{

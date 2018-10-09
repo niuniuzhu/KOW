@@ -83,6 +83,11 @@ export class ProtoCreator {
 		[<Protos.MsgID>8002, Protos.DB2LS_ExecRet],
 	]);
 
+	public static MakeTransMessage( msg:any, transTarget:number, transID:number ):void {
+		msg.opts.flag |= 1 << 3;//mark as transpose
+		msg.opts.flag |= 1 << (3+transTarget);//mark the target
+		msg.opts.transid = transID;
+	}
 	public static Q_G_AskPing(): Protos.G_AskPing {
 		let msg = new Protos.G_AskPing();
 		msg.opts = new Protos.MsgOpts();

@@ -1,5 +1,4 @@
-﻿using CentralServer.User;
-using Core.Misc;
+﻿using Core.Misc;
 using Shared;
 using System.Collections.Generic;
 
@@ -9,8 +8,11 @@ namespace CentralServer.Match
 	{
 		private static uint _gid;
 
-		public uint id;
-		public readonly List<CUser> users = new List<CUser>();
+		public uint id { get; }
+
+		public int numUsers => this._users.Count;
+
+		private readonly List<ulong> _users = new List<ulong>();
 
 		public Room()
 		{
@@ -22,14 +24,20 @@ namespace CentralServer.Match
 			this.id = _gid++;
 		}
 
-		public ErrorCode AddUser( CUser user )
+		public ErrorCode AddUser( ulong user )
 		{
-			if ( this.users.Count >= Consts.ROOM_MAX_USER )
+			if ( this._users.Count >= Consts.ROOM_MAX_USER )
 				return ErrorCode.MaximumUsers;
-			if ( this.users.Contains( user ) )
+			if ( this._users.Contains( user ) )
 				return ErrorCode.UserExists;
-			this.users.Add( user );
+			this._users.Add( user );
 			return ErrorCode.Success;
 		}
+
+		public ulong GetUserAt( int index ) => this._users[index];
+
+		public bool IsFull() => this._users.Count == Consts.ROOM_MAX_USER;
+
+		public void Clear() => this._users.Clear();
 	}
 }

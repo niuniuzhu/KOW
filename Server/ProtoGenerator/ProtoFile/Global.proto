@@ -57,6 +57,7 @@ enum MsgID {
 	eCS2BS_RoomInfo = 5201;
 
 	eCS2GC_BeginMatchRet = 5300;
+	eCS2GC_BeginBattle = 5301;
 
 	//db
 	eDB2LS_QueryAccountRet = 8000;
@@ -96,6 +97,13 @@ message G_AskPingRet {
 	MsgOpts opts = 1;
 	int64 stime = 2;
 	int64 time = 3;
+}
+
+message Global{
+	enum ECommon{
+		Success = 0;
+		Failed = 1;
+	}
 }
 
 /*

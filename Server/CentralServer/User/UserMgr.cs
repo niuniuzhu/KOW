@@ -65,5 +65,16 @@ namespace CentralServer.User
 				--count;
 			}
 		}
+
+		public bool HasUser( ulong gcNID )
+		{
+			return this.gcNIDToUser.ContainsKey( gcNID );
+		}
+
+		public CUser GetUser( ulong gcNID )
+		{
+			this.gcNIDToUser.TryGetValue( gcNID, out CUser user );
+			return user;
+		}
 	}
 }

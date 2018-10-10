@@ -34,18 +34,6 @@ namespace ProtoGenerator
 			sb.AppendLine( "\t#endregion" );
 			sb.AppendLine();
 
-			#region 构造转发消息
-			sb.AppendLine( "\t#region construct transpose message" );
-			sb.AppendLine( "\tpublic static void MakeTransMessage( Google.Protobuf.IMessage msg, Protos.MsgOpts.Types.TransTarget transTarget, ulong transID ) {" );
-			sb.AppendLine( "\t\tvar opts = msg.GetMsgOpts();" );
-			sb.AppendLine( "\t\topts.Flag |= 1 << 3;//mark as transpose" );
-			sb.AppendLine( "\t\topts.Flag |= (uint)(1 << (3+( int ) transTarget));//mark the target" );
-			sb.AppendLine( "\t\topts.Transid = transID;" );
-			sb.AppendLine( "\t}" );
-			sb.AppendLine( "\t#endregion" );
-			#endregion
-			sb.AppendLine();
-
 			#region 生成请求消息
 			sb.AppendLine( "\t#region proto generator class" );
 			foreach ( KeyValuePair<string, int> kv in clsToMsgID )
@@ -146,6 +134,19 @@ namespace ProtoGenerator
 			sb.AppendLine();
 
 			#region 扩展方法
+
+			#region 构造转发消息
+			sb.AppendLine( "\t#region construct transpose message" );
+			sb.AppendLine( "\tpublic static void MTrans( this Google.Protobuf.IMessage msg, Protos.MsgOpts.Types.TransTarget transTarget, ulong transID ) {" );
+			sb.AppendLine( "\t\tvar opts = msg.GetMsgOpts();" );
+			sb.AppendLine( "\t\topts.Flag |= 1 << 3;//mark as transpose" );
+			sb.AppendLine( "\t\topts.Flag |= (uint)(1 << (3+( int ) transTarget));//mark the target" );
+			sb.AppendLine( "\t\topts.Transid = transID;" );
+			sb.AppendLine( "\t}" );
+			sb.AppendLine( "\t#endregion" );
+			#endregion
+			sb.AppendLine();
+
 			sb.AppendLine( "\t#region get message static functions" );
 			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID( System.Type type ) => _TYPE2ID[type];" );
 			sb.AppendLine();

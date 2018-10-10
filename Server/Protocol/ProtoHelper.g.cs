@@ -39,6 +39,7 @@ public static class ProtoCreator {
 		{typeof(Protos.CS2BS_GCLoginRet), (Protos.MsgID)5200},
 		{typeof(Protos.CS2BS_RoomInfo), (Protos.MsgID)5201},
 		{typeof(Protos.CS2GC_BeginMatchRet), (Protos.MsgID)5300},
+		{typeof(Protos.CS2GC_BeginBattle), (Protos.MsgID)5301},
 		{typeof(Protos.DB2LS_QueryAccountRet), (Protos.MsgID)8000},
 		{typeof(Protos.DB2LS_QueryLoginRet), (Protos.MsgID)8001},
 		{typeof(Protos.DB2LS_ExecRet), (Protos.MsgID)8002},
@@ -78,19 +79,11 @@ public static class ProtoCreator {
 		{(Protos.MsgID)5200, typeof(Protos.CS2BS_GCLoginRet)},
 		{(Protos.MsgID)5201, typeof(Protos.CS2BS_RoomInfo)},
 		{(Protos.MsgID)5300, typeof(Protos.CS2GC_BeginMatchRet)},
+		{(Protos.MsgID)5301, typeof(Protos.CS2GC_BeginBattle)},
 		{(Protos.MsgID)8000, typeof(Protos.DB2LS_QueryAccountRet)},
 		{(Protos.MsgID)8001, typeof(Protos.DB2LS_QueryLoginRet)},
 		{(Protos.MsgID)8002, typeof(Protos.DB2LS_ExecRet)},
 	};
-	#endregion
-
-	#region construct transpose message
-	public static void MakeTransMessage( Google.Protobuf.IMessage msg, Protos.MsgOpts.Types.TransTarget transTarget, ulong transID ) {
-		var opts = msg.GetMsgOpts();
-		opts.Flag |= 1 << 3;//mark as transpose
-		opts.Flag |= (uint)(1 << (3+( int ) transTarget));//mark the target
-		opts.Transid = transID;
-	}
 	#endregion
 
 	#region proto generator class
@@ -301,6 +294,12 @@ public static class ProtoCreator {
 
 	public static Protos.CS2GC_BeginMatchRet Q_CS2GC_BeginMatchRet() {
 		var msg = new Protos.CS2GC_BeginMatchRet();
+		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Protos.CS2GC_BeginBattle Q_CS2GC_BeginBattle() {
+		var msg = new Protos.CS2GC_BeginBattle();
 		msg.Opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -600,6 +599,11 @@ public static class ProtoCreator {
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
+			case (Protos.MsgID)5301: {
+				var msg = new Protos.CS2GC_BeginBattle();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
 			case (Protos.MsgID)8000: {
 				var msg = new Protos.DB2LS_QueryAccountRet();
 				msg.MergeFrom( data, offset, size );
@@ -817,6 +821,12 @@ public static class ProtoCreator {
 		return msg;
 	}
 
+	public static Protos.CS2GC_BeginBattle D_CS2GC_BeginBattle( byte[] data, int offset, int size ) {
+		var msg = new Protos.CS2GC_BeginBattle();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
 	public static Protos.DB2LS_QueryAccountRet D_DB2LS_QueryAccountRet( byte[] data, int offset, int size ) {
 		var msg = new Protos.DB2LS_QueryAccountRet();
 		msg.MergeFrom( data, offset, size );
@@ -939,6 +949,9 @@ public static class ProtoCreator {
 			case (Protos.MsgID)5300: {
 				return new Protos.CS2GC_BeginMatchRet();
 			}
+			case (Protos.MsgID)5301: {
+				return new Protos.CS2GC_BeginBattle();
+			}
 			case (Protos.MsgID)8000: {
 				return new Protos.DB2LS_QueryAccountRet();
 			}
@@ -1056,6 +1069,9 @@ public static class ProtoCreator {
 			case (Protos.MsgID)5300: {
 				return ((Protos.CS2GC_BeginMatchRet)message).Opts;
 			}
+			case (Protos.MsgID)5301: {
+				return ((Protos.CS2GC_BeginBattle)message).Opts;
+			}
 			case (Protos.MsgID)8000: {
 				return ((Protos.DB2LS_QueryAccountRet)message).Opts;
 			}
@@ -1067,6 +1083,15 @@ public static class ProtoCreator {
 			}
 		}
 		return null;
+	}
+	#endregion
+
+	#region construct transpose message
+	public static void MTrans( this Google.Protobuf.IMessage msg, Protos.MsgOpts.Types.TransTarget transTarget, ulong transID ) {
+		var opts = msg.GetMsgOpts();
+		opts.Flag |= 1 << 3;//mark as transpose
+		opts.Flag |= (uint)(1 << (3+( int ) transTarget));//mark the target
+		opts.Transid = transID;
 	}
 	#endregion
 

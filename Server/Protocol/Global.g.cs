@@ -31,32 +31,35 @@ namespace Protos {
             "AkNTEAISBgoCQlMQAxIGCgJMUxAEEgYKAkRCEAUSBgoCR1MQBiI4CglHX0Fz",
             "a1BpbmcSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgwKBHRpbWUY",
             "AiABKAMiSgoMR19Bc2tQaW5nUmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
-            "TXNnT3B0cxINCgVzdGltZRgCIAEoAxIMCgR0aW1lGAMgASgDKsgGCgVNc2dJ",
-            "RBIMCghVbmRlZmluZRAAEg4KCmVHX0Fza1BpbmcQChIRCg1lR19Bc2tQaW5n",
-            "UmV0EAsSFwoSZUdDMkxTX0Fza1JlZ2lzdGVyEOgHEhQKD2VHQzJMU19Bc2tM",
-            "b2dpbhDpBxIUCg9lR0MyR1NfQXNrTG9naW4QzAgSFQoQZUdDMkdTX0tlZXBB",
-            "bGl2ZRDNCBIUCg9lR0MyQlNfQXNrTG9naW4QsAkSFQoQZUdDMkJTX0tlZXBB",
-            "bGl2ZRCxCRIWChFlR0MyQ1NfQmVnaW5NYXRjaBCUChISCg1lTFMyR0NfR1NJ",
-            "bmZvENAPEhUKEGVMUzJHQ19Bc2tSZWdSZXQQ0Q8SFwoSZUxTMkdDX0Fza0xv",
-            "Z2luUmV0ENIPEhMKDmVMUzJDU19HQ0xvZ2luELQQEhgKE2VMUzJEQl9RdWVy",
-            "eUFjY291bnQQmBESFgoRZUxTMkRCX1F1ZXJ5TG9naW4QmRESEAoLZUxTMkRC",
-            "X0V4ZWMQmhESFwoSZUdTMkNTX1JlcG9ydFN0YXRlELgXEhYKEWVHUzJDU19H",
-            "Q0Fza0xvZ2luELkXEhIKDWVHUzJDU19HQ0xvc3QQuhcSFAoPZUdTMkdDX0xv",
-            "Z2luUmV0EJwYEhcKEmVCUzJDU19SZXBvcnRTdGF0ZRCgHxIWChFlQlMyQ1Nf",
-            "R0NBc2tMb2dpbhChHxISCg1lQlMyQ1NfR0NMb3N0EKIfEhcKEmVCUzJDU19S",
-            "b21tSW5mb1JldBCjHxIUCg9lQlMyR0NfTG9naW5SZXQQhCASEwoOZUNTMkxT",
-            "X0dTSW5mb3MQiCcSEgoNZUNTMkxTX0dTSW5mbxCJJxISCg1lQ1MyTFNfR1NM",
-            "b3N0EIonEhYKEWVDUzJMU19HQ0xvZ2luUmV0EIsnEhYKEWVDUzJHU19HQ0xv",
-            "Z2luUmV0EOwnEhYKEWVDUzJCU19HQ0xvZ2luUmV0ENAoEhQKD2VDUzJCU19S",
-            "b29tSW5mbxDRKBIZChRlQ1MyR0NfQmVnaW5NYXRjaFJldBC0KRIbChZlREIy",
-            "TFNfUXVlcnlBY2NvdW50UmV0EMA+EhkKFGVEQjJMU19RdWVyeUxvZ2luUmV0",
-            "EME+EhMKDmVEQjJMU19FeGVjUmV0EMI+YgZwcm90bzM="));
+            "TXNnT3B0cxINCgVzdGltZRgCIAEoAxIMCgR0aW1lGAMgASgDIiwKBkdsb2Jh",
+            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASrhBgoFTXNn",
+            "SUQSDAoIVW5kZWZpbmUQABIOCgplR19Bc2tQaW5nEAoSEQoNZUdfQXNrUGlu",
+            "Z1JldBALEhcKEmVHQzJMU19Bc2tSZWdpc3RlchDoBxIUCg9lR0MyTFNfQXNr",
+            "TG9naW4Q6QcSFAoPZUdDMkdTX0Fza0xvZ2luEMwIEhUKEGVHQzJHU19LZWVw",
+            "QWxpdmUQzQgSFAoPZUdDMkJTX0Fza0xvZ2luELAJEhUKEGVHQzJCU19LZWVw",
+            "QWxpdmUQsQkSFgoRZUdDMkNTX0JlZ2luTWF0Y2gQlAoSEgoNZUxTMkdDX0dT",
+            "SW5mbxDQDxIVChBlTFMyR0NfQXNrUmVnUmV0ENEPEhcKEmVMUzJHQ19Bc2tM",
+            "b2dpblJldBDSDxITCg5lTFMyQ1NfR0NMb2dpbhC0EBIYChNlTFMyREJfUXVl",
+            "cnlBY2NvdW50EJgREhYKEWVMUzJEQl9RdWVyeUxvZ2luEJkREhAKC2VMUzJE",
+            "Ql9FeGVjEJoREhcKEmVHUzJDU19SZXBvcnRTdGF0ZRC4FxIWChFlR1MyQ1Nf",
+            "R0NBc2tMb2dpbhC5FxISCg1lR1MyQ1NfR0NMb3N0ELoXEhQKD2VHUzJHQ19M",
+            "b2dpblJldBCcGBIXChJlQlMyQ1NfUmVwb3J0U3RhdGUQoB8SFgoRZUJTMkNT",
+            "X0dDQXNrTG9naW4QoR8SEgoNZUJTMkNTX0dDTG9zdBCiHxIXChJlQlMyQ1Nf",
+            "Um9tbUluZm9SZXQQox8SFAoPZUJTMkdDX0xvZ2luUmV0EIQgEhMKDmVDUzJM",
+            "U19HU0luZm9zEIgnEhIKDWVDUzJMU19HU0luZm8QiScSEgoNZUNTMkxTX0dT",
+            "TG9zdBCKJxIWChFlQ1MyTFNfR0NMb2dpblJldBCLJxIWChFlQ1MyR1NfR0NM",
+            "b2dpblJldBDsJxIWChFlQ1MyQlNfR0NMb2dpblJldBDQKBIUCg9lQ1MyQlNf",
+            "Um9vbUluZm8Q0SgSGQoUZUNTMkdDX0JlZ2luTWF0Y2hSZXQQtCkSFwoSZUNT",
+            "MkdDX0JlZ2luQmF0dGxlELUpEhsKFmVEQjJMU19RdWVyeUFjY291bnRSZXQQ",
+            "wD4SGQoUZURCMkxTX1F1ZXJ5TG9naW5SZXQQwT4SEwoOZURCMkxTX0V4ZWNS",
+            "ZXQQwj5iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.MsgOpts), global::Protos.MsgOpts.Parser, new[]{ "Flag", "Pid", "Rpid", "Transid" }, null, new[]{ typeof(global::Protos.MsgOpts.Types.Flag), typeof(global::Protos.MsgOpts.Types.TransTarget) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPing), global::Protos.G_AskPing.Parser, new[]{ "Opts", "Time" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPingRet), global::Protos.G_AskPingRet.Parser, new[]{ "Opts", "Stime", "Time" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPingRet), global::Protos.G_AskPingRet.Parser, new[]{ "Opts", "Stime", "Time" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Global), global::Protos.Global.Parser, null, null, new[]{ typeof(global::Protos.Global.Types.ECommon) }, null)
           }));
     }
     #endregion
@@ -113,6 +116,7 @@ namespace Protos {
     [pbr::OriginalName("eCS2BS_GCLoginRet")] ECs2BsGcloginRet = 5200,
     [pbr::OriginalName("eCS2BS_RoomInfo")] ECs2BsRoomInfo = 5201,
     [pbr::OriginalName("eCS2GC_BeginMatchRet")] ECs2GcBeginMatchRet = 5300,
+    [pbr::OriginalName("eCS2GC_BeginBattle")] ECs2GcBeginBattle = 5301,
     /// <summary>
     ///db
     /// </summary>
@@ -724,6 +728,119 @@ namespace Protos {
         }
       }
     }
+
+  }
+
+  public sealed partial class Global : pb::IMessage<Global> {
+    private static readonly pb::MessageParser<Global> _parser = new pb::MessageParser<Global>(() => new Global());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<Global> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.GlobalReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Global() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Global(Global other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Global Clone() {
+      return new Global(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as Global);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(Global other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(Global other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the Global message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum ECommon {
+        [pbr::OriginalName("Success")] Success = 0,
+        [pbr::OriginalName("Failed")] Failed = 1,
+      }
+
+    }
+    #endregion
 
   }
 

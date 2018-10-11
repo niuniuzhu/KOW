@@ -40,6 +40,7 @@ namespace LoginServer.Net
 			{
 				regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.UnameExists;
 				this.Send( regRet );
+				this.DelayClose( 500, "register finish" );
 				return ErrorCode.Success;
 			}
 
@@ -47,6 +48,7 @@ namespace LoginServer.Net
 			{
 				regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.UnameIllegal;
 				this.Send( regRet );
+				this.DelayClose( 500, "register finish" );
 				return ErrorCode.Success;
 			}
 
@@ -54,6 +56,7 @@ namespace LoginServer.Net
 			{
 				regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.PwdIllegal;
 				this.Send( regRet );
+				this.DelayClose( 500, "register finish" );
 				return ErrorCode.Success;
 			}
 
@@ -64,6 +67,7 @@ namespace LoginServer.Net
 				//redis存在相同用户名
 				regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.UnameExists;
 				this.Send( regRet );
+				this.DelayClose( 500, "register finish" );
 				return ErrorCode.Success;
 			}
 			string pwd = Core.Crypto.MD5Util.GetMd5HexDigest( register.Passwd ).Replace( "-", string.Empty ).ToLower();
@@ -87,7 +91,10 @@ namespace LoginServer.Net
 					this.owner.Send( SessionType.ServerL2DB, sqlExec, OnLS2DB_Exec );
 				}
 				else
+				{
 					this.Send( regRet );
+					this.DelayClose( 500, "register finish" );
+				}
 			}
 
 			void OnLS2DB_Exec( Google.Protobuf.IMessage m )
@@ -104,6 +111,7 @@ namespace LoginServer.Net
 					}
 				}
 				this.Send( regRet );
+				this.DelayClose( 500, "register finish" );
 			}
 		}
 
@@ -116,6 +124,7 @@ namespace LoginServer.Net
 			{
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
 				this.Send( gcLoginRet );
+				this.DelayClose( 500, "login finish" );
 				return ErrorCode.Success;
 			}
 
@@ -123,6 +132,7 @@ namespace LoginServer.Net
 			{
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidPwd;
 				this.Send( gcLoginRet );
+				this.DelayClose( 500, "login finish" );
 				return ErrorCode.Success;
 			}
 
@@ -137,12 +147,14 @@ namespace LoginServer.Net
 				{
 					gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
 					this.Send( gcLoginRet );
+					this.DelayClose( 500, "login finish" );
 					return ErrorCode.Success;
 				}
 				if ( pwd != Core.Crypto.MD5Util.GetMd5HexDigest( login.Passwd ).Replace( "-", string.Empty ).ToLower() )//密码不正确
 				{
 					gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidPwd;
 					this.Send( gcLoginRet );
+					this.DelayClose( 500, "login finish" );
 					return ErrorCode.Success;
 				}
 				ukey = ( uint )redisWrapper.HashGet( "ukeys", login.Name );//从redis取回ukey
@@ -169,7 +181,10 @@ namespace LoginServer.Net
 						HandlerLoginSuccess();
 					}
 					else
+					{
 						this.Send( gcLoginRet );
+						this.DelayClose( 500, "login finish" );
+					}
 				} );
 			}
 			return ErrorCode.Success;
@@ -207,6 +222,7 @@ namespace LoginServer.Net
 					else
 						Logger.Log( $"client:{login.Name} login failed" );
 					this.Send( gcLoginRet );
+					this.DelayClose( 500, "login finish" );
 				} );
 			}
 		}

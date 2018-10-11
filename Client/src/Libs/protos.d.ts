@@ -148,6 +148,7 @@ export namespace Protos {
         eCS2BS_GCLoginRet = 5200,
         eCS2BS_RoomInfo = 5201,
         eCS2GC_BeginMatchRet = 5300,
+        eCS2GC_BeginBattle = 5301,
         eDB2LS_QueryAccountRet = 8000,
         eDB2LS_QueryLoginRet = 8001,
         eDB2LS_ExecRet = 8002
@@ -237,6 +238,30 @@ export namespace Protos {
         public static fromObject(object: { [k: string]: any }): Protos.G_AskPingRet;
         public static toObject(message: Protos.G_AskPingRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
+    }
+
+    interface IGlobal {
+    }
+
+    class Global implements IGlobal {
+        constructor(properties?: Protos.IGlobal);
+        public static create(properties?: Protos.IGlobal): Protos.Global;
+        public static encode(message: Protos.IGlobal, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGlobal, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.Global;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.Global;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.Global;
+        public static toObject(message: Protos.Global, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace Global {
+
+        enum ECommon {
+            Success = 0,
+            Failed = 1
+        }
     }
 
     interface IBS2GC_LoginRet {
@@ -335,11 +360,13 @@ export namespace Protos {
 
     interface ICS2GC_BeginMatchRet {
         opts?: (Protos.IMsgOpts|null);
+        result?: (Protos.Global.ECommon|null);
     }
 
     class CS2GC_BeginMatchRet implements ICS2GC_BeginMatchRet {
         constructor(properties?: Protos.ICS2GC_BeginMatchRet);
         public opts?: (Protos.IMsgOpts|null);
+        public result: Protos.Global.ECommon;
         public static create(properties?: Protos.ICS2GC_BeginMatchRet): Protos.CS2GC_BeginMatchRet;
         public static encode(message: Protos.ICS2GC_BeginMatchRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_BeginMatchRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -348,6 +375,52 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.CS2GC_BeginMatchRet;
         public static toObject(message: Protos.CS2GC_BeginMatchRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface ICS_PlayerInfo {
+        id?: (Long|null);
+        name?: (string|null);
+        job?: (number|null);
+        sex?: (number|null);
+    }
+
+    class CS_PlayerInfo implements ICS_PlayerInfo {
+        constructor(properties?: Protos.ICS_PlayerInfo);
+        public id: Long;
+        public name: string;
+        public job: number;
+        public sex: number;
+        public static create(properties?: Protos.ICS_PlayerInfo): Protos.CS_PlayerInfo;
+        public static encode(message: Protos.ICS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS_PlayerInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS_PlayerInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS_PlayerInfo;
+        public static toObject(message: Protos.CS_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface ICS2GC_BeginBattle {
+        opts?: (Protos.IMsgOpts|null);
+        mapID?: (number|null);
+        playInfos?: (Protos.ICS_PlayerInfo[]|null);
+    }
+
+    class CS2GC_BeginBattle implements ICS2GC_BeginBattle {
+        constructor(properties?: Protos.ICS2GC_BeginBattle);
+        public opts?: (Protos.IMsgOpts|null);
+        public mapID: number;
+        public playInfos: Protos.ICS_PlayerInfo[];
+        public static create(properties?: Protos.ICS2GC_BeginBattle): Protos.CS2GC_BeginBattle;
+        public static encode(message: Protos.ICS2GC_BeginBattle, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_BeginBattle, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_BeginBattle;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_BeginBattle;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_BeginBattle;
+        public static toObject(message: Protos.CS2GC_BeginBattle, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

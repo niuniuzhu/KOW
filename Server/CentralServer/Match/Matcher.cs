@@ -4,7 +4,6 @@ using Shared;
 using System;
 using System.Collections.Generic;
 using CentralServer.User;
-using Protos;
 
 namespace CentralServer.Match
 {
@@ -75,9 +74,8 @@ namespace CentralServer.Match
 			for ( int i = 0; i < room.numUsers; i++ )
 			{
 				ulong gcNID = room.GetUserAt( i );
-				CUser user = CS.instance.userMgr.GetUser( gcNID );
-				beginBattle.MTrans( MsgOpts.Types.TransTarget.Gc, gcNID );
-				CS.instance.netSessionMgr.Send( user.gsNID, beginBattle );
+				beginBattle.MTrans( Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				CS.instance.userMgr.SendToUser( gcNID, beginBattle );
 			}
 		}
 

@@ -65,7 +65,7 @@ define("Net/MsgCenter", ["require", "exports"], function (require, exports) {
         Register(msgID, handler) {
             if (this._generalHandlers.has(msgID))
                 return;
-            this._generalHandlers[msgID] = handler;
+            this._generalHandlers.set(msgID, handler);
         }
         Unregister(msgID, handler) {
             return this._generalHandlers.delete(msgID);
@@ -260,6 +260,11 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         }
         static Q_CS2GC_BeginMatchRet() {
             let msg = new protos_1.Protos.CS2GC_BeginMatchRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
+        static Q_CS2GC_BeginBattle() {
+            let msg = new protos_1.Protos.CS2GC_BeginBattle();
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
@@ -503,6 +508,10 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                     let msg = protos_1.Protos.CS2GC_BeginMatchRet.decode(data, size);
                     return msg;
                 }
+                case 5301: {
+                    let msg = protos_1.Protos.CS2GC_BeginBattle.decode(data, size);
+                    return msg;
+                }
                 case 8000: {
                     let msg = protos_1.Protos.DB2LS_QueryAccountRet.decode(data, size);
                     return msg;
@@ -650,6 +659,10 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             let msg = protos_1.Protos.CS2GC_BeginMatchRet.decode(data, size);
             return msg;
         }
+        static D_CS2GC_BeginBattle(data, size) {
+            let msg = protos_1.Protos.CS2GC_BeginBattle.decode(data, size);
+            return msg;
+        }
         static D_DB2LS_QueryAccountRet(data, size) {
             let msg = protos_1.Protos.DB2LS_QueryAccountRet.decode(data, size);
             return msg;
@@ -762,6 +775,9 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 }
                 case 5300: {
                     return new protos_1.Protos.CS2GC_BeginMatchRet();
+                }
+                case 5301: {
+                    return new protos_1.Protos.CS2GC_BeginBattle();
                 }
                 case 8000: {
                     return new protos_1.Protos.DB2LS_QueryAccountRet();
@@ -877,6 +893,9 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 case 5300: {
                     return message.opts;
                 }
+                case 5301: {
+                    return message.opts;
+                }
                 case 8000: {
                     return message.opts;
                 }
@@ -926,6 +945,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [protos_1.Protos.CS2BS_GCLoginRet, 5200],
         [protos_1.Protos.CS2BS_RoomInfo, 5201],
         [protos_1.Protos.CS2GC_BeginMatchRet, 5300],
+        [protos_1.Protos.CS2GC_BeginBattle, 5301],
         [protos_1.Protos.DB2LS_QueryAccountRet, 8000],
         [protos_1.Protos.DB2LS_QueryLoginRet, 8001],
         [protos_1.Protos.DB2LS_ExecRet, 8002],
@@ -964,6 +984,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [5200, protos_1.Protos.CS2BS_GCLoginRet],
         [5201, protos_1.Protos.CS2BS_RoomInfo],
         [5300, protos_1.Protos.CS2GC_BeginMatchRet],
+        [5301, protos_1.Protos.CS2GC_BeginBattle],
         [8000, protos_1.Protos.DB2LS_QueryAccountRet],
         [8001, protos_1.Protos.DB2LS_QueryLoginRet],
         [8002, protos_1.Protos.DB2LS_ExecRet],
@@ -1146,6 +1167,7 @@ define("Net/Network", ["require", "exports", "Events/UIEvent", "Net/ProtoHelper"
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Network {
+        static get connector() { return Network._connector; }
         static Init(connector) {
             Network._init = true;
             Network._time = 0;
@@ -1154,7 +1176,7 @@ define("Net/Network", ["require", "exports", "Events/UIEvent", "Net/ProtoHelper"
             Network._connector.onclose = Network.HandleDisconnect;
         }
         static HandleDisconnect() {
-            this._init = false;
+            Network._init = false;
             Network._time = 0;
             UIEvent_1.UIEvent.NetworkDisconnect();
         }
@@ -1168,6 +1190,7 @@ define("Net/Network", ["require", "exports", "Events/UIEvent", "Net/ProtoHelper"
             if (Network._time >= Network.PING_INTERVAL) {
                 let keepAlive = ProtoHelper_2.ProtoCreator.Q_GC2GS_KeepAlive();
                 Network.Send(protos_3.Protos.GC2GS_KeepAlive, keepAlive);
+                Network._time = 0;
             }
         }
     }
@@ -1324,6 +1347,7 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "Net/WSConnector",
             connector.Connect("localhost", 49996);
         }
         HandleLoginLSSuccess(loginResult) {
+            this._areaList.removeChildrenToPool();
             let count = loginResult.gsInfos.length;
             for (let i = 0; i < count; ++i) {
                 let gsInfo = loginResult.gsInfos[i];
@@ -1403,6 +1427,7 @@ define("UI/UICutscene", ["require", "exports", "Net/Network", "../libs/protos", 
         Dispose() {
         }
         Enter(param) {
+            Network_2.Network.connector.AddListener(protos_5.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
             let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
             ProtoHelper_4.ProtoCreator.MakeTransMessage(beginMatch, protos_5.Protos.MsgOpts.TransTarget.CS, 0);
             Network_2.Network.Send(protos_5.Protos.GC2CS_BeginMatch, beginMatch, message => {
@@ -1413,8 +1438,13 @@ define("UI/UICutscene", ["require", "exports", "Net/Network", "../libs/protos", 
         Leave() {
         }
         Update(deltaTime) {
+            Network_2.Network.connector.RemoveListener(protos_5.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
         }
         OnResize(e) {
+        }
+        OnBeginBattle(message) {
+            let beginBattle = message;
+            console.log(beginBattle);
         }
     }
     exports.UICutscene = UICutscene;

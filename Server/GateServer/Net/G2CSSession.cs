@@ -2,6 +2,7 @@
 using Core.Net;
 using Google.Protobuf;
 using Shared.Net;
+using System.Linq;
 
 namespace GateServer.Net
 {
@@ -28,6 +29,13 @@ namespace GateServer.Net
 		{
 			base.OnClose( reason );
 			Logger.Info( $"CS({this.logicID}) disconnected with msg:{reason}." );
+			//断开所有客户端
+			uint[] gcSids = GS.instance.GcNidToSid.Values.ToArray();
+			foreach ( uint sid in gcSids )
+			{
+				if ( GS.instance.netSessionMgr.GetSession( sid, out INetSession session ) )
+					session.Close( "CS Closed." );
+			}
 		}
 
 		protected override void OnHeartBeat( long dt )

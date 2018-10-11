@@ -9,6 +9,8 @@ export class Network {
 	private static _connector: WSConnector;
 	private static _time: number;
 
+	public static get connector(): WSConnector { return Network._connector; }
+
 	public static Init(connector: WSConnector): void {
 		Network._init = true;
 		Network._time = 0;
@@ -18,7 +20,7 @@ export class Network {
 	}
 
 	private static HandleDisconnect(): void {
-		this._init = false;
+		Network._init = false;
 		Network._time = 0;
 		UIEvent.NetworkDisconnect();
 	}
@@ -34,6 +36,7 @@ export class Network {
 		if (Network._time >= Network.PING_INTERVAL) {
 			let keepAlive = ProtoCreator.Q_GC2GS_KeepAlive();
 			Network.Send(Protos.GC2GS_KeepAlive, keepAlive);
+			Network._time = 0;
 		}
 	}
 }

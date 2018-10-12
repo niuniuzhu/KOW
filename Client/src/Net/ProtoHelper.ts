@@ -39,6 +39,7 @@ export class ProtoCreator {
 		[Protos.CS2BS_GCLoginRet, <Protos.MsgID>5200],
 		[Protos.CS2BS_RoomInfo, <Protos.MsgID>5201],
 		[Protos.CS2GC_BeginMatchRet, <Protos.MsgID>5300],
+		[Protos.CS2GC_BeginBattle, <Protos.MsgID>5301],
 		[Protos.DB2LS_QueryAccountRet, <Protos.MsgID>8000],
 		[Protos.DB2LS_QueryLoginRet, <Protos.MsgID>8001],
 		[Protos.DB2LS_ExecRet, <Protos.MsgID>8002],
@@ -78,6 +79,7 @@ export class ProtoCreator {
 		[<Protos.MsgID>5200, Protos.CS2BS_GCLoginRet],
 		[<Protos.MsgID>5201, Protos.CS2BS_RoomInfo],
 		[<Protos.MsgID>5300, Protos.CS2GC_BeginMatchRet],
+		[<Protos.MsgID>5301, Protos.CS2GC_BeginBattle],
 		[<Protos.MsgID>8000, Protos.DB2LS_QueryAccountRet],
 		[<Protos.MsgID>8001, Protos.DB2LS_QueryLoginRet],
 		[<Protos.MsgID>8002, Protos.DB2LS_ExecRet],
@@ -295,6 +297,12 @@ export class ProtoCreator {
 
 	public static Q_CS2GC_BeginMatchRet(): Protos.CS2GC_BeginMatchRet {
 		let msg = new Protos.CS2GC_BeginMatchRet();
+		msg.opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Q_CS2GC_BeginBattle(): Protos.CS2GC_BeginBattle {
+		let msg = new Protos.CS2GC_BeginBattle();
 		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -557,6 +565,10 @@ export class ProtoCreator {
 				let msg = Protos.CS2GC_BeginMatchRet.decode(data, size);
 				return msg;
 			}
+			case 5301: {
+				let msg = Protos.CS2GC_BeginBattle.decode(data, size);
+				return msg;
+			}
 			case 8000: {
 				let msg = Protos.DB2LS_QueryAccountRet.decode(data, size);
 				return msg;
@@ -738,6 +750,11 @@ export class ProtoCreator {
 		return msg;
 	}
 
+	public static D_CS2GC_BeginBattle(data: Uint8Array, size: number): Protos.CS2GC_BeginBattle {
+		let msg = Protos.CS2GC_BeginBattle.decode(data, size);
+		return msg;
+	}
+
 	public static D_DB2LS_QueryAccountRet(data: Uint8Array, size: number): Protos.DB2LS_QueryAccountRet {
 		let msg = Protos.DB2LS_QueryAccountRet.decode(data, size);
 		return msg;
@@ -855,6 +872,9 @@ export class ProtoCreator {
 			case 5300: {
 				return new Protos.CS2GC_BeginMatchRet();
 			}
+			case 5301: {
+				return new Protos.CS2GC_BeginBattle();
+			}
 			case 8000: {
 				return new Protos.DB2LS_QueryAccountRet();
 			}
@@ -969,6 +989,9 @@ export class ProtoCreator {
 			}
 			case 5300: {
 				return (<Protos.CS2GC_BeginMatchRet>message).opts;
+			}
+			case 5301: {
+				return (<Protos.CS2GC_BeginBattle>message).opts;
 			}
 			case 8000: {
 				return (<Protos.DB2LS_QueryAccountRet>message).opts;

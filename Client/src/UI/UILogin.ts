@@ -148,6 +148,7 @@ export class UILogin extends fairygui.Window implements IUIModule {
 	}
 
 	private HandleLoginLSSuccess(loginResult: Protos.LS2GC_AskLoginRet): void {
+		this._areaList.removeChildrenToPool();
 		let count = loginResult.gsInfos.length;
 		for (let i = 0; i < count; ++i) {
 			let gsInfo = loginResult.gsInfos[i];

@@ -1,4 +1,4 @@
-type GeneralHandler = (message:any) => void;
+type GeneralHandler = (message: any) => void;
 
 export class MsgCenter {
 	private readonly _generalHandlers: Map<number, GeneralHandler>;
@@ -10,7 +10,7 @@ export class MsgCenter {
 	public Register(msgID: number, handler: GeneralHandler): void {
 		if (this._generalHandlers.has(msgID))
 			return;
-		this._generalHandlers[msgID] = handler;
+		this._generalHandlers.set(msgID, handler);
 	}
 
 	public Unregister(msgID: number, handler: GeneralHandler): boolean {

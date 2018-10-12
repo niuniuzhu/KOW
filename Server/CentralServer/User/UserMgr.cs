@@ -1,20 +1,18 @@
-﻿using System;
-using Core.Misc;
+﻿using Core.Misc;
+using Google.Protobuf;
 using Shared;
 using System.Collections.Generic;
-using Google.Protobuf;
-using Protos;
 
 namespace CentralServer.User
 {
 	public class UserMgr
 	{
-		public readonly Dictionary<ulong, CUser> gcNIDToUser = new Dictionary<ulong, CUser>();
-		public readonly List<CUser> users = new List<CUser>();
+		private readonly Dictionary<ulong, CUser> _gcNidToUser = new Dictionary<ulong, CUser>();
+		private readonly List<CUser> _users = new List<CUser>();
 
 		public ErrorCode SendToUser( ulong gcNID, IMessage msg )
 		{
-			if ( !this.gcNIDToUser.TryGetValue( gcNID, out CUser user ) )
+			if ( !this._gcNidToUser.TryGetValue( gcNID, out CUser user ) )
 				return ErrorCode.InvalidGcNID;
 			return user.Send( msg );
 		}
@@ -25,8 +23,8 @@ namespace CentralServer.User
 		public ErrorCode UserOnline( ulong gcNID, uint ukey, uint gsNID, out CUser user )
 		{
 			user = new CUser( gcNID, ukey, gsNID );
-			this.gcNIDToUser[gcNID] = user;
-			this.users.Add( user );
+			this._gcNidToUser[gcNID] = user;
+			this._users.Add( user );
 			Logger.Log( $"user:{gcNID} online" );
 			return ErrorCode.Success;
 		}
@@ -36,25 +34,18 @@ namespace CentralServer.User
 		/// </summary>
 		public ErrorCode UserOffline( ulong gcNID )
 		{
-			if ( !this.gcNIDToUser.TryGetValue( gcNID, out CUser user ) )
+			if ( !this._gcNidToUser.TryGetValue( gcNID, out CUser user ) )
 				return ErrorCode.InvalidGcNID;
-			this.gcNIDToUser.Remove( gcNID );
-			this.users.Remove( user );
+			this._gcNidToUser.Remove( gcNID );
+			this._users.Remove( user );
 			Logger.Log( $"user:{gcNID} offline" );
 			return ErrorCode.Success;
 		}
 
-		public bool KickUser( ulong gcNID, CS2GS_KickGC.Types.EReason reason, Action<IMessage> rpcHandler )
+		public void KickUser( CUser user )
 		{
-			var user = this.GetUser( gcNID );
-			if ( user == null )
-				return false;
-			//通知gs玩家被踢下线
-			var kickGc = ProtoCreator.Q_CS2GS_KickGC();
-			kickGc.GcNID = gcNID;
-			kickGc.Reason = reason;
-			CS.instance.netSessionMgr.Send( user.gsNID, kickGc, rpcHandler );
-			return true;
+			this.UserOffline( user.gcNID );
+			//todo send to client and cs
 		}
 
 		/// <summary>
@@ -62,14 +53,14 @@ namespace CentralServer.User
 		/// </summary>
 		public void KickUsers( uint gsNID )
 		{
-			int count = this.users.Count;
+			int count = this._users.Count;
 			for ( int i = 0; i < count; i++ )
 			{
-				CUser user = this.users[i];
+				CUser user = this._users[i];
 				if ( user.gsNID != gsNID )
 					continue;
-				this.gcNIDToUser.Remove( user.gcNID );
-				this.users.RemoveAt( i );
+				this._gcNidToUser.Remove( user.gcNID );
+				this._users.RemoveAt( i );
 				--i;
 				--count;
 			}
@@ -77,12 +68,12 @@ namespace CentralServer.User
 
 		public bool HasUser( ulong gcNID )
 		{
-			return this.gcNIDToUser.ContainsKey( gcNID );
+			return this._gcNidToUser.ContainsKey( gcNID );
 		}
 
 		public CUser GetUser( ulong gcNID )
 		{
-			this.gcNIDToUser.TryGetValue( gcNID, out CUser user );
+			this._gcNidToUser.TryGetValue( gcNID, out CUser user );
 			return user;
 		}
 	}

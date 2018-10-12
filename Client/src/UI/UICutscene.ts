@@ -15,6 +15,8 @@ export class UICutscene implements IUIModule {
 	}
 
 	public Enter(param: any): void {
+		Network.connector.AddListener(Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
+
 		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
 		ProtoCreator.MakeTransMessage(beginMatch, Protos.MsgOpts.TransTarget.CS, 0);
 		Network.Send(Protos.GC2CS_BeginMatch, beginMatch, message => {
@@ -27,8 +29,14 @@ export class UICutscene implements IUIModule {
 	}
 
 	public Update(deltaTime: number): void {
+		Network.connector.RemoveListener(Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
 	}
 
 	public OnResize(e: laya.events.Event): void {
+	}
+
+	private OnBeginBattle(message: any): void {
+		let beginBattle: Protos.CS2GC_BeginBattle = <Protos.CS2GC_BeginBattle>message;
+		console.log(beginBattle);
 	}
 }

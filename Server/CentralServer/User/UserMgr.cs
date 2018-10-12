@@ -1,6 +1,7 @@
 ﻿using Core.Misc;
 using Google.Protobuf;
 using Shared;
+using System;
 using System.Collections.Generic;
 
 namespace CentralServer.User
@@ -42,10 +43,17 @@ namespace CentralServer.User
 			return ErrorCode.Success;
 		}
 
-		public void KickUser( CUser user )
+		public bool KickUser( ulong gcNID, Protos.CS2GS_KickGC.Types.EReason reason, Action<IMessage> rpcHandler )
 		{
-			this.UserOffline( user.gcNID );
-			//todo send to client and cs
+			var user = this.GetUser( gcNID );
+			if ( user == null )
+				return false;
+			//通知gs玩家被踢下线
+			var kickGc = ProtoCreator.Q_CS2GS_KickGC();
+			kickGc.GcNID = gcNID;
+			kickGc.Reason = reason;
+			CS.instance.netSessionMgr.Send( user.gsNID, kickGc, rpcHandler );
+			return true;
 		}
 
 		/// <summary>

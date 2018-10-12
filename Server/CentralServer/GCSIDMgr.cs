@@ -26,39 +26,20 @@ namespace CentralServer
 			//处理顶号
 			if ( this._ukeys.Contains( ukey ) )
 			{
+				//由于gs和cs的客户端数据不同步,所以只需要各自管理就可以
+				//这里无需等待回调就马上移除客户端数据
 				System.Diagnostics.Debug.Assert(
-					CS.instance.userMgr.KickUser( gcNID, Protos.CS2GS_KickGC.Types.EReason.DuplicateLogin,
-						OnKickUserRet ), $"kick user:{gcNID} failed" );
+					CS.instance.userMgr.KickUser( gcNID, Protos.CS2GS_KickGC.Types.EReason.DuplicateLogin ),
+					$"kick user:{gcNID} failed" );
+				//玩家下线
+				CS.instance.userMgr.UserOffline( gcNID );
+				//移除客户端数据
+				this.Remove( gcNID );
 			}
-			else
-				HandleLogin();//直接登录
-
-			//gs处理踢出客户端后的回调
-			void OnKickUserRet( IMessage message )
-			{
-				Protos.GS2CS_KickGCRet kickGCRet = ( Protos.GS2CS_KickGCRet ) message;
-				if ( kickGCRet.Result != Protos.Global.Types.ECommon.Success )
-				{
-					Logger.Warn( $"kick user:{gcNID} failed" );
-					errorCode = ErrorCode.LoginFailed;
-				}
-				else
-				{
-					System.Diagnostics.Debug.Assert( CS.instance.userMgr.UserOffline( gcNID ) == ErrorCode.Success, $"user:{gcNID} offline failed" );
-					System.Diagnostics.Debug.Assert( this.Remove( gcNID ), $"remove user:{gcNID} failed" );
-					HandleLogin();
-				}
-			}
-
-			void HandleLogin()
-			{
-				System.Diagnostics.Debug.Assert( this._gcNIDToUKey.TryAdd( gcNID, ukey ),
-					$"user:{gcNID} already login" );
-				this._ukeys.Add( ukey );
-				this._gcNIDs.Add( gcNID );
-				this._loginTime.Add( TimeUtils.utcTime );
-			}
-
+			this._gcNIDToUKey[gcNID] = ukey;
+			this._ukeys.Add( ukey );
+			this._gcNIDs.Add( gcNID );
+			this._loginTime.Add( TimeUtils.utcTime );
 			return errorCode;
 		}
 

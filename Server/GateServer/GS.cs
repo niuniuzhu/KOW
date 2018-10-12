@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Shared;
 using Shared.Net;
 using System.IO;
+using System.Linq;
 
 namespace GateServer
 {
@@ -19,8 +20,7 @@ namespace GateServer
 
 		public GSConfig.State state;
 
-		public readonly Dictionary<ulong, uint> GcNidToSid = new Dictionary<ulong, uint>();
-
+		private readonly Dictionary<ulong, uint> _gcNIDToSID = new Dictionary<ulong, uint>();
 		private readonly Scheduler _heartBeater = new Scheduler();
 
 		public ErrorCode Initialize( Options opts )
@@ -47,7 +47,7 @@ namespace GateServer
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 
-			WSListener cliListener = ( WSListener )this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
+			WSListener cliListener = ( WSListener ) this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
 			cliListener.Start( "ws", this.config.externalPort );
 
 			this.netSessionMgr.CreateConnector<G2CSSession>( SessionType.ServerG2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 65535, 0 );
@@ -62,5 +62,30 @@ namespace GateServer
 		}
 
 		private void OnHeartBeat( int count ) => NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+
+		public bool HasClient( ulong gcNID )
+		{
+			return this._gcNIDToSID.ContainsKey( gcNID );
+		}
+
+		public bool GetClientUKey( ulong gcNID, out uint ukey )
+		{
+			return this._gcNIDToSID.TryGetValue( gcNID, out ukey );
+		}
+
+		public bool RemoveClient( ulong gcNID )
+		{
+			return this._gcNIDToSID.Remove( gcNID );
+		}
+
+		public void AddClient( ulong gcNID, uint ukey )
+		{
+			this._gcNIDToSID.Add( gcNID, ukey );
+		}
+
+		public uint[] GetClients()
+		{
+			return this._gcNIDToSID.Values.ToArray();
+		}
 	}
 }

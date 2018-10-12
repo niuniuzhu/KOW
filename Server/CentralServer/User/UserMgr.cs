@@ -43,7 +43,7 @@ namespace CentralServer.User
 			return ErrorCode.Success;
 		}
 
-		public bool KickUser( ulong gcNID, Protos.CS2GS_KickGC.Types.EReason reason, Action<IMessage> rpcHandler )
+		public bool KickUser( ulong gcNID, Protos.CS2GS_KickGC.Types.EReason reason )
 		{
 			var user = this.GetUser( gcNID );
 			if ( user == null )
@@ -52,7 +52,7 @@ namespace CentralServer.User
 			var kickGc = ProtoCreator.Q_CS2GS_KickGC();
 			kickGc.GcNID = gcNID;
 			kickGc.Reason = reason;
-			CS.instance.netSessionMgr.Send( user.gsNID, kickGc, rpcHandler );
+			CS.instance.netSessionMgr.Send( user.gsNID, kickGc );
 			return true;
 		}
 

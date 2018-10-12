@@ -32,7 +32,7 @@ namespace GateServer.Net
 			Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
 			gcLost.SessionID = this._gcNid;
 			this.owner.Send( SessionType.ServerG2CS, gcLost );
-			GS.instance.GcNidToSid.Remove( this._gcNid );
+			System.Diagnostics.Debug.Assert( GS.instance.RemoveClient( this._gcNid ), $"invalid gcNID:{this._gcNid}" );
 
 			this._activeTime = 0;
 			this._gcNid = 0;
@@ -56,7 +56,7 @@ namespace GateServer.Net
 				{
 					case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
-						GS.instance.GcNidToSid.Add( this._gcNid, this.id );
+						GS.instance.AddClient( this._gcNid, this.id );
 						break;
 					case Protos.CS2GS_GCLoginRet.Types.EResult.Failed:
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Failed;

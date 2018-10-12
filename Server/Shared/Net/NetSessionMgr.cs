@@ -112,7 +112,7 @@ namespace Shared.Net
 		/// </summary>
 		public void StopListener( uint id ) => NetworkMgr.instance.GetListener( id )?.Stop();
 
-		private bool GetSession( uint sessionId, out INetSession session )
+		public bool GetSession( uint sessionId, out INetSession session )
 		{
 			session = NetworkMgr.instance.GetSession( sessionId );
 			if ( session != null )

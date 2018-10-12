@@ -27,12 +27,16 @@ namespace Protos {
             "CgtDUzJHUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ihwEKEENTMkdT",
             "X0dDTG9naW5SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEjAK",
             "BnJlc3VsdBgCIAEoDjIgLlByb3Rvcy5DUzJHU19HQ0xvZ2luUmV0LkVSZXN1",
-            "bHQiIgoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVkEAFiBnByb3Rv",
-            "Mw=="));
+            "bHQiIgoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVkEAEilAEKDENT",
+            "MkdTX0tpY2tHQxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoF",
+            "Z2NOSUQYAiABKAQSLAoGcmVhc29uGAMgASgOMhwuUHJvdG9zLkNTMkdTX0tp",
+            "Y2tHQy5FUmVhc29uIigKB0VSZWFzb24SEgoORHVwbGljYXRlTG9naW4QABIJ",
+            "CgVPdGhlchABYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GS_GCLoginRet), global::Protos.CS2GS_GCLoginRet.Parser, new[]{ "Opts", "Result" }, null, new[]{ typeof(global::Protos.CS2GS_GCLoginRet.Types.EResult) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GS_GCLoginRet), global::Protos.CS2GS_GCLoginRet.Parser, new[]{ "Opts", "Result" }, null, new[]{ typeof(global::Protos.CS2GS_GCLoginRet.Types.EResult) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GS_KickGC), global::Protos.CS2GS_KickGC.Parser, new[]{ "Opts", "GcNID", "Reason" }, null, new[]{ typeof(global::Protos.CS2GS_KickGC.Types.EReason) }, null)
           }));
     }
     #endregion
@@ -207,6 +211,212 @@ namespace Protos {
       public enum EResult {
         [pbr::OriginalName("Success")] Success = 0,
         [pbr::OriginalName("Failed")] Failed = 1,
+      }
+
+    }
+    #endregion
+
+  }
+
+  public sealed partial class CS2GS_KickGC : pb::IMessage<CS2GS_KickGC> {
+    private static readonly pb::MessageParser<CS2GS_KickGC> _parser = new pb::MessageParser<CS2GS_KickGC>(() => new CS2GS_KickGC());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2GS_KickGC> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2GSReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GS_KickGC() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GS_KickGC(CS2GS_KickGC other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      gcNID_ = other.gcNID_;
+      reason_ = other.reason_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GS_KickGC Clone() {
+      return new CS2GS_KickGC(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gcNID" field.</summary>
+    public const int GcNIDFieldNumber = 2;
+    private ulong gcNID_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong GcNID {
+      get { return gcNID_; }
+      set {
+        gcNID_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "reason" field.</summary>
+    public const int ReasonFieldNumber = 3;
+    private global::Protos.CS2GS_KickGC.Types.EReason reason_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.CS2GS_KickGC.Types.EReason Reason {
+      get { return reason_; }
+      set {
+        reason_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2GS_KickGC);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2GS_KickGC other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (GcNID != other.GcNID) return false;
+      if (Reason != other.Reason) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
+      if (Reason != 0) hash ^= Reason.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (GcNID != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(GcNID);
+      }
+      if (Reason != 0) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) Reason);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (GcNID != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
+      }
+      if (Reason != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Reason);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2GS_KickGC other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.GcNID != 0UL) {
+        GcNID = other.GcNID;
+      }
+      if (other.Reason != 0) {
+        Reason = other.Reason;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            GcNID = input.ReadUInt64();
+            break;
+          }
+          case 24: {
+            reason_ = (global::Protos.CS2GS_KickGC.Types.EReason) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the CS2GS_KickGC message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum EReason {
+        [pbr::OriginalName("DuplicateLogin")] DuplicateLogin = 0,
+        /// <summary>
+        /// ...more reason
+        /// </summary>
+        [pbr::OriginalName("Other")] Other = 1,
       }
 
     }

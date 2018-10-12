@@ -2,6 +2,7 @@
 package Protos;
 
 import "Global.proto";
+import "CS2GS.proto";
 
 message GS2GC_LoginRet {
 	enum EResult{
@@ -10,4 +11,9 @@ message GS2GC_LoginRet {
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;
+}
+
+message GS2GC_Kick {
+	MsgOpts opts = 1;
+	CS2GS_KickGC.EReason reason = 2;
 }

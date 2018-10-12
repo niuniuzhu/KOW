@@ -1,6 +1,7 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Google.Protobuf;
+using Shared;
 using Shared.Net;
 
 namespace GateServer.Net
@@ -12,6 +13,7 @@ namespace GateServer.Net
 
 		private G2CSSession( uint id, ProtoType type ) : base( id, type )
 		{
+			this._msgCenter.Register( Protos.MsgID.ECs2GsKickGc, this.OnECs2GsKickGc );
 		}
 
 		protected override void OnEstablish()
@@ -69,6 +71,28 @@ namespace GateServer.Net
 					this.owner.Send( sid, message );
 					break;
 			}
+		}
+
+		private ErrorCode OnECs2GsKickGc( IMessage message )
+		{
+			Protos.CS2GS_KickGC kickGC = ( Protos.CS2GS_KickGC ) message;
+			Protos.CS2GS_KickGC.Types.EReason reason = kickGC.Reason;
+
+			//todo 如果客户端断了,刚好cs要踢掉,怎么处理?
+			//这样会找不到客户端
+			//通知客户端被踢下线
+			Protos.GS2GC_Kick kick = ProtoCreator.Q_GS2GC_Kick();
+			kick.Reason = reason;
+			GS.instance.netSessionMgr.SendToGC( kickGC.GcNID, kick );
+
+			//通知cs踢出成功
+			Protos.GS2CS_KickGCRet kickGCRet = ProtoCreator.R_CS2GS_KickGC( kickGC.Opts.Pid );
+			kickGCRet.Result = Protos.Global.Types.ECommon.Success;
+			this.Send( kickGCRet );
+			return ErrorCode.Success;
+
+			//todo 强制断开客户端
+			GS.instance.netSessionMgr.GetSession(  )
 		}
 	}
 }

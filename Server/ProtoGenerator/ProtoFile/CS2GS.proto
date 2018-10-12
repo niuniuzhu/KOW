@@ -11,3 +11,14 @@ message CS2GS_GCLoginRet{
 	MsgOpts opts = 1;
 	EResult result = 2;
 }
+
+message CS2GS_KickGC {
+	enum EReason {
+		DuplicateLogin = 0;
+		Other = 1;
+		// ...more reason
+	}
+	MsgOpts opts = 1;
+	uint64 gcNID = 2;
+	EReason reason = 3;
+}

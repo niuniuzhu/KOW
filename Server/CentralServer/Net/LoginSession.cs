@@ -36,10 +36,13 @@ namespace CentralServer.Net
 			return ErrorCode.Success;
 		}
 
+		/// <summary>
+		/// LS通知CS有客户端登录成功
+		/// </summary>
 		private ErrorCode OnLs2CsGclogin( Google.Protobuf.IMessage message )
 		{
 			Protos.LS2CS_GCLogin gcLogin = ( Protos.LS2CS_GCLogin )message;
-			ErrorCode errorCode = CS.instance.gcNIDMgr.Add( gcLogin.SessionID, gcLogin.Ukey );//todo
+			ErrorCode errorCode = CS.instance.gcNIDMgr.OnLSLoginSuccess( gcLogin.SessionID, gcLogin.Ukey );
 
 			Protos.CS2LS_GCLoginRet gcLoginRet = ProtoCreator.R_LS2CS_GCLogin( gcLogin.Opts.Pid );
 			gcLoginRet.Result = errorCode == ErrorCode.Success

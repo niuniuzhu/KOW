@@ -48,7 +48,8 @@ namespace Shared
 		InvalidGcNID,
 		InvalidGsNID,
 		MaximumUsers,
-		UserExists
+		UserExists,
+		LoginFailed
 	}
 
 	public class GSInfo

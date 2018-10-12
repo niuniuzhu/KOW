@@ -34,8 +34,10 @@ enum MsgID {
 	eGS2CS_ReportState = 3000;
 	eGS2CS_GCAskLogin = 3001;
 	eGS2CS_GCLost = 3002;
+	eGS2CS_KickGCRet = 3003;
 
 	eGS2GC_LoginRet = 3100;
+	eGS2GC_Kick = 3101;
 
 	//bs
 	eBS2CS_ReportState = 4000;
@@ -52,6 +54,7 @@ enum MsgID {
 	eCS2LS_GCLoginRet = 5003;
 
 	eCS2GS_GCLoginRet = 5100;
+	eCS2GS_KickGC = 5101;
 
 	eCS2BS_GCLoginRet = 5200;
 	eCS2BS_RoomInfo = 5201;
@@ -122,7 +125,8 @@ message Global{
 		"LS2DB_QueryLogin":"DB2LS_QueryLoginRet",
 		"LS2DB_Exec":"DB2LS_ExecRet",
 		"GC2CS_BeginMatch":"CS2GC_BeginMatchRet",
-		"CS2BS_RoomInfo":"BS2CS_RommInfoRet"
+		"CS2BS_RoomInfo":"BS2CS_RommInfoRet",
+		"CS2GS_KickGC":"GS2CS_KickGCRet"
 	}
 }
 </ext>

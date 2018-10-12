@@ -32,3 +32,8 @@ message GS2CS_GCLost{
 	MsgOpts opts = 1;
 	uint64 sessionID = 2;
 }
+
+message GS2CS_KickGCRet {
+	MsgOpts opts = 1;
+	Global.ECommon result = 2;
+}

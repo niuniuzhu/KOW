@@ -16,15 +16,15 @@ namespace GateServer.Net
 			return session;
 		}
 
-		public void SendToGC( ulong gcNID, IMessage msg, System.Action<IMessage> rpcHandler = null )
+		public bool SendToGC( ulong gcNID, IMessage msg, System.Action<IMessage> rpcHandler = null )
 		{
-			GS.instance.GcNidToSid.TryGetValue( gcNID, out uint sid );
-			if ( sid <= 0 )
+			if ( !GS.instance.GcNidToSid.TryGetValue( gcNID, out uint sid ) )
 			{
-				Logger.Warn( $"sid not found by gcNID:{gcNID}" );
-				return;
+				Logger.Warn( $"invalid gcNID:{gcNID}" );
+				return false;
 			}
 			this.Send( sid, msg, rpcHandler );
+			return true;
 		}
 
 		public override bool IsTransTarget( MsgOpts.Types.TransTarget transTarget )

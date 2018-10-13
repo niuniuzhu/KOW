@@ -65,6 +65,9 @@ namespace CentralServer
 
 		public ErrorCode HandleGSGCLost( ulong gcNID )
 		{
+			//移除登陆信息
+			this.gcNIDMgr.Remove( gcNID );
+			//玩家下线
 			return this.userMgr.UserOffline( gcNID );
 		}
 	}

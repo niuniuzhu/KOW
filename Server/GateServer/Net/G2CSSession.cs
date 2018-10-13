@@ -95,7 +95,7 @@ namespace GateServer.Net
 
 				//强制断开客户端
 				System.Diagnostics.Debug.Assert( GS.instance.netSessionMgr.GetSession( sid, out INetSession netSession ), $"can not find session:{sid}" );
-				netSession.Close( "CS Kick" );
+				netSession.DelayClose( 500, "CS Kick" );
 			}
 			return ErrorCode.Success;
 		}

@@ -28,6 +28,13 @@
 		void Send( byte[] data, int offset, int size );
 
 		/// <summary>
+		/// 延时关闭Session
+		/// </summary>
+		/// <param name="delay"></param>
+		/// <param name="reason"></param>
+		void DelayClose( long delay, string reason );
+
+		/// <summary>
 		/// 关闭Session
 		/// </summary>
 		void Close( string reason );

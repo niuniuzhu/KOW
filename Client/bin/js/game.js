@@ -1147,6 +1147,474 @@ define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter
     }
     exports.WSConnector = WSConnector;
 });
+define("Net/GSConnector", ["require", "exports", "Net/WSConnector", "Net/ProtoHelper", "../libs/protos"], function (require, exports, WSConnector_1, ProtoHelper_2, protos_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class GSConnector {
+        static get connector() { return GSConnector._connector; }
+        static Init() {
+            GSConnector._connector = new WSConnector_1.WSConnector();
+            GSConnector._connector.onclose = GSConnector.HandleDisconnect;
+        }
+        static OnConnected() {
+            GSConnector._connected = true;
+            GSConnector._time = 0;
+        }
+        static AddListener(msgID, handler) {
+            GSConnector._connector.AddListener(msgID, handler);
+        }
+        static RemoveListener(msgID, handler) {
+            return GSConnector._connector.RemoveListener(msgID, handler);
+        }
+        static Send(type, message, rpcHandler = null) {
+            GSConnector._connector.Send(type, message, rpcHandler);
+        }
+        static Update(dt) {
+            if (!GSConnector._connected)
+                return;
+            GSConnector._time += dt;
+            if (GSConnector._time >= GSConnector.PING_INTERVAL) {
+                let keepAlive = ProtoHelper_2.ProtoCreator.Q_GC2GS_KeepAlive();
+                GSConnector.Send(protos_3.Protos.GC2GS_KeepAlive, keepAlive);
+                GSConnector._time = 0;
+            }
+        }
+        static HandleDisconnect(e) {
+            RC.Logger.Log("connection closed.");
+            GSConnector._connected = false;
+            GSConnector._time = 0;
+            GSConnector.disconnectHandler(e);
+        }
+    }
+    GSConnector.PING_INTERVAL = 10000;
+    exports.GSConnector = GSConnector;
+});
+define("UI/UIAlert", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class UIAlert {
+        static get isShowing() { return UIAlert._isShowing; }
+        static Show(content, removeHandler = null, isModal = false, scour = true) {
+            if (UIAlert._isShowing && (UIAlert._isModal || !scour)) {
+                return;
+            }
+            if (null == UIAlert._com) {
+                UIAlert._com = fairygui.UIPackage.createObject("global", "alert").asCom;
+            }
+            UIAlert._hideHandler = removeHandler;
+            if (UIAlert._hideHandler != null)
+                UIAlert._com.on(laya.events.Event.REMOVED, null, UIAlert.OnHide);
+            fairygui.GRoot.inst.showPopup(UIAlert._com);
+            UIAlert._com.center();
+            UIAlert._com.getChild("text").asTextField.text = content;
+            UIAlert._isShowing = true;
+            UIAlert._isModal = isModal;
+        }
+        static OnHide() {
+            UIAlert._com.off(laya.events.Event.REMOVED, null, UIAlert.OnHide);
+            UIAlert._isShowing = false;
+            UIAlert._isModal = false;
+            UIAlert._hideHandler();
+        }
+    }
+    exports.UIAlert = UIAlert;
+});
+define("UI/UILogin", ["require", "exports", "../libs/protos", "Net/WSConnector", "Net/GSConnector", "Net/ProtoHelper", "UI/UIAlert", "Game"], function (require, exports, protos_4, WSConnector_2, GSConnector_1, ProtoHelper_3, UIAlert_1, Game_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class UILogin extends fairygui.Window {
+        constructor() {
+            super();
+            fairygui.UIPackage.addPackage("res/ui/login");
+        }
+        onInit() {
+            this.contentPane = fairygui.UIPackage.createObject("login", "Main").asCom;
+            this.contentPane.getChild("login_btn").onClick(this, this.OnLoginBtnClick);
+            this.contentPane.getChild("reg_btn").onClick(this, this.OnRegBtnClick);
+            this.contentPane.getChild("enter_btn").onClick(this, this.OnEnterBtnClick);
+            this._areaList = this.contentPane.getChild("alist").asList;
+            this._areaList.on(fairygui.Events.CLICK_ITEM, this, this.OnAreaClick);
+        }
+        Dispose() {
+            this.contentPane.dispose();
+            this.contentPane = null;
+            this.dispose();
+        }
+        Enter(param) {
+            this.show();
+            this.center();
+            this.BackToLogin();
+        }
+        Leave() {
+            this.hide();
+        }
+        Update(deltaTime) {
+        }
+        OnResize(e) {
+        }
+        BackToRegister() {
+            this.contentPane.getController("c1").selectedIndex = 1;
+        }
+        BackToLogin() {
+            this.contentPane.getController("c1").selectedIndex = 0;
+        }
+        OnRegBtnClick() {
+            let regName = this.contentPane.getChild("reg_name").asTextField.text;
+            if (regName == "") {
+                UIAlert_1.UIAlert.Show("无效的用户名");
+                return;
+            }
+            let regPwd = this.contentPane.getChild("reg_password").asTextField.text;
+            if (regPwd == "") {
+                UIAlert_1.UIAlert.Show("无效的密码");
+                return;
+            }
+            let register = ProtoHelper_3.ProtoCreator.Q_GC2LS_AskRegister();
+            register.name = regName;
+            register.passwd = regPwd;
+            register.platform = 0;
+            register.sdk = 0;
+            let connector = new WSConnector_2.WSConnector();
+            connector.onerror = () => UIAlert_1.UIAlert.Show("无法连接服务器", () => connector.Connect("localhost", 49996));
+            connector.onclose = () => RC.Logger.Log("connection closed.");
+            connector.onopen = () => {
+                connector.Send(protos_4.Protos.GC2LS_AskRegister, register, message => {
+                    this.closeModalWait();
+                    let resp = message;
+                    switch (resp.result) {
+                        case protos_4.Protos.LS2GC_AskRegRet.EResult.Success:
+                            UIAlert_1.UIAlert.Show("注册成功");
+                            this.contentPane.getChild("name").asTextField.text = regName;
+                            this.contentPane.getChild("password").asTextField.text = regPwd;
+                            this.contentPane.getController("c1").selectedIndex = 0;
+                            break;
+                        case protos_4.Protos.LS2GC_AskRegRet.EResult.Failed:
+                            UIAlert_1.UIAlert.Show("注册失败", this.BackToRegister.bind(this));
+                            break;
+                        case protos_4.Protos.LS2GC_AskRegRet.EResult.UnameExists:
+                            UIAlert_1.UIAlert.Show("用户名已存在", this.BackToRegister.bind(this));
+                            break;
+                        case protos_4.Protos.LS2GC_AskRegRet.EResult.UnameIllegal:
+                            UIAlert_1.UIAlert.Show("无效的用户名", this.BackToRegister.bind(this));
+                            break;
+                        case protos_4.Protos.LS2GC_AskRegRet.EResult.PwdIllegal:
+                            UIAlert_1.UIAlert.Show("无效的密码", this.BackToRegister.bind(this));
+                            break;
+                    }
+                    connector.Close();
+                });
+            };
+            this.showModalWait();
+            connector.Connect("localhost", 49996);
+        }
+        OnLoginBtnClick() {
+            let uname = this.contentPane.getChild("name").asTextField.text;
+            if (uname == "") {
+                UIAlert_1.UIAlert.Show("无效用户名");
+                return;
+            }
+            let password = this.contentPane.getChild("password").asTextField.text;
+            if (password == "") {
+                UIAlert_1.UIAlert.Show("无效密码");
+                return;
+            }
+            let login = ProtoHelper_3.ProtoCreator.Q_GC2LS_AskLogin();
+            login.name = uname;
+            login.passwd = password;
+            let connector = new WSConnector_2.WSConnector();
+            connector.onerror = () => UIAlert_1.UIAlert.Show("无法连接服务器", () => connector.Connect("localhost", 49996));
+            connector.onclose = () => RC.Logger.Log("connection closed.");
+            connector.onopen = () => {
+                connector.Send(protos_4.Protos.GC2LS_AskLogin, login, message => {
+                    this.closeModalWait();
+                    let resp = message;
+                    switch (resp.result) {
+                        case protos_4.Protos.LS2GC_AskLoginRet.EResult.Success:
+                            this.HandleLoginLSSuccess(resp);
+                            break;
+                        case protos_4.Protos.LS2GC_AskLoginRet.EResult.Failed:
+                            UIAlert_1.UIAlert.Show("登陆失败", this.BackToLogin.bind(this));
+                            break;
+                        case protos_4.Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
+                            UIAlert_1.UIAlert.Show("请输入正确的用户名", this.BackToLogin.bind(this));
+                            break;
+                        case protos_4.Protos.LS2GC_AskLoginRet.EResult.InvalidPwd:
+                            UIAlert_1.UIAlert.Show("请输入正确的密码", this.BackToLogin.bind(this));
+                            break;
+                    }
+                });
+            };
+            this.showModalWait();
+            connector.Connect("localhost", 49996);
+        }
+        HandleLoginLSSuccess(loginResult) {
+            this._areaList.removeChildrenToPool();
+            let count = loginResult.gsInfos.length;
+            for (let i = 0; i < count; ++i) {
+                let gsInfo = loginResult.gsInfos[i];
+                let item = this._areaList.addItemFromPool().asButton;
+                item.title = gsInfo.name;
+                item.data = { "data": gsInfo, "sid": loginResult.sessionID };
+            }
+            if (count > 0)
+                this._areaList.selectedIndex = 0;
+            this.contentPane.getController("c1").selectedIndex = 2;
+        }
+        OnAreaClick() {
+        }
+        OnEnterBtnClick() {
+            let item = this._areaList.getChildAt(this._areaList.selectedIndex);
+            let data = item.data["data"];
+            this.ConnectToGS(data.ip, data.port, data.password, item.data["sid"]);
+        }
+        ConnectToGS(ip, port, pwd, sessionID) {
+            let connector = GSConnector_1.GSConnector.connector;
+            connector.onerror = () => UIAlert_1.UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
+            connector.onopen = () => {
+                let askLogin = ProtoHelper_3.ProtoCreator.Q_GC2GS_AskLogin();
+                askLogin.pwd = pwd;
+                askLogin.sessionID = sessionID;
+                connector.Send(protos_4.Protos.GC2GS_AskLogin, askLogin, message => {
+                    this.closeModalWait();
+                    let resp = message;
+                    switch (resp.result) {
+                        case protos_4.Protos.GS2GC_LoginRet.EResult.Success:
+                            Game_1.Game.instance.OnGSConnected();
+                            break;
+                        case protos_4.Protos.GS2GC_LoginRet.EResult.SessionExpire:
+                            UIAlert_1.UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
+                            break;
+                    }
+                });
+            };
+            this.showModalWait();
+            connector.Connect(ip, port);
+        }
+    }
+    exports.UILogin = UILogin;
+});
+define("UI/UIMain", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class UIMain {
+        get root() { return this._root; }
+        constructor() {
+        }
+        Dispose() {
+        }
+        Enter(param) {
+        }
+        Leave() {
+        }
+        Update(deltaTime) {
+        }
+        OnResize(e) {
+        }
+    }
+    exports.UIMain = UIMain;
+});
+define("UI/UICutscene", ["require", "exports", "Net/GSConnector", "../libs/protos", "Net/ProtoHelper"], function (require, exports, GSConnector_2, protos_5, ProtoHelper_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class UICutscene {
+        get root() { return this._root; }
+        constructor() {
+        }
+        Dispose() {
+        }
+        Enter(param) {
+            GSConnector_2.GSConnector.AddListener(protos_5.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
+            let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
+            ProtoHelper_4.ProtoCreator.MakeTransMessage(beginMatch, protos_5.Protos.MsgOpts.TransTarget.CS, 0);
+            GSConnector_2.GSConnector.Send(protos_5.Protos.GC2CS_BeginMatch, beginMatch, message => {
+                let resp = message;
+                console.log(resp);
+            });
+        }
+        Leave() {
+            GSConnector_2.GSConnector.RemoveListener(protos_5.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
+        }
+        Update(deltaTime) {
+        }
+        OnResize(e) {
+        }
+        OnBeginBattle(message) {
+            let beginBattle = message;
+            console.log(beginBattle);
+        }
+    }
+    exports.UICutscene = UICutscene;
+});
+define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UICutscene", "Net/GSConnector", "../libs/protos", "UI/UIAlert"], function (require, exports, UILogin_1, UIMain_1, UICutscene_1, GSConnector_3, protos_6, UIAlert_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class UIManager {
+        static get login() { return this._login; }
+        static get main() { return this._main; }
+        static get cutscene() { return this._cutscene; }
+        static Init() {
+            Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
+            fairygui.UIPackage.addPackage("res/ui/global");
+            fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
+            fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
+            fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
+            this._login = new UILogin_1.UILogin();
+            this._main = new UIMain_1.UIMain();
+            this._cutscene = new UICutscene_1.UICutscene();
+            GSConnector_3.GSConnector.disconnectHandler = UIManager.HandleGSDisconnect;
+            GSConnector_3.GSConnector.AddListener(protos_6.Protos.MsgID.eGS2GC_Kick, UIManager.HandleKick);
+        }
+        static Dispose() {
+            if (this._currModule != null) {
+                this._currModule.Leave();
+                this._currModule = null;
+            }
+        }
+        static Update(deltaTime) {
+            if (this._currModule != null)
+                this._currModule.Update(deltaTime);
+        }
+        static OnResize(e) {
+            if (this._currModule != null)
+                this._currModule.OnResize(e);
+        }
+        static EnterModule(module, param) {
+            if (this._currModule != null)
+                this._currModule.Leave();
+            module.Enter(param);
+            this._currModule = module;
+        }
+        static LeaveModule() {
+            if (this._currModule != null)
+                this._currModule.Leave();
+            this._currModule = null;
+        }
+        static EnterLogin() {
+            this.EnterModule(this._login);
+        }
+        static EnterCutscene() {
+            this.EnterModule(this._cutscene);
+        }
+        static HandleGSDisconnect(e) {
+            UIAlert_2.UIAlert.Show("与服务器断开连接", () => UIManager.EnterLogin());
+        }
+        static HandleKick(message) {
+            let kick = message;
+            switch (kick.reason) {
+                case protos_6.Protos.CS2GS_KickGC.EReason.DuplicateLogin:
+                    UIAlert_2.UIAlert.Show("另一台设备正在登陆相同的账号", () => UIManager.EnterLogin());
+                    break;
+                default:
+                    UIAlert_2.UIAlert.Show("已被服务器强制下线", () => UIManager.EnterLogin(), true);
+                    break;
+            }
+        }
+    }
+    exports.UIManager = UIManager;
+});
+define("Model/Defs", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Defs {
+        static Init(json) {
+            Defs._defs = json;
+        }
+        static GetUser() {
+            let ht = RC.Utils.Hashtable.GetMap(Defs._defs, "user");
+            return ht;
+        }
+        static GetPreloads() {
+            let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "preloads");
+            return arr;
+        }
+        static GetMap(id) {
+            let ht = RC.Utils.Hashtable.GetMap(Defs._defs, "maps");
+            let defaultHt = RC.Utils.Hashtable.GetMap(ht, "default");
+            let result = RC.Utils.Hashtable.GetMap(ht, id);
+            if (result == null)
+                result = {};
+            RC.Utils.Hashtable.Concat(result, defaultHt);
+            return result;
+        }
+        static GetEntity(id) {
+            let ht = RC.Utils.Hashtable.GetMap(Defs._defs, "entities");
+            let defaultHt = RC.Utils.Hashtable.GetMap(ht, "default");
+            let result = RC.Utils.Hashtable.GetMap(ht, id);
+            if (result == null)
+                result = {};
+            RC.Utils.Hashtable.Concat(result, defaultHt);
+            return result;
+        }
+        static GetTask() {
+            let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "task");
+            return arr;
+        }
+        static GetMessage() {
+            let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "message");
+            return arr;
+        }
+    }
+    exports.Defs = Defs;
+});
+define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/GSConnector"], function (require, exports, UIManager_1, Defs_1, GSConnector_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Game {
+        static get instance() { return Game._instance; }
+        constructor() {
+            Game._instance = this;
+            Laya.init(720, 1280);
+            Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_WIDTH;
+            Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
+            Laya.stage.alignV = Laya.Stage.ALIGN_TOP;
+            Laya.stage.screenMode = Laya.Stage.SCREEN_VERTICAL;
+            this.LoadDefs();
+        }
+        LoadDefs() {
+            console.log("loading defs...");
+            Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, this.OnDefsLoadComplete), undefined, Laya.Loader.JSON);
+        }
+        OnDefsLoadComplete() {
+            let json = Laya.loader.getRes("res/defs/b_defs.json");
+            Defs_1.Defs.Init(json);
+            this.LoadUIRes();
+        }
+        LoadUIRes() {
+            console.log("loading res...");
+            let preloads = Defs_1.Defs.GetPreloads();
+            let urls = [];
+            for (let u of preloads) {
+                let ss = u.split(",");
+                urls.push({ url: "res/ui/" + ss[0], type: ss[1] == "0" ? Laya.Loader.BUFFER : Laya.Loader.IMAGE });
+            }
+            Laya.loader.load(urls, Laya.Handler.create(this, this.OnUIResLoadComplete));
+        }
+        OnUIResLoadComplete() {
+            this.StartGame();
+        }
+        StartGame() {
+            console.log("start game...");
+            fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
+            Laya.timer.frameLoop(1, this, this.Update);
+            GSConnector_4.GSConnector.Init();
+            UIManager_1.UIManager.Init();
+            UIManager_1.UIManager.EnterLogin();
+        }
+        Update() {
+            let dt = Laya.timer.delta;
+            UIManager_1.UIManager.Update(dt);
+            GSConnector_4.GSConnector.Update(dt);
+        }
+        OnResize(e) {
+            UIManager_1.UIManager.OnResize(e);
+        }
+        OnGSConnected() {
+            GSConnector_4.GSConnector.OnConnected();
+            UIManager_1.UIManager.EnterCutscene();
+        }
+    }
+    exports.Game = Game;
+});
 define("Events/EventManager", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1233,442 +1701,5 @@ define("Events/UIEvent", ["require", "exports", "Events/BaseEvent"], function (r
     UIEvent.NETWORK_DISCONNECT = 10500;
     UIEvent.POOL = new RC.Collections.Stack();
     exports.UIEvent = UIEvent;
-});
-define("Net/Network", ["require", "exports", "Events/UIEvent", "Net/ProtoHelper", "../libs/protos"], function (require, exports, UIEvent_1, ProtoHelper_2, protos_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class Network {
-        static get connector() { return Network._connector; }
-        static Init(connector) {
-            Network._init = true;
-            Network._time = 0;
-            Network._connector = connector;
-            Network._connector.onerror = Network.HandleDisconnect;
-            Network._connector.onclose = Network.HandleDisconnect;
-        }
-        static HandleDisconnect() {
-            Network._init = false;
-            Network._time = 0;
-            UIEvent_1.UIEvent.NetworkDisconnect();
-        }
-        static Send(type, message, rpcHandler = null) {
-            Network._connector.Send(type, message, rpcHandler);
-        }
-        static Update(dt) {
-            if (!Network._init)
-                return;
-            Network._time += dt;
-            if (Network._time >= Network.PING_INTERVAL) {
-                let keepAlive = ProtoHelper_2.ProtoCreator.Q_GC2GS_KeepAlive();
-                Network.Send(protos_3.Protos.GC2GS_KeepAlive, keepAlive);
-                Network._time = 0;
-            }
-        }
-    }
-    Network.PING_INTERVAL = 10000;
-    exports.Network = Network;
-});
-define("UI/UIAlert", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class UIAlert {
-        static Show(content, removeHandler = null) {
-            if (null == UIAlert._com) {
-                UIAlert._com = fairygui.UIPackage.createObject("global", "alert").asCom;
-            }
-            UIAlert._handler = removeHandler;
-            if (UIAlert._handler != null)
-                UIAlert._com.on(laya.events.Event.REMOVED, null, UIAlert.RemoveHandler);
-            fairygui.GRoot.inst.showPopup(UIAlert._com);
-            UIAlert._com.center();
-            UIAlert._com.getChild("text").asTextField.text = content;
-        }
-        static RemoveHandler() {
-            UIAlert._com.off(laya.events.Event.REMOVED, null, UIAlert.RemoveHandler);
-            UIAlert._handler();
-        }
-    }
-    exports.UIAlert = UIAlert;
-});
-define("UI/UILogin", ["require", "exports", "../libs/protos", "Net/WSConnector", "Net/Network", "Net/ProtoHelper", "UI/UIAlert", "UI/UIManager"], function (require, exports, protos_4, WSConnector_1, Network_1, ProtoHelper_3, UIAlert_1, UIManager_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class UILogin extends fairygui.Window {
-        constructor() {
-            super();
-            fairygui.UIPackage.addPackage("res/ui/login");
-        }
-        onInit() {
-            this.contentPane = fairygui.UIPackage.createObject("login", "Main").asCom;
-            this.contentPane.getChild("login_btn").onClick(this, this.OnLoginBtnClick);
-            this.contentPane.getChild("reg_btn").onClick(this, this.OnRegBtnClick);
-            this.contentPane.getChild("enter_btn").onClick(this, this.OnEnterBtnClick);
-            this._areaList = this.contentPane.getChild("alist").asList;
-            this._areaList.on(fairygui.Events.CLICK_ITEM, this, this.OnAreaClick);
-        }
-        Dispose() {
-            this.contentPane.dispose();
-            this.contentPane = null;
-            this.dispose();
-        }
-        Enter(param) {
-            this.show();
-            this.center();
-        }
-        Leave() {
-            this.hide();
-        }
-        Update(deltaTime) {
-        }
-        OnResize(e) {
-        }
-        BackToRegister() {
-            this.contentPane.getController("c1").selectedIndex = 1;
-        }
-        BackToLogin() {
-            this.contentPane.getController("c1").selectedIndex = 0;
-        }
-        OnRegBtnClick() {
-            let regName = this.contentPane.getChild("reg_name").asTextField.text;
-            if (regName == "") {
-                UIAlert_1.UIAlert.Show("无效的用户名");
-                return;
-            }
-            let regPwd = this.contentPane.getChild("reg_password").asTextField.text;
-            if (regPwd == "") {
-                UIAlert_1.UIAlert.Show("无效的密码");
-                return;
-            }
-            let register = ProtoHelper_3.ProtoCreator.Q_GC2LS_AskRegister();
-            register.name = regName;
-            register.passwd = regPwd;
-            register.platform = 0;
-            register.sdk = 0;
-            let connector = new WSConnector_1.WSConnector();
-            connector.onerror = () => UIAlert_1.UIAlert.Show("无法连接服务器", () => connector.Connect("localhost", 49996));
-            connector.onclose = () => RC.Logger.Log("connection closed.");
-            connector.onopen = () => {
-                connector.Send(protos_4.Protos.GC2LS_AskRegister, register, message => {
-                    this.closeModalWait();
-                    let resp = message;
-                    switch (resp.result) {
-                        case protos_4.Protos.LS2GC_AskRegRet.EResult.Success:
-                            UIAlert_1.UIAlert.Show("注册成功");
-                            this.contentPane.getChild("name").asTextField.text = regName;
-                            this.contentPane.getChild("password").asTextField.text = regPwd;
-                            this.contentPane.getController("c1").selectedIndex = 0;
-                            break;
-                        case protos_4.Protos.LS2GC_AskRegRet.EResult.Failed:
-                            UIAlert_1.UIAlert.Show("注册失败", this.BackToRegister.bind(this));
-                            break;
-                        case protos_4.Protos.LS2GC_AskRegRet.EResult.UnameExists:
-                            UIAlert_1.UIAlert.Show("用户名已存在", this.BackToRegister.bind(this));
-                            break;
-                        case protos_4.Protos.LS2GC_AskRegRet.EResult.UnameIllegal:
-                            UIAlert_1.UIAlert.Show("无效的用户名", this.BackToRegister.bind(this));
-                            break;
-                        case protos_4.Protos.LS2GC_AskRegRet.EResult.PwdIllegal:
-                            UIAlert_1.UIAlert.Show("无效的密码", this.BackToRegister.bind(this));
-                            break;
-                    }
-                    connector.Close();
-                });
-            };
-            this.showModalWait();
-            connector.Connect("localhost", 49996);
-        }
-        OnLoginBtnClick() {
-            let uname = this.contentPane.getChild("name").asTextField.text;
-            if (uname == "") {
-                UIAlert_1.UIAlert.Show("无效用户名");
-                return;
-            }
-            let password = this.contentPane.getChild("password").asTextField.text;
-            if (password == "") {
-                UIAlert_1.UIAlert.Show("无效密码");
-                return;
-            }
-            let login = ProtoHelper_3.ProtoCreator.Q_GC2LS_AskLogin();
-            login.name = uname;
-            login.passwd = password;
-            let connector = new WSConnector_1.WSConnector();
-            connector.onerror = () => UIAlert_1.UIAlert.Show("无法连接服务器", () => connector.Connect("localhost", 49996));
-            connector.onclose = () => RC.Logger.Log("connection closed.");
-            connector.onopen = () => {
-                connector.Send(protos_4.Protos.GC2LS_AskLogin, login, message => {
-                    this.closeModalWait();
-                    let resp = message;
-                    switch (resp.result) {
-                        case protos_4.Protos.LS2GC_AskLoginRet.EResult.Success:
-                            this.HandleLoginLSSuccess(resp);
-                            break;
-                        case protos_4.Protos.LS2GC_AskLoginRet.EResult.Failed:
-                            UIAlert_1.UIAlert.Show("登陆失败", this.BackToLogin.bind(this));
-                            break;
-                        case protos_4.Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
-                            UIAlert_1.UIAlert.Show("请输入正确的用户名", this.BackToLogin.bind(this));
-                            break;
-                        case protos_4.Protos.LS2GC_AskLoginRet.EResult.InvalidPwd:
-                            UIAlert_1.UIAlert.Show("请输入正确的密码", this.BackToLogin.bind(this));
-                            break;
-                    }
-                });
-            };
-            this.showModalWait();
-            connector.Connect("localhost", 49996);
-        }
-        HandleLoginLSSuccess(loginResult) {
-            this._areaList.removeChildrenToPool();
-            let count = loginResult.gsInfos.length;
-            for (let i = 0; i < count; ++i) {
-                let gsInfo = loginResult.gsInfos[i];
-                let item = this._areaList.addItemFromPool().asButton;
-                item.title = gsInfo.name;
-                item.data = { "data": gsInfo, "sid": loginResult.sessionID };
-            }
-            if (count > 0)
-                this._areaList.selectedIndex = 0;
-            this.contentPane.getController("c1").selectedIndex = 2;
-        }
-        OnAreaClick() {
-        }
-        OnEnterBtnClick() {
-            let item = this._areaList.getChildAt(this._areaList.selectedIndex);
-            let data = item.data["data"];
-            this.ConnectToGS(data.ip, data.port, data.password, item.data["sid"]);
-        }
-        ConnectToGS(ip, port, pwd, sessionID) {
-            let connector = new WSConnector_1.WSConnector();
-            connector.onerror = () => UIAlert_1.UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
-            connector.onclose = () => RC.Logger.Log("connection closed.");
-            connector.onopen = () => {
-                let askLogin = ProtoHelper_3.ProtoCreator.Q_GC2GS_AskLogin();
-                askLogin.pwd = pwd;
-                askLogin.sessionID = sessionID;
-                connector.Send(protos_4.Protos.GC2GS_AskLogin, askLogin, message => {
-                    this.closeModalWait();
-                    let resp = message;
-                    switch (resp.result) {
-                        case protos_4.Protos.GS2GC_LoginRet.EResult.Success:
-                            this.HandleLoginBSSuccess(connector);
-                            break;
-                        case protos_4.Protos.GS2GC_LoginRet.EResult.SessionExpire:
-                            UIAlert_1.UIAlert.Show("登陆凭证已过期", this.BackToLogin.bind(this));
-                            break;
-                    }
-                });
-            };
-            this.showModalWait();
-            connector.Connect(ip, port);
-        }
-        HandleLoginBSSuccess(connector) {
-            Network_1.Network.Init(connector);
-            UIManager_1.UIManager.EnterCutscene();
-        }
-    }
-    exports.UILogin = UILogin;
-});
-define("UI/UIMain", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class UIMain {
-        get root() { return this._root; }
-        constructor() {
-        }
-        Dispose() {
-        }
-        Enter(param) {
-        }
-        Leave() {
-        }
-        Update(deltaTime) {
-        }
-        OnResize(e) {
-        }
-    }
-    exports.UIMain = UIMain;
-});
-define("UI/UICutscene", ["require", "exports", "Net/Network", "../libs/protos", "Net/ProtoHelper"], function (require, exports, Network_2, protos_5, ProtoHelper_4) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class UICutscene {
-        get root() { return this._root; }
-        constructor() {
-        }
-        Dispose() {
-        }
-        Enter(param) {
-            Network_2.Network.connector.AddListener(protos_5.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
-            let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
-            ProtoHelper_4.ProtoCreator.MakeTransMessage(beginMatch, protos_5.Protos.MsgOpts.TransTarget.CS, 0);
-            Network_2.Network.Send(protos_5.Protos.GC2CS_BeginMatch, beginMatch, message => {
-                let resp = message;
-                console.log(resp);
-            });
-        }
-        Leave() {
-        }
-        Update(deltaTime) {
-            Network_2.Network.connector.RemoveListener(protos_5.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
-        }
-        OnResize(e) {
-        }
-        OnBeginBattle(message) {
-            let beginBattle = message;
-            console.log(beginBattle);
-        }
-    }
-    exports.UICutscene = UICutscene;
-});
-define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UICutscene"], function (require, exports, UILogin_1, UIMain_1, UICutscene_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class UIManager {
-        static get login() { return this._login; }
-        static get main() { return this._main; }
-        static get cutscene() { return this._cutscene; }
-        static Init() {
-            Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
-            fairygui.UIPackage.addPackage("res/ui/global");
-            fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
-            fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
-            fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
-            this._login = new UILogin_1.UILogin();
-            this._main = new UIMain_1.UIMain();
-            this._cutscene = new UICutscene_1.UICutscene();
-        }
-        static Dispose() {
-            if (this._currModule != null) {
-                this._currModule.Leave();
-                this._currModule = null;
-            }
-        }
-        static Update(deltaTime) {
-            if (this._currModule != null)
-                this._currModule.Update(deltaTime);
-        }
-        static OnResize(e) {
-            if (this._currModule != null)
-                this._currModule.OnResize(e);
-        }
-        static EnterModule(module, param) {
-            if (this._currModule != null)
-                this._currModule.Leave();
-            module.Enter(param);
-            this._currModule = module;
-        }
-        static LeaveModule() {
-            if (this._currModule != null)
-                this._currModule.Leave();
-            this._currModule = null;
-        }
-        static EnterLogin() {
-            this.EnterModule(this._login);
-        }
-        static EnterCutscene() {
-            this.EnterModule(this._cutscene);
-        }
-    }
-    exports.UIManager = UIManager;
-});
-define("Model/Defs", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class Defs {
-        static Init(json) {
-            Defs._defs = json;
-        }
-        static GetUser() {
-            let ht = RC.Utils.Hashtable.GetMap(Defs._defs, "user");
-            return ht;
-        }
-        static GetPreloads() {
-            let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "preloads");
-            return arr;
-        }
-        static GetMap(id) {
-            let ht = RC.Utils.Hashtable.GetMap(Defs._defs, "maps");
-            let defaultHt = RC.Utils.Hashtable.GetMap(ht, "default");
-            let result = RC.Utils.Hashtable.GetMap(ht, id);
-            if (result == null)
-                result = {};
-            RC.Utils.Hashtable.Concat(result, defaultHt);
-            return result;
-        }
-        static GetEntity(id) {
-            let ht = RC.Utils.Hashtable.GetMap(Defs._defs, "entities");
-            let defaultHt = RC.Utils.Hashtable.GetMap(ht, "default");
-            let result = RC.Utils.Hashtable.GetMap(ht, id);
-            if (result == null)
-                result = {};
-            RC.Utils.Hashtable.Concat(result, defaultHt);
-            return result;
-        }
-        static GetTask() {
-            let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "task");
-            return arr;
-        }
-        static GetMessage() {
-            let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "message");
-            return arr;
-        }
-    }
-    exports.Defs = Defs;
-});
-define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Network", "Events/EventManager", "Events/UIEvent", "UI/UIAlert"], function (require, exports, UIManager_2, Defs_1, Network_3, EventManager_2, UIEvent_2, UIAlert_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class Main {
-        constructor() {
-            Laya.init(720, 1280);
-            Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_WIDTH;
-            Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
-            Laya.stage.alignV = Laya.Stage.ALIGN_TOP;
-            Laya.stage.screenMode = Laya.Stage.SCREEN_VERTICAL;
-            this.LoadDefs();
-        }
-        LoadDefs() {
-            console.log("loading defs...");
-            Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, this.OnDefsLoadComplete), undefined, Laya.Loader.JSON);
-        }
-        OnDefsLoadComplete() {
-            let json = Laya.loader.getRes("res/defs/b_defs.json");
-            Defs_1.Defs.Init(json);
-            this.LoadUIRes();
-        }
-        LoadUIRes() {
-            console.log("loading res...");
-            let preloads = Defs_1.Defs.GetPreloads();
-            let urls = [];
-            for (let u of preloads) {
-                let ss = u.split(",");
-                urls.push({ url: "res/ui/" + ss[0], type: ss[1] == "0" ? Laya.Loader.BUFFER : Laya.Loader.IMAGE });
-            }
-            Laya.loader.load(urls, Laya.Handler.create(this, this.OnUIResLoadComplete));
-        }
-        OnUIResLoadComplete() {
-            this.StartGame();
-        }
-        StartGame() {
-            console.log("start game...");
-            UIManager_2.UIManager.Init();
-            fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
-            Laya.timer.frameLoop(1, this, this.Update);
-            EventManager_2.EventManager.AddListener(UIEvent_2.UIEvent.NETWORK_DISCONNECT, this.HandleNetworkDisconnect);
-            UIManager_2.UIManager.EnterLogin();
-        }
-        HandleNetworkDisconnect() {
-            UIAlert_2.UIAlert.Show("与服务器断开连接", () => UIManager_2.UIManager.EnterLogin());
-        }
-        Update() {
-            let dt = Laya.timer.delta;
-            UIManager_2.UIManager.Update(dt);
-            Network_3.Network.Update(dt);
-        }
-        OnResize(e) {
-            UIManager_2.UIManager.OnResize(e);
-        }
-    }
-    exports.Main = Main;
 });
 //# sourceMappingURL=game.js.map

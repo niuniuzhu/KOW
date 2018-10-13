@@ -1,10 +1,10 @@
 import { Protos } from "../libs/protos";
 import { WSConnector } from "../Net/WSConnector";
-import { Network } from "../Net/Network";
+import { GSConnector } from "../Net/GSConnector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { UIAlert } from "./UIAlert";
 import { IUIModule } from "./IUIModule";
-import { UIManager } from "./UIManager";
+import { Game } from "../Game";
 
 export class UILogin extends fairygui.Window implements IUIModule {
 	private _areaList: fairygui.GList;
@@ -32,6 +32,7 @@ export class UILogin extends fairygui.Window implements IUIModule {
 	public Enter(param: any): void{
 		this.show();
 		this.center();
+		this.BackToLogin();
 	}
 
 	public Leave(): void{
@@ -171,9 +172,8 @@ export class UILogin extends fairygui.Window implements IUIModule {
 	}
 
 	private ConnectToGS(ip: string, port: number, pwd: string, sessionID: Long): void {
-		let connector = new WSConnector();
+		let connector = GSConnector.connector;
 		connector.onerror = () => UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
-		connector.onclose = () => RC.Logger.Log("connection closed.");
 		connector.onopen = () => {
 			let askLogin = ProtoCreator.Q_GC2GS_AskLogin();
 			askLogin.pwd = pwd;
@@ -183,20 +183,15 @@ export class UILogin extends fairygui.Window implements IUIModule {
 				let resp: Protos.GS2GC_LoginRet = <Protos.GS2GC_LoginRet>message;
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
-						this.HandleLoginBSSuccess(connector);
+						Game.instance.OnGSConnected();
 						break;
 					case Protos.GS2GC_LoginRet.EResult.SessionExpire:
-						UIAlert.Show("登陆凭证已过期", this.BackToLogin.bind(this));
+						UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
 						break;
 				}
 			});
 		}
 		this.showModalWait();
 		connector.Connect(ip, port);
-	}
-
-	private HandleLoginBSSuccess(connector: WSConnector): void {
-		Network.Init(connector);
-		UIManager.EnterCutscene();
 	}
 }

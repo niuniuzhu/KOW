@@ -4,6 +4,6 @@ require.config({
 	}
 });
 
-require(["Game"], function (Game) {
-	new Game.Main();
+require(["Game"], function (G) {
+	new G.Game();
 })

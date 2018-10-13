@@ -13,19 +13,19 @@ export class WSConnector {
 			this._socket.onclose = this._onclose;
 	}
 	
-	public set onerror(handler: (ev: CloseEvent) => any) {
+	public set onerror(handler: (ev: Event) => any) {
 		this._onerror = handler;
 		if (this._socket != null)
 			this._socket.onerror = this._onerror;
 	}
 
-	public set onopen(handler: (ev: CloseEvent) => any) {
+	public set onopen(handler: (ev: Event) => any) {
 		this._onopen = handler;
 		if (this._socket != null)
 			this._socket.onopen = this._onopen;
 	}
 
-	private _onclose: ((ev: Event) => any) | null;
+	private _onclose: ((ev: CloseEvent) => any) | null;
 	private _onerror: ((ev: Event) => any) | null;
 	private _onopen: ((ev: Event) => any) | null;
 

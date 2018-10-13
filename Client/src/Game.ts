@@ -1,12 +1,13 @@
 import { UIManager } from "./UI/UIManager";
 import { Defs } from "./Model/Defs";
-import { Network } from "./Net/Network";
-import { EventManager } from "./Events/EventManager";
-import { UIEvent } from "./Events/UIEvent";
-import { UIAlert } from "./UI/UIAlert";
+import { GSConnector } from "./Net/GSConnector";
 
-export class Main {
+export class Game {
+	private static _instance: Game;
+	public static get instance(): Game { return Game._instance; }
+
 	constructor() {
+		Game._instance = this;
 		Laya.init(720, 1280);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_WIDTH;
 		Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
@@ -45,26 +46,26 @@ export class Main {
 	private StartGame(): void {
 		console.log("start game...");
 
-		UIManager.Init();
 		fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
 		Laya.timer.frameLoop(1, this, this.Update);
 
-		EventManager.AddListener(UIEvent.NETWORK_DISCONNECT, this.HandleNetworkDisconnect);
-
+		GSConnector.Init();
+		UIManager.Init();
 		UIManager.EnterLogin();
-	}
-
-	private HandleNetworkDisconnect(): void {
-		UIAlert.Show("与服务器断开连接", () => UIManager.EnterLogin());
 	}
 
 	private Update(): void {
 		let dt = Laya.timer.delta;
 		UIManager.Update(dt);
-		Network.Update(dt);
+		GSConnector.Update(dt);
 	}
 
 	private OnResize(e: laya.events.Event): void {
 		UIManager.OnResize(e);
+	}
+
+	public OnGSConnected(): void {
+		GSConnector.OnConnected();
+		UIManager.EnterCutscene();
 	}
 }

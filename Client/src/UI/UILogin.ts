@@ -185,8 +185,8 @@ export class UILogin extends fairygui.Window implements IUIModule {
 					case Protos.GS2GC_LoginRet.EResult.Success:
 						this.HandleLoginBSSuccess(connector);
 						break;
-					case Protos.GS2GC_LoginRet.EResult.Failed:
-						UIAlert.Show("登陆失败", this.BackToLogin.bind(this));
+					case Protos.GS2GC_LoginRet.EResult.SessionExpire:
+						UIAlert.Show("登陆凭证已过期", this.BackToLogin.bind(this));
 						break;
 				}
 			});

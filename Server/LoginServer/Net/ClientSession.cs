@@ -129,7 +129,7 @@ namespace LoginServer.Net
 			{
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
 				this.Send( gcLoginRet );
-				this.DelayClose( 500, "login finish" );
+				this.DelayClose( 500, "login complete" );
 				return ErrorCode.Success;
 			}
 
@@ -138,7 +138,7 @@ namespace LoginServer.Net
 			{
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidPwd;
 				this.Send( gcLoginRet );
-				this.DelayClose( 500, "login finish" );
+				this.DelayClose( 500, "login complete" );
 				return ErrorCode.Success;
 			}
 
@@ -153,14 +153,14 @@ namespace LoginServer.Net
 				{
 					gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
 					this.Send( gcLoginRet );
-					this.DelayClose( 500, "login finish" );
+					this.DelayClose( 500, "login complete" );
 					return ErrorCode.Success;
 				}
 				if ( pwd != Core.Crypto.MD5Util.GetMd5HexDigest( login.Passwd ).Replace( "-", string.Empty ).ToLower() )//密码不正确
 				{
 					gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidPwd;
 					this.Send( gcLoginRet );
-					this.DelayClose( 500, "login finish" );
+					this.DelayClose( 500, "login complete" );
 					return ErrorCode.Success;
 				}
 				ukey = ( uint )redisWrapper.HashGet( "ukeys", login.Name );//从redis取回ukey
@@ -189,7 +189,7 @@ namespace LoginServer.Net
 					else
 					{
 						this.Send( gcLoginRet );
-						this.DelayClose( 500, "login finish" );
+						this.DelayClose( 500, "login complete" );
 					}
 				} );
 			}
@@ -229,7 +229,7 @@ namespace LoginServer.Net
 					else
 						Logger.Log( $"client:{login.Name} login failed" );
 					this.Send( gcLoginRet );
-					this.DelayClose( 500, "login finish" );
+					this.DelayClose( 500, "login complete" );
 				} );
 			}
 		}

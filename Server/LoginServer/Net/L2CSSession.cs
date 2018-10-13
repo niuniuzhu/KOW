@@ -68,7 +68,9 @@ namespace LoginServer.Net
 		private ErrorCode OnCs2LsGslost( Google.Protobuf.IMessage message )
 		{
 			Protos.CS2LS_GSLost gsLost = ( Protos.CS2LS_GSLost )message;
-			return LS.instance.GSLostHandler( gsLost.Gsid );
+			LS.instance.gsInfos.Remove( gsLost.Gsid );
+			Logger.Log( $"GS lost:{gsLost.Gsid},count:{LS.instance.gsInfos.Count}" );
+			return ErrorCode.Success;
 		}
 	}
 }

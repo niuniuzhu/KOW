@@ -48,8 +48,6 @@ namespace Shared
 		InvalidGcNID,
 		InvalidGsNID,
 		MaximumUsers,
-		UserExists,
-		LoginFailed,
 		DuplicateGCNID
 	}
 

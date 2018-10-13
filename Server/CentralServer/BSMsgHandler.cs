@@ -32,15 +32,5 @@ namespace CentralServer
 			}
 			return ErrorCode.Success;
 		}
-
-		public ErrorCode HandleGCAskLoginFromBS( ulong gcNID, uint gsNID )
-		{
-			return this.userMgr.UserOnline( gcNID, gsNID, out _ );
-		}
-
-		public ErrorCode HandleBSGCLost( ulong gcNID )
-		{
-			return this.userMgr.UserOffline( gcNID );
-		}
 	}
 }

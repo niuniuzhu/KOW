@@ -1206,7 +1206,9 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eGS2CS_ReportState=3000 eGS2CS_ReportState value
          * @property {number} eGS2CS_GCAskLogin=3001 eGS2CS_GCAskLogin value
          * @property {number} eGS2CS_GCLost=3002 eGS2CS_GCLost value
+         * @property {number} eGS2CS_KickGCRet=3003 eGS2CS_KickGCRet value
          * @property {number} eGS2GC_LoginRet=3100 eGS2GC_LoginRet value
+         * @property {number} eGS2GC_Kick=3101 eGS2GC_Kick value
          * @property {number} eBS2CS_ReportState=4000 eBS2CS_ReportState value
          * @property {number} eBS2CS_GCAskLogin=4001 eBS2CS_GCAskLogin value
          * @property {number} eBS2CS_GCLost=4002 eBS2CS_GCLost value
@@ -1217,6 +1219,7 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eCS2LS_GSLost=5002 eCS2LS_GSLost value
          * @property {number} eCS2LS_GCLoginRet=5003 eCS2LS_GCLoginRet value
          * @property {number} eCS2GS_GCLoginRet=5100 eCS2GS_GCLoginRet value
+         * @property {number} eCS2GS_KickGC=5101 eCS2GS_KickGC value
          * @property {number} eCS2BS_GCLoginRet=5200 eCS2BS_GCLoginRet value
          * @property {number} eCS2BS_RoomInfo=5201 eCS2BS_RoomInfo value
          * @property {number} eCS2GC_BeginMatchRet=5300 eCS2GC_BeginMatchRet value
@@ -1247,7 +1250,9 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[3000] = "eGS2CS_ReportState"] = 3000;
             values[valuesById[3001] = "eGS2CS_GCAskLogin"] = 3001;
             values[valuesById[3002] = "eGS2CS_GCLost"] = 3002;
+            values[valuesById[3003] = "eGS2CS_KickGCRet"] = 3003;
             values[valuesById[3100] = "eGS2GC_LoginRet"] = 3100;
+            values[valuesById[3101] = "eGS2GC_Kick"] = 3101;
             values[valuesById[4000] = "eBS2CS_ReportState"] = 4000;
             values[valuesById[4001] = "eBS2CS_GCAskLogin"] = 4001;
             values[valuesById[4002] = "eBS2CS_GCLost"] = 4002;
@@ -1258,6 +1263,7 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[5002] = "eCS2LS_GSLost"] = 5002;
             values[valuesById[5003] = "eCS2LS_GCLoginRet"] = 5003;
             values[valuesById[5100] = "eCS2GS_GCLoginRet"] = 5100;
+            values[valuesById[5101] = "eCS2GS_KickGC"] = 5101;
             values[valuesById[5200] = "eCS2BS_GCLoginRet"] = 5200;
             values[valuesById[5201] = "eCS2BS_RoomInfo"] = 5201;
             values[valuesById[5300] = "eCS2GC_BeginMatchRet"] = 5300;
@@ -4090,7 +4096,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 case 0:
                     message.result = 0;
                     break;
-                case "Failed":
+                case "IllegalLogin":
                 case 1:
                     message.result = 1;
                     break;
@@ -4138,16 +4144,294 @@ define(["libs/protobufjs"], function($protobuf) {
              * @name Protos.CS2GS_GCLoginRet.EResult
              * @enum {string}
              * @property {number} Success=0 Success value
-             * @property {number} Failed=1 Failed value
+             * @property {number} IllegalLogin=1 IllegalLogin value
              */
             CS2GS_GCLoginRet.EResult = (function() {
                 var valuesById = {}, values = Object.create(valuesById);
                 values[valuesById[0] = "Success"] = 0;
-                values[valuesById[1] = "Failed"] = 1;
+                values[valuesById[1] = "IllegalLogin"] = 1;
                 return values;
             })();
     
             return CS2GS_GCLoginRet;
+        })();
+    
+        Protos.CS2GS_KickGC = (function() {
+    
+            /**
+             * Properties of a CS2GS_KickGC.
+             * @memberof Protos
+             * @interface ICS2GS_KickGC
+             * @property {Protos.IMsgOpts|null} [opts] CS2GS_KickGC opts
+             * @property {Long|null} [gcNID] CS2GS_KickGC gcNID
+             * @property {Protos.CS2GS_KickGC.EReason|null} [reason] CS2GS_KickGC reason
+             */
+    
+            /**
+             * Constructs a new CS2GS_KickGC.
+             * @memberof Protos
+             * @classdesc Represents a CS2GS_KickGC.
+             * @implements ICS2GS_KickGC
+             * @constructor
+             * @param {Protos.ICS2GS_KickGC=} [properties] Properties to set
+             */
+            function CS2GS_KickGC(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * CS2GS_KickGC opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.CS2GS_KickGC
+             * @instance
+             */
+            CS2GS_KickGC.prototype.opts = null;
+    
+            /**
+             * CS2GS_KickGC gcNID.
+             * @member {Long} gcNID
+             * @memberof Protos.CS2GS_KickGC
+             * @instance
+             */
+            CS2GS_KickGC.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+            /**
+             * CS2GS_KickGC reason.
+             * @member {Protos.CS2GS_KickGC.EReason} reason
+             * @memberof Protos.CS2GS_KickGC
+             * @instance
+             */
+            CS2GS_KickGC.prototype.reason = 0;
+    
+            /**
+             * Creates a new CS2GS_KickGC instance using the specified properties.
+             * @function create
+             * @memberof Protos.CS2GS_KickGC
+             * @static
+             * @param {Protos.ICS2GS_KickGC=} [properties] Properties to set
+             * @returns {Protos.CS2GS_KickGC} CS2GS_KickGC instance
+             */
+            CS2GS_KickGC.create = function create(properties) {
+                return new CS2GS_KickGC(properties);
+            };
+    
+            /**
+             * Encodes the specified CS2GS_KickGC message. Does not implicitly {@link Protos.CS2GS_KickGC.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.CS2GS_KickGC
+             * @static
+             * @param {Protos.ICS2GS_KickGC} message CS2GS_KickGC message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2GS_KickGC.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.gcNID);
+                if (message.reason != null && message.hasOwnProperty("reason"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.reason);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified CS2GS_KickGC message, length delimited. Does not implicitly {@link Protos.CS2GS_KickGC.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.CS2GS_KickGC
+             * @static
+             * @param {Protos.ICS2GS_KickGC} message CS2GS_KickGC message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2GS_KickGC.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a CS2GS_KickGC message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.CS2GS_KickGC
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.CS2GS_KickGC} CS2GS_KickGC
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2GS_KickGC.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GS_KickGC();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.gcNID = reader.uint64();
+                        break;
+                    case 3:
+                        message.reason = reader.int32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a CS2GS_KickGC message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.CS2GS_KickGC
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.CS2GS_KickGC} CS2GS_KickGC
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2GS_KickGC.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a CS2GS_KickGC message.
+             * @function verify
+             * @memberof Protos.CS2GS_KickGC
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CS2GS_KickGC.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                        return "gcNID: integer|Long expected";
+                if (message.reason != null && message.hasOwnProperty("reason"))
+                    switch (message.reason) {
+                    default:
+                        return "reason: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
+                return null;
+            };
+    
+            /**
+             * Creates a CS2GS_KickGC message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.CS2GS_KickGC
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.CS2GS_KickGC} CS2GS_KickGC
+             */
+            CS2GS_KickGC.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.CS2GS_KickGC)
+                    return object;
+                var message = new $root.Protos.CS2GS_KickGC();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.CS2GS_KickGC.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                if (object.gcNID != null)
+                    if ($util.Long)
+                        (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                    else if (typeof object.gcNID === "string")
+                        message.gcNID = parseInt(object.gcNID, 10);
+                    else if (typeof object.gcNID === "number")
+                        message.gcNID = object.gcNID;
+                    else if (typeof object.gcNID === "object")
+                        message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+                switch (object.reason) {
+                case "DuplicateLogin":
+                case 0:
+                    message.reason = 0;
+                    break;
+                case "Other":
+                case 1:
+                    message.reason = 1;
+                    break;
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a CS2GS_KickGC message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.CS2GS_KickGC
+             * @static
+             * @param {Protos.CS2GS_KickGC} message CS2GS_KickGC
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CS2GS_KickGC.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.opts = null;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.gcNID = options.longs === String ? "0" : 0;
+                    object.reason = options.enums === String ? "DuplicateLogin" : 0;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (typeof message.gcNID === "number")
+                        object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                    else
+                        object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+                if (message.reason != null && message.hasOwnProperty("reason"))
+                    object.reason = options.enums === String ? $root.Protos.CS2GS_KickGC.EReason[message.reason] : message.reason;
+                return object;
+            };
+    
+            /**
+             * Converts this CS2GS_KickGC to JSON.
+             * @function toJSON
+             * @memberof Protos.CS2GS_KickGC
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CS2GS_KickGC.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            /**
+             * EReason enum.
+             * @name Protos.CS2GS_KickGC.EReason
+             * @enum {string}
+             * @property {number} DuplicateLogin=0 DuplicateLogin value
+             * @property {number} Other=1 Other value
+             */
+            CS2GS_KickGC.EReason = (function() {
+                var valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "DuplicateLogin"] = 0;
+                values[valuesById[1] = "Other"] = 1;
+                return values;
+            })();
+    
+            return CS2GS_KickGC;
         })();
     
         Protos.CS2LS_GSInfos = (function() {
@@ -6078,6 +6362,234 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             return GS2CS_GCLost;
+        })();
+    
+        Protos.GS2CS_KickGCRet = (function() {
+    
+            /**
+             * Properties of a GS2CS_KickGCRet.
+             * @memberof Protos
+             * @interface IGS2CS_KickGCRet
+             * @property {Protos.IMsgOpts|null} [opts] GS2CS_KickGCRet opts
+             * @property {Protos.Global.ECommon|null} [result] GS2CS_KickGCRet result
+             */
+    
+            /**
+             * Constructs a new GS2CS_KickGCRet.
+             * @memberof Protos
+             * @classdesc Represents a GS2CS_KickGCRet.
+             * @implements IGS2CS_KickGCRet
+             * @constructor
+             * @param {Protos.IGS2CS_KickGCRet=} [properties] Properties to set
+             */
+            function GS2CS_KickGCRet(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * GS2CS_KickGCRet opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.GS2CS_KickGCRet
+             * @instance
+             */
+            GS2CS_KickGCRet.prototype.opts = null;
+    
+            /**
+             * GS2CS_KickGCRet result.
+             * @member {Protos.Global.ECommon} result
+             * @memberof Protos.GS2CS_KickGCRet
+             * @instance
+             */
+            GS2CS_KickGCRet.prototype.result = 0;
+    
+            /**
+             * Creates a new GS2CS_KickGCRet instance using the specified properties.
+             * @function create
+             * @memberof Protos.GS2CS_KickGCRet
+             * @static
+             * @param {Protos.IGS2CS_KickGCRet=} [properties] Properties to set
+             * @returns {Protos.GS2CS_KickGCRet} GS2CS_KickGCRet instance
+             */
+            GS2CS_KickGCRet.create = function create(properties) {
+                return new GS2CS_KickGCRet(properties);
+            };
+    
+            /**
+             * Encodes the specified GS2CS_KickGCRet message. Does not implicitly {@link Protos.GS2CS_KickGCRet.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.GS2CS_KickGCRet
+             * @static
+             * @param {Protos.IGS2CS_KickGCRet} message GS2CS_KickGCRet message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GS2CS_KickGCRet.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.result != null && message.hasOwnProperty("result"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified GS2CS_KickGCRet message, length delimited. Does not implicitly {@link Protos.GS2CS_KickGCRet.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.GS2CS_KickGCRet
+             * @static
+             * @param {Protos.IGS2CS_KickGCRet} message GS2CS_KickGCRet message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GS2CS_KickGCRet.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a GS2CS_KickGCRet message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.GS2CS_KickGCRet
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.GS2CS_KickGCRet} GS2CS_KickGCRet
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GS2CS_KickGCRet.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2CS_KickGCRet();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.result = reader.int32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a GS2CS_KickGCRet message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.GS2CS_KickGCRet
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.GS2CS_KickGCRet} GS2CS_KickGCRet
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GS2CS_KickGCRet.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a GS2CS_KickGCRet message.
+             * @function verify
+             * @memberof Protos.GS2CS_KickGCRet
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            GS2CS_KickGCRet.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.result != null && message.hasOwnProperty("result"))
+                    switch (message.result) {
+                    default:
+                        return "result: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
+                return null;
+            };
+    
+            /**
+             * Creates a GS2CS_KickGCRet message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.GS2CS_KickGCRet
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.GS2CS_KickGCRet} GS2CS_KickGCRet
+             */
+            GS2CS_KickGCRet.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.GS2CS_KickGCRet)
+                    return object;
+                var message = new $root.Protos.GS2CS_KickGCRet();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.GS2CS_KickGCRet.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                switch (object.result) {
+                case "Success":
+                case 0:
+                    message.result = 0;
+                    break;
+                case "Failed":
+                case 1:
+                    message.result = 1;
+                    break;
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a GS2CS_KickGCRet message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.GS2CS_KickGCRet
+             * @static
+             * @param {Protos.GS2CS_KickGCRet} message GS2CS_KickGCRet
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            GS2CS_KickGCRet.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.opts = null;
+                    object.result = options.enums === String ? "Success" : 0;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.result != null && message.hasOwnProperty("result"))
+                    object.result = options.enums === String ? $root.Protos.Global.ECommon[message.result] : message.result;
+                return object;
+            };
+    
+            /**
+             * Converts this GS2CS_KickGCRet to JSON.
+             * @function toJSON
+             * @memberof Protos.GS2CS_KickGCRet
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            GS2CS_KickGCRet.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return GS2CS_KickGCRet;
         })();
     
         /**
@@ -8660,6 +9172,7 @@ define(["libs/protobufjs"], function($protobuf) {
                         return "result: enum value expected";
                     case 0:
                     case 1:
+                    case 2:
                         break;
                     }
                 return null;
@@ -8687,9 +9200,13 @@ define(["libs/protobufjs"], function($protobuf) {
                 case 0:
                     message.result = 0;
                     break;
-                case "Failed":
+                case "SessionExpire":
                 case 1:
                     message.result = 1;
+                    break;
+                case "IllegalLogin":
+                case 2:
+                    message.result = 2;
                     break;
                 }
                 return message;
@@ -8735,16 +9252,246 @@ define(["libs/protobufjs"], function($protobuf) {
              * @name Protos.GS2GC_LoginRet.EResult
              * @enum {string}
              * @property {number} Success=0 Success value
-             * @property {number} Failed=1 Failed value
+             * @property {number} SessionExpire=1 SessionExpire value
+             * @property {number} IllegalLogin=2 IllegalLogin value
              */
             GS2GC_LoginRet.EResult = (function() {
                 var valuesById = {}, values = Object.create(valuesById);
                 values[valuesById[0] = "Success"] = 0;
-                values[valuesById[1] = "Failed"] = 1;
+                values[valuesById[1] = "SessionExpire"] = 1;
+                values[valuesById[2] = "IllegalLogin"] = 2;
                 return values;
             })();
     
             return GS2GC_LoginRet;
+        })();
+    
+        Protos.GS2GC_Kick = (function() {
+    
+            /**
+             * Properties of a GS2GC_Kick.
+             * @memberof Protos
+             * @interface IGS2GC_Kick
+             * @property {Protos.IMsgOpts|null} [opts] GS2GC_Kick opts
+             * @property {Protos.CS2GS_KickGC.EReason|null} [reason] GS2GC_Kick reason
+             */
+    
+            /**
+             * Constructs a new GS2GC_Kick.
+             * @memberof Protos
+             * @classdesc Represents a GS2GC_Kick.
+             * @implements IGS2GC_Kick
+             * @constructor
+             * @param {Protos.IGS2GC_Kick=} [properties] Properties to set
+             */
+            function GS2GC_Kick(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * GS2GC_Kick opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.GS2GC_Kick
+             * @instance
+             */
+            GS2GC_Kick.prototype.opts = null;
+    
+            /**
+             * GS2GC_Kick reason.
+             * @member {Protos.CS2GS_KickGC.EReason} reason
+             * @memberof Protos.GS2GC_Kick
+             * @instance
+             */
+            GS2GC_Kick.prototype.reason = 0;
+    
+            /**
+             * Creates a new GS2GC_Kick instance using the specified properties.
+             * @function create
+             * @memberof Protos.GS2GC_Kick
+             * @static
+             * @param {Protos.IGS2GC_Kick=} [properties] Properties to set
+             * @returns {Protos.GS2GC_Kick} GS2GC_Kick instance
+             */
+            GS2GC_Kick.create = function create(properties) {
+                return new GS2GC_Kick(properties);
+            };
+    
+            /**
+             * Encodes the specified GS2GC_Kick message. Does not implicitly {@link Protos.GS2GC_Kick.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.GS2GC_Kick
+             * @static
+             * @param {Protos.IGS2GC_Kick} message GS2GC_Kick message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GS2GC_Kick.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.reason != null && message.hasOwnProperty("reason"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.reason);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified GS2GC_Kick message, length delimited. Does not implicitly {@link Protos.GS2GC_Kick.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.GS2GC_Kick
+             * @static
+             * @param {Protos.IGS2GC_Kick} message GS2GC_Kick message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GS2GC_Kick.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a GS2GC_Kick message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.GS2GC_Kick
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.GS2GC_Kick} GS2GC_Kick
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GS2GC_Kick.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2GC_Kick();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.reason = reader.int32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a GS2GC_Kick message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.GS2GC_Kick
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.GS2GC_Kick} GS2GC_Kick
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GS2GC_Kick.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a GS2GC_Kick message.
+             * @function verify
+             * @memberof Protos.GS2GC_Kick
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            GS2GC_Kick.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.reason != null && message.hasOwnProperty("reason"))
+                    switch (message.reason) {
+                    default:
+                        return "reason: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
+                return null;
+            };
+    
+            /**
+             * Creates a GS2GC_Kick message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.GS2GC_Kick
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.GS2GC_Kick} GS2GC_Kick
+             */
+            GS2GC_Kick.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.GS2GC_Kick)
+                    return object;
+                var message = new $root.Protos.GS2GC_Kick();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.GS2GC_Kick.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                switch (object.reason) {
+                case "DuplicateLogin":
+                case 0:
+                    message.reason = 0;
+                    break;
+                case "Other":
+                case 1:
+                    message.reason = 1;
+                    break;
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a GS2GC_Kick message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.GS2GC_Kick
+             * @static
+             * @param {Protos.GS2GC_Kick} message GS2GC_Kick
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            GS2GC_Kick.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.opts = null;
+                    object.reason = options.enums === String ? "DuplicateLogin" : 0;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.reason != null && message.hasOwnProperty("reason"))
+                    object.reason = options.enums === String ? $root.Protos.CS2GS_KickGC.EReason[message.reason] : message.reason;
+                return object;
+            };
+    
+            /**
+             * Converts this GS2GC_Kick to JSON.
+             * @function toJSON
+             * @memberof Protos.GS2GC_Kick
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            GS2GC_Kick.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return GS2GC_Kick;
         })();
     
         Protos.LS2CS_GCLogin = (function() {

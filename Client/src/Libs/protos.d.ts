@@ -134,7 +134,9 @@ export namespace Protos {
         eGS2CS_ReportState = 3000,
         eGS2CS_GCAskLogin = 3001,
         eGS2CS_GCLost = 3002,
+        eGS2CS_KickGCRet = 3003,
         eGS2GC_LoginRet = 3100,
+        eGS2GC_Kick = 3101,
         eBS2CS_ReportState = 4000,
         eBS2CS_GCAskLogin = 4001,
         eBS2CS_GCLost = 4002,
@@ -145,6 +147,7 @@ export namespace Protos {
         eCS2LS_GSLost = 5002,
         eCS2LS_GCLoginRet = 5003,
         eCS2GS_GCLoginRet = 5100,
+        eCS2GS_KickGC = 5101,
         eCS2BS_GCLoginRet = 5200,
         eCS2BS_RoomInfo = 5201,
         eCS2GC_BeginMatchRet = 5300,
@@ -448,7 +451,37 @@ export namespace Protos {
 
         enum EResult {
             Success = 0,
-            Failed = 1
+            IllegalLogin = 1
+        }
+    }
+
+    interface ICS2GS_KickGC {
+        opts?: (Protos.IMsgOpts|null);
+        gcNID?: (Long|null);
+        reason?: (Protos.CS2GS_KickGC.EReason|null);
+    }
+
+    class CS2GS_KickGC implements ICS2GS_KickGC {
+        constructor(properties?: Protos.ICS2GS_KickGC);
+        public opts?: (Protos.IMsgOpts|null);
+        public gcNID: Long;
+        public reason: Protos.CS2GS_KickGC.EReason;
+        public static create(properties?: Protos.ICS2GS_KickGC): Protos.CS2GS_KickGC;
+        public static encode(message: Protos.ICS2GS_KickGC, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GS_KickGC, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GS_KickGC;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GS_KickGC;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GS_KickGC;
+        public static toObject(message: Protos.CS2GS_KickGC, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace CS2GS_KickGC {
+
+        enum EReason {
+            DuplicateLogin = 0,
+            Other = 1
         }
     }
 
@@ -635,6 +668,26 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GS2CS_GCLost;
         public static toObject(message: Protos.GS2CS_GCLost, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGS2CS_KickGCRet {
+        opts?: (Protos.IMsgOpts|null);
+        result?: (Protos.Global.ECommon|null);
+    }
+
+    class GS2CS_KickGCRet implements IGS2CS_KickGCRet {
+        constructor(properties?: Protos.IGS2CS_KickGCRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public result: Protos.Global.ECommon;
+        public static create(properties?: Protos.IGS2CS_KickGCRet): Protos.GS2CS_KickGCRet;
+        public static encode(message: Protos.IGS2CS_KickGCRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGS2CS_KickGCRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GS2CS_KickGCRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GS2CS_KickGCRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GS2CS_KickGCRet;
+        public static toObject(message: Protos.GS2CS_KickGCRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
@@ -882,8 +935,29 @@ export namespace Protos {
 
         enum EResult {
             Success = 0,
-            Failed = 1
+            SessionExpire = 1,
+            IllegalLogin = 2
         }
+    }
+
+    interface IGS2GC_Kick {
+        opts?: (Protos.IMsgOpts|null);
+        reason?: (Protos.CS2GS_KickGC.EReason|null);
+    }
+
+    class GS2GC_Kick implements IGS2GC_Kick {
+        constructor(properties?: Protos.IGS2GC_Kick);
+        public opts?: (Protos.IMsgOpts|null);
+        public reason: Protos.CS2GS_KickGC.EReason;
+        public static create(properties?: Protos.IGS2GC_Kick): Protos.GS2GC_Kick;
+        public static encode(message: Protos.IGS2GC_Kick, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGS2GC_Kick, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GS2GC_Kick;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GS2GC_Kick;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GS2GC_Kick;
+        public static toObject(message: Protos.GS2GC_Kick, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
     }
 
     interface ILS2CS_GCLogin {

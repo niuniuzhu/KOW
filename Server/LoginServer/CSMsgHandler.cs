@@ -21,12 +21,5 @@ namespace LoginServer
 			Logger.Log( $"GS report:{gsInfo},count:{this.gsInfos.Count}" );
 			return ErrorCode.Success;
 		}
-
-		public ErrorCode GSLostHandler( uint gsID )
-		{
-			this.gsInfos.Remove( gsID );
-			Logger.Log( $"GS lost:{gsID},count:{this.gsInfos.Count}" );
-			return ErrorCode.Success;
-		}
 	}
 }

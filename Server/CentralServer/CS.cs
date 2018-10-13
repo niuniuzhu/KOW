@@ -6,6 +6,7 @@ using Shared;
 using Shared.DB;
 using System.Collections.Generic;
 using System.IO;
+using CentralServer.Match;
 using CentralServer.User;
 
 namespace CentralServer
@@ -22,6 +23,7 @@ namespace CentralServer
 		public readonly RedisWrapper redisWrapper = new RedisWrapper();
 		public readonly UserMgr userMgr = new UserMgr();
 		public readonly GCSIDMgr gcNIDMgr = new GCSIDMgr();
+		public readonly Matcher matcher = new Matcher();
 		public readonly Dictionary<uint, GSInfo> nIDToGSInfos = new Dictionary<uint, GSInfo>();
 		public readonly Dictionary<uint, BSInfo> nIDToBSInfos = new Dictionary<uint, BSInfo>();
 
@@ -82,6 +84,24 @@ namespace CentralServer
 			this.gcNIDMgr.Update();
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			this.redisWrapper.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+		}
+
+		internal void OnGCLost( ulong gcNID )
+		{
+			//从房间内移除
+			this.matcher.OnUserKicked( gcNID );
+			//玩家下线
+			this.userMgr.UserOffline( gcNID );
+			//移除登陆凭证
+			this.gcNIDMgr.Remove( gcNID );
+		}
+
+		internal void OnUserKicked( ulong gcNID )
+		{
+			//从房间内移除
+			this.matcher.OnUserKicked( gcNID );
+			//移除玩家
+			this.userMgr.OnUserKicked( gcNID );
 		}
 	}
 }

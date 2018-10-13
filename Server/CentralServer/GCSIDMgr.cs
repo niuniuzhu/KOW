@@ -6,9 +6,9 @@ namespace CentralServer
 {
 	class CSID
 	{
-		public ulong gcNID;
-		public uint ukey;
-		public long loginTime;
+		public readonly ulong gcNID;
+		public readonly uint ukey;
+		public readonly long loginTime;
 
 		public CSID( ulong gcNID, uint ukey, long loginTime )
 		{
@@ -50,7 +50,10 @@ namespace CentralServer
 		public bool Remove( ulong gcNID )
 		{
 			if ( !this._gcNIDs.TryGetValue( gcNID, out CSID csid ) )
+			{
+				Logger.Warn( $"invalid gcNID:{gcNID} to remove" );
 				return false;
+			}
 			this._gcNIDs.Remove( gcNID );
 			this._gcUKeys.Remove( csid.ukey );
 			this._csids.Remove( csid );

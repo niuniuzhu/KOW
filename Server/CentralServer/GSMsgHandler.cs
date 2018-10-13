@@ -42,29 +42,13 @@ namespace CentralServer
 		{
 			bool result = this.nIDToGSInfos.Remove( gsNID );
 			System.Diagnostics.Debug.Assert( result, $"gsNID:{gsNID} not found" );
-			if ( result )
-			{
-				//踢出所有连接到该GS的玩家
-				this.userMgr.KickUsers( gsNID );
-				//通知LS有GS断开连接了
-				Protos.CS2LS_GSLost gsLost = ProtoCreator.Q_CS2LS_GSLost();
-				gsLost.Gsid = gsNID;
-				this.netSessionMgr.Send( SessionType.ServerLS, gsLost );
-			}
+			//踢出所有连接到该GS的玩家
+			this.userMgr.KickUsers( gsNID );
+			//通知LS有GS断开连接了
+			Protos.CS2LS_GSLost gsLost = ProtoCreator.Q_CS2LS_GSLost();
+			gsLost.Gsid = gsNID;
+			this.netSessionMgr.Send( SessionType.ServerLS, gsLost );
 			return ErrorCode.Success;
-		}
-
-		public ErrorCode HandleGCAskLoginFromGS( ulong gcNID, uint gsNID )
-		{
-			return this.userMgr.UserOnline( gcNID, gsNID, out _ );
-		}
-
-		public ErrorCode HandleGSGCLost( ulong gcNID )
-		{
-			//移除登陆信息
-			this.gcNIDMgr.Remove( gcNID );
-			//玩家下线
-			return this.userMgr.UserOffline( gcNID );
 		}
 	}
 }

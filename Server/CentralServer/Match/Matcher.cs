@@ -9,31 +9,60 @@ namespace CentralServer.Match
 {
 	public class Matcher
 	{
-		private static Matcher _instance;
-		public static Matcher instance => _instance ?? ( _instance = new Matcher() );
-
 		private static readonly ObejctPool<Room> POOL = new ObejctPool<Room>( 50, 25 );
 
 		private readonly List<Room> _rooms = new List<Room>();
+		private readonly Dictionary<uint, Room> _idToRoom = new Dictionary<uint, Room>();
 
-		private Matcher()
+		public bool OnUserKicked( ulong gcNID )
 		{
-		}
-
-		private bool CheckUser( ulong gcNID )
-		{
-			return CS.instance.userMgr.HasUser( gcNID );
+			CUser user = CS.instance.userMgr.GetUser( gcNID );
+			if ( user == null )
+			{
+				Logger.Warn( $"can not find user:{gcNID}" );
+				return false;
+			}
+			if ( user.inRoom )
+			{
+				System.Diagnostics.Debug.Assert( this._idToRoom.TryGetValue( user.room, out Room room ) );
+				if ( !room.RemoveUser( gcNID ) )
+					return false;
+				if ( room.IsEmpty )
+					this.DestroyRoom( room );
+			}
+			return true;
 		}
 
 		private Room CreateRoom( ulong gcNID )
 		{
-			if ( !this.CheckUser( gcNID ) )
+			CUser user = CS.instance.userMgr.GetUser( gcNID );
+			if ( user == null )
+			{
+				Logger.Warn( $"invalid gcNID:{gcNID}" );
 				return null;
-
+			}
 			Room room = POOL.Pop();
-			room.AddUser( gcNID );
+			Logger.Log( $"room:{room.id} was created" );
+			if ( !room.AddUser( gcNID ) )
+			{
+				Logger.Log( $"room:{room.id} was destroy" );
+				POOL.Push( room );
+				return null;
+			}
 			this._rooms.Add( room );
+			this._idToRoom[room.id] = room;
+			user.room = room.id;
+			user.inRoom = true;
 			return room;
+		}
+
+		private void DestroyRoom( Room room )
+		{
+			room.RemoveAllUsers();
+			this._idToRoom.Remove( room.id );
+			this._rooms.Remove( room );
+			POOL.Push( room );
+			Logger.Log( $"room:{room.id} was destroy" );
 		}
 
 		private Room SelectRoom( ulong gcNID )
@@ -43,21 +72,20 @@ namespace CentralServer.Match
 				Random rnd = new Random();
 				int index = rnd.Next( 0, this._rooms.Count );
 
-				if ( !this.CheckUser( gcNID ) )
+				CUser user = CS.instance.userMgr.GetUser( gcNID );
+				if ( user == null )
+				{
+					Logger.Warn( $"invalid gcNID:{gcNID}" );
 					return null;
-
+				}
 				Room room = this._rooms[index];
-				room.AddUser( gcNID );
+				if ( !room.AddUser( gcNID ) )
+					return null;
+				user.room = room.id;
+				user.inRoom = true;
 				return room;
 			}
 			return this.CreateRoom( gcNID );
-		}
-
-		private void DestroyRoom( Room room )
-		{
-			room.Clear();
-			this._rooms.Remove( room );
-			POOL.Push( room );
 		}
 
 		private void BeginBattle( Room room )
@@ -91,12 +119,11 @@ namespace CentralServer.Match
 				ret.Result = Protos.Global.Types.ECommon.Failed;
 			CS.instance.netSessionMgr.Send( sid, ret );
 
-			if ( room != null && room.IsFull() )
+			if ( room != null && room.IsFull )
 			{
 				this.BeginBattle( room );
 				this.DestroyRoom( room );
 			}
-
 			return ErrorCode.Success;
 		}
 	}

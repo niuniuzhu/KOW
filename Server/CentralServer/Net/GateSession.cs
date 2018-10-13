@@ -1,5 +1,4 @@
-﻿using CentralServer.Match;
-using Core.Misc;
+﻿using Core.Misc;
 using Core.Net;
 using Shared;
 using Shared.Net;
@@ -15,7 +14,7 @@ namespace CentralServer.Net
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGcaskLogin, this.OnGs2CsGcaskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGclost, this.OnGs2CsGclost );
 
-			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, msg => Matcher.instance.OnGc2CsBeginMatch( this.id, msg ) );
+			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, msg => CS.instance.matcher.OnGc2CsBeginMatch( this.id, msg ) );
 		}
 
 		protected override void OnEstablish()
@@ -56,10 +55,8 @@ namespace CentralServer.Net
 			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin ) message;
 			Protos.CS2GS_GCLoginRet gcAskLoginRet = ProtoCreator.R_GS2CS_GCAskLogin( gcAskLogin.Opts.Pid );
 
-			ErrorCode errorCode = CS.instance.HandleGCAskLoginFromGS( gcAskLogin.SessionID, this.logicID );
-			gcAskLoginRet.Result = errorCode == ErrorCode.Success
-									   ? Protos.CS2GS_GCLoginRet.Types.EResult.Success
-									   : Protos.CS2GS_GCLoginRet.Types.EResult.SessionExpire;
+			bool result = CS.instance.userMgr.UserOnline( gcAskLogin.SessionID, this.logicID, out _ );
+			gcAskLoginRet.Result = result ? Protos.CS2GS_GCLoginRet.Types.EResult.Success : Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin;
 
 			this.Send( gcAskLoginRet );
 			return ErrorCode.Success;
@@ -68,8 +65,8 @@ namespace CentralServer.Net
 		private ErrorCode OnGs2CsGclost( Google.Protobuf.IMessage message )
 		{
 			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost ) message;
-			ErrorCode errorCode = CS.instance.HandleGSGCLost( gcLost.SessionID );
-			return errorCode;
+			CS.instance.OnGCLost( gcLost.SessionID );
+			return ErrorCode.Success;
 		}
 	}
 }

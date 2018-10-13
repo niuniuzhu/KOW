@@ -83,20 +83,28 @@ namespace GateServer.Net
 		private ErrorCode OnECs2GsKickGc( IMessage message )
 		{
 			Protos.CS2GS_KickGC kickGC = ( Protos.CS2GS_KickGC ) message;
-			Protos.CS2GS_KickGC.Types.EReason reason = kickGC.Reason;
+			Protos.GS2CS_KickGCRet kickGCRet = ProtoCreator.R_CS2GS_KickGC( kickGC.Opts.Pid );
 
 			//可能在收到消息前,客户端就断开了,这里必须容错
 			if ( !GS.instance.GetClientUKey( kickGC.GcNID, out uint sid ) )
 			{
 				//通知客户端被踢下线
 				Protos.GS2GC_Kick kick = ProtoCreator.Q_GS2GC_Kick();
-				kick.Reason = reason;
+				kick.Reason = kickGC.Reason;
 				this.owner.Send( sid, kick );
 
 				//强制断开客户端
 				System.Diagnostics.Debug.Assert( GS.instance.netSessionMgr.GetSession( sid, out INetSession netSession ), $"can not find session:{sid}" );
 				netSession.DelayClose( 500, "CS Kick" );
+
+				kickGCRet.Result = Protos.Global.Types.ECommon.Success;
 			}
+			else
+				kickGCRet.Result = Protos.Global.Types.ECommon.Failed;
+
+			//通知cs操作结果
+			this.Send( kickGCRet );
+
 			return ErrorCode.Success;
 		}
 	}

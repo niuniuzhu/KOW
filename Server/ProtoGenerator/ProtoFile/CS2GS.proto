@@ -6,7 +6,8 @@ import "Global.proto";
 message CS2GS_GCLoginRet{
 	enum EResult{
 		Success = 0;
-		Failed = 1;
+		SessionExpire = 1;
+		IllegalLogin = 2;
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;

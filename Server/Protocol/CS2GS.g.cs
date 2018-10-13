@@ -24,14 +24,14 @@ namespace Protos {
     static CS2GSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtDUzJHUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ihwEKEENTMkdT",
+            "CgtDUzJHUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ioAEKEENTMkdT",
             "X0dDTG9naW5SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEjAK",
             "BnJlc3VsdBgCIAEoDjIgLlByb3Rvcy5DUzJHU19HQ0xvZ2luUmV0LkVSZXN1",
-            "bHQiIgoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVkEAEilAEKDENT",
-            "MkdTX0tpY2tHQxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoF",
-            "Z2NOSUQYAiABKAQSLAoGcmVhc29uGAMgASgOMhwuUHJvdG9zLkNTMkdTX0tp",
-            "Y2tHQy5FUmVhc29uIigKB0VSZWFzb24SEgoORHVwbGljYXRlTG9naW4QABIJ",
-            "CgVPdGhlchABYgZwcm90bzM="));
+            "bHQiOwoHRVJlc3VsdBILCgdTdWNjZXNzEAASEQoNU2Vzc2lvbkV4cGlyZRAB",
+            "EhAKDElsbGVnYWxMb2dpbhACIpQBCgxDUzJHU19LaWNrR0MSHQoEb3B0cxgB",
+            "IAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdjTklEGAIgASgEEiwKBnJlYXNv",
+            "bhgDIAEoDjIcLlByb3Rvcy5DUzJHU19LaWNrR0MuRVJlYXNvbiIoCgdFUmVh",
+            "c29uEhIKDkR1cGxpY2F0ZUxvZ2luEAASCQoFT3RoZXIQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -210,7 +210,8 @@ namespace Protos {
     public static partial class Types {
       public enum EResult {
         [pbr::OriginalName("Success")] Success = 0,
-        [pbr::OriginalName("Failed")] Failed = 1,
+        [pbr::OriginalName("SessionExpire")] SessionExpire = 1,
+        [pbr::OriginalName("IllegalLogin")] IllegalLogin = 2,
       }
 
     }

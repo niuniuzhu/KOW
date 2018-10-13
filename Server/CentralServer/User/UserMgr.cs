@@ -1,7 +1,6 @@
 ﻿using Core.Misc;
 using Google.Protobuf;
 using Shared;
-using System;
 using System.Collections.Generic;
 
 namespace CentralServer.User
@@ -21,8 +20,27 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家上线
 		/// </summary>
-		public ErrorCode UserOnline( ulong gcNID, uint ukey, uint gsNID, out CUser user )
+		public ErrorCode UserOnline( ulong gcNID, uint gsNID, out CUser user )
 		{
+			user = null;
+
+			//先验证是否合法登陆
+			if ( !CS.instance.gcNIDMgr.Check( gcNID ) )
+				return ErrorCode.InvalidGcNID;
+			uint ukey = CS.instance.gcNIDMgr.GetUKey( gcNID );
+			//移除登陆凭证
+			CS.instance.gcNIDMgr.Remove( gcNID );
+
+			//处理顶号
+			if ( this.HasUser( gcNID ) )
+			{
+				//由于gs和cs的客户端数据不同步,所以只需要各自管理就可以
+				//这里无需等待回调就马上移除客户端数据
+				System.Diagnostics.Debug.Assert(
+					this.KickUser( gcNID, Protos.CS2GS_KickGC.Types.EReason.DuplicateLogin ),
+					$"kick user:{gcNID} failed" );
+			}
+
 			user = new CUser( gcNID, ukey, gsNID );
 			this._gcNidToUser[gcNID] = user;
 			this._users.Add( user );
@@ -48,11 +66,15 @@ namespace CentralServer.User
 			var user = this.GetUser( gcNID );
 			if ( user == null )
 				return false;
+
+			//玩家下线
+			this.UserOffline( gcNID );
+
 			//通知gs玩家被踢下线
-			var kickGc = ProtoCreator.Q_CS2GS_KickGC();
+			Protos.CS2GS_KickGC kickGc = ProtoCreator.Q_CS2GS_KickGC();
 			kickGc.GcNID = gcNID;
 			kickGc.Reason = reason;
-			CS.instance.netSessionMgr.Send( user.gsNID, kickGc );
+			user.Send( kickGc );
 			return true;
 		}
 

@@ -35,11 +35,7 @@ namespace CentralServer
 
 		public ErrorCode HandleGCAskLoginFromBS( ulong gcNID, uint gsNID )
 		{
-			if ( !this.gcNIDMgr.Check( gcNID ) )
-				return ErrorCode.InvalidGcNID;
-			uint ukey = this.gcNIDMgr.GetUKey( gcNID );
-			this.gcNIDMgr.Remove( gcNID );
-			return this.userMgr.UserOnline( gcNID, ukey, gsNID, out _ );
+			return this.userMgr.UserOnline( gcNID, gsNID, out _ );
 		}
 
 		public ErrorCode HandleBSGCLost( ulong gcNID )

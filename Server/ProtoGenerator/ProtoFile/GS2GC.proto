@@ -7,7 +7,8 @@ import "CS2GS.proto";
 message GS2GC_LoginRet {
 	enum EResult{
 		Success = 0;
-		Failed = 1;
+		SessionExpire = 1;
+		IllegalLogin = 2;
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;

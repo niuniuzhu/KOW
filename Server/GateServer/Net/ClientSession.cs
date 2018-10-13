@@ -58,8 +58,8 @@ namespace GateServer.Net
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
 						GS.instance.AddClient( this._gcNid, this.id );
 						break;
-					case Protos.CS2GS_GCLoginRet.Types.EResult.Failed:
-						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Failed;
+					case Protos.CS2GS_GCLoginRet.Types.EResult.SessionExpire:
+						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.SessionExpire;
 						this.DelayClose( 500, "client login failed" );
 						break;
 				}

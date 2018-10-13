@@ -25,12 +25,12 @@ namespace Protos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgtHUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8aC0NTMkdTLnBy",
-            "b3RvIoMBCg5HUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
+            "b3RvIpwBCg5HUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
             "Lk1zZ09wdHMSLgoGcmVzdWx0GAIgASgOMh4uUHJvdG9zLkdTMkdDX0xvZ2lu",
-            "UmV0LkVSZXN1bHQiIgoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVk",
-            "EAEiWQoKR1MyR0NfS2ljaxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09w",
-            "dHMSLAoGcmVhc29uGAIgASgOMhwuUHJvdG9zLkNTMkdTX0tpY2tHQy5FUmVh",
-            "c29uYgZwcm90bzM="));
+            "UmV0LkVSZXN1bHQiOwoHRVJlc3VsdBILCgdTdWNjZXNzEAASEQoNU2Vzc2lv",
+            "bkV4cGlyZRABEhAKDElsbGVnYWxMb2dpbhACIlkKCkdTMkdDX0tpY2sSHQoE",
+            "b3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiwKBnJlYXNvbhgCIAEoDjIc",
+            "LlByb3Rvcy5DUzJHU19LaWNrR0MuRVJlYXNvbmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2GSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -209,7 +209,8 @@ namespace Protos {
     public static partial class Types {
       public enum EResult {
         [pbr::OriginalName("Success")] Success = 0,
-        [pbr::OriginalName("Failed")] Failed = 1,
+        [pbr::OriginalName("SessionExpire")] SessionExpire = 1,
+        [pbr::OriginalName("IllegalLogin")] IllegalLogin = 2,
       }
 
     }

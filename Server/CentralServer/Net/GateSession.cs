@@ -59,7 +59,7 @@ namespace CentralServer.Net
 			ErrorCode errorCode = CS.instance.HandleGCAskLoginFromGS( gcAskLogin.SessionID, this.logicID );
 			gcAskLoginRet.Result = errorCode == ErrorCode.Success
 									   ? Protos.CS2GS_GCLoginRet.Types.EResult.Success
-									   : Protos.CS2GS_GCLoginRet.Types.EResult.Failed;
+									   : Protos.CS2GS_GCLoginRet.Types.EResult.SessionExpire;
 
 			this.Send( gcAskLoginRet );
 			return ErrorCode.Success;

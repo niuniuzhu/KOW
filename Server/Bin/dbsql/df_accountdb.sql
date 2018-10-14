@@ -5,10 +5,13 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `account_user`;
 CREATE TABLE `account_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sdk` int(10) NOT NULL,
+  `id` int (11) unsigned NOT NULL AUTO_INCREMENT,
+  `sdk` tinyint(4) unsigned NOT NULL,
   `uname` varchar(32) NOT NULL,
   `pwd` varchar(32) NOT NULL,
+  `last_login_time` bigint(20) NOT NULL,
+  `last_login_ip` varchar(46) NOT NULL,
+  `block` int(11) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `uname_check` (`uname`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;

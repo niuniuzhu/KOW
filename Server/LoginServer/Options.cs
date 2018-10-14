@@ -74,5 +74,11 @@ namespace LoginServer
 			SetName = "bysetting",
 			HelpText = "password verification." )]
 		public int pwdVerification { get; set; }
+
+		[Option( "auto_register",
+			Default = 1,
+			SetName = "bysetting",
+			HelpText = "auto register." )]
+		public int autoRegister { get; set; }
 	}
 }

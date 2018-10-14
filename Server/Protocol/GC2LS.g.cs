@@ -29,12 +29,15 @@ namespace Protos {
             "A3NkaxgCIAEoBRIMCgRuYW1lGAMgASgJEg4KBnBhc3N3ZBgEIAEoCRIQCghw",
             "bGF0Zm9ybRgFIAEoDSJNCg5HQzJMU19Bc2tMb2dpbhIdCgRvcHRzGAEgASgL",
             "Mg8uUHJvdG9zLk1zZ09wdHMSDAoEbmFtZRgCIAEoCRIOCgZwYXNzd2QYAyAB",
-            "KAliBnByb3RvMw=="));
+            "KAkiYQoTR0MyTFNfQXNrU21hcnRMb2dpbhIdCgRvcHRzGAEgASgLMg8uUHJv",
+            "dG9zLk1zZ09wdHMSCwoDc2RrGAIgASgFEgwKBG5hbWUYAyABKAkSEAoIcGxh",
+            "dGZvcm0YBCABKA1iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2LS_AskRegister), global::Protos.GC2LS_AskRegister.Parser, new[]{ "Opts", "Sdk", "Name", "Passwd", "Platform" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2LS_AskLogin), global::Protos.GC2LS_AskLogin.Parser, new[]{ "Opts", "Name", "Passwd" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2LS_AskLogin), global::Protos.GC2LS_AskLogin.Parser, new[]{ "Opts", "Name", "Passwd" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2LS_AskSmartLogin), global::Protos.GC2LS_AskSmartLogin.Parser, new[]{ "Opts", "Sdk", "Name", "Platform" }, null, null, null)
           }));
     }
     #endregion
@@ -477,6 +480,228 @@ namespace Protos {
           }
           case 26: {
             Passwd = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///客户端登陆并自动注册
+  /// </summary>
+  public sealed partial class GC2LS_AskSmartLogin : pb::IMessage<GC2LS_AskSmartLogin> {
+    private static readonly pb::MessageParser<GC2LS_AskSmartLogin> _parser = new pb::MessageParser<GC2LS_AskSmartLogin>(() => new GC2LS_AskSmartLogin());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GC2LS_AskSmartLogin> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.GC2LSReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2LS_AskSmartLogin() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2LS_AskSmartLogin(GC2LS_AskSmartLogin other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      sdk_ = other.sdk_;
+      name_ = other.name_;
+      platform_ = other.platform_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2LS_AskSmartLogin Clone() {
+      return new GC2LS_AskSmartLogin(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "sdk" field.</summary>
+    public const int SdkFieldNumber = 2;
+    private int sdk_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Sdk {
+      get { return sdk_; }
+      set {
+        sdk_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 3;
+    private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "platform" field.</summary>
+    public const int PlatformFieldNumber = 4;
+    private uint platform_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Platform {
+      get { return platform_; }
+      set {
+        platform_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GC2LS_AskSmartLogin);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GC2LS_AskSmartLogin other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Sdk != other.Sdk) return false;
+      if (Name != other.Name) return false;
+      if (Platform != other.Platform) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Sdk != 0) hash ^= Sdk.GetHashCode();
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Platform != 0) hash ^= Platform.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Sdk != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Sdk);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
+      if (Platform != 0) {
+        output.WriteRawTag(32);
+        output.WriteUInt32(Platform);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Sdk != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Sdk);
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (Platform != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Platform);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GC2LS_AskSmartLogin other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Sdk != 0) {
+        Sdk = other.Sdk;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.Platform != 0) {
+        Platform = other.Platform;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            Sdk = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
+            break;
+          }
+          case 32: {
+            Platform = input.ReadUInt32();
             break;
           }
         }

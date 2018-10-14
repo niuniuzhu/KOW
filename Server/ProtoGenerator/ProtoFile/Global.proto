@@ -10,6 +10,7 @@ enum MsgID {
 	//gc
 	eGC2LS_AskRegister = 1000;
 	eGC2LS_AskLogin = 1001;
+	eGC2LS_AskSmartLogin = 1002;
 
 	eGC2GS_AskLogin = 1100;
 	eGC2GS_KeepAlive = 1101;
@@ -117,6 +118,7 @@ message Global{
 		"LS2CS_GCLogin":"CS2LS_GCLoginRet",
 		"GC2LS_AskRegister": "LS2GC_AskRegRet",
 		"GC2LS_AskLogin": "LS2GC_AskLoginRet",
+		"GC2LS_AskSmartLogin": "LS2GC_AskLoginRet",
 		"GC2GS_AskLogin": "GS2GC_LoginRet",
 		"GS2CS_GCAskLogin": "CS2GS_GCLoginRet",
 		"BS2CS_GCAskLogin": "CS2BS_GCLoginRet",

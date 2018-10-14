@@ -13,6 +13,8 @@ message LS2DB_QueryLogin{
 	string name = 2;//用户名
 	string pwd = 3;//密码
 	bool vertPwd = 4;//是否需要验证密码
+	string ip = 5;//登陆ip
+	int64 time = 6;//登陆时间
 }
 
 message LS2DB_Exec {

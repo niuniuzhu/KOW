@@ -10,6 +10,7 @@ export class ProtoCreator {
 		[Protos.G_AskPingRet, <Protos.MsgID>11],
 		[Protos.GC2LS_AskRegister, <Protos.MsgID>1000],
 		[Protos.GC2LS_AskLogin, <Protos.MsgID>1001],
+		[Protos.GC2LS_AskSmartLogin, <Protos.MsgID>1002],
 		[Protos.GC2GS_AskLogin, <Protos.MsgID>1100],
 		[Protos.GC2GS_KeepAlive, <Protos.MsgID>1101],
 		[Protos.GC2BS_AskLogin, <Protos.MsgID>1200],
@@ -53,6 +54,7 @@ export class ProtoCreator {
 		[<Protos.MsgID>11, Protos.G_AskPingRet],
 		[<Protos.MsgID>1000, Protos.GC2LS_AskRegister],
 		[<Protos.MsgID>1001, Protos.GC2LS_AskLogin],
+		[<Protos.MsgID>1002, Protos.GC2LS_AskSmartLogin],
 		[<Protos.MsgID>1100, Protos.GC2GS_AskLogin],
 		[<Protos.MsgID>1101, Protos.GC2GS_KeepAlive],
 		[<Protos.MsgID>1200, Protos.GC2BS_AskLogin],
@@ -118,6 +120,13 @@ export class ProtoCreator {
 
 	public static Q_GC2LS_AskLogin(): Protos.GC2LS_AskLogin {
 		let msg = new Protos.GC2LS_AskLogin();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+		return msg;
+	}
+
+	public static Q_GC2LS_AskSmartLogin(): Protos.GC2LS_AskSmartLogin {
+		let msg = new Protos.GC2LS_AskSmartLogin();
 		msg.opts = new Protos.MsgOpts();
 		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
@@ -383,6 +392,14 @@ export class ProtoCreator {
 		return msg;
 	}
 
+	public static R_GC2LS_AskSmartLogin(pid: number): Protos.LS2GC_AskLoginRet {
+		let msg = new Protos.LS2GC_AskLoginRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
 	public static R_GC2GS_AskLogin(pid: number): Protos.GS2GC_LoginRet {
 		let msg = new Protos.GS2GC_LoginRet();
 		msg.opts = new Protos.MsgOpts();
@@ -480,6 +497,10 @@ export class ProtoCreator {
 			}
 			case 1001: {
 				let msg = Protos.GC2LS_AskLogin.decode(data, size);
+				return msg;
+			}
+			case 1002: {
+				let msg = Protos.GC2LS_AskSmartLogin.decode(data, size);
 				return msg;
 			}
 			case 1100: {
@@ -647,6 +668,11 @@ export class ProtoCreator {
 
 	public static D_GC2LS_AskLogin(data: Uint8Array, size: number): Protos.GC2LS_AskLogin {
 		let msg = Protos.GC2LS_AskLogin.decode(data, size);
+		return msg;
+	}
+
+	public static D_GC2LS_AskSmartLogin(data: Uint8Array, size: number): Protos.GC2LS_AskSmartLogin {
+		let msg = Protos.GC2LS_AskSmartLogin.decode(data, size);
 		return msg;
 	}
 
@@ -845,6 +871,9 @@ export class ProtoCreator {
 			case 1001: {
 				return new Protos.GC2LS_AskLogin();
 			}
+			case 1002: {
+				return new Protos.GC2LS_AskSmartLogin();
+			}
 			case 1100: {
 				return new Protos.GC2GS_AskLogin();
 			}
@@ -971,6 +1000,9 @@ export class ProtoCreator {
 			}
 			case 1001: {
 				return (<Protos.GC2LS_AskLogin>message).opts;
+			}
+			case 1002: {
+				return (<Protos.GC2LS_AskSmartLogin>message).opts;
 			}
 			case 1100: {
 				return (<Protos.GC2GS_AskLogin>message).opts;

@@ -4,6 +4,7 @@ using Shared;
 using Shared.DB;
 using Shared.Net;
 using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 using GSInfo = Shared.GSInfo;
 
@@ -15,6 +16,7 @@ namespace LoginServer.Net
 		{
 			this._msgCenter.Register( Protos.MsgID.EGc2LsAskRegister, this.OnGCtoLSAskRegister );
 			this._msgCenter.Register( Protos.MsgID.EGc2LsAskLogin, this.OnGCtoLSAskLogin );
+			this._msgCenter.Register( Protos.MsgID.EGc2LsAskSmartLogin, this.OnGc2LsAskSmartLogin );
 		}
 
 		protected override void OnEstablish()
@@ -36,7 +38,7 @@ namespace LoginServer.Net
 
 			regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.Success;
 
-			//检测用户名是否存在
+			//在内存中检测用户名是否存在
 			if ( LS.instance.userNameToGcNID.ContainsKey( register.Name ) )
 			{
 				regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.UnameExists;
@@ -46,7 +48,7 @@ namespace LoginServer.Net
 			}
 
 			//检测用户名的合法性
-			if ( string.IsNullOrEmpty( register.Name ) || register.Name.Length < Consts.DEFAULT_UNAME_LEN )
+			if ( !CheckUsername( register.Name ) )
 			{
 				regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.UnameIllegal;
 				this.Send( regRet );
@@ -58,9 +60,7 @@ namespace LoginServer.Net
 			if ( LS.instance.config.pwdVerification )
 			{
 				//检测密码合法性
-				if ( string.IsNullOrEmpty( register.Passwd ) ||
-					 register.Passwd.Length < Consts.DEFAULT_PWD_LEN ||
-					 !Consts.REGEX_PWD.IsMatch( register.Passwd ) )
+				if ( !CheckPassword( register.Passwd ) )
 				{
 					regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.PwdIllegal;
 					this.Send( regRet );
@@ -100,7 +100,7 @@ namespace LoginServer.Net
 				{
 					//请求DB服务器注册账号
 					Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
-					sqlExec.Cmd = $"insert account_user( sdk,uname,pwd ) values({register.Sdk}, \'{register.Name}\', \'{pwdmd5}\');";
+					sqlExec.Cmd = $"insert account_user( sdk,uname,pwd,last_login_time,last_login_ip ) values({register.Sdk}, \'{register.Name}\', \'{pwdmd5}\', {TimeUtils.utcTime}, \'{this.connection.remoteEndPoint.ToString()}\');";
 					this.owner.Send( SessionType.ServerL2DB, sqlExec, OnCheckAccount );
 				}
 				else
@@ -139,7 +139,7 @@ namespace LoginServer.Net
 			Protos.LS2GC_AskLoginRet gcLoginRet = ProtoCreator.R_GC2LS_AskLogin( login.Opts.Pid );
 
 			//检测用户名的合法性
-			if ( string.IsNullOrEmpty( login.Name ) || login.Name.Length < Consts.DEFAULT_UNAME_LEN )
+			if ( !CheckUsername( login.Name ) )
 			{
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
 				this.Send( gcLoginRet );
@@ -151,9 +151,7 @@ namespace LoginServer.Net
 			if ( LS.instance.config.pwdVerification )
 			{
 				//检测密码合法性
-				if ( string.IsNullOrEmpty( login.Passwd ) ||
-					 login.Passwd.Length < Consts.DEFAULT_PWD_LEN ||
-					 !Consts.REGEX_PWD.IsMatch( login.Passwd ) )
+				if ( !CheckPassword( login.Passwd ) )
 				{
 					gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidPwd;
 					this.Send( gcLoginRet );
@@ -191,9 +189,11 @@ namespace LoginServer.Net
 						return ErrorCode.Success;
 					}
 				}
-				ukey = ( uint ) redisWrapper.HashGet( "ukeys", login.Name );//从redis取回ukey
-				HandlerLoginSuccess();
+				//从redis取回ukey
+				ukey = ( uint ) redisWrapper.HashGet( "ukeys", login.Name );
+				this.HandlerLoginSuccess( gcLoginRet, login.Name, ukey );
 			}
+			//从数据库中查找
 			else
 			{
 				string pwdmd5 = Core.Crypto.MD5Util.GetMd5HexDigest( pwd ).Replace( "-", string.Empty ).ToLower();
@@ -201,20 +201,23 @@ namespace LoginServer.Net
 				queryLogin.Name = login.Name;
 				queryLogin.Pwd = pwdmd5;
 				queryLogin.VertPwd = LS.instance.config.pwdVerification;
+				queryLogin.Time = TimeUtils.utcTime;
+				queryLogin.Ip = this.connection.remoteEndPoint.ToString();
 				this.owner.Send( SessionType.ServerL2DB, queryLogin, m =>
 				{
 					Protos.DB2LS_QueryLoginRet queryLoginRet = ( Protos.DB2LS_QueryLoginRet ) m;
 					gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) queryLoginRet.Result;
-					ukey = queryLoginRet.Ukey;//从数据库取回ukey
 					if ( gcLoginRet.Result == Protos.LS2GC_AskLoginRet.Types.EResult.Success )
 					{
+						//从数据库取回ukey
+						ukey = queryLoginRet.Ukey;
 						//写入redis缓存
 						if ( redisWrapper.IsConnected )
 						{
 							redisWrapper.HashSet( "unames", login.Name, pwdmd5 );
 							redisWrapper.HashSet( "ukeys", login.Name, ukey );
 						}
-						HandlerLoginSuccess();
+						this.HandlerLoginSuccess( gcLoginRet, login.Name, ukey );
 					}
 					else
 					{
@@ -224,44 +227,181 @@ namespace LoginServer.Net
 				} );
 			}
 			return ErrorCode.Success;
+		}
 
-			void HandlerLoginSuccess()
+		private void HandlerLoginSuccess( Protos.LS2GC_AskLoginRet gcLoginRet, string uname, uint ukey )
+		{
+			//为当前客户端分配唯一id
+			ulong sessionID = GuidHash.GetUInt64();
+			//通知cs,客户端登陆成功
+			Protos.LS2CS_GCLogin csLogin = ProtoCreator.Q_LS2CS_GCLogin();
+			csLogin.SessionID = sessionID;
+			csLogin.Ukey = ukey;
+			this.owner.Send( SessionType.ServerL2CS, csLogin, m =>
 			{
-				//为当前客户端分配唯一id
-				ulong sessionID = GuidHash.GetUInt64();
-				//通知cs,客户端登陆成功
-				Protos.LS2CS_GCLogin csLogin = ProtoCreator.Q_LS2CS_GCLogin();
-				csLogin.SessionID = sessionID;
-				csLogin.Ukey = ukey;
-				this.owner.Send( SessionType.ServerL2CS, csLogin, m =>
-				{
-					Protos.CS2LS_GCLoginRet csLoginRet = ( Protos.CS2LS_GCLoginRet ) m;
+				Protos.CS2LS_GCLoginRet csLoginRet = ( Protos.CS2LS_GCLoginRet ) m;
 
-					gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) csLoginRet.Result;
+				gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) csLoginRet.Result;
+				if ( gcLoginRet.Result == Protos.LS2GC_AskLoginRet.Types.EResult.Success )
+				{
+					gcLoginRet.SessionID = sessionID;
+					foreach ( KeyValuePair<uint, GSInfo> kv in LS.instance.gsInfos )
+					{
+						GSInfo info = kv.Value;
+						Protos.GSInfo gsInfo = new Protos.GSInfo
+						{
+							Name = info.name,
+							Ip = info.ip,
+							Port = info.port,
+							Password = info.password,
+							State = ( Protos.GSInfo.Types.State ) info.state
+						};
+						gcLoginRet.GsInfos.Add( gsInfo );
+					}
+					Logger.Log( $"client:{uname}, sid:{sessionID} login success" );
+				}
+				else
+					Logger.Log( $"client:{uname} login failed" );
+				this.Send( gcLoginRet );
+				this.DelayClose( 500, "login complete" );
+			} );
+		}
+
+		private ErrorCode OnGc2LsAskSmartLogin( Google.Protobuf.IMessage message )
+		{
+			if ( LS.instance.config.pwdVerification )
+			{
+				Logger.Error( "the password verification must be shutdown before use smart login" );
+				return ErrorCode.Failed;
+			}
+
+			Protos.GC2LS_AskSmartLogin login = ( Protos.GC2LS_AskSmartLogin ) message;
+			Protos.LS2GC_AskLoginRet gcLoginRet = ProtoCreator.R_GC2LS_AskLogin( login.Opts.Pid );
+
+			//检测用户名的合法性
+			if ( !CheckUsername( login.Name ) )
+			{
+				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
+				this.Send( gcLoginRet );
+				this.DelayClose( 500, "login complete" );
+				return ErrorCode.Success;
+			}
+
+			bool hasUsername = false;
+			//登录id 
+			uint ukey = 0;
+			//若Redis可用则查询；不可用就直接查询数据库
+			RedisWrapper redisWrapper = LS.instance.redisWrapper;
+			//尝试从缓存中查找账号
+			if ( redisWrapper.IsConnected )
+			{
+				RedisValue cachedPwd = redisWrapper.HashGet( "unames", login.Name );
+				if ( cachedPwd.HasValue ) //redis找到用户名
+				{
+					hasUsername = true;
+					//从redis取回ukey
+					ukey = ( uint ) redisWrapper.HashGet( "ukeys", login.Name );
+				}
+				OnUsernameChecked();
+			}
+			//从数据库中查找
+			else
+			{
+				Protos.LS2DB_QueryLogin queryLogin = ProtoCreator.Q_LS2DB_QueryLogin();
+				queryLogin.Name = login.Name;
+				queryLogin.VertPwd = false;
+				queryLogin.Time = TimeUtils.utcTime;
+				queryLogin.Ip = this.connection.remoteEndPoint.ToString();
+				this.owner.Send( SessionType.ServerL2DB, queryLogin, m =>
+				{
+					Protos.DB2LS_QueryLoginRet queryLoginRet = ( Protos.DB2LS_QueryLoginRet ) m;
+					gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) queryLoginRet.Result;
 					if ( gcLoginRet.Result == Protos.LS2GC_AskLoginRet.Types.EResult.Success )
 					{
-						gcLoginRet.SessionID = sessionID;
-						foreach ( KeyValuePair<uint, GSInfo> kv in LS.instance.gsInfos )
+						hasUsername = true;
+						//从数据库取回ukey
+						ukey = queryLoginRet.Ukey;
+						//写入redis缓存
+						if ( redisWrapper.IsConnected )
 						{
-							GSInfo info = kv.Value;
-							Protos.GSInfo gsInfo = new Protos.GSInfo
-							{
-								Name = info.name,
-								Ip = info.ip,
-								Port = info.port,
-								Password = info.password,
-								State = ( Protos.GSInfo.Types.State ) info.state
-							};
-							gcLoginRet.GsInfos.Add( gsInfo );
+							redisWrapper.HashSet( "unames", login.Name, string.Empty );
+							redisWrapper.HashSet( "ukeys", login.Name, ukey );
 						}
-						Logger.Log( $"client:{login.Name}, sid:{sessionID} login success" );
 					}
-					else
-						Logger.Log( $"client:{login.Name} login failed" );
-					this.Send( gcLoginRet );
-					this.DelayClose( 500, "login complete" );
+					OnUsernameChecked();
 				} );
 			}
+
+			void OnUsernameChecked()
+			{
+				if ( !hasUsername )
+				{
+					//找不到用户名则自动注册
+					this.SmartRegister( login.Sdk, login.Name, login.Platform, ret =>
+					{
+						if ( ret == Protos.DB2LS_QueryResult.Success )
+							this.HandlerLoginSuccess( gcLoginRet, login.Name, ukey );
+						else
+						{
+							//这里不应该会失败,以防万一打印一些信息
+							Logger.Error( $"smart register occurs an error:{ret}" );
+							gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) ret;
+							this.Send( gcLoginRet );
+							this.DelayClose( 500, "login complete" );
+						}
+					} );
+				}
+				else
+					this.HandlerLoginSuccess( gcLoginRet, login.Name, ukey );
+			}
+			return ErrorCode.Success;
+		}
+
+		private ErrorCode SmartRegister( int sdk, string uname, uint platform, Action<Protos.DB2LS_QueryResult> callback )
+		{
+			//无需检测用户名的合法性和是否存在,进入该方法前已经判定
+			//请求DB服务器注册账号
+			Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
+			sqlExec.Cmd = $"insert account_user( sdk,uname,pwd,last_login_time,last_login_ip ) values({sdk}, \'{uname}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{this.connection.remoteEndPoint.ToString()}\');";
+			this.owner.Send( SessionType.ServerL2DB, sqlExec, OnCheckAccount );
+
+			return ErrorCode.Success;
+
+			//DB服务端回调
+			void OnCheckAccount( Google.Protobuf.IMessage m )
+			{
+				Protos.DB2LS_ExecRet sqlExecRet = ( Protos.DB2LS_ExecRet ) m;
+				if ( sqlExecRet.Result == Protos.DB2LS_QueryResult.Success )
+				{
+					RedisWrapper redisWrapper = LS.instance.redisWrapper;
+					//写入redis缓存
+					if ( redisWrapper.IsConnected )
+					{
+						redisWrapper.HashSet( "unames", uname, string.Empty );
+						redisWrapper.HashSet( "ukeys", uname, sqlExecRet.Id );
+					}
+					callback( sqlExecRet.Result );
+				}
+				else
+					callback( sqlExecRet.Result );
+			}
+		}
+
+		private static bool CheckUsername( string uname )
+		{
+			if ( string.IsNullOrEmpty( uname ) ||
+				 uname.Length < Consts.DEFAULT_UNAME_LEN )
+				return false;
+			return true;
+		}
+
+		private static bool CheckPassword( string pwd )
+		{
+			if ( string.IsNullOrEmpty( pwd ) ||
+				 pwd.Length < Consts.DEFAULT_PWD_LEN ||
+				 !Consts.REGEX_PWD.IsMatch( pwd ) )
+				return false;
+			return true;
 		}
 	}
 }

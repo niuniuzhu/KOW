@@ -1191,6 +1191,7 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eG_AskPingRet=11 eG_AskPingRet value
          * @property {number} eGC2LS_AskRegister=1000 eGC2LS_AskRegister value
          * @property {number} eGC2LS_AskLogin=1001 eGC2LS_AskLogin value
+         * @property {number} eGC2LS_AskSmartLogin=1002 eGC2LS_AskSmartLogin value
          * @property {number} eGC2GS_AskLogin=1100 eGC2GS_AskLogin value
          * @property {number} eGC2GS_KeepAlive=1101 eGC2GS_KeepAlive value
          * @property {number} eGC2BS_AskLogin=1200 eGC2BS_AskLogin value
@@ -1235,6 +1236,7 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[11] = "eG_AskPingRet"] = 11;
             values[valuesById[1000] = "eGC2LS_AskRegister"] = 1000;
             values[valuesById[1001] = "eGC2LS_AskLogin"] = 1001;
+            values[valuesById[1002] = "eGC2LS_AskSmartLogin"] = 1002;
             values[valuesById[1100] = "eGC2GS_AskLogin"] = 1100;
             values[valuesById[1101] = "eGC2GS_KeepAlive"] = 1101;
             values[valuesById[1200] = "eGC2BS_AskLogin"] = 1200;
@@ -9017,6 +9019,265 @@ define(["libs/protobufjs"], function($protobuf) {
             return GC2LS_AskLogin;
         })();
     
+        Protos.GC2LS_AskSmartLogin = (function() {
+    
+            /**
+             * Properties of a GC2LS_AskSmartLogin.
+             * @memberof Protos
+             * @interface IGC2LS_AskSmartLogin
+             * @property {Protos.IMsgOpts|null} [opts] GC2LS_AskSmartLogin opts
+             * @property {number|null} [sdk] GC2LS_AskSmartLogin sdk
+             * @property {string|null} [name] GC2LS_AskSmartLogin name
+             * @property {number|null} [platform] GC2LS_AskSmartLogin platform
+             */
+    
+            /**
+             * Constructs a new GC2LS_AskSmartLogin.
+             * @memberof Protos
+             * @classdesc Represents a GC2LS_AskSmartLogin.
+             * @implements IGC2LS_AskSmartLogin
+             * @constructor
+             * @param {Protos.IGC2LS_AskSmartLogin=} [properties] Properties to set
+             */
+            function GC2LS_AskSmartLogin(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * GC2LS_AskSmartLogin opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @instance
+             */
+            GC2LS_AskSmartLogin.prototype.opts = null;
+    
+            /**
+             * GC2LS_AskSmartLogin sdk.
+             * @member {number} sdk
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @instance
+             */
+            GC2LS_AskSmartLogin.prototype.sdk = 0;
+    
+            /**
+             * GC2LS_AskSmartLogin name.
+             * @member {string} name
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @instance
+             */
+            GC2LS_AskSmartLogin.prototype.name = "";
+    
+            /**
+             * GC2LS_AskSmartLogin platform.
+             * @member {number} platform
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @instance
+             */
+            GC2LS_AskSmartLogin.prototype.platform = 0;
+    
+            /**
+             * Creates a new GC2LS_AskSmartLogin instance using the specified properties.
+             * @function create
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @static
+             * @param {Protos.IGC2LS_AskSmartLogin=} [properties] Properties to set
+             * @returns {Protos.GC2LS_AskSmartLogin} GC2LS_AskSmartLogin instance
+             */
+            GC2LS_AskSmartLogin.create = function create(properties) {
+                return new GC2LS_AskSmartLogin(properties);
+            };
+    
+            /**
+             * Encodes the specified GC2LS_AskSmartLogin message. Does not implicitly {@link Protos.GC2LS_AskSmartLogin.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @static
+             * @param {Protos.IGC2LS_AskSmartLogin} message GC2LS_AskSmartLogin message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GC2LS_AskSmartLogin.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.sdk != null && message.hasOwnProperty("sdk"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.sdk);
+                if (message.name != null && message.hasOwnProperty("name"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
+                if (message.platform != null && message.hasOwnProperty("platform"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).uint32(message.platform);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified GC2LS_AskSmartLogin message, length delimited. Does not implicitly {@link Protos.GC2LS_AskSmartLogin.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @static
+             * @param {Protos.IGC2LS_AskSmartLogin} message GC2LS_AskSmartLogin message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GC2LS_AskSmartLogin.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a GC2LS_AskSmartLogin message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.GC2LS_AskSmartLogin} GC2LS_AskSmartLogin
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GC2LS_AskSmartLogin.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskSmartLogin();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.sdk = reader.int32();
+                        break;
+                    case 3:
+                        message.name = reader.string();
+                        break;
+                    case 4:
+                        message.platform = reader.uint32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a GC2LS_AskSmartLogin message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.GC2LS_AskSmartLogin} GC2LS_AskSmartLogin
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GC2LS_AskSmartLogin.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a GC2LS_AskSmartLogin message.
+             * @function verify
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            GC2LS_AskSmartLogin.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.sdk != null && message.hasOwnProperty("sdk"))
+                    if (!$util.isInteger(message.sdk))
+                        return "sdk: integer expected";
+                if (message.name != null && message.hasOwnProperty("name"))
+                    if (!$util.isString(message.name))
+                        return "name: string expected";
+                if (message.platform != null && message.hasOwnProperty("platform"))
+                    if (!$util.isInteger(message.platform))
+                        return "platform: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a GC2LS_AskSmartLogin message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.GC2LS_AskSmartLogin} GC2LS_AskSmartLogin
+             */
+            GC2LS_AskSmartLogin.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.GC2LS_AskSmartLogin)
+                    return object;
+                var message = new $root.Protos.GC2LS_AskSmartLogin();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.GC2LS_AskSmartLogin.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                if (object.sdk != null)
+                    message.sdk = object.sdk | 0;
+                if (object.name != null)
+                    message.name = String(object.name);
+                if (object.platform != null)
+                    message.platform = object.platform >>> 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a GC2LS_AskSmartLogin message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @static
+             * @param {Protos.GC2LS_AskSmartLogin} message GC2LS_AskSmartLogin
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            GC2LS_AskSmartLogin.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.opts = null;
+                    object.sdk = 0;
+                    object.name = "";
+                    object.platform = 0;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.sdk != null && message.hasOwnProperty("sdk"))
+                    object.sdk = message.sdk;
+                if (message.name != null && message.hasOwnProperty("name"))
+                    object.name = message.name;
+                if (message.platform != null && message.hasOwnProperty("platform"))
+                    object.platform = message.platform;
+                return object;
+            };
+    
+            /**
+             * Converts this GC2LS_AskSmartLogin to JSON.
+             * @function toJSON
+             * @memberof Protos.GC2LS_AskSmartLogin
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            GC2LS_AskSmartLogin.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return GC2LS_AskSmartLogin;
+        })();
+    
         Protos.GS2GC_LoginRet = (function() {
     
             /**
@@ -9970,6 +10231,8 @@ define(["libs/protobufjs"], function($protobuf) {
              * @property {string|null} [name] LS2DB_QueryLogin name
              * @property {string|null} [pwd] LS2DB_QueryLogin pwd
              * @property {boolean|null} [vertPwd] LS2DB_QueryLogin vertPwd
+             * @property {string|null} [ip] LS2DB_QueryLogin ip
+             * @property {Long|null} [time] LS2DB_QueryLogin time
              */
     
             /**
@@ -10020,6 +10283,22 @@ define(["libs/protobufjs"], function($protobuf) {
             LS2DB_QueryLogin.prototype.vertPwd = false;
     
             /**
+             * LS2DB_QueryLogin ip.
+             * @member {string} ip
+             * @memberof Protos.LS2DB_QueryLogin
+             * @instance
+             */
+            LS2DB_QueryLogin.prototype.ip = "";
+    
+            /**
+             * LS2DB_QueryLogin time.
+             * @member {Long} time
+             * @memberof Protos.LS2DB_QueryLogin
+             * @instance
+             */
+            LS2DB_QueryLogin.prototype.time = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+    
+            /**
              * Creates a new LS2DB_QueryLogin instance using the specified properties.
              * @function create
              * @memberof Protos.LS2DB_QueryLogin
@@ -10051,6 +10330,10 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer.uint32(/* id 3, wireType 2 =*/26).string(message.pwd);
                 if (message.vertPwd != null && message.hasOwnProperty("vertPwd"))
                     writer.uint32(/* id 4, wireType 0 =*/32).bool(message.vertPwd);
+                if (message.ip != null && message.hasOwnProperty("ip"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.ip);
+                if (message.time != null && message.hasOwnProperty("time"))
+                    writer.uint32(/* id 6, wireType 0 =*/48).int64(message.time);
                 return writer;
             };
     
@@ -10096,6 +10379,12 @@ define(["libs/protobufjs"], function($protobuf) {
                         break;
                     case 4:
                         message.vertPwd = reader.bool();
+                        break;
+                    case 5:
+                        message.ip = reader.string();
+                        break;
+                    case 6:
+                        message.time = reader.int64();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -10146,6 +10435,12 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.vertPwd != null && message.hasOwnProperty("vertPwd"))
                     if (typeof message.vertPwd !== "boolean")
                         return "vertPwd: boolean expected";
+                if (message.ip != null && message.hasOwnProperty("ip"))
+                    if (!$util.isString(message.ip))
+                        return "ip: string expected";
+                if (message.time != null && message.hasOwnProperty("time"))
+                    if (!$util.isInteger(message.time) && !(message.time && $util.isInteger(message.time.low) && $util.isInteger(message.time.high)))
+                        return "time: integer|Long expected";
                 return null;
             };
     
@@ -10172,6 +10467,17 @@ define(["libs/protobufjs"], function($protobuf) {
                     message.pwd = String(object.pwd);
                 if (object.vertPwd != null)
                     message.vertPwd = Boolean(object.vertPwd);
+                if (object.ip != null)
+                    message.ip = String(object.ip);
+                if (object.time != null)
+                    if ($util.Long)
+                        (message.time = $util.Long.fromValue(object.time)).unsigned = false;
+                    else if (typeof object.time === "string")
+                        message.time = parseInt(object.time, 10);
+                    else if (typeof object.time === "number")
+                        message.time = object.time;
+                    else if (typeof object.time === "object")
+                        message.time = new $util.LongBits(object.time.low >>> 0, object.time.high >>> 0).toNumber();
                 return message;
             };
     
@@ -10193,6 +10499,12 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.name = "";
                     object.pwd = "";
                     object.vertPwd = false;
+                    object.ip = "";
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.time = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.time = options.longs === String ? "0" : 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -10202,6 +10514,13 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.pwd = message.pwd;
                 if (message.vertPwd != null && message.hasOwnProperty("vertPwd"))
                     object.vertPwd = message.vertPwd;
+                if (message.ip != null && message.hasOwnProperty("ip"))
+                    object.ip = message.ip;
+                if (message.time != null && message.hasOwnProperty("time"))
+                    if (typeof message.time === "number")
+                        object.time = options.longs === String ? String(message.time) : message.time;
+                    else
+                        object.time = options.longs === String ? $util.Long.prototype.toString.call(message.time) : options.longs === Number ? new $util.LongBits(message.time.low >>> 0, message.time.high >>> 0).toNumber() : message.time;
                 return object;
             };
     

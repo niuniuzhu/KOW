@@ -26,15 +26,16 @@ namespace Protos {
           string.Concat(
             "CgtMUzJEQi5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iQQoSTFMyREJf",
             "UXVlcnlBY2NvdW50Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIM",
-            "CgRuYW1lGAIgASgJIl0KEExTMkRCX1F1ZXJ5TG9naW4SHQoEb3B0cxgBIAEo",
+            "CgRuYW1lGAIgASgJIncKEExTMkRCX1F1ZXJ5TG9naW4SHQoEb3B0cxgBIAEo",
             "CzIPLlByb3Rvcy5Nc2dPcHRzEgwKBG5hbWUYAiABKAkSCwoDcHdkGAMgASgJ",
-            "Eg8KB3ZlcnRQd2QYBCABKAgiOAoKTFMyREJfRXhlYxIdCgRvcHRzGAEgASgL",
-            "Mg8uUHJvdG9zLk1zZ09wdHMSCwoDY21kGAIgASgJYgZwcm90bzM="));
+            "Eg8KB3ZlcnRQd2QYBCABKAgSCgoCaXAYBSABKAkSDAoEdGltZRgGIAEoAyI4",
+            "CgpMUzJEQl9FeGVjEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIL",
+            "CgNjbWQYAiABKAliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2DB_QueryAccount), global::Protos.LS2DB_QueryAccount.Parser, new[]{ "Opts", "Name" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2DB_QueryLogin), global::Protos.LS2DB_QueryLogin.Parser, new[]{ "Opts", "Name", "Pwd", "VertPwd" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2DB_QueryLogin), global::Protos.LS2DB_QueryLogin.Parser, new[]{ "Opts", "Name", "Pwd", "VertPwd", "Ip", "Time" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2DB_Exec), global::Protos.LS2DB_Exec.Parser, new[]{ "Opts", "Cmd" }, null, null, null)
           }));
     }
@@ -237,6 +238,8 @@ namespace Protos {
       name_ = other.name_;
       pwd_ = other.pwd_;
       vertPwd_ = other.vertPwd_;
+      ip_ = other.ip_;
+      time_ = other.time_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -298,6 +301,34 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "ip" field.</summary>
+    public const int IpFieldNumber = 5;
+    private string ip_ = "";
+    /// <summary>
+    ///登陆ip
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Ip {
+      get { return ip_; }
+      set {
+        ip_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "time" field.</summary>
+    public const int TimeFieldNumber = 6;
+    private long time_;
+    /// <summary>
+    ///登陆时间
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public long Time {
+      get { return time_; }
+      set {
+        time_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as LS2DB_QueryLogin);
@@ -315,6 +346,8 @@ namespace Protos {
       if (Name != other.Name) return false;
       if (Pwd != other.Pwd) return false;
       if (VertPwd != other.VertPwd) return false;
+      if (Ip != other.Ip) return false;
+      if (Time != other.Time) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -325,6 +358,8 @@ namespace Protos {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (Pwd.Length != 0) hash ^= Pwd.GetHashCode();
       if (VertPwd != false) hash ^= VertPwd.GetHashCode();
+      if (Ip.Length != 0) hash ^= Ip.GetHashCode();
+      if (Time != 0L) hash ^= Time.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -354,6 +389,14 @@ namespace Protos {
         output.WriteRawTag(32);
         output.WriteBool(VertPwd);
       }
+      if (Ip.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Ip);
+      }
+      if (Time != 0L) {
+        output.WriteRawTag(48);
+        output.WriteInt64(Time);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -373,6 +416,12 @@ namespace Protos {
       }
       if (VertPwd != false) {
         size += 1 + 1;
+      }
+      if (Ip.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Ip);
+      }
+      if (Time != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Time);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -399,6 +448,12 @@ namespace Protos {
       }
       if (other.VertPwd != false) {
         VertPwd = other.VertPwd;
+      }
+      if (other.Ip.Length != 0) {
+        Ip = other.Ip;
+      }
+      if (other.Time != 0L) {
+        Time = other.Time;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -428,6 +483,14 @@ namespace Protos {
           }
           case 32: {
             VertPwd = input.ReadBool();
+            break;
+          }
+          case 42: {
+            Ip = input.ReadString();
+            break;
+          }
+          case 48: {
+            Time = input.ReadInt64();
             break;
           }
         }

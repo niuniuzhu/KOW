@@ -119,6 +119,7 @@ export namespace Protos {
         eG_AskPingRet = 11,
         eGC2LS_AskRegister = 1000,
         eGC2LS_AskLogin = 1001,
+        eGC2LS_AskSmartLogin = 1002,
         eGC2GS_AskLogin = 1100,
         eGC2GS_KeepAlive = 1101,
         eGC2BS_AskLogin = 1200,
@@ -911,6 +912,30 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
+    interface IGC2LS_AskSmartLogin {
+        opts?: (Protos.IMsgOpts|null);
+        sdk?: (number|null);
+        name?: (string|null);
+        platform?: (number|null);
+    }
+
+    class GC2LS_AskSmartLogin implements IGC2LS_AskSmartLogin {
+        constructor(properties?: Protos.IGC2LS_AskSmartLogin);
+        public opts?: (Protos.IMsgOpts|null);
+        public sdk: number;
+        public name: string;
+        public platform: number;
+        public static create(properties?: Protos.IGC2LS_AskSmartLogin): Protos.GC2LS_AskSmartLogin;
+        public static encode(message: Protos.IGC2LS_AskSmartLogin, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2LS_AskSmartLogin, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2LS_AskSmartLogin;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2LS_AskSmartLogin;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2LS_AskSmartLogin;
+        public static toObject(message: Protos.GC2LS_AskSmartLogin, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
     interface IGS2GC_LoginRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.GS2GC_LoginRet.EResult|null);
@@ -1006,6 +1031,9 @@ export namespace Protos {
         opts?: (Protos.IMsgOpts|null);
         name?: (string|null);
         pwd?: (string|null);
+        vertPwd?: (boolean|null);
+        ip?: (string|null);
+        time?: (Long|null);
     }
 
     class LS2DB_QueryLogin implements ILS2DB_QueryLogin {
@@ -1013,6 +1041,9 @@ export namespace Protos {
         public opts?: (Protos.IMsgOpts|null);
         public name: string;
         public pwd: string;
+        public vertPwd: boolean;
+        public ip: string;
+        public time: Long;
         public static create(properties?: Protos.ILS2DB_QueryLogin): Protos.LS2DB_QueryLogin;
         public static encode(message: Protos.ILS2DB_QueryLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2DB_QueryLogin, writer?: $protobuf.Writer): $protobuf.Writer;

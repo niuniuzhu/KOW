@@ -55,14 +55,18 @@ namespace DBServer.Net
 						return ErrorCode.InvalidUname;
 					dataReader.Read();
 					queryLoginRet.Ukey = dataReader.GetUInt32( "id" );
+					ErrorCode QueryError = ErrorCode.Success;
 					if ( queryLogin.VertPwd )
 					{
-						return dataReader.GetString( "pwd" ) != queryLogin.Pwd
-								   ? ErrorCode.InvalidPwd
-								   : ErrorCode.Success;
+						if ( dataReader.GetString( "pwd" ) != queryLogin.Pwd )
+							QueryError = ErrorCode.InvalidPwd;
 					}
-					return ErrorCode.Success;
+					return QueryError;
 				} );
+
+			if ( errorCode == ErrorCode.Success )
+				errorCode = DB.instance.accountDB.SqlExecNonQuery( $"update account_user SET last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out long _ );
+
 			switch ( errorCode )
 			{
 				case ErrorCode.Success:

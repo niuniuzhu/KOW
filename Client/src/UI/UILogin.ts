@@ -67,15 +67,9 @@ export class UILogin extends fairygui.Window implements IUIModule {
 			UIAlert.Show("无效的用户名");
 			return;
 		}
-		let regPwd = this.contentPane.getChild("reg_password").asTextField.text;
-		if (regPwd == "") {
-			UIAlert.Show("无效的密码");
-			return;
-		}
 
 		let register = ProtoCreator.Q_GC2LS_AskRegister();
 		register.name = regName;
-		register.passwd = regPwd;
 		register.platform = 0;
 		register.sdk = 0;
 
@@ -90,7 +84,6 @@ export class UILogin extends fairygui.Window implements IUIModule {
 					case Protos.LS2GC_AskRegRet.EResult.Success:
 						UIAlert.Show("注册成功");
 						this.contentPane.getChild("name").asTextField.text = regName;
-						this.contentPane.getChild("password").asTextField.text = regPwd;
 						this.contentPane.getController("c1").selectedIndex = 0;
 						break;
 					case Protos.LS2GC_AskRegRet.EResult.Failed:
@@ -119,21 +112,17 @@ export class UILogin extends fairygui.Window implements IUIModule {
 			UIAlert.Show("无效用户名");
 			return;
 		}
-		let password = this.contentPane.getChild("password").asTextField.text;
-		if (password == "") {
-			UIAlert.Show("无效密码");
-			return;
-		}
 
-		let login = ProtoCreator.Q_GC2LS_AskLogin();
+		let login = ProtoCreator.Q_GC2LS_AskSmartLogin();
 		login.name = uname;
-		login.passwd = password;
+		login.platform = 0;
+		login.sdk = 0;
 
 		let connector = new WSConnector();
 		connector.onerror = () => UIAlert.Show("无法连接服务器", () => connector.Connect("localhost", 49996));
 		connector.onclose = () => RC.Logger.Log("connection closed.");
 		connector.onopen = () => {
-			connector.Send(Protos.GC2LS_AskLogin, login, message => {
+			connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
 				this.closeModalWait();
 				let resp: Protos.LS2GC_AskLoginRet = <Protos.LS2GC_AskLoginRet>message;
 				switch (resp.result) {

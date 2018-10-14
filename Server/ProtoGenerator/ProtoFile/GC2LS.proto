@@ -18,3 +18,11 @@ message GC2LS_AskLogin {
 	string name = 2;
 	string passwd = 3;
 }
+
+//客户端登陆并自动注册
+message GC2LS_AskSmartLogin {
+	MsgOpts opts = 1;
+	int32 sdk = 2;
+	string name = 3;
+	uint32 platform = 4;
+}

@@ -108,6 +108,12 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
+        static Q_GC2LS_AskSmartLogin() {
+            let msg = new protos_1.Protos.GC2LS_AskSmartLogin();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
+            return msg;
+        }
         static Q_GC2GS_AskLogin() {
             let msg = new protos_1.Protos.GC2GS_AskLogin();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -327,6 +333,13 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             msg.opts.rpid = pid;
             return msg;
         }
+        static R_GC2LS_AskSmartLogin(pid) {
+            let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
         static R_GC2GS_AskLogin(pid) {
             let msg = new protos_1.Protos.GS2GC_LoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -413,6 +426,10 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 }
                 case 1001: {
                     let msg = protos_1.Protos.GC2LS_AskLogin.decode(data, size);
+                    return msg;
+                }
+                case 1002: {
+                    let msg = protos_1.Protos.GC2LS_AskSmartLogin.decode(data, size);
                     return msg;
                 }
                 case 1100: {
@@ -578,6 +595,10 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             let msg = protos_1.Protos.GC2LS_AskLogin.decode(data, size);
             return msg;
         }
+        static D_GC2LS_AskSmartLogin(data, size) {
+            let msg = protos_1.Protos.GC2LS_AskSmartLogin.decode(data, size);
+            return msg;
+        }
         static D_GC2GS_AskLogin(data, size) {
             let msg = protos_1.Protos.GC2GS_AskLogin.decode(data, size);
             return msg;
@@ -736,6 +757,9 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 case 1001: {
                     return new protos_1.Protos.GC2LS_AskLogin();
                 }
+                case 1002: {
+                    return new protos_1.Protos.GC2LS_AskSmartLogin();
+                }
                 case 1100: {
                     return new protos_1.Protos.GC2GS_AskLogin();
                 }
@@ -862,6 +886,9 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 case 1001: {
                     return message.opts;
                 }
+                case 1002: {
+                    return message.opts;
+                }
                 case 1100: {
                     return message.opts;
                 }
@@ -981,6 +1008,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [protos_1.Protos.G_AskPingRet, 11],
         [protos_1.Protos.GC2LS_AskRegister, 1000],
         [protos_1.Protos.GC2LS_AskLogin, 1001],
+        [protos_1.Protos.GC2LS_AskSmartLogin, 1002],
         [protos_1.Protos.GC2GS_AskLogin, 1100],
         [protos_1.Protos.GC2GS_KeepAlive, 1101],
         [protos_1.Protos.GC2BS_AskLogin, 1200],
@@ -1023,6 +1051,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [11, protos_1.Protos.G_AskPingRet],
         [1000, protos_1.Protos.GC2LS_AskRegister],
         [1001, protos_1.Protos.GC2LS_AskLogin],
+        [1002, protos_1.Protos.GC2LS_AskSmartLogin],
         [1100, protos_1.Protos.GC2GS_AskLogin],
         [1101, protos_1.Protos.GC2GS_KeepAlive],
         [1200, protos_1.Protos.GC2BS_AskLogin],
@@ -1248,6 +1277,10 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "Net/WSConnector",
         Leave() {
             this.hide();
         }
+        AnimIn() {
+        }
+        AnimOut() {
+        }
         Update(deltaTime) {
         }
         OnResize(e) {
@@ -1264,14 +1297,8 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "Net/WSConnector",
                 UIAlert_1.UIAlert.Show("无效的用户名");
                 return;
             }
-            let regPwd = this.contentPane.getChild("reg_password").asTextField.text;
-            if (regPwd == "") {
-                UIAlert_1.UIAlert.Show("无效的密码");
-                return;
-            }
             let register = ProtoHelper_3.ProtoCreator.Q_GC2LS_AskRegister();
             register.name = regName;
-            register.passwd = regPwd;
             register.platform = 0;
             register.sdk = 0;
             let connector = new WSConnector_2.WSConnector();
@@ -1285,7 +1312,6 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "Net/WSConnector",
                         case protos_4.Protos.LS2GC_AskRegRet.EResult.Success:
                             UIAlert_1.UIAlert.Show("注册成功");
                             this.contentPane.getChild("name").asTextField.text = regName;
-                            this.contentPane.getChild("password").asTextField.text = regPwd;
                             this.contentPane.getController("c1").selectedIndex = 0;
                             break;
                         case protos_4.Protos.LS2GC_AskRegRet.EResult.Failed:
@@ -1313,19 +1339,15 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "Net/WSConnector",
                 UIAlert_1.UIAlert.Show("无效用户名");
                 return;
             }
-            let password = this.contentPane.getChild("password").asTextField.text;
-            if (password == "") {
-                UIAlert_1.UIAlert.Show("无效密码");
-                return;
-            }
-            let login = ProtoHelper_3.ProtoCreator.Q_GC2LS_AskLogin();
+            let login = ProtoHelper_3.ProtoCreator.Q_GC2LS_AskSmartLogin();
             login.name = uname;
-            login.passwd = password;
+            login.platform = 0;
+            login.sdk = 0;
             let connector = new WSConnector_2.WSConnector();
             connector.onerror = () => UIAlert_1.UIAlert.Show("无法连接服务器", () => connector.Connect("localhost", 49996));
             connector.onclose = () => RC.Logger.Log("connection closed.");
             connector.onopen = () => {
-                connector.Send(protos_4.Protos.GC2LS_AskLogin, login, message => {
+                connector.Send(protos_4.Protos.GC2LS_AskSmartLogin, login, message => {
                     this.closeModalWait();
                     let resp = message;
                     switch (resp.result) {
@@ -1413,10 +1435,10 @@ define("UI/UIMain", ["require", "exports"], function (require, exports) {
     }
     exports.UIMain = UIMain;
 });
-define("UI/UICutscene", ["require", "exports", "Net/GSConnector", "../libs/protos", "Net/ProtoHelper"], function (require, exports, GSConnector_2, protos_5, ProtoHelper_4) {
+define("UI/UIMatching", ["require", "exports", "Net/GSConnector", "../libs/protos", "Net/ProtoHelper"], function (require, exports, GSConnector_2, protos_5, ProtoHelper_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class UICutscene {
+    class UIMatching {
         get root() { return this._root; }
         constructor() {
         }
@@ -1443,15 +1465,15 @@ define("UI/UICutscene", ["require", "exports", "Net/GSConnector", "../libs/proto
             console.log(beginBattle);
         }
     }
-    exports.UICutscene = UICutscene;
+    exports.UIMatching = UIMatching;
 });
-define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UICutscene", "Net/GSConnector", "../libs/protos", "UI/UIAlert"], function (require, exports, UILogin_1, UIMain_1, UICutscene_1, GSConnector_3, protos_6, UIAlert_2) {
+define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIMatching", "Net/GSConnector", "../libs/protos", "UI/UIAlert"], function (require, exports, UILogin_1, UIMain_1, UIMatching_1, GSConnector_3, protos_6, UIAlert_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIManager {
         static get login() { return this._login; }
         static get main() { return this._main; }
-        static get cutscene() { return this._cutscene; }
+        static get cutscene() { return this._matching; }
         static Init() {
             Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
             fairygui.UIPackage.addPackage("res/ui/global");
@@ -1460,7 +1482,7 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIC
             fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
             this._login = new UILogin_1.UILogin();
             this._main = new UIMain_1.UIMain();
-            this._cutscene = new UICutscene_1.UICutscene();
+            this._matching = new UIMatching_1.UIMatching();
             GSConnector_3.GSConnector.disconnectHandler = UIManager.HandleGSDisconnect;
             GSConnector_3.GSConnector.AddListener(protos_6.Protos.MsgID.eGS2GC_Kick, UIManager.HandleKick);
         }
@@ -1493,7 +1515,7 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIC
             this.EnterModule(this._login);
         }
         static EnterCutscene() {
-            this.EnterModule(this._cutscene);
+            this.EnterModule(this._matching);
         }
         static HandleGSDisconnect(e) {
             UIAlert_2.UIAlert.Show("与服务器断开连接", () => UIManager.EnterLogin());
@@ -1502,7 +1524,7 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIC
             let kick = message;
             switch (kick.reason) {
                 case protos_6.Protos.CS2GS_KickGC.EReason.DuplicateLogin:
-                    UIAlert_2.UIAlert.Show("另一台设备正在登陆相同的账号", () => UIManager.EnterLogin());
+                    UIAlert_2.UIAlert.Show("另一台设备正在登陆相同的账号", () => UIManager.EnterLogin(), true);
                     break;
                 default:
                     UIAlert_2.UIAlert.Show("已被服务器强制下线", () => UIManager.EnterLogin(), true);

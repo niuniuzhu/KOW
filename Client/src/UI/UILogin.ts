@@ -39,6 +39,14 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		this.hide();
 	}
 
+	public AnimIn():void{
+
+	}
+
+	public AnimOut():void{
+
+	}
+
 	public Update(deltaTime: number): void {
 	}
 

@@ -1,14 +1,8 @@
 {
-	"active_doc": [
-		"dvbmzwcp",
-		"ypb40"
-	],
 	"hidden_packages": [],
 	"docs": [
 		"ytr6jf79",
-		"kqy59",
-		"dvbmzwcp",
-		"ypb40"
+		"kqy59"
 	],
 	"expanded_nodes": [
 		"dvbmzwcp",
@@ -17,5 +11,9 @@
 		"/",
 		"ytr6jf79",
 		"/"
+	],
+	"active_doc": [
+		"ytr6jf79",
+		"kqy59"
 	]
 }

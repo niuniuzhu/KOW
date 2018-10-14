@@ -3,7 +3,7 @@ import { GSConnector } from "../Net/GSConnector";
 import { Protos } from "../libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 
-export class UICutscene implements IUIModule {
+export class UIMatching implements IUIModule {
 	private _root: fairygui.GComponent;
 
 	public get root(): fairygui.GComponent { return this._root; }
@@ -17,6 +17,7 @@ export class UICutscene implements IUIModule {
 	public Enter(param: any): void {
 		GSConnector.AddListener(Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
 
+		//请求匹配
 		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
 		ProtoCreator.MakeTransMessage(beginMatch, Protos.MsgOpts.TransTarget.CS, 0);
 		GSConnector.Send(Protos.GC2CS_BeginMatch, beginMatch, message => {

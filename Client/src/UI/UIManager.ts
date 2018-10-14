@@ -1,7 +1,7 @@
 import { IUIModule } from "./IUIModule";
 import { UILogin } from "./UILogin";
 import { UIMain } from "./UIMain";
-import { UICutscene } from "./UICutscene";
+import { UIMatching } from "./UIMatching";
 import { GSConnector } from "../Net/GSConnector";
 import { Protos } from "../libs/protos";
 import { UIAlert } from "./UIAlert";
@@ -10,11 +10,11 @@ export class UIManager {
 	private static _login: UILogin;
 	private static _main: UIMain;
 	private static _currModule: IUIModule;
-	private static _cutscene: UICutscene;
+	private static _matching: UIMatching;
 
 	public static get login(): UILogin { return this._login; }
 	public static get main(): UIMain { return this._main; }
-	public static get cutscene(): UICutscene { return this._cutscene; }
+	public static get cutscene(): UIMatching { return this._matching; }
 
 	public static Init(): void {
 		Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
@@ -26,7 +26,7 @@ export class UIManager {
 
 		this._login = new UILogin();
 		this._main = new UIMain();
-		this._cutscene = new UICutscene();
+		this._matching = new UIMatching();
 
 		GSConnector.disconnectHandler = UIManager.HandleGSDisconnect;
 		GSConnector.AddListener(Protos.MsgID.eGS2GC_Kick, UIManager.HandleKick);
@@ -67,7 +67,7 @@ export class UIManager {
 	}
 
 	public static EnterCutscene(): void {
-		this.EnterModule(this._cutscene);
+		this.EnterModule(this._matching);
 	}
 
 	private static HandleGSDisconnect(e: Event): void {

@@ -9969,6 +9969,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @property {Protos.IMsgOpts|null} [opts] LS2DB_QueryLogin opts
              * @property {string|null} [name] LS2DB_QueryLogin name
              * @property {string|null} [pwd] LS2DB_QueryLogin pwd
+             * @property {boolean|null} [vertPwd] LS2DB_QueryLogin vertPwd
              */
     
             /**
@@ -10011,6 +10012,14 @@ define(["libs/protobufjs"], function($protobuf) {
             LS2DB_QueryLogin.prototype.pwd = "";
     
             /**
+             * LS2DB_QueryLogin vertPwd.
+             * @member {boolean} vertPwd
+             * @memberof Protos.LS2DB_QueryLogin
+             * @instance
+             */
+            LS2DB_QueryLogin.prototype.vertPwd = false;
+    
+            /**
              * Creates a new LS2DB_QueryLogin instance using the specified properties.
              * @function create
              * @memberof Protos.LS2DB_QueryLogin
@@ -10040,6 +10049,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
                 if (message.pwd != null && message.hasOwnProperty("pwd"))
                     writer.uint32(/* id 3, wireType 2 =*/26).string(message.pwd);
+                if (message.vertPwd != null && message.hasOwnProperty("vertPwd"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).bool(message.vertPwd);
                 return writer;
             };
     
@@ -10082,6 +10093,9 @@ define(["libs/protobufjs"], function($protobuf) {
                         break;
                     case 3:
                         message.pwd = reader.string();
+                        break;
+                    case 4:
+                        message.vertPwd = reader.bool();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -10129,6 +10143,9 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.pwd != null && message.hasOwnProperty("pwd"))
                     if (!$util.isString(message.pwd))
                         return "pwd: string expected";
+                if (message.vertPwd != null && message.hasOwnProperty("vertPwd"))
+                    if (typeof message.vertPwd !== "boolean")
+                        return "vertPwd: boolean expected";
                 return null;
             };
     
@@ -10153,6 +10170,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     message.name = String(object.name);
                 if (object.pwd != null)
                     message.pwd = String(object.pwd);
+                if (object.vertPwd != null)
+                    message.vertPwd = Boolean(object.vertPwd);
                 return message;
             };
     
@@ -10173,6 +10192,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.opts = null;
                     object.name = "";
                     object.pwd = "";
+                    object.vertPwd = false;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -10180,6 +10200,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.name = message.name;
                 if (message.pwd != null && message.hasOwnProperty("pwd"))
                     object.pwd = message.pwd;
+                if (message.vertPwd != null && message.hasOwnProperty("vertPwd"))
+                    object.vertPwd = message.vertPwd;
                 return object;
             };
     

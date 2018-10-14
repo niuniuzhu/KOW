@@ -5,16 +5,17 @@ import "Global.proto";
 
 message LS2DB_QueryAccount{
 	MsgOpts opts = 1;
-	string name = 2;
+	string name = 2;//用户名
 }
 
 message LS2DB_QueryLogin{
 	MsgOpts opts = 1;
-	string name = 2;
-	string pwd = 3;
+	string name = 2;//用户名
+	string pwd = 3;//密码
+	bool vertPwd = 4;//是否需要验证密码
 }
 
 message LS2DB_Exec {
 	MsgOpts opts = 1;
-	string cmd = 2;
+	string cmd = 2;//sql指令
 }

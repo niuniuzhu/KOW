@@ -11,6 +11,7 @@
 		public int redisPort;
 		public string redisPwd;
 		public long pingInterval;
+		public bool pwdVerification;
 
 		public void CopyFromCLIOptions( Options opts )
 		{
@@ -23,6 +24,7 @@
 			this.redisPort = opts.redisPort;
 			this.redisPwd = opts.redisPwd;
 			this.pingInterval = opts.pingInterval;
+			this.pwdVerification = System.Convert.ToBoolean( opts.pwdVerification );
 		}
 	}
 }

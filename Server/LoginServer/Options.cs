@@ -68,5 +68,11 @@ namespace LoginServer
 			SetName = "bysetting",
 			HelpText = "interval to ping to cs." )]
 		public long pingInterval { get; set; }
+
+		[Option( "pwd_verification",
+			Default = 0,
+			SetName = "bysetting",
+			HelpText = "password verification." )]
+		public int pwdVerification { get; set; }
 	}
 }

@@ -28,7 +28,7 @@ namespace DBServer.Net
 
 		private ErrorCode OnLs2DbQueryAccount( Google.Protobuf.IMessage message )
 		{
-			Protos.LS2DB_QueryAccount queryUser = ( Protos.LS2DB_QueryAccount )message;
+			Protos.LS2DB_QueryAccount queryUser = ( Protos.LS2DB_QueryAccount ) message;
 			Protos.DB2LS_QueryAccountRet queryUserRet = ProtoCreator.R_LS2DB_QueryAccount( queryUser.Opts.Pid );
 			ErrorCode errorCode = DB.instance.accountDB.SqlExecQuery( $"select id from account_user where uname=\'{queryUser.Name}\'",
 															 dataReader =>
@@ -44,7 +44,7 @@ namespace DBServer.Net
 
 		private ErrorCode OnLs2DbQueryLogin( Google.Protobuf.IMessage message )
 		{
-			Protos.LS2DB_QueryLogin queryLogin = ( Protos.LS2DB_QueryLogin )message;
+			Protos.LS2DB_QueryLogin queryLogin = ( Protos.LS2DB_QueryLogin ) message;
 
 			Protos.DB2LS_QueryLoginRet queryLoginRet = ProtoCreator.R_LS2DB_QueryLogin( queryLogin.Opts.Pid );
 			ErrorCode errorCode = DB.instance.accountDB.SqlExecQuery(
@@ -55,9 +55,13 @@ namespace DBServer.Net
 						return ErrorCode.InvalidUname;
 					dataReader.Read();
 					queryLoginRet.Ukey = dataReader.GetUInt32( "id" );
-					return dataReader.GetString( "pwd" ) != queryLogin.Pwd
-							   ? ErrorCode.InvalidPwd
-							   : ErrorCode.Success;
+					if ( queryLogin.VertPwd )
+					{
+						return dataReader.GetString( "pwd" ) != queryLogin.Pwd
+								   ? ErrorCode.InvalidPwd
+								   : ErrorCode.Success;
+					}
+					return ErrorCode.Success;
 				} );
 			switch ( errorCode )
 			{
@@ -77,7 +81,7 @@ namespace DBServer.Net
 
 		private ErrorCode OnLs2DbExec( Google.Protobuf.IMessage message )
 		{
-			Protos.LS2DB_Exec exec = ( Protos.LS2DB_Exec )message;
+			Protos.LS2DB_Exec exec = ( Protos.LS2DB_Exec ) message;
 			Protos.DB2LS_ExecRet execRet = ProtoCreator.R_LS2DB_Exec( exec.Opts.Pid );
 			ErrorCode errorCode = DB.instance.accountDB.SqlExecNonQuery( exec.Cmd, out int row, out long id );
 			execRet.Row = row;

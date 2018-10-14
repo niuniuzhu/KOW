@@ -31,7 +31,7 @@ namespace LoginServer.Net
 
 		private ErrorCode OnGCtoLSAskRegister( Google.Protobuf.IMessage message )
 		{
-			Protos.GC2LS_AskRegister register = ( Protos.GC2LS_AskRegister )message;
+			Protos.GC2LS_AskRegister register = ( Protos.GC2LS_AskRegister ) message;
 			Protos.LS2GC_AskRegRet regRet = ProtoCreator.R_GC2LS_AskRegister( register.Opts.Pid );
 
 			regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.Success;
@@ -54,14 +54,23 @@ namespace LoginServer.Net
 				return ErrorCode.Success;
 			}
 
-			//检测密码合法性
-			if ( string.IsNullOrEmpty( register.Passwd ) || register.Passwd.Length < Consts.DEFAULT_PWD_LEN || !Consts.REGEX_PWD.IsMatch( register.Passwd ) )
+			string pwd;
+			if ( LS.instance.config.pwdVerification )
 			{
-				regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.PwdIllegal;
-				this.Send( regRet );
-				this.DelayClose( 500, "register finish" );
-				return ErrorCode.Success;
+				//检测密码合法性
+				if ( string.IsNullOrEmpty( register.Passwd ) ||
+					 register.Passwd.Length < Consts.DEFAULT_PWD_LEN ||
+					 !Consts.REGEX_PWD.IsMatch( register.Passwd ) )
+				{
+					regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.PwdIllegal;
+					this.Send( regRet );
+					this.DelayClose( 500, "register finish" );
+					return ErrorCode.Success;
+				}
+				pwd = register.Passwd;
 			}
+			else
+				pwd = string.Empty;
 
 			//若Redis可用，则查询；不可用就直接查询数据库
 			RedisWrapper redisWrapper = LS.instance.redisWrapper;
@@ -74,7 +83,7 @@ namespace LoginServer.Net
 				return ErrorCode.Success;
 			}
 			//md5编码密码
-			string pwdmd5 = Core.Crypto.MD5Util.GetMd5HexDigest( register.Passwd ).Replace( "-", string.Empty ).ToLower();
+			string pwdmd5 = Core.Crypto.MD5Util.GetMd5HexDigest( pwd ).Replace( "-", string.Empty ).ToLower();
 			//查询数据库
 			Protos.LS2DB_QueryAccount queryAccount = ProtoCreator.Q_LS2DB_QueryAccount();
 			queryAccount.Name = register.Name;
@@ -84,44 +93,49 @@ namespace LoginServer.Net
 
 			void OnLS2DB_QueryAccount( Google.Protobuf.IMessage m )
 			{
-				Protos.DB2LS_QueryAccountRet queryAccountRet = ( Protos.DB2LS_QueryAccountRet )m;
+				Protos.DB2LS_QueryAccountRet queryAccountRet = ( Protos.DB2LS_QueryAccountRet ) m;
 				regRet.Result = queryAccountRet.Result == Protos.DB2LS_QueryResult.Success
 									? Protos.LS2GC_AskRegRet.Types.EResult.Success : Protos.LS2GC_AskRegRet.Types.EResult.UnameExists;
 				if ( regRet.Result == Protos.LS2GC_AskRegRet.Types.EResult.Success )
 				{
-					//开始注册
+					//请求DB服务器注册账号
 					Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
 					sqlExec.Cmd = $"insert account_user( sdk,uname,pwd ) values({register.Sdk}, \'{register.Name}\', \'{pwdmd5}\');";
-					this.owner.Send( SessionType.ServerL2DB, sqlExec, OnLS2DB_Exec );
+					this.owner.Send( SessionType.ServerL2DB, sqlExec, OnCheckAccount );
 				}
 				else
 				{
+					//发送注册结果到gc
 					this.Send( regRet );
+					//关闭连接
 					this.DelayClose( 500, "register finish" );
 				}
 			}
 
-			void OnLS2DB_Exec( Google.Protobuf.IMessage m )
+			//DB服务端回调
+			void OnCheckAccount( Google.Protobuf.IMessage m )
 			{
-				Protos.DB2LS_ExecRet sqlExecRet = ( Protos.DB2LS_ExecRet )m;
-				regRet.Result = ( Protos.LS2GC_AskRegRet.Types.EResult )sqlExecRet.Result;
-				Logger.Log( sqlExecRet.Id );
+				Protos.DB2LS_ExecRet sqlExecRet = ( Protos.DB2LS_ExecRet ) m;
+				regRet.Result = ( Protos.LS2GC_AskRegRet.Types.EResult ) sqlExecRet.Result;
 				if ( regRet.Result == Protos.LS2GC_AskRegRet.Types.EResult.Success )
 				{
+					//写入redis缓存
 					if ( redisWrapper.IsConnected )
 					{
 						redisWrapper.HashSet( "unames", register.Name, pwdmd5 );
 						redisWrapper.HashSet( "ukeys", register.Name, sqlExecRet.Id );
 					}
 				}
+				//发送注册结果到gc
 				this.Send( regRet );
+				//关闭连接
 				this.DelayClose( 500, "register finish" );
 			}
 		}
 
 		private ErrorCode OnGCtoLSAskLogin( Google.Protobuf.IMessage message )
 		{
-			Protos.GC2LS_AskLogin login = ( Protos.GC2LS_AskLogin )message;
+			Protos.GC2LS_AskLogin login = ( Protos.GC2LS_AskLogin ) message;
 			Protos.LS2GC_AskLoginRet gcLoginRet = ProtoCreator.R_GC2LS_AskLogin( login.Opts.Pid );
 
 			//检测用户名的合法性
@@ -133,55 +147,71 @@ namespace LoginServer.Net
 				return ErrorCode.Success;
 			}
 
-			//检测密码合法性
-			if ( string.IsNullOrEmpty( login.Passwd ) || login.Passwd.Length < Consts.DEFAULT_PWD_LEN || !Consts.REGEX_PWD.IsMatch( login.Passwd ) )
+			string pwd;
+			if ( LS.instance.config.pwdVerification )
 			{
-				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidPwd;
-				this.Send( gcLoginRet );
-				this.DelayClose( 500, "login complete" );
-				return ErrorCode.Success;
-			}
-
-			//登录id 
-			uint ukey = 0;
-			//若Redis可用则查询；不可用就直接查询数据库
-			RedisWrapper redisWrapper = LS.instance.redisWrapper;
-			if ( redisWrapper.IsConnected )
-			{
-				RedisValue pwd = redisWrapper.HashGet( "unames", login.Name );
-				if ( !pwd.HasValue ) //redis找不到用户名
-				{
-					gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
-					this.Send( gcLoginRet );
-					this.DelayClose( 500, "login complete" );
-					return ErrorCode.Success;
-				}
-				if ( pwd != Core.Crypto.MD5Util.GetMd5HexDigest( login.Passwd ).Replace( "-", string.Empty ).ToLower() )//密码不正确
+				//检测密码合法性
+				if ( string.IsNullOrEmpty( login.Passwd ) ||
+					 login.Passwd.Length < Consts.DEFAULT_PWD_LEN ||
+					 !Consts.REGEX_PWD.IsMatch( login.Passwd ) )
 				{
 					gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidPwd;
 					this.Send( gcLoginRet );
 					this.DelayClose( 500, "login complete" );
 					return ErrorCode.Success;
 				}
-				ukey = ( uint )redisWrapper.HashGet( "ukeys", login.Name );//从redis取回ukey
+				pwd = login.Passwd;
+			}
+			else
+				pwd = string.Empty;
+
+			//登录id 
+			uint ukey = 0;
+			//若Redis可用则查询；不可用就直接查询数据库
+			RedisWrapper redisWrapper = LS.instance.redisWrapper;
+			//尝试从缓存中查找账号
+			if ( redisWrapper.IsConnected )
+			{
+				RedisValue cachedPwd = redisWrapper.HashGet( "unames", login.Name );
+				if ( !cachedPwd.HasValue ) //redis找不到用户名
+				{
+					gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
+					this.Send( gcLoginRet );
+					this.DelayClose( 500, "login complete" );
+					return ErrorCode.Success;
+				}
+				if ( LS.instance.config.pwdVerification )
+				{
+					//验证密码
+					if ( cachedPwd != Core.Crypto.MD5Util.GetMd5HexDigest( pwd ).Replace( "-", string.Empty ).ToLower() ) //密码不正确
+					{
+						gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidPwd;
+						this.Send( gcLoginRet );
+						this.DelayClose( 500, "login complete" );
+						return ErrorCode.Success;
+					}
+				}
+				ukey = ( uint ) redisWrapper.HashGet( "ukeys", login.Name );//从redis取回ukey
 				HandlerLoginSuccess();
 			}
 			else
 			{
-				string pwd = Core.Crypto.MD5Util.GetMd5HexDigest( login.Passwd ).Replace( "-", string.Empty ).ToLower();
+				string pwdmd5 = Core.Crypto.MD5Util.GetMd5HexDigest( pwd ).Replace( "-", string.Empty ).ToLower();
 				Protos.LS2DB_QueryLogin queryLogin = ProtoCreator.Q_LS2DB_QueryLogin();
 				queryLogin.Name = login.Name;
-				queryLogin.Pwd = pwd;
+				queryLogin.Pwd = pwdmd5;
+				queryLogin.VertPwd = LS.instance.config.pwdVerification;
 				this.owner.Send( SessionType.ServerL2DB, queryLogin, m =>
 				{
-					Protos.DB2LS_QueryLoginRet queryLoginRet = ( Protos.DB2LS_QueryLoginRet )m;
-					gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult )queryLoginRet.Result;
+					Protos.DB2LS_QueryLoginRet queryLoginRet = ( Protos.DB2LS_QueryLoginRet ) m;
+					gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) queryLoginRet.Result;
 					ukey = queryLoginRet.Ukey;//从数据库取回ukey
 					if ( gcLoginRet.Result == Protos.LS2GC_AskLoginRet.Types.EResult.Success )
 					{
+						//写入redis缓存
 						if ( redisWrapper.IsConnected )
 						{
-							redisWrapper.HashSet( "unames", login.Name, pwd );
+							redisWrapper.HashSet( "unames", login.Name, pwdmd5 );
 							redisWrapper.HashSet( "ukeys", login.Name, ukey );
 						}
 						HandlerLoginSuccess();
@@ -205,9 +235,9 @@ namespace LoginServer.Net
 				csLogin.Ukey = ukey;
 				this.owner.Send( SessionType.ServerL2CS, csLogin, m =>
 				{
-					Protos.CS2LS_GCLoginRet csLoginRet = ( Protos.CS2LS_GCLoginRet )m;
+					Protos.CS2LS_GCLoginRet csLoginRet = ( Protos.CS2LS_GCLoginRet ) m;
 
-					gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult )csLoginRet.Result;
+					gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) csLoginRet.Result;
 					if ( gcLoginRet.Result == Protos.LS2GC_AskLoginRet.Types.EResult.Success )
 					{
 						gcLoginRet.SessionID = sessionID;
@@ -220,7 +250,7 @@ namespace LoginServer.Net
 								Ip = info.ip,
 								Port = info.port,
 								Password = info.password,
-								State = ( Protos.GSInfo.Types.State )info.state
+								State = ( Protos.GSInfo.Types.State ) info.state
 							};
 							gcLoginRet.GsInfos.Add( gsInfo );
 						}

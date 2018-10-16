@@ -25,21 +25,19 @@ namespace Protos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgtCUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8aC0NTMkJTLnBy",
-            "b3RvIoMBCg5CUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
+            "b3RvIr8BCg5CUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
             "Lk1zZ09wdHMSLgoGcmVzdWx0GAIgASgOMh4uUHJvdG9zLkJTMkdDX0xvZ2lu",
-            "UmV0LkVSZXN1bHQiIgoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVk",
-            "EAEibgoQQlMyR0NfQmF0dGxlSW5mbxIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
-            "Lk1zZ09wdHMSDQoFbWFwSUQYAiABKAUSLAoKcGxheWVySW5mbxgDIAMoCzIY",
-            "LlByb3Rvcy5DUzJCU19QbGF5ZXJJbmZvIoIBChJCUzJHQ19VcGRhdGVQbGF5",
-            "ZXISHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgoKAmlkGAIgASgE",
-            "EhAKCHByb2dyZXNzGAMgASgFEi8KBnN0YXR1cxgEIAEoDjIfLlByb3Rvcy5D",
-            "UzJCU19QbGF5ZXJJbmZvLlN0YXR1cyIyChFCUzJHQ19CYXR0bGVTdGFydBId",
-            "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHNiBnByb3RvMw=="));
+            "UmV0LkVSZXN1bHQSDQoFbWFwSUQYAyABKAUSKwoJcGxheUluZm9zGAQgAygL",
+            "MhguUHJvdG9zLkNTMkJTX1BsYXllckluZm8iIgoHRVJlc3VsdBILCgdTdWNj",
+            "ZXNzEAASCgoGRmFpbGVkEAEiggEKEkJTMkdDX1VwZGF0ZVBsYXllchIdCgRv",
+            "cHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSCgoCaWQYAiABKAQSEAoIcHJv",
+            "Z3Jlc3MYAyABKAUSLwoGc3RhdHVzGAQgASgOMh8uUHJvdG9zLkNTMkJTX1Bs",
+            "YXllckluZm8uU3RhdHVzIjIKEUJTMkdDX0JhdHRsZVN0YXJ0Eh0KBG9wdHMY",
+            "ASABKAsyDy5Qcm90b3MuTXNnT3B0c2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2BSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_LoginRet), global::Protos.BS2GC_LoginRet.Parser, new[]{ "Opts", "Result" }, null, new[]{ typeof(global::Protos.BS2GC_LoginRet.Types.EResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleInfo), global::Protos.BS2GC_BattleInfo.Parser, new[]{ "Opts", "MapID", "PlayerInfo" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_LoginRet), global::Protos.BS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "MapID", "PlayInfos" }, null, new[]{ typeof(global::Protos.BS2GC_LoginRet.Types.EResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_UpdatePlayer), global::Protos.BS2GC_UpdatePlayer.Parser, new[]{ "Opts", "Id", "Progress", "Status" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleStart), global::Protos.BS2GC_BattleStart.Parser, new[]{ "Opts" }, null, null, null)
           }));
@@ -78,6 +76,8 @@ namespace Protos {
     public BS2GC_LoginRet(BS2GC_LoginRet other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       result_ = other.result_;
+      mapID_ = other.mapID_;
+      playInfos_ = other.playInfos_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -108,6 +108,33 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "mapID" field.</summary>
+    public const int MapIDFieldNumber = 3;
+    private int mapID_;
+    /// <summary>
+    ///地图id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MapID {
+      get { return mapID_; }
+      set {
+        mapID_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "playInfos" field.</summary>
+    public const int PlayInfosFieldNumber = 4;
+    private static readonly pb::FieldCodec<global::Protos.CS2BS_PlayerInfo> _repeated_playInfos_codec
+        = pb::FieldCodec.ForMessage(34, global::Protos.CS2BS_PlayerInfo.Parser);
+    private readonly pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo> playInfos_ = new pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo>();
+    /// <summary>
+    ///玩家信息
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo> PlayInfos {
+      get { return playInfos_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as BS2GC_LoginRet);
@@ -123,6 +150,8 @@ namespace Protos {
       }
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Result != other.Result) return false;
+      if (MapID != other.MapID) return false;
+      if(!playInfos_.Equals(other.playInfos_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -131,6 +160,8 @@ namespace Protos {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
+      if (MapID != 0) hash ^= MapID.GetHashCode();
+      hash ^= playInfos_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -152,6 +183,11 @@ namespace Protos {
         output.WriteRawTag(16);
         output.WriteEnum((int) Result);
       }
+      if (MapID != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(MapID);
+      }
+      playInfos_.WriteTo(output, _repeated_playInfos_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -166,6 +202,10 @@ namespace Protos {
       if (Result != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
+      if (MapID != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MapID);
+      }
+      size += playInfos_.CalculateSize(_repeated_playInfos_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -186,6 +226,10 @@ namespace Protos {
       if (other.Result != 0) {
         Result = other.Result;
       }
+      if (other.MapID != 0) {
+        MapID = other.MapID;
+      }
+      playInfos_.Add(other.playInfos_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -208,6 +252,14 @@ namespace Protos {
             result_ = (global::Protos.BS2GC_LoginRet.Types.EResult) input.ReadEnum();
             break;
           }
+          case 24: {
+            MapID = input.ReadInt32();
+            break;
+          }
+          case 34: {
+            playInfos_.AddEntriesFrom(input, _repeated_playInfos_codec);
+            break;
+          }
         }
       }
     }
@@ -227,198 +279,6 @@ namespace Protos {
   }
 
   /// <summary>
-  ///战场信息
-  /// </summary>
-  public sealed partial class BS2GC_BattleInfo : pb::IMessage<BS2GC_BattleInfo> {
-    private static readonly pb::MessageParser<BS2GC_BattleInfo> _parser = new pb::MessageParser<BS2GC_BattleInfo>(() => new BS2GC_BattleInfo());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<BS2GC_BattleInfo> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[1]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_BattleInfo() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_BattleInfo(BS2GC_BattleInfo other) : this() {
-      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      mapID_ = other.mapID_;
-      playerInfo_ = other.playerInfo_.Clone();
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_BattleInfo Clone() {
-      return new BS2GC_BattleInfo(this);
-    }
-
-    /// <summary>Field number for the "opts" field.</summary>
-    public const int OptsFieldNumber = 1;
-    private global::Protos.MsgOpts opts_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.MsgOpts Opts {
-      get { return opts_; }
-      set {
-        opts_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "mapID" field.</summary>
-    public const int MapIDFieldNumber = 2;
-    private int mapID_;
-    /// <summary>
-    ///地图id
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int MapID {
-      get { return mapID_; }
-      set {
-        mapID_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "playerInfo" field.</summary>
-    public const int PlayerInfoFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Protos.CS2BS_PlayerInfo> _repeated_playerInfo_codec
-        = pb::FieldCodec.ForMessage(26, global::Protos.CS2BS_PlayerInfo.Parser);
-    private readonly pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo> playerInfo_ = new pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo>();
-    /// <summary>
-    ///玩家信息
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo> PlayerInfo {
-      get { return playerInfo_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as BS2GC_BattleInfo);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(BS2GC_BattleInfo other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(Opts, other.Opts)) return false;
-      if (MapID != other.MapID) return false;
-      if(!playerInfo_.Equals(other.playerInfo_)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (MapID != 0) hash ^= MapID.GetHashCode();
-      hash ^= playerInfo_.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (opts_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Opts);
-      }
-      if (MapID != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(MapID);
-      }
-      playerInfo_.WriteTo(output, _repeated_playerInfo_codec);
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (opts_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
-      }
-      if (MapID != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MapID);
-      }
-      size += playerInfo_.CalculateSize(_repeated_playerInfo_codec);
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(BS2GC_BattleInfo other) {
-      if (other == null) {
-        return;
-      }
-      if (other.opts_ != null) {
-        if (opts_ == null) {
-          opts_ = new global::Protos.MsgOpts();
-        }
-        Opts.MergeFrom(other.Opts);
-      }
-      if (other.MapID != 0) {
-        MapID = other.MapID;
-      }
-      playerInfo_.Add(other.playerInfo_);
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (opts_ == null) {
-              opts_ = new global::Protos.MsgOpts();
-            }
-            input.ReadMessage(opts_);
-            break;
-          }
-          case 16: {
-            MapID = input.ReadInt32();
-            break;
-          }
-          case 26: {
-            playerInfo_.AddEntriesFrom(input, _repeated_playerInfo_codec);
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  /// <summary>
   ///更新玩家信息
   /// </summary>
   public sealed partial class BS2GC_UpdatePlayer : pb::IMessage<BS2GC_UpdatePlayer> {
@@ -429,7 +289,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -660,7 +520,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

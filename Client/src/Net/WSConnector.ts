@@ -12,7 +12,7 @@ export class WSConnector {
 		if (this._socket != null)
 			this._socket.onclose = this._onclose;
 	}
-	
+
 	public set onerror(handler: (ev: Event) => any) {
 		this._onerror = handler;
 		if (this._socket != null)
@@ -33,6 +33,10 @@ export class WSConnector {
 	private readonly _msgCenter: MsgCenter;
 	private readonly _rpcHandlers: Map<number, (any) => any>;//可能是异步写入,但必定是同步读取,所以不用加锁
 	private _pid: number = 0;
+	private _time: number = 0;
+
+	public get time(): number { return this._time; }
+	public lastPingTime:number = 0;
 
 	constructor() {
 		this._msgCenter = new MsgCenter();
@@ -52,10 +56,13 @@ export class WSConnector {
 		this._socket.onmessage = this.OnReceived.bind(this);
 		this._socket.onerror = this._onerror;
 		this._socket.onclose = this._onclose;
-		this._socket.onopen = this._onopen;
+		this._socket.onopen = (e) => {
+			this._time = 0;
+			this._onopen(e)
+		};
 	}
 
-	public Send(type: any, message: any, rpcHandler: (any) => any = null): void {
+	public Send(msgType: any, message: any, rpcHandler: (any) => any = null): void {
 		let opts = ProtoCreator.GetMsgOpts(message);
 		RC.Logger.Assert(opts != null, "invalid message options");
 		//为消息写入序号
@@ -66,7 +73,7 @@ export class WSConnector {
 				RC.Logger.Warn("packet id collision!!");
 			this._rpcHandlers.set(opts.pid, rpcHandler);
 		}
-		let msgData: Uint8Array = type.encode(message).finish();
+		let msgData: Uint8Array = msgType.encode(message).finish();
 		let data = new Uint8Array(msgData.length + 4);
 		ByteUtils.Encode32u(data, 0, <number>ProtoCreator.GetMsgID(message));
 		data.set(msgData, 4);
@@ -105,5 +112,11 @@ export class WSConnector {
 			else
 				RC.Logger.Warn(`invalid msg:${msgID}`);
 		}
+	}
+
+	public Update(dt: number): void {
+		if (!this.connected)
+			return;
+		this._time += dt;
 	}
 }

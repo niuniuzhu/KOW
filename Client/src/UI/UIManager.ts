@@ -2,20 +2,16 @@ import { IUIModule } from "./IUIModule";
 import { UILogin } from "./UILogin";
 import { UIMain } from "./UIMain";
 import { UIMatching } from "./UIMatching";
-import { GSConnector } from "../Net/GSConnector";
-import { Protos } from "../libs/protos";
-import { UIAlert } from "./UIAlert";
-import { SceneManager } from "../Scene/SceneManager";
 
 export class UIManager {
 	private static _login: UILogin;
 	private static _main: UIMain;
-	private static _currModule: IUIModule;
 	private static _matching: UIMatching;
+	private static _uis: IUIModule[];
 
-	public static get login(): UILogin { return this._login; }
-	public static get main(): UIMain { return this._main; }
-	public static get cutscene(): UIMatching { return this._matching; }
+	public static get login(): UILogin { return UIManager._login; }
+	public static get main(): UIMain { return UIManager._main; }
+	public static get matching(): UIMatching { return UIManager._matching; }
 
 	public static Init(): void {
 		Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
@@ -25,46 +21,25 @@ export class UIManager {
 		fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
 		fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
 
-		this._login = new UILogin();
-		this._main = new UIMain();
-		this._matching = new UIMatching();
+		UIManager._main = new UIMain();
+		UIManager._login = new UILogin();
+		UIManager._matching = new UIMatching();
+
+		UIManager._uis = [];
+		UIManager._uis[0] = UIManager._main;
+		UIManager._uis[1] = UIManager._login;
+		UIManager._uis[2] = UIManager._matching;
 	}
 
 	public static Dispose(): void {
-		if (this._currModule != null) {
-			this._currModule.Leave();
-			this._currModule = null;
+		for (let i = 0; i < UIManager._uis.length; i++) {
+			UIManager._uis[i].Dispose();
 		}
 	}
 
-	public static Update(deltaTime: number): void {
-		if (this._currModule != null)
-			this._currModule.Update(deltaTime);
-	}
-
 	public static OnResize(e: laya.events.Event): any {
-		if (this._currModule != null)
-			this._currModule.OnResize(e);
-	}
-
-	private static EnterModule(module: IUIModule, param?: any): void {
-		if (this._currModule != null)
-			this._currModule.Leave();
-		module.Enter(param);
-		this._currModule = module;
-	}
-
-	public static LeaveModule(): void {
-		if (this._currModule != null)
-			this._currModule.Leave();
-		this._currModule = null;
-	}
-
-	public static EnterLogin(): void {
-		this.EnterModule(this._login);
-	}
-
-	public static EnterMatching(): void {
-		this.EnterModule(this._matching);
+		for (let i = 0; i < UIManager._uis.length; i++) {
+			UIManager._uis[i].OnResize(e);
+		}
 	}
 }

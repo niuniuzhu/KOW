@@ -1,7 +1,7 @@
 export interface IUIModule {
 	Dispose(): void;
 	Enter(param: any): void;
-	Leave(): void;
+	Exit(): void;
 	Update(deltaTime: number): void;
-	OnResize(e: laya.events.Event): void;
+	OnResize(e: laya.events.Event): void
 }

@@ -1,6 +1,6 @@
 import { UIManager } from "./UI/UIManager";
 import { Defs } from "./Model/Defs";
-import { GSConnector } from "./Net/GSConnector";
+import { Connector } from "./Net/Connector";
 import { SceneManager } from "./Scene/SceneManager";
 import { UIAlert } from "./UI/UIAlert";
 import { Protos } from "./libs/protos";
@@ -49,24 +49,23 @@ export class Game {
 	private StartGame(): void {
 		console.log("start game...");
 
-		fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
-		Laya.timer.frameLoop(1, this, this.Update);
+		Connector.Init();
 
-		GSConnector.Init();
-		
 		UIManager.Init();
 
 		SceneManager.Init();
 		SceneManager.ChangeState(SceneManager.State.Login);
 
-		GSConnector.disconnectHandler = this.HandleGSDisconnect;
-		GSConnector.AddListener(Protos.MsgID.eGS2GC_Kick, this.HandleKick);
+		Connector.gsConnector.onclose = this.HandleGSDisconnect;
+		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick);
+
+		fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
+		Laya.timer.frameLoop(1, this, this.Update);
 	}
 
 	private Update(): void {
 		let dt = Laya.timer.delta;
-		GSConnector.Update(dt);
-		UIManager.Update(dt);
+		Connector.Update(dt);
 		SceneManager.Update(dt);
 	}
 
@@ -74,12 +73,8 @@ export class Game {
 		UIManager.OnResize(e);
 	}
 
-	public OnGSConnected(): void {
-		GSConnector.OnConnected();
-		UIManager.EnterMatching();
-	}
-
 	private HandleGSDisconnect(e: Event): void {
+		RC.Logger.Log("gs connection closed.");
 		UIAlert.Show("与服务器断开连接", () => SceneManager.ChangeState(SceneManager.State.Login));
 	}
 

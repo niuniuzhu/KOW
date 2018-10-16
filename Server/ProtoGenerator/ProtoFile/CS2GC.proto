@@ -9,15 +9,8 @@ message CS2GC_BeginMatchRet {
 	Global.ECommon result = 2;
 }
 
-message CS_PlayerInfo {
-	uint64 id = 1;
-	string name = 2;
-	int32 job = 3;
-	int32 sex =  4;
-}
-
 message CS2GC_BeginBattle {
 	MsgOpts opts = 1;
-	int32 mapID = 2;
-	repeated CS_PlayerInfo playInfos = 3;
+	string ip = 2;
+	int32 port = 3;
 }

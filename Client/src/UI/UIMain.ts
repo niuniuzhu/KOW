@@ -14,10 +14,10 @@ export class UIMain implements IUIModule {
 	public Enter(param: any): void {
 	}
 
-	public Leave(): void {
+	public Exit(): void {
 	}
 
-	public Update(deltaTime: number): void {
+	public Update(dt: number): void {
 	}
 
 	public OnResize(e: laya.events.Event): void {

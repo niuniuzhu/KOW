@@ -12,13 +12,8 @@ message BS2GC_LoginRet {
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;
-}
-
-//战场信息
-message BS2GC_BattleInfo{
-	MsgOpts opts = 1;
-	int32 mapID = 2;//地图id
-	repeated CS2BS_PlayerInfo playerInfo = 3;//玩家信息
+	int32 mapID = 3;//地图id
+	repeated CS2BS_PlayerInfo playInfos = 4;//玩家信息
 }
 
 //更新玩家信息

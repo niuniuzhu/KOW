@@ -26,17 +26,14 @@ namespace Protos {
           string.Concat(
             "CgtDUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iXAoTQ1MyR0Nf",
             "QmVnaW5NYXRjaFJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMS",
-            "JgoGcmVzdWx0GAIgASgOMhYuUHJvdG9zLkdsb2JhbC5FQ29tbW9uIkMKDUNT",
-            "X1BsYXllckluZm8SCgoCaWQYASABKAQSDAoEbmFtZRgCIAEoCRILCgNqb2IY",
-            "AyABKAUSCwoDc2V4GAQgASgFImsKEUNTMkdDX0JlZ2luQmF0dGxlEh0KBG9w",
-            "dHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVtYXBJRBgCIAEoBRIoCglw",
-            "bGF5SW5mb3MYAyADKAsyFS5Qcm90b3MuQ1NfUGxheWVySW5mb2IGcHJvdG8z"));
+            "JgoGcmVzdWx0GAIgASgOMhYuUHJvdG9zLkdsb2JhbC5FQ29tbW9uIkwKEUNT",
+            "MkdDX0JlZ2luQmF0dGxlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0",
+            "cxIKCgJpcBgCIAEoCRIMCgRwb3J0GAMgASgFYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS_PlayerInfo), global::Protos.CS_PlayerInfo.Parser, new[]{ "Id", "Name", "Job", "Sex" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginBattle), global::Protos.CS2GC_BeginBattle.Parser, new[]{ "Opts", "MapID", "PlayInfos" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginBattle), global::Protos.CS2GC_BeginBattle.Parser, new[]{ "Opts", "Ip", "Port" }, null, null, null)
           }));
     }
     #endregion
@@ -209,219 +206,6 @@ namespace Protos {
 
   }
 
-  public sealed partial class CS_PlayerInfo : pb::IMessage<CS_PlayerInfo> {
-    private static readonly pb::MessageParser<CS_PlayerInfo> _parser = new pb::MessageParser<CS_PlayerInfo>(() => new CS_PlayerInfo());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<CS_PlayerInfo> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[1]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS_PlayerInfo() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS_PlayerInfo(CS_PlayerInfo other) : this() {
-      id_ = other.id_;
-      name_ = other.name_;
-      job_ = other.job_;
-      sex_ = other.sex_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS_PlayerInfo Clone() {
-      return new CS_PlayerInfo(this);
-    }
-
-    /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 1;
-    private ulong id_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ulong Id {
-      get { return id_; }
-      set {
-        id_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
-    private string name_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
-      set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "job" field.</summary>
-    public const int JobFieldNumber = 3;
-    private int job_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Job {
-      get { return job_; }
-      set {
-        job_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "sex" field.</summary>
-    public const int SexFieldNumber = 4;
-    private int sex_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Sex {
-      get { return sex_; }
-      set {
-        sex_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as CS_PlayerInfo);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(CS_PlayerInfo other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Id != other.Id) return false;
-      if (Name != other.Name) return false;
-      if (Job != other.Job) return false;
-      if (Sex != other.Sex) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Id != 0UL) hash ^= Id.GetHashCode();
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
-      if (Job != 0) hash ^= Job.GetHashCode();
-      if (Sex != 0) hash ^= Sex.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (Id != 0UL) {
-        output.WriteRawTag(8);
-        output.WriteUInt64(Id);
-      }
-      if (Name.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Name);
-      }
-      if (Job != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(Job);
-      }
-      if (Sex != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(Sex);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (Id != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(Id);
-      }
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
-      }
-      if (Job != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Job);
-      }
-      if (Sex != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Sex);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(CS_PlayerInfo other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Id != 0UL) {
-        Id = other.Id;
-      }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
-      }
-      if (other.Job != 0) {
-        Job = other.Job;
-      }
-      if (other.Sex != 0) {
-        Sex = other.Sex;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            Id = input.ReadUInt64();
-            break;
-          }
-          case 18: {
-            Name = input.ReadString();
-            break;
-          }
-          case 24: {
-            Job = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            Sex = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
   public sealed partial class CS2GC_BeginBattle : pb::IMessage<CS2GC_BeginBattle> {
     private static readonly pb::MessageParser<CS2GC_BeginBattle> _parser = new pb::MessageParser<CS2GC_BeginBattle>(() => new CS2GC_BeginBattle());
     private pb::UnknownFieldSet _unknownFields;
@@ -430,7 +214,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -448,8 +232,8 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CS2GC_BeginBattle(CS2GC_BeginBattle other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      mapID_ = other.mapID_;
-      playInfos_ = other.playInfos_.Clone();
+      ip_ = other.ip_;
+      port_ = other.port_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -469,25 +253,26 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "mapID" field.</summary>
-    public const int MapIDFieldNumber = 2;
-    private int mapID_;
+    /// <summary>Field number for the "ip" field.</summary>
+    public const int IpFieldNumber = 2;
+    private string ip_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int MapID {
-      get { return mapID_; }
+    public string Ip {
+      get { return ip_; }
       set {
-        mapID_ = value;
+        ip_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
-    /// <summary>Field number for the "playInfos" field.</summary>
-    public const int PlayInfosFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Protos.CS_PlayerInfo> _repeated_playInfos_codec
-        = pb::FieldCodec.ForMessage(26, global::Protos.CS_PlayerInfo.Parser);
-    private readonly pbc::RepeatedField<global::Protos.CS_PlayerInfo> playInfos_ = new pbc::RepeatedField<global::Protos.CS_PlayerInfo>();
+    /// <summary>Field number for the "port" field.</summary>
+    public const int PortFieldNumber = 3;
+    private int port_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Protos.CS_PlayerInfo> PlayInfos {
-      get { return playInfos_; }
+    public int Port {
+      get { return port_; }
+      set {
+        port_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -504,8 +289,8 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
-      if (MapID != other.MapID) return false;
-      if(!playInfos_.Equals(other.playInfos_)) return false;
+      if (Ip != other.Ip) return false;
+      if (Port != other.Port) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -513,8 +298,8 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (MapID != 0) hash ^= MapID.GetHashCode();
-      hash ^= playInfos_.GetHashCode();
+      if (Ip.Length != 0) hash ^= Ip.GetHashCode();
+      if (Port != 0) hash ^= Port.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -532,11 +317,14 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (MapID != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(MapID);
+      if (Ip.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Ip);
       }
-      playInfos_.WriteTo(output, _repeated_playInfos_codec);
+      if (Port != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Port);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -548,10 +336,12 @@ namespace Protos {
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
-      if (MapID != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MapID);
+      if (Ip.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Ip);
       }
-      size += playInfos_.CalculateSize(_repeated_playInfos_codec);
+      if (Port != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -569,10 +359,12 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
-      if (other.MapID != 0) {
-        MapID = other.MapID;
+      if (other.Ip.Length != 0) {
+        Ip = other.Ip;
       }
-      playInfos_.Add(other.playInfos_);
+      if (other.Port != 0) {
+        Port = other.Port;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -591,12 +383,12 @@ namespace Protos {
             input.ReadMessage(opts_);
             break;
           }
-          case 16: {
-            MapID = input.ReadInt32();
+          case 18: {
+            Ip = input.ReadString();
             break;
           }
-          case 26: {
-            playInfos_.AddEntriesFrom(input, _repeated_playInfos_codec);
+          case 24: {
+            Port = input.ReadInt32();
             break;
           }
         }

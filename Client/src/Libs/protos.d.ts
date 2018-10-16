@@ -124,6 +124,7 @@ export namespace Protos {
         eGC2GS_KeepAlive = 1101,
         eGC2BS_AskLogin = 1200,
         eGC2BS_KeepAlive = 1201,
+        eGC2BS_UpdateInfo = 1202,
         eGC2CS_BeginMatch = 1300,
         eLS2GC_GSInfo = 2000,
         eLS2GC_AskRegRet = 2001,
@@ -143,6 +144,8 @@ export namespace Protos {
         eBS2CS_GCLost = 4002,
         eBS2CS_RommInfoRet = 4003,
         eBS2GC_LoginRet = 4100,
+        eBS2GC_UpdatePlayer = 4101,
+        eBS2GC_BattleStart = 4102,
         eCS2LS_GSInfos = 5000,
         eCS2LS_GSInfo = 5001,
         eCS2LS_GSLost = 5002,
@@ -150,7 +153,7 @@ export namespace Protos {
         eCS2GS_GCLoginRet = 5100,
         eCS2GS_KickGC = 5101,
         eCS2BS_GCLoginRet = 5200,
-        eCS2BS_RoomInfo = 5201,
+        eCS2BS_BattleInfo = 5201,
         eCS2GC_BeginMatchRet = 5300,
         eCS2GC_BeginBattle = 5301,
         eDB2LS_QueryAccountRet = 8000,
@@ -271,12 +274,16 @@ export namespace Protos {
     interface IBS2GC_LoginRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.BS2GC_LoginRet.EResult|null);
+        mapID?: (number|null);
+        playInfos?: (Protos.ICS2BS_PlayerInfo[]|null);
     }
 
     class BS2GC_LoginRet implements IBS2GC_LoginRet {
         constructor(properties?: Protos.IBS2GC_LoginRet);
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.BS2GC_LoginRet.EResult;
+        public mapID: number;
+        public playInfos: Protos.ICS2BS_PlayerInfo[];
         public static create(properties?: Protos.IBS2GC_LoginRet): Protos.BS2GC_LoginRet;
         public static encode(message: Protos.IBS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -294,6 +301,48 @@ export namespace Protos {
             Success = 0,
             Failed = 1
         }
+    }
+
+    interface IBS2GC_UpdatePlayer {
+        opts?: (Protos.IMsgOpts|null);
+        id?: (Long|null);
+        progress?: (number|null);
+        status?: (Protos.CS2BS_PlayerInfo.Status|null);
+    }
+
+    class BS2GC_UpdatePlayer implements IBS2GC_UpdatePlayer {
+        constructor(properties?: Protos.IBS2GC_UpdatePlayer);
+        public opts?: (Protos.IMsgOpts|null);
+        public id: Long;
+        public progress: number;
+        public status: Protos.CS2BS_PlayerInfo.Status;
+        public static create(properties?: Protos.IBS2GC_UpdatePlayer): Protos.BS2GC_UpdatePlayer;
+        public static encode(message: Protos.IBS2GC_UpdatePlayer, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IBS2GC_UpdatePlayer, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_UpdatePlayer;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_UpdatePlayer;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_UpdatePlayer;
+        public static toObject(message: Protos.BS2GC_UpdatePlayer, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IBS2GC_BattleStart {
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    class BS2GC_BattleStart implements IBS2GC_BattleStart {
+        constructor(properties?: Protos.IBS2GC_BattleStart);
+        public opts?: (Protos.IMsgOpts|null);
+        public static create(properties?: Protos.IBS2GC_BattleStart): Protos.BS2GC_BattleStart;
+        public static encode(message: Protos.IBS2GC_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IBS2GC_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_BattleStart;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_BattleStart;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_BattleStart;
+        public static toObject(message: Protos.BS2GC_BattleStart, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
     }
 
     interface ICS2BS_GCLoginRet {
@@ -324,41 +373,64 @@ export namespace Protos {
         }
     }
 
-    interface IBS_PlayerInfo {
-        gsid?: (number|null);
+    interface ICS2BS_PlayerInfo {
+        id?: (Long|null);
+        name?: (string|null);
+        job?: (number|null);
+        sex?: (number|null);
+        statuc?: (Protos.CS2BS_PlayerInfo.Status|null);
     }
 
-    class BS_PlayerInfo implements IBS_PlayerInfo {
-        constructor(properties?: Protos.IBS_PlayerInfo);
-        public gsid: number;
-        public static create(properties?: Protos.IBS_PlayerInfo): Protos.BS_PlayerInfo;
-        public static encode(message: Protos.IBS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS_PlayerInfo;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS_PlayerInfo;
+    class CS2BS_PlayerInfo implements ICS2BS_PlayerInfo {
+        constructor(properties?: Protos.ICS2BS_PlayerInfo);
+        public id: Long;
+        public name: string;
+        public job: number;
+        public sex: number;
+        public statuc: Protos.CS2BS_PlayerInfo.Status;
+        public static create(properties?: Protos.ICS2BS_PlayerInfo): Protos.CS2BS_PlayerInfo;
+        public static encode(message: Protos.ICS2BS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2BS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2BS_PlayerInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2BS_PlayerInfo;
         public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS_PlayerInfo;
-        public static toObject(message: Protos.BS_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public static fromObject(object: { [k: string]: any }): Protos.CS2BS_PlayerInfo;
+        public static toObject(message: Protos.CS2BS_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
-    interface ICS2BS_RoomInfo {
-        opts?: (Protos.IMsgOpts|null);
-        playerInfo?: (Protos.IBS_PlayerInfo[]|null);
+    namespace CS2BS_PlayerInfo {
+
+        enum Status {
+            Disconnect = 0,
+            Connected = 1,
+            Ready = 2
+        }
     }
 
-    class CS2BS_RoomInfo implements ICS2BS_RoomInfo {
-        constructor(properties?: Protos.ICS2BS_RoomInfo);
+    interface ICS2BS_BattleInfo {
+        opts?: (Protos.IMsgOpts|null);
+        id?: (number|null);
+        mapID?: (number|null);
+        playerInfo?: (Protos.ICS2BS_PlayerInfo[]|null);
+        timeout?: (number|null);
+    }
+
+    class CS2BS_BattleInfo implements ICS2BS_BattleInfo {
+        constructor(properties?: Protos.ICS2BS_BattleInfo);
         public opts?: (Protos.IMsgOpts|null);
-        public playerInfo: Protos.IBS_PlayerInfo[];
-        public static create(properties?: Protos.ICS2BS_RoomInfo): Protos.CS2BS_RoomInfo;
-        public static encode(message: Protos.ICS2BS_RoomInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.ICS2BS_RoomInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2BS_RoomInfo;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2BS_RoomInfo;
+        public id: number;
+        public mapID: number;
+        public playerInfo: Protos.ICS2BS_PlayerInfo[];
+        public timeout: number;
+        public static create(properties?: Protos.ICS2BS_BattleInfo): Protos.CS2BS_BattleInfo;
+        public static encode(message: Protos.ICS2BS_BattleInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2BS_BattleInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2BS_BattleInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2BS_BattleInfo;
         public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.CS2BS_RoomInfo;
-        public static toObject(message: Protos.CS2BS_RoomInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleInfo;
+        public static toObject(message: Protos.CS2BS_BattleInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
@@ -382,41 +454,17 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
-    interface ICS_PlayerInfo {
-        id?: (Long|null);
-        name?: (string|null);
-        job?: (number|null);
-        sex?: (number|null);
-    }
-
-    class CS_PlayerInfo implements ICS_PlayerInfo {
-        constructor(properties?: Protos.ICS_PlayerInfo);
-        public id: Long;
-        public name: string;
-        public job: number;
-        public sex: number;
-        public static create(properties?: Protos.ICS_PlayerInfo): Protos.CS_PlayerInfo;
-        public static encode(message: Protos.ICS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.ICS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS_PlayerInfo;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS_PlayerInfo;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.CS_PlayerInfo;
-        public static toObject(message: Protos.CS_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
     interface ICS2GC_BeginBattle {
         opts?: (Protos.IMsgOpts|null);
-        mapID?: (number|null);
-        playInfos?: (Protos.ICS_PlayerInfo[]|null);
+        ip?: (string|null);
+        port?: (number|null);
     }
 
     class CS2GC_BeginBattle implements ICS2GC_BeginBattle {
         constructor(properties?: Protos.ICS2GC_BeginBattle);
         public opts?: (Protos.IMsgOpts|null);
-        public mapID: number;
-        public playInfos: Protos.ICS_PlayerInfo[];
+        public ip: string;
+        public port: number;
         public static create(properties?: Protos.ICS2GC_BeginBattle): Protos.CS2GC_BeginBattle;
         public static encode(message: Protos.ICS2GC_BeginBattle, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_BeginBattle, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -803,6 +851,28 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GC2BS_KeepAlive;
         public static toObject(message: Protos.GC2BS_KeepAlive, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2BS_UpdateInfo {
+        opts?: (Protos.IMsgOpts|null);
+        id?: (Long|null);
+        progress?: (number|null);
+    }
+
+    class GC2BS_UpdateInfo implements IGC2BS_UpdateInfo {
+        constructor(properties?: Protos.IGC2BS_UpdateInfo);
+        public opts?: (Protos.IMsgOpts|null);
+        public id: Long;
+        public progress: number;
+        public static create(properties?: Protos.IGC2BS_UpdateInfo): Protos.GC2BS_UpdateInfo;
+        public static encode(message: Protos.IGC2BS_UpdateInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2BS_UpdateInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2BS_UpdateInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2BS_UpdateInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2BS_UpdateInfo;
+        public static toObject(message: Protos.GC2BS_UpdateInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

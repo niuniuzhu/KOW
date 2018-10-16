@@ -12,12 +12,25 @@ message CS2BS_GCLoginRet{
 	EResult result = 2;
 }
 
-message BS_PlayerInfo{
-	uint32 gsid = 1;
+//玩家信息
+message CS2BS_PlayerInfo{
+	enum Status{
+		Disconnect = 0;
+		Connected = 1;
+		Ready = 2;
+	}
+	uint64 id = 1;
+	string name = 2;
+	int32 job = 3;
+	int32 sex =  4;
+	Status statuc = 5;
 }
 
-//房间信息
-message CS2BS_RoomInfo{
+//战场信息
+message CS2BS_BattleInfo{
 	MsgOpts opts = 1;
-	repeated BS_PlayerInfo playerInfo = 2;
+	uint32 id = 2;//战场运行时id
+	int32 mapID = 3;//地图id
+	repeated CS2BS_PlayerInfo playerInfo = 4;//玩家信息
+	uint32 timeout = 5;//超时时间
 }

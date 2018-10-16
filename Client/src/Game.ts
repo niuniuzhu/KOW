@@ -1,6 +1,9 @@
 import { UIManager } from "./UI/UIManager";
 import { Defs } from "./Model/Defs";
 import { GSConnector } from "./Net/GSConnector";
+import { SceneManager } from "./Scene/SceneManager";
+import { UIAlert } from "./UI/UIAlert";
+import { Protos } from "./libs/protos";
 
 export class Game {
 	private static _instance: Game;
@@ -50,14 +53,21 @@ export class Game {
 		Laya.timer.frameLoop(1, this, this.Update);
 
 		GSConnector.Init();
+		
 		UIManager.Init();
-		UIManager.EnterLogin();
+
+		SceneManager.Init();
+		SceneManager.ChangeState(SceneManager.State.Login);
+
+		GSConnector.disconnectHandler = this.HandleGSDisconnect;
+		GSConnector.AddListener(Protos.MsgID.eGS2GC_Kick, this.HandleKick);
 	}
 
 	private Update(): void {
 		let dt = Laya.timer.delta;
-		UIManager.Update(dt);
 		GSConnector.Update(dt);
+		UIManager.Update(dt);
+		SceneManager.Update(dt);
 	}
 
 	private OnResize(e: laya.events.Event): void {
@@ -66,6 +76,23 @@ export class Game {
 
 	public OnGSConnected(): void {
 		GSConnector.OnConnected();
-		UIManager.EnterCutscene();
+		UIManager.EnterMatching();
+	}
+
+	private HandleGSDisconnect(e: Event): void {
+		UIAlert.Show("与服务器断开连接", () => SceneManager.ChangeState(SceneManager.State.Login));
+	}
+
+	private HandleKick(message: any): void {
+		let kick: Protos.GS2GC_Kick = <Protos.GS2GC_Kick>message;
+		switch (kick.reason) {
+			case Protos.CS2GS_KickGC.EReason.DuplicateLogin:
+				UIAlert.Show("另一台设备正在登陆相同的账号", () => SceneManager.ChangeState(SceneManager.State.Login), true);
+				break;
+
+			default:
+				UIAlert.Show("已被服务器强制下线", () => SceneManager.ChangeState(SceneManager.State.Login), true);
+				break;
+		}
 	}
 }

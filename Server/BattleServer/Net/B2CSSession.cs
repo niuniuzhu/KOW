@@ -16,17 +16,17 @@ namespace BattleServer.Net
 		protected override void OnEstablish()
 		{
 			base.OnEstablish();
-			Logger.Info( $"BS({this.logicID}) connected." );
+			Logger.Info( $"CS({this.logicID}) connected." );
 
 			this._pingTime = 0;
 			this._reportTime = 0;
-			BS.instance.ReportStateToCS();
+			this.ReportStateToCS();
 		}
 
 		protected override void OnClose( string reason )
 		{
 			base.OnClose( reason );
-			Logger.Info( $"BS({this.logicID}) disconnected with msg:{reason}." );
+			Logger.Info( $"CS({this.logicID}) disconnected with msg:{reason}." );
 		}
 
 		protected override void OnHeartBeat( long dt )
@@ -46,17 +46,31 @@ namespace BattleServer.Net
 			if ( this._state == State.Connected && this._reportTime >= BS.instance.config.reportInterval )
 			{
 				this._reportTime = 0;
-				BS.instance.ReportStateToCS();
+				this.ReportStateToCS();
 			}
 		}
 
 		private void OnGSAskPingRet( Google.Protobuf.IMessage message )
 		{
 			long currTime = TimeUtils.utcTime;
-			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
-			long lag = ( long )( ( currTime - askPingRet.Stime ) * 0.5 );
+			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet ) message;
+			long lag = ( long ) ( ( currTime - askPingRet.Stime ) * 0.5 );
 			long timeDiff = askPingRet.Time + lag - currTime;
 			Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
+		}
+
+		private void ReportStateToCS()
+		{
+			Protos.BS2CS_ReportState reportState = ProtoCreator.Q_BS2CS_ReportState();
+			BSConfig config = BS.instance.config;
+			reportState.BsInfo = new Protos.BSInfo
+			{
+				Id = config.id,
+				Ip = config.externalIP,
+				Port = config.externalPort,
+				State = ( Protos.BSInfo.Types.State ) BS.instance.state
+			};
+			this.Send( reportState );
 		}
 	}
 }

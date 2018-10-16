@@ -23,7 +23,7 @@ namespace GateServer.Net
 
 			this._pingTime = 0;
 			this._reportTime = 0;
-			GS.instance.ReportStateToCS();
+			this.ReportStateToCS();
 		}
 
 		protected override void OnClose( string reason )
@@ -56,8 +56,24 @@ namespace GateServer.Net
 			if ( this._state == State.Connected && this._reportTime >= GS.instance.config.reportInterval )
 			{
 				this._reportTime = 0;
-				GS.instance.ReportStateToCS();
+				this.ReportStateToCS();
 			}
+		}
+
+		private void ReportStateToCS()
+		{
+			Protos.GS2CS_ReportState reportState = ProtoCreator.Q_GS2CS_ReportState();
+			GSConfig config = GS.instance.config;
+			reportState.GsInfo = new Protos.GSInfo
+			{
+				Id = config.gsID,
+				Name = config.name,
+				Ip = config.externalIP,
+				Port = config.externalPort,
+				Password = config.password,
+				State = ( Protos.GSInfo.Types.State ) GS.instance.state
+			};
+			this.Send( reportState );
 		}
 
 		private void OnGSAskPingRet( IMessage message )

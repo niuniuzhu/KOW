@@ -17,6 +17,7 @@ enum MsgID {
 
 	eGC2BS_AskLogin = 1200;
 	eGC2BS_KeepAlive = 1201;
+	eGC2BS_UpdateInfo = 1202;
 
 	eGC2CS_BeginMatch = 1300;
 	
@@ -47,6 +48,8 @@ enum MsgID {
 	eBS2CS_RommInfoRet = 4003;
 
 	eBS2GC_LoginRet = 4100;
+	eBS2GC_UpdatePlayer = 4101;
+	eBS2GC_BattleStart = 4102;
 
 	//cs
 	eCS2LS_GSInfos = 5000;
@@ -58,7 +61,7 @@ enum MsgID {
 	eCS2GS_KickGC = 5101;
 
 	eCS2BS_GCLoginRet = 5200;
-	eCS2BS_RoomInfo = 5201;
+	eCS2BS_BattleInfo = 5201;
 
 	eCS2GC_BeginMatchRet = 5300;
 	eCS2GC_BeginBattle = 5301;

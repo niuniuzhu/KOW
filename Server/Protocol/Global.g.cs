@@ -32,30 +32,29 @@ namespace Protos {
             "a1BpbmcSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgwKBHRpbWUY",
             "AiABKAMiSgoMR19Bc2tQaW5nUmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
             "TXNnT3B0cxINCgVzdGltZRgCIAEoAxIMCgR0aW1lGAMgASgDIiwKBkdsb2Jh",
-            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASqGCAoFTXNn",
+            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASrBBwoFTXNn",
             "SUQSDAoIVW5kZWZpbmUQABIOCgplR19Bc2tQaW5nEAoSEQoNZUdfQXNrUGlu",
             "Z1JldBALEhcKEmVHQzJMU19Bc2tSZWdpc3RlchDoBxIUCg9lR0MyTFNfQXNr",
             "TG9naW4Q6QcSGQoUZUdDMkxTX0Fza1NtYXJ0TG9naW4Q6gcSFAoPZUdDMkdT",
             "X0Fza0xvZ2luEMwIEhUKEGVHQzJHU19LZWVwQWxpdmUQzQgSFAoPZUdDMkJT",
-            "X0Fza0xvZ2luELAJEhUKEGVHQzJCU19LZWVwQWxpdmUQsQkSFgoRZUdDMkJT",
-            "X1VwZGF0ZUluZm8QsgkSFgoRZUdDMkNTX0JlZ2luTWF0Y2gQlAoSEgoNZUxT",
-            "MkdDX0dTSW5mbxDQDxIVChBlTFMyR0NfQXNrUmVnUmV0ENEPEhcKEmVMUzJH",
-            "Q19Bc2tMb2dpblJldBDSDxITCg5lTFMyQ1NfR0NMb2dpbhC0EBIYChNlTFMy",
-            "REJfUXVlcnlBY2NvdW50EJgREhYKEWVMUzJEQl9RdWVyeUxvZ2luEJkREhAK",
-            "C2VMUzJEQl9FeGVjEJoREhcKEmVHUzJDU19SZXBvcnRTdGF0ZRC4FxIWChFl",
-            "R1MyQ1NfR0NBc2tMb2dpbhC5FxISCg1lR1MyQ1NfR0NMb3N0ELoXEhUKEGVH",
-            "UzJDU19LaWNrR0NSZXQQuxcSFAoPZUdTMkdDX0xvZ2luUmV0EJwYEhAKC2VH",
-            "UzJHQ19LaWNrEJ0YEhcKEmVCUzJDU19SZXBvcnRTdGF0ZRCgHxIWChFlQlMy",
-            "Q1NfR0NBc2tMb2dpbhChHxISCg1lQlMyQ1NfR0NMb3N0EKIfEhcKEmVCUzJD",
-            "U19Sb21tSW5mb1JldBCjHxIUCg9lQlMyR0NfTG9naW5SZXQQhCASGAoTZUJT",
-            "MkdDX1VwZGF0ZVBsYXllchCFIBIXChJlQlMyR0NfQmF0dGxlU3RhcnQQhiAS",
-            "EwoOZUNTMkxTX0dTSW5mb3MQiCcSEgoNZUNTMkxTX0dTSW5mbxCJJxISCg1l",
-            "Q1MyTFNfR1NMb3N0EIonEhYKEWVDUzJMU19HQ0xvZ2luUmV0EIsnEhYKEWVD",
-            "UzJHU19HQ0xvZ2luUmV0EOwnEhIKDWVDUzJHU19LaWNrR0MQ7ScSFgoRZUNT",
-            "MkJTX0dDTG9naW5SZXQQ0CgSFgoRZUNTMkJTX0JhdHRsZUluZm8Q0SgSGQoU",
-            "ZUNTMkdDX0JlZ2luTWF0Y2hSZXQQtCkSFwoSZUNTMkdDX0JlZ2luQmF0dGxl",
-            "ELUpEhsKFmVEQjJMU19RdWVyeUFjY291bnRSZXQQwD4SGQoUZURCMkxTX1F1",
-            "ZXJ5TG9naW5SZXQQwT4SEwoOZURCMkxTX0V4ZWNSZXQQwj5iBnByb3RvMw=="));
+            "X0Fza0xvZ2luELAJEhUKEGVHQzJCU19LZWVwQWxpdmUQsQkSFgoRZUdDMkNT",
+            "X0JlZ2luTWF0Y2gQlAoSHAoXZUdDMkNTX1VwZGF0ZVBsYXllckluZm8QlQoS",
+            "EgoNZUxTMkdDX0dTSW5mbxDQDxIVChBlTFMyR0NfQXNrUmVnUmV0ENEPEhcK",
+            "EmVMUzJHQ19Bc2tMb2dpblJldBDSDxITCg5lTFMyQ1NfR0NMb2dpbhC0EBIY",
+            "ChNlTFMyREJfUXVlcnlBY2NvdW50EJgREhYKEWVMUzJEQl9RdWVyeUxvZ2lu",
+            "EJkREhAKC2VMUzJEQl9FeGVjEJoREhcKEmVHUzJDU19SZXBvcnRTdGF0ZRC4",
+            "FxIWChFlR1MyQ1NfR0NBc2tMb2dpbhC5FxISCg1lR1MyQ1NfR0NMb3N0ELoX",
+            "EhUKEGVHUzJDU19LaWNrR0NSZXQQuxcSFAoPZUdTMkdDX0xvZ2luUmV0EJwY",
+            "EhAKC2VHUzJHQ19LaWNrEJ0YEhcKEmVCUzJDU19SZXBvcnRTdGF0ZRCgHxIZ",
+            "ChRlQlMyQ1NfQmF0dGxlSW5mb1JldBChHxIUCg9lQlMyR0NfTG9naW5SZXQQ",
+            "hCASFwoSZUJTMkdDX0JhdHRsZVN0YXJ0EIYgEhMKDmVDUzJMU19HU0luZm9z",
+            "EIgnEhIKDWVDUzJMU19HU0luZm8QiScSEgoNZUNTMkxTX0dTTG9zdBCKJxIW",
+            "ChFlQ1MyTFNfR0NMb2dpblJldBCLJxIWChFlQ1MyR1NfR0NMb2dpblJldBDs",
+            "JxISCg1lQ1MyR1NfS2lja0dDEO0nEhYKEWVDUzJCU19CYXR0bGVJbmZvENAo",
+            "EhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhQKD2VDUzJHQ19Sb29tSW5m",
+            "bxC1KRISCg1lQ1MyR0NfQlNJbmZvELYpEhsKFmVEQjJMU19RdWVyeUFjY291",
+            "bnRSZXQQwD4SGQoUZURCMkxTX1F1ZXJ5TG9naW5SZXQQwT4SEwoOZURCMkxT",
+            "X0V4ZWNSZXQQwj5iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
@@ -83,8 +82,8 @@ namespace Protos {
     [pbr::OriginalName("eGC2GS_KeepAlive")] EGc2GsKeepAlive = 1101,
     [pbr::OriginalName("eGC2BS_AskLogin")] EGc2BsAskLogin = 1200,
     [pbr::OriginalName("eGC2BS_KeepAlive")] EGc2BsKeepAlive = 1201,
-    [pbr::OriginalName("eGC2BS_UpdateInfo")] EGc2BsUpdateInfo = 1202,
     [pbr::OriginalName("eGC2CS_BeginMatch")] EGc2CsBeginMatch = 1300,
+    [pbr::OriginalName("eGC2CS_UpdatePlayerInfo")] EGc2CsUpdatePlayerInfo = 1301,
     /// <summary>
     ///ls
     /// </summary>
@@ -108,11 +107,8 @@ namespace Protos {
     ///bs
     /// </summary>
     [pbr::OriginalName("eBS2CS_ReportState")] EBs2CsReportState = 4000,
-    [pbr::OriginalName("eBS2CS_GCAskLogin")] EBs2CsGcaskLogin = 4001,
-    [pbr::OriginalName("eBS2CS_GCLost")] EBs2CsGclost = 4002,
-    [pbr::OriginalName("eBS2CS_RommInfoRet")] EBs2CsRommInfoRet = 4003,
+    [pbr::OriginalName("eBS2CS_BattleInfoRet")] EBs2CsBattleInfoRet = 4001,
     [pbr::OriginalName("eBS2GC_LoginRet")] EBs2GcLoginRet = 4100,
-    [pbr::OriginalName("eBS2GC_UpdatePlayer")] EBs2GcUpdatePlayer = 4101,
     [pbr::OriginalName("eBS2GC_BattleStart")] EBs2GcBattleStart = 4102,
     /// <summary>
     ///cs
@@ -123,10 +119,10 @@ namespace Protos {
     [pbr::OriginalName("eCS2LS_GCLoginRet")] ECs2LsGcloginRet = 5003,
     [pbr::OriginalName("eCS2GS_GCLoginRet")] ECs2GsGcloginRet = 5100,
     [pbr::OriginalName("eCS2GS_KickGC")] ECs2GsKickGc = 5101,
-    [pbr::OriginalName("eCS2BS_GCLoginRet")] ECs2BsGcloginRet = 5200,
-    [pbr::OriginalName("eCS2BS_BattleInfo")] ECs2BsBattleInfo = 5201,
+    [pbr::OriginalName("eCS2BS_BattleInfo")] ECs2BsBattleInfo = 5200,
     [pbr::OriginalName("eCS2GC_BeginMatchRet")] ECs2GcBeginMatchRet = 5300,
-    [pbr::OriginalName("eCS2GC_BeginBattle")] ECs2GcBeginBattle = 5301,
+    [pbr::OriginalName("eCS2GC_RoomInfo")] ECs2GcRoomInfo = 5301,
+    [pbr::OriginalName("eCS2GC_BSInfo")] ECs2GcBsinfo = 5302,
     /// <summary>
     ///db
     /// </summary>

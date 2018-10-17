@@ -1,25 +1,22 @@
-﻿using System.IO;
+﻿using Core.Misc;
+using System.IO;
 using System.Text;
 
 namespace Core.Net
 {
-	public class StreamBuffer
+	public class StreamBuffer : IPoolObject
 	{
-		private readonly MemoryStream _ms;
-		private readonly BinaryWriter _bw;
-		private readonly BinaryReader _br;
-
-		public MemoryStream ms => this._ms;
-		public BinaryWriter bw => this._bw;
-		public BinaryReader br => this._br;
+		public MemoryStream ms { get; }
+		public BinaryWriter bw { get; }
+		public BinaryReader br { get; }
 
 		/// <summary>
 		/// 获取当前位置
 		/// </summary>
 		public int position
 		{
-			get => ( int )this._ms.Position;
-			set => this._ms.Position = value;
+			get => ( int ) this.ms.Position;
+			set => this.ms.Position = value;
 		}
 
 		/// <summary>
@@ -27,46 +24,46 @@ namespace Core.Net
 		/// </summary>
 		public int length
 		{
-			get => ( int )this._ms.Length;
-			set => this._ms.SetLength( value );
+			get => ( int ) this.ms.Length;
+			set => this.ms.SetLength( value );
 		}
 
 		/// <summary>
 		/// 当前是否还有数据可以读取
 		/// </summary>
-		public bool readable => this._ms.Length > this._ms.Position;
+		public bool readable => this.ms.Length > this.ms.Position;
 
 		/// <summary>
 		/// 可读数据长度
 		/// </summary>
-		public long bytesAvailable => this._ms.Length - this._ms.Position;
+		public long bytesAvailable => this.ms.Length - this.ms.Position;
 
 		public object data;
 
 		public StreamBuffer()
 		{
-			this._ms = new MemoryStream();
-			this._bw = new BinaryWriter( this._ms, Encoding.UTF8 );
-			this._br = new BinaryReader( this._ms, Encoding.UTF8 );
+			this.ms = new MemoryStream();
+			this.bw = new BinaryWriter( this.ms, Encoding.UTF8 );
+			this.br = new BinaryReader( this.ms, Encoding.UTF8 );
 		}
 
 		public StreamBuffer( byte[] buff )
 		{
-			this._ms = new MemoryStream( buff );
-			this._bw = new BinaryWriter( this._ms );
-			this._br = new BinaryReader( this._ms );
+			this.ms = new MemoryStream( buff );
+			this.bw = new BinaryWriter( this.ms );
+			this.br = new BinaryReader( this.ms );
 		}
 
 		public void Close()
 		{
-			this._bw.Close();
-			this._br.Close();
-			this._ms.Close();
+			this.bw.Close();
+			this.br.Close();
+			this.ms.Close();
 		}
 
 		public void Clear()
 		{
-			this._ms.SetLength( 0 );
+			this.ms.SetLength( 0 );
 		}
 
 		/// <summary>
@@ -93,77 +90,77 @@ namespace Core.Net
 
 		public void Write( StreamBuffer streamBuffer )
 		{
-			this._bw.Write( streamBuffer.ToArray() );
+			this.bw.Write( streamBuffer.ToArray() );
 		}
 
 		public void Write( int value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( byte value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( bool value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( string value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( byte[] value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( byte[] value, int index, int count )
 		{
-			this._bw.Write( value, index, count );
+			this.bw.Write( value, index, count );
 		}
 
 		public void Write( char[] chars, int index, int count )
 		{
-			this._bw.Write( chars, index, count );
+			this.bw.Write( chars, index, count );
 		}
 
 		public void Write( char[] chars )
 		{
-			this._bw.Write( chars );
+			this.bw.Write( chars );
 		}
 
 		public void Write( double value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( float value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( long value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( ushort value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( uint value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void Write( ulong value )
 		{
-			this._bw.Write( value );
+			this.bw.Write( value );
 		}
 
 		public void WriteUTF8( string value )
@@ -188,22 +185,22 @@ namespace Core.Net
 
 		public int ReadInt()
 		{
-			return this._br.ReadInt32();
+			return this.br.ReadInt32();
 		}
 
 		public byte ReadByte()
 		{
-			return this._br.ReadByte();
+			return this.br.ReadByte();
 		}
 
 		public bool ReadBool()
 		{
-			return this._br.ReadBoolean();
+			return this.br.ReadBoolean();
 		}
 
 		public string ReadString()
 		{
-			return this._br.ReadString();
+			return this.br.ReadString();
 		}
 
 		public string ReadUTF8()
@@ -219,166 +216,166 @@ namespace Core.Net
 		{
 			if ( this.bytesAvailable <= 0 )
 				return string.Empty;
-			byte[] bytes = this.ReadBytes( ( int )this.bytesAvailable );
+			byte[] bytes = this.ReadBytes( ( int ) this.bytesAvailable );
 			return Encoding.UTF8.GetString( bytes );
 		}
 
 		public byte[] ReadBytes( int length )
 		{
-			return this._br.ReadBytes( length );
+			return this.br.ReadBytes( length );
 		}
 
 		public double ReadDouble()
 		{
-			return this._br.ReadDouble();
+			return this.br.ReadDouble();
 		}
 
 		public float ReadFloat()
 		{
-			return this._br.ReadSingle();
+			return this.br.ReadSingle();
 		}
 
 		public long ReadLong()
 		{
-			return this._br.ReadInt64();
+			return this.br.ReadInt64();
 		}
 
 		public short ReadShort()
 		{
-			return this._br.ReadInt16();
+			return this.br.ReadInt16();
 		}
 
 		public ushort ReadUShort()
 		{
-			return this._br.ReadUInt16();
+			return this.br.ReadUInt16();
 		}
 
 		public uint ReadUInt()
 		{
-			return this._br.ReadUInt32();
+			return this.br.ReadUInt32();
 		}
 
 		public ulong ReadULong()
 		{
-			return this._br.ReadUInt64();
+			return this.br.ReadUInt64();
 		}
 
 		public void Write( int pos, int value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, byte value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, bool value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, string value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, byte[] value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, byte[] value, int index, int count )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value, index, count );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value, index, count );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, char[] chars, int index, int count )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( chars, index, count );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( chars, index, count );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, char[] chars )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( chars );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( chars );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, double value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, float value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, long value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, ushort value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, uint value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void Write( int pos, ulong value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			this._bw.Write( value );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Write( value );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public void WriteUTF8( int pos, string value )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
 			if ( string.IsNullOrEmpty( value ) )
 				this.Write( 0 );
 			else
@@ -387,49 +384,49 @@ namespace Core.Net
 				this.Write( bytes.Length );
 				this.Write( bytes );
 			}
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( p, SeekOrigin.Begin );
 		}
 
 		public int ReadInt( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			int value = this._br.ReadInt32();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			int value = this.br.ReadInt32();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public byte ReadByte( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			byte value = this._br.ReadByte();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			byte value = this.br.ReadByte();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public bool ReadBool( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			bool value = this._br.ReadBoolean();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			bool value = this.br.ReadBoolean();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public string ReadString( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			string value = this._br.ReadString();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			string value = this.br.ReadString();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public string ReadUTF8( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
 			int len = this.ReadInt();
 			string str;
 			if ( len == 0 )
@@ -439,90 +436,90 @@ namespace Core.Net
 				byte[] bytes = this.ReadBytes( len );
 				str = Encoding.UTF8.GetString( bytes );
 			}
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return str;
 		}
 
 		public byte[] ReadBytes( int pos, int count )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			byte[] value = this._br.ReadBytes( count );
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			byte[] value = this.br.ReadBytes( count );
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public double ReadDouble( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			double value = this._br.ReadDouble();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			double value = this.br.ReadDouble();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public float ReadFloat( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			float value = this._br.ReadSingle();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			float value = this.br.ReadSingle();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public long ReadLong( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			long value = this._br.ReadInt64();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			long value = this.br.ReadInt64();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public short ReadShort( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			short value = this._br.ReadInt16();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			short value = this.br.ReadInt16();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public ushort ReadUShort( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			ushort value = this._br.ReadUInt16();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			ushort value = this.br.ReadUInt16();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public uint ReadUInt( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			uint value = this._br.ReadUInt32();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			uint value = this.br.ReadUInt32();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public ulong ReadULong( int pos )
 		{
 			int p = this.position;
-			this._bw.Seek( pos, SeekOrigin.Begin );
-			ulong value = this._br.ReadUInt64();
-			this._bw.Seek( p, SeekOrigin.Begin );
+			this.bw.Seek( pos, SeekOrigin.Begin );
+			ulong value = this.br.ReadUInt64();
+			this.bw.Seek( p, SeekOrigin.Begin );
 			return value;
 		}
 
 		public byte[] GetBuffer()
 		{
-			return this._ms.GetBuffer();
+			return this.ms.GetBuffer();
 		}
 
 		public byte[] ToArray()
 		{
-			return this._ms.ToArray();
+			return this.ms.ToArray();
 		}
 	}
 }

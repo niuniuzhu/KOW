@@ -2,7 +2,6 @@
 package Protos;
 
 import "Global.proto";
-import "CS2BS.proto";
 
 //登录结果
 message BS2GC_LoginRet {
@@ -12,16 +11,6 @@ message BS2GC_LoginRet {
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;
-	int32 mapID = 3;//地图id
-	repeated CS2BS_PlayerInfo playInfos = 4;//玩家信息
-}
-
-//更新玩家信息
-message BS2GC_UpdatePlayer {
-	MsgOpts opts = 1;
-	uint64 id = 2;//玩家网络id
-	int32 progress = 3;//加载进度
-	CS2BS_PlayerInfo.Status status = 4;//玩家状态
 }
 
 //战场开始

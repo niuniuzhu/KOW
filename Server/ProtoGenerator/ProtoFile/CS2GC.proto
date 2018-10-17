@@ -9,9 +9,32 @@ message CS2GC_BeginMatchRet {
 	Global.ECommon result = 2;
 }
 
-message CS2GC_BeginBattle {
+message Room_PlayerInfo {
+	uint64 gcNID = 2;//玩家网络id
+	string name = 3;//玩家名字
+	int32 actorID = 4;//角色id
+	int32 progress = 5;//加载进度
+}
+
+//更新房间信息
+message CS2GC_RoomInfo {
 	MsgOpts opts = 1;
-	uint64 gsNID = 2;
+	uint32 id = 2;//房间运行时id
+	int32 mapID = 3;//地图id
+	bool isFull = 4;//是否满员
+	repeated Room_PlayerInfo playerInfos = 5;//玩家信息
+}
+
+//所有玩家准备完成,下发BS连接信息
+message CS2GC_BSInfo {
+	enum Error{
+		Success = 0;
+		BSNotFound = 1;//找不到bs
+		BSLost = 2;//bs意外丢失
+	}
+	MsgOpts opts = 1;
+	uint64 gcNID = 2;//客户端id,用于登录bs时进行校验
 	string ip = 3;
 	int32 port = 4;
+	Error error = 5;
 }

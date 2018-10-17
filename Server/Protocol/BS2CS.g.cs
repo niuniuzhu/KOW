@@ -29,20 +29,15 @@ namespace Protos {
             "YXRlGAYgASgOMhQuUHJvdG9zLkJTSW5mby5TdGF0ZSIwCgVTdGF0ZRIICgRG",
             "cmVlEAASCAoEQnVzeRABEggKBEZ1bGwQAhIJCgVDbG9zZRADIlIKEUJTMkNT",
             "X1JlcG9ydFN0YXRlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIe",
-            "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvIkQKEEJTMkNTX0dDQXNr",
-            "TG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEhEKCXNlc3Np",
-            "b25JRBgCIAEoBCJACgxCUzJDU19HQ0xvc3QSHQoEb3B0cxgBIAEoCzIPLlBy",
-            "b3Rvcy5Nc2dPcHRzEhEKCXNlc3Npb25JRBgCIAEoBCIyChFCUzJDU19Sb21t",
-            "SW5mb1JldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHNiBnByb3Rv",
-            "Mw=="));
+            "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvIjQKE0JTMkNTX0JhdHRs",
+            "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzYgZwcm90",
+            "bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BSInfo), global::Protos.BSInfo.Parser, new[]{ "Id", "Ip", "Port", "State" }, null, new[]{ typeof(global::Protos.BSInfo.Types.State) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_ReportState), global::Protos.BS2CS_ReportState.Parser, new[]{ "Opts", "BsInfo" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_GCAskLogin), global::Protos.BS2CS_GCAskLogin.Parser, new[]{ "Opts", "SessionID" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_GCLost), global::Protos.BS2CS_GCLost.Parser, new[]{ "Opts", "SessionID" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_RommInfoRet), global::Protos.BS2CS_RommInfoRet.Parser, new[]{ "Opts" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts" }, null, null, null)
           }));
     }
     #endregion
@@ -445,11 +440,11 @@ namespace Protos {
 
   }
 
-  public sealed partial class BS2CS_GCAskLogin : pb::IMessage<BS2CS_GCAskLogin> {
-    private static readonly pb::MessageParser<BS2CS_GCAskLogin> _parser = new pb::MessageParser<BS2CS_GCAskLogin>(() => new BS2CS_GCAskLogin());
+  public sealed partial class BS2CS_BattleInfoRet : pb::IMessage<BS2CS_BattleInfoRet> {
+    private static readonly pb::MessageParser<BS2CS_BattleInfoRet> _parser = new pb::MessageParser<BS2CS_BattleInfoRet>(() => new BS2CS_BattleInfoRet());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<BS2CS_GCAskLogin> Parser { get { return _parser; } }
+    public static pb::MessageParser<BS2CS_BattleInfoRet> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -462,347 +457,21 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_GCAskLogin() {
+    public BS2CS_BattleInfoRet() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_GCAskLogin(BS2CS_GCAskLogin other) : this() {
-      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      sessionID_ = other.sessionID_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_GCAskLogin Clone() {
-      return new BS2CS_GCAskLogin(this);
-    }
-
-    /// <summary>Field number for the "opts" field.</summary>
-    public const int OptsFieldNumber = 1;
-    private global::Protos.MsgOpts opts_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.MsgOpts Opts {
-      get { return opts_; }
-      set {
-        opts_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "sessionID" field.</summary>
-    public const int SessionIDFieldNumber = 2;
-    private ulong sessionID_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ulong SessionID {
-      get { return sessionID_; }
-      set {
-        sessionID_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as BS2CS_GCAskLogin);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(BS2CS_GCAskLogin other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(Opts, other.Opts)) return false;
-      if (SessionID != other.SessionID) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (SessionID != 0UL) hash ^= SessionID.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (opts_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Opts);
-      }
-      if (SessionID != 0UL) {
-        output.WriteRawTag(16);
-        output.WriteUInt64(SessionID);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (opts_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
-      }
-      if (SessionID != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(SessionID);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(BS2CS_GCAskLogin other) {
-      if (other == null) {
-        return;
-      }
-      if (other.opts_ != null) {
-        if (opts_ == null) {
-          opts_ = new global::Protos.MsgOpts();
-        }
-        Opts.MergeFrom(other.Opts);
-      }
-      if (other.SessionID != 0UL) {
-        SessionID = other.SessionID;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (opts_ == null) {
-              opts_ = new global::Protos.MsgOpts();
-            }
-            input.ReadMessage(opts_);
-            break;
-          }
-          case 16: {
-            SessionID = input.ReadUInt64();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  public sealed partial class BS2CS_GCLost : pb::IMessage<BS2CS_GCLost> {
-    private static readonly pb::MessageParser<BS2CS_GCLost> _parser = new pb::MessageParser<BS2CS_GCLost>(() => new BS2CS_GCLost());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<BS2CS_GCLost> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[3]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_GCLost() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_GCLost(BS2CS_GCLost other) : this() {
-      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      sessionID_ = other.sessionID_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_GCLost Clone() {
-      return new BS2CS_GCLost(this);
-    }
-
-    /// <summary>Field number for the "opts" field.</summary>
-    public const int OptsFieldNumber = 1;
-    private global::Protos.MsgOpts opts_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.MsgOpts Opts {
-      get { return opts_; }
-      set {
-        opts_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "sessionID" field.</summary>
-    public const int SessionIDFieldNumber = 2;
-    private ulong sessionID_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ulong SessionID {
-      get { return sessionID_; }
-      set {
-        sessionID_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as BS2CS_GCLost);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(BS2CS_GCLost other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(Opts, other.Opts)) return false;
-      if (SessionID != other.SessionID) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (SessionID != 0UL) hash ^= SessionID.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (opts_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Opts);
-      }
-      if (SessionID != 0UL) {
-        output.WriteRawTag(16);
-        output.WriteUInt64(SessionID);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (opts_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
-      }
-      if (SessionID != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(SessionID);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(BS2CS_GCLost other) {
-      if (other == null) {
-        return;
-      }
-      if (other.opts_ != null) {
-        if (opts_ == null) {
-          opts_ = new global::Protos.MsgOpts();
-        }
-        Opts.MergeFrom(other.Opts);
-      }
-      if (other.SessionID != 0UL) {
-        SessionID = other.SessionID;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (opts_ == null) {
-              opts_ = new global::Protos.MsgOpts();
-            }
-            input.ReadMessage(opts_);
-            break;
-          }
-          case 16: {
-            SessionID = input.ReadUInt64();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  public sealed partial class BS2CS_RommInfoRet : pb::IMessage<BS2CS_RommInfoRet> {
-    private static readonly pb::MessageParser<BS2CS_RommInfoRet> _parser = new pb::MessageParser<BS2CS_RommInfoRet>(() => new BS2CS_RommInfoRet());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<BS2CS_RommInfoRet> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[4]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_RommInfoRet() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_RommInfoRet(BS2CS_RommInfoRet other) : this() {
+    public BS2CS_BattleInfoRet(BS2CS_BattleInfoRet other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2CS_RommInfoRet Clone() {
-      return new BS2CS_RommInfoRet(this);
+    public BS2CS_BattleInfoRet Clone() {
+      return new BS2CS_BattleInfoRet(this);
     }
 
     /// <summary>Field number for the "opts" field.</summary>
@@ -818,11 +487,11 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as BS2CS_RommInfoRet);
+      return Equals(other as BS2CS_BattleInfoRet);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(BS2CS_RommInfoRet other) {
+    public bool Equals(BS2CS_BattleInfoRet other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -872,7 +541,7 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(BS2CS_RommInfoRet other) {
+    public void MergeFrom(BS2CS_BattleInfoRet other) {
       if (other == null) {
         return;
       }

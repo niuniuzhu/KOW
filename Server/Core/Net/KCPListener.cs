@@ -8,7 +8,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace Core.Net
 {
-	public class ReceiveData
+	public class ReceiveData : IPoolObject
 	{
 		public readonly IPEndPoint remoteEndPoint = new IPEndPoint( IPAddress.Any, 0 );
 		public readonly StreamBuffer buffer = new StreamBuffer();
@@ -25,7 +25,7 @@ namespace Core.Net
 
 		private Socket _socket;
 		private readonly BufferBlock<ReceiveData> _recvDataBuffer = new BufferBlock<ReceiveData>();
-		private readonly ThreadSafeObejctPool<ReceiveData> _receiveDataPool = new ThreadSafeObejctPool<ReceiveData>();
+		private readonly ThreadSafeObjectPool<ReceiveData> _receiveDataPool = new ThreadSafeObjectPool<ReceiveData>( 20, 10 );
 		private bool _running;
 
 		public KCPListener( uint id ) => this.id = id;
@@ -144,8 +144,8 @@ namespace Core.Net
 
 				ReceiveData receiveData = this._receiveDataPool.Pop();
 				receiveData.buffer.Write( recvEventArgs.Buffer, recvEventArgs.Offset, size );
-				receiveData.remoteEndPoint.Address = ( ( IPEndPoint )recvEventArgs.RemoteEndPoint ).Address;
-				receiveData.remoteEndPoint.Port = ( ( IPEndPoint )recvEventArgs.RemoteEndPoint ).Port;
+				receiveData.remoteEndPoint.Address = ( ( IPEndPoint ) recvEventArgs.RemoteEndPoint ).Address;
+				receiveData.remoteEndPoint.Port = ( ( IPEndPoint ) recvEventArgs.RemoteEndPoint ).Port;
 				this._recvDataBuffer.Post( receiveData );
 			} while ( false );
 			this.StartReceive( recvEventArgs );
@@ -176,7 +176,7 @@ namespace Core.Net
 				else
 				{
 					session.isPassive = true;
-					KCPConnection kcpConnection = ( KCPConnection )session.connection;
+					KCPConnection kcpConnection = ( KCPConnection ) session.connection;
 					kcpConnection.socket = new SocketWrapper( this._socket );
 					kcpConnection.isRefSocket = true;
 					kcpConnection.remoteEndPoint = recvData.remoteEndPoint;
@@ -199,9 +199,8 @@ namespace Core.Net
 				if ( session == null )
 					Logger.Error( $"get session failed with id:{connID}" );
 				else
-					( ( KCPConnection )session.connection ).SendDataToMainThread( data, offset, size );
+					( ( KCPConnection ) session.connection ).SendDataToMainThread( data, offset, size );
 			}
-			recvData.Clear();
 			this._receiveDataPool.Push( recvData );
 		}
 	}

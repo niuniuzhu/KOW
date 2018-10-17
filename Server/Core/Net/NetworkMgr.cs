@@ -10,7 +10,7 @@ namespace Core.Net
 		public static NetworkMgr instance => _instance ?? ( _instance = new NetworkMgr() );
 
 		private readonly SwitchQueue<NetEvent> _eventQueue = new SwitchQueue<NetEvent>();
-		private readonly ThreadSafeObejctPool<NetEvent> _eventPool = new ThreadSafeObejctPool<NetEvent>();
+		private readonly ThreadSafeObjectPool<NetEvent> _eventPool = new ThreadSafeObjectPool<NetEvent>( 100, 50 );
 		private readonly Dictionary<uint, IListener> _idToListeners = new Dictionary<uint, IListener>();
 		private readonly Dictionary<uint, INetSession> _idToSession = new Dictionary<uint, INetSession>();
 		private readonly HashSet<INetSession> _sessionsToRemove = new HashSet<INetSession>();

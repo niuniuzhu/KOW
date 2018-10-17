@@ -26,15 +26,24 @@ namespace Protos {
           string.Concat(
             "CgtDUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iXAoTQ1MyR0Nf",
             "QmVnaW5NYXRjaFJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMS",
-            "JgoGcmVzdWx0GAIgASgOMhYuUHJvdG9zLkdsb2JhbC5FQ29tbW9uIlsKEUNT",
-            "MkdDX0JlZ2luQmF0dGxlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0",
-            "cxINCgVnc05JRBgCIAEoBBIKCgJpcBgDIAEoCRIMCgRwb3J0GAQgASgFYgZw",
-            "cm90bzM="));
+            "JgoGcmVzdWx0GAIgASgOMhYuUHJvdG9zLkdsb2JhbC5FQ29tbW9uIlEKD1Jv",
+            "b21fUGxheWVySW5mbxINCgVnY05JRBgCIAEoBBIMCgRuYW1lGAMgASgJEg8K",
+            "B2FjdG9ySUQYBCABKAUSEAoIcHJvZ3Jlc3MYBSABKAUiiAEKDkNTMkdDX1Jv",
+            "b21JbmZvEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIKCgJpZBgC",
+            "IAEoDRINCgVtYXBJRBgDIAEoBRIOCgZpc0Z1bGwYBCABKAgSLAoLcGxheWVy",
+            "SW5mb3MYBSADKAsyFy5Qcm90b3MuUm9vbV9QbGF5ZXJJbmZvIrMBCgxDUzJH",
+            "Q19CU0luZm8SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdj",
+            "TklEGAIgASgEEgoKAmlwGAMgASgJEgwKBHBvcnQYBCABKAUSKQoFZXJyb3IY",
+            "BSABKA4yGi5Qcm90b3MuQ1MyR0NfQlNJbmZvLkVycm9yIjAKBUVycm9yEgsK",
+            "B1N1Y2Nlc3MQABIOCgpCU05vdEZvdW5kEAESCgoGQlNMb3N0EAJiBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginBattle), global::Protos.CS2GC_BeginBattle.Parser, new[]{ "Opts", "GsNID", "Ip", "Port" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Room_PlayerInfo), global::Protos.Room_PlayerInfo.Parser, new[]{ "GcNID", "Name", "ActorID", "Progress" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RoomInfo), global::Protos.CS2GC_RoomInfo.Parser, new[]{ "Opts", "Id", "MapID", "IsFull", "PlayerInfos" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BSInfo), global::Protos.CS2GC_BSInfo.Parser, new[]{ "Opts", "GcNID", "Ip", "Port", "Error" }, null, new[]{ typeof(global::Protos.CS2GC_BSInfo.Types.Error) }, null)
           }));
     }
     #endregion
@@ -207,11 +216,11 @@ namespace Protos {
 
   }
 
-  public sealed partial class CS2GC_BeginBattle : pb::IMessage<CS2GC_BeginBattle> {
-    private static readonly pb::MessageParser<CS2GC_BeginBattle> _parser = new pb::MessageParser<CS2GC_BeginBattle>(() => new CS2GC_BeginBattle());
+  public sealed partial class Room_PlayerInfo : pb::IMessage<Room_PlayerInfo> {
+    private static readonly pb::MessageParser<Room_PlayerInfo> _parser = new pb::MessageParser<Room_PlayerInfo>(() => new Room_PlayerInfo());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<CS2GC_BeginBattle> Parser { get { return _parser; } }
+    public static pb::MessageParser<Room_PlayerInfo> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -224,24 +233,253 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS2GC_BeginBattle() {
+    public Room_PlayerInfo() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS2GC_BeginBattle(CS2GC_BeginBattle other) : this() {
-      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      gsNID_ = other.gsNID_;
-      ip_ = other.ip_;
-      port_ = other.port_;
+    public Room_PlayerInfo(Room_PlayerInfo other) : this() {
+      gcNID_ = other.gcNID_;
+      name_ = other.name_;
+      actorID_ = other.actorID_;
+      progress_ = other.progress_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS2GC_BeginBattle Clone() {
-      return new CS2GC_BeginBattle(this);
+    public Room_PlayerInfo Clone() {
+      return new Room_PlayerInfo(this);
+    }
+
+    /// <summary>Field number for the "gcNID" field.</summary>
+    public const int GcNIDFieldNumber = 2;
+    private ulong gcNID_;
+    /// <summary>
+    ///玩家网络id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong GcNID {
+      get { return gcNID_; }
+      set {
+        gcNID_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 3;
+    private string name_ = "";
+    /// <summary>
+    ///玩家名字
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "actorID" field.</summary>
+    public const int ActorIDFieldNumber = 4;
+    private int actorID_;
+    /// <summary>
+    ///角色id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ActorID {
+      get { return actorID_; }
+      set {
+        actorID_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "progress" field.</summary>
+    public const int ProgressFieldNumber = 5;
+    private int progress_;
+    /// <summary>
+    ///加载进度
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Progress {
+      get { return progress_; }
+      set {
+        progress_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as Room_PlayerInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(Room_PlayerInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (GcNID != other.GcNID) return false;
+      if (Name != other.Name) return false;
+      if (ActorID != other.ActorID) return false;
+      if (Progress != other.Progress) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (ActorID != 0) hash ^= ActorID.GetHashCode();
+      if (Progress != 0) hash ^= Progress.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (GcNID != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(GcNID);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
+      if (ActorID != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(ActorID);
+      }
+      if (Progress != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Progress);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (GcNID != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (ActorID != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
+      }
+      if (Progress != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Progress);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(Room_PlayerInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.GcNID != 0UL) {
+        GcNID = other.GcNID;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.ActorID != 0) {
+        ActorID = other.ActorID;
+      }
+      if (other.Progress != 0) {
+        Progress = other.Progress;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 16: {
+            GcNID = input.ReadUInt64();
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
+            break;
+          }
+          case 32: {
+            ActorID = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Progress = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///更新房间信息
+  /// </summary>
+  public sealed partial class CS2GC_RoomInfo : pb::IMessage<CS2GC_RoomInfo> {
+    private static readonly pb::MessageParser<CS2GC_RoomInfo> _parser = new pb::MessageParser<CS2GC_RoomInfo>(() => new CS2GC_RoomInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2GC_RoomInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_RoomInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_RoomInfo(CS2GC_RoomInfo other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      id_ = other.id_;
+      mapID_ = other.mapID_;
+      isFull_ = other.isFull_;
+      playerInfos_ = other.playerInfos_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_RoomInfo Clone() {
+      return new CS2GC_RoomInfo(this);
     }
 
     /// <summary>Field number for the "opts" field.</summary>
@@ -255,14 +493,271 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "gsNID" field.</summary>
-    public const int GsNIDFieldNumber = 2;
-    private ulong gsNID_;
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 2;
+    private uint id_;
+    /// <summary>
+    ///房间运行时id
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ulong GsNID {
-      get { return gsNID_; }
+    public uint Id {
+      get { return id_; }
       set {
-        gsNID_ = value;
+        id_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "mapID" field.</summary>
+    public const int MapIDFieldNumber = 3;
+    private int mapID_;
+    /// <summary>
+    ///地图id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MapID {
+      get { return mapID_; }
+      set {
+        mapID_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isFull" field.</summary>
+    public const int IsFullFieldNumber = 4;
+    private bool isFull_;
+    /// <summary>
+    ///是否满员
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsFull {
+      get { return isFull_; }
+      set {
+        isFull_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "playerInfos" field.</summary>
+    public const int PlayerInfosFieldNumber = 5;
+    private static readonly pb::FieldCodec<global::Protos.Room_PlayerInfo> _repeated_playerInfos_codec
+        = pb::FieldCodec.ForMessage(42, global::Protos.Room_PlayerInfo.Parser);
+    private readonly pbc::RepeatedField<global::Protos.Room_PlayerInfo> playerInfos_ = new pbc::RepeatedField<global::Protos.Room_PlayerInfo>();
+    /// <summary>
+    ///玩家信息
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Protos.Room_PlayerInfo> PlayerInfos {
+      get { return playerInfos_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2GC_RoomInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2GC_RoomInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Id != other.Id) return false;
+      if (MapID != other.MapID) return false;
+      if (IsFull != other.IsFull) return false;
+      if(!playerInfos_.Equals(other.playerInfos_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Id != 0) hash ^= Id.GetHashCode();
+      if (MapID != 0) hash ^= MapID.GetHashCode();
+      if (IsFull != false) hash ^= IsFull.GetHashCode();
+      hash ^= playerInfos_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Id != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Id);
+      }
+      if (MapID != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(MapID);
+      }
+      if (IsFull != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(IsFull);
+      }
+      playerInfos_.WriteTo(output, _repeated_playerInfos_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Id != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Id);
+      }
+      if (MapID != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MapID);
+      }
+      if (IsFull != false) {
+        size += 1 + 1;
+      }
+      size += playerInfos_.CalculateSize(_repeated_playerInfos_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2GC_RoomInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Id != 0) {
+        Id = other.Id;
+      }
+      if (other.MapID != 0) {
+        MapID = other.MapID;
+      }
+      if (other.IsFull != false) {
+        IsFull = other.IsFull;
+      }
+      playerInfos_.Add(other.playerInfos_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            Id = input.ReadUInt32();
+            break;
+          }
+          case 24: {
+            MapID = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            IsFull = input.ReadBool();
+            break;
+          }
+          case 42: {
+            playerInfos_.AddEntriesFrom(input, _repeated_playerInfos_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///所有玩家准备完成,下发BS连接信息
+  /// </summary>
+  public sealed partial class CS2GC_BSInfo : pb::IMessage<CS2GC_BSInfo> {
+    private static readonly pb::MessageParser<CS2GC_BSInfo> _parser = new pb::MessageParser<CS2GC_BSInfo>(() => new CS2GC_BSInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2GC_BSInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_BSInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_BSInfo(CS2GC_BSInfo other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      gcNID_ = other.gcNID_;
+      ip_ = other.ip_;
+      port_ = other.port_;
+      error_ = other.error_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_BSInfo Clone() {
+      return new CS2GC_BSInfo(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gcNID" field.</summary>
+    public const int GcNIDFieldNumber = 2;
+    private ulong gcNID_;
+    /// <summary>
+    ///客户端id,用于登录bs时进行校验
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong GcNID {
+      get { return gcNID_; }
+      set {
+        gcNID_ = value;
       }
     }
 
@@ -288,13 +783,24 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 5;
+    private global::Protos.CS2GC_BSInfo.Types.Error error_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as CS2GC_BeginBattle);
+    public global::Protos.CS2GC_BSInfo.Types.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(CS2GC_BeginBattle other) {
+    public override bool Equals(object other) {
+      return Equals(other as CS2GC_BSInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2GC_BSInfo other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -302,9 +808,10 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
-      if (GsNID != other.GsNID) return false;
+      if (GcNID != other.GcNID) return false;
       if (Ip != other.Ip) return false;
       if (Port != other.Port) return false;
+      if (Error != other.Error) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -312,9 +819,10 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (GsNID != 0UL) hash ^= GsNID.GetHashCode();
+      if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
       if (Ip.Length != 0) hash ^= Ip.GetHashCode();
       if (Port != 0) hash ^= Port.GetHashCode();
+      if (Error != 0) hash ^= Error.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -332,9 +840,9 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (GsNID != 0UL) {
+      if (GcNID != 0UL) {
         output.WriteRawTag(16);
-        output.WriteUInt64(GsNID);
+        output.WriteUInt64(GcNID);
       }
       if (Ip.Length != 0) {
         output.WriteRawTag(26);
@@ -343,6 +851,10 @@ namespace Protos {
       if (Port != 0) {
         output.WriteRawTag(32);
         output.WriteInt32(Port);
+      }
+      if (Error != 0) {
+        output.WriteRawTag(40);
+        output.WriteEnum((int) Error);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -355,14 +867,17 @@ namespace Protos {
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
-      if (GsNID != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GsNID);
+      if (GcNID != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
       }
       if (Ip.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Ip);
       }
       if (Port != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
+      }
+      if (Error != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Error);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -371,7 +886,7 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(CS2GC_BeginBattle other) {
+    public void MergeFrom(CS2GC_BSInfo other) {
       if (other == null) {
         return;
       }
@@ -381,14 +896,17 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
-      if (other.GsNID != 0UL) {
-        GsNID = other.GsNID;
+      if (other.GcNID != 0UL) {
+        GcNID = other.GcNID;
       }
       if (other.Ip.Length != 0) {
         Ip = other.Ip;
       }
       if (other.Port != 0) {
         Port = other.Port;
+      }
+      if (other.Error != 0) {
+        Error = other.Error;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -409,7 +927,7 @@ namespace Protos {
             break;
           }
           case 16: {
-            GsNID = input.ReadUInt64();
+            GcNID = input.ReadUInt64();
             break;
           }
           case 26: {
@@ -420,9 +938,32 @@ namespace Protos {
             Port = input.ReadInt32();
             break;
           }
+          case 40: {
+            error_ = (global::Protos.CS2GC_BSInfo.Types.Error) input.ReadEnum();
+            break;
+          }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the CS2GC_BSInfo message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum Error {
+        [pbr::OriginalName("Success")] Success = 0,
+        /// <summary>
+        ///找不到bs
+        /// </summary>
+        [pbr::OriginalName("BSNotFound")] BsnotFound = 1,
+        /// <summary>
+        ///bs意外丢失
+        /// </summary>
+        [pbr::OriginalName("BSLost")] Bslost = 2,
+      }
+
+    }
+    #endregion
 
   }
 

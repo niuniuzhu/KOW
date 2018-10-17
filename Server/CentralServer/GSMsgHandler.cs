@@ -7,14 +7,14 @@ namespace CentralServer
 	{
 		public ErrorCode GStateReportHandler( Protos.GSInfo gsInfoRecv, uint sessionID )
 		{
-			bool hasRecord = this.nIDToGSInfos.TryGetValue( gsInfoRecv.Id, out GSInfo gsInfo );
+			bool hasRecord = this.LIDToGSInfos.TryGetValue( gsInfoRecv.Id, out GSInfo gsInfo );
 			if ( !hasRecord )
 			{
 				gsInfo = new GSInfo();
-				this.nIDToGSInfos[gsInfoRecv.Id] = gsInfo;
+				this.LIDToGSInfos[gsInfoRecv.Id] = gsInfo;
 			}
 			//更新GS信息
-			gsInfo.id = gsInfoRecv.Id;
+			gsInfo.lid = gsInfoRecv.Id;
 			gsInfo.sessionID = sessionID;
 			gsInfo.name = gsInfoRecv.Name;
 			gsInfo.ip = gsInfoRecv.Ip;
@@ -27,7 +27,7 @@ namespace CentralServer
 			Protos.CS2LS_GSInfo nGSInfo = ProtoCreator.Q_CS2LS_GSInfo();
 			nGSInfo.GsInfo = new Protos.GSInfo()
 			{
-				Id = gsInfo.id,
+				Id = gsInfo.lid,
 				Name = gsInfo.name,
 				Ip = gsInfo.ip,
 				Port = gsInfo.port,
@@ -40,7 +40,7 @@ namespace CentralServer
 
 		public ErrorCode GSDisconnectHandler( uint gsNID )
 		{
-			bool result = this.nIDToGSInfos.Remove( gsNID );
+			bool result = this.LIDToGSInfos.Remove( gsNID );
 			System.Diagnostics.Debug.Assert( result, $"gsNID:{gsNID} not found" );
 			//踢出所有连接到该GS的玩家
 			this.userMgr.KickUsers( gsNID );

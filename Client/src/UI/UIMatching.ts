@@ -34,9 +34,6 @@ export class UIMatching implements IUIModule {
 	public OnLoginBSResut(resp: Protos.BS2GC_LoginRet): void {
 		switch (resp.result) {
 			case Protos.BS2GC_LoginRet.EResult.Success:
-				this.UpdateMaoInfo(resp.mapID);
-				this.UpdatePlayerInfos(resp.playInfos);
-				this.StartLoad(resp.mapID, resp.playInfos);
 				break;
 			default:
 				//进入失败重新匹配,暂时的处理方式
@@ -45,16 +42,7 @@ export class UIMatching implements IUIModule {
 		}
 	}
 
-	private UpdateMaoInfo(mapID: number): void {
-	}
-
-	private UpdatePlayerInfos(playInfos: Protos.ICS2BS_PlayerInfo[]): void {
-	}
-
-	public UpdatePlayerInfo(updatePlayer: Protos.BS2GC_UpdatePlayer): any {
-	}
-
-	private StartLoad(mapID: number, playInfos: Protos.ICS2BS_PlayerInfo[]): void {
-		SceneManager.matching.OnLoadComplete();
+	public UpdateRoomInfo(roomInfo: Protos.CS2GC_RoomInfo): void {
+		//todo update ui
 	}
 }

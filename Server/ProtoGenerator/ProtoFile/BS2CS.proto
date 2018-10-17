@@ -21,16 +21,6 @@ message BS2CS_ReportState{
 	BSInfo bsInfo = 2;
 }
 
-message BS2CS_GCAskLogin{
-	MsgOpts opts = 1;
-	uint64 sessionID = 2;
-}
-
-message BS2CS_GCLost{
-	MsgOpts opts = 1;
-	uint64 sessionID = 2;
-}
-
-message BS2CS_RommInfoRet{
+message BS2CS_BattleInfoRet{
 	MsgOpts opts = 1;
 }

@@ -37,7 +37,7 @@ namespace CentralServer.User
 
 		public ErrorCode Send( IMessage msg, Action<IMessage> rpcHandler = null )
 		{
-			if ( !CS.instance.nIDToGSInfos.TryGetValue( this.gsNID, out GSInfo gsInfo ) )
+			if ( !CS.instance.LIDToGSInfos.TryGetValue( this.gsNID, out GSInfo gsInfo ) )
 				return ErrorCode.InvalidGsNID;
 			CS.instance.netSessionMgr.Send( gsInfo.sessionID, msg, rpcHandler );
 			return ErrorCode.Success;

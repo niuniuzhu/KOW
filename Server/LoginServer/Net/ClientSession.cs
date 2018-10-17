@@ -390,7 +390,8 @@ namespace LoginServer.Net
 		private static bool CheckUsername( string uname )
 		{
 			if ( string.IsNullOrEmpty( uname ) ||
-				 uname.Length < Consts.DEFAULT_UNAME_LEN )
+				 uname.Length < Consts.DEFAULT_UNAME_MIN_LEN ||
+				 uname.Length > Consts.DEFAULT_UNAME_MAX_LEN )
 				return false;
 			return true;
 		}
@@ -398,7 +399,8 @@ namespace LoginServer.Net
 		private static bool CheckPassword( string pwd )
 		{
 			if ( string.IsNullOrEmpty( pwd ) ||
-				 pwd.Length < Consts.DEFAULT_PWD_LEN ||
+				 pwd.Length < Consts.DEFAULT_PWD_MIN_LEN ||
+				 pwd.Length > Consts.DEFAULT_PWD_MAX_LEN ||
 				 !Consts.REGEX_PWD.IsMatch( pwd ) )
 				return false;
 			return true;

@@ -14,7 +14,6 @@ namespace BattleServer.Net
 		{
 			this._msgCenter.Register( Protos.MsgID.EGc2BsAskLogin, this.OnGc2BsAskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGc2BsKeepAlive, this.OnGc2BsKeepAlive );
-			this._msgCenter.Register( Protos.MsgID.EGc2BsUpdateInfo, this.OnGC2BS_UpdateInfo );
 		}
 
 		protected override void OnEstablish()
@@ -28,11 +27,6 @@ namespace BattleServer.Net
 		{
 			base.OnClose( reason );
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );
-
-			//通知cs客户端丢失
-			Protos.BS2CS_GCLost gcLost = ProtoCreator.Q_BS2CS_GCLost();
-			gcLost.SessionID = this._sid;
-			this.owner.Send( SessionType.ServerB2CS, gcLost );
 
 			this._activeTime = 0;
 			this._sid = 0;
@@ -49,39 +43,15 @@ namespace BattleServer.Net
 			Protos.GC2BS_AskLogin login = ( Protos.GC2BS_AskLogin ) message;
 			this._sid = login.SessionID;
 
-			Protos.BS2CS_GCAskLogin gcAskLogin = ProtoCreator.Q_BS2CS_GCAskLogin();
-			gcAskLogin.SessionID = this._sid;
-			Logger.Log( $"client:{gcAskLogin.SessionID} ask login" );
+			Logger.Log( $"client:{login.SessionID} ask login" );
 
-			//向CS请求客户端登陆
-			this.owner.Send( SessionType.ServerB2CS, gcAskLogin, msgRet =>
-			{
-				Protos.BS2GC_LoginRet gsLoginRet = ProtoCreator.R_GC2BS_AskLogin( login.Opts.Pid );
-				Protos.CS2BS_GCLoginRet csLoginRet = ( Protos.CS2BS_GCLoginRet ) msgRet;
-				switch ( csLoginRet.Result )
-				{
-					case Protos.CS2BS_GCLoginRet.Types.EResult.Success:
-						gsLoginRet.Result = Protos.BS2GC_LoginRet.Types.EResult.Success;
-						break;
-					case Protos.CS2BS_GCLoginRet.Types.EResult.Failed:
-						gsLoginRet.Result = Protos.BS2GC_LoginRet.Types.EResult.Failed;
-						this.DelayClose( 500, "client login failed" );
-						break;
-				}
-				this.Send( gsLoginRet );
-			} );
+			//todo
 			return ErrorCode.Success;
 		}
 
 		private ErrorCode OnGc2BsKeepAlive( Google.Protobuf.IMessage message )
 		{
 			this._activeTime = TimeUtils.utcTime;
-			return ErrorCode.Success;
-		}
-
-		private ErrorCode OnGC2BS_UpdateInfo( Google.Protobuf.IMessage message )
-		{
-			Protos.GC2BS_UpdateInfo updateInfo = ( Protos.GC2BS_UpdateInfo ) message;
 			return ErrorCode.Success;
 		}
 	}

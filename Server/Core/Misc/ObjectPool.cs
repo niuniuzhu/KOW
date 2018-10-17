@@ -2,16 +2,18 @@
 
 namespace Core.Misc
 {
-	public class ObejctPool<T> where T : new()
+	public class ObjectPool<T> where T : IPoolObject, new()
 	{
 		private readonly Queue<T> _pool = new Queue<T>();
 
 		public bool isEmpty => this._pool.Count == 0;
+
 		public int increase = 1;
 
-		public ObejctPool( int cap = 0, int increase = 1 )
+		public ObjectPool( int cap = 0, int increase = 1 )
 		{
-			this.increase = cap <= 1 ? 1 : cap;
+			this.increase = increase;
+			cap = cap <= 1 ? 1 : cap;
 			for ( int i = 0; i < cap; i++ )
 				this._pool.Enqueue( new T() );
 		}
@@ -28,6 +30,7 @@ namespace Core.Misc
 
 		public void Push( T obj )
 		{
+			obj.Clear();
 			this._pool.Enqueue( obj );
 		}
 	}

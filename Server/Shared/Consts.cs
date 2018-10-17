@@ -12,20 +12,52 @@ namespace Shared
 		/// <summary>
 		/// 心跳时间间隔
 		/// </summary>
-		public const int HEART_BEAT_INTERVAL = 100;
+		public const long HEART_BEAT_INTERVAL = 100;
 
 		/// <summary>
 		/// 重连检测的时间间隔
 		/// </summary>
 		public const long RECONN_INTERVAL = 2000;
 
-		public const int DEFAULT_UNAME_LEN = 3;
+		/// <summary>
+		/// 用户名最小长度
+		/// </summary>
+		public const int DEFAULT_UNAME_MIN_LEN = 3;
 
-		public const int DEFAULT_PWD_LEN = 3;
+		/// <summary>
+		/// 用户名最大长度
+		/// </summary>
+		public const int DEFAULT_UNAME_MAX_LEN = 10;
 
-		public const int ROOM_MAX_USER = 2;
+		/// <summary>
+		/// 密码最小长度
+		/// </summary>
+		public const int DEFAULT_PWD_MIN_LEN = 3;
 
+		/// <summary>
+		/// 密码最大长度
+		/// </summary>
+		public const int DEFAULT_PWD_MAX_LEN = 16;
+
+		/// <summary>
+		/// 密码的正则匹配规则
+		/// </summary>
 		public static readonly Regex REGEX_PWD = new Regex( @"" );
+
+		/// <summary>
+		/// 房间最大玩家数量
+		/// </summary>
+		public const int ROOM_MAX_PLAYERS = 2;
+
+		/// <summary>
+		/// 房间超时时间
+		/// </summary>
+		public const long ROOM_TIME_OUT = 10000;
+
+		/// <summary>
+		/// 通知客户端房间内所有玩家的信息
+		/// </summary>
+		public const long NOTIFY_PLAYERINFO_INTERVAL = 1000;
 	}
 
 	public enum ErrorCode
@@ -60,7 +92,7 @@ namespace Shared
 			Full,
 			Close
 		}
-		public uint id;
+		public uint lid;
 		public uint sessionID;
 		public string name;
 		public string ip;
@@ -68,7 +100,7 @@ namespace Shared
 		public string password;
 		public State state;
 
-		public override string ToString() => $"id:{this.id},name:{this.name},ip:{this.ip},port:{this.port},pwd:{this.password},state:{this.state}";
+		public override string ToString() => $"lid:{this.lid},sessionID:{this.sessionID},name:{this.name},ip:{this.ip},port:{this.port},pwd:{this.password},state:{this.state}";
 	}
 
 	public class BSInfo
@@ -80,12 +112,13 @@ namespace Shared
 			Full,
 			Close
 		}
-		public uint id;
+		public uint lid;
+		public uint sessionID;
 		public string ip;
 		public int port;
 		public State state;
 
-		public override string ToString() => $"id:{this.id},ip:{this.ip},port:{this.port},state:{this.state}";
+		public override string ToString() => $"lid:{this.lid},sessionID:{this.sessionID},ip:{this.ip},port:{this.port},state:{this.state}";
 	}
 
 	public enum UserPlatform
@@ -109,28 +142,5 @@ namespace Shared
 		PlatformiOS_CMGEInfo = 304,
 
 		All = int.MaxValue
-	}
-
-	public struct UserNetInfo
-	{
-		public int gsID { get; private set; }
-		public uint gcNetID { get; private set; }
-
-		public UserNetInfo( int gsID, uint gcNetID )
-		{
-			this.gsID = gsID;
-			this.gcNetID = gcNetID;
-		}
-
-		public void Clear()
-		{
-			this.gcNetID = 0;
-			this.gsID = 0;
-		}
-
-		public bool IsValid()
-		{
-			return this.gcNetID > 0 && this.gsID > 0;
-		}
 	}
 }

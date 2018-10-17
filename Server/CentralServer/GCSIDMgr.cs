@@ -60,7 +60,7 @@ namespace CentralServer
 			return true;
 		}
 
-		public void Update()
+		public void OnHeartBeat()
 		{
 			long currTime = TimeUtils.utcTime;
 			long expTime = CS.instance.config.sessionExpTime;

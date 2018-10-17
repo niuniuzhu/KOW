@@ -12,7 +12,7 @@ namespace LoginServer
 				gsInfo = new GSInfo();
 				this.gsInfos[newGSInfo.Id] = gsInfo;
 			}
-			gsInfo.id = newGSInfo.Id;
+			gsInfo.lid = newGSInfo.Id;
 			gsInfo.name = newGSInfo.Name;
 			gsInfo.ip = newGSInfo.Ip;
 			gsInfo.port = newGSInfo.Port;

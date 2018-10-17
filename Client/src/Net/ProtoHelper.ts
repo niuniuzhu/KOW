@@ -15,8 +15,8 @@ export class ProtoCreator {
 		[Protos.GC2GS_KeepAlive, <Protos.MsgID>1101],
 		[Protos.GC2BS_AskLogin, <Protos.MsgID>1200],
 		[Protos.GC2BS_KeepAlive, <Protos.MsgID>1201],
-		[Protos.GC2BS_UpdateInfo, <Protos.MsgID>1202],
 		[Protos.GC2CS_BeginMatch, <Protos.MsgID>1300],
+		[Protos.GC2CS_UpdatePlayerInfo, <Protos.MsgID>1301],
 		[Protos.LS2GC_GSInfo, <Protos.MsgID>2000],
 		[Protos.LS2GC_AskRegRet, <Protos.MsgID>2001],
 		[Protos.LS2GC_AskLoginRet, <Protos.MsgID>2002],
@@ -31,11 +31,8 @@ export class ProtoCreator {
 		[Protos.GS2GC_LoginRet, <Protos.MsgID>3100],
 		[Protos.GS2GC_Kick, <Protos.MsgID>3101],
 		[Protos.BS2CS_ReportState, <Protos.MsgID>4000],
-		[Protos.BS2CS_GCAskLogin, <Protos.MsgID>4001],
-		[Protos.BS2CS_GCLost, <Protos.MsgID>4002],
-		[Protos.BS2CS_RommInfoRet, <Protos.MsgID>4003],
+		[Protos.BS2CS_BattleInfoRet, <Protos.MsgID>4001],
 		[Protos.BS2GC_LoginRet, <Protos.MsgID>4100],
-		[Protos.BS2GC_UpdatePlayer, <Protos.MsgID>4101],
 		[Protos.BS2GC_BattleStart, <Protos.MsgID>4102],
 		[Protos.CS2LS_GSInfos, <Protos.MsgID>5000],
 		[Protos.CS2LS_GSInfo, <Protos.MsgID>5001],
@@ -43,10 +40,10 @@ export class ProtoCreator {
 		[Protos.CS2LS_GCLoginRet, <Protos.MsgID>5003],
 		[Protos.CS2GS_GCLoginRet, <Protos.MsgID>5100],
 		[Protos.CS2GS_KickGC, <Protos.MsgID>5101],
-		[Protos.CS2BS_GCLoginRet, <Protos.MsgID>5200],
-		[Protos.CS2BS_BattleInfo, <Protos.MsgID>5201],
+		[Protos.CS2BS_BattleInfo, <Protos.MsgID>5200],
 		[Protos.CS2GC_BeginMatchRet, <Protos.MsgID>5300],
-		[Protos.CS2GC_BeginBattle, <Protos.MsgID>5301],
+		[Protos.CS2GC_RoomInfo, <Protos.MsgID>5301],
+		[Protos.CS2GC_BSInfo, <Protos.MsgID>5302],
 		[Protos.DB2LS_QueryAccountRet, <Protos.MsgID>8000],
 		[Protos.DB2LS_QueryLoginRet, <Protos.MsgID>8001],
 		[Protos.DB2LS_ExecRet, <Protos.MsgID>8002],
@@ -62,8 +59,8 @@ export class ProtoCreator {
 		[<Protos.MsgID>1101, Protos.GC2GS_KeepAlive],
 		[<Protos.MsgID>1200, Protos.GC2BS_AskLogin],
 		[<Protos.MsgID>1201, Protos.GC2BS_KeepAlive],
-		[<Protos.MsgID>1202, Protos.GC2BS_UpdateInfo],
 		[<Protos.MsgID>1300, Protos.GC2CS_BeginMatch],
+		[<Protos.MsgID>1301, Protos.GC2CS_UpdatePlayerInfo],
 		[<Protos.MsgID>2000, Protos.LS2GC_GSInfo],
 		[<Protos.MsgID>2001, Protos.LS2GC_AskRegRet],
 		[<Protos.MsgID>2002, Protos.LS2GC_AskLoginRet],
@@ -78,11 +75,8 @@ export class ProtoCreator {
 		[<Protos.MsgID>3100, Protos.GS2GC_LoginRet],
 		[<Protos.MsgID>3101, Protos.GS2GC_Kick],
 		[<Protos.MsgID>4000, Protos.BS2CS_ReportState],
-		[<Protos.MsgID>4001, Protos.BS2CS_GCAskLogin],
-		[<Protos.MsgID>4002, Protos.BS2CS_GCLost],
-		[<Protos.MsgID>4003, Protos.BS2CS_RommInfoRet],
+		[<Protos.MsgID>4001, Protos.BS2CS_BattleInfoRet],
 		[<Protos.MsgID>4100, Protos.BS2GC_LoginRet],
-		[<Protos.MsgID>4101, Protos.BS2GC_UpdatePlayer],
 		[<Protos.MsgID>4102, Protos.BS2GC_BattleStart],
 		[<Protos.MsgID>5000, Protos.CS2LS_GSInfos],
 		[<Protos.MsgID>5001, Protos.CS2LS_GSInfo],
@@ -90,10 +84,10 @@ export class ProtoCreator {
 		[<Protos.MsgID>5003, Protos.CS2LS_GCLoginRet],
 		[<Protos.MsgID>5100, Protos.CS2GS_GCLoginRet],
 		[<Protos.MsgID>5101, Protos.CS2GS_KickGC],
-		[<Protos.MsgID>5200, Protos.CS2BS_GCLoginRet],
-		[<Protos.MsgID>5201, Protos.CS2BS_BattleInfo],
+		[<Protos.MsgID>5200, Protos.CS2BS_BattleInfo],
 		[<Protos.MsgID>5300, Protos.CS2GC_BeginMatchRet],
-		[<Protos.MsgID>5301, Protos.CS2GC_BeginBattle],
+		[<Protos.MsgID>5301, Protos.CS2GC_RoomInfo],
+		[<Protos.MsgID>5302, Protos.CS2GC_BSInfo],
 		[<Protos.MsgID>8000, Protos.DB2LS_QueryAccountRet],
 		[<Protos.MsgID>8001, Protos.DB2LS_QueryLoginRet],
 		[<Protos.MsgID>8002, Protos.DB2LS_ExecRet],
@@ -164,16 +158,16 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static Q_GC2BS_UpdateInfo(): Protos.GC2BS_UpdateInfo {
-		let msg = new Protos.GC2BS_UpdateInfo();
-		msg.opts = new Protos.MsgOpts();
-		return msg;
-	}
-
 	public static Q_GC2CS_BeginMatch(): Protos.GC2CS_BeginMatch {
 		let msg = new Protos.GC2CS_BeginMatch();
 		msg.opts = new Protos.MsgOpts();
 		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+		return msg;
+	}
+
+	public static Q_GC2CS_UpdatePlayerInfo(): Protos.GC2CS_UpdatePlayerInfo {
+		let msg = new Protos.GC2CS_UpdatePlayerInfo();
+		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
 
@@ -266,33 +260,14 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static Q_BS2CS_GCAskLogin(): Protos.BS2CS_GCAskLogin {
-		let msg = new Protos.BS2CS_GCAskLogin();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
-		return msg;
-	}
-
-	public static Q_BS2CS_GCLost(): Protos.BS2CS_GCLost {
-		let msg = new Protos.BS2CS_GCLost();
-		msg.opts = new Protos.MsgOpts();
-		return msg;
-	}
-
-	public static Q_BS2CS_RommInfoRet(): Protos.BS2CS_RommInfoRet {
-		let msg = new Protos.BS2CS_RommInfoRet();
+	public static Q_BS2CS_BattleInfoRet(): Protos.BS2CS_BattleInfoRet {
+		let msg = new Protos.BS2CS_BattleInfoRet();
 		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
 
 	public static Q_BS2GC_LoginRet(): Protos.BS2GC_LoginRet {
 		let msg = new Protos.BS2GC_LoginRet();
-		msg.opts = new Protos.MsgOpts();
-		return msg;
-	}
-
-	public static Q_BS2GC_UpdatePlayer(): Protos.BS2GC_UpdatePlayer {
-		let msg = new Protos.BS2GC_UpdatePlayer();
 		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -340,15 +315,10 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static Q_CS2BS_GCLoginRet(): Protos.CS2BS_GCLoginRet {
-		let msg = new Protos.CS2BS_GCLoginRet();
-		msg.opts = new Protos.MsgOpts();
-		return msg;
-	}
-
 	public static Q_CS2BS_BattleInfo(): Protos.CS2BS_BattleInfo {
 		let msg = new Protos.CS2BS_BattleInfo();
 		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -358,8 +328,14 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static Q_CS2GC_BeginBattle(): Protos.CS2GC_BeginBattle {
-		let msg = new Protos.CS2GC_BeginBattle();
+	public static Q_CS2GC_RoomInfo(): Protos.CS2GC_RoomInfo {
+		let msg = new Protos.CS2GC_RoomInfo();
+		msg.opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Q_CS2GC_BSInfo(): Protos.CS2GC_BSInfo {
+		let msg = new Protos.CS2GC_BSInfo();
 		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -439,14 +415,6 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static R_BS2CS_GCAskLogin(pid: number): Protos.CS2BS_GCLoginRet {
-		let msg = new Protos.CS2BS_GCLoginRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
 	public static R_GC2BS_AskLogin(pid: number): Protos.BS2GC_LoginRet {
 		let msg = new Protos.BS2GC_LoginRet();
 		msg.opts = new Protos.MsgOpts();
@@ -487,8 +455,8 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static R_CS2BS_RoomInfo(pid: number): Protos.BS2CS_RommInfoRet {
-		let msg = new Protos.BS2CS_RommInfoRet();
+	public static R_CS2BS_BattleInfo(pid: number): Protos.BS2CS_BattleInfoRet {
+		let msg = new Protos.BS2CS_BattleInfoRet();
 		msg.opts = new Protos.MsgOpts();
 		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
@@ -542,12 +510,12 @@ export class ProtoCreator {
 				let msg = Protos.GC2BS_KeepAlive.decode(data, size);
 				return msg;
 			}
-			case 1202: {
-				let msg = Protos.GC2BS_UpdateInfo.decode(data, size);
-				return msg;
-			}
 			case 1300: {
 				let msg = Protos.GC2CS_BeginMatch.decode(data, size);
+				return msg;
+			}
+			case 1301: {
+				let msg = Protos.GC2CS_UpdatePlayerInfo.decode(data, size);
 				return msg;
 			}
 			case 2000: {
@@ -607,23 +575,11 @@ export class ProtoCreator {
 				return msg;
 			}
 			case 4001: {
-				let msg = Protos.BS2CS_GCAskLogin.decode(data, size);
-				return msg;
-			}
-			case 4002: {
-				let msg = Protos.BS2CS_GCLost.decode(data, size);
-				return msg;
-			}
-			case 4003: {
-				let msg = Protos.BS2CS_RommInfoRet.decode(data, size);
+				let msg = Protos.BS2CS_BattleInfoRet.decode(data, size);
 				return msg;
 			}
 			case 4100: {
 				let msg = Protos.BS2GC_LoginRet.decode(data, size);
-				return msg;
-			}
-			case 4101: {
-				let msg = Protos.BS2GC_UpdatePlayer.decode(data, size);
 				return msg;
 			}
 			case 4102: {
@@ -655,10 +611,6 @@ export class ProtoCreator {
 				return msg;
 			}
 			case 5200: {
-				let msg = Protos.CS2BS_GCLoginRet.decode(data, size);
-				return msg;
-			}
-			case 5201: {
 				let msg = Protos.CS2BS_BattleInfo.decode(data, size);
 				return msg;
 			}
@@ -667,7 +619,11 @@ export class ProtoCreator {
 				return msg;
 			}
 			case 5301: {
-				let msg = Protos.CS2GC_BeginBattle.decode(data, size);
+				let msg = Protos.CS2GC_RoomInfo.decode(data, size);
+				return msg;
+			}
+			case 5302: {
+				let msg = Protos.CS2GC_BSInfo.decode(data, size);
 				return msg;
 			}
 			case 8000: {
@@ -731,13 +687,13 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static D_GC2BS_UpdateInfo(data: Uint8Array, size: number): Protos.GC2BS_UpdateInfo {
-		let msg = Protos.GC2BS_UpdateInfo.decode(data, size);
+	public static D_GC2CS_BeginMatch(data: Uint8Array, size: number): Protos.GC2CS_BeginMatch {
+		let msg = Protos.GC2CS_BeginMatch.decode(data, size);
 		return msg;
 	}
 
-	public static D_GC2CS_BeginMatch(data: Uint8Array, size: number): Protos.GC2CS_BeginMatch {
-		let msg = Protos.GC2CS_BeginMatch.decode(data, size);
+	public static D_GC2CS_UpdatePlayerInfo(data: Uint8Array, size: number): Protos.GC2CS_UpdatePlayerInfo {
+		let msg = Protos.GC2CS_UpdatePlayerInfo.decode(data, size);
 		return msg;
 	}
 
@@ -811,28 +767,13 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static D_BS2CS_GCAskLogin(data: Uint8Array, size: number): Protos.BS2CS_GCAskLogin {
-		let msg = Protos.BS2CS_GCAskLogin.decode(data, size);
-		return msg;
-	}
-
-	public static D_BS2CS_GCLost(data: Uint8Array, size: number): Protos.BS2CS_GCLost {
-		let msg = Protos.BS2CS_GCLost.decode(data, size);
-		return msg;
-	}
-
-	public static D_BS2CS_RommInfoRet(data: Uint8Array, size: number): Protos.BS2CS_RommInfoRet {
-		let msg = Protos.BS2CS_RommInfoRet.decode(data, size);
+	public static D_BS2CS_BattleInfoRet(data: Uint8Array, size: number): Protos.BS2CS_BattleInfoRet {
+		let msg = Protos.BS2CS_BattleInfoRet.decode(data, size);
 		return msg;
 	}
 
 	public static D_BS2GC_LoginRet(data: Uint8Array, size: number): Protos.BS2GC_LoginRet {
 		let msg = Protos.BS2GC_LoginRet.decode(data, size);
-		return msg;
-	}
-
-	public static D_BS2GC_UpdatePlayer(data: Uint8Array, size: number): Protos.BS2GC_UpdatePlayer {
-		let msg = Protos.BS2GC_UpdatePlayer.decode(data, size);
 		return msg;
 	}
 
@@ -871,11 +812,6 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static D_CS2BS_GCLoginRet(data: Uint8Array, size: number): Protos.CS2BS_GCLoginRet {
-		let msg = Protos.CS2BS_GCLoginRet.decode(data, size);
-		return msg;
-	}
-
 	public static D_CS2BS_BattleInfo(data: Uint8Array, size: number): Protos.CS2BS_BattleInfo {
 		let msg = Protos.CS2BS_BattleInfo.decode(data, size);
 		return msg;
@@ -886,8 +822,13 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static D_CS2GC_BeginBattle(data: Uint8Array, size: number): Protos.CS2GC_BeginBattle {
-		let msg = Protos.CS2GC_BeginBattle.decode(data, size);
+	public static D_CS2GC_RoomInfo(data: Uint8Array, size: number): Protos.CS2GC_RoomInfo {
+		let msg = Protos.CS2GC_RoomInfo.decode(data, size);
+		return msg;
+	}
+
+	public static D_CS2GC_BSInfo(data: Uint8Array, size: number): Protos.CS2GC_BSInfo {
+		let msg = Protos.CS2GC_BSInfo.decode(data, size);
 		return msg;
 	}
 
@@ -936,11 +877,11 @@ export class ProtoCreator {
 			case 1201: {
 				return new Protos.GC2BS_KeepAlive();
 			}
-			case 1202: {
-				return new Protos.GC2BS_UpdateInfo();
-			}
 			case 1300: {
 				return new Protos.GC2CS_BeginMatch();
+			}
+			case 1301: {
+				return new Protos.GC2CS_UpdatePlayerInfo();
 			}
 			case 2000: {
 				return new Protos.LS2GC_GSInfo();
@@ -985,19 +926,10 @@ export class ProtoCreator {
 				return new Protos.BS2CS_ReportState();
 			}
 			case 4001: {
-				return new Protos.BS2CS_GCAskLogin();
-			}
-			case 4002: {
-				return new Protos.BS2CS_GCLost();
-			}
-			case 4003: {
-				return new Protos.BS2CS_RommInfoRet();
+				return new Protos.BS2CS_BattleInfoRet();
 			}
 			case 4100: {
 				return new Protos.BS2GC_LoginRet();
-			}
-			case 4101: {
-				return new Protos.BS2GC_UpdatePlayer();
 			}
 			case 4102: {
 				return new Protos.BS2GC_BattleStart();
@@ -1021,16 +953,16 @@ export class ProtoCreator {
 				return new Protos.CS2GS_KickGC();
 			}
 			case 5200: {
-				return new Protos.CS2BS_GCLoginRet();
-			}
-			case 5201: {
 				return new Protos.CS2BS_BattleInfo();
 			}
 			case 5300: {
 				return new Protos.CS2GC_BeginMatchRet();
 			}
 			case 5301: {
-				return new Protos.CS2GC_BeginBattle();
+				return new Protos.CS2GC_RoomInfo();
+			}
+			case 5302: {
+				return new Protos.CS2GC_BSInfo();
 			}
 			case 8000: {
 				return new Protos.DB2LS_QueryAccountRet();
@@ -1075,11 +1007,11 @@ export class ProtoCreator {
 			case 1201: {
 				return (<Protos.GC2BS_KeepAlive>message).opts;
 			}
-			case 1202: {
-				return (<Protos.GC2BS_UpdateInfo>message).opts;
-			}
 			case 1300: {
 				return (<Protos.GC2CS_BeginMatch>message).opts;
+			}
+			case 1301: {
+				return (<Protos.GC2CS_UpdatePlayerInfo>message).opts;
 			}
 			case 2000: {
 				return (<Protos.LS2GC_GSInfo>message).opts;
@@ -1124,19 +1056,10 @@ export class ProtoCreator {
 				return (<Protos.BS2CS_ReportState>message).opts;
 			}
 			case 4001: {
-				return (<Protos.BS2CS_GCAskLogin>message).opts;
-			}
-			case 4002: {
-				return (<Protos.BS2CS_GCLost>message).opts;
-			}
-			case 4003: {
-				return (<Protos.BS2CS_RommInfoRet>message).opts;
+				return (<Protos.BS2CS_BattleInfoRet>message).opts;
 			}
 			case 4100: {
 				return (<Protos.BS2GC_LoginRet>message).opts;
-			}
-			case 4101: {
-				return (<Protos.BS2GC_UpdatePlayer>message).opts;
 			}
 			case 4102: {
 				return (<Protos.BS2GC_BattleStart>message).opts;
@@ -1160,16 +1083,16 @@ export class ProtoCreator {
 				return (<Protos.CS2GS_KickGC>message).opts;
 			}
 			case 5200: {
-				return (<Protos.CS2BS_GCLoginRet>message).opts;
-			}
-			case 5201: {
 				return (<Protos.CS2BS_BattleInfo>message).opts;
 			}
 			case 5300: {
 				return (<Protos.CS2GC_BeginMatchRet>message).opts;
 			}
 			case 5301: {
-				return (<Protos.CS2GC_BeginBattle>message).opts;
+				return (<Protos.CS2GC_RoomInfo>message).opts;
+			}
+			case 5302: {
+				return (<Protos.CS2GC_BSInfo>message).opts;
 			}
 			case 8000: {
 				return (<Protos.DB2LS_QueryAccountRet>message).opts;

@@ -15,6 +15,7 @@ namespace CentralServer.User
 		{
 			if ( !this._gcNidToUser.TryGetValue( gcNID, out CUser user ) )
 				return ErrorCode.InvalidGcNID;
+			msg.MTrans( Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 			return user.Send( msg );
 		}
 

@@ -18,7 +18,7 @@ namespace Core.Net
 		private readonly SocketAsyncEventArgs _recvEventArgs;
 		private readonly StreamBuffer _cache = new StreamBuffer();
 		protected readonly SwitchQueue<StreamBuffer> _sendQueue = new SwitchQueue<StreamBuffer>();
-		protected readonly ThreadSafeObejctPool<StreamBuffer> _bufferPool = new ThreadSafeObejctPool<StreamBuffer>();
+		protected readonly ThreadSafeObjectPool<StreamBuffer> _bufferPool = new ThreadSafeObjectPool<StreamBuffer>( 10, 5 );
 		protected bool _reading;
 		protected readonly object _lockObj = new object();
 
@@ -91,7 +91,7 @@ namespace Core.Net
 				return false;
 			StreamBuffer buffer = this._bufferPool.Pop();
 			//写入数据长度
-			buffer.Write( ( ushort )( size + TCPMsgEncoder.LENGTH_SIZE ) );
+			buffer.Write( ( ushort ) ( size + TCPMsgEncoder.LENGTH_SIZE ) );
 			buffer.Write( data, offset, size );
 			this._sendQueue.Push( buffer );
 			return true;
@@ -222,7 +222,6 @@ namespace Core.Net
 				if ( !asyncResult )
 					this.ProcessSend( this._sendEventArgs );
 
-				buffer.Clear();
 				this._bufferPool.Push( buffer );
 			}
 		}

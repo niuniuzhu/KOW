@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using Core.Net;
+using Shared;
 using Shared.Net;
 
 namespace BattleServer.Net
@@ -11,6 +12,7 @@ namespace BattleServer.Net
 
 		private B2CSSession( uint id, ProtoType type ) : base( id, type )
 		{
+			this._msgCenter.Register( Protos.MsgID.ECs2BsBattleInfo, this.OnCs2BsBattleInfo );
 		}
 
 		protected override void OnEstablish()
@@ -71,6 +73,17 @@ namespace BattleServer.Net
 				State = ( Protos.BSInfo.Types.State ) BS.instance.state
 			};
 			this.Send( reportState );
+		}
+
+		/// <summary>
+		/// 处理cs通知开始战斗
+		/// </summary>
+		private ErrorCode OnCs2BsBattleInfo( Google.Protobuf.IMessage message )
+		{
+			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo ) message;
+			Protos.BS2CS_BattleInfoRet battleInfoRet = ProtoCreator.R_CS2BS_BattleInfo( battleInfo.Opts.Pid );
+			this.Send( battleInfoRet );
+			return ErrorCode.Success;
 		}
 	}
 }

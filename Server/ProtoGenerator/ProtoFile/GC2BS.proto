@@ -12,10 +12,3 @@ message GC2BS_AskLogin {
 message GC2BS_KeepAlive {
 	MsgOpts opts = 1;
 }
-
-//更新玩家信息
-message GC2BS_UpdateInfo {
-	MsgOpts opts = 1;
-	uint64 id = 2;
-	int32 progress = 3;
-}

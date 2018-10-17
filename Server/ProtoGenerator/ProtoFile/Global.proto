@@ -17,9 +17,9 @@ enum MsgID {
 
 	eGC2BS_AskLogin = 1200;
 	eGC2BS_KeepAlive = 1201;
-	eGC2BS_UpdateInfo = 1202;
 
 	eGC2CS_BeginMatch = 1300;
+	eGC2CS_UpdatePlayerInfo = 1301;
 	
 	//ls
 	eLS2GC_GSInfo = 2000;
@@ -43,12 +43,9 @@ enum MsgID {
 
 	//bs
 	eBS2CS_ReportState = 4000;
-	eBS2CS_GCAskLogin = 4001;
-	eBS2CS_GCLost = 4002;
-	eBS2CS_RommInfoRet = 4003;
+	eBS2CS_BattleInfoRet = 4001;
 
 	eBS2GC_LoginRet = 4100;
-	eBS2GC_UpdatePlayer = 4101;
 	eBS2GC_BattleStart = 4102;
 
 	//cs
@@ -60,11 +57,11 @@ enum MsgID {
 	eCS2GS_GCLoginRet = 5100;
 	eCS2GS_KickGC = 5101;
 
-	eCS2BS_GCLoginRet = 5200;
-	eCS2BS_BattleInfo = 5201;
+	eCS2BS_BattleInfo = 5200;
 
 	eCS2GC_BeginMatchRet = 5300;
-	eCS2GC_BeginBattle = 5301;
+	eCS2GC_RoomInfo = 5301;
+	eCS2GC_BSInfo = 5302;
 
 	//db
 	eDB2LS_QueryAccountRet = 8000;
@@ -124,13 +121,12 @@ message Global{
 		"GC2LS_AskSmartLogin": "LS2GC_AskLoginRet",
 		"GC2GS_AskLogin": "GS2GC_LoginRet",
 		"GS2CS_GCAskLogin": "CS2GS_GCLoginRet",
-		"BS2CS_GCAskLogin": "CS2BS_GCLoginRet",
 		"GC2BS_AskLogin": "BS2GC_LoginRet",
 		"LS2DB_QueryAccount":"DB2LS_QueryAccountRet",
 		"LS2DB_QueryLogin":"DB2LS_QueryLoginRet",
 		"LS2DB_Exec":"DB2LS_ExecRet",
 		"GC2CS_BeginMatch":"CS2GC_BeginMatchRet",
-		"CS2BS_RoomInfo":"BS2CS_RommInfoRet",
+		"CS2BS_BattleInfo":"BS2CS_BattleInfoRet",
 		"CS2GS_KickGC":"GS2CS_KickGCRet"
 	}
 }

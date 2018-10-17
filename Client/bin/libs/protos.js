@@ -532,25 +532,24 @@ define(["libs/protobufjs"], function($protobuf) {
             return BS2CS_ReportState;
         })();
     
-        Protos.BS2CS_GCAskLogin = (function() {
+        Protos.BS2CS_BattleInfoRet = (function() {
     
             /**
-             * Properties of a BS2CS_GCAskLogin.
+             * Properties of a BS2CS_BattleInfoRet.
              * @memberof Protos
-             * @interface IBS2CS_GCAskLogin
-             * @property {Protos.IMsgOpts|null} [opts] BS2CS_GCAskLogin opts
-             * @property {Long|null} [sessionID] BS2CS_GCAskLogin sessionID
+             * @interface IBS2CS_BattleInfoRet
+             * @property {Protos.IMsgOpts|null} [opts] BS2CS_BattleInfoRet opts
              */
     
             /**
-             * Constructs a new BS2CS_GCAskLogin.
+             * Constructs a new BS2CS_BattleInfoRet.
              * @memberof Protos
-             * @classdesc Represents a BS2CS_GCAskLogin.
-             * @implements IBS2CS_GCAskLogin
+             * @classdesc Represents a BS2CS_BattleInfoRet.
+             * @implements IBS2CS_BattleInfoRet
              * @constructor
-             * @param {Protos.IBS2CS_GCAskLogin=} [properties] Properties to set
+             * @param {Protos.IBS2CS_BattleInfoRet=} [properties] Properties to set
              */
-            function BS2CS_GCAskLogin(properties) {
+            function BS2CS_BattleInfoRet(properties) {
                 if (properties)
                     for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null)
@@ -558,492 +557,35 @@ define(["libs/protobufjs"], function($protobuf) {
             }
     
             /**
-             * BS2CS_GCAskLogin opts.
+             * BS2CS_BattleInfoRet opts.
              * @member {Protos.IMsgOpts|null|undefined} opts
-             * @memberof Protos.BS2CS_GCAskLogin
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @instance
              */
-            BS2CS_GCAskLogin.prototype.opts = null;
+            BS2CS_BattleInfoRet.prototype.opts = null;
     
             /**
-             * BS2CS_GCAskLogin sessionID.
-             * @member {Long} sessionID
-             * @memberof Protos.BS2CS_GCAskLogin
-             * @instance
-             */
-            BS2CS_GCAskLogin.prototype.sessionID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-    
-            /**
-             * Creates a new BS2CS_GCAskLogin instance using the specified properties.
+             * Creates a new BS2CS_BattleInfoRet instance using the specified properties.
              * @function create
-             * @memberof Protos.BS2CS_GCAskLogin
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @static
-             * @param {Protos.IBS2CS_GCAskLogin=} [properties] Properties to set
-             * @returns {Protos.BS2CS_GCAskLogin} BS2CS_GCAskLogin instance
+             * @param {Protos.IBS2CS_BattleInfoRet=} [properties] Properties to set
+             * @returns {Protos.BS2CS_BattleInfoRet} BS2CS_BattleInfoRet instance
              */
-            BS2CS_GCAskLogin.create = function create(properties) {
-                return new BS2CS_GCAskLogin(properties);
+            BS2CS_BattleInfoRet.create = function create(properties) {
+                return new BS2CS_BattleInfoRet(properties);
             };
     
             /**
-             * Encodes the specified BS2CS_GCAskLogin message. Does not implicitly {@link Protos.BS2CS_GCAskLogin.verify|verify} messages.
+             * Encodes the specified BS2CS_BattleInfoRet message. Does not implicitly {@link Protos.BS2CS_BattleInfoRet.verify|verify} messages.
              * @function encode
-             * @memberof Protos.BS2CS_GCAskLogin
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @static
-             * @param {Protos.IBS2CS_GCAskLogin} message BS2CS_GCAskLogin message or plain object to encode
+             * @param {Protos.IBS2CS_BattleInfoRet} message BS2CS_BattleInfoRet message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            BS2CS_GCAskLogin.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                if (message.sessionID != null && message.hasOwnProperty("sessionID"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.sessionID);
-                return writer;
-            };
-    
-            /**
-             * Encodes the specified BS2CS_GCAskLogin message, length delimited. Does not implicitly {@link Protos.BS2CS_GCAskLogin.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof Protos.BS2CS_GCAskLogin
-             * @static
-             * @param {Protos.IBS2CS_GCAskLogin} message BS2CS_GCAskLogin message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            BS2CS_GCAskLogin.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-    
-            /**
-             * Decodes a BS2CS_GCAskLogin message from the specified reader or buffer.
-             * @function decode
-             * @memberof Protos.BS2CS_GCAskLogin
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.BS2CS_GCAskLogin} BS2CS_GCAskLogin
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            BS2CS_GCAskLogin.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_GCAskLogin();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                        break;
-                    case 2:
-                        message.sessionID = reader.uint64();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-    
-            /**
-             * Decodes a BS2CS_GCAskLogin message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof Protos.BS2CS_GCAskLogin
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.BS2CS_GCAskLogin} BS2CS_GCAskLogin
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            BS2CS_GCAskLogin.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-    
-            /**
-             * Verifies a BS2CS_GCAskLogin message.
-             * @function verify
-             * @memberof Protos.BS2CS_GCAskLogin
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            BS2CS_GCAskLogin.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.opts != null && message.hasOwnProperty("opts")) {
-                    var error = $root.Protos.MsgOpts.verify(message.opts);
-                    if (error)
-                        return "opts." + error;
-                }
-                if (message.sessionID != null && message.hasOwnProperty("sessionID"))
-                    if (!$util.isInteger(message.sessionID) && !(message.sessionID && $util.isInteger(message.sessionID.low) && $util.isInteger(message.sessionID.high)))
-                        return "sessionID: integer|Long expected";
-                return null;
-            };
-    
-            /**
-             * Creates a BS2CS_GCAskLogin message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof Protos.BS2CS_GCAskLogin
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.BS2CS_GCAskLogin} BS2CS_GCAskLogin
-             */
-            BS2CS_GCAskLogin.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.BS2CS_GCAskLogin)
-                    return object;
-                var message = new $root.Protos.BS2CS_GCAskLogin();
-                if (object.opts != null) {
-                    if (typeof object.opts !== "object")
-                        throw TypeError(".Protos.BS2CS_GCAskLogin.opts: object expected");
-                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-                }
-                if (object.sessionID != null)
-                    if ($util.Long)
-                        (message.sessionID = $util.Long.fromValue(object.sessionID)).unsigned = true;
-                    else if (typeof object.sessionID === "string")
-                        message.sessionID = parseInt(object.sessionID, 10);
-                    else if (typeof object.sessionID === "number")
-                        message.sessionID = object.sessionID;
-                    else if (typeof object.sessionID === "object")
-                        message.sessionID = new $util.LongBits(object.sessionID.low >>> 0, object.sessionID.high >>> 0).toNumber(true);
-                return message;
-            };
-    
-            /**
-             * Creates a plain object from a BS2CS_GCAskLogin message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof Protos.BS2CS_GCAskLogin
-             * @static
-             * @param {Protos.BS2CS_GCAskLogin} message BS2CS_GCAskLogin
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            BS2CS_GCAskLogin.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    object.opts = null;
-                    if ($util.Long) {
-                        var long = new $util.Long(0, 0, true);
-                        object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                    } else
-                        object.sessionID = options.longs === String ? "0" : 0;
-                }
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-                if (message.sessionID != null && message.hasOwnProperty("sessionID"))
-                    if (typeof message.sessionID === "number")
-                        object.sessionID = options.longs === String ? String(message.sessionID) : message.sessionID;
-                    else
-                        object.sessionID = options.longs === String ? $util.Long.prototype.toString.call(message.sessionID) : options.longs === Number ? new $util.LongBits(message.sessionID.low >>> 0, message.sessionID.high >>> 0).toNumber(true) : message.sessionID;
-                return object;
-            };
-    
-            /**
-             * Converts this BS2CS_GCAskLogin to JSON.
-             * @function toJSON
-             * @memberof Protos.BS2CS_GCAskLogin
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            BS2CS_GCAskLogin.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-    
-            return BS2CS_GCAskLogin;
-        })();
-    
-        Protos.BS2CS_GCLost = (function() {
-    
-            /**
-             * Properties of a BS2CS_GCLost.
-             * @memberof Protos
-             * @interface IBS2CS_GCLost
-             * @property {Protos.IMsgOpts|null} [opts] BS2CS_GCLost opts
-             * @property {Long|null} [sessionID] BS2CS_GCLost sessionID
-             */
-    
-            /**
-             * Constructs a new BS2CS_GCLost.
-             * @memberof Protos
-             * @classdesc Represents a BS2CS_GCLost.
-             * @implements IBS2CS_GCLost
-             * @constructor
-             * @param {Protos.IBS2CS_GCLost=} [properties] Properties to set
-             */
-            function BS2CS_GCLost(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-    
-            /**
-             * BS2CS_GCLost opts.
-             * @member {Protos.IMsgOpts|null|undefined} opts
-             * @memberof Protos.BS2CS_GCLost
-             * @instance
-             */
-            BS2CS_GCLost.prototype.opts = null;
-    
-            /**
-             * BS2CS_GCLost sessionID.
-             * @member {Long} sessionID
-             * @memberof Protos.BS2CS_GCLost
-             * @instance
-             */
-            BS2CS_GCLost.prototype.sessionID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-    
-            /**
-             * Creates a new BS2CS_GCLost instance using the specified properties.
-             * @function create
-             * @memberof Protos.BS2CS_GCLost
-             * @static
-             * @param {Protos.IBS2CS_GCLost=} [properties] Properties to set
-             * @returns {Protos.BS2CS_GCLost} BS2CS_GCLost instance
-             */
-            BS2CS_GCLost.create = function create(properties) {
-                return new BS2CS_GCLost(properties);
-            };
-    
-            /**
-             * Encodes the specified BS2CS_GCLost message. Does not implicitly {@link Protos.BS2CS_GCLost.verify|verify} messages.
-             * @function encode
-             * @memberof Protos.BS2CS_GCLost
-             * @static
-             * @param {Protos.IBS2CS_GCLost} message BS2CS_GCLost message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            BS2CS_GCLost.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                if (message.sessionID != null && message.hasOwnProperty("sessionID"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.sessionID);
-                return writer;
-            };
-    
-            /**
-             * Encodes the specified BS2CS_GCLost message, length delimited. Does not implicitly {@link Protos.BS2CS_GCLost.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof Protos.BS2CS_GCLost
-             * @static
-             * @param {Protos.IBS2CS_GCLost} message BS2CS_GCLost message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            BS2CS_GCLost.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-    
-            /**
-             * Decodes a BS2CS_GCLost message from the specified reader or buffer.
-             * @function decode
-             * @memberof Protos.BS2CS_GCLost
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.BS2CS_GCLost} BS2CS_GCLost
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            BS2CS_GCLost.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_GCLost();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                        break;
-                    case 2:
-                        message.sessionID = reader.uint64();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-    
-            /**
-             * Decodes a BS2CS_GCLost message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof Protos.BS2CS_GCLost
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.BS2CS_GCLost} BS2CS_GCLost
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            BS2CS_GCLost.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-    
-            /**
-             * Verifies a BS2CS_GCLost message.
-             * @function verify
-             * @memberof Protos.BS2CS_GCLost
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            BS2CS_GCLost.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.opts != null && message.hasOwnProperty("opts")) {
-                    var error = $root.Protos.MsgOpts.verify(message.opts);
-                    if (error)
-                        return "opts." + error;
-                }
-                if (message.sessionID != null && message.hasOwnProperty("sessionID"))
-                    if (!$util.isInteger(message.sessionID) && !(message.sessionID && $util.isInteger(message.sessionID.low) && $util.isInteger(message.sessionID.high)))
-                        return "sessionID: integer|Long expected";
-                return null;
-            };
-    
-            /**
-             * Creates a BS2CS_GCLost message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof Protos.BS2CS_GCLost
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.BS2CS_GCLost} BS2CS_GCLost
-             */
-            BS2CS_GCLost.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.BS2CS_GCLost)
-                    return object;
-                var message = new $root.Protos.BS2CS_GCLost();
-                if (object.opts != null) {
-                    if (typeof object.opts !== "object")
-                        throw TypeError(".Protos.BS2CS_GCLost.opts: object expected");
-                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-                }
-                if (object.sessionID != null)
-                    if ($util.Long)
-                        (message.sessionID = $util.Long.fromValue(object.sessionID)).unsigned = true;
-                    else if (typeof object.sessionID === "string")
-                        message.sessionID = parseInt(object.sessionID, 10);
-                    else if (typeof object.sessionID === "number")
-                        message.sessionID = object.sessionID;
-                    else if (typeof object.sessionID === "object")
-                        message.sessionID = new $util.LongBits(object.sessionID.low >>> 0, object.sessionID.high >>> 0).toNumber(true);
-                return message;
-            };
-    
-            /**
-             * Creates a plain object from a BS2CS_GCLost message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof Protos.BS2CS_GCLost
-             * @static
-             * @param {Protos.BS2CS_GCLost} message BS2CS_GCLost
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            BS2CS_GCLost.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    object.opts = null;
-                    if ($util.Long) {
-                        var long = new $util.Long(0, 0, true);
-                        object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                    } else
-                        object.sessionID = options.longs === String ? "0" : 0;
-                }
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-                if (message.sessionID != null && message.hasOwnProperty("sessionID"))
-                    if (typeof message.sessionID === "number")
-                        object.sessionID = options.longs === String ? String(message.sessionID) : message.sessionID;
-                    else
-                        object.sessionID = options.longs === String ? $util.Long.prototype.toString.call(message.sessionID) : options.longs === Number ? new $util.LongBits(message.sessionID.low >>> 0, message.sessionID.high >>> 0).toNumber(true) : message.sessionID;
-                return object;
-            };
-    
-            /**
-             * Converts this BS2CS_GCLost to JSON.
-             * @function toJSON
-             * @memberof Protos.BS2CS_GCLost
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            BS2CS_GCLost.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-    
-            return BS2CS_GCLost;
-        })();
-    
-        Protos.BS2CS_RommInfoRet = (function() {
-    
-            /**
-             * Properties of a BS2CS_RommInfoRet.
-             * @memberof Protos
-             * @interface IBS2CS_RommInfoRet
-             * @property {Protos.IMsgOpts|null} [opts] BS2CS_RommInfoRet opts
-             */
-    
-            /**
-             * Constructs a new BS2CS_RommInfoRet.
-             * @memberof Protos
-             * @classdesc Represents a BS2CS_RommInfoRet.
-             * @implements IBS2CS_RommInfoRet
-             * @constructor
-             * @param {Protos.IBS2CS_RommInfoRet=} [properties] Properties to set
-             */
-            function BS2CS_RommInfoRet(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-    
-            /**
-             * BS2CS_RommInfoRet opts.
-             * @member {Protos.IMsgOpts|null|undefined} opts
-             * @memberof Protos.BS2CS_RommInfoRet
-             * @instance
-             */
-            BS2CS_RommInfoRet.prototype.opts = null;
-    
-            /**
-             * Creates a new BS2CS_RommInfoRet instance using the specified properties.
-             * @function create
-             * @memberof Protos.BS2CS_RommInfoRet
-             * @static
-             * @param {Protos.IBS2CS_RommInfoRet=} [properties] Properties to set
-             * @returns {Protos.BS2CS_RommInfoRet} BS2CS_RommInfoRet instance
-             */
-            BS2CS_RommInfoRet.create = function create(properties) {
-                return new BS2CS_RommInfoRet(properties);
-            };
-    
-            /**
-             * Encodes the specified BS2CS_RommInfoRet message. Does not implicitly {@link Protos.BS2CS_RommInfoRet.verify|verify} messages.
-             * @function encode
-             * @memberof Protos.BS2CS_RommInfoRet
-             * @static
-             * @param {Protos.IBS2CS_RommInfoRet} message BS2CS_RommInfoRet message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            BS2CS_RommInfoRet.encode = function encode(message, writer) {
+            BS2CS_BattleInfoRet.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
@@ -1052,33 +594,33 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Encodes the specified BS2CS_RommInfoRet message, length delimited. Does not implicitly {@link Protos.BS2CS_RommInfoRet.verify|verify} messages.
+             * Encodes the specified BS2CS_BattleInfoRet message, length delimited. Does not implicitly {@link Protos.BS2CS_BattleInfoRet.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof Protos.BS2CS_RommInfoRet
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @static
-             * @param {Protos.IBS2CS_RommInfoRet} message BS2CS_RommInfoRet message or plain object to encode
+             * @param {Protos.IBS2CS_BattleInfoRet} message BS2CS_BattleInfoRet message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            BS2CS_RommInfoRet.encodeDelimited = function encodeDelimited(message, writer) {
+            BS2CS_BattleInfoRet.encodeDelimited = function encodeDelimited(message, writer) {
                 return this.encode(message, writer).ldelim();
             };
     
             /**
-             * Decodes a BS2CS_RommInfoRet message from the specified reader or buffer.
+             * Decodes a BS2CS_BattleInfoRet message from the specified reader or buffer.
              * @function decode
-             * @memberof Protos.BS2CS_RommInfoRet
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.BS2CS_RommInfoRet} BS2CS_RommInfoRet
+             * @returns {Protos.BS2CS_BattleInfoRet} BS2CS_BattleInfoRet
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            BS2CS_RommInfoRet.decode = function decode(reader, length) {
+            BS2CS_BattleInfoRet.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_RommInfoRet();
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleInfoRet();
                 while (reader.pos < end) {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
@@ -1094,30 +636,30 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Decodes a BS2CS_RommInfoRet message from the specified reader or buffer, length delimited.
+             * Decodes a BS2CS_BattleInfoRet message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof Protos.BS2CS_RommInfoRet
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.BS2CS_RommInfoRet} BS2CS_RommInfoRet
+             * @returns {Protos.BS2CS_BattleInfoRet} BS2CS_BattleInfoRet
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            BS2CS_RommInfoRet.decodeDelimited = function decodeDelimited(reader) {
+            BS2CS_BattleInfoRet.decodeDelimited = function decodeDelimited(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
     
             /**
-             * Verifies a BS2CS_RommInfoRet message.
+             * Verifies a BS2CS_BattleInfoRet message.
              * @function verify
-             * @memberof Protos.BS2CS_RommInfoRet
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            BS2CS_RommInfoRet.verify = function verify(message) {
+            BS2CS_BattleInfoRet.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (message.opts != null && message.hasOwnProperty("opts")) {
@@ -1129,35 +671,35 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Creates a BS2CS_RommInfoRet message from a plain object. Also converts values to their respective internal types.
+             * Creates a BS2CS_BattleInfoRet message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof Protos.BS2CS_RommInfoRet
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.BS2CS_RommInfoRet} BS2CS_RommInfoRet
+             * @returns {Protos.BS2CS_BattleInfoRet} BS2CS_BattleInfoRet
              */
-            BS2CS_RommInfoRet.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.BS2CS_RommInfoRet)
+            BS2CS_BattleInfoRet.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.BS2CS_BattleInfoRet)
                     return object;
-                var message = new $root.Protos.BS2CS_RommInfoRet();
+                var message = new $root.Protos.BS2CS_BattleInfoRet();
                 if (object.opts != null) {
                     if (typeof object.opts !== "object")
-                        throw TypeError(".Protos.BS2CS_RommInfoRet.opts: object expected");
+                        throw TypeError(".Protos.BS2CS_BattleInfoRet.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
                 return message;
             };
     
             /**
-             * Creates a plain object from a BS2CS_RommInfoRet message. Also converts values to other types if specified.
+             * Creates a plain object from a BS2CS_BattleInfoRet message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof Protos.BS2CS_RommInfoRet
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @static
-             * @param {Protos.BS2CS_RommInfoRet} message BS2CS_RommInfoRet
+             * @param {Protos.BS2CS_BattleInfoRet} message BS2CS_BattleInfoRet
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            BS2CS_RommInfoRet.toObject = function toObject(message, options) {
+            BS2CS_BattleInfoRet.toObject = function toObject(message, options) {
                 if (!options)
                     options = {};
                 var object = {};
@@ -1169,17 +711,17 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Converts this BS2CS_RommInfoRet to JSON.
+             * Converts this BS2CS_BattleInfoRet to JSON.
              * @function toJSON
-             * @memberof Protos.BS2CS_RommInfoRet
+             * @memberof Protos.BS2CS_BattleInfoRet
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            BS2CS_RommInfoRet.prototype.toJSON = function toJSON() {
+            BS2CS_BattleInfoRet.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
     
-            return BS2CS_RommInfoRet;
+            return BS2CS_BattleInfoRet;
         })();
     
         /**
@@ -1196,8 +738,8 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eGC2GS_KeepAlive=1101 eGC2GS_KeepAlive value
          * @property {number} eGC2BS_AskLogin=1200 eGC2BS_AskLogin value
          * @property {number} eGC2BS_KeepAlive=1201 eGC2BS_KeepAlive value
-         * @property {number} eGC2BS_UpdateInfo=1202 eGC2BS_UpdateInfo value
          * @property {number} eGC2CS_BeginMatch=1300 eGC2CS_BeginMatch value
+         * @property {number} eGC2CS_UpdatePlayerInfo=1301 eGC2CS_UpdatePlayerInfo value
          * @property {number} eLS2GC_GSInfo=2000 eLS2GC_GSInfo value
          * @property {number} eLS2GC_AskRegRet=2001 eLS2GC_AskRegRet value
          * @property {number} eLS2GC_AskLoginRet=2002 eLS2GC_AskLoginRet value
@@ -1212,11 +754,8 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eGS2GC_LoginRet=3100 eGS2GC_LoginRet value
          * @property {number} eGS2GC_Kick=3101 eGS2GC_Kick value
          * @property {number} eBS2CS_ReportState=4000 eBS2CS_ReportState value
-         * @property {number} eBS2CS_GCAskLogin=4001 eBS2CS_GCAskLogin value
-         * @property {number} eBS2CS_GCLost=4002 eBS2CS_GCLost value
-         * @property {number} eBS2CS_RommInfoRet=4003 eBS2CS_RommInfoRet value
+         * @property {number} eBS2CS_BattleInfoRet=4001 eBS2CS_BattleInfoRet value
          * @property {number} eBS2GC_LoginRet=4100 eBS2GC_LoginRet value
-         * @property {number} eBS2GC_UpdatePlayer=4101 eBS2GC_UpdatePlayer value
          * @property {number} eBS2GC_BattleStart=4102 eBS2GC_BattleStart value
          * @property {number} eCS2LS_GSInfos=5000 eCS2LS_GSInfos value
          * @property {number} eCS2LS_GSInfo=5001 eCS2LS_GSInfo value
@@ -1224,10 +763,10 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eCS2LS_GCLoginRet=5003 eCS2LS_GCLoginRet value
          * @property {number} eCS2GS_GCLoginRet=5100 eCS2GS_GCLoginRet value
          * @property {number} eCS2GS_KickGC=5101 eCS2GS_KickGC value
-         * @property {number} eCS2BS_GCLoginRet=5200 eCS2BS_GCLoginRet value
-         * @property {number} eCS2BS_BattleInfo=5201 eCS2BS_BattleInfo value
+         * @property {number} eCS2BS_BattleInfo=5200 eCS2BS_BattleInfo value
          * @property {number} eCS2GC_BeginMatchRet=5300 eCS2GC_BeginMatchRet value
-         * @property {number} eCS2GC_BeginBattle=5301 eCS2GC_BeginBattle value
+         * @property {number} eCS2GC_RoomInfo=5301 eCS2GC_RoomInfo value
+         * @property {number} eCS2GC_BSInfo=5302 eCS2GC_BSInfo value
          * @property {number} eDB2LS_QueryAccountRet=8000 eDB2LS_QueryAccountRet value
          * @property {number} eDB2LS_QueryLoginRet=8001 eDB2LS_QueryLoginRet value
          * @property {number} eDB2LS_ExecRet=8002 eDB2LS_ExecRet value
@@ -1244,8 +783,8 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[1101] = "eGC2GS_KeepAlive"] = 1101;
             values[valuesById[1200] = "eGC2BS_AskLogin"] = 1200;
             values[valuesById[1201] = "eGC2BS_KeepAlive"] = 1201;
-            values[valuesById[1202] = "eGC2BS_UpdateInfo"] = 1202;
             values[valuesById[1300] = "eGC2CS_BeginMatch"] = 1300;
+            values[valuesById[1301] = "eGC2CS_UpdatePlayerInfo"] = 1301;
             values[valuesById[2000] = "eLS2GC_GSInfo"] = 2000;
             values[valuesById[2001] = "eLS2GC_AskRegRet"] = 2001;
             values[valuesById[2002] = "eLS2GC_AskLoginRet"] = 2002;
@@ -1260,11 +799,8 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[3100] = "eGS2GC_LoginRet"] = 3100;
             values[valuesById[3101] = "eGS2GC_Kick"] = 3101;
             values[valuesById[4000] = "eBS2CS_ReportState"] = 4000;
-            values[valuesById[4001] = "eBS2CS_GCAskLogin"] = 4001;
-            values[valuesById[4002] = "eBS2CS_GCLost"] = 4002;
-            values[valuesById[4003] = "eBS2CS_RommInfoRet"] = 4003;
+            values[valuesById[4001] = "eBS2CS_BattleInfoRet"] = 4001;
             values[valuesById[4100] = "eBS2GC_LoginRet"] = 4100;
-            values[valuesById[4101] = "eBS2GC_UpdatePlayer"] = 4101;
             values[valuesById[4102] = "eBS2GC_BattleStart"] = 4102;
             values[valuesById[5000] = "eCS2LS_GSInfos"] = 5000;
             values[valuesById[5001] = "eCS2LS_GSInfo"] = 5001;
@@ -1272,10 +808,10 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[5003] = "eCS2LS_GCLoginRet"] = 5003;
             values[valuesById[5100] = "eCS2GS_GCLoginRet"] = 5100;
             values[valuesById[5101] = "eCS2GS_KickGC"] = 5101;
-            values[valuesById[5200] = "eCS2BS_GCLoginRet"] = 5200;
-            values[valuesById[5201] = "eCS2BS_BattleInfo"] = 5201;
+            values[valuesById[5200] = "eCS2BS_BattleInfo"] = 5200;
             values[valuesById[5300] = "eCS2GC_BeginMatchRet"] = 5300;
-            values[valuesById[5301] = "eCS2GC_BeginBattle"] = 5301;
+            values[valuesById[5301] = "eCS2GC_RoomInfo"] = 5301;
+            values[valuesById[5302] = "eCS2GC_BSInfo"] = 5302;
             values[valuesById[8000] = "eDB2LS_QueryAccountRet"] = 8000;
             values[valuesById[8001] = "eDB2LS_QueryLoginRet"] = 8001;
             values[valuesById[8002] = "eDB2LS_ExecRet"] = 8002;
@@ -2268,8 +1804,6 @@ define(["libs/protobufjs"], function($protobuf) {
              * @interface IBS2GC_LoginRet
              * @property {Protos.IMsgOpts|null} [opts] BS2GC_LoginRet opts
              * @property {Protos.BS2GC_LoginRet.EResult|null} [result] BS2GC_LoginRet result
-             * @property {number|null} [mapID] BS2GC_LoginRet mapID
-             * @property {Array.<Protos.ICS2BS_PlayerInfo>|null} [playInfos] BS2GC_LoginRet playInfos
              */
     
             /**
@@ -2281,7 +1815,6 @@ define(["libs/protobufjs"], function($protobuf) {
              * @param {Protos.IBS2GC_LoginRet=} [properties] Properties to set
              */
             function BS2GC_LoginRet(properties) {
-                this.playInfos = [];
                 if (properties)
                     for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null)
@@ -2303,22 +1836,6 @@ define(["libs/protobufjs"], function($protobuf) {
              * @instance
              */
             BS2GC_LoginRet.prototype.result = 0;
-    
-            /**
-             * BS2GC_LoginRet mapID.
-             * @member {number} mapID
-             * @memberof Protos.BS2GC_LoginRet
-             * @instance
-             */
-            BS2GC_LoginRet.prototype.mapID = 0;
-    
-            /**
-             * BS2GC_LoginRet playInfos.
-             * @member {Array.<Protos.ICS2BS_PlayerInfo>} playInfos
-             * @memberof Protos.BS2GC_LoginRet
-             * @instance
-             */
-            BS2GC_LoginRet.prototype.playInfos = $util.emptyArray;
     
             /**
              * Creates a new BS2GC_LoginRet instance using the specified properties.
@@ -2348,11 +1865,6 @@ define(["libs/protobufjs"], function($protobuf) {
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                 if (message.result != null && message.hasOwnProperty("result"))
                     writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
-                if (message.mapID != null && message.hasOwnProperty("mapID"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.mapID);
-                if (message.playInfos != null && message.playInfos.length)
-                    for (var i = 0; i < message.playInfos.length; ++i)
-                        $root.Protos.CS2BS_PlayerInfo.encode(message.playInfos[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                 return writer;
             };
     
@@ -2392,14 +1904,6 @@ define(["libs/protobufjs"], function($protobuf) {
                         break;
                     case 2:
                         message.result = reader.int32();
-                        break;
-                    case 3:
-                        message.mapID = reader.int32();
-                        break;
-                    case 4:
-                        if (!(message.playInfos && message.playInfos.length))
-                            message.playInfos = [];
-                        message.playInfos.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -2449,18 +1953,6 @@ define(["libs/protobufjs"], function($protobuf) {
                     case 1:
                         break;
                     }
-                if (message.mapID != null && message.hasOwnProperty("mapID"))
-                    if (!$util.isInteger(message.mapID))
-                        return "mapID: integer expected";
-                if (message.playInfos != null && message.hasOwnProperty("playInfos")) {
-                    if (!Array.isArray(message.playInfos))
-                        return "playInfos: array expected";
-                    for (var i = 0; i < message.playInfos.length; ++i) {
-                        var error = $root.Protos.CS2BS_PlayerInfo.verify(message.playInfos[i]);
-                        if (error)
-                            return "playInfos." + error;
-                    }
-                }
                 return null;
             };
     
@@ -2491,18 +1983,6 @@ define(["libs/protobufjs"], function($protobuf) {
                     message.result = 1;
                     break;
                 }
-                if (object.mapID != null)
-                    message.mapID = object.mapID | 0;
-                if (object.playInfos) {
-                    if (!Array.isArray(object.playInfos))
-                        throw TypeError(".Protos.BS2GC_LoginRet.playInfos: array expected");
-                    message.playInfos = [];
-                    for (var i = 0; i < object.playInfos.length; ++i) {
-                        if (typeof object.playInfos[i] !== "object")
-                            throw TypeError(".Protos.BS2GC_LoginRet.playInfos: object expected");
-                        message.playInfos[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playInfos[i]);
-                    }
-                }
                 return message;
             };
     
@@ -2519,24 +1999,14 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (!options)
                     options = {};
                 var object = {};
-                if (options.arrays || options.defaults)
-                    object.playInfos = [];
                 if (options.defaults) {
                     object.opts = null;
                     object.result = options.enums === String ? "Success" : 0;
-                    object.mapID = 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
                 if (message.result != null && message.hasOwnProperty("result"))
                     object.result = options.enums === String ? $root.Protos.BS2GC_LoginRet.EResult[message.result] : message.result;
-                if (message.mapID != null && message.hasOwnProperty("mapID"))
-                    object.mapID = message.mapID;
-                if (message.playInfos && message.playInfos.length) {
-                    object.playInfos = [];
-                    for (var j = 0; j < message.playInfos.length; ++j)
-                        object.playInfos[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playInfos[j], options);
-                }
                 return object;
             };
     
@@ -2566,297 +2036,6 @@ define(["libs/protobufjs"], function($protobuf) {
             })();
     
             return BS2GC_LoginRet;
-        })();
-    
-        Protos.BS2GC_UpdatePlayer = (function() {
-    
-            /**
-             * Properties of a BS2GC_UpdatePlayer.
-             * @memberof Protos
-             * @interface IBS2GC_UpdatePlayer
-             * @property {Protos.IMsgOpts|null} [opts] BS2GC_UpdatePlayer opts
-             * @property {Long|null} [id] BS2GC_UpdatePlayer id
-             * @property {number|null} [progress] BS2GC_UpdatePlayer progress
-             * @property {Protos.CS2BS_PlayerInfo.Status|null} [status] BS2GC_UpdatePlayer status
-             */
-    
-            /**
-             * Constructs a new BS2GC_UpdatePlayer.
-             * @memberof Protos
-             * @classdesc Represents a BS2GC_UpdatePlayer.
-             * @implements IBS2GC_UpdatePlayer
-             * @constructor
-             * @param {Protos.IBS2GC_UpdatePlayer=} [properties] Properties to set
-             */
-            function BS2GC_UpdatePlayer(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-    
-            /**
-             * BS2GC_UpdatePlayer opts.
-             * @member {Protos.IMsgOpts|null|undefined} opts
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @instance
-             */
-            BS2GC_UpdatePlayer.prototype.opts = null;
-    
-            /**
-             * BS2GC_UpdatePlayer id.
-             * @member {Long} id
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @instance
-             */
-            BS2GC_UpdatePlayer.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-    
-            /**
-             * BS2GC_UpdatePlayer progress.
-             * @member {number} progress
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @instance
-             */
-            BS2GC_UpdatePlayer.prototype.progress = 0;
-    
-            /**
-             * BS2GC_UpdatePlayer status.
-             * @member {Protos.CS2BS_PlayerInfo.Status} status
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @instance
-             */
-            BS2GC_UpdatePlayer.prototype.status = 0;
-    
-            /**
-             * Creates a new BS2GC_UpdatePlayer instance using the specified properties.
-             * @function create
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @static
-             * @param {Protos.IBS2GC_UpdatePlayer=} [properties] Properties to set
-             * @returns {Protos.BS2GC_UpdatePlayer} BS2GC_UpdatePlayer instance
-             */
-            BS2GC_UpdatePlayer.create = function create(properties) {
-                return new BS2GC_UpdatePlayer(properties);
-            };
-    
-            /**
-             * Encodes the specified BS2GC_UpdatePlayer message. Does not implicitly {@link Protos.BS2GC_UpdatePlayer.verify|verify} messages.
-             * @function encode
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @static
-             * @param {Protos.IBS2GC_UpdatePlayer} message BS2GC_UpdatePlayer message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            BS2GC_UpdatePlayer.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                if (message.id != null && message.hasOwnProperty("id"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.id);
-                if (message.progress != null && message.hasOwnProperty("progress"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.progress);
-                if (message.status != null && message.hasOwnProperty("status"))
-                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.status);
-                return writer;
-            };
-    
-            /**
-             * Encodes the specified BS2GC_UpdatePlayer message, length delimited. Does not implicitly {@link Protos.BS2GC_UpdatePlayer.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @static
-             * @param {Protos.IBS2GC_UpdatePlayer} message BS2GC_UpdatePlayer message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            BS2GC_UpdatePlayer.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-    
-            /**
-             * Decodes a BS2GC_UpdatePlayer message from the specified reader or buffer.
-             * @function decode
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.BS2GC_UpdatePlayer} BS2GC_UpdatePlayer
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            BS2GC_UpdatePlayer.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_UpdatePlayer();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                        break;
-                    case 2:
-                        message.id = reader.uint64();
-                        break;
-                    case 3:
-                        message.progress = reader.int32();
-                        break;
-                    case 4:
-                        message.status = reader.int32();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-    
-            /**
-             * Decodes a BS2GC_UpdatePlayer message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.BS2GC_UpdatePlayer} BS2GC_UpdatePlayer
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            BS2GC_UpdatePlayer.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-    
-            /**
-             * Verifies a BS2GC_UpdatePlayer message.
-             * @function verify
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            BS2GC_UpdatePlayer.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.opts != null && message.hasOwnProperty("opts")) {
-                    var error = $root.Protos.MsgOpts.verify(message.opts);
-                    if (error)
-                        return "opts." + error;
-                }
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                        return "id: integer|Long expected";
-                if (message.progress != null && message.hasOwnProperty("progress"))
-                    if (!$util.isInteger(message.progress))
-                        return "progress: integer expected";
-                if (message.status != null && message.hasOwnProperty("status"))
-                    switch (message.status) {
-                    default:
-                        return "status: enum value expected";
-                    case 0:
-                    case 1:
-                    case 2:
-                        break;
-                    }
-                return null;
-            };
-    
-            /**
-             * Creates a BS2GC_UpdatePlayer message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.BS2GC_UpdatePlayer} BS2GC_UpdatePlayer
-             */
-            BS2GC_UpdatePlayer.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.BS2GC_UpdatePlayer)
-                    return object;
-                var message = new $root.Protos.BS2GC_UpdatePlayer();
-                if (object.opts != null) {
-                    if (typeof object.opts !== "object")
-                        throw TypeError(".Protos.BS2GC_UpdatePlayer.opts: object expected");
-                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-                }
-                if (object.id != null)
-                    if ($util.Long)
-                        (message.id = $util.Long.fromValue(object.id)).unsigned = true;
-                    else if (typeof object.id === "string")
-                        message.id = parseInt(object.id, 10);
-                    else if (typeof object.id === "number")
-                        message.id = object.id;
-                    else if (typeof object.id === "object")
-                        message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
-                if (object.progress != null)
-                    message.progress = object.progress | 0;
-                switch (object.status) {
-                case "Disconnect":
-                case 0:
-                    message.status = 0;
-                    break;
-                case "Connected":
-                case 1:
-                    message.status = 1;
-                    break;
-                case "Ready":
-                case 2:
-                    message.status = 2;
-                    break;
-                }
-                return message;
-            };
-    
-            /**
-             * Creates a plain object from a BS2GC_UpdatePlayer message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @static
-             * @param {Protos.BS2GC_UpdatePlayer} message BS2GC_UpdatePlayer
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            BS2GC_UpdatePlayer.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    object.opts = null;
-                    if ($util.Long) {
-                        var long = new $util.Long(0, 0, true);
-                        object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                    } else
-                        object.id = options.longs === String ? "0" : 0;
-                    object.progress = 0;
-                    object.status = options.enums === String ? "Disconnect" : 0;
-                }
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (typeof message.id === "number")
-                        object.id = options.longs === String ? String(message.id) : message.id;
-                    else
-                        object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
-                if (message.progress != null && message.hasOwnProperty("progress"))
-                    object.progress = message.progress;
-                if (message.status != null && message.hasOwnProperty("status"))
-                    object.status = options.enums === String ? $root.Protos.CS2BS_PlayerInfo.Status[message.status] : message.status;
-                return object;
-            };
-    
-            /**
-             * Converts this BS2GC_UpdatePlayer to JSON.
-             * @function toJSON
-             * @memberof Protos.BS2GC_UpdatePlayer
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            BS2GC_UpdatePlayer.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-    
-            return BS2GC_UpdatePlayer;
         })();
     
         Protos.BS2GC_BattleStart = (function() {
@@ -3051,550 +2230,6 @@ define(["libs/protobufjs"], function($protobuf) {
             return BS2GC_BattleStart;
         })();
     
-        Protos.CS2BS_GCLoginRet = (function() {
-    
-            /**
-             * Properties of a CS2BS_GCLoginRet.
-             * @memberof Protos
-             * @interface ICS2BS_GCLoginRet
-             * @property {Protos.IMsgOpts|null} [opts] CS2BS_GCLoginRet opts
-             * @property {Protos.CS2BS_GCLoginRet.EResult|null} [result] CS2BS_GCLoginRet result
-             */
-    
-            /**
-             * Constructs a new CS2BS_GCLoginRet.
-             * @memberof Protos
-             * @classdesc Represents a CS2BS_GCLoginRet.
-             * @implements ICS2BS_GCLoginRet
-             * @constructor
-             * @param {Protos.ICS2BS_GCLoginRet=} [properties] Properties to set
-             */
-            function CS2BS_GCLoginRet(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-    
-            /**
-             * CS2BS_GCLoginRet opts.
-             * @member {Protos.IMsgOpts|null|undefined} opts
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @instance
-             */
-            CS2BS_GCLoginRet.prototype.opts = null;
-    
-            /**
-             * CS2BS_GCLoginRet result.
-             * @member {Protos.CS2BS_GCLoginRet.EResult} result
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @instance
-             */
-            CS2BS_GCLoginRet.prototype.result = 0;
-    
-            /**
-             * Creates a new CS2BS_GCLoginRet instance using the specified properties.
-             * @function create
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @static
-             * @param {Protos.ICS2BS_GCLoginRet=} [properties] Properties to set
-             * @returns {Protos.CS2BS_GCLoginRet} CS2BS_GCLoginRet instance
-             */
-            CS2BS_GCLoginRet.create = function create(properties) {
-                return new CS2BS_GCLoginRet(properties);
-            };
-    
-            /**
-             * Encodes the specified CS2BS_GCLoginRet message. Does not implicitly {@link Protos.CS2BS_GCLoginRet.verify|verify} messages.
-             * @function encode
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @static
-             * @param {Protos.ICS2BS_GCLoginRet} message CS2BS_GCLoginRet message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            CS2BS_GCLoginRet.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                if (message.result != null && message.hasOwnProperty("result"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
-                return writer;
-            };
-    
-            /**
-             * Encodes the specified CS2BS_GCLoginRet message, length delimited. Does not implicitly {@link Protos.CS2BS_GCLoginRet.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @static
-             * @param {Protos.ICS2BS_GCLoginRet} message CS2BS_GCLoginRet message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            CS2BS_GCLoginRet.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-    
-            /**
-             * Decodes a CS2BS_GCLoginRet message from the specified reader or buffer.
-             * @function decode
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.CS2BS_GCLoginRet} CS2BS_GCLoginRet
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            CS2BS_GCLoginRet.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_GCLoginRet();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                        break;
-                    case 2:
-                        message.result = reader.int32();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-    
-            /**
-             * Decodes a CS2BS_GCLoginRet message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.CS2BS_GCLoginRet} CS2BS_GCLoginRet
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            CS2BS_GCLoginRet.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-    
-            /**
-             * Verifies a CS2BS_GCLoginRet message.
-             * @function verify
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            CS2BS_GCLoginRet.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.opts != null && message.hasOwnProperty("opts")) {
-                    var error = $root.Protos.MsgOpts.verify(message.opts);
-                    if (error)
-                        return "opts." + error;
-                }
-                if (message.result != null && message.hasOwnProperty("result"))
-                    switch (message.result) {
-                    default:
-                        return "result: enum value expected";
-                    case 0:
-                    case 1:
-                        break;
-                    }
-                return null;
-            };
-    
-            /**
-             * Creates a CS2BS_GCLoginRet message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.CS2BS_GCLoginRet} CS2BS_GCLoginRet
-             */
-            CS2BS_GCLoginRet.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.CS2BS_GCLoginRet)
-                    return object;
-                var message = new $root.Protos.CS2BS_GCLoginRet();
-                if (object.opts != null) {
-                    if (typeof object.opts !== "object")
-                        throw TypeError(".Protos.CS2BS_GCLoginRet.opts: object expected");
-                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-                }
-                switch (object.result) {
-                case "Success":
-                case 0:
-                    message.result = 0;
-                    break;
-                case "Failed":
-                case 1:
-                    message.result = 1;
-                    break;
-                }
-                return message;
-            };
-    
-            /**
-             * Creates a plain object from a CS2BS_GCLoginRet message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @static
-             * @param {Protos.CS2BS_GCLoginRet} message CS2BS_GCLoginRet
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            CS2BS_GCLoginRet.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    object.opts = null;
-                    object.result = options.enums === String ? "Success" : 0;
-                }
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-                if (message.result != null && message.hasOwnProperty("result"))
-                    object.result = options.enums === String ? $root.Protos.CS2BS_GCLoginRet.EResult[message.result] : message.result;
-                return object;
-            };
-    
-            /**
-             * Converts this CS2BS_GCLoginRet to JSON.
-             * @function toJSON
-             * @memberof Protos.CS2BS_GCLoginRet
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            CS2BS_GCLoginRet.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-    
-            /**
-             * EResult enum.
-             * @name Protos.CS2BS_GCLoginRet.EResult
-             * @enum {string}
-             * @property {number} Success=0 Success value
-             * @property {number} Failed=1 Failed value
-             */
-            CS2BS_GCLoginRet.EResult = (function() {
-                var valuesById = {}, values = Object.create(valuesById);
-                values[valuesById[0] = "Success"] = 0;
-                values[valuesById[1] = "Failed"] = 1;
-                return values;
-            })();
-    
-            return CS2BS_GCLoginRet;
-        })();
-    
-        Protos.CS2BS_PlayerInfo = (function() {
-    
-            /**
-             * Properties of a CS2BS_PlayerInfo.
-             * @memberof Protos
-             * @interface ICS2BS_PlayerInfo
-             * @property {Long|null} [id] CS2BS_PlayerInfo id
-             * @property {string|null} [name] CS2BS_PlayerInfo name
-             * @property {number|null} [actorID] CS2BS_PlayerInfo actorID
-             * @property {Protos.CS2BS_PlayerInfo.Status|null} [statuc] CS2BS_PlayerInfo statuc
-             */
-    
-            /**
-             * Constructs a new CS2BS_PlayerInfo.
-             * @memberof Protos
-             * @classdesc Represents a CS2BS_PlayerInfo.
-             * @implements ICS2BS_PlayerInfo
-             * @constructor
-             * @param {Protos.ICS2BS_PlayerInfo=} [properties] Properties to set
-             */
-            function CS2BS_PlayerInfo(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-    
-            /**
-             * CS2BS_PlayerInfo id.
-             * @member {Long} id
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @instance
-             */
-            CS2BS_PlayerInfo.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-    
-            /**
-             * CS2BS_PlayerInfo name.
-             * @member {string} name
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @instance
-             */
-            CS2BS_PlayerInfo.prototype.name = "";
-    
-            /**
-             * CS2BS_PlayerInfo actorID.
-             * @member {number} actorID
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @instance
-             */
-            CS2BS_PlayerInfo.prototype.actorID = 0;
-    
-            /**
-             * CS2BS_PlayerInfo statuc.
-             * @member {Protos.CS2BS_PlayerInfo.Status} statuc
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @instance
-             */
-            CS2BS_PlayerInfo.prototype.statuc = 0;
-    
-            /**
-             * Creates a new CS2BS_PlayerInfo instance using the specified properties.
-             * @function create
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @static
-             * @param {Protos.ICS2BS_PlayerInfo=} [properties] Properties to set
-             * @returns {Protos.CS2BS_PlayerInfo} CS2BS_PlayerInfo instance
-             */
-            CS2BS_PlayerInfo.create = function create(properties) {
-                return new CS2BS_PlayerInfo(properties);
-            };
-    
-            /**
-             * Encodes the specified CS2BS_PlayerInfo message. Does not implicitly {@link Protos.CS2BS_PlayerInfo.verify|verify} messages.
-             * @function encode
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @static
-             * @param {Protos.ICS2BS_PlayerInfo} message CS2BS_PlayerInfo message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            CS2BS_PlayerInfo.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.id != null && message.hasOwnProperty("id"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.id);
-                if (message.name != null && message.hasOwnProperty("name"))
-                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
-                if (message.actorID != null && message.hasOwnProperty("actorID"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.actorID);
-                if (message.statuc != null && message.hasOwnProperty("statuc"))
-                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.statuc);
-                return writer;
-            };
-    
-            /**
-             * Encodes the specified CS2BS_PlayerInfo message, length delimited. Does not implicitly {@link Protos.CS2BS_PlayerInfo.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @static
-             * @param {Protos.ICS2BS_PlayerInfo} message CS2BS_PlayerInfo message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            CS2BS_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-    
-            /**
-             * Decodes a CS2BS_PlayerInfo message from the specified reader or buffer.
-             * @function decode
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.CS2BS_PlayerInfo} CS2BS_PlayerInfo
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            CS2BS_PlayerInfo.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_PlayerInfo();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.id = reader.uint64();
-                        break;
-                    case 2:
-                        message.name = reader.string();
-                        break;
-                    case 3:
-                        message.actorID = reader.int32();
-                        break;
-                    case 4:
-                        message.statuc = reader.int32();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-    
-            /**
-             * Decodes a CS2BS_PlayerInfo message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.CS2BS_PlayerInfo} CS2BS_PlayerInfo
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            CS2BS_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-    
-            /**
-             * Verifies a CS2BS_PlayerInfo message.
-             * @function verify
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            CS2BS_PlayerInfo.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                        return "id: integer|Long expected";
-                if (message.name != null && message.hasOwnProperty("name"))
-                    if (!$util.isString(message.name))
-                        return "name: string expected";
-                if (message.actorID != null && message.hasOwnProperty("actorID"))
-                    if (!$util.isInteger(message.actorID))
-                        return "actorID: integer expected";
-                if (message.statuc != null && message.hasOwnProperty("statuc"))
-                    switch (message.statuc) {
-                    default:
-                        return "statuc: enum value expected";
-                    case 0:
-                    case 1:
-                    case 2:
-                        break;
-                    }
-                return null;
-            };
-    
-            /**
-             * Creates a CS2BS_PlayerInfo message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.CS2BS_PlayerInfo} CS2BS_PlayerInfo
-             */
-            CS2BS_PlayerInfo.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.CS2BS_PlayerInfo)
-                    return object;
-                var message = new $root.Protos.CS2BS_PlayerInfo();
-                if (object.id != null)
-                    if ($util.Long)
-                        (message.id = $util.Long.fromValue(object.id)).unsigned = true;
-                    else if (typeof object.id === "string")
-                        message.id = parseInt(object.id, 10);
-                    else if (typeof object.id === "number")
-                        message.id = object.id;
-                    else if (typeof object.id === "object")
-                        message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
-                if (object.name != null)
-                    message.name = String(object.name);
-                if (object.actorID != null)
-                    message.actorID = object.actorID | 0;
-                switch (object.statuc) {
-                case "Disconnect":
-                case 0:
-                    message.statuc = 0;
-                    break;
-                case "Connected":
-                case 1:
-                    message.statuc = 1;
-                    break;
-                case "Ready":
-                case 2:
-                    message.statuc = 2;
-                    break;
-                }
-                return message;
-            };
-    
-            /**
-             * Creates a plain object from a CS2BS_PlayerInfo message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @static
-             * @param {Protos.CS2BS_PlayerInfo} message CS2BS_PlayerInfo
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            CS2BS_PlayerInfo.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    if ($util.Long) {
-                        var long = new $util.Long(0, 0, true);
-                        object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                    } else
-                        object.id = options.longs === String ? "0" : 0;
-                    object.name = "";
-                    object.actorID = 0;
-                    object.statuc = options.enums === String ? "Disconnect" : 0;
-                }
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (typeof message.id === "number")
-                        object.id = options.longs === String ? String(message.id) : message.id;
-                    else
-                        object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
-                if (message.name != null && message.hasOwnProperty("name"))
-                    object.name = message.name;
-                if (message.actorID != null && message.hasOwnProperty("actorID"))
-                    object.actorID = message.actorID;
-                if (message.statuc != null && message.hasOwnProperty("statuc"))
-                    object.statuc = options.enums === String ? $root.Protos.CS2BS_PlayerInfo.Status[message.statuc] : message.statuc;
-                return object;
-            };
-    
-            /**
-             * Converts this CS2BS_PlayerInfo to JSON.
-             * @function toJSON
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            CS2BS_PlayerInfo.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-    
-            /**
-             * Status enum.
-             * @name Protos.CS2BS_PlayerInfo.Status
-             * @enum {string}
-             * @property {number} Disconnect=0 Disconnect value
-             * @property {number} Connected=1 Connected value
-             * @property {number} Ready=2 Ready value
-             */
-            CS2BS_PlayerInfo.Status = (function() {
-                var valuesById = {}, values = Object.create(valuesById);
-                values[valuesById[0] = "Disconnect"] = 0;
-                values[valuesById[1] = "Connected"] = 1;
-                values[valuesById[2] = "Ready"] = 2;
-                return values;
-            })();
-    
-            return CS2BS_PlayerInfo;
-        })();
-    
         Protos.CS2BS_BattleInfo = (function() {
     
             /**
@@ -3604,8 +2239,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @property {Protos.IMsgOpts|null} [opts] CS2BS_BattleInfo opts
              * @property {number|null} [id] CS2BS_BattleInfo id
              * @property {number|null} [mapID] CS2BS_BattleInfo mapID
-             * @property {Array.<Protos.ICS2BS_PlayerInfo>|null} [playerInfo] CS2BS_BattleInfo playerInfo
-             * @property {number|null} [timeout] CS2BS_BattleInfo timeout
+             * @property {Array.<Protos.IRoom_PlayerInfo>|null} [playerInfo] CS2BS_BattleInfo playerInfo
              */
     
             /**
@@ -3650,19 +2284,11 @@ define(["libs/protobufjs"], function($protobuf) {
     
             /**
              * CS2BS_BattleInfo playerInfo.
-             * @member {Array.<Protos.ICS2BS_PlayerInfo>} playerInfo
+             * @member {Array.<Protos.IRoom_PlayerInfo>} playerInfo
              * @memberof Protos.CS2BS_BattleInfo
              * @instance
              */
             CS2BS_BattleInfo.prototype.playerInfo = $util.emptyArray;
-    
-            /**
-             * CS2BS_BattleInfo timeout.
-             * @member {number} timeout
-             * @memberof Protos.CS2BS_BattleInfo
-             * @instance
-             */
-            CS2BS_BattleInfo.prototype.timeout = 0;
     
             /**
              * Creates a new CS2BS_BattleInfo instance using the specified properties.
@@ -3696,9 +2322,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer.uint32(/* id 3, wireType 0 =*/24).int32(message.mapID);
                 if (message.playerInfo != null && message.playerInfo.length)
                     for (var i = 0; i < message.playerInfo.length; ++i)
-                        $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfo[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-                if (message.timeout != null && message.hasOwnProperty("timeout"))
-                    writer.uint32(/* id 5, wireType 0 =*/40).uint32(message.timeout);
+                        $root.Protos.Room_PlayerInfo.encode(message.playerInfo[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                 return writer;
             };
     
@@ -3745,10 +2369,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     case 4:
                         if (!(message.playerInfo && message.playerInfo.length))
                             message.playerInfo = [];
-                        message.playerInfo.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
-                        break;
-                    case 5:
-                        message.timeout = reader.uint32();
+                        message.playerInfo.push($root.Protos.Room_PlayerInfo.decode(reader, reader.uint32()));
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -3800,14 +2421,11 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (!Array.isArray(message.playerInfo))
                         return "playerInfo: array expected";
                     for (var i = 0; i < message.playerInfo.length; ++i) {
-                        var error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfo[i]);
+                        var error = $root.Protos.Room_PlayerInfo.verify(message.playerInfo[i]);
                         if (error)
                             return "playerInfo." + error;
                     }
                 }
-                if (message.timeout != null && message.hasOwnProperty("timeout"))
-                    if (!$util.isInteger(message.timeout))
-                        return "timeout: integer expected";
                 return null;
             };
     
@@ -3839,11 +2457,9 @@ define(["libs/protobufjs"], function($protobuf) {
                     for (var i = 0; i < object.playerInfo.length; ++i) {
                         if (typeof object.playerInfo[i] !== "object")
                             throw TypeError(".Protos.CS2BS_BattleInfo.playerInfo: object expected");
-                        message.playerInfo[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfo[i]);
+                        message.playerInfo[i] = $root.Protos.Room_PlayerInfo.fromObject(object.playerInfo[i]);
                     }
                 }
-                if (object.timeout != null)
-                    message.timeout = object.timeout >>> 0;
                 return message;
             };
     
@@ -3866,7 +2482,6 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.opts = null;
                     object.id = 0;
                     object.mapID = 0;
-                    object.timeout = 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -3877,10 +2492,8 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.playerInfo && message.playerInfo.length) {
                     object.playerInfo = [];
                     for (var j = 0; j < message.playerInfo.length; ++j)
-                        object.playerInfo[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfo[j], options);
+                        object.playerInfo[j] = $root.Protos.Room_PlayerInfo.toObject(message.playerInfo[j], options);
                 }
-                if (message.timeout != null && message.hasOwnProperty("timeout"))
-                    object.timeout = message.timeout;
                 return object;
             };
     
@@ -4126,27 +2739,27 @@ define(["libs/protobufjs"], function($protobuf) {
             return CS2GC_BeginMatchRet;
         })();
     
-        Protos.CS2GC_BeginBattle = (function() {
+        Protos.Room_PlayerInfo = (function() {
     
             /**
-             * Properties of a CS2GC_BeginBattle.
+             * Properties of a Room_PlayerInfo.
              * @memberof Protos
-             * @interface ICS2GC_BeginBattle
-             * @property {Protos.IMsgOpts|null} [opts] CS2GC_BeginBattle opts
-             * @property {Long|null} [gsNID] CS2GC_BeginBattle gsNID
-             * @property {string|null} [ip] CS2GC_BeginBattle ip
-             * @property {number|null} [port] CS2GC_BeginBattle port
+             * @interface IRoom_PlayerInfo
+             * @property {Long|null} [gcNID] Room_PlayerInfo gcNID
+             * @property {string|null} [name] Room_PlayerInfo name
+             * @property {number|null} [actorID] Room_PlayerInfo actorID
+             * @property {number|null} [progress] Room_PlayerInfo progress
              */
     
             /**
-             * Constructs a new CS2GC_BeginBattle.
+             * Constructs a new Room_PlayerInfo.
              * @memberof Protos
-             * @classdesc Represents a CS2GC_BeginBattle.
-             * @implements ICS2GC_BeginBattle
+             * @classdesc Represents a Room_PlayerInfo.
+             * @implements IRoom_PlayerInfo
              * @constructor
-             * @param {Protos.ICS2GC_BeginBattle=} [properties] Properties to set
+             * @param {Protos.IRoom_PlayerInfo=} [properties] Properties to set
              */
-            function CS2GC_BeginBattle(properties) {
+            function Room_PlayerInfo(properties) {
                 if (properties)
                     for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null)
@@ -4154,114 +2767,114 @@ define(["libs/protobufjs"], function($protobuf) {
             }
     
             /**
-             * CS2GC_BeginBattle opts.
-             * @member {Protos.IMsgOpts|null|undefined} opts
-             * @memberof Protos.CS2GC_BeginBattle
+             * Room_PlayerInfo gcNID.
+             * @member {Long} gcNID
+             * @memberof Protos.Room_PlayerInfo
              * @instance
              */
-            CS2GC_BeginBattle.prototype.opts = null;
+            Room_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
     
             /**
-             * CS2GC_BeginBattle gsNID.
-             * @member {Long} gsNID
-             * @memberof Protos.CS2GC_BeginBattle
+             * Room_PlayerInfo name.
+             * @member {string} name
+             * @memberof Protos.Room_PlayerInfo
              * @instance
              */
-            CS2GC_BeginBattle.prototype.gsNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+            Room_PlayerInfo.prototype.name = "";
     
             /**
-             * CS2GC_BeginBattle ip.
-             * @member {string} ip
-             * @memberof Protos.CS2GC_BeginBattle
+             * Room_PlayerInfo actorID.
+             * @member {number} actorID
+             * @memberof Protos.Room_PlayerInfo
              * @instance
              */
-            CS2GC_BeginBattle.prototype.ip = "";
+            Room_PlayerInfo.prototype.actorID = 0;
     
             /**
-             * CS2GC_BeginBattle port.
-             * @member {number} port
-             * @memberof Protos.CS2GC_BeginBattle
+             * Room_PlayerInfo progress.
+             * @member {number} progress
+             * @memberof Protos.Room_PlayerInfo
              * @instance
              */
-            CS2GC_BeginBattle.prototype.port = 0;
+            Room_PlayerInfo.prototype.progress = 0;
     
             /**
-             * Creates a new CS2GC_BeginBattle instance using the specified properties.
+             * Creates a new Room_PlayerInfo instance using the specified properties.
              * @function create
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.Room_PlayerInfo
              * @static
-             * @param {Protos.ICS2GC_BeginBattle=} [properties] Properties to set
-             * @returns {Protos.CS2GC_BeginBattle} CS2GC_BeginBattle instance
+             * @param {Protos.IRoom_PlayerInfo=} [properties] Properties to set
+             * @returns {Protos.Room_PlayerInfo} Room_PlayerInfo instance
              */
-            CS2GC_BeginBattle.create = function create(properties) {
-                return new CS2GC_BeginBattle(properties);
+            Room_PlayerInfo.create = function create(properties) {
+                return new Room_PlayerInfo(properties);
             };
     
             /**
-             * Encodes the specified CS2GC_BeginBattle message. Does not implicitly {@link Protos.CS2GC_BeginBattle.verify|verify} messages.
+             * Encodes the specified Room_PlayerInfo message. Does not implicitly {@link Protos.Room_PlayerInfo.verify|verify} messages.
              * @function encode
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.Room_PlayerInfo
              * @static
-             * @param {Protos.ICS2GC_BeginBattle} message CS2GC_BeginBattle message or plain object to encode
+             * @param {Protos.IRoom_PlayerInfo} message Room_PlayerInfo message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            CS2GC_BeginBattle.encode = function encode(message, writer) {
+            Room_PlayerInfo.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                if (message.gsNID != null && message.hasOwnProperty("gsNID"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.gsNID);
-                if (message.ip != null && message.hasOwnProperty("ip"))
-                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.ip);
-                if (message.port != null && message.hasOwnProperty("port"))
-                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.port);
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.gcNID);
+                if (message.name != null && message.hasOwnProperty("name"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.actorID);
+                if (message.progress != null && message.hasOwnProperty("progress"))
+                    writer.uint32(/* id 5, wireType 0 =*/40).int32(message.progress);
                 return writer;
             };
     
             /**
-             * Encodes the specified CS2GC_BeginBattle message, length delimited. Does not implicitly {@link Protos.CS2GC_BeginBattle.verify|verify} messages.
+             * Encodes the specified Room_PlayerInfo message, length delimited. Does not implicitly {@link Protos.Room_PlayerInfo.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.Room_PlayerInfo
              * @static
-             * @param {Protos.ICS2GC_BeginBattle} message CS2GC_BeginBattle message or plain object to encode
+             * @param {Protos.IRoom_PlayerInfo} message Room_PlayerInfo message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            CS2GC_BeginBattle.encodeDelimited = function encodeDelimited(message, writer) {
+            Room_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
                 return this.encode(message, writer).ldelim();
             };
     
             /**
-             * Decodes a CS2GC_BeginBattle message from the specified reader or buffer.
+             * Decodes a Room_PlayerInfo message from the specified reader or buffer.
              * @function decode
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.Room_PlayerInfo
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.CS2GC_BeginBattle} CS2GC_BeginBattle
+             * @returns {Protos.Room_PlayerInfo} Room_PlayerInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            CS2GC_BeginBattle.decode = function decode(reader, length) {
+            Room_PlayerInfo.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BeginBattle();
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.Room_PlayerInfo();
                 while (reader.pos < end) {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1:
-                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                        break;
                     case 2:
-                        message.gsNID = reader.uint64();
+                        message.gcNID = reader.uint64();
                         break;
                     case 3:
-                        message.ip = reader.string();
+                        message.name = reader.string();
                         break;
                     case 4:
-                        message.port = reader.int32();
+                        message.actorID = reader.int32();
+                        break;
+                    case 5:
+                        message.progress = reader.int32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -4272,30 +2885,316 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Decodes a CS2GC_BeginBattle message from the specified reader or buffer, length delimited.
+             * Decodes a Room_PlayerInfo message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.Room_PlayerInfo
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.CS2GC_BeginBattle} CS2GC_BeginBattle
+             * @returns {Protos.Room_PlayerInfo} Room_PlayerInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            CS2GC_BeginBattle.decodeDelimited = function decodeDelimited(reader) {
+            Room_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
     
             /**
-             * Verifies a CS2GC_BeginBattle message.
+             * Verifies a Room_PlayerInfo message.
              * @function verify
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.Room_PlayerInfo
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            CS2GC_BeginBattle.verify = function verify(message) {
+            Room_PlayerInfo.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                        return "gcNID: integer|Long expected";
+                if (message.name != null && message.hasOwnProperty("name"))
+                    if (!$util.isString(message.name))
+                        return "name: string expected";
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    if (!$util.isInteger(message.actorID))
+                        return "actorID: integer expected";
+                if (message.progress != null && message.hasOwnProperty("progress"))
+                    if (!$util.isInteger(message.progress))
+                        return "progress: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a Room_PlayerInfo message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.Room_PlayerInfo
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.Room_PlayerInfo} Room_PlayerInfo
+             */
+            Room_PlayerInfo.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.Room_PlayerInfo)
+                    return object;
+                var message = new $root.Protos.Room_PlayerInfo();
+                if (object.gcNID != null)
+                    if ($util.Long)
+                        (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                    else if (typeof object.gcNID === "string")
+                        message.gcNID = parseInt(object.gcNID, 10);
+                    else if (typeof object.gcNID === "number")
+                        message.gcNID = object.gcNID;
+                    else if (typeof object.gcNID === "object")
+                        message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+                if (object.name != null)
+                    message.name = String(object.name);
+                if (object.actorID != null)
+                    message.actorID = object.actorID | 0;
+                if (object.progress != null)
+                    message.progress = object.progress | 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a Room_PlayerInfo message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.Room_PlayerInfo
+             * @static
+             * @param {Protos.Room_PlayerInfo} message Room_PlayerInfo
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Room_PlayerInfo.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.gcNID = options.longs === String ? "0" : 0;
+                    object.name = "";
+                    object.actorID = 0;
+                    object.progress = 0;
+                }
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (typeof message.gcNID === "number")
+                        object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                    else
+                        object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+                if (message.name != null && message.hasOwnProperty("name"))
+                    object.name = message.name;
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    object.actorID = message.actorID;
+                if (message.progress != null && message.hasOwnProperty("progress"))
+                    object.progress = message.progress;
+                return object;
+            };
+    
+            /**
+             * Converts this Room_PlayerInfo to JSON.
+             * @function toJSON
+             * @memberof Protos.Room_PlayerInfo
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Room_PlayerInfo.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return Room_PlayerInfo;
+        })();
+    
+        Protos.CS2GC_RoomInfo = (function() {
+    
+            /**
+             * Properties of a CS2GC_RoomInfo.
+             * @memberof Protos
+             * @interface ICS2GC_RoomInfo
+             * @property {Protos.IMsgOpts|null} [opts] CS2GC_RoomInfo opts
+             * @property {number|null} [id] CS2GC_RoomInfo id
+             * @property {number|null} [mapID] CS2GC_RoomInfo mapID
+             * @property {boolean|null} [isFull] CS2GC_RoomInfo isFull
+             * @property {Array.<Protos.IRoom_PlayerInfo>|null} [playerInfos] CS2GC_RoomInfo playerInfos
+             */
+    
+            /**
+             * Constructs a new CS2GC_RoomInfo.
+             * @memberof Protos
+             * @classdesc Represents a CS2GC_RoomInfo.
+             * @implements ICS2GC_RoomInfo
+             * @constructor
+             * @param {Protos.ICS2GC_RoomInfo=} [properties] Properties to set
+             */
+            function CS2GC_RoomInfo(properties) {
+                this.playerInfos = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * CS2GC_RoomInfo opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.CS2GC_RoomInfo
+             * @instance
+             */
+            CS2GC_RoomInfo.prototype.opts = null;
+    
+            /**
+             * CS2GC_RoomInfo id.
+             * @member {number} id
+             * @memberof Protos.CS2GC_RoomInfo
+             * @instance
+             */
+            CS2GC_RoomInfo.prototype.id = 0;
+    
+            /**
+             * CS2GC_RoomInfo mapID.
+             * @member {number} mapID
+             * @memberof Protos.CS2GC_RoomInfo
+             * @instance
+             */
+            CS2GC_RoomInfo.prototype.mapID = 0;
+    
+            /**
+             * CS2GC_RoomInfo isFull.
+             * @member {boolean} isFull
+             * @memberof Protos.CS2GC_RoomInfo
+             * @instance
+             */
+            CS2GC_RoomInfo.prototype.isFull = false;
+    
+            /**
+             * CS2GC_RoomInfo playerInfos.
+             * @member {Array.<Protos.IRoom_PlayerInfo>} playerInfos
+             * @memberof Protos.CS2GC_RoomInfo
+             * @instance
+             */
+            CS2GC_RoomInfo.prototype.playerInfos = $util.emptyArray;
+    
+            /**
+             * Creates a new CS2GC_RoomInfo instance using the specified properties.
+             * @function create
+             * @memberof Protos.CS2GC_RoomInfo
+             * @static
+             * @param {Protos.ICS2GC_RoomInfo=} [properties] Properties to set
+             * @returns {Protos.CS2GC_RoomInfo} CS2GC_RoomInfo instance
+             */
+            CS2GC_RoomInfo.create = function create(properties) {
+                return new CS2GC_RoomInfo(properties);
+            };
+    
+            /**
+             * Encodes the specified CS2GC_RoomInfo message. Does not implicitly {@link Protos.CS2GC_RoomInfo.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.CS2GC_RoomInfo
+             * @static
+             * @param {Protos.ICS2GC_RoomInfo} message CS2GC_RoomInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2GC_RoomInfo.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.id != null && message.hasOwnProperty("id"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.id);
+                if (message.mapID != null && message.hasOwnProperty("mapID"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.mapID);
+                if (message.isFull != null && message.hasOwnProperty("isFull"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isFull);
+                if (message.playerInfos != null && message.playerInfos.length)
+                    for (var i = 0; i < message.playerInfos.length; ++i)
+                        $root.Protos.Room_PlayerInfo.encode(message.playerInfos[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified CS2GC_RoomInfo message, length delimited. Does not implicitly {@link Protos.CS2GC_RoomInfo.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.CS2GC_RoomInfo
+             * @static
+             * @param {Protos.ICS2GC_RoomInfo} message CS2GC_RoomInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2GC_RoomInfo.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a CS2GC_RoomInfo message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.CS2GC_RoomInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.CS2GC_RoomInfo} CS2GC_RoomInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2GC_RoomInfo.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_RoomInfo();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.id = reader.uint32();
+                        break;
+                    case 3:
+                        message.mapID = reader.int32();
+                        break;
+                    case 4:
+                        message.isFull = reader.bool();
+                        break;
+                    case 5:
+                        if (!(message.playerInfos && message.playerInfos.length))
+                            message.playerInfos = [];
+                        message.playerInfos.push($root.Protos.Room_PlayerInfo.decode(reader, reader.uint32()));
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a CS2GC_RoomInfo message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.CS2GC_RoomInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.CS2GC_RoomInfo} CS2GC_RoomInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2GC_RoomInfo.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a CS2GC_RoomInfo message.
+             * @function verify
+             * @memberof Protos.CS2GC_RoomInfo
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CS2GC_RoomInfo.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (message.opts != null && message.hasOwnProperty("opts")) {
@@ -4303,61 +3202,383 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (error)
                         return "opts." + error;
                 }
-                if (message.gsNID != null && message.hasOwnProperty("gsNID"))
-                    if (!$util.isInteger(message.gsNID) && !(message.gsNID && $util.isInteger(message.gsNID.low) && $util.isInteger(message.gsNID.high)))
-                        return "gsNID: integer|Long expected";
+                if (message.id != null && message.hasOwnProperty("id"))
+                    if (!$util.isInteger(message.id))
+                        return "id: integer expected";
+                if (message.mapID != null && message.hasOwnProperty("mapID"))
+                    if (!$util.isInteger(message.mapID))
+                        return "mapID: integer expected";
+                if (message.isFull != null && message.hasOwnProperty("isFull"))
+                    if (typeof message.isFull !== "boolean")
+                        return "isFull: boolean expected";
+                if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
+                    if (!Array.isArray(message.playerInfos))
+                        return "playerInfos: array expected";
+                    for (var i = 0; i < message.playerInfos.length; ++i) {
+                        var error = $root.Protos.Room_PlayerInfo.verify(message.playerInfos[i]);
+                        if (error)
+                            return "playerInfos." + error;
+                    }
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a CS2GC_RoomInfo message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.CS2GC_RoomInfo
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.CS2GC_RoomInfo} CS2GC_RoomInfo
+             */
+            CS2GC_RoomInfo.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.CS2GC_RoomInfo)
+                    return object;
+                var message = new $root.Protos.CS2GC_RoomInfo();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.CS2GC_RoomInfo.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                if (object.id != null)
+                    message.id = object.id >>> 0;
+                if (object.mapID != null)
+                    message.mapID = object.mapID | 0;
+                if (object.isFull != null)
+                    message.isFull = Boolean(object.isFull);
+                if (object.playerInfos) {
+                    if (!Array.isArray(object.playerInfos))
+                        throw TypeError(".Protos.CS2GC_RoomInfo.playerInfos: array expected");
+                    message.playerInfos = [];
+                    for (var i = 0; i < object.playerInfos.length; ++i) {
+                        if (typeof object.playerInfos[i] !== "object")
+                            throw TypeError(".Protos.CS2GC_RoomInfo.playerInfos: object expected");
+                        message.playerInfos[i] = $root.Protos.Room_PlayerInfo.fromObject(object.playerInfos[i]);
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a CS2GC_RoomInfo message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.CS2GC_RoomInfo
+             * @static
+             * @param {Protos.CS2GC_RoomInfo} message CS2GC_RoomInfo
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CS2GC_RoomInfo.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.playerInfos = [];
+                if (options.defaults) {
+                    object.opts = null;
+                    object.id = 0;
+                    object.mapID = 0;
+                    object.isFull = false;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.id != null && message.hasOwnProperty("id"))
+                    object.id = message.id;
+                if (message.mapID != null && message.hasOwnProperty("mapID"))
+                    object.mapID = message.mapID;
+                if (message.isFull != null && message.hasOwnProperty("isFull"))
+                    object.isFull = message.isFull;
+                if (message.playerInfos && message.playerInfos.length) {
+                    object.playerInfos = [];
+                    for (var j = 0; j < message.playerInfos.length; ++j)
+                        object.playerInfos[j] = $root.Protos.Room_PlayerInfo.toObject(message.playerInfos[j], options);
+                }
+                return object;
+            };
+    
+            /**
+             * Converts this CS2GC_RoomInfo to JSON.
+             * @function toJSON
+             * @memberof Protos.CS2GC_RoomInfo
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CS2GC_RoomInfo.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return CS2GC_RoomInfo;
+        })();
+    
+        Protos.CS2GC_BSInfo = (function() {
+    
+            /**
+             * Properties of a CS2GC_BSInfo.
+             * @memberof Protos
+             * @interface ICS2GC_BSInfo
+             * @property {Protos.IMsgOpts|null} [opts] CS2GC_BSInfo opts
+             * @property {Long|null} [gcNID] CS2GC_BSInfo gcNID
+             * @property {string|null} [ip] CS2GC_BSInfo ip
+             * @property {number|null} [port] CS2GC_BSInfo port
+             * @property {Protos.CS2GC_BSInfo.Error|null} [error] CS2GC_BSInfo error
+             */
+    
+            /**
+             * Constructs a new CS2GC_BSInfo.
+             * @memberof Protos
+             * @classdesc Represents a CS2GC_BSInfo.
+             * @implements ICS2GC_BSInfo
+             * @constructor
+             * @param {Protos.ICS2GC_BSInfo=} [properties] Properties to set
+             */
+            function CS2GC_BSInfo(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * CS2GC_BSInfo opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.CS2GC_BSInfo
+             * @instance
+             */
+            CS2GC_BSInfo.prototype.opts = null;
+    
+            /**
+             * CS2GC_BSInfo gcNID.
+             * @member {Long} gcNID
+             * @memberof Protos.CS2GC_BSInfo
+             * @instance
+             */
+            CS2GC_BSInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+            /**
+             * CS2GC_BSInfo ip.
+             * @member {string} ip
+             * @memberof Protos.CS2GC_BSInfo
+             * @instance
+             */
+            CS2GC_BSInfo.prototype.ip = "";
+    
+            /**
+             * CS2GC_BSInfo port.
+             * @member {number} port
+             * @memberof Protos.CS2GC_BSInfo
+             * @instance
+             */
+            CS2GC_BSInfo.prototype.port = 0;
+    
+            /**
+             * CS2GC_BSInfo error.
+             * @member {Protos.CS2GC_BSInfo.Error} error
+             * @memberof Protos.CS2GC_BSInfo
+             * @instance
+             */
+            CS2GC_BSInfo.prototype.error = 0;
+    
+            /**
+             * Creates a new CS2GC_BSInfo instance using the specified properties.
+             * @function create
+             * @memberof Protos.CS2GC_BSInfo
+             * @static
+             * @param {Protos.ICS2GC_BSInfo=} [properties] Properties to set
+             * @returns {Protos.CS2GC_BSInfo} CS2GC_BSInfo instance
+             */
+            CS2GC_BSInfo.create = function create(properties) {
+                return new CS2GC_BSInfo(properties);
+            };
+    
+            /**
+             * Encodes the specified CS2GC_BSInfo message. Does not implicitly {@link Protos.CS2GC_BSInfo.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.CS2GC_BSInfo
+             * @static
+             * @param {Protos.ICS2GC_BSInfo} message CS2GC_BSInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2GC_BSInfo.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.gcNID);
+                if (message.ip != null && message.hasOwnProperty("ip"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.ip);
+                if (message.port != null && message.hasOwnProperty("port"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.port);
+                if (message.error != null && message.hasOwnProperty("error"))
+                    writer.uint32(/* id 5, wireType 0 =*/40).int32(message.error);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified CS2GC_BSInfo message, length delimited. Does not implicitly {@link Protos.CS2GC_BSInfo.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.CS2GC_BSInfo
+             * @static
+             * @param {Protos.ICS2GC_BSInfo} message CS2GC_BSInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2GC_BSInfo.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a CS2GC_BSInfo message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.CS2GC_BSInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.CS2GC_BSInfo} CS2GC_BSInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2GC_BSInfo.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BSInfo();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.gcNID = reader.uint64();
+                        break;
+                    case 3:
+                        message.ip = reader.string();
+                        break;
+                    case 4:
+                        message.port = reader.int32();
+                        break;
+                    case 5:
+                        message.error = reader.int32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a CS2GC_BSInfo message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.CS2GC_BSInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.CS2GC_BSInfo} CS2GC_BSInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2GC_BSInfo.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a CS2GC_BSInfo message.
+             * @function verify
+             * @memberof Protos.CS2GC_BSInfo
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CS2GC_BSInfo.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                        return "gcNID: integer|Long expected";
                 if (message.ip != null && message.hasOwnProperty("ip"))
                     if (!$util.isString(message.ip))
                         return "ip: string expected";
                 if (message.port != null && message.hasOwnProperty("port"))
                     if (!$util.isInteger(message.port))
                         return "port: integer expected";
+                if (message.error != null && message.hasOwnProperty("error"))
+                    switch (message.error) {
+                    default:
+                        return "error: enum value expected";
+                    case 0:
+                    case 1:
+                    case 2:
+                        break;
+                    }
                 return null;
             };
     
             /**
-             * Creates a CS2GC_BeginBattle message from a plain object. Also converts values to their respective internal types.
+             * Creates a CS2GC_BSInfo message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.CS2GC_BSInfo
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.CS2GC_BeginBattle} CS2GC_BeginBattle
+             * @returns {Protos.CS2GC_BSInfo} CS2GC_BSInfo
              */
-            CS2GC_BeginBattle.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.CS2GC_BeginBattle)
+            CS2GC_BSInfo.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.CS2GC_BSInfo)
                     return object;
-                var message = new $root.Protos.CS2GC_BeginBattle();
+                var message = new $root.Protos.CS2GC_BSInfo();
                 if (object.opts != null) {
                     if (typeof object.opts !== "object")
-                        throw TypeError(".Protos.CS2GC_BeginBattle.opts: object expected");
+                        throw TypeError(".Protos.CS2GC_BSInfo.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
-                if (object.gsNID != null)
+                if (object.gcNID != null)
                     if ($util.Long)
-                        (message.gsNID = $util.Long.fromValue(object.gsNID)).unsigned = true;
-                    else if (typeof object.gsNID === "string")
-                        message.gsNID = parseInt(object.gsNID, 10);
-                    else if (typeof object.gsNID === "number")
-                        message.gsNID = object.gsNID;
-                    else if (typeof object.gsNID === "object")
-                        message.gsNID = new $util.LongBits(object.gsNID.low >>> 0, object.gsNID.high >>> 0).toNumber(true);
+                        (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                    else if (typeof object.gcNID === "string")
+                        message.gcNID = parseInt(object.gcNID, 10);
+                    else if (typeof object.gcNID === "number")
+                        message.gcNID = object.gcNID;
+                    else if (typeof object.gcNID === "object")
+                        message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
                 if (object.ip != null)
                     message.ip = String(object.ip);
                 if (object.port != null)
                     message.port = object.port | 0;
+                switch (object.error) {
+                case "Success":
+                case 0:
+                    message.error = 0;
+                    break;
+                case "BSNotFound":
+                case 1:
+                    message.error = 1;
+                    break;
+                case "BSLost":
+                case 2:
+                    message.error = 2;
+                    break;
+                }
                 return message;
             };
     
             /**
-             * Creates a plain object from a CS2GC_BeginBattle message. Also converts values to other types if specified.
+             * Creates a plain object from a CS2GC_BSInfo message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.CS2GC_BSInfo
              * @static
-             * @param {Protos.CS2GC_BeginBattle} message CS2GC_BeginBattle
+             * @param {Protos.CS2GC_BSInfo} message CS2GC_BSInfo
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            CS2GC_BeginBattle.toObject = function toObject(message, options) {
+            CS2GC_BSInfo.toObject = function toObject(message, options) {
                 if (!options)
                     options = {};
                 var object = {};
@@ -4365,38 +3586,57 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.opts = null;
                     if ($util.Long) {
                         var long = new $util.Long(0, 0, true);
-                        object.gsNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                     } else
-                        object.gsNID = options.longs === String ? "0" : 0;
+                        object.gcNID = options.longs === String ? "0" : 0;
                     object.ip = "";
                     object.port = 0;
+                    object.error = options.enums === String ? "Success" : 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-                if (message.gsNID != null && message.hasOwnProperty("gsNID"))
-                    if (typeof message.gsNID === "number")
-                        object.gsNID = options.longs === String ? String(message.gsNID) : message.gsNID;
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (typeof message.gcNID === "number")
+                        object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
                     else
-                        object.gsNID = options.longs === String ? $util.Long.prototype.toString.call(message.gsNID) : options.longs === Number ? new $util.LongBits(message.gsNID.low >>> 0, message.gsNID.high >>> 0).toNumber(true) : message.gsNID;
+                        object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
                 if (message.ip != null && message.hasOwnProperty("ip"))
                     object.ip = message.ip;
                 if (message.port != null && message.hasOwnProperty("port"))
                     object.port = message.port;
+                if (message.error != null && message.hasOwnProperty("error"))
+                    object.error = options.enums === String ? $root.Protos.CS2GC_BSInfo.Error[message.error] : message.error;
                 return object;
             };
     
             /**
-             * Converts this CS2GC_BeginBattle to JSON.
+             * Converts this CS2GC_BSInfo to JSON.
              * @function toJSON
-             * @memberof Protos.CS2GC_BeginBattle
+             * @memberof Protos.CS2GC_BSInfo
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            CS2GC_BeginBattle.prototype.toJSON = function toJSON() {
+            CS2GC_BSInfo.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
     
-            return CS2GC_BeginBattle;
+            /**
+             * Error enum.
+             * @name Protos.CS2GC_BSInfo.Error
+             * @enum {string}
+             * @property {number} Success=0 Success value
+             * @property {number} BSNotFound=1 BSNotFound value
+             * @property {number} BSLost=2 BSLost value
+             */
+            CS2GC_BSInfo.Error = (function() {
+                var valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "Success"] = 0;
+                values[valuesById[1] = "BSNotFound"] = 1;
+                values[valuesById[2] = "BSLost"] = 2;
+                return values;
+            })();
+    
+            return CS2GC_BSInfo;
         })();
     
         Protos.CS2GS_GCLoginRet = (function() {
@@ -8349,257 +7589,6 @@ define(["libs/protobufjs"], function($protobuf) {
             return GC2BS_KeepAlive;
         })();
     
-        Protos.GC2BS_UpdateInfo = (function() {
-    
-            /**
-             * Properties of a GC2BS_UpdateInfo.
-             * @memberof Protos
-             * @interface IGC2BS_UpdateInfo
-             * @property {Protos.IMsgOpts|null} [opts] GC2BS_UpdateInfo opts
-             * @property {Long|null} [id] GC2BS_UpdateInfo id
-             * @property {number|null} [progress] GC2BS_UpdateInfo progress
-             */
-    
-            /**
-             * Constructs a new GC2BS_UpdateInfo.
-             * @memberof Protos
-             * @classdesc Represents a GC2BS_UpdateInfo.
-             * @implements IGC2BS_UpdateInfo
-             * @constructor
-             * @param {Protos.IGC2BS_UpdateInfo=} [properties] Properties to set
-             */
-            function GC2BS_UpdateInfo(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-    
-            /**
-             * GC2BS_UpdateInfo opts.
-             * @member {Protos.IMsgOpts|null|undefined} opts
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @instance
-             */
-            GC2BS_UpdateInfo.prototype.opts = null;
-    
-            /**
-             * GC2BS_UpdateInfo id.
-             * @member {Long} id
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @instance
-             */
-            GC2BS_UpdateInfo.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-    
-            /**
-             * GC2BS_UpdateInfo progress.
-             * @member {number} progress
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @instance
-             */
-            GC2BS_UpdateInfo.prototype.progress = 0;
-    
-            /**
-             * Creates a new GC2BS_UpdateInfo instance using the specified properties.
-             * @function create
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @static
-             * @param {Protos.IGC2BS_UpdateInfo=} [properties] Properties to set
-             * @returns {Protos.GC2BS_UpdateInfo} GC2BS_UpdateInfo instance
-             */
-            GC2BS_UpdateInfo.create = function create(properties) {
-                return new GC2BS_UpdateInfo(properties);
-            };
-    
-            /**
-             * Encodes the specified GC2BS_UpdateInfo message. Does not implicitly {@link Protos.GC2BS_UpdateInfo.verify|verify} messages.
-             * @function encode
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @static
-             * @param {Protos.IGC2BS_UpdateInfo} message GC2BS_UpdateInfo message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            GC2BS_UpdateInfo.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                if (message.id != null && message.hasOwnProperty("id"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.id);
-                if (message.progress != null && message.hasOwnProperty("progress"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.progress);
-                return writer;
-            };
-    
-            /**
-             * Encodes the specified GC2BS_UpdateInfo message, length delimited. Does not implicitly {@link Protos.GC2BS_UpdateInfo.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @static
-             * @param {Protos.IGC2BS_UpdateInfo} message GC2BS_UpdateInfo message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            GC2BS_UpdateInfo.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-    
-            /**
-             * Decodes a GC2BS_UpdateInfo message from the specified reader or buffer.
-             * @function decode
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.GC2BS_UpdateInfo} GC2BS_UpdateInfo
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            GC2BS_UpdateInfo.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_UpdateInfo();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                        break;
-                    case 2:
-                        message.id = reader.uint64();
-                        break;
-                    case 3:
-                        message.progress = reader.int32();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-    
-            /**
-             * Decodes a GC2BS_UpdateInfo message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.GC2BS_UpdateInfo} GC2BS_UpdateInfo
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            GC2BS_UpdateInfo.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-    
-            /**
-             * Verifies a GC2BS_UpdateInfo message.
-             * @function verify
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            GC2BS_UpdateInfo.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.opts != null && message.hasOwnProperty("opts")) {
-                    var error = $root.Protos.MsgOpts.verify(message.opts);
-                    if (error)
-                        return "opts." + error;
-                }
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                        return "id: integer|Long expected";
-                if (message.progress != null && message.hasOwnProperty("progress"))
-                    if (!$util.isInteger(message.progress))
-                        return "progress: integer expected";
-                return null;
-            };
-    
-            /**
-             * Creates a GC2BS_UpdateInfo message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.GC2BS_UpdateInfo} GC2BS_UpdateInfo
-             */
-            GC2BS_UpdateInfo.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.GC2BS_UpdateInfo)
-                    return object;
-                var message = new $root.Protos.GC2BS_UpdateInfo();
-                if (object.opts != null) {
-                    if (typeof object.opts !== "object")
-                        throw TypeError(".Protos.GC2BS_UpdateInfo.opts: object expected");
-                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-                }
-                if (object.id != null)
-                    if ($util.Long)
-                        (message.id = $util.Long.fromValue(object.id)).unsigned = true;
-                    else if (typeof object.id === "string")
-                        message.id = parseInt(object.id, 10);
-                    else if (typeof object.id === "number")
-                        message.id = object.id;
-                    else if (typeof object.id === "object")
-                        message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
-                if (object.progress != null)
-                    message.progress = object.progress | 0;
-                return message;
-            };
-    
-            /**
-             * Creates a plain object from a GC2BS_UpdateInfo message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @static
-             * @param {Protos.GC2BS_UpdateInfo} message GC2BS_UpdateInfo
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            GC2BS_UpdateInfo.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    object.opts = null;
-                    if ($util.Long) {
-                        var long = new $util.Long(0, 0, true);
-                        object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                    } else
-                        object.id = options.longs === String ? "0" : 0;
-                    object.progress = 0;
-                }
-                if (message.opts != null && message.hasOwnProperty("opts"))
-                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (typeof message.id === "number")
-                        object.id = options.longs === String ? String(message.id) : message.id;
-                    else
-                        object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
-                if (message.progress != null && message.hasOwnProperty("progress"))
-                    object.progress = message.progress;
-                return object;
-            };
-    
-            /**
-             * Converts this GC2BS_UpdateInfo to JSON.
-             * @function toJSON
-             * @memberof Protos.GC2BS_UpdateInfo
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            GC2BS_UpdateInfo.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-    
-            return GC2BS_UpdateInfo;
-        })();
-    
         Protos.GC2CS_BeginMatch = (function() {
     
             /**
@@ -8607,6 +7596,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface IGC2CS_BeginMatch
              * @property {Protos.IMsgOpts|null} [opts] GC2CS_BeginMatch opts
+             * @property {number|null} [actorID] GC2CS_BeginMatch actorID
              */
     
             /**
@@ -8631,6 +7621,14 @@ define(["libs/protobufjs"], function($protobuf) {
              * @instance
              */
             GC2CS_BeginMatch.prototype.opts = null;
+    
+            /**
+             * GC2CS_BeginMatch actorID.
+             * @member {number} actorID
+             * @memberof Protos.GC2CS_BeginMatch
+             * @instance
+             */
+            GC2CS_BeginMatch.prototype.actorID = 0;
     
             /**
              * Creates a new GC2CS_BeginMatch instance using the specified properties.
@@ -8658,6 +7656,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.actorID);
                 return writer;
             };
     
@@ -8694,6 +7694,9 @@ define(["libs/protobufjs"], function($protobuf) {
                     switch (tag >>> 3) {
                     case 1:
                         message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.actorID = reader.int32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -8735,6 +7738,9 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (error)
                         return "opts." + error;
                 }
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    if (!$util.isInteger(message.actorID))
+                        return "actorID: integer expected";
                 return null;
             };
     
@@ -8755,6 +7761,8 @@ define(["libs/protobufjs"], function($protobuf) {
                         throw TypeError(".Protos.GC2CS_BeginMatch.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
+                if (object.actorID != null)
+                    message.actorID = object.actorID | 0;
                 return message;
             };
     
@@ -8771,10 +7779,14 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (!options)
                     options = {};
                 var object = {};
-                if (options.defaults)
+                if (options.defaults) {
                     object.opts = null;
+                    object.actorID = 0;
+                }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    object.actorID = message.actorID;
                 return object;
             };
     
@@ -8790,6 +7802,221 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             return GC2CS_BeginMatch;
+        })();
+    
+        Protos.GC2CS_UpdatePlayerInfo = (function() {
+    
+            /**
+             * Properties of a GC2CS_UpdatePlayerInfo.
+             * @memberof Protos
+             * @interface IGC2CS_UpdatePlayerInfo
+             * @property {Protos.IMsgOpts|null} [opts] GC2CS_UpdatePlayerInfo opts
+             * @property {number|null} [progress] GC2CS_UpdatePlayerInfo progress
+             */
+    
+            /**
+             * Constructs a new GC2CS_UpdatePlayerInfo.
+             * @memberof Protos
+             * @classdesc Represents a GC2CS_UpdatePlayerInfo.
+             * @implements IGC2CS_UpdatePlayerInfo
+             * @constructor
+             * @param {Protos.IGC2CS_UpdatePlayerInfo=} [properties] Properties to set
+             */
+            function GC2CS_UpdatePlayerInfo(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * GC2CS_UpdatePlayerInfo opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @instance
+             */
+            GC2CS_UpdatePlayerInfo.prototype.opts = null;
+    
+            /**
+             * GC2CS_UpdatePlayerInfo progress.
+             * @member {number} progress
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @instance
+             */
+            GC2CS_UpdatePlayerInfo.prototype.progress = 0;
+    
+            /**
+             * Creates a new GC2CS_UpdatePlayerInfo instance using the specified properties.
+             * @function create
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @static
+             * @param {Protos.IGC2CS_UpdatePlayerInfo=} [properties] Properties to set
+             * @returns {Protos.GC2CS_UpdatePlayerInfo} GC2CS_UpdatePlayerInfo instance
+             */
+            GC2CS_UpdatePlayerInfo.create = function create(properties) {
+                return new GC2CS_UpdatePlayerInfo(properties);
+            };
+    
+            /**
+             * Encodes the specified GC2CS_UpdatePlayerInfo message. Does not implicitly {@link Protos.GC2CS_UpdatePlayerInfo.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @static
+             * @param {Protos.IGC2CS_UpdatePlayerInfo} message GC2CS_UpdatePlayerInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GC2CS_UpdatePlayerInfo.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.progress != null && message.hasOwnProperty("progress"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.progress);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified GC2CS_UpdatePlayerInfo message, length delimited. Does not implicitly {@link Protos.GC2CS_UpdatePlayerInfo.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @static
+             * @param {Protos.IGC2CS_UpdatePlayerInfo} message GC2CS_UpdatePlayerInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GC2CS_UpdatePlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a GC2CS_UpdatePlayerInfo message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.GC2CS_UpdatePlayerInfo} GC2CS_UpdatePlayerInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GC2CS_UpdatePlayerInfo.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2CS_UpdatePlayerInfo();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.progress = reader.int32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a GC2CS_UpdatePlayerInfo message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.GC2CS_UpdatePlayerInfo} GC2CS_UpdatePlayerInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GC2CS_UpdatePlayerInfo.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a GC2CS_UpdatePlayerInfo message.
+             * @function verify
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            GC2CS_UpdatePlayerInfo.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.progress != null && message.hasOwnProperty("progress"))
+                    if (!$util.isInteger(message.progress))
+                        return "progress: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a GC2CS_UpdatePlayerInfo message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.GC2CS_UpdatePlayerInfo} GC2CS_UpdatePlayerInfo
+             */
+            GC2CS_UpdatePlayerInfo.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.GC2CS_UpdatePlayerInfo)
+                    return object;
+                var message = new $root.Protos.GC2CS_UpdatePlayerInfo();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.GC2CS_UpdatePlayerInfo.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                if (object.progress != null)
+                    message.progress = object.progress | 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a GC2CS_UpdatePlayerInfo message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @static
+             * @param {Protos.GC2CS_UpdatePlayerInfo} message GC2CS_UpdatePlayerInfo
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            GC2CS_UpdatePlayerInfo.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.opts = null;
+                    object.progress = 0;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.progress != null && message.hasOwnProperty("progress"))
+                    object.progress = message.progress;
+                return object;
+            };
+    
+            /**
+             * Converts this GC2CS_UpdatePlayerInfo to JSON.
+             * @function toJSON
+             * @memberof Protos.GC2CS_UpdatePlayerInfo
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            GC2CS_UpdatePlayerInfo.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return GC2CS_UpdatePlayerInfo;
         })();
     
         Protos.GC2GS_AskLogin = (function() {

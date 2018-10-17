@@ -2,34 +2,13 @@
 package Protos;
 
 import "Global.proto";
+import "CS2GC.proto";
 
-message CS2BS_GCLoginRet{
-	enum EResult{
-		Success = 0;
-		Failed = 1;
-	}
-	MsgOpts opts = 1;
-	EResult result = 2;
-}
-
-//玩家信息
-message CS2BS_PlayerInfo{
-	enum Status{
-		Disconnect = 0;
-		Connected = 1;
-		Ready = 2;
-	}
-	uint64 id = 1;
-	string name = 2;
-	int32 actorID = 3;
-	Status statuc = 4;
-}
 
 //战场信息
 message CS2BS_BattleInfo{
 	MsgOpts opts = 1;
 	uint32 id = 2;//战场运行时id
 	int32 mapID = 3;//地图id
-	repeated CS2BS_PlayerInfo playerInfo = 4;//玩家信息
-	uint32 timeout = 5;//超时时间
+	repeated Room_PlayerInfo playerInfo = 4;//玩家信息
 }

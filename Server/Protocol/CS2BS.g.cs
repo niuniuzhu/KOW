@@ -27,20 +27,19 @@ namespace Protos {
             "CgtDUzJCUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ihwEKEENTMkJT",
             "X0dDTG9naW5SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEjAK",
             "BnJlc3VsdBgCIAEoDjIgLlByb3Rvcy5DUzJCU19HQ0xvZ2luUmV0LkVSZXN1",
-            "bHQiIgoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVkEAEiqwEKEENT",
-            "MkJTX1BsYXllckluZm8SCgoCaWQYASABKAQSDAoEbmFtZRgCIAEoCRILCgNq",
-            "b2IYAyABKAUSCwoDc2V4GAQgASgFEi8KBnN0YXR1YxgFIAEoDjIfLlByb3Rv",
-            "cy5DUzJCU19QbGF5ZXJJbmZvLlN0YXR1cyIyCgZTdGF0dXMSDgoKRGlzY29u",
-            "bmVjdBAAEg0KCUNvbm5lY3RlZBABEgkKBVJlYWR5EAIiiwEKEENTMkJTX0Jh",
-            "dHRsZUluZm8SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgoKAmlk",
-            "GAIgASgNEg0KBW1hcElEGAMgASgFEiwKCnBsYXllckluZm8YBCADKAsyGC5Q",
-            "cm90b3MuQ1MyQlNfUGxheWVySW5mbxIPCgd0aW1lb3V0GAUgASgNYgZwcm90",
-            "bzM="));
+            "bHQiIgoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVkEAEiogEKEENT",
+            "MkJTX1BsYXllckluZm8SCgoCaWQYASABKAQSDAoEbmFtZRgCIAEoCRIPCgdh",
+            "Y3RvcklEGAMgASgFEi8KBnN0YXR1YxgEIAEoDjIfLlByb3Rvcy5DUzJCU19Q",
+            "bGF5ZXJJbmZvLlN0YXR1cyIyCgZTdGF0dXMSDgoKRGlzY29ubmVjdBAAEg0K",
+            "CUNvbm5lY3RlZBABEgkKBVJlYWR5EAIiiwEKEENTMkJTX0JhdHRsZUluZm8S",
+            "HQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgoKAmlkGAIgASgNEg0K",
+            "BW1hcElEGAMgASgFEiwKCnBsYXllckluZm8YBCADKAsyGC5Qcm90b3MuQ1My",
+            "QlNfUGxheWVySW5mbxIPCgd0aW1lb3V0GAUgASgNYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_GCLoginRet), global::Protos.CS2BS_GCLoginRet.Parser, new[]{ "Opts", "Result" }, null, new[]{ typeof(global::Protos.CS2BS_GCLoginRet.Types.EResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_PlayerInfo), global::Protos.CS2BS_PlayerInfo.Parser, new[]{ "Id", "Name", "Job", "Sex", "Statuc" }, null, new[]{ typeof(global::Protos.CS2BS_PlayerInfo.Types.Status) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_PlayerInfo), global::Protos.CS2BS_PlayerInfo.Parser, new[]{ "Id", "Name", "ActorID", "Statuc" }, null, new[]{ typeof(global::Protos.CS2BS_PlayerInfo.Types.Status) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_BattleInfo), global::Protos.CS2BS_BattleInfo.Parser, new[]{ "Opts", "Id", "MapID", "PlayerInfo", "Timeout" }, null, null, null)
           }));
     }
@@ -253,8 +252,7 @@ namespace Protos {
     public CS2BS_PlayerInfo(CS2BS_PlayerInfo other) : this() {
       id_ = other.id_;
       name_ = other.name_;
-      job_ = other.job_;
-      sex_ = other.sex_;
+      actorID_ = other.actorID_;
       statuc_ = other.statuc_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -286,30 +284,19 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "job" field.</summary>
-    public const int JobFieldNumber = 3;
-    private int job_;
+    /// <summary>Field number for the "actorID" field.</summary>
+    public const int ActorIDFieldNumber = 3;
+    private int actorID_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Job {
-      get { return job_; }
+    public int ActorID {
+      get { return actorID_; }
       set {
-        job_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "sex" field.</summary>
-    public const int SexFieldNumber = 4;
-    private int sex_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Sex {
-      get { return sex_; }
-      set {
-        sex_ = value;
+        actorID_ = value;
       }
     }
 
     /// <summary>Field number for the "statuc" field.</summary>
-    public const int StatucFieldNumber = 5;
+    public const int StatucFieldNumber = 4;
     private global::Protos.CS2BS_PlayerInfo.Types.Status statuc_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Protos.CS2BS_PlayerInfo.Types.Status Statuc {
@@ -334,8 +321,7 @@ namespace Protos {
       }
       if (Id != other.Id) return false;
       if (Name != other.Name) return false;
-      if (Job != other.Job) return false;
-      if (Sex != other.Sex) return false;
+      if (ActorID != other.ActorID) return false;
       if (Statuc != other.Statuc) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -345,8 +331,7 @@ namespace Protos {
       int hash = 1;
       if (Id != 0UL) hash ^= Id.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
-      if (Job != 0) hash ^= Job.GetHashCode();
-      if (Sex != 0) hash ^= Sex.GetHashCode();
+      if (ActorID != 0) hash ^= ActorID.GetHashCode();
       if (Statuc != 0) hash ^= Statuc.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -369,16 +354,12 @@ namespace Protos {
         output.WriteRawTag(18);
         output.WriteString(Name);
       }
-      if (Job != 0) {
+      if (ActorID != 0) {
         output.WriteRawTag(24);
-        output.WriteInt32(Job);
-      }
-      if (Sex != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(Sex);
+        output.WriteInt32(ActorID);
       }
       if (Statuc != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteEnum((int) Statuc);
       }
       if (_unknownFields != null) {
@@ -395,11 +376,8 @@ namespace Protos {
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
-      if (Job != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Job);
-      }
-      if (Sex != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Sex);
+      if (ActorID != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
       }
       if (Statuc != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Statuc);
@@ -421,11 +399,8 @@ namespace Protos {
       if (other.Name.Length != 0) {
         Name = other.Name;
       }
-      if (other.Job != 0) {
-        Job = other.Job;
-      }
-      if (other.Sex != 0) {
-        Sex = other.Sex;
+      if (other.ActorID != 0) {
+        ActorID = other.ActorID;
       }
       if (other.Statuc != 0) {
         Statuc = other.Statuc;
@@ -450,14 +425,10 @@ namespace Protos {
             break;
           }
           case 24: {
-            Job = input.ReadInt32();
+            ActorID = input.ReadInt32();
             break;
           }
           case 32: {
-            Sex = input.ReadInt32();
-            break;
-          }
-          case 40: {
             statuc_ = (global::Protos.CS2BS_PlayerInfo.Types.Status) input.ReadEnum();
             break;
           }

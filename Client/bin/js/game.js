@@ -1497,7 +1497,7 @@ define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connect
     }
     exports.LoginState = LoginState;
 });
-define("UI/UIMatching", ["require", "exports"], function (require, exports) {
+define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_5, UIAlert_1, SceneManager_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMatching {
@@ -1514,10 +1514,28 @@ define("UI/UIMatching", ["require", "exports"], function (require, exports) {
         }
         OnResize(e) {
         }
+        OnConnectToBSError() {
+            UIAlert_1.UIAlert.Show("无法连接服务器", () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
+        }
+        OnLoginBSResut(resp) {
+            switch (resp.result) {
+                case protos_5.Protos.BS2GC_LoginRet.EResult.Success:
+                    this.UpdateMaoInfo(resp.mapID);
+                    this.UpdatePlayerInfos(resp.playInfos);
+                    break;
+                default:
+                    UIAlert_1.UIAlert.Show("进入战场失败", () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
+                    break;
+            }
+        }
+        UpdatePlayerInfos(playInfos) {
+        }
+        UpdateMaoInfo(mapID) {
+        }
     }
     exports.UIMatching = UIMatching;
 });
-define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connector", "../libs/protos", "Net/ProtoHelper", "Scene/SceneState"], function (require, exports, UIManager_2, Connector_2, protos_5, ProtoHelper_4, SceneState_2) {
+define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connector", "../libs/protos", "Net/ProtoHelper", "Scene/SceneState"], function (require, exports, UIManager_2, Connector_2, protos_6, ProtoHelper_4, SceneState_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MatchingState extends SceneState_2.SceneState {
@@ -1527,26 +1545,37 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
         }
         OnEnter(param) {
             super.OnEnter(param);
-            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_5.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
-            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.BS, protos_5.Protos.MsgID.eBS2GC_UpdatePlayer, this.OnUpdatePlayerInfo.bind(this));
-            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.BS, protos_5.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
+            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
+            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.BS, protos_6.Protos.MsgID.eBS2GC_UpdatePlayer, this.OnUpdatePlayerInfo.bind(this));
+            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.BS, protos_6.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
             let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
-            ProtoHelper_4.ProtoCreator.MakeTransMessage(beginMatch, protos_5.Protos.MsgOpts.TransTarget.CS, 0);
-            Connector_2.Connector.Send(Connector_2.Connector.ConnectorType.GS, protos_5.Protos.GC2CS_BeginMatch, beginMatch, message => {
+            ProtoHelper_4.ProtoCreator.MakeTransMessage(beginMatch, protos_6.Protos.MsgOpts.TransTarget.CS, 0);
+            Connector_2.Connector.Send(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.GC2CS_BeginMatch, beginMatch, message => {
                 let resp = message;
                 console.log(resp);
             });
         }
         OnExit() {
-            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_5.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
-            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.BS, protos_5.Protos.MsgID.eBS2GC_UpdatePlayer, this.OnUpdatePlayerInfo.bind(this));
-            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.BS, protos_5.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
+            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_BeginBattle, this.OnBeginBattle.bind(this));
+            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.BS, protos_6.Protos.MsgID.eBS2GC_UpdatePlayer, this.OnUpdatePlayerInfo.bind(this));
+            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.BS, protos_6.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
             super.OnExit();
         }
         OnUpdate(dt) {
         }
         OnBeginBattle(message) {
             let beginBattle = message;
+            let connector = Connector_2.Connector.bsConnector;
+            connector.onerror = () => this._ui.OnConnectToBSError();
+            connector.onopen = () => {
+                let askLogin = ProtoHelper_4.ProtoCreator.Q_GC2BS_AskLogin();
+                askLogin.sessionID = beginBattle.gsNID;
+                connector.Send(protos_6.Protos.GC2GS_AskLogin, askLogin, message => {
+                    let resp = message;
+                    this._ui.OnLoginBSResut(resp);
+                });
+            };
+            connector.Connect(beginBattle.ip, beginBattle.port);
         }
         OnUpdatePlayerInfo(message) {
             let updatePlayer = message;
@@ -1585,7 +1614,7 @@ define("Scene/SceneManager", ["require", "exports", "FSM/FSM", "Scene/LoginState
     SceneManager.State = State;
     exports.SceneManager = SceneManager;
 });
-define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_6, UIAlert_1, SceneManager_2) {
+define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_7, UIAlert_2, SceneManager_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UILogin extends fairygui.Window {
@@ -1631,70 +1660,70 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Sce
         OnRegBtnClick() {
             let regName = this.contentPane.getChild("reg_name").asTextField.text;
             if (regName == "") {
-                UIAlert_1.UIAlert.Show("无效的用户名");
+                UIAlert_2.UIAlert.Show("无效的用户名");
                 return;
             }
             this.showModalWait();
-            SceneManager_2.SceneManager.login.RequestRegister(regName, 0, 0);
+            SceneManager_3.SceneManager.login.RequestRegister(regName, 0, 0);
         }
         OnLoginBtnClick() {
             let uname = this.contentPane.getChild("name").asTextField.text;
             if (uname == "") {
-                UIAlert_1.UIAlert.Show("无效用户名");
+                UIAlert_2.UIAlert.Show("无效用户名");
                 return;
             }
             this.showModalWait();
-            SceneManager_2.SceneManager.login.RequestLogin(uname, 0, 0);
+            SceneManager_3.SceneManager.login.RequestLogin(uname, 0, 0);
         }
         OnEnterBtnClick() {
             let item = this._areaList.getChildAt(this._areaList.selectedIndex);
             let data = item.data["data"];
             this.showModalWait();
-            SceneManager_2.SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["sid"]);
+            SceneManager_3.SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["sid"]);
         }
         OnAreaClick() {
         }
         OnRegisterResult(resp) {
             this.closeModalWait();
             switch (resp.result) {
-                case protos_6.Protos.LS2GC_AskRegRet.EResult.Success:
+                case protos_7.Protos.LS2GC_AskRegRet.EResult.Success:
                     this.contentPane.getChild("name").asTextField.text = this.contentPane.getChild("reg_name").asTextField.text;
                     this.contentPane.getController("c1").selectedIndex = 0;
-                    UIAlert_1.UIAlert.Show("注册成功");
+                    UIAlert_2.UIAlert.Show("注册成功");
                     break;
-                case protos_6.Protos.LS2GC_AskRegRet.EResult.Failed:
-                    UIAlert_1.UIAlert.Show("注册失败", this.BackToRegister.bind(this));
+                case protos_7.Protos.LS2GC_AskRegRet.EResult.Failed:
+                    UIAlert_2.UIAlert.Show("注册失败", this.BackToRegister.bind(this));
                     break;
-                case protos_6.Protos.LS2GC_AskRegRet.EResult.UnameExists:
-                    UIAlert_1.UIAlert.Show("用户名已存在", this.BackToRegister.bind(this));
+                case protos_7.Protos.LS2GC_AskRegRet.EResult.UnameExists:
+                    UIAlert_2.UIAlert.Show("用户名已存在", this.BackToRegister.bind(this));
                     break;
-                case protos_6.Protos.LS2GC_AskRegRet.EResult.UnameIllegal:
-                    UIAlert_1.UIAlert.Show("无效的用户名", this.BackToRegister.bind(this));
+                case protos_7.Protos.LS2GC_AskRegRet.EResult.UnameIllegal:
+                    UIAlert_2.UIAlert.Show("无效的用户名", this.BackToRegister.bind(this));
                     break;
-                case protos_6.Protos.LS2GC_AskRegRet.EResult.PwdIllegal:
-                    UIAlert_1.UIAlert.Show("无效的密码", this.BackToRegister.bind(this));
+                case protos_7.Protos.LS2GC_AskRegRet.EResult.PwdIllegal:
+                    UIAlert_2.UIAlert.Show("无效的密码", this.BackToRegister.bind(this));
                     break;
             }
         }
         OnLoginResut(resp) {
             this.closeModalWait();
             switch (resp.result) {
-                case protos_6.Protos.LS2GC_AskLoginRet.EResult.Success:
+                case protos_7.Protos.LS2GC_AskLoginRet.EResult.Success:
                     this.HandleLoginLSSuccess(resp);
                     break;
-                case protos_6.Protos.LS2GC_AskLoginRet.EResult.Failed:
-                    UIAlert_1.UIAlert.Show("登陆失败", this.BackToLogin.bind(this));
+                case protos_7.Protos.LS2GC_AskLoginRet.EResult.Failed:
+                    UIAlert_2.UIAlert.Show("登陆失败", this.BackToLogin.bind(this));
                     break;
-                case protos_6.Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
-                    UIAlert_1.UIAlert.Show("请输入正确的用户名", this.BackToLogin.bind(this));
+                case protos_7.Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
+                    UIAlert_2.UIAlert.Show("请输入正确的用户名", this.BackToLogin.bind(this));
                     break;
-                case protos_6.Protos.LS2GC_AskLoginRet.EResult.InvalidPwd:
-                    UIAlert_1.UIAlert.Show("请输入正确的密码", this.BackToLogin.bind(this));
+                case protos_7.Protos.LS2GC_AskLoginRet.EResult.InvalidPwd:
+                    UIAlert_2.UIAlert.Show("请输入正确的密码", this.BackToLogin.bind(this));
                     break;
             }
         }
         OnConnectToLSError(confirmCallback) {
-            UIAlert_1.UIAlert.Show("无法连接服务器", confirmCallback);
+            UIAlert_2.UIAlert.Show("无法连接服务器", confirmCallback);
         }
         HandleLoginLSSuccess(loginResult) {
             this._areaList.removeChildrenToPool();
@@ -1710,13 +1739,13 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Sce
             this.contentPane.getController("c1").selectedIndex = 2;
         }
         OnConnectToGSError() {
-            UIAlert_1.UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
+            UIAlert_2.UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
         }
         OnLoginGSResut(resp) {
             this.closeModalWait();
             switch (resp.result) {
-                case protos_6.Protos.GS2GC_LoginRet.EResult.SessionExpire:
-                    UIAlert_1.UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
+                case protos_7.Protos.GS2GC_LoginRet.EResult.SessionExpire:
+                    UIAlert_2.UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
                     break;
             }
         }
@@ -1777,7 +1806,7 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIM
     }
     exports.UIManager = UIManager;
 });
-define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connector", "Scene/SceneManager", "UI/UIAlert", "./libs/protos"], function (require, exports, UIManager_3, Defs_2, Connector_3, SceneManager_3, UIAlert_2, protos_7) {
+define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connector", "Scene/SceneManager", "UI/UIAlert", "./libs/protos"], function (require, exports, UIManager_3, Defs_2, Connector_3, SceneManager_4, UIAlert_3, protos_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Game {
@@ -1817,33 +1846,33 @@ define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
             console.log("start game...");
             Connector_3.Connector.Init();
             UIManager_3.UIManager.Init();
-            SceneManager_3.SceneManager.Init();
-            SceneManager_3.SceneManager.ChangeState(SceneManager_3.SceneManager.State.Login);
+            SceneManager_4.SceneManager.Init();
+            SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login);
             Connector_3.Connector.gsConnector.onclose = this.HandleGSDisconnect;
-            Connector_3.Connector.AddListener(Connector_3.Connector.ConnectorType.GS, protos_7.Protos.MsgID.eGS2GC_Kick, this.HandleKick);
+            Connector_3.Connector.AddListener(Connector_3.Connector.ConnectorType.GS, protos_8.Protos.MsgID.eGS2GC_Kick, this.HandleKick);
             fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
             Laya.timer.frameLoop(1, this, this.Update);
         }
         Update() {
             let dt = Laya.timer.delta;
             Connector_3.Connector.Update(dt);
-            SceneManager_3.SceneManager.Update(dt);
+            SceneManager_4.SceneManager.Update(dt);
         }
         OnResize(e) {
             UIManager_3.UIManager.OnResize(e);
         }
         HandleGSDisconnect(e) {
             RC.Logger.Log("gs connection closed.");
-            UIAlert_2.UIAlert.Show("与服务器断开连接", () => SceneManager_3.SceneManager.ChangeState(SceneManager_3.SceneManager.State.Login));
+            UIAlert_3.UIAlert.Show("与服务器断开连接", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login));
         }
         HandleKick(message) {
             let kick = message;
             switch (kick.reason) {
-                case protos_7.Protos.CS2GS_KickGC.EReason.DuplicateLogin:
-                    UIAlert_2.UIAlert.Show("另一台设备正在登陆相同的账号", () => SceneManager_3.SceneManager.ChangeState(SceneManager_3.SceneManager.State.Login), true);
+                case protos_8.Protos.CS2GS_KickGC.EReason.DuplicateLogin:
+                    UIAlert_3.UIAlert.Show("另一台设备正在登陆相同的账号", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login), true);
                     break;
                 default:
-                    UIAlert_2.UIAlert.Show("已被服务器强制下线", () => SceneManager_3.SceneManager.ChangeState(SceneManager_3.SceneManager.State.Login), true);
+                    UIAlert_3.UIAlert.Show("已被服务器强制下线", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login), true);
                     break;
             }
         }

@@ -21,9 +21,8 @@ message CS2BS_PlayerInfo{
 	}
 	uint64 id = 1;
 	string name = 2;
-	int32 job = 3;
-	int32 sex =  4;
-	Status statuc = 5;
+	int32 actorID = 3;
+	Status statuc = 4;
 }
 
 //战场信息

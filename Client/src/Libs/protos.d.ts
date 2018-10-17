@@ -376,8 +376,7 @@ export namespace Protos {
     interface ICS2BS_PlayerInfo {
         id?: (Long|null);
         name?: (string|null);
-        job?: (number|null);
-        sex?: (number|null);
+        actorID?: (number|null);
         statuc?: (Protos.CS2BS_PlayerInfo.Status|null);
     }
 
@@ -385,8 +384,7 @@ export namespace Protos {
         constructor(properties?: Protos.ICS2BS_PlayerInfo);
         public id: Long;
         public name: string;
-        public job: number;
-        public sex: number;
+        public actorID: number;
         public statuc: Protos.CS2BS_PlayerInfo.Status;
         public static create(properties?: Protos.ICS2BS_PlayerInfo): Protos.CS2BS_PlayerInfo;
         public static encode(message: Protos.ICS2BS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -456,6 +454,7 @@ export namespace Protos {
 
     interface ICS2GC_BeginBattle {
         opts?: (Protos.IMsgOpts|null);
+        gsNID?: (Long|null);
         ip?: (string|null);
         port?: (number|null);
     }
@@ -463,6 +462,7 @@ export namespace Protos {
     class CS2GC_BeginBattle implements ICS2GC_BeginBattle {
         constructor(properties?: Protos.ICS2GC_BeginBattle);
         public opts?: (Protos.IMsgOpts|null);
+        public gsNID: Long;
         public ip: string;
         public port: number;
         public static create(properties?: Protos.ICS2GC_BeginBattle): Protos.CS2GC_BeginBattle;

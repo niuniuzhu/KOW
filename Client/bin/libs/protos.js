@@ -3301,8 +3301,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @interface ICS2BS_PlayerInfo
              * @property {Long|null} [id] CS2BS_PlayerInfo id
              * @property {string|null} [name] CS2BS_PlayerInfo name
-             * @property {number|null} [job] CS2BS_PlayerInfo job
-             * @property {number|null} [sex] CS2BS_PlayerInfo sex
+             * @property {number|null} [actorID] CS2BS_PlayerInfo actorID
              * @property {Protos.CS2BS_PlayerInfo.Status|null} [statuc] CS2BS_PlayerInfo statuc
              */
     
@@ -3338,20 +3337,12 @@ define(["libs/protobufjs"], function($protobuf) {
             CS2BS_PlayerInfo.prototype.name = "";
     
             /**
-             * CS2BS_PlayerInfo job.
-             * @member {number} job
+             * CS2BS_PlayerInfo actorID.
+             * @member {number} actorID
              * @memberof Protos.CS2BS_PlayerInfo
              * @instance
              */
-            CS2BS_PlayerInfo.prototype.job = 0;
-    
-            /**
-             * CS2BS_PlayerInfo sex.
-             * @member {number} sex
-             * @memberof Protos.CS2BS_PlayerInfo
-             * @instance
-             */
-            CS2BS_PlayerInfo.prototype.sex = 0;
+            CS2BS_PlayerInfo.prototype.actorID = 0;
     
             /**
              * CS2BS_PlayerInfo statuc.
@@ -3389,12 +3380,10 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.id);
                 if (message.name != null && message.hasOwnProperty("name"))
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
-                if (message.job != null && message.hasOwnProperty("job"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.job);
-                if (message.sex != null && message.hasOwnProperty("sex"))
-                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.sex);
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.actorID);
                 if (message.statuc != null && message.hasOwnProperty("statuc"))
-                    writer.uint32(/* id 5, wireType 0 =*/40).int32(message.statuc);
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.statuc);
                 return writer;
             };
     
@@ -3436,12 +3425,9 @@ define(["libs/protobufjs"], function($protobuf) {
                         message.name = reader.string();
                         break;
                     case 3:
-                        message.job = reader.int32();
+                        message.actorID = reader.int32();
                         break;
                     case 4:
-                        message.sex = reader.int32();
-                        break;
-                    case 5:
                         message.statuc = reader.int32();
                         break;
                     default:
@@ -3485,12 +3471,9 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.name != null && message.hasOwnProperty("name"))
                     if (!$util.isString(message.name))
                         return "name: string expected";
-                if (message.job != null && message.hasOwnProperty("job"))
-                    if (!$util.isInteger(message.job))
-                        return "job: integer expected";
-                if (message.sex != null && message.hasOwnProperty("sex"))
-                    if (!$util.isInteger(message.sex))
-                        return "sex: integer expected";
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    if (!$util.isInteger(message.actorID))
+                        return "actorID: integer expected";
                 if (message.statuc != null && message.hasOwnProperty("statuc"))
                     switch (message.statuc) {
                     default:
@@ -3526,10 +3509,8 @@ define(["libs/protobufjs"], function($protobuf) {
                         message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
                 if (object.name != null)
                     message.name = String(object.name);
-                if (object.job != null)
-                    message.job = object.job | 0;
-                if (object.sex != null)
-                    message.sex = object.sex | 0;
+                if (object.actorID != null)
+                    message.actorID = object.actorID | 0;
                 switch (object.statuc) {
                 case "Disconnect":
                 case 0:
@@ -3567,8 +3548,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     } else
                         object.id = options.longs === String ? "0" : 0;
                     object.name = "";
-                    object.job = 0;
-                    object.sex = 0;
+                    object.actorID = 0;
                     object.statuc = options.enums === String ? "Disconnect" : 0;
                 }
                 if (message.id != null && message.hasOwnProperty("id"))
@@ -3578,10 +3558,8 @@ define(["libs/protobufjs"], function($protobuf) {
                         object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
                 if (message.name != null && message.hasOwnProperty("name"))
                     object.name = message.name;
-                if (message.job != null && message.hasOwnProperty("job"))
-                    object.job = message.job;
-                if (message.sex != null && message.hasOwnProperty("sex"))
-                    object.sex = message.sex;
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    object.actorID = message.actorID;
                 if (message.statuc != null && message.hasOwnProperty("statuc"))
                     object.statuc = options.enums === String ? $root.Protos.CS2BS_PlayerInfo.Status[message.statuc] : message.statuc;
                 return object;
@@ -4155,6 +4133,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface ICS2GC_BeginBattle
              * @property {Protos.IMsgOpts|null} [opts] CS2GC_BeginBattle opts
+             * @property {Long|null} [gsNID] CS2GC_BeginBattle gsNID
              * @property {string|null} [ip] CS2GC_BeginBattle ip
              * @property {number|null} [port] CS2GC_BeginBattle port
              */
@@ -4181,6 +4160,14 @@ define(["libs/protobufjs"], function($protobuf) {
              * @instance
              */
             CS2GC_BeginBattle.prototype.opts = null;
+    
+            /**
+             * CS2GC_BeginBattle gsNID.
+             * @member {Long} gsNID
+             * @memberof Protos.CS2GC_BeginBattle
+             * @instance
+             */
+            CS2GC_BeginBattle.prototype.gsNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
     
             /**
              * CS2GC_BeginBattle ip.
@@ -4224,10 +4211,12 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.gsNID != null && message.hasOwnProperty("gsNID"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.gsNID);
                 if (message.ip != null && message.hasOwnProperty("ip"))
-                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.ip);
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.ip);
                 if (message.port != null && message.hasOwnProperty("port"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.port);
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.port);
                 return writer;
             };
     
@@ -4266,9 +4255,12 @@ define(["libs/protobufjs"], function($protobuf) {
                         message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                         break;
                     case 2:
-                        message.ip = reader.string();
+                        message.gsNID = reader.uint64();
                         break;
                     case 3:
+                        message.ip = reader.string();
+                        break;
+                    case 4:
                         message.port = reader.int32();
                         break;
                     default:
@@ -4311,6 +4303,9 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (error)
                         return "opts." + error;
                 }
+                if (message.gsNID != null && message.hasOwnProperty("gsNID"))
+                    if (!$util.isInteger(message.gsNID) && !(message.gsNID && $util.isInteger(message.gsNID.low) && $util.isInteger(message.gsNID.high)))
+                        return "gsNID: integer|Long expected";
                 if (message.ip != null && message.hasOwnProperty("ip"))
                     if (!$util.isString(message.ip))
                         return "ip: string expected";
@@ -4337,6 +4332,15 @@ define(["libs/protobufjs"], function($protobuf) {
                         throw TypeError(".Protos.CS2GC_BeginBattle.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
+                if (object.gsNID != null)
+                    if ($util.Long)
+                        (message.gsNID = $util.Long.fromValue(object.gsNID)).unsigned = true;
+                    else if (typeof object.gsNID === "string")
+                        message.gsNID = parseInt(object.gsNID, 10);
+                    else if (typeof object.gsNID === "number")
+                        message.gsNID = object.gsNID;
+                    else if (typeof object.gsNID === "object")
+                        message.gsNID = new $util.LongBits(object.gsNID.low >>> 0, object.gsNID.high >>> 0).toNumber(true);
                 if (object.ip != null)
                     message.ip = String(object.ip);
                 if (object.port != null)
@@ -4359,11 +4363,21 @@ define(["libs/protobufjs"], function($protobuf) {
                 var object = {};
                 if (options.defaults) {
                     object.opts = null;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.gsNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.gsNID = options.longs === String ? "0" : 0;
                     object.ip = "";
                     object.port = 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.gsNID != null && message.hasOwnProperty("gsNID"))
+                    if (typeof message.gsNID === "number")
+                        object.gsNID = options.longs === String ? String(message.gsNID) : message.gsNID;
+                    else
+                        object.gsNID = options.longs === String ? $util.Long.prototype.toString.call(message.gsNID) : options.longs === Number ? new $util.LongBits(message.gsNID.low >>> 0, message.gsNID.high >>> 0).toNumber(true) : message.gsNID;
                 if (message.ip != null && message.hasOwnProperty("ip"))
                     object.ip = message.ip;
                 if (message.port != null && message.hasOwnProperty("port"))

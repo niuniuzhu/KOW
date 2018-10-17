@@ -14,6 +14,7 @@ export class SceneManager {
 	public static fsm: FSM;
 
 	public static get login(): LoginState { return this._login; }
+	public static get matching(): MatchingState { return this._matching; }
 
 	private static _login: LoginState;
 	private static _matching: MatchingState;

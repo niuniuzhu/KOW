@@ -96,9 +96,10 @@ namespace CentralServer.Match
 				beginBattle.Ip = CS.instance.appropriateBSInfo.ip;
 				beginBattle.Port = CS.instance.appropriateBSInfo.port;
 			}
-			for ( int i = 0; i < room.numUsers; i++ )
+			for ( int i = 0; i < room.numUsers; ++i )
 			{
 				ulong gcNID = room.GetUserAt( i );
+				beginBattle.GsNID = gcNID;
 				beginBattle.MTrans( Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 				CS.instance.userMgr.SendToUser( gcNID, beginBattle );
 			}

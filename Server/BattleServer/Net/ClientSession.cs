@@ -14,6 +14,7 @@ namespace BattleServer.Net
 		{
 			this._msgCenter.Register( Protos.MsgID.EGc2BsAskLogin, this.OnGc2BsAskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGc2BsKeepAlive, this.OnGc2BsKeepAlive );
+			this._msgCenter.Register( Protos.MsgID.EGc2BsUpdateInfo, this.OnGC2BS_UpdateInfo );
 		}
 
 		protected override void OnEstablish()
@@ -35,6 +36,12 @@ namespace BattleServer.Net
 
 			this._activeTime = 0;
 			this._sid = 0;
+		}
+
+		protected override void OnHeartBeat( long dt )
+		{
+			if ( TimeUtils.utcTime > this._activeTime + BS.instance.config.gcLive )
+				this.Close( "gc connection timeout" );
 		}
 
 		private ErrorCode OnGc2BsAskLogin( Google.Protobuf.IMessage message )
@@ -72,10 +79,10 @@ namespace BattleServer.Net
 			return ErrorCode.Success;
 		}
 
-		protected override void OnHeartBeat( long dt )
+		private ErrorCode OnGC2BS_UpdateInfo( Google.Protobuf.IMessage message )
 		{
-			if ( TimeUtils.utcTime > this._activeTime + BS.instance.config.gcLive )
-				this.Close( "gc connection timeout" );
+			Protos.GC2BS_UpdateInfo updateInfo = ( Protos.GC2BS_UpdateInfo ) message;
+			return ErrorCode.Success;
 		}
 	}
 }

@@ -11,6 +11,7 @@ message CS2GC_BeginMatchRet {
 
 message CS2GC_BeginBattle {
 	MsgOpts opts = 1;
-	string ip = 2;
-	int32 port = 3;
+	uint64 gsNID = 2;
+	string ip = 3;
+	int32 port = 4;
 }

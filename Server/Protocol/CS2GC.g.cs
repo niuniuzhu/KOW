@@ -26,14 +26,15 @@ namespace Protos {
           string.Concat(
             "CgtDUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iXAoTQ1MyR0Nf",
             "QmVnaW5NYXRjaFJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMS",
-            "JgoGcmVzdWx0GAIgASgOMhYuUHJvdG9zLkdsb2JhbC5FQ29tbW9uIkwKEUNT",
+            "JgoGcmVzdWx0GAIgASgOMhYuUHJvdG9zLkdsb2JhbC5FQ29tbW9uIlsKEUNT",
             "MkdDX0JlZ2luQmF0dGxlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0",
-            "cxIKCgJpcBgCIAEoCRIMCgRwb3J0GAMgASgFYgZwcm90bzM="));
+            "cxINCgVnc05JRBgCIAEoBBIKCgJpcBgDIAEoCRIMCgRwb3J0GAQgASgFYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginBattle), global::Protos.CS2GC_BeginBattle.Parser, new[]{ "Opts", "Ip", "Port" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginBattle), global::Protos.CS2GC_BeginBattle.Parser, new[]{ "Opts", "GsNID", "Ip", "Port" }, null, null, null)
           }));
     }
     #endregion
@@ -232,6 +233,7 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CS2GC_BeginBattle(CS2GC_BeginBattle other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      gsNID_ = other.gsNID_;
       ip_ = other.ip_;
       port_ = other.port_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -253,8 +255,19 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "gsNID" field.</summary>
+    public const int GsNIDFieldNumber = 2;
+    private ulong gsNID_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong GsNID {
+      get { return gsNID_; }
+      set {
+        gsNID_ = value;
+      }
+    }
+
     /// <summary>Field number for the "ip" field.</summary>
-    public const int IpFieldNumber = 2;
+    public const int IpFieldNumber = 3;
     private string ip_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Ip {
@@ -265,7 +278,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "port" field.</summary>
-    public const int PortFieldNumber = 3;
+    public const int PortFieldNumber = 4;
     private int port_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Port {
@@ -289,6 +302,7 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
+      if (GsNID != other.GsNID) return false;
       if (Ip != other.Ip) return false;
       if (Port != other.Port) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -298,6 +312,7 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (GsNID != 0UL) hash ^= GsNID.GetHashCode();
       if (Ip.Length != 0) hash ^= Ip.GetHashCode();
       if (Port != 0) hash ^= Port.GetHashCode();
       if (_unknownFields != null) {
@@ -317,12 +332,16 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
+      if (GsNID != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(GsNID);
+      }
       if (Ip.Length != 0) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteString(Ip);
       }
       if (Port != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteInt32(Port);
       }
       if (_unknownFields != null) {
@@ -335,6 +354,9 @@ namespace Protos {
       int size = 0;
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (GsNID != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GsNID);
       }
       if (Ip.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Ip);
@@ -358,6 +380,9 @@ namespace Protos {
           opts_ = new global::Protos.MsgOpts();
         }
         Opts.MergeFrom(other.Opts);
+      }
+      if (other.GsNID != 0UL) {
+        GsNID = other.GsNID;
       }
       if (other.Ip.Length != 0) {
         Ip = other.Ip;
@@ -383,11 +408,15 @@ namespace Protos {
             input.ReadMessage(opts_);
             break;
           }
-          case 18: {
+          case 16: {
+            GsNID = input.ReadUInt64();
+            break;
+          }
+          case 26: {
             Ip = input.ReadString();
             break;
           }
-          case 24: {
+          case 32: {
             Port = input.ReadInt32();
             break;
           }

@@ -26,6 +26,7 @@ namespace CentralServer
 		public readonly Matcher matcher = new Matcher();
 		public readonly Dictionary<uint, GSInfo> nIDToGSInfos = new Dictionary<uint, GSInfo>();
 		public readonly Dictionary<uint, BSInfo> nIDToBSInfos = new Dictionary<uint, BSInfo>();
+		public BSInfo appropriateBSInfo { get; private set; }
 
 		private readonly Scheduler _heartBeater = new Scheduler();
 
@@ -82,8 +83,21 @@ namespace CentralServer
 		private void OnHeartBeat( int count )
 		{
 			this.gcNIDMgr.Update();
+			this.UpdateAppropriateBSInfo();
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			this.redisWrapper.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+		}
+
+		private void UpdateAppropriateBSInfo()
+		{
+			this.appropriateBSInfo = null;
+			int minState = int.MaxValue;
+			foreach ( KeyValuePair<uint, BSInfo> kv in this.nIDToBSInfos )
+			{
+				int state = ( int ) kv.Value.state;
+				if ( state < minState )
+					this.appropriateBSInfo = kv.Value;
+			}
 		}
 
 		internal void OnGCLost( ulong gcNID )

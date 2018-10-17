@@ -1,9 +1,9 @@
-﻿using Core.Misc;
+﻿using CentralServer.User;
+using Core.Misc;
 using Google.Protobuf;
 using Shared;
 using System;
 using System.Collections.Generic;
-using CentralServer.User;
 
 namespace CentralServer.Match
 {
@@ -91,13 +91,10 @@ namespace CentralServer.Match
 		private void BeginBattle( Room room )
 		{
 			Protos.CS2GC_BeginBattle beginBattle = ProtoCreator.Q_CS2GC_BeginBattle();
-			beginBattle.MapID = 0;//todo
-			for ( int i = 0; i < room.numUsers; i++ )
+			if ( CS.instance.appropriateBSInfo != null )
 			{
-				Protos.CS_PlayerInfo playerInfo = new Protos.CS_PlayerInfo();
-				playerInfo.Id = room.GetUserAt( i );
-				//todo other infos
-				beginBattle.PlayInfos.Add( playerInfo );
+				beginBattle.Ip = CS.instance.appropriateBSInfo.ip;
+				beginBattle.Port = CS.instance.appropriateBSInfo.port;
 			}
 			for ( int i = 0; i < room.numUsers; i++ )
 			{

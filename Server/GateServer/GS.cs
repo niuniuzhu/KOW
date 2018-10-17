@@ -87,5 +87,10 @@ namespace GateServer
 		{
 			return this._gcNIDToSID.Values.ToArray();
 		}
+
+		public void ClearClients()
+		{
+			this._gcNIDToSID.Clear();
+		}
 	}
 }

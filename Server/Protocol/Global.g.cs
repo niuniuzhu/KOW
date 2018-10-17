@@ -32,7 +32,7 @@ namespace Protos {
             "a1BpbmcSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgwKBHRpbWUY",
             "AiABKAMiSgoMR19Bc2tQaW5nUmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
             "TXNnT3B0cxINCgVzdGltZRgCIAEoAxIMCgR0aW1lGAMgASgDIiwKBkdsb2Jh",
-            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASrBBwoFTXNn",
+            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASryBwoFTXNn",
             "SUQSDAoIVW5kZWZpbmUQABIOCgplR19Bc2tQaW5nEAoSEQoNZUdfQXNrUGlu",
             "Z1JldBALEhcKEmVHQzJMU19Bc2tSZWdpc3RlchDoBxIUCg9lR0MyTFNfQXNr",
             "TG9naW4Q6QcSGQoUZUdDMkxTX0Fza1NtYXJ0TG9naW4Q6gcSFAoPZUdDMkdT",
@@ -51,10 +51,11 @@ namespace Protos {
             "EIgnEhIKDWVDUzJMU19HU0luZm8QiScSEgoNZUNTMkxTX0dTTG9zdBCKJxIW",
             "ChFlQ1MyTFNfR0NMb2dpblJldBCLJxIWChFlQ1MyR1NfR0NMb2dpblJldBDs",
             "JxISCg1lQ1MyR1NfS2lja0dDEO0nEhYKEWVDUzJCU19CYXR0bGVJbmZvENAo",
-            "EhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhQKD2VDUzJHQ19Sb29tSW5m",
-            "bxC1KRISCg1lQ1MyR0NfQlNJbmZvELYpEhsKFmVEQjJMU19RdWVyeUFjY291",
-            "bnRSZXQQwD4SGQoUZURCMkxTX1F1ZXJ5TG9naW5SZXQQwT4SEwoOZURCMkxT",
-            "X0V4ZWNSZXQQwj5iBnByb3RvMw=="));
+            "EhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhYKEWVDUzJHQ19QbGF5ZXJK",
+            "b2luELUpEhcKEmVDUzJHQ19QbGF5ZXJMZWF2ZRC2KRIUCg9lQ1MyR0NfUm9v",
+            "bUluZm8QtykSEgoNZUNTMkdDX0JTSW5mbxC4KRIbChZlREIyTFNfUXVlcnlB",
+            "Y2NvdW50UmV0EMA+EhkKFGVEQjJMU19RdWVyeUxvZ2luUmV0EME+EhMKDmVE",
+            "QjJMU19FeGVjUmV0EMI+YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
@@ -121,8 +122,10 @@ namespace Protos {
     [pbr::OriginalName("eCS2GS_KickGC")] ECs2GsKickGc = 5101,
     [pbr::OriginalName("eCS2BS_BattleInfo")] ECs2BsBattleInfo = 5200,
     [pbr::OriginalName("eCS2GC_BeginMatchRet")] ECs2GcBeginMatchRet = 5300,
-    [pbr::OriginalName("eCS2GC_RoomInfo")] ECs2GcRoomInfo = 5301,
-    [pbr::OriginalName("eCS2GC_BSInfo")] ECs2GcBsinfo = 5302,
+    [pbr::OriginalName("eCS2GC_PlayerJoin")] ECs2GcPlayerJoin = 5301,
+    [pbr::OriginalName("eCS2GC_PlayerLeave")] ECs2GcPlayerLeave = 5302,
+    [pbr::OriginalName("eCS2GC_RoomInfo")] ECs2GcRoomInfo = 5303,
+    [pbr::OriginalName("eCS2GC_BSInfo")] ECs2GcBsinfo = 5304,
     /// <summary>
     ///db
     /// </summary>

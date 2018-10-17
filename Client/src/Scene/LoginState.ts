@@ -9,7 +9,7 @@ import { SceneManager } from "./SceneManager";
 import { Defs } from "../Model/Defs";
 
 export class LoginState extends SceneState {
-	private _ui: UILogin;
+	private readonly _ui: UILogin;
 
 	constructor(type: number) {
 		super(type);

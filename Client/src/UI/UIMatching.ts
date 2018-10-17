@@ -45,4 +45,7 @@ export class UIMatching implements IUIModule {
 	public UpdateRoomInfo(roomInfo: Protos.CS2GC_RoomInfo): void {
 		//todo update ui
 	}
+	
+	public UpdatePlayers(_players: Protos.IRoom_PlayerInfo[]): void {
+	}
 }

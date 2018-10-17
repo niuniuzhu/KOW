@@ -60,8 +60,10 @@ enum MsgID {
 	eCS2BS_BattleInfo = 5200;
 
 	eCS2GC_BeginMatchRet = 5300;
-	eCS2GC_RoomInfo = 5301;
-	eCS2GC_BSInfo = 5302;
+	eCS2GC_PlayerJoin = 5301;
+	eCS2GC_PlayerLeave = 5302;
+	eCS2GC_RoomInfo = 5303;
+	eCS2GC_BSInfo = 5304;
 
 	//db
 	eDB2LS_QueryAccountRet = 8000;

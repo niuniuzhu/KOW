@@ -385,6 +385,16 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
+        static Q_CS2GC_PlayerJoin() {
+            let msg = new protos_1.Protos.CS2GC_PlayerJoin();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
+        static Q_CS2GC_PlayerLeave() {
+            let msg = new protos_1.Protos.CS2GC_PlayerLeave();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
         static Q_CS2GC_RoomInfo() {
             let msg = new protos_1.Protos.CS2GC_RoomInfo();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -655,10 +665,18 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                     return msg;
                 }
                 case 5301: {
-                    let msg = protos_1.Protos.CS2GC_RoomInfo.decode(data, size);
+                    let msg = protos_1.Protos.CS2GC_PlayerJoin.decode(data, size);
                     return msg;
                 }
                 case 5302: {
+                    let msg = protos_1.Protos.CS2GC_PlayerLeave.decode(data, size);
+                    return msg;
+                }
+                case 5303: {
+                    let msg = protos_1.Protos.CS2GC_RoomInfo.decode(data, size);
+                    return msg;
+                }
+                case 5304: {
                     let msg = protos_1.Protos.CS2GC_BSInfo.decode(data, size);
                     return msg;
                 }
@@ -821,6 +839,14 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             let msg = protos_1.Protos.CS2GC_BeginMatchRet.decode(data, size);
             return msg;
         }
+        static D_CS2GC_PlayerJoin(data, size) {
+            let msg = protos_1.Protos.CS2GC_PlayerJoin.decode(data, size);
+            return msg;
+        }
+        static D_CS2GC_PlayerLeave(data, size) {
+            let msg = protos_1.Protos.CS2GC_PlayerLeave.decode(data, size);
+            return msg;
+        }
         static D_CS2GC_RoomInfo(data, size) {
             let msg = protos_1.Protos.CS2GC_RoomInfo.decode(data, size);
             return msg;
@@ -952,9 +978,15 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                     return new protos_1.Protos.CS2GC_BeginMatchRet();
                 }
                 case 5301: {
-                    return new protos_1.Protos.CS2GC_RoomInfo();
+                    return new protos_1.Protos.CS2GC_PlayerJoin();
                 }
                 case 5302: {
+                    return new protos_1.Protos.CS2GC_PlayerLeave();
+                }
+                case 5303: {
+                    return new protos_1.Protos.CS2GC_RoomInfo();
+                }
+                case 5304: {
                     return new protos_1.Protos.CS2GC_BSInfo();
                 }
                 case 8000: {
@@ -1086,6 +1118,12 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 case 5302: {
                     return message.opts;
                 }
+                case 5303: {
+                    return message.opts;
+                }
+                case 5304: {
+                    return message.opts;
+                }
                 case 8000: {
                     return message.opts;
                 }
@@ -1138,8 +1176,10 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [protos_1.Protos.CS2GS_KickGC, 5101],
         [protos_1.Protos.CS2BS_BattleInfo, 5200],
         [protos_1.Protos.CS2GC_BeginMatchRet, 5300],
-        [protos_1.Protos.CS2GC_RoomInfo, 5301],
-        [protos_1.Protos.CS2GC_BSInfo, 5302],
+        [protos_1.Protos.CS2GC_PlayerJoin, 5301],
+        [protos_1.Protos.CS2GC_PlayerLeave, 5302],
+        [protos_1.Protos.CS2GC_RoomInfo, 5303],
+        [protos_1.Protos.CS2GC_BSInfo, 5304],
         [protos_1.Protos.DB2LS_QueryAccountRet, 8000],
         [protos_1.Protos.DB2LS_QueryLoginRet, 8001],
         [protos_1.Protos.DB2LS_ExecRet, 8002],
@@ -1181,8 +1221,10 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [5101, protos_1.Protos.CS2GS_KickGC],
         [5200, protos_1.Protos.CS2BS_BattleInfo],
         [5300, protos_1.Protos.CS2GC_BeginMatchRet],
-        [5301, protos_1.Protos.CS2GC_RoomInfo],
-        [5302, protos_1.Protos.CS2GC_BSInfo],
+        [5301, protos_1.Protos.CS2GC_PlayerJoin],
+        [5302, protos_1.Protos.CS2GC_PlayerLeave],
+        [5303, protos_1.Protos.CS2GC_RoomInfo],
+        [5304, protos_1.Protos.CS2GC_BSInfo],
         [8000, protos_1.Protos.DB2LS_QueryAccountRet],
         [8001, protos_1.Protos.DB2LS_QueryLoginRet],
         [8002, protos_1.Protos.DB2LS_ExecRet],
@@ -1458,6 +1500,8 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
         }
         UpdateRoomInfo(roomInfo) {
         }
+        UpdatePlayers(_players) {
+        }
     }
     exports.UIMatching = UIMatching;
 });
@@ -1471,19 +1515,35 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
         }
         OnEnter(param) {
             super.OnEnter(param);
-            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.BS, protos_6.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
-            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.BS, protos_6.Protos.MsgID.eCS2GC_BSInfo, this.OnRecvBSInfo.bind(this));
+            this._roomID = 0;
+            this._mapID = 0;
+            this._maxPlayers = 0;
+            this._players = [];
+            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
+            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
+            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
+            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_BSInfo, this.OnRecvBSInfo.bind(this));
             let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
             ProtoHelper_4.ProtoCreator.MakeTransMessage(beginMatch, protos_6.Protos.MsgOpts.TransTarget.CS, 0);
             beginMatch.actorID = 0;
             Connector_2.Connector.Send(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.GC2CS_BeginMatch, beginMatch, message => {
                 let resp = message;
+                this._roomID = resp.id;
+                this._mapID = resp.mapID;
+                this._maxPlayers = resp.maxPlayer;
+                for (let i = 0; i < resp.playerInfos.length; i++) {
+                    const playerInfo = resp.playerInfos[i];
+                    this._players.push(playerInfo);
+                }
+                this._ui.UpdatePlayers(this._players);
                 console.log(resp);
             });
         }
         OnExit() {
-            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.BS, protos_6.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
-            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.BS, protos_6.Protos.MsgID.eCS2GC_BSInfo, this.OnRecvBSInfo.bind(this));
+            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
+            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
+            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
+            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_BSInfo, this.OnRecvBSInfo.bind(this));
             super.OnExit();
         }
         OnUpdate(dt) {
@@ -1491,12 +1551,25 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
         OnUpdateRoomInfo(message) {
             let roomInfo = message;
             this._ui.UpdateRoomInfo(roomInfo);
-            if (roomInfo.isFull) {
-                this.StartLoad(roomInfo.mapID, roomInfo.playerInfos);
+        }
+        OnPlayerJoint(message) {
+            let playerJoin = message;
+            this._players.push(playerJoin.playerInfos);
+            this._ui.UpdatePlayers(this._players);
+            if (this._players.length == this._maxPlayers) {
+                this.StartLoad(this._mapID, this._players);
             }
         }
-        StartLoad(mapID, playInfos) {
-            SceneManager_3.SceneManager.matching.OnLoadComplete();
+        OnPlayerLeave(message) {
+            let playerLeave = message;
+            for (let i = 0; i < this._players.length; i++) {
+                const player = this._players[i];
+                if (player.gcNID == playerLeave.gcNID) {
+                    this._players.splice(i, 1);
+                    this._ui.UpdatePlayers(this._players);
+                    return;
+                }
+            }
         }
         OnRecvBSInfo(message) {
             let bsInfo = message;
@@ -1511,6 +1584,10 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
                 });
             };
             connector.Connect(bsInfo.ip, bsInfo.port);
+        }
+        StartLoad(mapID, playInfos) {
+            console.log("start load");
+            SceneManager_3.SceneManager.matching.OnLoadComplete();
         }
         OnLoadComplete() {
         }

@@ -6,14 +6,30 @@ namespace CentralServer.User
 {
 	public class CUser
 	{
+		/// <summary>
+		/// 网络唯一ID
+		/// </summary>
 		public ulong gcNID { get; }
+
+		/// <summary>
+		/// 登陆密匙
+		/// </summary>
 		public uint ukey { get; }
+
+		/// <summary>
+		/// GS通道ID
+		/// </summary>
 		public uint gsNID { get; }
 
 		/// <summary>
-		/// 玩家所在房间
+		/// 玩家名字
 		/// </summary>
-		public uint room;
+		public string name { get; }
+
+		/// <summary>
+		/// 玩家所在房间ID
+		/// </summary>
+		public uint roomID;
 
 		/// <summary>
 		/// 玩家是否在房间内
@@ -21,9 +37,14 @@ namespace CentralServer.User
 		public bool inRoom;
 
 		/// <summary>
-		/// 玩家名字
+		/// 玩家所在战场ID
 		/// </summary>
-		public string name;
+		public uint battleID;
+
+		/// <summary>
+		/// 玩家是否在战场
+		/// </summary>
+		public bool inBattle;
 
 		public CUser( ulong gcNID, uint ukey, uint gsNID )
 		{
@@ -32,7 +53,7 @@ namespace CentralServer.User
 			this.ukey = ukey;
 			//todo 从redis或db中取回数据
 
-			//CS.instance.userMgr.userNameToGcNID[this.name] = this.gcNID;
+			this.name = string.Empty;
 		}
 
 		public ErrorCode Send( IMessage msg, Action<IMessage> rpcHandler = null )

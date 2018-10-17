@@ -42,8 +42,10 @@ public static class ProtoCreator {
 		{typeof(Protos.CS2GS_KickGC), (Protos.MsgID)5101},
 		{typeof(Protos.CS2BS_BattleInfo), (Protos.MsgID)5200},
 		{typeof(Protos.CS2GC_BeginMatchRet), (Protos.MsgID)5300},
-		{typeof(Protos.CS2GC_RoomInfo), (Protos.MsgID)5301},
-		{typeof(Protos.CS2GC_BSInfo), (Protos.MsgID)5302},
+		{typeof(Protos.CS2GC_PlayerJoin), (Protos.MsgID)5301},
+		{typeof(Protos.CS2GC_PlayerLeave), (Protos.MsgID)5302},
+		{typeof(Protos.CS2GC_RoomInfo), (Protos.MsgID)5303},
+		{typeof(Protos.CS2GC_BSInfo), (Protos.MsgID)5304},
 		{typeof(Protos.DB2LS_QueryAccountRet), (Protos.MsgID)8000},
 		{typeof(Protos.DB2LS_QueryLoginRet), (Protos.MsgID)8001},
 		{typeof(Protos.DB2LS_ExecRet), (Protos.MsgID)8002},
@@ -86,8 +88,10 @@ public static class ProtoCreator {
 		{(Protos.MsgID)5101, typeof(Protos.CS2GS_KickGC)},
 		{(Protos.MsgID)5200, typeof(Protos.CS2BS_BattleInfo)},
 		{(Protos.MsgID)5300, typeof(Protos.CS2GC_BeginMatchRet)},
-		{(Protos.MsgID)5301, typeof(Protos.CS2GC_RoomInfo)},
-		{(Protos.MsgID)5302, typeof(Protos.CS2GC_BSInfo)},
+		{(Protos.MsgID)5301, typeof(Protos.CS2GC_PlayerJoin)},
+		{(Protos.MsgID)5302, typeof(Protos.CS2GC_PlayerLeave)},
+		{(Protos.MsgID)5303, typeof(Protos.CS2GC_RoomInfo)},
+		{(Protos.MsgID)5304, typeof(Protos.CS2GC_BSInfo)},
 		{(Protos.MsgID)8000, typeof(Protos.DB2LS_QueryAccountRet)},
 		{(Protos.MsgID)8001, typeof(Protos.DB2LS_QueryLoginRet)},
 		{(Protos.MsgID)8002, typeof(Protos.DB2LS_ExecRet)},
@@ -321,6 +325,18 @@ public static class ProtoCreator {
 
 	public static Protos.CS2GC_BeginMatchRet Q_CS2GC_BeginMatchRet() {
 		var msg = new Protos.CS2GC_BeginMatchRet();
+		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Protos.CS2GC_PlayerJoin Q_CS2GC_PlayerJoin() {
+		var msg = new Protos.CS2GC_PlayerJoin();
+		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Protos.CS2GC_PlayerLeave Q_CS2GC_PlayerLeave() {
+		var msg = new Protos.CS2GC_PlayerLeave();
 		msg.Opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -656,11 +672,21 @@ public static class ProtoCreator {
 				return msg;
 			}
 			case (Protos.MsgID)5301: {
-				var msg = new Protos.CS2GC_RoomInfo();
+				var msg = new Protos.CS2GC_PlayerJoin();
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
 			case (Protos.MsgID)5302: {
+				var msg = new Protos.CS2GC_PlayerLeave();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
+			case (Protos.MsgID)5303: {
+				var msg = new Protos.CS2GC_RoomInfo();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
+			case (Protos.MsgID)5304: {
 				var msg = new Protos.CS2GC_BSInfo();
 				msg.MergeFrom( data, offset, size );
 				return msg;
@@ -900,6 +926,18 @@ public static class ProtoCreator {
 		return msg;
 	}
 
+	public static Protos.CS2GC_PlayerJoin D_CS2GC_PlayerJoin( byte[] data, int offset, int size ) {
+		var msg = new Protos.CS2GC_PlayerJoin();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
+	public static Protos.CS2GC_PlayerLeave D_CS2GC_PlayerLeave( byte[] data, int offset, int size ) {
+		var msg = new Protos.CS2GC_PlayerLeave();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
 	public static Protos.CS2GC_RoomInfo D_CS2GC_RoomInfo( byte[] data, int offset, int size ) {
 		var msg = new Protos.CS2GC_RoomInfo();
 		msg.MergeFrom( data, offset, size );
@@ -1044,9 +1082,15 @@ public static class ProtoCreator {
 				return new Protos.CS2GC_BeginMatchRet();
 			}
 			case (Protos.MsgID)5301: {
-				return new Protos.CS2GC_RoomInfo();
+				return new Protos.CS2GC_PlayerJoin();
 			}
 			case (Protos.MsgID)5302: {
+				return new Protos.CS2GC_PlayerLeave();
+			}
+			case (Protos.MsgID)5303: {
+				return new Protos.CS2GC_RoomInfo();
+			}
+			case (Protos.MsgID)5304: {
 				return new Protos.CS2GC_BSInfo();
 			}
 			case (Protos.MsgID)8000: {
@@ -1176,9 +1220,15 @@ public static class ProtoCreator {
 				return ((Protos.CS2GC_BeginMatchRet)message).Opts;
 			}
 			case (Protos.MsgID)5301: {
-				return ((Protos.CS2GC_RoomInfo)message).Opts;
+				return ((Protos.CS2GC_PlayerJoin)message).Opts;
 			}
 			case (Protos.MsgID)5302: {
+				return ((Protos.CS2GC_PlayerLeave)message).Opts;
+			}
+			case (Protos.MsgID)5303: {
+				return ((Protos.CS2GC_RoomInfo)message).Opts;
+			}
+			case (Protos.MsgID)5304: {
 				return ((Protos.CS2GC_BSInfo)message).Opts;
 			}
 			case (Protos.MsgID)8000: {

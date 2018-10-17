@@ -37,6 +37,7 @@ namespace GateServer.Net
 				if ( GS.instance.netSessionMgr.GetSession( sid, out INetSession session ) )
 					session.Close( "CS Closed." );
 			}
+			GS.instance.ClearClients();
 		}
 
 		protected override void OnHeartBeat( long dt )

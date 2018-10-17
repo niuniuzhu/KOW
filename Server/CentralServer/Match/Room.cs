@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 namespace CentralServer.Match
 {
+	/// <summary>
+	/// 房间类
+	/// 该类未内部类,由Matcher类代理,大部分方法的参数不进行合法性检测
+	/// </summary>
 	public class Room : IPoolObject
 	{
 		private static uint _gid;
@@ -13,7 +17,9 @@ namespace CentralServer.Match
 
 		public int mapID { get; }
 
-		public int numPlayer => this._players.Count;
+		public int numPlayers => this._players.Count;
+
+		public int maxPlayers => Consts.ROOM_MAX_PLAYERS;
 
 		/// <summary>
 		/// 获取房间是否满员
@@ -25,8 +31,21 @@ namespace CentralServer.Match
 		/// </summary>
 		public bool isEmpty => this._players.Count == 0;
 
+		/// <summary>
+		/// 房间是否超时
+		/// 无论玩家在载入过程中是否丢失,只要超时就会进入战场,玩家以后可以断线重连的方式进入战场
+		/// </summary>
 		public bool timeout => this._time >= Consts.ROOM_TIME_OUT;
+
+		/// <summary>
+		/// 是否到达同步玩家信息的时间
+		/// </summary>
 		public long timeToNitifyPlayerInfos { private set; get; }
+
+		/// <summary>
+		/// 是否满员后开始等待玩家载入战场
+		/// </summary>
+		public bool started;
 
 		private readonly List<PlayerInfo> _players = new List<PlayerInfo>();
 		private long _time;
@@ -46,62 +65,33 @@ namespace CentralServer.Match
 			this.RemoveAllPlayers();
 			this._time = 0;
 			this.timeToNitifyPlayerInfos = 0;
+			this.started = false;
 		}
+
+		public bool CanAddPlayer( PlayerInfo player ) => this._players.Count < this.maxPlayers && !this.HasPlayer( player.gcNID );
 
 		/// <summary>
 		/// 加入新玩家
+		/// 该方法不检查参数合法性
 		/// </summary>
-		public bool AddPlayer( PlayerInfo player )
+		public void AddPlayer( PlayerInfo player )
 		{
-			if ( this._players.Count >= Consts.ROOM_MAX_PLAYERS )
-			{
-				Logger.Warn( "room overflow" );
-				return false;
-			}
-			if ( this.HasPlayer( player ) )
-			{
-				Logger.Error( $"player:{player} exist" );
-				return false;
-			}
 			this._players.Add( player );
 			Logger.Log( $"player:{player} join room:{this.id}" );
-			return true;
-		}
-
-		/// <summary>
-		/// 移除指定id的玩家
-		/// 注意这里不处理当所有玩家移除后归还房间,需要调用者自行处理
-		/// </summary>
-		public bool RemovePlayer( ulong gcNID )
-		{
-			PlayerInfo player = this.GetPlayer( gcNID );
-			if ( player == null )
-			{
-				Logger.Error( $"player:{gcNID} not exist" );
-				return false;
-			}
-			CUser user = CS.instance.userMgr.GetUser( gcNID );
-			if ( user == null )
-			{
-				Logger.Error( $"can not find user:{gcNID}" );
-				return false;
-			}
-			System.Diagnostics.Debug.Assert( user.room == this.id, $"user's roomID:{user.room} is not same as rommID:{this.id}" );
-			user.inRoom = false;
-			this._players.Remove( player );
-			Logger.Log( $"player:{player} leave room:{this.id}" );
-			return true;
 		}
 
 		/// <summary>
 		/// 移除玩家
-		/// 注意这里不处理当所有玩家移除后归还房间,需要调用者自行处理
+		/// 该方法不检查参数合法性
 		/// </summary>
-		public bool RemovePlayer( PlayerInfo player ) => this.RemovePlayer( player.gcNID );
+		public void RemovePlayer( PlayerInfo player )
+		{
+			this._players.Remove( player );
+			Logger.Log( $"player:{player} leave room:{this.id}" );
+		}
 
 		/// <summary>
 		/// 移除所有玩家(内部调用,通常是房间被销毁时)
-		/// 注意这里不处理归还房间,需要调用者自行处理
 		/// </summary>
 		private void RemoveAllPlayers()
 		{
@@ -112,15 +102,10 @@ namespace CentralServer.Match
 			{
 				PlayerInfo player = this._players[i];
 				CUser user = CS.instance.userMgr.GetUser( player.gcNID );
-				if ( user == null )
-				{
-					Logger.Error( $"can not find user:{player.gcNID}" );
-					continue;
-				}
-
-				System.Diagnostics.Debug.Assert( user.room == this.id,
-												 $"user's roomID:{user.room} is not same as rommID:{this.id}" );
+				System.Diagnostics.Debug.Assert( user != null && user.roomID == this.id,
+												 $"can not find user:{player.gcNID} or user not in romm:{this.id}" );
 				user.inRoom = false;
+				user.roomID = 0;
 				Logger.Log( $"player:{player} leave room:{this.id}" );
 			}
 			this._players.Clear();
@@ -146,11 +131,6 @@ namespace CentralServer.Match
 		}
 
 		/// <summary>
-		/// 获取指定玩家
-		/// </summary>
-		public PlayerInfo GetPlayer( PlayerInfo player ) => this.GetPlayer( player.gcNID );
-
-		/// <summary>
 		/// 检查是否存在指定id的玩家
 		/// </summary>
 		public bool HasPlayer( ulong gcNID )
@@ -162,25 +142,6 @@ namespace CentralServer.Match
 					return true;
 			}
 			return false;
-		}
-
-		/// <summary>
-		/// 检查是否存在指定玩家
-		/// </summary>
-		public bool HasPlayer( PlayerInfo player ) => this.HasPlayer( player.gcNID );
-
-		/// <summary>
-		/// 更新玩家信息
-		/// </summary>
-		public void UpdatePlayerProgress( ulong gcNID, int progress )
-		{
-			PlayerInfo player = this.GetPlayer( gcNID );
-			if ( player == null )
-			{
-				Logger.Error( $"player:{gcNID} not exist" );
-				return;
-			}
-			player.progress = progress;
 		}
 
 		/// <summary>
@@ -203,24 +164,9 @@ namespace CentralServer.Match
 			if ( this.timeToNitifyPlayerInfos >= Consts.NOTIFY_PLAYERINFO_INTERVAL )
 				this.timeToNitifyPlayerInfos = 0;
 
-			//只要满员就开始计时,即使过程中丢失玩家也照样开始游戏
-			if ( this.isFull )
+			//只要满员就开始计时,即使玩家载入过程中丢失也照样开始游戏
+			if ( this.started )
 				this._time += dt;
-		}
-
-		public void FillProtoPlayerInfo( Google.Protobuf.Collections.RepeatedField<Protos.Room_PlayerInfo> repeatedField )
-		{
-			int count = this._players.Count;
-			for ( int i = 0; i < count; i++ )
-			{
-				PlayerInfo player = this._players[i];
-				Protos.Room_PlayerInfo pi = new Protos.Room_PlayerInfo();
-				pi.GcNID = player.gcNID;
-				pi.Name = CS.instance.userMgr.GetUser( player.gcNID ).name;
-				pi.ActorID = player.actorID;
-				pi.Progress = player.progress;
-				repeatedField.Add( pi );
-			}
 		}
 	}
 }

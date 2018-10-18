@@ -52,12 +52,8 @@ namespace CentralServer.Match
 
 		public Room()
 		{
-			if ( _gid == uint.MaxValue )
-			{
-				Logger.Warn( "maximum id of room, will begin from zero" );
-				_gid = 0;
-			}
-			this.id = _gid++;
+			System.Diagnostics.Debug.Assert( _gid < uint.MaxValue, "maximum id of room!!" );
+			this.id = ++_gid;
 		}
 
 		public void Clear()

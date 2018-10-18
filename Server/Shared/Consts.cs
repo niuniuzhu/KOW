@@ -47,12 +47,17 @@ namespace Shared
 		/// <summary>
 		/// 房间最大玩家数量
 		/// </summary>
-		public const int ROOM_MAX_PLAYERS = 2;
+		public const int ROOM_MAX_PLAYERS = 1;
 
 		/// <summary>
 		/// 房间超时时间
 		/// </summary>
-		public const long ROOM_TIME_OUT = 10000;
+		public const long ROOM_TIME_OUT = 5000;
+
+		/// <summary>
+		/// 连接BS超时时间
+		/// </summary>
+		public const long WAITING_ROOM_TIME_OUT = 5000;
 
 		/// <summary>
 		/// 通知客户端房间内所有玩家的信息

@@ -260,11 +260,13 @@ export namespace Protos {
 
     interface IBS2GC_BattleStart {
         opts?: (Protos.IMsgOpts|null);
+        id?: (number|null);
     }
 
     class BS2GC_BattleStart implements IBS2GC_BattleStart {
         constructor(properties?: Protos.IBS2GC_BattleStart);
         public opts?: (Protos.IMsgOpts|null);
+        public id: number;
         public static create(properties?: Protos.IBS2GC_BattleStart): Protos.BS2GC_BattleStart;
         public static encode(message: Protos.IBS2GC_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2GC_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -280,6 +282,7 @@ export namespace Protos {
         opts?: (Protos.IMsgOpts|null);
         id?: (number|null);
         mapID?: (number|null);
+        timeout?: (number|null);
         playerInfo?: (Protos.IRoom_PlayerInfo[]|null);
     }
 
@@ -288,6 +291,7 @@ export namespace Protos {
         public opts?: (Protos.IMsgOpts|null);
         public id: number;
         public mapID: number;
+        public timeout: number;
         public playerInfo: Protos.IRoom_PlayerInfo[];
         public static create(properties?: Protos.ICS2BS_BattleInfo): Protos.CS2BS_BattleInfo;
         public static encode(message: Protos.ICS2BS_BattleInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -787,14 +791,12 @@ export namespace Protos {
 
     interface IGC2BS_AskLogin {
         opts?: (Protos.IMsgOpts|null);
-        pwd?: (string|null);
         sessionID?: (Long|null);
     }
 
     class GC2BS_AskLogin implements IGC2BS_AskLogin {
         constructor(properties?: Protos.IGC2BS_AskLogin);
         public opts?: (Protos.IMsgOpts|null);
-        public pwd: string;
         public sessionID: Long;
         public static create(properties?: Protos.IGC2BS_AskLogin): Protos.GC2BS_AskLogin;
         public static encode(message: Protos.IGC2BS_AskLogin, writer?: $protobuf.Writer): $protobuf.Writer;

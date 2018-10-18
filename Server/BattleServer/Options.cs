@@ -69,10 +69,10 @@ namespace BattleServer
 			HelpText = "the frame rate of the logical update." )]
 		public int frameRate { get; set; }
 
-		[Option( "keyFrameStep",
+		[Option( "keyframeStep",
 			Default = 4,
 			SetName = "bysetting",
 			HelpText = "how long the step between two key frame." )]
-		public int keyFrameStep { get; set; }
+		public int keyframeStep { get; set; }
 	}
 }

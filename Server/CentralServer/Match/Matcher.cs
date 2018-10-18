@@ -12,8 +12,19 @@ namespace CentralServer.Match
 	{
 		private static readonly ObjectPool<Room> POOL = new ObjectPool<Room>( 50, 25 );
 
+		/// <summary>
+		/// 还在等待玩家进入的房间
+		/// </summary>
 		private readonly List<Room> _freeRooms = new List<Room>();
+		/// <summary>
+		/// 满员的房间
+		/// </summary>
 		private readonly List<Room> _fullRooms = new List<Room>();
+		/// <summary>
+		/// 等待消息确认的房间
+		/// </summary>
+		private readonly List<Room> _transits = new List<Room>();
+
 		private readonly Dictionary<uint, Room> _idToRoom = new Dictionary<uint, Room>();
 
 		/// <summary>
@@ -75,7 +86,7 @@ namespace CentralServer.Match
 			this.Broadcast( room, playerLeave );
 
 			if ( room.isEmpty )
-				this.DestroyRoom( room, true );
+				this.DestroyRoom( room, 0 );
 		}
 
 		private Room JoinRoom()
@@ -101,13 +112,13 @@ namespace CentralServer.Match
 			return room;
 		}
 
-		private void DestroyRoom( Room room, bool isInFreeRoom )
+		private void DestroyRoom( Room room, int type )
 		{
 			this._idToRoom.Remove( room.id );
-			if ( isInFreeRoom )
+			if ( type == 0 )
 				this._freeRooms.Remove( room );
-			else
-				this._fullRooms.Remove( room );
+			else if ( type == 1 )
+				this._transits.Remove( room );
 			POOL.Push( room );
 			Logger.Log( $"room:{room.id} was destroied" );
 		}
@@ -228,6 +239,7 @@ namespace CentralServer.Match
 			if ( CS.instance.appropriateBSInfo == null )
 			{
 				this.NotifyGCBeginFailed( room, Protos.CS2GC_BSInfo.Types.Error.BsnotFound );
+				this.DestroyRoom( room, 1 );
 				return;
 			}
 
@@ -236,31 +248,33 @@ namespace CentralServer.Match
 			Protos.CS2BS_BattleInfo battleInfo = ProtoCreator.Q_CS2BS_BattleInfo();
 			battleInfo.Id = room.id;
 			battleInfo.MapID = room.mapID;
+			battleInfo.Timeout = ( int ) Consts.WAITING_ROOM_TIME_OUT;
 			this.FillProtoPlayerInfo( room, battleInfo.PlayerInfo );
 			CS.instance.netSessionMgr.Send( selectedBSInfo.sessionID, battleInfo, msg =>
 			{
 				//避免在消息发送期间,BS可能发生意外丢失,这里需要再检查一次
 				if ( !CS.instance.LIDToBSInfos.ContainsKey( selectedBSInfo.lid ) )
-				{
 					this.NotifyGCBeginFailed( room, Protos.CS2GC_BSInfo.Types.Error.Bslost );
-					return;
-				}
-				Protos.CS2GC_BSInfo beginBattle = ProtoCreator.Q_CS2GC_BSInfo();
-				beginBattle.Ip = CS.instance.appropriateBSInfo.ip;
-				beginBattle.Port = CS.instance.appropriateBSInfo.port;
-				this.Broadcast( room, beginBattle, 0, ( m, player ) =>
+				else
 				{
-					Protos.CS2GC_BSInfo m2 = ( Protos.CS2GC_BSInfo ) m;
-					m2.GcNID = player.gcNID;
-				} );
+					Protos.CS2GC_BSInfo bsInfo = ProtoCreator.Q_CS2GC_BSInfo();
+					bsInfo.Ip = CS.instance.appropriateBSInfo.ip;
+					bsInfo.Port = CS.instance.appropriateBSInfo.port;
+					this.Broadcast( room, bsInfo, 0, ( m, player ) =>
+					{
+						Protos.CS2GC_BSInfo m2 = ( Protos.CS2GC_BSInfo ) m;
+						m2.GcNID = player.gcNID;
+					} );
+				}
+				this.DestroyRoom( room, 1 );
 			} );
 		}
 
 		private void NotifyGCBeginFailed( Room room, Protos.CS2GC_BSInfo.Types.Error error )
 		{
-			Protos.CS2GC_BSInfo beginBattle = ProtoCreator.Q_CS2GC_BSInfo();
-			beginBattle.Error = error;
-			this.Broadcast( room, beginBattle );
+			Protos.CS2GC_BSInfo bsInfo = ProtoCreator.Q_CS2GC_BSInfo();
+			bsInfo.Error = error;
+			this.Broadcast( room, bsInfo );
 		}
 
 		private void FillProtoPlayerInfo( Room room, Google.Protobuf.Collections.RepeatedField<Protos.Room_PlayerInfo> repeatedField )
@@ -303,8 +317,9 @@ namespace CentralServer.Match
 				//检查房间是否所有玩家准备完成或者超时
 				if ( room.started && ( room.CheckAllPlayerReady() || room.timeout ) )
 				{
+					this._fullRooms.RemoveAt( i );
+					this._transits.Add( room );
 					this.BeginBattle( room );
-					this.DestroyRoom( room, false );
 					--i;
 					--count;
 				}

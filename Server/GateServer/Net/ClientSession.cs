@@ -8,7 +8,7 @@ namespace GateServer.Net
 	public class ClientSession : SrvCliSession
 	{
 		private long _activeTime;
-		private ulong _gcNid;
+		private ulong _gcNID;
 
 		protected ClientSession( uint id, ProtoType type ) : base( id, type )
 		{
@@ -30,21 +30,21 @@ namespace GateServer.Net
 
 			//通知cs客户端丢失
 			Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
-			gcLost.SessionID = this._gcNid;
+			gcLost.SessionID = this._gcNID;
 			this.owner.Send( SessionType.ServerG2CS, gcLost );
-			System.Diagnostics.Debug.Assert( GS.instance.RemoveClient( this._gcNid ), $"invalid gcNID:{this._gcNid}" );
+			System.Diagnostics.Debug.Assert( GS.instance.RemoveClient( this._gcNID ), $"invalid gcNID:{this._gcNID}" );
 
 			this._activeTime = 0;
-			this._gcNid = 0;
+			this._gcNID = 0;
 		}
 
 		private ErrorCode OnGc2GsAskLogin( Google.Protobuf.IMessage message )
 		{
 			Protos.GC2GS_AskLogin login = ( Protos.GC2GS_AskLogin ) message;
-			this._gcNid = login.SessionID;
+			this._gcNID = login.SessionID;
 
 			Protos.GS2CS_GCAskLogin gcAskLogin = ProtoCreator.Q_GS2CS_GCAskLogin();
-			gcAskLogin.SessionID = this._gcNid;
+			gcAskLogin.SessionID = this._gcNID;
 			Logger.Log( $"client:{gcAskLogin.SessionID} ask login" );
 
 			//向CS请求客户端登陆
@@ -56,7 +56,7 @@ namespace GateServer.Net
 				{
 					case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
-						GS.instance.AddClient( this._gcNid, this.id );
+						GS.instance.AddClient( this._gcNID, this.id );
 						break;
 					case Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin:
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.SessionExpire;
@@ -85,7 +85,7 @@ namespace GateServer.Net
 			switch ( transTarget )
 			{
 				case Protos.MsgOpts.Types.TransTarget.Cs:
-					this.owner.Send( SessionType.ServerG2CS, message, null, true, this._gcNid );
+					this.owner.Send( SessionType.ServerG2CS, message, null, true, this._gcNID );
 					break;
 			}
 		}

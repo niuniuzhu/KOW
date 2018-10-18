@@ -18,7 +18,7 @@
 		public long pingInterval;
 		public long gcLive;
 		public int frameRate;
-		public int keyFrameStep;
+		public int keyframeStep;
 
 		public void CopyFromCLIOptions( Options opts )
 		{
@@ -31,7 +31,7 @@
 			this.pingInterval = opts.pingInterval;
 			this.gcLive = opts.gcLive;
 			this.frameRate = opts.frameRate;
-			this.keyFrameStep = opts.keyFrameStep;
+			this.keyframeStep = opts.keyframeStep;
 		}
 	}
 }

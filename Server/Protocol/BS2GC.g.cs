@@ -27,14 +27,14 @@ namespace Protos {
             "CgtCUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8igwEKDkJTMkdD",
             "X0xvZ2luUmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIuCgZy",
             "ZXN1bHQYAiABKA4yHi5Qcm90b3MuQlMyR0NfTG9naW5SZXQuRVJlc3VsdCIi",
-            "CgdFUmVzdWx0EgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASIyChFCUzJHQ19C",
-            "YXR0bGVTdGFydBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHNiBnBy",
-            "b3RvMw=="));
+            "CgdFUmVzdWx0EgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASI+ChFCUzJHQ19C",
+            "YXR0bGVTdGFydBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSCgoC",
+            "aWQYAiABKA1iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_LoginRet), global::Protos.BS2GC_LoginRet.Parser, new[]{ "Opts", "Result" }, null, new[]{ typeof(global::Protos.BS2GC_LoginRet.Types.EResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleStart), global::Protos.BS2GC_BattleStart.Parser, new[]{ "Opts" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleStart), global::Protos.BS2GC_BattleStart.Parser, new[]{ "Opts", "Id" }, null, null, null)
           }));
     }
     #endregion
@@ -248,6 +248,7 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public BS2GC_BattleStart(BS2GC_BattleStart other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      id_ = other.id_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -267,6 +268,20 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 2;
+    private uint id_;
+    /// <summary>
+    ///战场id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Id {
+      get { return id_; }
+      set {
+        id_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as BS2GC_BattleStart);
@@ -281,6 +296,7 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
+      if (Id != other.Id) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -288,6 +304,7 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Id != 0) hash ^= Id.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -305,6 +322,10 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
+      if (Id != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Id);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -315,6 +336,9 @@ namespace Protos {
       int size = 0;
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Id != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Id);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -333,6 +357,9 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
+      if (other.Id != 0) {
+        Id = other.Id;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -349,6 +376,10 @@ namespace Protos {
               opts_ = new global::Protos.MsgOpts();
             }
             input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            Id = input.ReadUInt32();
             break;
           }
         }

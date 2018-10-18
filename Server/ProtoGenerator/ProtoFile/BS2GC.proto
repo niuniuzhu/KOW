@@ -16,4 +16,5 @@ message BS2GC_LoginRet {
 //战场开始
 message BS2GC_BattleStart {
 	MsgOpts opts = 1;
+	uint32 id = 2;//战场id
 }

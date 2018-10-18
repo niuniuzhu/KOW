@@ -1,14 +1,14 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "cf06099b9713a110e2fcae8c0b5b648027c50b28"
+    "signature": "e1e310b9901885f4a0675917da6aec7cad9160f9"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
       "BattleServer/1.0.0": {
         "dependencies": {
-          "CommandLineParser": "2.2.1",
+          "CommandLineParser": "2.3.0",
           "Core": "1.0.0",
           "Newtonsoft.Json": "11.0.2",
           "Protocol": "1.0.0",
@@ -18,7 +18,7 @@
           "BattleServer.dll": {}
         }
       },
-      "CommandLineParser/2.2.1": {
+      "CommandLineParser/2.3.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
           "System.Console": "4.0.0",
@@ -1301,12 +1301,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "CommandLineParser/2.2.1": {
+    "CommandLineParser/2.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-s+cVeOzKcoPu0IWda5DPd0b9K7vfKqo17aOOrj5zsUnE5n3Bts8vutn5R3KYqBlnbuqQEXzJT7IhAkRKMXouzw==",
-      "path": "commandlineparser/2.2.1",
-      "hashPath": "commandlineparser.2.2.1.nupkg.sha512"
+      "sha512": "sha512-reRoh1qxIxsipV2FPBBkp5zFQZjJ0QKZCODLg6nSGBVJzKMBpLAjZP1QkD8f526RfN4+E1zJR/WHOckSRvllOg==",
+      "path": "commandlineparser/2.3.0",
+      "hashPath": "commandlineparser.2.3.0.nupkg.sha512"
     },
     "Google.Protobuf/3.5.1": {
       "type": "package",

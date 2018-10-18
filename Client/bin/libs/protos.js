@@ -2049,6 +2049,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface IBS2GC_BattleStart
              * @property {Protos.IMsgOpts|null} [opts] BS2GC_BattleStart opts
+             * @property {number|null} [id] BS2GC_BattleStart id
              */
     
             /**
@@ -2073,6 +2074,14 @@ define(["libs/protobufjs"], function($protobuf) {
              * @instance
              */
             BS2GC_BattleStart.prototype.opts = null;
+    
+            /**
+             * BS2GC_BattleStart id.
+             * @member {number} id
+             * @memberof Protos.BS2GC_BattleStart
+             * @instance
+             */
+            BS2GC_BattleStart.prototype.id = 0;
     
             /**
              * Creates a new BS2GC_BattleStart instance using the specified properties.
@@ -2100,6 +2109,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.id != null && message.hasOwnProperty("id"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.id);
                 return writer;
             };
     
@@ -2136,6 +2147,9 @@ define(["libs/protobufjs"], function($protobuf) {
                     switch (tag >>> 3) {
                     case 1:
                         message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.id = reader.uint32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -2177,6 +2191,9 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (error)
                         return "opts." + error;
                 }
+                if (message.id != null && message.hasOwnProperty("id"))
+                    if (!$util.isInteger(message.id))
+                        return "id: integer expected";
                 return null;
             };
     
@@ -2197,6 +2214,8 @@ define(["libs/protobufjs"], function($protobuf) {
                         throw TypeError(".Protos.BS2GC_BattleStart.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
+                if (object.id != null)
+                    message.id = object.id >>> 0;
                 return message;
             };
     
@@ -2213,10 +2232,14 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (!options)
                     options = {};
                 var object = {};
-                if (options.defaults)
+                if (options.defaults) {
                     object.opts = null;
+                    object.id = 0;
+                }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.id != null && message.hasOwnProperty("id"))
+                    object.id = message.id;
                 return object;
             };
     
@@ -2243,6 +2266,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @property {Protos.IMsgOpts|null} [opts] CS2BS_BattleInfo opts
              * @property {number|null} [id] CS2BS_BattleInfo id
              * @property {number|null} [mapID] CS2BS_BattleInfo mapID
+             * @property {number|null} [timeout] CS2BS_BattleInfo timeout
              * @property {Array.<Protos.IRoom_PlayerInfo>|null} [playerInfo] CS2BS_BattleInfo playerInfo
              */
     
@@ -2287,6 +2311,14 @@ define(["libs/protobufjs"], function($protobuf) {
             CS2BS_BattleInfo.prototype.mapID = 0;
     
             /**
+             * CS2BS_BattleInfo timeout.
+             * @member {number} timeout
+             * @memberof Protos.CS2BS_BattleInfo
+             * @instance
+             */
+            CS2BS_BattleInfo.prototype.timeout = 0;
+    
+            /**
              * CS2BS_BattleInfo playerInfo.
              * @member {Array.<Protos.IRoom_PlayerInfo>} playerInfo
              * @memberof Protos.CS2BS_BattleInfo
@@ -2324,9 +2356,11 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.id);
                 if (message.mapID != null && message.hasOwnProperty("mapID"))
                     writer.uint32(/* id 3, wireType 0 =*/24).int32(message.mapID);
+                if (message.timeout != null && message.hasOwnProperty("timeout"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.timeout);
                 if (message.playerInfo != null && message.playerInfo.length)
                     for (var i = 0; i < message.playerInfo.length; ++i)
-                        $root.Protos.Room_PlayerInfo.encode(message.playerInfo[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                        $root.Protos.Room_PlayerInfo.encode(message.playerInfo[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                 return writer;
             };
     
@@ -2371,6 +2405,9 @@ define(["libs/protobufjs"], function($protobuf) {
                         message.mapID = reader.int32();
                         break;
                     case 4:
+                        message.timeout = reader.int32();
+                        break;
+                    case 5:
                         if (!(message.playerInfo && message.playerInfo.length))
                             message.playerInfo = [];
                         message.playerInfo.push($root.Protos.Room_PlayerInfo.decode(reader, reader.uint32()));
@@ -2421,6 +2458,9 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.mapID != null && message.hasOwnProperty("mapID"))
                     if (!$util.isInteger(message.mapID))
                         return "mapID: integer expected";
+                if (message.timeout != null && message.hasOwnProperty("timeout"))
+                    if (!$util.isInteger(message.timeout))
+                        return "timeout: integer expected";
                 if (message.playerInfo != null && message.hasOwnProperty("playerInfo")) {
                     if (!Array.isArray(message.playerInfo))
                         return "playerInfo: array expected";
@@ -2454,6 +2494,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     message.id = object.id >>> 0;
                 if (object.mapID != null)
                     message.mapID = object.mapID | 0;
+                if (object.timeout != null)
+                    message.timeout = object.timeout | 0;
                 if (object.playerInfo) {
                     if (!Array.isArray(object.playerInfo))
                         throw TypeError(".Protos.CS2BS_BattleInfo.playerInfo: array expected");
@@ -2486,6 +2528,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.opts = null;
                     object.id = 0;
                     object.mapID = 0;
+                    object.timeout = 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -2493,6 +2536,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.id = message.id;
                 if (message.mapID != null && message.hasOwnProperty("mapID"))
                     object.mapID = message.mapID;
+                if (message.timeout != null && message.hasOwnProperty("timeout"))
+                    object.timeout = message.timeout;
                 if (message.playerInfo && message.playerInfo.length) {
                     object.playerInfo = [];
                     for (var j = 0; j < message.playerInfo.length; ++j)
@@ -7674,7 +7719,6 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface IGC2BS_AskLogin
              * @property {Protos.IMsgOpts|null} [opts] GC2BS_AskLogin opts
-             * @property {string|null} [pwd] GC2BS_AskLogin pwd
              * @property {Long|null} [sessionID] GC2BS_AskLogin sessionID
              */
     
@@ -7700,14 +7744,6 @@ define(["libs/protobufjs"], function($protobuf) {
              * @instance
              */
             GC2BS_AskLogin.prototype.opts = null;
-    
-            /**
-             * GC2BS_AskLogin pwd.
-             * @member {string} pwd
-             * @memberof Protos.GC2BS_AskLogin
-             * @instance
-             */
-            GC2BS_AskLogin.prototype.pwd = "";
     
             /**
              * GC2BS_AskLogin sessionID.
@@ -7743,10 +7779,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                if (message.pwd != null && message.hasOwnProperty("pwd"))
-                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.pwd);
                 if (message.sessionID != null && message.hasOwnProperty("sessionID"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.sessionID);
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.sessionID);
                 return writer;
             };
     
@@ -7785,9 +7819,6 @@ define(["libs/protobufjs"], function($protobuf) {
                         message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                         break;
                     case 2:
-                        message.pwd = reader.string();
-                        break;
-                    case 3:
                         message.sessionID = reader.uint64();
                         break;
                     default:
@@ -7830,9 +7861,6 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (error)
                         return "opts." + error;
                 }
-                if (message.pwd != null && message.hasOwnProperty("pwd"))
-                    if (!$util.isString(message.pwd))
-                        return "pwd: string expected";
                 if (message.sessionID != null && message.hasOwnProperty("sessionID"))
                     if (!$util.isInteger(message.sessionID) && !(message.sessionID && $util.isInteger(message.sessionID.low) && $util.isInteger(message.sessionID.high)))
                         return "sessionID: integer|Long expected";
@@ -7856,8 +7884,6 @@ define(["libs/protobufjs"], function($protobuf) {
                         throw TypeError(".Protos.GC2BS_AskLogin.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
-                if (object.pwd != null)
-                    message.pwd = String(object.pwd);
                 if (object.sessionID != null)
                     if ($util.Long)
                         (message.sessionID = $util.Long.fromValue(object.sessionID)).unsigned = true;
@@ -7885,7 +7911,6 @@ define(["libs/protobufjs"], function($protobuf) {
                 var object = {};
                 if (options.defaults) {
                     object.opts = null;
-                    object.pwd = "";
                     if ($util.Long) {
                         var long = new $util.Long(0, 0, true);
                         object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -7894,8 +7919,6 @@ define(["libs/protobufjs"], function($protobuf) {
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-                if (message.pwd != null && message.hasOwnProperty("pwd"))
-                    object.pwd = message.pwd;
                 if (message.sessionID != null && message.hasOwnProperty("sessionID"))
                     if (typeof message.sessionID === "number")
                         object.sessionID = options.longs === String ? String(message.sessionID) : message.sessionID;

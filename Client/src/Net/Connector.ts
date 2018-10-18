@@ -36,8 +36,13 @@ export class Connector {
 		return this._connectors.get(type).RemoveListener(msgID, handler);
 	}
 
-	public static Send(type: ConnectorType, msgType: any, message: any, rpcHandler: (any) => any = null): void {
-		this._connectors.get(type).Send(msgType, message, rpcHandler);
+	public static SendToBS(msgType: any, message: any, rpcHandler: (any) => any = null): void {
+		this._bsConnector.Send(msgType, message, rpcHandler);
+	}
+
+	public static SendToCS(msgType: any, message: any, rpcHandler: (any) => any = null): void {
+		ProtoCreator.MakeTransMessage(message, Protos.MsgOpts.TransTarget.CS, 0);
+		this._gsConnector.Send(msgType, message, rpcHandler);
 	}
 
 	public static Update(dt: number): void {
@@ -47,9 +52,15 @@ export class Connector {
 		if (this.gsConnector.connected) {
 			this.gsConnector.lastPingTime += dt;
 			if (this.gsConnector.lastPingTime >= this.PING_INTERVAL) {
-				let keepAlive = ProtoCreator.Q_GC2GS_KeepAlive();
-				this.Send(ConnectorType.GS, Protos.GC2GS_KeepAlive, keepAlive);
+				this.gsConnector.Send(Protos.GC2GS_KeepAlive, ProtoCreator.Q_GC2GS_KeepAlive());
 				this.gsConnector.lastPingTime = 0;
+			}
+		}
+		if (this.bsConnector.connected) {
+			this.bsConnector.lastPingTime += dt;
+			if (this.bsConnector.lastPingTime >= this.PING_INTERVAL) {
+				this.bsConnector.Send(Protos.GC2BS_KeepAlive, ProtoCreator.Q_GC2BS_KeepAlive());
+				this.bsConnector.lastPingTime = 0;
 			}
 		}
 	}

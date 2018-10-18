@@ -1,10 +1,13 @@
-﻿using BattleServer.Net;
+﻿using System.Collections.Generic;
+using BattleServer.Net;
 using Core.Misc;
 using Core.Net;
 using Newtonsoft.Json;
 using Shared;
 using Shared.Net;
 using System.IO;
+using System.Linq;
+using BattleServer.Battle;
 
 namespace BattleServer
 {
@@ -15,9 +18,12 @@ namespace BattleServer
 
 		public BSNetSessionMgr netSessionMgr { get; } = new BSNetSessionMgr();
 		public BSConfig config { get; private set; }
+		public WaitingRoomMgr waitingRoomMgr { get; } = new WaitingRoomMgr();
+		public BattleManager battleManager { get; } = new BattleManager();
 
 		public BSConfig.State state;
 
+		private readonly Dictionary<ulong, uint> _gcNIDToSID = new Dictionary<ulong, uint>();
 		private readonly Scheduler _heartBeater = new Scheduler();
 
 		public ErrorCode Initialize( Options opts )
@@ -44,7 +50,7 @@ namespace BattleServer
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 
-			WSListener cliListener = ( WSListener )this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
+			WSListener cliListener = ( WSListener ) this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
 			cliListener.Start( "ws", this.config.externalPort );
 
 			this.netSessionMgr.CreateConnector<B2CSSession>( SessionType.ServerB2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 65535, 0 );
@@ -58,6 +64,48 @@ namespace BattleServer
 			this._heartBeater.Update( dt );
 		}
 
-		private void OnHeartBeat( int count ) => NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+		private void OnHeartBeat( int count )
+		{
+			this.waitingRoomMgr.Update( Consts.HEART_BEAT_INTERVAL );
+			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+		}
+
+		public bool HasClient( ulong gcNID )
+		{
+			return this._gcNIDToSID.ContainsKey( gcNID );
+		}
+
+		public bool GetClientUKey( ulong gcNID, out uint sid )
+		{
+			return this._gcNIDToSID.TryGetValue( gcNID, out sid );
+		}
+
+		public bool RemoveClient( ulong gcNID )
+		{
+			return this._gcNIDToSID.Remove( gcNID );
+		}
+
+		public void AddClient( ulong gcNID, uint sid )
+		{
+			this._gcNIDToSID.Add( gcNID, sid );
+		}
+
+		public uint[] GetClients()
+		{
+			return this._gcNIDToSID.Values.ToArray();
+		}
+
+		public void ClearClients()
+		{
+			this._gcNIDToSID.Clear();
+		}
+
+		public bool SendToGC( ulong gcNID, Google.Protobuf.IMessage message )
+		{
+			if ( !this._gcNIDToSID.TryGetValue( gcNID, out uint sid ) )
+				return false;
+			this.netSessionMgr.Send( sid, message );
+			return true;
+		}
 	}
 }

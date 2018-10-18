@@ -5,8 +5,7 @@ import "Global.proto";
 
 message GC2BS_AskLogin {
 	MsgOpts opts = 1;
-	string pwd = 2;
-	uint64 sessionID = 3;
+	uint64 sessionID = 2;
 }
 
 message GC2BS_KeepAlive {

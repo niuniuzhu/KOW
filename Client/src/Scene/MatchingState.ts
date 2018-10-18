@@ -33,9 +33,8 @@ export class MatchingState extends SceneState {
 
 		//请求匹配
 		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
-		ProtoCreator.MakeTransMessage(beginMatch, Protos.MsgOpts.TransTarget.CS, 0);
 		beginMatch.actorID = 0;//todo 使用的角色
-		Connector.Send(Connector.ConnectorType.GS, Protos.GC2CS_BeginMatch, beginMatch, message => {
+		Connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
 			let resp: Protos.CS2GC_BeginMatchRet = <Protos.CS2GC_BeginMatchRet>message;
 			this._roomID = resp.id;
 			this._mapID = resp.mapID;
@@ -87,27 +86,34 @@ export class MatchingState extends SceneState {
 		}
 	}
 
+	//cs下发bs的连接信息
 	private OnRecvBSInfo(message: any): void {
 		let bsInfo: Protos.CS2GC_BSInfo = <Protos.CS2GC_BSInfo>message;
 		let connector = Connector.bsConnector;
 		connector.onerror = () => this._ui.OnConnectToBSError();
 		connector.onopen = () => {
+			console.log("BS Connected");
 			let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
 			askLogin.sessionID = bsInfo.gcNID;
-			connector.Send(Protos.GC2GS_AskLogin, askLogin, message => {
+			connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
 				let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
 				this._ui.OnLoginBSResut(resp);
 			});
 		}
+		//todo 这里最好用kcp连接
 		connector.Connect(bsInfo.ip, bsInfo.port);
 	}
 
 	private StartLoad(mapID: number, playInfos: Protos.IRoom_PlayerInfo[]): void {
 		//todo preloadall
 		console.log("start load");
-		SceneManager.matching.OnLoadComplete();
+		this.OnLoadComplete();
 	}
 
+	//通知cs加载完成
 	public OnLoadComplete(): void {
+		let msg = ProtoCreator.Q_GC2CS_UpdatePlayerInfo();
+		msg.progress = 100;
+		Connector.SendToCS(Protos.GC2CS_UpdatePlayerInfo, msg);
 	}
 }

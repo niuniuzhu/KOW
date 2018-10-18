@@ -24,14 +24,14 @@ namespace Protos {
     static GC2BSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtHQzJCUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iTwoOR0MyQlNf",
-            "QXNrTG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgsKA3B3",
-            "ZBgCIAEoCRIRCglzZXNzaW9uSUQYAyABKAQiMAoPR0MyQlNfS2VlcEFsaXZl",
-            "Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0c2IGcHJvdG8z"));
+            "CgtHQzJCUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iQgoOR0MyQlNf",
+            "QXNrTG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEhEKCXNl",
+            "c3Npb25JRBgCIAEoBCIwCg9HQzJCU19LZWVwQWxpdmUSHQoEb3B0cxgBIAEo",
+            "CzIPLlByb3Rvcy5Nc2dPcHRzYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_AskLogin), global::Protos.GC2BS_AskLogin.Parser, new[]{ "Opts", "Pwd", "SessionID" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_AskLogin), global::Protos.GC2BS_AskLogin.Parser, new[]{ "Opts", "SessionID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_KeepAlive), global::Protos.GC2BS_KeepAlive.Parser, new[]{ "Opts" }, null, null, null)
           }));
     }
@@ -65,7 +65,6 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GC2BS_AskLogin(GC2BS_AskLogin other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      pwd_ = other.pwd_;
       sessionID_ = other.sessionID_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -86,19 +85,8 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "pwd" field.</summary>
-    public const int PwdFieldNumber = 2;
-    private string pwd_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Pwd {
-      get { return pwd_; }
-      set {
-        pwd_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
     /// <summary>Field number for the "sessionID" field.</summary>
-    public const int SessionIDFieldNumber = 3;
+    public const int SessionIDFieldNumber = 2;
     private ulong sessionID_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong SessionID {
@@ -122,7 +110,6 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
-      if (Pwd != other.Pwd) return false;
       if (SessionID != other.SessionID) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -131,7 +118,6 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (Pwd.Length != 0) hash ^= Pwd.GetHashCode();
       if (SessionID != 0UL) hash ^= SessionID.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -150,12 +136,8 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (Pwd.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Pwd);
-      }
       if (SessionID != 0UL) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteUInt64(SessionID);
       }
       if (_unknownFields != null) {
@@ -168,9 +150,6 @@ namespace Protos {
       int size = 0;
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
-      }
-      if (Pwd.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Pwd);
       }
       if (SessionID != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(SessionID);
@@ -191,9 +170,6 @@ namespace Protos {
           opts_ = new global::Protos.MsgOpts();
         }
         Opts.MergeFrom(other.Opts);
-      }
-      if (other.Pwd.Length != 0) {
-        Pwd = other.Pwd;
       }
       if (other.SessionID != 0UL) {
         SessionID = other.SessionID;
@@ -216,11 +192,7 @@ namespace Protos {
             input.ReadMessage(opts_);
             break;
           }
-          case 18: {
-            Pwd = input.ReadString();
-            break;
-          }
-          case 24: {
+          case 16: {
             SessionID = input.ReadUInt64();
             break;
           }

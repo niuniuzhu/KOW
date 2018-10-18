@@ -25,13 +25,14 @@ namespace Protos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgtDUzJCUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8aC0NTMkdDLnBy",
-            "b3RvInkKEENTMkJTX0JhdHRsZUluZm8SHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
-            "cy5Nc2dPcHRzEgoKAmlkGAIgASgNEg0KBW1hcElEGAMgASgFEisKCnBsYXll",
-            "ckluZm8YBCADKAsyFy5Qcm90b3MuUm9vbV9QbGF5ZXJJbmZvYgZwcm90bzM="));
+            "b3RvIooBChBDUzJCU19CYXR0bGVJbmZvEh0KBG9wdHMYASABKAsyDy5Qcm90",
+            "b3MuTXNnT3B0cxIKCgJpZBgCIAEoDRINCgVtYXBJRBgDIAEoBRIPCgd0aW1l",
+            "b3V0GAQgASgFEisKCnBsYXllckluZm8YBSADKAsyFy5Qcm90b3MuUm9vbV9Q",
+            "bGF5ZXJJbmZvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2GCReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_BattleInfo), global::Protos.CS2BS_BattleInfo.Parser, new[]{ "Opts", "Id", "MapID", "PlayerInfo" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_BattleInfo), global::Protos.CS2BS_BattleInfo.Parser, new[]{ "Opts", "Id", "MapID", "Timeout", "PlayerInfo" }, null, null, null)
           }));
     }
     #endregion
@@ -69,6 +70,7 @@ namespace Protos {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       id_ = other.id_;
       mapID_ = other.mapID_;
+      timeout_ = other.timeout_;
       playerInfo_ = other.playerInfo_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -93,7 +95,7 @@ namespace Protos {
     public const int IdFieldNumber = 2;
     private uint id_;
     /// <summary>
-    ///战场运行时id
+    ///房间id
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Id {
@@ -117,10 +119,24 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "timeout" field.</summary>
+    public const int TimeoutFieldNumber = 4;
+    private int timeout_;
+    /// <summary>
+    ///连接超时时间
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Timeout {
+      get { return timeout_; }
+      set {
+        timeout_ = value;
+      }
+    }
+
     /// <summary>Field number for the "playerInfo" field.</summary>
-    public const int PlayerInfoFieldNumber = 4;
+    public const int PlayerInfoFieldNumber = 5;
     private static readonly pb::FieldCodec<global::Protos.Room_PlayerInfo> _repeated_playerInfo_codec
-        = pb::FieldCodec.ForMessage(34, global::Protos.Room_PlayerInfo.Parser);
+        = pb::FieldCodec.ForMessage(42, global::Protos.Room_PlayerInfo.Parser);
     private readonly pbc::RepeatedField<global::Protos.Room_PlayerInfo> playerInfo_ = new pbc::RepeatedField<global::Protos.Room_PlayerInfo>();
     /// <summary>
     ///玩家信息
@@ -146,6 +162,7 @@ namespace Protos {
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Id != other.Id) return false;
       if (MapID != other.MapID) return false;
+      if (Timeout != other.Timeout) return false;
       if(!playerInfo_.Equals(other.playerInfo_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -156,6 +173,7 @@ namespace Protos {
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Id != 0) hash ^= Id.GetHashCode();
       if (MapID != 0) hash ^= MapID.GetHashCode();
+      if (Timeout != 0) hash ^= Timeout.GetHashCode();
       hash ^= playerInfo_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -182,6 +200,10 @@ namespace Protos {
         output.WriteRawTag(24);
         output.WriteInt32(MapID);
       }
+      if (Timeout != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Timeout);
+      }
       playerInfo_.WriteTo(output, _repeated_playerInfo_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -199,6 +221,9 @@ namespace Protos {
       }
       if (MapID != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(MapID);
+      }
+      if (Timeout != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Timeout);
       }
       size += playerInfo_.CalculateSize(_repeated_playerInfo_codec);
       if (_unknownFields != null) {
@@ -223,6 +248,9 @@ namespace Protos {
       }
       if (other.MapID != 0) {
         MapID = other.MapID;
+      }
+      if (other.Timeout != 0) {
+        Timeout = other.Timeout;
       }
       playerInfo_.Add(other.playerInfo_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -251,7 +279,11 @@ namespace Protos {
             MapID = input.ReadInt32();
             break;
           }
-          case 34: {
+          case 32: {
+            Timeout = input.ReadInt32();
+            break;
+          }
+          case 42: {
             playerInfo_.AddEntriesFrom(input, _repeated_playerInfo_codec);
             break;
           }

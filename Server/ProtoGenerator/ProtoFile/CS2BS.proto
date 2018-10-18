@@ -8,7 +8,8 @@ import "CS2GC.proto";
 //战场信息
 message CS2BS_BattleInfo{
 	MsgOpts opts = 1;
-	uint32 id = 2;//战场运行时id
+	uint32 id = 2;//房间id
 	int32 mapID = 3;//地图id
-	repeated Room_PlayerInfo playerInfo = 4;//玩家信息
+	int32 timeout = 4;//连接超时时间
+	repeated Room_PlayerInfo playerInfo = 5;//玩家信息
 }

@@ -41,8 +41,7 @@ export class Connector {
 	}
 
 	public static SendToCS(msgType: any, message: any, rpcHandler: (any) => any = null): void {
-		ProtoCreator.MakeTransMessage(message, Protos.MsgOpts.TransTarget.CS, 0);
-		this._gsConnector.Send(msgType, message, rpcHandler);
+		this._gsConnector.Send(msgType, message, rpcHandler, Protos.MsgOpts.TransTarget.CS);
 	}
 
 	public static Update(dt: number): void {

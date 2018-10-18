@@ -152,7 +152,6 @@ namespace CentralServer.Match
 			}
 
 			Protos.CS2GC_BeginMatchRet ret = ProtoCreator.R_GC2CS_BeginMatch( beginMatch.Opts.Pid );
-			ret.MTrans( Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 
 			//加入或创建房间
 			Room room = this.JoinRoom();
@@ -182,7 +181,7 @@ namespace CentralServer.Match
 				return ErrorCode.Success;
 			}
 			//发送回应
-			CS.instance.netSessionMgr.Send( sid, ret );
+			CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 
 			this.AddPlayer( room, player, user );
 

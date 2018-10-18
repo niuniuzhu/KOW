@@ -91,7 +91,7 @@ namespace GateServer.Net
 			switch ( transTarget )
 			{
 				case Protos.MsgOpts.Types.TransTarget.Gc:
-					GS.instance.GetClientUKey( message.GetMsgOpts().Transid, out uint sid );
+					GS.instance.GetClientSID( message.GetMsgOpts().Transid, out uint sid );
 					this.owner.Send( sid, message );
 					break;
 			}
@@ -103,7 +103,7 @@ namespace GateServer.Net
 			Protos.GS2CS_KickGCRet kickGCRet = ProtoCreator.R_CS2GS_KickGC( kickGC.Opts.Pid );
 
 			//可能在收到消息前,客户端就断开了,这里必须容错
-			if ( GS.instance.GetClientUKey( kickGC.GcNID, out uint sid ) )
+			if ( GS.instance.GetClientSID( kickGC.GcNID, out uint sid ) )
 			{
 				//通知客户端被踢下线
 				Protos.GS2GC_Kick kick = ProtoCreator.Q_GS2GC_Kick();

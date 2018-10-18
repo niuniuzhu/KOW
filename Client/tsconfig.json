@@ -9,8 +9,14 @@
 		"sourceMap": true,
 		"removeComments": true,
 		"alwaysStrict": true,
-        "experimentalDecorators": true,
-		"emitDecoratorMetadata": true
+        //"experimentalDecorators": true,
+		//"emitDecoratorMetadata": true,
+		"baseUrl": "bin/",
+		"paths": {
+			"*": [
+				"*"
+			]
+		},
 		// "strict": true,
 		// "noImplicitReturns": true
 	},

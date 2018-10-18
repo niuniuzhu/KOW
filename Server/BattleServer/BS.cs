@@ -70,12 +70,7 @@ namespace BattleServer
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 		}
 
-		public bool HasClient( ulong gcNID )
-		{
-			return this._gcNIDToSID.ContainsKey( gcNID );
-		}
-
-		public bool GetClientUKey( ulong gcNID, out uint sid )
+		public bool GetClientSID( ulong gcNID, out uint sid )
 		{
 			return this._gcNIDToSID.TryGetValue( gcNID, out sid );
 		}
@@ -98,14 +93,6 @@ namespace BattleServer
 		public void ClearClients()
 		{
 			this._gcNIDToSID.Clear();
-		}
-
-		public bool SendToGC( ulong gcNID, Google.Protobuf.IMessage message )
-		{
-			if ( !this._gcNIDToSID.TryGetValue( gcNID, out uint sid ) )
-				return false;
-			this.netSessionMgr.Send( sid, message );
-			return true;
 		}
 	}
 }

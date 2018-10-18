@@ -18,7 +18,7 @@ namespace GateServer.Net
 
 		public bool SendToGC( ulong gcNID, IMessage msg, System.Action<IMessage> rpcHandler = null )
 		{
-			if ( !GS.instance.GetClientUKey( gcNID, out uint sid ) )
+			if ( !GS.instance.GetClientSID( gcNID, out uint sid ) )
 			{
 				Logger.Warn( $"invalid gcNID:{gcNID}" );
 				return false;

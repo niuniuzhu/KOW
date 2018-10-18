@@ -4,7 +4,6 @@ import { Protos } from "../libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { SceneState } from "./SceneState";
 import { UIMatching } from "../UI/UIMatching";
-import { SceneManager } from "./SceneManager";
 
 export class MatchingState extends SceneState {
 	private readonly _ui: UIMatching;

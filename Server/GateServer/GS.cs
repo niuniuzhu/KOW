@@ -68,7 +68,7 @@ namespace GateServer
 			return this._gcNIDToSID.ContainsKey( gcNID );
 		}
 
-		public bool GetClientUKey( ulong gcNID, out uint sid )
+		public bool GetClientSID( ulong gcNID, out uint sid )
 		{
 			return this._gcNIDToSID.TryGetValue( gcNID, out sid );
 		}

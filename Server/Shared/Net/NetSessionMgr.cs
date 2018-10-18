@@ -9,6 +9,7 @@ namespace Shared.Net
 	{
 		private readonly Dictionary<SessionType, List<NetSessionBase>> _typeToSession = new Dictionary<SessionType, List<NetSessionBase>>();
 		private readonly List<NetSessionBase> _sessionsToRemove = new List<NetSessionBase>();
+		private readonly ObjectPool<StreamBuffer> _bufferPool = new ObjectPool<StreamBuffer>( 10, 5 );
 
 		/// <summary>
 		/// 创建监听器
@@ -127,13 +128,44 @@ namespace Shared.Net
 		/// <param name="sessionId">session id</param>
 		/// <param name="msg">消息</param>
 		/// <param name="rpcHandler">rcp回调函数</param>
-		/// <param name="trans">是否转发消息</param>
+		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
-		public void Send( uint sessionId, IMessage msg, System.Action<IMessage> rpcHandler = null, bool trans = false, ulong nsid = 0u )
+		public void Send( uint sessionId, IMessage msg, System.Action<IMessage> rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
 		{
 			if ( !this.GetSession( sessionId, out INetSession session ) )
 				return;
-			( ( NetSessionBase ) session ).Send( msg, rpcHandler, trans, nsid );
+			( ( NetSessionBase ) session ).Send( msg, rpcHandler, transTarget, nsid );
+		}
+
+		/// <summary>
+		/// 广播消息到指定的session
+		/// 不支持消息转发
+		/// </summary>
+		/// <param name="sessionIds">session id</param>
+		/// <param name="msg">消息</param>
+		/// <param name="transTarget">转发目标</param>
+		/// <param name="nsid">转发的网络id</param>
+		public void Broadcast( IEnumerable<uint> sessionIds, IMessage msg,
+							   Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine,
+							   ulong nsid = 0u )
+		{
+			StreamBuffer buffer = this._bufferPool.Pop();
+			NetSessionBase.EncodeMessage( buffer, msg, transTarget, nsid );
+			byte[] data = buffer.GetBuffer();
+			int length = buffer.length;
+
+			var enumerator = sessionIds.GetEnumerator(); //据说用var会减少gc
+			while ( enumerator.MoveNext() )
+			{
+				uint sid = enumerator.Current;
+				if ( !this.GetSession( sid, out INetSession session ) )
+					continue;
+				( ( NetSessionBase ) session ).Send( data, 0, length );
+			}
+
+			enumerator.Dispose();
+
+			this._bufferPool.Push( buffer );
 		}
 
 		/// <summary>
@@ -142,18 +174,18 @@ namespace Shared.Net
 		/// <param name="sessionType">session类型</param>
 		/// <param name="msg">消息</param>
 		/// <param name="rpcHandler">rcp回调函数</param>
-		/// <param name="trans">是否转发消息</param>
+		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
 		/// <param name="all">是否在查询消息类型时对所有结果生效</param>
-		public void Send( SessionType sessionType, IMessage msg, System.Action<IMessage> rpcHandler = null, bool trans = false, ulong nsid = 0u, bool all = true )
+		public void Send( SessionType sessionType, IMessage msg, System.Action<IMessage> rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u, bool all = true )
 		{
 			if ( !this._typeToSession.TryGetValue( sessionType, out List<NetSessionBase> sessions ) )
 				return;
 			if ( !all )
-				sessions[0].Send( msg, rpcHandler, trans, nsid );
+				sessions[0].Send( msg, rpcHandler, transTarget, nsid );
 			else
 				foreach ( NetSessionBase session in sessions )
-					session.Send( msg, rpcHandler, trans, nsid );
+					session.Send( msg, rpcHandler, transTarget, nsid );
 		}
 
 		/// <summary>

@@ -39,14 +39,17 @@ namespace BattleServer.Battle
 		/// <param name="gcNIDExcept">剔除gcNID</param>
 		public void Broadcast( Google.Protobuf.IMessage message, ulong gcNIDExcept = 0 )
 		{
-			for ( int i = 0, count = this._battleDes.players.Count; i < count; i++ )
+			int count = this._battleDes.players.Count;
+			uint[] sids = new uint[count];
+			for ( int i = 0; i < count; i++ )
 			{
 				ulong gcNID = this._battleDes.players[i].gcNID;
 				if ( gcNIDExcept != 0 && gcNID == gcNIDExcept )
 					continue;
-				if ( !BS.instance.SendToGC( gcNID, message ) )
-					Logger.Warn( $"send message to gcNID:{gcNID} faild" );
+				if ( !BS.instance.GetClientSID( gcNID, out sids[i] ) )
+					Logger.Warn( $"failed to send message to gcNID:{gcNID}" );
 			}
+			BS.instance.netSessionMgr.Broadcast( sids, message );
 		}
 
 		/// <summary>

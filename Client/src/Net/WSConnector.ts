@@ -2,9 +2,9 @@ import { ByteUtils } from "./ByteUtils";
 import { MsgCenter } from "./MsgCenter";
 import { Protos } from "../libs/protos";
 import { ProtoCreator } from "./ProtoHelper";
+import Long = require("libs/long");
 
 export class WSConnector {
-
 	public get connected(): boolean { return this._socket != null && this._socket.readyState == WebSocket.OPEN };
 
 	public set onclose(handler: (ev: CloseEvent) => any) {
@@ -36,7 +36,7 @@ export class WSConnector {
 	private _time: number = 0;
 
 	public get time(): number { return this._time; }
-	public lastPingTime:number = 0;
+	public lastPingTime: number = 0;
 
 	constructor() {
 		this._msgCenter = new MsgCenter();
@@ -62,16 +62,29 @@ export class WSConnector {
 		};
 	}
 
-	public Send(msgType: any, message: any, rpcHandler: (any) => any = null): void {
+	public Send(msgType: any, message: any, rpcHandler: (any) => any = null,
+		transTarget: Protos.MsgOpts.TransTarget = Protos.MsgOpts.TransTarget.Undefine,
+		nsid: Long = Long.ZERO): void {
 		let opts = ProtoCreator.GetMsgOpts(message);
 		RC.Logger.Assert(opts != null, "invalid message options");
-		//为消息写入序号
-		opts.pid = this._pid++;
-		if ((opts.flag & (1 << Protos.MsgOpts.Flag.RPC)) > 0 && rpcHandler != null) //如果是rpc消息,记下消息序号等待回调
+
+		if (transTarget != Protos.MsgOpts.TransTarget.Undefine) {
+			opts.flag |= 1 << 3; //mark as transpose
+			opts.flag |= 1 << (3 + transTarget); //mark trans target
+		}
+		if (nsid.greaterThan(0))
+			opts.transid = nsid;
+		if ((opts.flag & (1 << Protos.MsgOpts.Flag.RPC)) > 0) //如果是rpc消息,记下消息序号等待回调
 		{
-			if (this._rpcHandlers.has(opts.pid))
-				RC.Logger.Warn("packet id collision!!");
-			this._rpcHandlers.set(opts.pid, rpcHandler);
+			//只有rpc才写入序号
+			if (nsid.eq(0))
+				opts.transid = nsid;
+
+			if (rpcHandler != null) {
+				if (this._rpcHandlers.has(opts.pid))
+					RC.Logger.Warn("packet id collision!!");
+				this._rpcHandlers.set(opts.pid, rpcHandler);
+			}
 		}
 		let msgData: Uint8Array = msgType.encode(message).finish();
 		let data = new Uint8Array(msgData.length + 4);
@@ -102,7 +115,7 @@ export class WSConnector {
 		//是否rpc消息
 		if ((opts.flag & (1 << Protos.MsgOpts.Flag.RESP)) > 0) {
 			let rcpHandler = this._rpcHandlers.get(opts.rpid);
-			RC.Logger.Assert(rcpHandler != null, "RPC handler not found");
+			RC.Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
 			this._rpcHandlers.delete(opts.rpid);
 			rcpHandler(message);//调用回调函数
 		} else {

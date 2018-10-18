@@ -232,6 +232,7 @@ namespace LoginServer.Net
 		private void HandlerLoginSuccess( Protos.LS2GC_AskLoginRet gcLoginRet, string uname, uint ukey )
 		{
 			//为当前客户端分配唯一id
+			//一定不为0吗?
 			ulong sessionID = GuidHash.GetUInt64();
 			//通知cs,客户端登陆成功
 			Protos.LS2CS_GCLogin csLogin = ProtoCreator.Q_LS2CS_GCLogin();

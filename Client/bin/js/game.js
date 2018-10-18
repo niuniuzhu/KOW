@@ -1231,7 +1231,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
     ]);
     exports.ProtoCreator = ProtoCreator;
 });
-define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter", "../libs/protos", "Net/ProtoHelper"], function (require, exports, ByteUtils_1, MsgCenter_1, protos_2, ProtoHelper_1) {
+define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter", "../libs/protos", "Net/ProtoHelper", "libs/long"], function (require, exports, ByteUtils_1, MsgCenter_1, protos_2, ProtoHelper_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class WSConnector {
@@ -1277,14 +1277,23 @@ define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter
                 this._onopen(e);
             };
         }
-        Send(msgType, message, rpcHandler = null) {
+        Send(msgType, message, rpcHandler = null, transTarget = protos_2.Protos.MsgOpts.TransTarget.Undefine, nsid = Long.ZERO) {
             let opts = ProtoHelper_1.ProtoCreator.GetMsgOpts(message);
             RC.Logger.Assert(opts != null, "invalid message options");
-            opts.pid = this._pid++;
-            if ((opts.flag & (1 << protos_2.Protos.MsgOpts.Flag.RPC)) > 0 && rpcHandler != null) {
-                if (this._rpcHandlers.has(opts.pid))
-                    RC.Logger.Warn("packet id collision!!");
-                this._rpcHandlers.set(opts.pid, rpcHandler);
+            if (transTarget != protos_2.Protos.MsgOpts.TransTarget.Undefine) {
+                opts.flag |= 1 << 3;
+                opts.flag |= 1 << (3 + transTarget);
+            }
+            if (nsid.greaterThan(0))
+                opts.transid = nsid;
+            if ((opts.flag & (1 << protos_2.Protos.MsgOpts.Flag.RPC)) > 0) {
+                if (nsid.eq(0))
+                    opts.transid = nsid;
+                if (rpcHandler != null) {
+                    if (this._rpcHandlers.has(opts.pid))
+                        RC.Logger.Warn("packet id collision!!");
+                    this._rpcHandlers.set(opts.pid, rpcHandler);
+                }
             }
             let msgData = msgType.encode(message).finish();
             let data = new Uint8Array(msgData.length + 4);
@@ -1307,7 +1316,7 @@ define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter
             RC.Logger.Assert(opts != null, "invalid msg options");
             if ((opts.flag & (1 << protos_2.Protos.MsgOpts.Flag.RESP)) > 0) {
                 let rcpHandler = this._rpcHandlers.get(opts.rpid);
-                RC.Logger.Assert(rcpHandler != null, "RPC handler not found");
+                RC.Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
                 this._rpcHandlers.delete(opts.rpid);
                 rcpHandler(message);
             }
@@ -1355,8 +1364,7 @@ define("Net/Connector", ["require", "exports", "Net/WSConnector", "Net/ProtoHelp
             this._bsConnector.Send(msgType, message, rpcHandler);
         }
         static SendToCS(msgType, message, rpcHandler = null) {
-            ProtoHelper_2.ProtoCreator.MakeTransMessage(message, protos_3.Protos.MsgOpts.TransTarget.CS, 0);
-            this._gsConnector.Send(msgType, message, rpcHandler);
+            this._gsConnector.Send(msgType, message, rpcHandler, protos_3.Protos.MsgOpts.TransTarget.CS);
         }
         static Update(dt) {
             this._connectors.forEach((v, k, map) => {

@@ -1,6 +1,5 @@
 ﻿using Core.Misc;
 using Google.Protobuf;
-using Shared;
 using System.Collections.Generic;
 
 namespace CentralServer.User
@@ -11,12 +10,11 @@ namespace CentralServer.User
 		private readonly Dictionary<uint, CUser> _ukeyToUser = new Dictionary<uint, CUser>();
 		private readonly List<CUser> _users = new List<CUser>();
 
-		public ErrorCode SendToUser( ulong gcNID, IMessage msg )
+		public void SendToUser( ulong gcNID, IMessage msg )
 		{
 			if ( !this._gcNidToUser.TryGetValue( gcNID, out CUser user ) )
-				return ErrorCode.InvalidGcNID;
-			msg.MTrans( Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
-			return user.Send( msg );
+				return;
+			user.Send( msg );
 		}
 
 		/// <summary>
@@ -62,7 +60,7 @@ namespace CentralServer.User
 			if ( !this._gcNidToUser.TryGetValue( gcNID, out CUser user ) )
 			{
 				Logger.Warn( $"can not find user:{gcNID}" );
-				return false; 
+				return false;
 			}
 			this._gcNidToUser.Remove( gcNID );
 			this._ukeyToUser.Remove( user.ukey );

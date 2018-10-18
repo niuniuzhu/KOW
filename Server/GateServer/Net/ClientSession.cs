@@ -85,7 +85,7 @@ namespace GateServer.Net
 			switch ( transTarget )
 			{
 				case Protos.MsgOpts.Types.TransTarget.Cs:
-					this.owner.Send( SessionType.ServerG2CS, message, null, true, this._gcNID );
+					this.owner.Send( SessionType.ServerG2CS, message, null, Protos.MsgOpts.Types.TransTarget.Undefine, this._gcNID );
 					break;
 			}
 		}

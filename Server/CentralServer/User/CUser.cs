@@ -1,6 +1,6 @@
-﻿using System;
-using Google.Protobuf;
-using Shared;
+﻿using Google.Protobuf;
+using System;
+using GSInfo = Shared.GSInfo;
 
 namespace CentralServer.User
 {
@@ -56,12 +56,11 @@ namespace CentralServer.User
 			this.name = string.Empty;
 		}
 
-		public ErrorCode Send( IMessage msg, Action<IMessage> rpcHandler = null )
+		public void Send( IMessage msg, Action<IMessage> rpcHandler = null )
 		{
 			if ( !CS.instance.LIDToGSInfos.TryGetValue( this.gsNID, out GSInfo gsInfo ) )
-				return ErrorCode.InvalidGsNID;
-			CS.instance.netSessionMgr.Send( gsInfo.sessionID, msg, rpcHandler );
-			return ErrorCode.Success;
+				return;
+			CS.instance.netSessionMgr.Send( gsInfo.sessionID, msg, rpcHandler, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
 		}
 	}
 }

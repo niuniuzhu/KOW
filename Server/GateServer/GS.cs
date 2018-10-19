@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Core.Misc;
+﻿using Core.Misc;
 using Core.Net;
 using GateServer.Net;
 using Newtonsoft.Json;
 using Shared;
 using Shared.Net;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -20,6 +20,7 @@ namespace GateServer
 
 		public GSConfig.State state;
 
+		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Dictionary<ulong, uint> _gcNIDToSID = new Dictionary<ulong, uint>();
 		private readonly Scheduler _heartBeater = new Scheduler();
 
@@ -56,8 +57,12 @@ namespace GateServer
 
 		public void Update( long elapsed, long dt )
 		{
-			this.netSessionMgr.Update();
-			NetworkMgr.instance.Update( elapsed, dt );
+			this._updateContext.utcTime = TimeUtils.utcTime;
+			this._updateContext.time = elapsed;
+			this._updateContext.deltaTime = dt;
+
+			this.netSessionMgr.Update( this._updateContext );
+			NetworkMgr.instance.Update( this._updateContext );
 			this._heartBeater.Update( dt );
 		}
 

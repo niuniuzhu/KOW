@@ -14,7 +14,6 @@ namespace Core.Net
 		private readonly Dictionary<uint, IListener> _idToListeners = new Dictionary<uint, IListener>();
 		private readonly Dictionary<uint, INetSession> _idToSession = new Dictionary<uint, INetSession>();
 		private readonly HashSet<INetSession> _sessionsToRemove = new HashSet<INetSession>();
-		private readonly UpdateContext _updateContext = new UpdateContext();
 
 		private NetworkMgr()
 		{
@@ -65,15 +64,11 @@ namespace Core.Net
 			return listener;
 		}
 
-		public void Update( long elapsed, long dt )
+		public void Update( UpdateContext updateContext )
 		{
-			this._updateContext.utcTime = TimeUtils.utcTime;
-			this._updateContext.time = elapsed;
-			this._updateContext.deltaTime = dt;
-
 			this.FireEvents();
 			this.RemoveSessions();
-			this.UpdateSessions( this._updateContext );
+			this.UpdateSessions( updateContext );
 			this.RemoveSessions();
 		}
 

@@ -3,8 +3,8 @@ using Core.Net;
 using DBServer.Net;
 using Newtonsoft.Json;
 using Shared;
-using System.IO;
 using Shared.DB;
+using System.IO;
 
 namespace DBServer
 {
@@ -18,6 +18,7 @@ namespace DBServer
 		public readonly DBNetSessionMgr netSessionMgr = new DBNetSessionMgr();
 		public readonly DBWrapper accountDB = new DBWrapper();
 
+		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Scheduler _heartBeater = new Scheduler();
 
 		public ErrorCode Initialize( Options opts )
@@ -47,8 +48,12 @@ namespace DBServer
 
 		public void Update( long elapsed, long dt )
 		{
-			this.netSessionMgr.Update();
-			NetworkMgr.instance.Update( elapsed, dt );
+			this._updateContext.utcTime = TimeUtils.utcTime;
+			this._updateContext.time = elapsed;
+			this._updateContext.deltaTime = dt;
+
+			this.netSessionMgr.Update( this._updateContext );
+			NetworkMgr.instance.Update( this._updateContext );
 			this._heartBeater.Update( dt );
 		}
 

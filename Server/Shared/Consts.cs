@@ -20,6 +20,11 @@ namespace Shared
 		public const long RECONN_INTERVAL = 2000;
 
 		/// <summary>
+		/// RPC超时时间
+		/// </summary>
+		public const int RPC_TIMEOUT = 5000;
+
+		/// <summary>
 		/// 用户名最小长度
 		/// </summary>
 		public const int DEFAULT_UNAME_MIN_LEN = 3;

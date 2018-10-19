@@ -54,6 +54,8 @@ namespace BattleServer.Net
 
 		private void OnGSAskPingRet( Google.Protobuf.IMessage message )
 		{
+			if ( message == null )
+				return;
 			long currTime = TimeUtils.utcTime;
 			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet ) message;
 			long lag = ( long ) ( ( currTime - askPingRet.Stime ) * 0.5 );

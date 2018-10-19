@@ -22,6 +22,7 @@ namespace LoginServer
 		public readonly Dictionary<uint, GSInfo> gsInfos = new Dictionary<uint, GSInfo>();
 		public readonly Dictionary<string, ulong> userNameToGcNID = new Dictionary<string, ulong>();
 
+		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Scheduler _heartBeater = new Scheduler();
 
 		public ErrorCode Initialize( Options opts )
@@ -57,8 +58,12 @@ namespace LoginServer
 
 		public void Update( long elapsed, long dt )
 		{
-			this.netSessionMgr.Update();
-			NetworkMgr.instance.Update( elapsed, dt );
+			this._updateContext.utcTime = TimeUtils.utcTime;
+			this._updateContext.time = elapsed;
+			this._updateContext.deltaTime = dt;
+
+			this.netSessionMgr.Update( this._updateContext );
+			NetworkMgr.instance.Update( this._updateContext );
 			this._heartBeater.Update( dt );
 		}
 

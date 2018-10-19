@@ -1,4 +1,6 @@
-﻿using CentralServer.Net;
+﻿using CentralServer.Match;
+using CentralServer.Net;
+using CentralServer.User;
 using Core.Misc;
 using Core.Net;
 using Newtonsoft.Json;
@@ -6,8 +8,6 @@ using Shared;
 using Shared.DB;
 using System.Collections.Generic;
 using System.IO;
-using CentralServer.Match;
-using CentralServer.User;
 
 namespace CentralServer
 {
@@ -28,6 +28,7 @@ namespace CentralServer
 		public readonly Dictionary<uint, BSInfo> LIDToBSInfos = new Dictionary<uint, BSInfo>();
 		public BSInfo appropriateBSInfo { get; private set; }
 
+		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Scheduler _heartBeater = new Scheduler();
 
 		public ErrorCode Initialize( Options opts )
@@ -75,8 +76,12 @@ namespace CentralServer
 
 		public void Update( long elapsed, long dt )
 		{
-			this.netSessionMgr.Update();
-			NetworkMgr.instance.Update( elapsed, dt );
+			this._updateContext.utcTime = TimeUtils.utcTime;
+			this._updateContext.time = elapsed;
+			this._updateContext.deltaTime = dt;
+
+			this.netSessionMgr.Update( this._updateContext );
+			NetworkMgr.instance.Update( this._updateContext );
 			this._heartBeater.Update( dt );
 		}
 

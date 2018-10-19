@@ -93,7 +93,7 @@ namespace Shared.Net
 
 		public abstract bool IsTransTarget( Protos.MsgOpts.Types.TransTarget transTarget );
 
-		public void Update()
+		public void Update( UpdateContext updateContext )
 		{
 			int count = this._sessionsToRemove.Count;
 			for ( int i = 0; i < count; i++ )

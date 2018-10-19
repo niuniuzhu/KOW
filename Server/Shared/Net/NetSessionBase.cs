@@ -8,19 +8,46 @@ namespace Shared.Net
 {
 	public class NetSessionBase : NetSession
 	{
+		/// <summary>
+		/// 所属管理器
+		/// </summary>
 		public NetSessionMgr owner { get; set; }
+		/// <summary>
+		/// 逻辑ID
+		/// </summary>
 		public uint logicID { get; set; }
+		/// <summary>
+		/// 类型
+		/// </summary>
 		public SessionType type { get; set; }
-
-		protected readonly MsgCenter _msgCenter;
-
+		/// <summary>
+		/// 消息id自增量
+		/// </summary>
 		private uint _pid;
-		private readonly Dictionary<uint, Action<IMessage>> _rpcHandlers = new Dictionary<uint, Action<IMessage>>();//可能是异步写入,但必定是同步读取,不用加锁
+		///// <summary>
+		///// RPC消息的时间记录
+		///// </summary>
+		//private readonly Dictionary<uint, long> _pidToTime = new Dictionary<uint, long>();
+		/// <summary>
+		/// RPC回调函数的容器
+		/// 可能是异步写入,但必定是同步读取,不用加锁
+		/// </summary>
+		private readonly Dictionary<uint, Action<IMessage>> _rpcHandlers = new Dictionary<uint, Action<IMessage>>();
+		///// <summary>
+		///// 需要删除的pid的临时列表
+		///// </summary>
+		//private readonly List<uint> _pidToDelete = new List<uint>();
+		/// <summary>
+		/// 数据缓冲区池
+		/// </summary>
 		private readonly ObjectPool<StreamBuffer> _bufferPool = new ObjectPool<StreamBuffer>( 10, 5 );
+		/// <summary>
+		/// 消息处理中心
+		/// </summary>
+		protected readonly MsgCenter _msgCenter = new MsgCenter();
 
 		protected NetSessionBase( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter = new MsgCenter();
 		}
 
 		/// <summary>
@@ -65,6 +92,7 @@ namespace Shared.Net
 
 			Protos.MsgOpts opts = message.GetMsgOpts();
 			System.Diagnostics.Debug.Assert( opts != null, "invalid message options" );
+
 			if ( transTarget != Protos.MsgOpts.Types.TransTarget.Undefine )
 			{
 				opts.Flag |= 1 << 3; //mark as transpose
@@ -83,7 +111,10 @@ namespace Shared.Net
 				{
 					if ( this._rpcHandlers.ContainsKey( opts.Pid ) )
 						Logger.Warn( "packet id collision!!" );
+					//记录回调函数
 					this._rpcHandlers[opts.Pid] = rpcHandler;
+					////记录超时时间
+					//this._pidToTime[opts.Pid] = 0;
 				}
 			}
 
@@ -101,16 +132,25 @@ namespace Shared.Net
 		{
 		}
 
+		/// <summary>
+		/// 连接到达后回调
+		/// </summary>
 		protected override void OnEstablish()
 		{
 			if ( this.isPassive )
 				this.owner.AddSession( this );
 		}
 
+		/// <summary>
+		/// 连接断开后回调
+		/// </summary>
+		/// <param name="reason">断开原因</param>
 		protected override void OnClose( string reason )
 		{
 			this._pid = 0;
 			this._rpcHandlers.Clear();
+			//this._pidToTime.Clear();
+			//this._pidToDelete.Clear();
 			if ( this.isPassive )
 				this.owner.RemoveSession( this );
 		}
@@ -159,6 +199,7 @@ namespace Shared.Net
 				bool find = this._rpcHandlers.TryGetValue( opts.Rpid, out Action<IMessage> rcpHandler );
 				System.Diagnostics.Debug.Assert( find, $"RPC handler not found with message:{msgID}" );
 				this._rpcHandlers.Remove( opts.Rpid );
+				//this._pidToTime.Remove( opts.Rpid );
 				rcpHandler( message );//调用回调函数
 			}
 			else
@@ -174,6 +215,14 @@ namespace Shared.Net
 			}
 		}
 
+		/// <summary>
+		/// 发送转发消息(自动调用)
+		/// 该方法在收到消息后,被判断为转发消息时调用
+		/// 由于各服务实现方式不相同,该方法需要被重写
+		/// </summary>
+		/// <param name="transTarget">转发目标</param>
+		/// <param name="transID">网络ID</param>
+		/// <param name="message">消息体</param>
 		protected virtual void TransMsg( Protos.MsgOpts.Types.TransTarget transTarget, ulong transID, IMessage message )
 		{
 			Logger.Warn( "override this method to transpose message" );
@@ -186,5 +235,38 @@ namespace Shared.Net
 		protected override void OnError( string error )
 		{
 		}
+
+		//public override void Update( UpdateContext updateContext )
+		//{
+		//	base.Update( updateContext );
+		//	var enumerator = this._pidToTime.Keys.GetEnumerator();
+		//	while ( enumerator.MoveNext() )
+		//	{
+		//		uint pid = enumerator.Current;
+		//		long start = this._pidToTime[pid];
+		//		start += updateContext.deltaTime;
+		//		if ( start >= Consts.RPC_TIMEOUT )
+		//		{
+		//			this._pidToDelete.Add( pid );
+		//		}
+		//		else
+		//			this._pidToTime[pid] = start;
+
+		//	}
+		//	enumerator.Dispose();
+		//	int count = this._pidToDelete.Count;
+		//	if ( count > 0 )
+		//	{
+		//		for ( int i = 0; i < count; i++ )
+		//		{
+		//			uint pid = this._pidToDelete[i];
+		//			this._rpcHandlers.Remove( pid );
+		//			this._pidToTime.Remove( pid );
+		//			Logger.Warn( $"timeout!! RPC:{pid} no response!!" );
+		//			this._rpcHandlers[pid]( null );
+		//		}
+		//		this._pidToDelete.Clear();
+		//	}
+		//}
 	}
 }

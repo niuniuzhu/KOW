@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Net;
+using System;
 
 namespace Core.Misc
 {

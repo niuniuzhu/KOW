@@ -12,7 +12,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 检查是否存在指定ID的客户端
 		/// </summary>
-		public bool HasGC( ulong gcNID ) => this._gcNIDToBattle.ContainsKey( gcNID );
+		public bool CheckClient( ulong gcNID ) => this._gcNIDToBattle.ContainsKey( gcNID );
 
 		/// <summary>
 		/// 开始战斗

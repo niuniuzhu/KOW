@@ -10,7 +10,7 @@ export class MatchingState extends SceneState {
 	private _roomID: number;
 	private _mapID: number;
 	private _maxPlayers: number;
-	private _players: Protos.IRoom_PlayerInfo[];
+	private _players: Protos.ICS2GC_PlayerInfo[];
 
 	constructor(type: number) {
 		super(type);
@@ -28,7 +28,7 @@ export class MatchingState extends SceneState {
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSInfo, this.OnRecvBSInfo.bind(this));
+		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnRecvBSInfo.bind(this));
 
 		//请求匹配
 		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
@@ -51,7 +51,7 @@ export class MatchingState extends SceneState {
 		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
 		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
 		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSInfo, this.OnRecvBSInfo.bind(this));
+		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnRecvBSInfo.bind(this));
 		super.OnExit();
 	}
 
@@ -87,7 +87,7 @@ export class MatchingState extends SceneState {
 
 	//cs下发bs的连接信息
 	private OnRecvBSInfo(message: any): void {
-		let bsInfo: Protos.CS2GC_BSInfo = <Protos.CS2GC_BSInfo>message;
+		let bsInfo: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
 		let connector = Connector.bsConnector;
 		connector.onerror = () => this._ui.OnConnectToBSError();
 		connector.onopen = () => {
@@ -103,7 +103,7 @@ export class MatchingState extends SceneState {
 		connector.Connect(bsInfo.ip, bsInfo.port);
 	}
 
-	private StartLoad(mapID: number, playInfos: Protos.IRoom_PlayerInfo[]): void {
+	private StartLoad(mapID: number, playInfos: Protos.ICS2GC_PlayerInfo[]): void {
 		//todo preloadall
 		console.log("start load");
 		this.OnLoadComplete();

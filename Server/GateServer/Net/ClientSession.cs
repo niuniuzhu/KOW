@@ -32,7 +32,8 @@ namespace GateServer.Net
 			Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
 			gcLost.SessionID = this._gcNID;
 			this.owner.Send( SessionType.ServerG2CS, gcLost );
-			System.Diagnostics.Debug.Assert( GS.instance.RemoveClient( this._gcNID ), $"invalid gcNID:{this._gcNID}" );
+			//可能会移除失败,因为向CS请求验证失败后并没有添加客户端
+			GS.instance.RemoveClient( this._gcNID );
 
 			this._activeTime = 0;
 			this._gcNID = 0;
@@ -50,14 +51,19 @@ namespace GateServer.Net
 			//向CS请求客户端登陆
 			this.owner.Send( SessionType.ServerG2CS, gcAskLogin, msgRet =>
 			{
-				Protos.GS2GC_LoginRet gsLoginRet = ProtoCreator.R_GC2GS_AskLogin( login.Opts.Pid );
 				Protos.CS2GS_GCLoginRet csLoginRet = ( Protos.CS2GS_GCLoginRet ) msgRet;
+				Protos.GS2GC_LoginRet gsLoginRet = ProtoCreator.R_GC2GS_AskLogin( login.Opts.Pid );
 				switch ( csLoginRet.Result )
 				{
 					case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
-						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
 						GS.instance.AddClient( this._gcNID, this.id );
+						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
+						gsLoginRet.GcNID = csLoginRet.GcNID;
+						gsLoginRet.GcState = ( Protos.GS2GC_LoginRet.Types.EGCCState ) csLoginRet.GcState;
+						gsLoginRet.BsIP = csLoginRet.BsIP;
+						gsLoginRet.BsPort = csLoginRet.BsPort;
 						break;
+
 					case Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin:
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.SessionExpire;
 						this.DelayClose( 500, "client login failed" );

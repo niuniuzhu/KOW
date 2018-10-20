@@ -768,7 +768,7 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eCS2GC_PlayerJoin=5301 eCS2GC_PlayerJoin value
          * @property {number} eCS2GC_PlayerLeave=5302 eCS2GC_PlayerLeave value
          * @property {number} eCS2GC_RoomInfo=5303 eCS2GC_RoomInfo value
-         * @property {number} eCS2GC_BSInfo=5304 eCS2GC_BSInfo value
+         * @property {number} eCS2GC_EnterBattle=5304 eCS2GC_EnterBattle value
          * @property {number} eDB2LS_QueryAccountRet=8000 eDB2LS_QueryAccountRet value
          * @property {number} eDB2LS_QueryLoginRet=8001 eDB2LS_QueryLoginRet value
          * @property {number} eDB2LS_ExecRet=8002 eDB2LS_ExecRet value
@@ -815,7 +815,7 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[5301] = "eCS2GC_PlayerJoin"] = 5301;
             values[valuesById[5302] = "eCS2GC_PlayerLeave"] = 5302;
             values[valuesById[5303] = "eCS2GC_RoomInfo"] = 5303;
-            values[valuesById[5304] = "eCS2GC_BSInfo"] = 5304;
+            values[valuesById[5304] = "eCS2GC_EnterBattle"] = 5304;
             values[valuesById[8000] = "eDB2LS_QueryAccountRet"] = 8000;
             values[valuesById[8001] = "eDB2LS_QueryLoginRet"] = 8001;
             values[valuesById[8002] = "eDB2LS_ExecRet"] = 8002;
@@ -2257,6 +2257,252 @@ define(["libs/protobufjs"], function($protobuf) {
             return BS2GC_BattleStart;
         })();
     
+        Protos.CS2BS_PlayerInfo = (function() {
+    
+            /**
+             * Properties of a CS2BS_PlayerInfo.
+             * @memberof Protos
+             * @interface ICS2BS_PlayerInfo
+             * @property {Long|null} [gcNID] CS2BS_PlayerInfo gcNID
+             * @property {string|null} [name] CS2BS_PlayerInfo name
+             * @property {number|null} [actorID] CS2BS_PlayerInfo actorID
+             */
+    
+            /**
+             * Constructs a new CS2BS_PlayerInfo.
+             * @memberof Protos
+             * @classdesc Represents a CS2BS_PlayerInfo.
+             * @implements ICS2BS_PlayerInfo
+             * @constructor
+             * @param {Protos.ICS2BS_PlayerInfo=} [properties] Properties to set
+             */
+            function CS2BS_PlayerInfo(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * CS2BS_PlayerInfo gcNID.
+             * @member {Long} gcNID
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @instance
+             */
+            CS2BS_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+            /**
+             * CS2BS_PlayerInfo name.
+             * @member {string} name
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @instance
+             */
+            CS2BS_PlayerInfo.prototype.name = "";
+    
+            /**
+             * CS2BS_PlayerInfo actorID.
+             * @member {number} actorID
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @instance
+             */
+            CS2BS_PlayerInfo.prototype.actorID = 0;
+    
+            /**
+             * Creates a new CS2BS_PlayerInfo instance using the specified properties.
+             * @function create
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @static
+             * @param {Protos.ICS2BS_PlayerInfo=} [properties] Properties to set
+             * @returns {Protos.CS2BS_PlayerInfo} CS2BS_PlayerInfo instance
+             */
+            CS2BS_PlayerInfo.create = function create(properties) {
+                return new CS2BS_PlayerInfo(properties);
+            };
+    
+            /**
+             * Encodes the specified CS2BS_PlayerInfo message. Does not implicitly {@link Protos.CS2BS_PlayerInfo.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @static
+             * @param {Protos.ICS2BS_PlayerInfo} message CS2BS_PlayerInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2BS_PlayerInfo.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.gcNID);
+                if (message.name != null && message.hasOwnProperty("name"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.actorID);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified CS2BS_PlayerInfo message, length delimited. Does not implicitly {@link Protos.CS2BS_PlayerInfo.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @static
+             * @param {Protos.ICS2BS_PlayerInfo} message CS2BS_PlayerInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2BS_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a CS2BS_PlayerInfo message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.CS2BS_PlayerInfo} CS2BS_PlayerInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2BS_PlayerInfo.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_PlayerInfo();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.gcNID = reader.uint64();
+                        break;
+                    case 2:
+                        message.name = reader.string();
+                        break;
+                    case 3:
+                        message.actorID = reader.int32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a CS2BS_PlayerInfo message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.CS2BS_PlayerInfo} CS2BS_PlayerInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2BS_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a CS2BS_PlayerInfo message.
+             * @function verify
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CS2BS_PlayerInfo.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                        return "gcNID: integer|Long expected";
+                if (message.name != null && message.hasOwnProperty("name"))
+                    if (!$util.isString(message.name))
+                        return "name: string expected";
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    if (!$util.isInteger(message.actorID))
+                        return "actorID: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a CS2BS_PlayerInfo message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.CS2BS_PlayerInfo} CS2BS_PlayerInfo
+             */
+            CS2BS_PlayerInfo.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.CS2BS_PlayerInfo)
+                    return object;
+                var message = new $root.Protos.CS2BS_PlayerInfo();
+                if (object.gcNID != null)
+                    if ($util.Long)
+                        (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                    else if (typeof object.gcNID === "string")
+                        message.gcNID = parseInt(object.gcNID, 10);
+                    else if (typeof object.gcNID === "number")
+                        message.gcNID = object.gcNID;
+                    else if (typeof object.gcNID === "object")
+                        message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+                if (object.name != null)
+                    message.name = String(object.name);
+                if (object.actorID != null)
+                    message.actorID = object.actorID | 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a CS2BS_PlayerInfo message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @static
+             * @param {Protos.CS2BS_PlayerInfo} message CS2BS_PlayerInfo
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CS2BS_PlayerInfo.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.gcNID = options.longs === String ? "0" : 0;
+                    object.name = "";
+                    object.actorID = 0;
+                }
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (typeof message.gcNID === "number")
+                        object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                    else
+                        object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+                if (message.name != null && message.hasOwnProperty("name"))
+                    object.name = message.name;
+                if (message.actorID != null && message.hasOwnProperty("actorID"))
+                    object.actorID = message.actorID;
+                return object;
+            };
+    
+            /**
+             * Converts this CS2BS_PlayerInfo to JSON.
+             * @function toJSON
+             * @memberof Protos.CS2BS_PlayerInfo
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CS2BS_PlayerInfo.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return CS2BS_PlayerInfo;
+        })();
+    
         Protos.CS2BS_BattleInfo = (function() {
     
             /**
@@ -2267,7 +2513,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @property {number|null} [id] CS2BS_BattleInfo id
              * @property {number|null} [mapID] CS2BS_BattleInfo mapID
              * @property {number|null} [timeout] CS2BS_BattleInfo timeout
-             * @property {Array.<Protos.IRoom_PlayerInfo>|null} [playerInfo] CS2BS_BattleInfo playerInfo
+             * @property {Array.<Protos.ICS2BS_PlayerInfo>|null} [playerInfo] CS2BS_BattleInfo playerInfo
              */
     
             /**
@@ -2320,7 +2566,7 @@ define(["libs/protobufjs"], function($protobuf) {
     
             /**
              * CS2BS_BattleInfo playerInfo.
-             * @member {Array.<Protos.IRoom_PlayerInfo>} playerInfo
+             * @member {Array.<Protos.ICS2BS_PlayerInfo>} playerInfo
              * @memberof Protos.CS2BS_BattleInfo
              * @instance
              */
@@ -2360,7 +2606,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer.uint32(/* id 4, wireType 0 =*/32).int32(message.timeout);
                 if (message.playerInfo != null && message.playerInfo.length)
                     for (var i = 0; i < message.playerInfo.length; ++i)
-                        $root.Protos.Room_PlayerInfo.encode(message.playerInfo[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                        $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfo[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                 return writer;
             };
     
@@ -2410,7 +2656,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     case 5:
                         if (!(message.playerInfo && message.playerInfo.length))
                             message.playerInfo = [];
-                        message.playerInfo.push($root.Protos.Room_PlayerInfo.decode(reader, reader.uint32()));
+                        message.playerInfo.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -2465,7 +2711,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (!Array.isArray(message.playerInfo))
                         return "playerInfo: array expected";
                     for (var i = 0; i < message.playerInfo.length; ++i) {
-                        var error = $root.Protos.Room_PlayerInfo.verify(message.playerInfo[i]);
+                        var error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfo[i]);
                         if (error)
                             return "playerInfo." + error;
                     }
@@ -2503,7 +2749,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     for (var i = 0; i < object.playerInfo.length; ++i) {
                         if (typeof object.playerInfo[i] !== "object")
                             throw TypeError(".Protos.CS2BS_BattleInfo.playerInfo: object expected");
-                        message.playerInfo[i] = $root.Protos.Room_PlayerInfo.fromObject(object.playerInfo[i]);
+                        message.playerInfo[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfo[i]);
                     }
                 }
                 return message;
@@ -2541,7 +2787,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.playerInfo && message.playerInfo.length) {
                     object.playerInfo = [];
                     for (var j = 0; j < message.playerInfo.length; ++j)
-                        object.playerInfo[j] = $root.Protos.Room_PlayerInfo.toObject(message.playerInfo[j], options);
+                        object.playerInfo[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfo[j], options);
                 }
                 return object;
             };
@@ -2571,7 +2817,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @property {number|null} [id] CS2GC_BeginMatchRet id
              * @property {number|null} [mapID] CS2GC_BeginMatchRet mapID
              * @property {number|null} [maxPlayer] CS2GC_BeginMatchRet maxPlayer
-             * @property {Array.<Protos.IRoom_PlayerInfo>|null} [playerInfos] CS2GC_BeginMatchRet playerInfos
+             * @property {Array.<Protos.ICS2GC_PlayerInfo>|null} [playerInfos] CS2GC_BeginMatchRet playerInfos
              */
     
             /**
@@ -2632,7 +2878,7 @@ define(["libs/protobufjs"], function($protobuf) {
     
             /**
              * CS2GC_BeginMatchRet playerInfos.
-             * @member {Array.<Protos.IRoom_PlayerInfo>} playerInfos
+             * @member {Array.<Protos.ICS2GC_PlayerInfo>} playerInfos
              * @memberof Protos.CS2GC_BeginMatchRet
              * @instance
              */
@@ -2674,7 +2920,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer.uint32(/* id 5, wireType 0 =*/40).int32(message.maxPlayer);
                 if (message.playerInfos != null && message.playerInfos.length)
                     for (var i = 0; i < message.playerInfos.length; ++i)
-                        $root.Protos.Room_PlayerInfo.encode(message.playerInfos[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                        $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfos[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
                 return writer;
             };
     
@@ -2727,7 +2973,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     case 6:
                         if (!(message.playerInfos && message.playerInfos.length))
                             message.playerInfos = [];
-                        message.playerInfos.push($root.Protos.Room_PlayerInfo.decode(reader, reader.uint32()));
+                        message.playerInfos.push($root.Protos.CS2GC_PlayerInfo.decode(reader, reader.uint32()));
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -2790,7 +3036,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (!Array.isArray(message.playerInfos))
                         return "playerInfos: array expected";
                     for (var i = 0; i < message.playerInfos.length; ++i) {
-                        var error = $root.Protos.Room_PlayerInfo.verify(message.playerInfos[i]);
+                        var error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos[i]);
                         if (error)
                             return "playerInfos." + error;
                     }
@@ -2838,7 +3084,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     for (var i = 0; i < object.playerInfos.length; ++i) {
                         if (typeof object.playerInfos[i] !== "object")
                             throw TypeError(".Protos.CS2GC_BeginMatchRet.playerInfos: object expected");
-                        message.playerInfos[i] = $root.Protos.Room_PlayerInfo.fromObject(object.playerInfos[i]);
+                        message.playerInfos[i] = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfos[i]);
                     }
                 }
                 return message;
@@ -2879,7 +3125,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.playerInfos && message.playerInfos.length) {
                     object.playerInfos = [];
                     for (var j = 0; j < message.playerInfos.length; ++j)
-                        object.playerInfos[j] = $root.Protos.Room_PlayerInfo.toObject(message.playerInfos[j], options);
+                        object.playerInfos[j] = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfos[j], options);
                 }
                 return object;
             };
@@ -2898,26 +3144,26 @@ define(["libs/protobufjs"], function($protobuf) {
             return CS2GC_BeginMatchRet;
         })();
     
-        Protos.Room_PlayerInfo = (function() {
+        Protos.CS2GC_PlayerInfo = (function() {
     
             /**
-             * Properties of a Room_PlayerInfo.
+             * Properties of a CS2GC_PlayerInfo.
              * @memberof Protos
-             * @interface IRoom_PlayerInfo
-             * @property {Long|null} [gcNID] Room_PlayerInfo gcNID
-             * @property {string|null} [name] Room_PlayerInfo name
-             * @property {number|null} [actorID] Room_PlayerInfo actorID
+             * @interface ICS2GC_PlayerInfo
+             * @property {Long|null} [gcNID] CS2GC_PlayerInfo gcNID
+             * @property {string|null} [name] CS2GC_PlayerInfo name
+             * @property {number|null} [actorID] CS2GC_PlayerInfo actorID
              */
     
             /**
-             * Constructs a new Room_PlayerInfo.
+             * Constructs a new CS2GC_PlayerInfo.
              * @memberof Protos
-             * @classdesc Represents a Room_PlayerInfo.
-             * @implements IRoom_PlayerInfo
+             * @classdesc Represents a CS2GC_PlayerInfo.
+             * @implements ICS2GC_PlayerInfo
              * @constructor
-             * @param {Protos.IRoom_PlayerInfo=} [properties] Properties to set
+             * @param {Protos.ICS2GC_PlayerInfo=} [properties] Properties to set
              */
-            function Room_PlayerInfo(properties) {
+            function CS2GC_PlayerInfo(properties) {
                 if (properties)
                     for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null)
@@ -2925,51 +3171,51 @@ define(["libs/protobufjs"], function($protobuf) {
             }
     
             /**
-             * Room_PlayerInfo gcNID.
+             * CS2GC_PlayerInfo gcNID.
              * @member {Long} gcNID
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @instance
              */
-            Room_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+            CS2GC_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
     
             /**
-             * Room_PlayerInfo name.
+             * CS2GC_PlayerInfo name.
              * @member {string} name
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @instance
              */
-            Room_PlayerInfo.prototype.name = "";
+            CS2GC_PlayerInfo.prototype.name = "";
     
             /**
-             * Room_PlayerInfo actorID.
+             * CS2GC_PlayerInfo actorID.
              * @member {number} actorID
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @instance
              */
-            Room_PlayerInfo.prototype.actorID = 0;
+            CS2GC_PlayerInfo.prototype.actorID = 0;
     
             /**
-             * Creates a new Room_PlayerInfo instance using the specified properties.
+             * Creates a new CS2GC_PlayerInfo instance using the specified properties.
              * @function create
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @static
-             * @param {Protos.IRoom_PlayerInfo=} [properties] Properties to set
-             * @returns {Protos.Room_PlayerInfo} Room_PlayerInfo instance
+             * @param {Protos.ICS2GC_PlayerInfo=} [properties] Properties to set
+             * @returns {Protos.CS2GC_PlayerInfo} CS2GC_PlayerInfo instance
              */
-            Room_PlayerInfo.create = function create(properties) {
-                return new Room_PlayerInfo(properties);
+            CS2GC_PlayerInfo.create = function create(properties) {
+                return new CS2GC_PlayerInfo(properties);
             };
     
             /**
-             * Encodes the specified Room_PlayerInfo message. Does not implicitly {@link Protos.Room_PlayerInfo.verify|verify} messages.
+             * Encodes the specified CS2GC_PlayerInfo message. Does not implicitly {@link Protos.CS2GC_PlayerInfo.verify|verify} messages.
              * @function encode
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @static
-             * @param {Protos.IRoom_PlayerInfo} message Room_PlayerInfo message or plain object to encode
+             * @param {Protos.ICS2GC_PlayerInfo} message CS2GC_PlayerInfo message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Room_PlayerInfo.encode = function encode(message, writer) {
+            CS2GC_PlayerInfo.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
                 if (message.gcNID != null && message.hasOwnProperty("gcNID"))
@@ -2982,33 +3228,33 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Encodes the specified Room_PlayerInfo message, length delimited. Does not implicitly {@link Protos.Room_PlayerInfo.verify|verify} messages.
+             * Encodes the specified CS2GC_PlayerInfo message, length delimited. Does not implicitly {@link Protos.CS2GC_PlayerInfo.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @static
-             * @param {Protos.IRoom_PlayerInfo} message Room_PlayerInfo message or plain object to encode
+             * @param {Protos.ICS2GC_PlayerInfo} message CS2GC_PlayerInfo message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Room_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            CS2GC_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
                 return this.encode(message, writer).ldelim();
             };
     
             /**
-             * Decodes a Room_PlayerInfo message from the specified reader or buffer.
+             * Decodes a CS2GC_PlayerInfo message from the specified reader or buffer.
              * @function decode
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.Room_PlayerInfo} Room_PlayerInfo
+             * @returns {Protos.CS2GC_PlayerInfo} CS2GC_PlayerInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Room_PlayerInfo.decode = function decode(reader, length) {
+            CS2GC_PlayerInfo.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.Room_PlayerInfo();
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerInfo();
                 while (reader.pos < end) {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
@@ -3030,30 +3276,30 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Decodes a Room_PlayerInfo message from the specified reader or buffer, length delimited.
+             * Decodes a CS2GC_PlayerInfo message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.Room_PlayerInfo} Room_PlayerInfo
+             * @returns {Protos.CS2GC_PlayerInfo} CS2GC_PlayerInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Room_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
+            CS2GC_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
     
             /**
-             * Verifies a Room_PlayerInfo message.
+             * Verifies a CS2GC_PlayerInfo message.
              * @function verify
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            Room_PlayerInfo.verify = function verify(message) {
+            CS2GC_PlayerInfo.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (message.gcNID != null && message.hasOwnProperty("gcNID"))
@@ -3069,17 +3315,17 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Creates a Room_PlayerInfo message from a plain object. Also converts values to their respective internal types.
+             * Creates a CS2GC_PlayerInfo message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.Room_PlayerInfo} Room_PlayerInfo
+             * @returns {Protos.CS2GC_PlayerInfo} CS2GC_PlayerInfo
              */
-            Room_PlayerInfo.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.Room_PlayerInfo)
+            CS2GC_PlayerInfo.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.CS2GC_PlayerInfo)
                     return object;
-                var message = new $root.Protos.Room_PlayerInfo();
+                var message = new $root.Protos.CS2GC_PlayerInfo();
                 if (object.gcNID != null)
                     if ($util.Long)
                         (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
@@ -3097,15 +3343,15 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Creates a plain object from a Room_PlayerInfo message. Also converts values to other types if specified.
+             * Creates a plain object from a CS2GC_PlayerInfo message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @static
-             * @param {Protos.Room_PlayerInfo} message Room_PlayerInfo
+             * @param {Protos.CS2GC_PlayerInfo} message CS2GC_PlayerInfo
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            Room_PlayerInfo.toObject = function toObject(message, options) {
+            CS2GC_PlayerInfo.toObject = function toObject(message, options) {
                 if (!options)
                     options = {};
                 var object = {};
@@ -3131,17 +3377,17 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Converts this Room_PlayerInfo to JSON.
+             * Converts this CS2GC_PlayerInfo to JSON.
              * @function toJSON
-             * @memberof Protos.Room_PlayerInfo
+             * @memberof Protos.CS2GC_PlayerInfo
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            Room_PlayerInfo.prototype.toJSON = function toJSON() {
+            CS2GC_PlayerInfo.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
     
-            return Room_PlayerInfo;
+            return CS2GC_PlayerInfo;
         })();
     
         Protos.CS2GC_PlayerJoin = (function() {
@@ -3151,7 +3397,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface ICS2GC_PlayerJoin
              * @property {Protos.IMsgOpts|null} [opts] CS2GC_PlayerJoin opts
-             * @property {Protos.IRoom_PlayerInfo|null} [playerInfos] CS2GC_PlayerJoin playerInfos
+             * @property {Protos.ICS2GC_PlayerInfo|null} [playerInfos] CS2GC_PlayerJoin playerInfos
              */
     
             /**
@@ -3179,7 +3425,7 @@ define(["libs/protobufjs"], function($protobuf) {
     
             /**
              * CS2GC_PlayerJoin playerInfos.
-             * @member {Protos.IRoom_PlayerInfo|null|undefined} playerInfos
+             * @member {Protos.ICS2GC_PlayerInfo|null|undefined} playerInfos
              * @memberof Protos.CS2GC_PlayerJoin
              * @instance
              */
@@ -3212,7 +3458,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                 if (message.playerInfos != null && message.hasOwnProperty("playerInfos"))
-                    $root.Protos.Room_PlayerInfo.encode(message.playerInfos, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfos, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
                 return writer;
             };
     
@@ -3251,7 +3497,7 @@ define(["libs/protobufjs"], function($protobuf) {
                         message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                         break;
                     case 2:
-                        message.playerInfos = $root.Protos.Room_PlayerInfo.decode(reader, reader.uint32());
+                        message.playerInfos = $root.Protos.CS2GC_PlayerInfo.decode(reader, reader.uint32());
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -3294,7 +3540,7 @@ define(["libs/protobufjs"], function($protobuf) {
                         return "opts." + error;
                 }
                 if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
-                    var error = $root.Protos.Room_PlayerInfo.verify(message.playerInfos);
+                    var error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos);
                     if (error)
                         return "playerInfos." + error;
                 }
@@ -3321,7 +3567,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (object.playerInfos != null) {
                     if (typeof object.playerInfos !== "object")
                         throw TypeError(".Protos.CS2GC_PlayerJoin.playerInfos: object expected");
-                    message.playerInfos = $root.Protos.Room_PlayerInfo.fromObject(object.playerInfos);
+                    message.playerInfos = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfos);
                 }
                 return message;
             };
@@ -3346,7 +3592,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
                 if (message.playerInfos != null && message.hasOwnProperty("playerInfos"))
-                    object.playerInfos = $root.Protos.Room_PlayerInfo.toObject(message.playerInfos, options);
+                    object.playerInfos = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfos, options);
                 return object;
             };
     
@@ -3600,7 +3846,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface ICS2GC_RoomInfo
              * @property {Protos.IMsgOpts|null} [opts] CS2GC_RoomInfo opts
-             * @property {Array.<Protos.IRoom_PlayerInfo>|null} [playerInfos] CS2GC_RoomInfo playerInfos
+             * @property {Array.<Protos.ICS2GC_PlayerInfo>|null} [playerInfos] CS2GC_RoomInfo playerInfos
              * @property {Array.<number>|null} [progresses] CS2GC_RoomInfo progresses
              */
     
@@ -3631,7 +3877,7 @@ define(["libs/protobufjs"], function($protobuf) {
     
             /**
              * CS2GC_RoomInfo playerInfos.
-             * @member {Array.<Protos.IRoom_PlayerInfo>} playerInfos
+             * @member {Array.<Protos.ICS2GC_PlayerInfo>} playerInfos
              * @memberof Protos.CS2GC_RoomInfo
              * @instance
              */
@@ -3673,7 +3919,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                 if (message.playerInfos != null && message.playerInfos.length)
                     for (var i = 0; i < message.playerInfos.length; ++i)
-                        $root.Protos.Room_PlayerInfo.encode(message.playerInfos[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfos[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
                 if (message.progresses != null && message.progresses.length) {
                     writer.uint32(/* id 3, wireType 2 =*/26).fork();
                     for (var i = 0; i < message.progresses.length; ++i)
@@ -3720,7 +3966,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     case 2:
                         if (!(message.playerInfos && message.playerInfos.length))
                             message.playerInfos = [];
-                        message.playerInfos.push($root.Protos.Room_PlayerInfo.decode(reader, reader.uint32()));
+                        message.playerInfos.push($root.Protos.CS2GC_PlayerInfo.decode(reader, reader.uint32()));
                         break;
                     case 3:
                         if (!(message.progresses && message.progresses.length))
@@ -3776,7 +4022,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (!Array.isArray(message.playerInfos))
                         return "playerInfos: array expected";
                     for (var i = 0; i < message.playerInfos.length; ++i) {
-                        var error = $root.Protos.Room_PlayerInfo.verify(message.playerInfos[i]);
+                        var error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos[i]);
                         if (error)
                             return "playerInfos." + error;
                     }
@@ -3815,7 +4061,7 @@ define(["libs/protobufjs"], function($protobuf) {
                     for (var i = 0; i < object.playerInfos.length; ++i) {
                         if (typeof object.playerInfos[i] !== "object")
                             throw TypeError(".Protos.CS2GC_RoomInfo.playerInfos: object expected");
-                        message.playerInfos[i] = $root.Protos.Room_PlayerInfo.fromObject(object.playerInfos[i]);
+                        message.playerInfos[i] = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfos[i]);
                     }
                 }
                 if (object.progresses) {
@@ -3852,7 +4098,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.playerInfos && message.playerInfos.length) {
                     object.playerInfos = [];
                     for (var j = 0; j < message.playerInfos.length; ++j)
-                        object.playerInfos[j] = $root.Protos.Room_PlayerInfo.toObject(message.playerInfos[j], options);
+                        object.playerInfos[j] = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfos[j], options);
                 }
                 if (message.progresses && message.progresses.length) {
                     object.progresses = [];
@@ -3876,28 +4122,28 @@ define(["libs/protobufjs"], function($protobuf) {
             return CS2GC_RoomInfo;
         })();
     
-        Protos.CS2GC_BSInfo = (function() {
+        Protos.CS2GC_EnterBattle = (function() {
     
             /**
-             * Properties of a CS2GC_BSInfo.
+             * Properties of a CS2GC_EnterBattle.
              * @memberof Protos
-             * @interface ICS2GC_BSInfo
-             * @property {Protos.IMsgOpts|null} [opts] CS2GC_BSInfo opts
-             * @property {Long|null} [gcNID] CS2GC_BSInfo gcNID
-             * @property {string|null} [ip] CS2GC_BSInfo ip
-             * @property {number|null} [port] CS2GC_BSInfo port
-             * @property {Protos.CS2GC_BSInfo.Error|null} [error] CS2GC_BSInfo error
+             * @interface ICS2GC_EnterBattle
+             * @property {Protos.IMsgOpts|null} [opts] CS2GC_EnterBattle opts
+             * @property {Long|null} [gcNID] CS2GC_EnterBattle gcNID
+             * @property {string|null} [ip] CS2GC_EnterBattle ip
+             * @property {number|null} [port] CS2GC_EnterBattle port
+             * @property {Protos.CS2GC_EnterBattle.Error|null} [error] CS2GC_EnterBattle error
              */
     
             /**
-             * Constructs a new CS2GC_BSInfo.
+             * Constructs a new CS2GC_EnterBattle.
              * @memberof Protos
-             * @classdesc Represents a CS2GC_BSInfo.
-             * @implements ICS2GC_BSInfo
+             * @classdesc Represents a CS2GC_EnterBattle.
+             * @implements ICS2GC_EnterBattle
              * @constructor
-             * @param {Protos.ICS2GC_BSInfo=} [properties] Properties to set
+             * @param {Protos.ICS2GC_EnterBattle=} [properties] Properties to set
              */
-            function CS2GC_BSInfo(properties) {
+            function CS2GC_EnterBattle(properties) {
                 if (properties)
                     for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null)
@@ -3905,67 +4151,67 @@ define(["libs/protobufjs"], function($protobuf) {
             }
     
             /**
-             * CS2GC_BSInfo opts.
+             * CS2GC_EnterBattle opts.
              * @member {Protos.IMsgOpts|null|undefined} opts
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @instance
              */
-            CS2GC_BSInfo.prototype.opts = null;
+            CS2GC_EnterBattle.prototype.opts = null;
     
             /**
-             * CS2GC_BSInfo gcNID.
+             * CS2GC_EnterBattle gcNID.
              * @member {Long} gcNID
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @instance
              */
-            CS2GC_BSInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+            CS2GC_EnterBattle.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
     
             /**
-             * CS2GC_BSInfo ip.
+             * CS2GC_EnterBattle ip.
              * @member {string} ip
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @instance
              */
-            CS2GC_BSInfo.prototype.ip = "";
+            CS2GC_EnterBattle.prototype.ip = "";
     
             /**
-             * CS2GC_BSInfo port.
+             * CS2GC_EnterBattle port.
              * @member {number} port
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @instance
              */
-            CS2GC_BSInfo.prototype.port = 0;
+            CS2GC_EnterBattle.prototype.port = 0;
     
             /**
-             * CS2GC_BSInfo error.
-             * @member {Protos.CS2GC_BSInfo.Error} error
-             * @memberof Protos.CS2GC_BSInfo
+             * CS2GC_EnterBattle error.
+             * @member {Protos.CS2GC_EnterBattle.Error} error
+             * @memberof Protos.CS2GC_EnterBattle
              * @instance
              */
-            CS2GC_BSInfo.prototype.error = 0;
+            CS2GC_EnterBattle.prototype.error = 0;
     
             /**
-             * Creates a new CS2GC_BSInfo instance using the specified properties.
+             * Creates a new CS2GC_EnterBattle instance using the specified properties.
              * @function create
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @static
-             * @param {Protos.ICS2GC_BSInfo=} [properties] Properties to set
-             * @returns {Protos.CS2GC_BSInfo} CS2GC_BSInfo instance
+             * @param {Protos.ICS2GC_EnterBattle=} [properties] Properties to set
+             * @returns {Protos.CS2GC_EnterBattle} CS2GC_EnterBattle instance
              */
-            CS2GC_BSInfo.create = function create(properties) {
-                return new CS2GC_BSInfo(properties);
+            CS2GC_EnterBattle.create = function create(properties) {
+                return new CS2GC_EnterBattle(properties);
             };
     
             /**
-             * Encodes the specified CS2GC_BSInfo message. Does not implicitly {@link Protos.CS2GC_BSInfo.verify|verify} messages.
+             * Encodes the specified CS2GC_EnterBattle message. Does not implicitly {@link Protos.CS2GC_EnterBattle.verify|verify} messages.
              * @function encode
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @static
-             * @param {Protos.ICS2GC_BSInfo} message CS2GC_BSInfo message or plain object to encode
+             * @param {Protos.ICS2GC_EnterBattle} message CS2GC_EnterBattle message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            CS2GC_BSInfo.encode = function encode(message, writer) {
+            CS2GC_EnterBattle.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
@@ -3982,33 +4228,33 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Encodes the specified CS2GC_BSInfo message, length delimited. Does not implicitly {@link Protos.CS2GC_BSInfo.verify|verify} messages.
+             * Encodes the specified CS2GC_EnterBattle message, length delimited. Does not implicitly {@link Protos.CS2GC_EnterBattle.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @static
-             * @param {Protos.ICS2GC_BSInfo} message CS2GC_BSInfo message or plain object to encode
+             * @param {Protos.ICS2GC_EnterBattle} message CS2GC_EnterBattle message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            CS2GC_BSInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            CS2GC_EnterBattle.encodeDelimited = function encodeDelimited(message, writer) {
                 return this.encode(message, writer).ldelim();
             };
     
             /**
-             * Decodes a CS2GC_BSInfo message from the specified reader or buffer.
+             * Decodes a CS2GC_EnterBattle message from the specified reader or buffer.
              * @function decode
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.CS2GC_BSInfo} CS2GC_BSInfo
+             * @returns {Protos.CS2GC_EnterBattle} CS2GC_EnterBattle
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            CS2GC_BSInfo.decode = function decode(reader, length) {
+            CS2GC_EnterBattle.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BSInfo();
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_EnterBattle();
                 while (reader.pos < end) {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
@@ -4036,30 +4282,30 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Decodes a CS2GC_BSInfo message from the specified reader or buffer, length delimited.
+             * Decodes a CS2GC_EnterBattle message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.CS2GC_BSInfo} CS2GC_BSInfo
+             * @returns {Protos.CS2GC_EnterBattle} CS2GC_EnterBattle
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            CS2GC_BSInfo.decodeDelimited = function decodeDelimited(reader) {
+            CS2GC_EnterBattle.decodeDelimited = function decodeDelimited(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
     
             /**
-             * Verifies a CS2GC_BSInfo message.
+             * Verifies a CS2GC_EnterBattle message.
              * @function verify
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            CS2GC_BSInfo.verify = function verify(message) {
+            CS2GC_EnterBattle.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (message.opts != null && message.hasOwnProperty("opts")) {
@@ -4089,20 +4335,20 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Creates a CS2GC_BSInfo message from a plain object. Also converts values to their respective internal types.
+             * Creates a CS2GC_EnterBattle message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.CS2GC_BSInfo} CS2GC_BSInfo
+             * @returns {Protos.CS2GC_EnterBattle} CS2GC_EnterBattle
              */
-            CS2GC_BSInfo.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.CS2GC_BSInfo)
+            CS2GC_EnterBattle.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.CS2GC_EnterBattle)
                     return object;
-                var message = new $root.Protos.CS2GC_BSInfo();
+                var message = new $root.Protos.CS2GC_EnterBattle();
                 if (object.opts != null) {
                     if (typeof object.opts !== "object")
-                        throw TypeError(".Protos.CS2GC_BSInfo.opts: object expected");
+                        throw TypeError(".Protos.CS2GC_EnterBattle.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
                 if (object.gcNID != null)
@@ -4136,15 +4382,15 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             /**
-             * Creates a plain object from a CS2GC_BSInfo message. Also converts values to other types if specified.
+             * Creates a plain object from a CS2GC_EnterBattle message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @static
-             * @param {Protos.CS2GC_BSInfo} message CS2GC_BSInfo
+             * @param {Protos.CS2GC_EnterBattle} message CS2GC_EnterBattle
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            CS2GC_BSInfo.toObject = function toObject(message, options) {
+            CS2GC_EnterBattle.toObject = function toObject(message, options) {
                 if (!options)
                     options = {};
                 var object = {};
@@ -4171,30 +4417,30 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.port != null && message.hasOwnProperty("port"))
                     object.port = message.port;
                 if (message.error != null && message.hasOwnProperty("error"))
-                    object.error = options.enums === String ? $root.Protos.CS2GC_BSInfo.Error[message.error] : message.error;
+                    object.error = options.enums === String ? $root.Protos.CS2GC_EnterBattle.Error[message.error] : message.error;
                 return object;
             };
     
             /**
-             * Converts this CS2GC_BSInfo to JSON.
+             * Converts this CS2GC_EnterBattle to JSON.
              * @function toJSON
-             * @memberof Protos.CS2GC_BSInfo
+             * @memberof Protos.CS2GC_EnterBattle
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            CS2GC_BSInfo.prototype.toJSON = function toJSON() {
+            CS2GC_EnterBattle.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
     
             /**
              * Error enum.
-             * @name Protos.CS2GC_BSInfo.Error
+             * @name Protos.CS2GC_EnterBattle.Error
              * @enum {string}
              * @property {number} Success=0 Success value
              * @property {number} BSNotFound=1 BSNotFound value
              * @property {number} BSLost=2 BSLost value
              */
-            CS2GC_BSInfo.Error = (function() {
+            CS2GC_EnterBattle.Error = (function() {
                 var valuesById = {}, values = Object.create(valuesById);
                 values[valuesById[0] = "Success"] = 0;
                 values[valuesById[1] = "BSNotFound"] = 1;
@@ -4202,7 +4448,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 return values;
             })();
     
-            return CS2GC_BSInfo;
+            return CS2GC_EnterBattle;
         })();
     
         Protos.CS2GS_GCLoginRet = (function() {
@@ -4213,6 +4459,10 @@ define(["libs/protobufjs"], function($protobuf) {
              * @interface ICS2GS_GCLoginRet
              * @property {Protos.IMsgOpts|null} [opts] CS2GS_GCLoginRet opts
              * @property {Protos.CS2GS_GCLoginRet.EResult|null} [result] CS2GS_GCLoginRet result
+             * @property {Protos.CS2GS_GCLoginRet.EGCCState|null} [gcState] CS2GS_GCLoginRet gcState
+             * @property {Long|null} [gcNID] CS2GS_GCLoginRet gcNID
+             * @property {string|null} [bsIP] CS2GS_GCLoginRet bsIP
+             * @property {number|null} [bsPort] CS2GS_GCLoginRet bsPort
              */
     
             /**
@@ -4247,6 +4497,38 @@ define(["libs/protobufjs"], function($protobuf) {
             CS2GS_GCLoginRet.prototype.result = 0;
     
             /**
+             * CS2GS_GCLoginRet gcState.
+             * @member {Protos.CS2GS_GCLoginRet.EGCCState} gcState
+             * @memberof Protos.CS2GS_GCLoginRet
+             * @instance
+             */
+            CS2GS_GCLoginRet.prototype.gcState = 0;
+    
+            /**
+             * CS2GS_GCLoginRet gcNID.
+             * @member {Long} gcNID
+             * @memberof Protos.CS2GS_GCLoginRet
+             * @instance
+             */
+            CS2GS_GCLoginRet.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+            /**
+             * CS2GS_GCLoginRet bsIP.
+             * @member {string} bsIP
+             * @memberof Protos.CS2GS_GCLoginRet
+             * @instance
+             */
+            CS2GS_GCLoginRet.prototype.bsIP = "";
+    
+            /**
+             * CS2GS_GCLoginRet bsPort.
+             * @member {number} bsPort
+             * @memberof Protos.CS2GS_GCLoginRet
+             * @instance
+             */
+            CS2GS_GCLoginRet.prototype.bsPort = 0;
+    
+            /**
              * Creates a new CS2GS_GCLoginRet instance using the specified properties.
              * @function create
              * @memberof Protos.CS2GS_GCLoginRet
@@ -4274,6 +4556,14 @@ define(["libs/protobufjs"], function($protobuf) {
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                 if (message.result != null && message.hasOwnProperty("result"))
                     writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
+                if (message.gcState != null && message.hasOwnProperty("gcState"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.gcState);
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.gcNID);
+                if (message.bsIP != null && message.hasOwnProperty("bsIP"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.bsIP);
+                if (message.bsPort != null && message.hasOwnProperty("bsPort"))
+                    writer.uint32(/* id 6, wireType 0 =*/48).int32(message.bsPort);
                 return writer;
             };
     
@@ -4313,6 +4603,18 @@ define(["libs/protobufjs"], function($protobuf) {
                         break;
                     case 2:
                         message.result = reader.int32();
+                        break;
+                    case 3:
+                        message.gcState = reader.int32();
+                        break;
+                    case 4:
+                        message.gcNID = reader.uint64();
+                        break;
+                    case 5:
+                        message.bsIP = reader.string();
+                        break;
+                    case 6:
+                        message.bsPort = reader.int32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -4362,6 +4664,23 @@ define(["libs/protobufjs"], function($protobuf) {
                     case 1:
                         break;
                     }
+                if (message.gcState != null && message.hasOwnProperty("gcState"))
+                    switch (message.gcState) {
+                    default:
+                        return "gcState: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                        return "gcNID: integer|Long expected";
+                if (message.bsIP != null && message.hasOwnProperty("bsIP"))
+                    if (!$util.isString(message.bsIP))
+                        return "bsIP: string expected";
+                if (message.bsPort != null && message.hasOwnProperty("bsPort"))
+                    if (!$util.isInteger(message.bsPort))
+                        return "bsPort: integer expected";
                 return null;
             };
     
@@ -4392,6 +4711,29 @@ define(["libs/protobufjs"], function($protobuf) {
                     message.result = 1;
                     break;
                 }
+                switch (object.gcState) {
+                case "Idle":
+                case 0:
+                    message.gcState = 0;
+                    break;
+                case "Battle":
+                case 1:
+                    message.gcState = 1;
+                    break;
+                }
+                if (object.gcNID != null)
+                    if ($util.Long)
+                        (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                    else if (typeof object.gcNID === "string")
+                        message.gcNID = parseInt(object.gcNID, 10);
+                    else if (typeof object.gcNID === "number")
+                        message.gcNID = object.gcNID;
+                    else if (typeof object.gcNID === "object")
+                        message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+                if (object.bsIP != null)
+                    message.bsIP = String(object.bsIP);
+                if (object.bsPort != null)
+                    message.bsPort = object.bsPort | 0;
                 return message;
             };
     
@@ -4411,11 +4753,30 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (options.defaults) {
                     object.opts = null;
                     object.result = options.enums === String ? "Success" : 0;
+                    object.gcState = options.enums === String ? "Idle" : 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.gcNID = options.longs === String ? "0" : 0;
+                    object.bsIP = "";
+                    object.bsPort = 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
                 if (message.result != null && message.hasOwnProperty("result"))
                     object.result = options.enums === String ? $root.Protos.CS2GS_GCLoginRet.EResult[message.result] : message.result;
+                if (message.gcState != null && message.hasOwnProperty("gcState"))
+                    object.gcState = options.enums === String ? $root.Protos.CS2GS_GCLoginRet.EGCCState[message.gcState] : message.gcState;
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (typeof message.gcNID === "number")
+                        object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                    else
+                        object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+                if (message.bsIP != null && message.hasOwnProperty("bsIP"))
+                    object.bsIP = message.bsIP;
+                if (message.bsPort != null && message.hasOwnProperty("bsPort"))
+                    object.bsPort = message.bsPort;
                 return object;
             };
     
@@ -4441,6 +4802,20 @@ define(["libs/protobufjs"], function($protobuf) {
                 var valuesById = {}, values = Object.create(valuesById);
                 values[valuesById[0] = "Success"] = 0;
                 values[valuesById[1] = "IllegalLogin"] = 1;
+                return values;
+            })();
+    
+            /**
+             * EGCCState enum.
+             * @name Protos.CS2GS_GCLoginRet.EGCCState
+             * @enum {string}
+             * @property {number} Idle=0 Idle value
+             * @property {number} Battle=1 Battle value
+             */
+            CS2GS_GCLoginRet.EGCCState = (function() {
+                var valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "Idle"] = 0;
+                values[valuesById[1] = "Battle"] = 1;
                 return values;
             })();
     
@@ -9791,6 +10166,10 @@ define(["libs/protobufjs"], function($protobuf) {
              * @interface IGS2GC_LoginRet
              * @property {Protos.IMsgOpts|null} [opts] GS2GC_LoginRet opts
              * @property {Protos.GS2GC_LoginRet.EResult|null} [result] GS2GC_LoginRet result
+             * @property {Protos.GS2GC_LoginRet.EGCCState|null} [gcState] GS2GC_LoginRet gcState
+             * @property {Long|null} [gcNID] GS2GC_LoginRet gcNID
+             * @property {string|null} [bsIP] GS2GC_LoginRet bsIP
+             * @property {number|null} [bsPort] GS2GC_LoginRet bsPort
              */
     
             /**
@@ -9825,6 +10204,38 @@ define(["libs/protobufjs"], function($protobuf) {
             GS2GC_LoginRet.prototype.result = 0;
     
             /**
+             * GS2GC_LoginRet gcState.
+             * @member {Protos.GS2GC_LoginRet.EGCCState} gcState
+             * @memberof Protos.GS2GC_LoginRet
+             * @instance
+             */
+            GS2GC_LoginRet.prototype.gcState = 0;
+    
+            /**
+             * GS2GC_LoginRet gcNID.
+             * @member {Long} gcNID
+             * @memberof Protos.GS2GC_LoginRet
+             * @instance
+             */
+            GS2GC_LoginRet.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+            /**
+             * GS2GC_LoginRet bsIP.
+             * @member {string} bsIP
+             * @memberof Protos.GS2GC_LoginRet
+             * @instance
+             */
+            GS2GC_LoginRet.prototype.bsIP = "";
+    
+            /**
+             * GS2GC_LoginRet bsPort.
+             * @member {number} bsPort
+             * @memberof Protos.GS2GC_LoginRet
+             * @instance
+             */
+            GS2GC_LoginRet.prototype.bsPort = 0;
+    
+            /**
              * Creates a new GS2GC_LoginRet instance using the specified properties.
              * @function create
              * @memberof Protos.GS2GC_LoginRet
@@ -9852,6 +10263,14 @@ define(["libs/protobufjs"], function($protobuf) {
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                 if (message.result != null && message.hasOwnProperty("result"))
                     writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
+                if (message.gcState != null && message.hasOwnProperty("gcState"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.gcState);
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.gcNID);
+                if (message.bsIP != null && message.hasOwnProperty("bsIP"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.bsIP);
+                if (message.bsPort != null && message.hasOwnProperty("bsPort"))
+                    writer.uint32(/* id 6, wireType 0 =*/48).int32(message.bsPort);
                 return writer;
             };
     
@@ -9891,6 +10310,18 @@ define(["libs/protobufjs"], function($protobuf) {
                         break;
                     case 2:
                         message.result = reader.int32();
+                        break;
+                    case 3:
+                        message.gcState = reader.int32();
+                        break;
+                    case 4:
+                        message.gcNID = reader.uint64();
+                        break;
+                    case 5:
+                        message.bsIP = reader.string();
+                        break;
+                    case 6:
+                        message.bsPort = reader.int32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -9938,9 +10369,25 @@ define(["libs/protobufjs"], function($protobuf) {
                         return "result: enum value expected";
                     case 0:
                     case 1:
-                    case 2:
                         break;
                     }
+                if (message.gcState != null && message.hasOwnProperty("gcState"))
+                    switch (message.gcState) {
+                    default:
+                        return "gcState: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                        return "gcNID: integer|Long expected";
+                if (message.bsIP != null && message.hasOwnProperty("bsIP"))
+                    if (!$util.isString(message.bsIP))
+                        return "bsIP: string expected";
+                if (message.bsPort != null && message.hasOwnProperty("bsPort"))
+                    if (!$util.isInteger(message.bsPort))
+                        return "bsPort: integer expected";
                 return null;
             };
     
@@ -9970,11 +10417,30 @@ define(["libs/protobufjs"], function($protobuf) {
                 case 1:
                     message.result = 1;
                     break;
-                case "IllegalLogin":
-                case 2:
-                    message.result = 2;
+                }
+                switch (object.gcState) {
+                case "Idle":
+                case 0:
+                    message.gcState = 0;
+                    break;
+                case "Battle":
+                case 1:
+                    message.gcState = 1;
                     break;
                 }
+                if (object.gcNID != null)
+                    if ($util.Long)
+                        (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                    else if (typeof object.gcNID === "string")
+                        message.gcNID = parseInt(object.gcNID, 10);
+                    else if (typeof object.gcNID === "number")
+                        message.gcNID = object.gcNID;
+                    else if (typeof object.gcNID === "object")
+                        message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+                if (object.bsIP != null)
+                    message.bsIP = String(object.bsIP);
+                if (object.bsPort != null)
+                    message.bsPort = object.bsPort | 0;
                 return message;
             };
     
@@ -9994,11 +10460,30 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (options.defaults) {
                     object.opts = null;
                     object.result = options.enums === String ? "Success" : 0;
+                    object.gcState = options.enums === String ? "Idle" : 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.gcNID = options.longs === String ? "0" : 0;
+                    object.bsIP = "";
+                    object.bsPort = 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
                 if (message.result != null && message.hasOwnProperty("result"))
                     object.result = options.enums === String ? $root.Protos.GS2GC_LoginRet.EResult[message.result] : message.result;
+                if (message.gcState != null && message.hasOwnProperty("gcState"))
+                    object.gcState = options.enums === String ? $root.Protos.GS2GC_LoginRet.EGCCState[message.gcState] : message.gcState;
+                if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                    if (typeof message.gcNID === "number")
+                        object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                    else
+                        object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+                if (message.bsIP != null && message.hasOwnProperty("bsIP"))
+                    object.bsIP = message.bsIP;
+                if (message.bsPort != null && message.hasOwnProperty("bsPort"))
+                    object.bsPort = message.bsPort;
                 return object;
             };
     
@@ -10019,13 +10504,25 @@ define(["libs/protobufjs"], function($protobuf) {
              * @enum {string}
              * @property {number} Success=0 Success value
              * @property {number} SessionExpire=1 SessionExpire value
-             * @property {number} IllegalLogin=2 IllegalLogin value
              */
             GS2GC_LoginRet.EResult = (function() {
                 var valuesById = {}, values = Object.create(valuesById);
                 values[valuesById[0] = "Success"] = 0;
                 values[valuesById[1] = "SessionExpire"] = 1;
-                values[valuesById[2] = "IllegalLogin"] = 2;
+                return values;
+            })();
+    
+            /**
+             * EGCCState enum.
+             * @name Protos.GS2GC_LoginRet.EGCCState
+             * @enum {string}
+             * @property {number} Idle=0 Idle value
+             * @property {number} Battle=1 Battle value
+             */
+            GS2GC_LoginRet.EGCCState = (function() {
+                var valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "Idle"] = 0;
+                values[valuesById[1] = "Battle"] = 1;
                 return values;
             })();
     

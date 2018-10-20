@@ -45,7 +45,7 @@ public static class ProtoCreator {
 		{typeof(Protos.CS2GC_PlayerJoin), (Protos.MsgID)5301},
 		{typeof(Protos.CS2GC_PlayerLeave), (Protos.MsgID)5302},
 		{typeof(Protos.CS2GC_RoomInfo), (Protos.MsgID)5303},
-		{typeof(Protos.CS2GC_BSInfo), (Protos.MsgID)5304},
+		{typeof(Protos.CS2GC_EnterBattle), (Protos.MsgID)5304},
 		{typeof(Protos.DB2LS_QueryAccountRet), (Protos.MsgID)8000},
 		{typeof(Protos.DB2LS_QueryLoginRet), (Protos.MsgID)8001},
 		{typeof(Protos.DB2LS_ExecRet), (Protos.MsgID)8002},
@@ -91,7 +91,7 @@ public static class ProtoCreator {
 		{(Protos.MsgID)5301, typeof(Protos.CS2GC_PlayerJoin)},
 		{(Protos.MsgID)5302, typeof(Protos.CS2GC_PlayerLeave)},
 		{(Protos.MsgID)5303, typeof(Protos.CS2GC_RoomInfo)},
-		{(Protos.MsgID)5304, typeof(Protos.CS2GC_BSInfo)},
+		{(Protos.MsgID)5304, typeof(Protos.CS2GC_EnterBattle)},
 		{(Protos.MsgID)8000, typeof(Protos.DB2LS_QueryAccountRet)},
 		{(Protos.MsgID)8001, typeof(Protos.DB2LS_QueryLoginRet)},
 		{(Protos.MsgID)8002, typeof(Protos.DB2LS_ExecRet)},
@@ -347,8 +347,8 @@ public static class ProtoCreator {
 		return msg;
 	}
 
-	public static Protos.CS2GC_BSInfo Q_CS2GC_BSInfo() {
-		var msg = new Protos.CS2GC_BSInfo();
+	public static Protos.CS2GC_EnterBattle Q_CS2GC_EnterBattle() {
+		var msg = new Protos.CS2GC_EnterBattle();
 		msg.Opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -687,7 +687,7 @@ public static class ProtoCreator {
 				return msg;
 			}
 			case (Protos.MsgID)5304: {
-				var msg = new Protos.CS2GC_BSInfo();
+				var msg = new Protos.CS2GC_EnterBattle();
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
@@ -944,8 +944,8 @@ public static class ProtoCreator {
 		return msg;
 	}
 
-	public static Protos.CS2GC_BSInfo D_CS2GC_BSInfo( byte[] data, int offset, int size ) {
-		var msg = new Protos.CS2GC_BSInfo();
+	public static Protos.CS2GC_EnterBattle D_CS2GC_EnterBattle( byte[] data, int offset, int size ) {
+		var msg = new Protos.CS2GC_EnterBattle();
 		msg.MergeFrom( data, offset, size );
 		return msg;
 	}
@@ -1091,7 +1091,7 @@ public static class ProtoCreator {
 				return new Protos.CS2GC_RoomInfo();
 			}
 			case (Protos.MsgID)5304: {
-				return new Protos.CS2GC_BSInfo();
+				return new Protos.CS2GC_EnterBattle();
 			}
 			case (Protos.MsgID)8000: {
 				return new Protos.DB2LS_QueryAccountRet();
@@ -1229,7 +1229,7 @@ public static class ProtoCreator {
 				return ((Protos.CS2GC_RoomInfo)message).Opts;
 			}
 			case (Protos.MsgID)5304: {
-				return ((Protos.CS2GC_BSInfo)message).Opts;
+				return ((Protos.CS2GC_EnterBattle)message).Opts;
 			}
 			case (Protos.MsgID)8000: {
 				return ((Protos.DB2LS_QueryAccountRet)message).Opts;

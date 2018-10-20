@@ -37,18 +37,5 @@ namespace CentralServer
 			this.netSessionMgr.Send( SessionType.ServerLS, nGSInfo );
 			return ErrorCode.Success;
 		}
-
-		public ErrorCode GSDisconnectHandler( uint gsNID )
-		{
-			bool result = this.LIDToGSInfos.Remove( gsNID );
-			System.Diagnostics.Debug.Assert( result, $"gsNID:{gsNID} not found" );
-			//踢出所有连接到该GS的玩家
-			this.userMgr.KickUsers( gsNID );
-			//通知LS有GS断开连接了
-			Protos.CS2LS_GSLost gsLost = ProtoCreator.Q_CS2LS_GSLost();
-			gsLost.Gsid = gsNID;
-			this.netSessionMgr.Send( SessionType.ServerLS, gsLost );
-			return ErrorCode.Success;
-		}
 	}
 }

@@ -32,7 +32,7 @@ namespace Protos {
             "a1BpbmcSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgwKBHRpbWUY",
             "AiABKAMiSgoMR19Bc2tQaW5nUmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
             "TXNnT3B0cxINCgVzdGltZRgCIAEoAxIMCgR0aW1lGAMgASgDIiwKBkdsb2Jh",
-            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASryBwoFTXNn",
+            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASr3BwoFTXNn",
             "SUQSDAoIVW5kZWZpbmUQABIOCgplR19Bc2tQaW5nEAoSEQoNZUdfQXNrUGlu",
             "Z1JldBALEhcKEmVHQzJMU19Bc2tSZWdpc3RlchDoBxIUCg9lR0MyTFNfQXNr",
             "TG9naW4Q6QcSGQoUZUdDMkxTX0Fza1NtYXJ0TG9naW4Q6gcSFAoPZUdDMkdT",
@@ -53,9 +53,9 @@ namespace Protos {
             "JxISCg1lQ1MyR1NfS2lja0dDEO0nEhYKEWVDUzJCU19CYXR0bGVJbmZvENAo",
             "EhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhYKEWVDUzJHQ19QbGF5ZXJK",
             "b2luELUpEhcKEmVDUzJHQ19QbGF5ZXJMZWF2ZRC2KRIUCg9lQ1MyR0NfUm9v",
-            "bUluZm8QtykSEgoNZUNTMkdDX0JTSW5mbxC4KRIbChZlREIyTFNfUXVlcnlB",
-            "Y2NvdW50UmV0EMA+EhkKFGVEQjJMU19RdWVyeUxvZ2luUmV0EME+EhMKDmVE",
-            "QjJMU19FeGVjUmV0EMI+YgZwcm90bzM="));
+            "bUluZm8QtykSFwoSZUNTMkdDX0VudGVyQmF0dGxlELgpEhsKFmVEQjJMU19R",
+            "dWVyeUFjY291bnRSZXQQwD4SGQoUZURCMkxTX1F1ZXJ5TG9naW5SZXQQwT4S",
+            "EwoOZURCMkxTX0V4ZWNSZXQQwj5iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
@@ -125,7 +125,7 @@ namespace Protos {
     [pbr::OriginalName("eCS2GC_PlayerJoin")] ECs2GcPlayerJoin = 5301,
     [pbr::OriginalName("eCS2GC_PlayerLeave")] ECs2GcPlayerLeave = 5302,
     [pbr::OriginalName("eCS2GC_RoomInfo")] ECs2GcRoomInfo = 5303,
-    [pbr::OriginalName("eCS2GC_BSInfo")] ECs2GcBsinfo = 5304,
+    [pbr::OriginalName("eCS2GC_EnterBattle")] ECs2GcEnterBattle = 5304,
     /// <summary>
     ///db
     /// </summary>

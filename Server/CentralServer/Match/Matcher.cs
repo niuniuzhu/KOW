@@ -30,30 +30,24 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 强制把指定ID玩家踢除
 		/// </summary>
-		public bool OnUserKicked( ulong gcNID )
+		public bool OnUserKicked( CSUser user )
 		{
-			CUser user = CS.instance.userMgr.GetUser( gcNID );
-			if ( user == null )
-			{
-				Logger.Error( $"can not find user:{gcNID}" );
-				return false;
-			}
 			if ( !user.inRoom || !this._idToRoom.TryGetValue( user.roomID, out Room room ) )
 			{
-				Logger.Error( $"player:{gcNID} not in room" );
+				Logger.Error( $"player:{user.gcNID} not in room" );
 				return false;
 			}
-			PlayerInfo player = room.GetPlayer( gcNID );
+			PlayerInfo player = room.GetPlayer( user.gcNID );
 			if ( player == null )
 			{
-				Logger.Error( $"player:{gcNID} not in room" );
+				Logger.Error( $"player:{user.gcNID} not in room" );
 				return false;
 			}
 			this.RemovePlayer( room, player, user );
 			return true;
 		}
 
-		private void AddPlayer( Room room, PlayerInfo player, CUser user )
+		private void AddPlayer( Room room, PlayerInfo player, CSUser user )
 		{
 			room.AddPlayer( player );
 			user.roomID = room.id;
@@ -61,7 +55,7 @@ namespace CentralServer.Match
 
 			//通知gc有玩家加入房间
 			Protos.CS2GC_PlayerJoin playerJoin = ProtoCreator.Q_CS2GC_PlayerJoin();
-			playerJoin.PlayerInfos = new Protos.Room_PlayerInfo
+			playerJoin.PlayerInfos = new Protos.CS2GC_PlayerInfo
 			{
 				GcNID = player.gcNID,
 				Name = player.uname,
@@ -74,7 +68,7 @@ namespace CentralServer.Match
 		/// 移除玩家
 		/// 该方法不检查参数合法性
 		/// </summary>
-		private void RemovePlayer( Room room, PlayerInfo player, CUser user )
+		private void RemovePlayer( Room room, PlayerInfo player, CSUser user )
 		{
 			room.RemovePlayer( player );
 			user.inRoom = false;
@@ -125,7 +119,7 @@ namespace CentralServer.Match
 
 		private Room GetRoom( ulong gcNID )
 		{
-			CUser user = CS.instance.userMgr.GetUser( gcNID );
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 			if ( user == null )
 			{
 				Logger.Error( $"can not find user:{gcNID}" );
@@ -139,12 +133,14 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 处理玩家开始匹配
 		/// </summary>
-		public ErrorCode OnGc2CsBeginMatch( uint sid, IMessage message )
+		public ErrorCode BeginMatch( uint sid, IMessage message )
 		{
+			//todo 这里需要检查发起匹配的合法性,由于是客户端主动调用的.例如处于战场状态或维护状态不能发起匹配
+
 			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch ) message;
 			ulong gcNID = beginMatch.Opts.Transid;
 
-			CUser user = CS.instance.userMgr.GetUser( gcNID );
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 			if ( user == null )
 			{
 				Logger.Error( $"invalid gcNID:{gcNID}" );
@@ -167,7 +163,7 @@ namespace CentralServer.Match
 			ret.MaxPlayer = room.maxPlayers;
 			this.FillProtoPlayerInfo( room, ret.PlayerInfos );
 
-			PlayerInfo player = new PlayerInfo( gcNID );
+			PlayerInfo player = new PlayerInfo( gcNID, user.ukey );
 			player.actorID = beginMatch.ActorID;
 
 			if ( !room.CanAddPlayer( player ) )
@@ -237,51 +233,75 @@ namespace CentralServer.Match
 			//没有找到合适的bs,通知客户端匹配失败
 			if ( CS.instance.appropriateBSInfo == null )
 			{
-				this.NotifyGCBeginFailed( room, Protos.CS2GC_BSInfo.Types.Error.BsnotFound );
+				this.NotifyGCBeginFailed( room, Protos.CS2GC_EnterBattle.Types.Error.BsnotFound );
 				this.DestroyRoom( room, 1 );
 				return;
 			}
 
 			BSInfo selectedBSInfo = CS.instance.appropriateBSInfo;
-			//先通知BS
+			//先通知BS创建战场
 			Protos.CS2BS_BattleInfo battleInfo = ProtoCreator.Q_CS2BS_BattleInfo();
 			battleInfo.Id = room.id;
 			battleInfo.MapID = room.mapID;
 			battleInfo.Timeout = ( int ) Consts.WAITING_ROOM_TIME_OUT;
-			this.FillProtoPlayerInfo( room, battleInfo.PlayerInfo );
+			for ( int i = 0; i < room.numPlayers; i++ )
+			{
+				PlayerInfo player = room.GetPlayerAt( i );
+				Protos.CS2BS_PlayerInfo pi = new Protos.CS2BS_PlayerInfo
+				{
+					GcNID = player.ukey | ( ulong ) CS.instance.appropriateBSInfo.lid << 32,
+					Name = CS.instance.userMgr.GetUser( player.gcNID ).name,
+					ActorID = player.actorID
+				};
+				battleInfo.PlayerInfo.Add( pi );
+			}
+
 			CS.instance.netSessionMgr.Send( selectedBSInfo.sessionID, battleInfo, msg =>
 			{
+				//这个回调表示BS通知CS战场创建完成了
+
 				//避免在消息发送期间,BS可能发生意外丢失,这里需要再检查一次
 				if ( !CS.instance.LIDToBSInfos.ContainsKey( selectedBSInfo.lid ) )
-					this.NotifyGCBeginFailed( room, Protos.CS2GC_BSInfo.Types.Error.Bslost );
+					this.NotifyGCBeginFailed( room, Protos.CS2GC_EnterBattle.Types.Error.Bslost );
 				else
 				{
-					Protos.CS2GC_BSInfo bsInfo = ProtoCreator.Q_CS2GC_BSInfo();
-					bsInfo.Ip = CS.instance.appropriateBSInfo.ip;
-					bsInfo.Port = CS.instance.appropriateBSInfo.port;
-					this.Broadcast( room, bsInfo, 0, ( m, player ) =>
+					int count = room.numPlayers;
+					for ( int i = 0; i < count; i++ )
 					{
-						Protos.CS2GC_BSInfo m2 = ( Protos.CS2GC_BSInfo ) m;
-						m2.GcNID = player.gcNID;
+						PlayerInfo playerInfo = room.GetPlayerAt( i );
+						CSUser user = CS.instance.userMgr.GetUser( playerInfo.ukey );
+						//记录BS逻辑ID
+						user.bsNID = CS.instance.appropriateBSInfo.lid;
+						//设置玩家为战场状态
+						user.state = CSUser.State.Battle;
+					}
+
+					Protos.CS2GC_EnterBattle enterBattle = ProtoCreator.Q_CS2GC_EnterBattle();
+					enterBattle.Ip = CS.instance.appropriateBSInfo.ip;
+					enterBattle.Port = CS.instance.appropriateBSInfo.port;
+					this.Broadcast( room, enterBattle, 0, ( m, player ) =>
+					{
+						Protos.CS2GC_EnterBattle m2 = ( Protos.CS2GC_EnterBattle ) m;
+						m2.GcNID = player.ukey | ( ulong ) CS.instance.appropriateBSInfo.lid << 32;
 					} );
 				}
 				this.DestroyRoom( room, 1 );
 			} );
 		}
 
-		private void NotifyGCBeginFailed( Room room, Protos.CS2GC_BSInfo.Types.Error error )
+		private void NotifyGCBeginFailed( Room room, Protos.CS2GC_EnterBattle.Types.Error error )
 		{
-			Protos.CS2GC_BSInfo bsInfo = ProtoCreator.Q_CS2GC_BSInfo();
+			Protos.CS2GC_EnterBattle bsInfo = ProtoCreator.Q_CS2GC_EnterBattle();
 			bsInfo.Error = error;
 			this.Broadcast( room, bsInfo );
 		}
 
-		private void FillProtoPlayerInfo( Room room, Google.Protobuf.Collections.RepeatedField<Protos.Room_PlayerInfo> repeatedField )
+		private void FillProtoPlayerInfo( Room room, Google.Protobuf.Collections.RepeatedField<Protos.CS2GC_PlayerInfo> repeatedField )
 		{
 			for ( int i = 0; i < room.numPlayers; i++ )
 			{
 				PlayerInfo player = room.GetPlayerAt( i );
-				Protos.Room_PlayerInfo pi = new Protos.Room_PlayerInfo();
+				Protos.CS2GC_PlayerInfo pi = new Protos.CS2GC_PlayerInfo();
 				pi.GcNID = player.gcNID;
 				pi.Name = CS.instance.userMgr.GetUser( player.gcNID ).name;
 				pi.ActorID = player.actorID;

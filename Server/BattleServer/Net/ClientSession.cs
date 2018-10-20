@@ -46,13 +46,13 @@ namespace BattleServer.Net
 			Protos.GC2BS_AskLogin login = ( Protos.GC2BS_AskLogin ) message;
 			this._gcNID = login.SessionID;
 
-			Protos.GS2GC_LoginRet loginRet = ProtoCreator.R_GC2GS_AskLogin( login.Opts.Pid );
+			Protos.BS2GC_LoginRet loginRet = ProtoCreator.R_GC2BS_AskLogin( login.Opts.Pid );
 
 			if ( this.HandleGCLogin( this._gcNID ) )
-				loginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
+				loginRet.Result = Protos.BS2GC_LoginRet.Types.EResult.Success;
 			else
 			{
-				loginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.IllegalLogin;
+				loginRet.Result = Protos.BS2GC_LoginRet.Types.EResult.Failed;
 				this.DelayClose( 500, "client login failed" );
 			}
 			this.Send( loginRet );
@@ -62,16 +62,16 @@ namespace BattleServer.Net
 		private bool HandleGCLogin( ulong gcNID )
 		{
 			//检查客户端是否在等待房间
-			if ( BS.instance.waitingRoomMgr.HasGC( this._gcNID ) )
+			if ( BS.instance.waitingRoomMgr.CheckClient( this._gcNID ) )
 			{
 				Logger.Log( $"client:{gcNID} join room" );
 				BS.instance.AddClient( this._gcNID, this.id );
 				//在等待房间加入客户端
-				BS.instance.waitingRoomMgr.GCConnected( this._gcNID );
+				BS.instance.waitingRoomMgr.OnGCLogin( this._gcNID );
 				return true;
 			}
 			//检查客户端是否在战场
-			if ( BS.instance.battleManager.HasGC( this._gcNID ) )
+			if ( BS.instance.battleManager.CheckClient( this._gcNID ) )
 			{
 				Logger.Log( $"client:{gcNID} join battle" );
 				return true;

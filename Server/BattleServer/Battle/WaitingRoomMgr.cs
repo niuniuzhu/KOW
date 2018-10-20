@@ -13,7 +13,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 检查是否存在指定ID的客户端
 		/// </summary>
-		public bool HasGC( ulong gcNID ) => this._gcNIDToRoom.ContainsKey( gcNID );
+		public bool CheckClient( ulong gcNID ) => this._gcNIDToRoom.ContainsKey( gcNID );
 
 		/// <summary>
 		/// CS通知有房间已完成
@@ -30,9 +30,9 @@ namespace BattleServer.Battle
 			int count = battleInfo.PlayerInfo.Count;
 			for ( int i = 0; i < count; i++ )
 			{
-				Protos.Room_PlayerInfo playerInfo = battleInfo.PlayerInfo[i];
+				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfo[i];
 				WaitingClient gc = new WaitingClient( playerInfo.GcNID, playerInfo.Name, playerInfo.ActorID );
-				waitingRoom.AddGCNID( gc );
+				waitingRoom.AddClient( gc );
 				this._gcNIDToRoom[playerInfo.GcNID] = waitingRoom;
 			}
 			Logger.Log( $"room:{waitingRoom.id} was created" );
@@ -41,7 +41,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 客户端连接后调用
 		/// </summary>
-		public void GCConnected( ulong gcNID )
+		public void OnGCLogin( ulong gcNID )
 		{
 			//这里不用检查是否存在key,调用者已经确保存在
 			WaitingRoom waitingRoom = this._gcNIDToRoom[gcNID];

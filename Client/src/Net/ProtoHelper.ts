@@ -45,7 +45,7 @@ export class ProtoCreator {
 		[Protos.CS2GC_PlayerJoin, <Protos.MsgID>5301],
 		[Protos.CS2GC_PlayerLeave, <Protos.MsgID>5302],
 		[Protos.CS2GC_RoomInfo, <Protos.MsgID>5303],
-		[Protos.CS2GC_BSInfo, <Protos.MsgID>5304],
+		[Protos.CS2GC_EnterBattle, <Protos.MsgID>5304],
 		[Protos.DB2LS_QueryAccountRet, <Protos.MsgID>8000],
 		[Protos.DB2LS_QueryLoginRet, <Protos.MsgID>8001],
 		[Protos.DB2LS_ExecRet, <Protos.MsgID>8002],
@@ -91,13 +91,13 @@ export class ProtoCreator {
 		[<Protos.MsgID>5301, Protos.CS2GC_PlayerJoin],
 		[<Protos.MsgID>5302, Protos.CS2GC_PlayerLeave],
 		[<Protos.MsgID>5303, Protos.CS2GC_RoomInfo],
-		[<Protos.MsgID>5304, Protos.CS2GC_BSInfo],
+		[<Protos.MsgID>5304, Protos.CS2GC_EnterBattle],
 		[<Protos.MsgID>8000, Protos.DB2LS_QueryAccountRet],
 		[<Protos.MsgID>8001, Protos.DB2LS_QueryLoginRet],
 		[<Protos.MsgID>8002, Protos.DB2LS_ExecRet],
 	]);
 
-	public static MakeTransMessage( msg:any, transTarget:number, transID:number = 0 ):void {
+	public static MakeTransMessage( msg:any, transTarget:number, transID:number ):void {
 		msg.opts.flag |= 1 << 3;//mark as transpose
 		msg.opts.flag |= 1 << (3+transTarget);//mark the target
 		msg.opts.transid = transID;
@@ -350,8 +350,8 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static Q_CS2GC_BSInfo(): Protos.CS2GC_BSInfo {
-		let msg = new Protos.CS2GC_BSInfo();
+	public static Q_CS2GC_EnterBattle(): Protos.CS2GC_EnterBattle {
+		let msg = new Protos.CS2GC_EnterBattle();
 		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -647,7 +647,7 @@ export class ProtoCreator {
 				return msg;
 			}
 			case 5304: {
-				let msg = Protos.CS2GC_BSInfo.decode(data, size);
+				let msg = Protos.CS2GC_EnterBattle.decode(data, size);
 				return msg;
 			}
 			case 8000: {
@@ -861,8 +861,8 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static D_CS2GC_BSInfo(data: Uint8Array, size: number): Protos.CS2GC_BSInfo {
-		let msg = Protos.CS2GC_BSInfo.decode(data, size);
+	public static D_CS2GC_EnterBattle(data: Uint8Array, size: number): Protos.CS2GC_EnterBattle {
+		let msg = Protos.CS2GC_EnterBattle.decode(data, size);
 		return msg;
 	}
 
@@ -1002,7 +1002,7 @@ export class ProtoCreator {
 				return new Protos.CS2GC_RoomInfo();
 			}
 			case 5304: {
-				return new Protos.CS2GC_BSInfo();
+				return new Protos.CS2GC_EnterBattle();
 			}
 			case 8000: {
 				return new Protos.DB2LS_QueryAccountRet();
@@ -1138,7 +1138,7 @@ export class ProtoCreator {
 				return (<Protos.CS2GC_RoomInfo>message).opts;
 			}
 			case 5304: {
-				return (<Protos.CS2GC_BSInfo>message).opts;
+				return (<Protos.CS2GC_EnterBattle>message).opts;
 			}
 			case 8000: {
 				return (<Protos.DB2LS_QueryAccountRet>message).opts;

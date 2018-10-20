@@ -97,7 +97,7 @@ namespace CentralServer.Match
 			for ( int i = 0; i < count; i++ )
 			{
 				PlayerInfo player = this._players[i];
-				CUser user = CS.instance.userMgr.GetUser( player.gcNID );
+				CSUser user = CS.instance.userMgr.GetUser( player.gcNID );
 				System.Diagnostics.Debug.Assert( user != null && user.roomID == this.id,
 												 $"can not find user:{player.gcNID} or user not in romm:{this.id}" );
 				user.inRoom = false;

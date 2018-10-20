@@ -4,14 +4,24 @@ package Protos;
 import "Global.proto";
 import "CS2GS.proto";
 
+//回应GC登陆请求
+//参考CS2GS_GCLoginRet的结构
 message GS2GC_LoginRet {
 	enum EResult{
 		Success = 0;
-		SessionExpire = 1;
-		IllegalLogin = 2;
+		SessionExpire = 1;//非法登陆
+	}
+	//GC当前状态
+	enum EGCCState {
+		Idle = 0;
+		Battle = 1;
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;
+	EGCCState gcState = 3;
+	uint64 gcNID = 4;//登录bs时进行校验的id
+	string bsIP = 5;//bs ip
+	int32 bsPort = 6;//bs port
 }
 
 message GS2GC_Kick {

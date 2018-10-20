@@ -21,8 +21,8 @@ namespace CentralServer
 		public DBConfig dbConfig { get; private set; }
 
 		public readonly RedisWrapper redisWrapper = new RedisWrapper();
-		public readonly UserMgr userMgr = new UserMgr();
-		public readonly GCSIDMgr gcNIDMgr = new GCSIDMgr();
+		public readonly CSUserMgr userMgr = new CSUserMgr();
+		public readonly LoginCertificate certificate = new LoginCertificate();
 		public readonly Matcher matcher = new Matcher();
 		public readonly Dictionary<uint, GSInfo> LIDToGSInfos = new Dictionary<uint, GSInfo>();
 		public readonly Dictionary<uint, BSInfo> LIDToBSInfos = new Dictionary<uint, BSInfo>();
@@ -88,7 +88,7 @@ namespace CentralServer
 		private void OnHeartBeat( int count )
 		{
 			this.UpdateAppropriateBSInfo();
-			this.gcNIDMgr.OnHeartBeat();
+			this.certificate.OnHeartBeat();
 			this.matcher.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			this.redisWrapper.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
@@ -107,24 +107,6 @@ namespace CentralServer
 				if ( state < minState )
 					this.appropriateBSInfo = kv.Value;
 			}
-		}
-
-		internal void OnGCLost( ulong gcNID )
-		{
-			//从房间内移除
-			this.matcher.OnUserKicked( gcNID );
-			//玩家下线
-			this.userMgr.UserOffline( gcNID );
-			//移除登陆凭证
-			this.gcNIDMgr.Remove( gcNID );
-		}
-
-		internal void OnUserKicked( ulong gcNID )
-		{
-			//从房间内移除
-			this.matcher.OnUserKicked( gcNID );
-			//移除玩家
-			this.userMgr.OnUserKicked( gcNID );
 		}
 	}
 }

@@ -4,12 +4,21 @@ package Protos;
 import "Global.proto";
 
 message CS2GS_GCLoginRet{
-	enum EResult{
+	enum EResult {
 		Success = 0;
-		IllegalLogin = 1;
+		IllegalLogin = 1;//非法登陆
+	}
+	//GC当前状态
+	enum EGCCState {
+		Idle = 0;
+		Battle = 1;
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;
+	EGCCState gcState = 3;
+	uint64 gcNID = 4;//登录bs时进行校验的id
+	string bsIP = 5;//bs ip
+	int32 bsPort = 6;//bs port
 }
 
 message CS2GS_KickGC {

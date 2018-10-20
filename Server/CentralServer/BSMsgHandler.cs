@@ -21,17 +21,5 @@ namespace CentralServer
 			Core.Misc.Logger.Log( $"report from BS:{gsInfo}" );
 			return ErrorCode.Success;
 		}
-
-		public ErrorCode BSDisconnectHandler( uint gsNID )
-		{
-			bool result = this.LIDToBSInfos.Remove( gsNID );
-			System.Diagnostics.Debug.Assert( result, $"gsNID:{gsNID} not found" );
-			if ( result )
-			{
-				//踢出所有连接到该BS的玩家
-				this.userMgr.KickUsers( gsNID );
-			}
-			return ErrorCode.Success;
-		}
 	}
 }

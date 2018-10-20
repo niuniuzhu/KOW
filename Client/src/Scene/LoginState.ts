@@ -65,7 +65,13 @@ export class LoginState extends SceneState {
 				this._ui.OnLoginGSResut(resp);
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
-						SceneManager.ChangeState(SceneManager.State.Matching);
+						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
+							//todo
+							console.log("reconnect to battle");
+						}
+						else {
+							SceneManager.ChangeState(SceneManager.State.Matching);
+						}
 						break;
 				}
 			});

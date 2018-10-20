@@ -1,7 +1,9 @@
-﻿using Core.Misc;
+﻿using CentralServer.User;
+using Core.Misc;
 using Core.Net;
 using Shared;
 using Shared.Net;
+using BSInfo = Shared.BSInfo;
 
 namespace CentralServer.Net
 {
@@ -14,7 +16,7 @@ namespace CentralServer.Net
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGcaskLogin, this.OnGs2CsGcaskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGclost, this.OnGs2CsGclost );
 
-			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, msg => CS.instance.matcher.OnGc2CsBeginMatch( this.id, msg ) );
+			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, msg => CS.instance.matcher.BeginMatch( this.id, msg ) );
 			this._msgCenter.Register( Protos.MsgID.EGc2CsUpdatePlayerInfo, msg => CS.instance.matcher.OnGc2CsUpdatePlayerInfo( msg ) );
 		}
 
@@ -26,10 +28,15 @@ namespace CentralServer.Net
 
 		protected override void OnClose( string reason )
 		{
-			CS.instance.GSDisconnectHandler( this.logicID );
+			//踢出所有连接到该GS的玩家
+			CS.instance.userMgr.KickUsers( this );
+
+			//通知LS有GS断开连接了
+			Protos.CS2LS_GSLost gsLost = ProtoCreator.Q_CS2LS_GSLost();
+			gsLost.Gsid = this.logicID;
+			CS.instance.netSessionMgr.Send( SessionType.ServerLS, gsLost );
 
 			this.logicID = 0;
-
 			base.OnClose( reason );
 			Logger.Info( $"GS({this.id}) disconnected with msg:{reason}" );
 		}
@@ -51,22 +58,54 @@ namespace CentralServer.Net
 			return CS.instance.GStateReportHandler( reportState.GsInfo, this.id );
 		}
 
+		/// <summary>
+		/// GS请求CS,验证GC登陆的合法性
+		/// </summary>
 		private ErrorCode OnGs2CsGcaskLogin( Google.Protobuf.IMessage message )
 		{
 			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin ) message;
 			Protos.CS2GS_GCLoginRet gcAskLoginRet = ProtoCreator.R_GS2CS_GCAskLogin( gcAskLogin.Opts.Pid );
 
-			bool result = CS.instance.userMgr.UserOnline( gcAskLogin.SessionID, this.logicID, out _ );
-			gcAskLoginRet.Result = result ? Protos.CS2GS_GCLoginRet.Types.EResult.Success : Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin;
+			//创建玩家并上线
+			CSUser user = CS.instance.userMgr.Online( gcAskLogin.SessionID, this );
+			if ( user == null )
+			{
+				//非法登陆
+				gcAskLoginRet.Result = Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin;
+			}
+			else
+			{
+				gcAskLoginRet.Result = Protos.CS2GS_GCLoginRet.Types.EResult.Success;
+				//检查玩家当前状态
+				switch ( user.state )
+				{
+					case CSUser.State.Battle:
+						//处于战场状态
+						//检查是否存在BS信息(可能当玩家上线时,BS已丢失)
+						if ( CS.instance.LIDToBSInfos.TryGetValue( user.bsNID, out BSInfo bsInfo ) )
+						{
+							gcAskLoginRet.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;
+							gcAskLoginRet.GcNID = user.ukey | ( ulong ) bsInfo.lid << 32;
+							gcAskLoginRet.BsIP = bsInfo.ip;
+							gcAskLoginRet.BsPort = bsInfo.port;
+						}
+						//不存在则不用处理,因为BS丢失后玩家就会退出战场,不用触发断线重连
+						break;
+				}
+			}
 
 			this.Send( gcAskLoginRet );
 			return ErrorCode.Success;
 		}
 
+		/// <summary>
+		/// 客户端与GS断开连接
+		/// </summary>
 		private ErrorCode OnGs2CsGclost( Google.Protobuf.IMessage message )
 		{
 			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost ) message;
-			CS.instance.OnGCLost( gcLost.SessionID );
+			ulong gcNID = gcLost.SessionID;
+			CS.instance.userMgr.Offline( gcNID );
 			return ErrorCode.Success;
 		}
 	}

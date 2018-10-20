@@ -21,8 +21,6 @@ namespace CentralServer.Net
 
 		protected override void OnClose( string reason )
 		{
-			CS.instance.BSDisconnectHandler( this.logicID );
-
 			this.logicID = 0;
 
 			base.OnClose( reason );

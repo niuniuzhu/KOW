@@ -46,7 +46,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// CS通知有房间完成,把客户端加入到等待列表
 		/// </summary>
-		public void AddGCNID( WaitingClient gc ) => this._gcNIDs[gc.gcNID] = gc;
+		public void AddClient( WaitingClient gc ) => this._gcNIDs[gc.gcNID] = gc;
 
 		/// <summary>
 		/// 客户端连接到BS后调用

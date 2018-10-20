@@ -110,7 +110,7 @@ namespace Shared
 		public string password;
 		public State state;
 
-		public override string ToString() => $"lid:{this.lid},sessionID:{this.sessionID},name:{this.name},ip:{this.ip},port:{this.port},pwd:{this.password},state:{this.state}";
+		public override string ToString() => $"lid:{this.lid},sessionID:{this.sessionID},state:{this.state}";
 	}
 
 	public class BSInfo
@@ -128,7 +128,7 @@ namespace Shared
 		public int port;
 		public State state;
 
-		public override string ToString() => $"lid:{this.lid},sessionID:{this.sessionID},ip:{this.ip},port:{this.port},state:{this.state}";
+		public override string ToString() => $"lid:{this.lid},sessionID:{this.sessionID},state:{this.state}";
 	}
 
 	public enum UserPlatform

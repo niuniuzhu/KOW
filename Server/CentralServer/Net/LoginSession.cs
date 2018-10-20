@@ -42,7 +42,7 @@ namespace CentralServer.Net
 		private ErrorCode OnLs2CsGclogin( Google.Protobuf.IMessage message )
 		{
 			Protos.LS2CS_GCLogin gcLogin = ( Protos.LS2CS_GCLogin )message;
-			ErrorCode errorCode = CS.instance.gcNIDMgr.OnLSLoginSuccess( gcLogin.SessionID, gcLogin.Ukey );
+			ErrorCode errorCode = CS.instance.certificate.Add( gcLogin.SessionID, gcLogin.Ukey );
 
 			Protos.CS2LS_GCLoginRet gcLoginRet = ProtoCreator.R_LS2CS_GCLogin( gcLogin.Opts.Pid );
 			gcLoginRet.Result = errorCode == ErrorCode.Success

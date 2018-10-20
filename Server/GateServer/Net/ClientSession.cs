@@ -28,12 +28,15 @@ namespace GateServer.Net
 			base.OnClose( reason );
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );
 
-			//通知cs客户端丢失
-			Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
-			gcLost.SessionID = this._gcNID;
-			this.owner.Send( SessionType.ServerG2CS, gcLost );
 			//可能会移除失败,因为向CS请求验证失败后并没有添加客户端
-			GS.instance.RemoveClient( this._gcNID );
+			if ( GS.instance.RemoveClient( this._gcNID ) )
+			{
+				//移除成功,说明向CS请求验证成功,所以在连接关闭时需要通知CS
+				//通知cs客户端丢失
+				Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
+				gcLost.SessionID = this._gcNID;
+				this.owner.Send( SessionType.ServerG2CS, gcLost );
+			}
 
 			this._activeTime = 0;
 			this._gcNID = 0;

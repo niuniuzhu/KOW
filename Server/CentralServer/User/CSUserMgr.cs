@@ -98,14 +98,9 @@ namespace CentralServer.User
 		/// </summary>
 		private void Offline( CSUser user )
 		{
-			//有可能在未连接的情况下请求下线
-			//当上线请求检查到不合法,GS会强制断开GC,并通知CS把玩家下线,这时就会出现上述情况
-			if ( user.IsConnected )
-			{
-				this._gsToUser.RemoveFromList( user.gsSession, user );
-				user.IsConnected = false;
-				user.gsSession = null;
-			}
+			this._gsToUser.RemoveFromList( user.gsSession, user );
+			user.IsConnected = false;
+			user.gsSession = null;
 
 			//判断是否需要下线
 			if ( user.KeepOnline() )

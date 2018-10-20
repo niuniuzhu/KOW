@@ -59,6 +59,8 @@ namespace GateServer.Net
 				switch ( csLoginRet.Result )
 				{
 					case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
+						//只有成功才会添加到列表
+						//在客户端丢失时,以此表为判断连接成功的基准
 						GS.instance.AddClient( this._gcNID, this.id );
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
 						gsLoginRet.GcNID = csLoginRet.GcNID;

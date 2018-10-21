@@ -5,9 +5,7 @@ using Core.Net;
 using Newtonsoft.Json;
 using Shared;
 using Shared.Net;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace BattleServer
 {
@@ -20,11 +18,11 @@ namespace BattleServer
 		public BSConfig config { get; private set; }
 		public WaitingRoomMgr waitingRoomMgr { get; } = new WaitingRoomMgr();
 		public BattleManager battleManager { get; } = new BattleManager();
+		public BSUserMgr userMgr { get; } = new BSUserMgr();
 
 		public BSConfig.State state;
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
-		private readonly Dictionary<ulong, uint> _gcNIDToSID = new Dictionary<ulong, uint>();
 		private readonly Scheduler _heartBeater = new Scheduler();
 
 		public ErrorCode Initialize( Options opts )
@@ -73,31 +71,6 @@ namespace BattleServer
 		{
 			this.waitingRoomMgr.Update( Consts.HEART_BEAT_INTERVAL );
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
-		}
-
-		public bool GetClientSID( ulong gcNID, out uint sid )
-		{
-			return this._gcNIDToSID.TryGetValue( gcNID, out sid );
-		}
-
-		public bool RemoveClient( ulong gcNID )
-		{
-			return this._gcNIDToSID.Remove( gcNID );
-		}
-
-		public void AddClient( ulong gcNID, uint sid )
-		{
-			this._gcNIDToSID.Add( gcNID, sid );
-		}
-
-		public uint[] GetClients()
-		{
-			return this._gcNIDToSID.Values.ToArray();
-		}
-
-		public void ClearClients()
-		{
-			this._gcNIDToSID.Clear();
 		}
 	}
 }

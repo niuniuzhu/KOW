@@ -46,7 +46,7 @@ namespace BattleServer.Battle
 				ulong gcNID = this._battleDes.players[i].gcNID;
 				if ( gcNIDExcept != 0 && gcNID == gcNIDExcept )
 					continue;
-				if ( !BS.instance.GetClientSID( gcNID, out sids[i] ) )
+				if ( !BS.instance.userMgr.GetClientSID( gcNID, out sids[i] ) )
 					Logger.Warn( $"failed to send message to gcNID:{gcNID}" );
 			}
 			BS.instance.netSessionMgr.Broadcast( sids, message );

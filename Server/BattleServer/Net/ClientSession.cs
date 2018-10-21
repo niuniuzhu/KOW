@@ -28,8 +28,7 @@ namespace BattleServer.Net
 			base.OnClose( reason );
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );
 
-			//todo 通知cs客户端丢失
-			System.Diagnostics.Debug.Assert( BS.instance.RemoveClient( this._gcNID ), $"invalid gcNID:{this._gcNID}" );
+			BS.instance.userMgr.RemoveClient( this._gcNID );
 
 			this._activeTime = 0;
 			this._gcNID = 0;
@@ -65,7 +64,7 @@ namespace BattleServer.Net
 			if ( BS.instance.waitingRoomMgr.CheckClient( this._gcNID ) )
 			{
 				Logger.Log( $"client:{gcNID} join room" );
-				BS.instance.AddClient( this._gcNID, this.id );
+				BS.instance.userMgr.AddClient( this._gcNID, this.id );
 				//在等待房间加入客户端
 				BS.instance.waitingRoomMgr.OnGCLogin( this._gcNID );
 				return true;
@@ -74,6 +73,7 @@ namespace BattleServer.Net
 			if ( BS.instance.battleManager.CheckClient( this._gcNID ) )
 			{
 				Logger.Log( $"client:{gcNID} join battle" );
+				BS.instance.userMgr.AddClient( this._gcNID, this.id );
 				return true;
 			}
 			return false;

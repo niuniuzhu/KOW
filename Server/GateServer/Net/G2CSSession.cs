@@ -31,13 +31,13 @@ namespace GateServer.Net
 			base.OnClose( reason );
 			Logger.Info( $"CS({this.logicID}) disconnected with msg:{reason}." );
 			//断开所有客户端
-			uint[] gcSids = GS.instance.GetClients();
+			uint[] gcSids = GS.instance.userMgr.GetClients();
 			foreach ( uint sid in gcSids )
 			{
 				if ( GS.instance.netSessionMgr.GetSession( sid, out INetSession session ) )
 					session.Close( "CS Closed." );
 			}
-			GS.instance.ClearClients();
+			GS.instance.userMgr.ClearClients();
 		}
 
 		protected override void OnHeartBeat( long dt )
@@ -93,8 +93,7 @@ namespace GateServer.Net
 			switch ( transTarget )
 			{
 				case Protos.MsgOpts.Types.TransTarget.Gc:
-					GS.instance.GetClientSID( message.GetMsgOpts().Transid, out uint sid );
-					this.owner.Send( sid, message );
+					GS.instance.netSessionMgr.SendToGC( message.GetMsgOpts().Transid, message );
 					break;
 			}
 		}
@@ -105,7 +104,7 @@ namespace GateServer.Net
 			Protos.GS2CS_KickGCRet kickGCRet = ProtoCreator.R_CS2GS_KickGC( kickGC.Opts.Pid );
 
 			//可能在收到消息前,客户端就断开了,这里必须容错
-			if ( GS.instance.GetClientSID( kickGC.GcNID, out uint sid ) )
+			if ( GS.instance.userMgr.GetClientSID( kickGC.GcNID, out uint sid ) )
 			{
 				//通知客户端被踢下线
 				Protos.GS2GC_Kick kick = ProtoCreator.Q_GS2GC_Kick();

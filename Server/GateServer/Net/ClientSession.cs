@@ -29,7 +29,7 @@ namespace GateServer.Net
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );
 
 			//可能会移除失败,因为向CS请求验证失败后并没有添加客户端
-			if ( GS.instance.RemoveClient( this._gcNID ) )
+			if ( GS.instance.userMgr.RemoveClient( this._gcNID ) )
 			{
 				//移除成功,说明向CS请求验证成功,所以在连接关闭时需要通知CS
 				//通知cs客户端丢失
@@ -61,7 +61,7 @@ namespace GateServer.Net
 					case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
 						//只有成功才会添加到列表
 						//在客户端丢失时,以此表为判断连接成功的基准
-						GS.instance.AddClient( this._gcNID, this.id );
+						GS.instance.userMgr.AddClient( this._gcNID, this.id );
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
 						gsLoginRet.GcNID = csLoginRet.GcNID;
 						gsLoginRet.GcState = ( Protos.GS2GC_LoginRet.Types.EGCCState ) csLoginRet.GcState;

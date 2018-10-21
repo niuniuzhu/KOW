@@ -4,9 +4,7 @@ using GateServer.Net;
 using Newtonsoft.Json;
 using Shared;
 using Shared.Net;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace GateServer
 {
@@ -16,12 +14,12 @@ namespace GateServer
 		public static GS instance => _instance ?? ( _instance = new GS() );
 
 		public GSNetSessionMgr netSessionMgr { get; } = new GSNetSessionMgr();
+		public GSUserMgr userMgr { get; } = new GSUserMgr();
 		public GSConfig config { get; private set; }
 
 		public GSConfig.State state;
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
-		private readonly Dictionary<ulong, uint> _gcNIDToSID = new Dictionary<ulong, uint>();
 		private readonly Scheduler _heartBeater = new Scheduler();
 
 		public ErrorCode Initialize( Options opts )
@@ -67,35 +65,5 @@ namespace GateServer
 		}
 
 		private void OnHeartBeat( int count ) => NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
-
-		public bool HasClient( ulong gcNID )
-		{
-			return this._gcNIDToSID.ContainsKey( gcNID );
-		}
-
-		public bool GetClientSID( ulong gcNID, out uint sid )
-		{
-			return this._gcNIDToSID.TryGetValue( gcNID, out sid );
-		}
-
-		public bool RemoveClient( ulong gcNID )
-		{
-			return this._gcNIDToSID.Remove( gcNID );
-		}
-
-		public void AddClient( ulong gcNID, uint sid )
-		{
-			this._gcNIDToSID.Add( gcNID, sid );
-		}
-
-		public uint[] GetClients()
-		{
-			return this._gcNIDToSID.Values.ToArray();
-		}
-
-		public void ClearClients()
-		{
-			this._gcNIDToSID.Clear();
-		}
 	}
 }

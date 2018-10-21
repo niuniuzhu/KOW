@@ -3,7 +3,7 @@ package Protos;
 
 import "Global.proto";
 
-message BSInfo{
+message BSInfo {
 	enum State{
 		Free = 0;
 		Busy = 1;
@@ -16,11 +16,26 @@ message BSInfo{
 	State state = 6;
 }
 
-message BS2CS_ReportState{
+//汇报状态
+message BS2CS_ReportState {
 	MsgOpts opts = 1;
 	BSInfo bsInfo = 2;
 }
 
-message BS2CS_BattleInfoRet{
+//回应战场信息
+message BS2CS_BattleInfoRet {
 	MsgOpts opts = 1;
+	uint32 bid = 2;
+}
+
+//战场开始
+message BS2CS_BattleStart {
+	MsgOpts opts = 1;
+	uint32 bid = 2;//战场id
+}
+
+//战场结束
+message BS2CS_BattleEnd {
+	MsgOpts opts = 1;
+	uint32 bid = 2;//战场id
 }

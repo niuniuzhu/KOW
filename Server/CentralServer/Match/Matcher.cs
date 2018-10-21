@@ -24,8 +24,15 @@ namespace CentralServer.Match
 		/// 等待消息确认的房间
 		/// </summary>
 		private readonly List<Room> _transits = new List<Room>();
-
+		/// <summary>
+		/// 房间ID对应的房间实例
+		/// </summary>
 		private readonly Dictionary<uint, Room> _idToRoom = new Dictionary<uint, Room>();
+		/// <summary>
+		/// 战场ID对应的玩家网络ID
+		/// 当BS确认战场创建后,这里需要记录这个信息,用于战斗通信可以快速找到玩家
+		/// </summary>
+		private readonly Dictionary<uint, List<ulong>> _bIDToGCNID = new Dictionary<uint, List<ulong>>();
 
 		/// <summary>
 		/// 强制把指定ID玩家踢除
@@ -47,6 +54,9 @@ namespace CentralServer.Match
 			return true;
 		}
 
+		/// <summary>
+		/// 添加玩家
+		/// </summary>
 		private void AddPlayer( Room room, PlayerInfo player, CSUser user )
 		{
 			room.AddPlayer( player );
@@ -66,7 +76,6 @@ namespace CentralServer.Match
 
 		/// <summary>
 		/// 移除玩家
-		/// 该方法不检查参数合法性
 		/// </summary>
 		private void RemovePlayer( Room room, PlayerInfo player, CSUser user )
 		{
@@ -241,7 +250,6 @@ namespace CentralServer.Match
 			BSInfo selectedBSInfo = CS.instance.appropriateBSInfo;
 			//先通知BS创建战场
 			Protos.CS2BS_BattleInfo battleInfo = ProtoCreator.Q_CS2BS_BattleInfo();
-			battleInfo.Id = room.id;
 			battleInfo.MapID = room.mapID;
 			battleInfo.Timeout = ( int ) Consts.WAITING_ROOM_TIME_OUT;
 			for ( int i = 0; i < room.numPlayers; i++ )
@@ -255,21 +263,30 @@ namespace CentralServer.Match
 				};
 				battleInfo.PlayerInfo.Add( pi );
 			}
-
+			//发送到BS
 			CS.instance.netSessionMgr.Send( selectedBSInfo.sessionID, battleInfo, msg =>
 			{
 				//这个回调表示BS通知CS战场创建完成了
+
+				Protos.BS2CS_BattleInfoRet ret = ( Protos.BS2CS_BattleInfoRet ) msg;
+				//把房间ID和玩家在BS上的网络ID联系起来,以便在战场结束后迅速找到玩家
+				int count = room.numPlayers;
+				for ( int i = 0; i < count; i++ )
+				{
+					PlayerInfo player = room.GetPlayerAt( i );
+					this._bIDToGCNID.AddToList( ret.Bid, player.ukey | ( ulong ) CS.instance.appropriateBSInfo.lid << 32 );
+				}
 
 				//避免在消息发送期间,BS可能发生意外丢失,这里需要再检查一次
 				if ( !CS.instance.LIDToBSInfos.ContainsKey( selectedBSInfo.lid ) )
 					this.NotifyGCBeginFailed( room, Protos.CS2GC_EnterBattle.Types.Error.Bslost );
 				else
 				{
-					int count = room.numPlayers;
+					count = room.numPlayers;
 					for ( int i = 0; i < count; i++ )
 					{
-						PlayerInfo playerInfo = room.GetPlayerAt( i );
-						CSUser user = CS.instance.userMgr.GetUser( playerInfo.ukey );
+						PlayerInfo player = room.GetPlayerAt( i );
+						CSUser user = CS.instance.userMgr.GetUser( player.ukey );
 						//记录BS逻辑ID
 						user.bsNID = CS.instance.appropriateBSInfo.lid;
 						//设置玩家为战场状态

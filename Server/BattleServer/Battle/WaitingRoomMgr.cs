@@ -19,12 +19,11 @@ namespace BattleServer.Battle
 		/// CS通知有房间已完成
 		/// </summary>
 		/// <param name="battleInfo"></param>
-		public void CreateWaitingRoom( Protos.CS2BS_BattleInfo battleInfo )
+		public WaitingRoom CreateWaitingRoom( Protos.CS2BS_BattleInfo battleInfo )
 		{
 			WaitingRoom waitingRoom = POOL.Pop();
 			this._waitingRooms.Add( waitingRoom );
 
-			waitingRoom.id = battleInfo.Id;
 			waitingRoom.mapID = battleInfo.MapID;
 			waitingRoom.timeout = battleInfo.Timeout;
 			int count = battleInfo.PlayerInfo.Count;
@@ -36,6 +35,7 @@ namespace BattleServer.Battle
 				this._gcNIDToRoom[playerInfo.GcNID] = waitingRoom;
 			}
 			Logger.Log( $"room:{waitingRoom.id} was created" );
+			return waitingRoom;
 		}
 
 		/// <summary>

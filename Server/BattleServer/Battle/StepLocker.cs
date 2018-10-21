@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace BattleServer.Battle
+﻿namespace BattleServer.Battle
 {
 	public class StepLocker
 	{
@@ -9,8 +7,6 @@ namespace BattleServer.Battle
 
 		private int _frame;
 		private int _msPerFrame;
-		private long _elapsed;
-		private readonly Stopwatch _sw = new Stopwatch();
 		private Battle _battle;
 
 		public void Init( Battle battle, int frameRate, int keyframeStep )
@@ -24,19 +20,14 @@ namespace BattleServer.Battle
 		public void Reset()
 		{
 			this._frame = 0;
-			this._elapsed = 0;
-			this._sw.Stop();
-			this._sw.Reset();
 			this._battle = null;
 		}
 
-		public void Update()
+		public void Update(long elapsed )
 		{
-			this._elapsed += this._sw.ElapsedMilliseconds;
-
-			while ( this._elapsed >= this._msPerFrame )
+			while ( elapsed >= this._msPerFrame )
 			{
-				this._elapsed -= this._msPerFrame;
+				elapsed -= this._msPerFrame;
 
 				if ( this._frame % this.keyframeStep == 0 )
 					this._battle.OnKeyframe( this._frame, this._msPerFrame );
@@ -45,8 +36,6 @@ namespace BattleServer.Battle
 
 				++this._frame;
 			}
-
-			this._sw.Restart();
 		}
 	}
 }

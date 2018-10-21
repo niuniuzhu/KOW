@@ -29,15 +29,20 @@ namespace Protos {
             "YXRlGAYgASgOMhQuUHJvdG9zLkJTSW5mby5TdGF0ZSIwCgVTdGF0ZRIICgRG",
             "cmVlEAASCAoEQnVzeRABEggKBEZ1bGwQAhIJCgVDbG9zZRADIlIKEUJTMkNT",
             "X1JlcG9ydFN0YXRlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIe",
-            "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvIjQKE0JTMkNTX0JhdHRs",
-            "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzYgZwcm90",
-            "bzM="));
+            "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvIkEKE0JTMkNTX0JhdHRs",
+            "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgsKA2Jp",
+            "ZBgCIAEoDSI/ChFCUzJDU19CYXR0bGVTdGFydBIdCgRvcHRzGAEgASgLMg8u",
+            "UHJvdG9zLk1zZ09wdHMSCwoDYmlkGAIgASgNIj0KD0JTMkNTX0JhdHRsZUVu",
+            "ZBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSCwoDYmlkGAIgASgN",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BSInfo), global::Protos.BSInfo.Parser, new[]{ "Id", "Ip", "Port", "State" }, null, new[]{ typeof(global::Protos.BSInfo.Types.State) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_ReportState), global::Protos.BS2CS_ReportState.Parser, new[]{ "Opts", "BsInfo" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts", "Bid" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleStart), global::Protos.BS2CS_BattleStart.Parser, new[]{ "Opts", "Bid" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEnd), global::Protos.BS2CS_BattleEnd.Parser, new[]{ "Opts", "Bid" }, null, null, null)
           }));
     }
     #endregion
@@ -271,6 +276,9 @@ namespace Protos {
 
   }
 
+  /// <summary>
+  ///汇报状态
+  /// </summary>
   public sealed partial class BS2CS_ReportState : pb::IMessage<BS2CS_ReportState> {
     private static readonly pb::MessageParser<BS2CS_ReportState> _parser = new pb::MessageParser<BS2CS_ReportState>(() => new BS2CS_ReportState());
     private pb::UnknownFieldSet _unknownFields;
@@ -440,6 +448,9 @@ namespace Protos {
 
   }
 
+  /// <summary>
+  ///回应战场信息
+  /// </summary>
   public sealed partial class BS2CS_BattleInfoRet : pb::IMessage<BS2CS_BattleInfoRet> {
     private static readonly pb::MessageParser<BS2CS_BattleInfoRet> _parser = new pb::MessageParser<BS2CS_BattleInfoRet>(() => new BS2CS_BattleInfoRet());
     private pb::UnknownFieldSet _unknownFields;
@@ -466,6 +477,7 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public BS2CS_BattleInfoRet(BS2CS_BattleInfoRet other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      bid_ = other.bid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -485,6 +497,17 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "bid" field.</summary>
+    public const int BidFieldNumber = 2;
+    private uint bid_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Bid {
+      get { return bid_; }
+      set {
+        bid_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as BS2CS_BattleInfoRet);
@@ -499,6 +522,7 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
+      if (Bid != other.Bid) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -506,6 +530,7 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Bid != 0) hash ^= Bid.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -523,6 +548,10 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
+      if (Bid != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Bid);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -533,6 +562,9 @@ namespace Protos {
       int size = 0;
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Bid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Bid);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -551,6 +583,9 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
+      if (other.Bid != 0) {
+        Bid = other.Bid;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -567,6 +602,348 @@ namespace Protos {
               opts_ = new global::Protos.MsgOpts();
             }
             input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            Bid = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///战场开始
+  /// </summary>
+  public sealed partial class BS2CS_BattleStart : pb::IMessage<BS2CS_BattleStart> {
+    private static readonly pb::MessageParser<BS2CS_BattleStart> _parser = new pb::MessageParser<BS2CS_BattleStart>(() => new BS2CS_BattleStart());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BS2CS_BattleStart> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleStart() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleStart(BS2CS_BattleStart other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      bid_ = other.bid_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleStart Clone() {
+      return new BS2CS_BattleStart(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "bid" field.</summary>
+    public const int BidFieldNumber = 2;
+    private uint bid_;
+    /// <summary>
+    ///战场id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Bid {
+      get { return bid_; }
+      set {
+        bid_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BS2CS_BattleStart);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BS2CS_BattleStart other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Bid != other.Bid) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Bid != 0) hash ^= Bid.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Bid != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Bid);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Bid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Bid);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BS2CS_BattleStart other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Bid != 0) {
+        Bid = other.Bid;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            Bid = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///战场结束
+  /// </summary>
+  public sealed partial class BS2CS_BattleEnd : pb::IMessage<BS2CS_BattleEnd> {
+    private static readonly pb::MessageParser<BS2CS_BattleEnd> _parser = new pb::MessageParser<BS2CS_BattleEnd>(() => new BS2CS_BattleEnd());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BS2CS_BattleEnd> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleEnd() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleEnd(BS2CS_BattleEnd other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      bid_ = other.bid_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleEnd Clone() {
+      return new BS2CS_BattleEnd(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "bid" field.</summary>
+    public const int BidFieldNumber = 2;
+    private uint bid_;
+    /// <summary>
+    ///战场id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Bid {
+      get { return bid_; }
+      set {
+        bid_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BS2CS_BattleEnd);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BS2CS_BattleEnd other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Bid != other.Bid) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Bid != 0) hash ^= Bid.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Bid != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Bid);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Bid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Bid);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BS2CS_BattleEnd other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Bid != 0) {
+        Bid = other.Bid;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            Bid = input.ReadUInt32();
             break;
           }
         }

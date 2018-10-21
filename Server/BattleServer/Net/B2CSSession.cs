@@ -1,4 +1,5 @@
-﻿using Core.Misc;
+﻿using BattleServer.Battle;
+using Core.Misc;
 using Core.Net;
 using Shared;
 using Shared.Net;
@@ -84,9 +85,10 @@ namespace BattleServer.Net
 		{
 			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo ) message;
 			//创建等待房间
-			BS.instance.waitingRoomMgr.CreateWaitingRoom( battleInfo );
+			WaitingRoom waitingRoom = BS.instance.waitingRoomMgr.CreateWaitingRoom( battleInfo );
 
 			Protos.BS2CS_BattleInfoRet battleInfoRet = ProtoCreator.R_CS2BS_BattleInfo( battleInfo.Opts.Pid );
+			battleInfoRet.Bid = waitingRoom.id;
 			this.Send( battleInfoRet );
 			return ErrorCode.Success;
 		}

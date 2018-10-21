@@ -43,16 +43,6 @@ namespace CentralServer.User
 		public bool inRoom;
 
 		/// <summary>
-		/// 玩家所在战场ID
-		/// </summary>
-		public uint battleID;
-
-		/// <summary>
-		/// 玩家是否在战场
-		/// </summary>
-		public bool inBattle;
-
-		/// <summary>
 		/// 当前连接的GS实例
 		/// </summary>
 		public GateSession gsSession;

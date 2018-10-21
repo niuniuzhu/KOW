@@ -222,6 +222,9 @@ export namespace Protos {
 
         /** BS2CS_BattleInfoRet opts */
         opts?: (Protos.IMsgOpts|null);
+
+        /** BS2CS_BattleInfoRet bid */
+        bid?: (number|null);
     }
 
     /** Represents a BS2CS_BattleInfoRet. */
@@ -235,6 +238,9 @@ export namespace Protos {
 
         /** BS2CS_BattleInfoRet opts. */
         public opts?: (Protos.IMsgOpts|null);
+
+        /** BS2CS_BattleInfoRet bid. */
+        public bid: number;
 
         /**
          * Creates a new BS2CS_BattleInfoRet instance using the specified properties.
@@ -307,6 +313,198 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a BS2CS_BattleStart. */
+    interface IBS2CS_BattleStart {
+
+        /** BS2CS_BattleStart opts */
+        opts?: (Protos.IMsgOpts|null);
+
+        /** BS2CS_BattleStart bid */
+        bid?: (number|null);
+    }
+
+    /** Represents a BS2CS_BattleStart. */
+    class BS2CS_BattleStart implements IBS2CS_BattleStart {
+
+        /**
+         * Constructs a new BS2CS_BattleStart.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Protos.IBS2CS_BattleStart);
+
+        /** BS2CS_BattleStart opts. */
+        public opts?: (Protos.IMsgOpts|null);
+
+        /** BS2CS_BattleStart bid. */
+        public bid: number;
+
+        /**
+         * Creates a new BS2CS_BattleStart instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns BS2CS_BattleStart instance
+         */
+        public static create(properties?: Protos.IBS2CS_BattleStart): Protos.BS2CS_BattleStart;
+
+        /**
+         * Encodes the specified BS2CS_BattleStart message. Does not implicitly {@link Protos.BS2CS_BattleStart.verify|verify} messages.
+         * @param message BS2CS_BattleStart message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Protos.IBS2CS_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified BS2CS_BattleStart message, length delimited. Does not implicitly {@link Protos.BS2CS_BattleStart.verify|verify} messages.
+         * @param message BS2CS_BattleStart message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Protos.IBS2CS_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a BS2CS_BattleStart message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns BS2CS_BattleStart
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2CS_BattleStart;
+
+        /**
+         * Decodes a BS2CS_BattleStart message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns BS2CS_BattleStart
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2CS_BattleStart;
+
+        /**
+         * Verifies a BS2CS_BattleStart message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a BS2CS_BattleStart message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns BS2CS_BattleStart
+         */
+        public static fromObject(object: { [k: string]: any }): Protos.BS2CS_BattleStart;
+
+        /**
+         * Creates a plain object from a BS2CS_BattleStart message. Also converts values to other types if specified.
+         * @param message BS2CS_BattleStart
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Protos.BS2CS_BattleStart, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this BS2CS_BattleStart to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a BS2CS_BattleEnd. */
+    interface IBS2CS_BattleEnd {
+
+        /** BS2CS_BattleEnd opts */
+        opts?: (Protos.IMsgOpts|null);
+
+        /** BS2CS_BattleEnd bid */
+        bid?: (number|null);
+    }
+
+    /** Represents a BS2CS_BattleEnd. */
+    class BS2CS_BattleEnd implements IBS2CS_BattleEnd {
+
+        /**
+         * Constructs a new BS2CS_BattleEnd.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Protos.IBS2CS_BattleEnd);
+
+        /** BS2CS_BattleEnd opts. */
+        public opts?: (Protos.IMsgOpts|null);
+
+        /** BS2CS_BattleEnd bid. */
+        public bid: number;
+
+        /**
+         * Creates a new BS2CS_BattleEnd instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns BS2CS_BattleEnd instance
+         */
+        public static create(properties?: Protos.IBS2CS_BattleEnd): Protos.BS2CS_BattleEnd;
+
+        /**
+         * Encodes the specified BS2CS_BattleEnd message. Does not implicitly {@link Protos.BS2CS_BattleEnd.verify|verify} messages.
+         * @param message BS2CS_BattleEnd message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Protos.IBS2CS_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified BS2CS_BattleEnd message, length delimited. Does not implicitly {@link Protos.BS2CS_BattleEnd.verify|verify} messages.
+         * @param message BS2CS_BattleEnd message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Protos.IBS2CS_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a BS2CS_BattleEnd message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns BS2CS_BattleEnd
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2CS_BattleEnd;
+
+        /**
+         * Decodes a BS2CS_BattleEnd message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns BS2CS_BattleEnd
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2CS_BattleEnd;
+
+        /**
+         * Verifies a BS2CS_BattleEnd message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a BS2CS_BattleEnd message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns BS2CS_BattleEnd
+         */
+        public static fromObject(object: { [k: string]: any }): Protos.BS2CS_BattleEnd;
+
+        /**
+         * Creates a plain object from a BS2CS_BattleEnd message. Also converts values to other types if specified.
+         * @param message BS2CS_BattleEnd
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Protos.BS2CS_BattleEnd, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this BS2CS_BattleEnd to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** MsgID enum. */
     enum MsgID {
         Undefine = 0,
@@ -336,8 +534,11 @@ export namespace Protos {
         eGS2GC_Kick = 3101,
         eBS2CS_ReportState = 4000,
         eBS2CS_BattleInfoRet = 4001,
+        eBS2CS_BattleStart = 4002,
+        eBS2CS_BattleEnd = 4003,
         eBS2GC_LoginRet = 4100,
         eBS2GC_BattleStart = 4102,
+        eBS2GC_BattleEnd = 4103,
         eCS2LS_GSInfos = 5000,
         eCS2LS_GSInfo = 5001,
         eCS2LS_GSLost = 5002,
@@ -345,6 +546,8 @@ export namespace Protos {
         eCS2GS_GCLoginRet = 5100,
         eCS2GS_KickGC = 5101,
         eCS2BS_BattleInfo = 5200,
+        eCS2BS_BattleStartRet = 5201,
+        eCS2BS_BattleEndRet = 5202,
         eCS2GC_BeginMatchRet = 5300,
         eCS2GC_PlayerJoin = 5301,
         eCS2GC_PlayerLeave = 5302,
@@ -977,6 +1180,102 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a BS2GC_BattleEnd. */
+    interface IBS2GC_BattleEnd {
+
+        /** BS2GC_BattleEnd opts */
+        opts?: (Protos.IMsgOpts|null);
+
+        /** BS2GC_BattleEnd id */
+        id?: (number|null);
+    }
+
+    /** Represents a BS2GC_BattleEnd. */
+    class BS2GC_BattleEnd implements IBS2GC_BattleEnd {
+
+        /**
+         * Constructs a new BS2GC_BattleEnd.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Protos.IBS2GC_BattleEnd);
+
+        /** BS2GC_BattleEnd opts. */
+        public opts?: (Protos.IMsgOpts|null);
+
+        /** BS2GC_BattleEnd id. */
+        public id: number;
+
+        /**
+         * Creates a new BS2GC_BattleEnd instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns BS2GC_BattleEnd instance
+         */
+        public static create(properties?: Protos.IBS2GC_BattleEnd): Protos.BS2GC_BattleEnd;
+
+        /**
+         * Encodes the specified BS2GC_BattleEnd message. Does not implicitly {@link Protos.BS2GC_BattleEnd.verify|verify} messages.
+         * @param message BS2GC_BattleEnd message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Protos.IBS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified BS2GC_BattleEnd message, length delimited. Does not implicitly {@link Protos.BS2GC_BattleEnd.verify|verify} messages.
+         * @param message BS2GC_BattleEnd message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Protos.IBS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a BS2GC_BattleEnd message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns BS2GC_BattleEnd
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_BattleEnd;
+
+        /**
+         * Decodes a BS2GC_BattleEnd message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns BS2GC_BattleEnd
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_BattleEnd;
+
+        /**
+         * Verifies a BS2GC_BattleEnd message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a BS2GC_BattleEnd message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns BS2GC_BattleEnd
+         */
+        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_BattleEnd;
+
+        /**
+         * Creates a plain object from a BS2GC_BattleEnd message. Also converts values to other types if specified.
+         * @param message BS2GC_BattleEnd
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Protos.BS2GC_BattleEnd, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this BS2GC_BattleEnd to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a CS2BS_PlayerInfo. */
     interface ICS2BS_PlayerInfo {
 
@@ -1085,9 +1384,6 @@ export namespace Protos {
         /** CS2BS_BattleInfo opts */
         opts?: (Protos.IMsgOpts|null);
 
-        /** CS2BS_BattleInfo id */
-        id?: (number|null);
-
         /** CS2BS_BattleInfo mapID */
         mapID?: (number|null);
 
@@ -1109,9 +1405,6 @@ export namespace Protos {
 
         /** CS2BS_BattleInfo opts. */
         public opts?: (Protos.IMsgOpts|null);
-
-        /** CS2BS_BattleInfo id. */
-        public id: number;
 
         /** CS2BS_BattleInfo mapID. */
         public mapID: number;
@@ -1188,6 +1481,186 @@ export namespace Protos {
 
         /**
          * Converts this CS2BS_BattleInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a CS2BS_BattleStartRet. */
+    interface ICS2BS_BattleStartRet {
+
+        /** CS2BS_BattleStartRet opts */
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    /** Represents a CS2BS_BattleStartRet. */
+    class CS2BS_BattleStartRet implements ICS2BS_BattleStartRet {
+
+        /**
+         * Constructs a new CS2BS_BattleStartRet.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Protos.ICS2BS_BattleStartRet);
+
+        /** CS2BS_BattleStartRet opts. */
+        public opts?: (Protos.IMsgOpts|null);
+
+        /**
+         * Creates a new CS2BS_BattleStartRet instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CS2BS_BattleStartRet instance
+         */
+        public static create(properties?: Protos.ICS2BS_BattleStartRet): Protos.CS2BS_BattleStartRet;
+
+        /**
+         * Encodes the specified CS2BS_BattleStartRet message. Does not implicitly {@link Protos.CS2BS_BattleStartRet.verify|verify} messages.
+         * @param message CS2BS_BattleStartRet message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Protos.ICS2BS_BattleStartRet, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified CS2BS_BattleStartRet message, length delimited. Does not implicitly {@link Protos.CS2BS_BattleStartRet.verify|verify} messages.
+         * @param message CS2BS_BattleStartRet message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Protos.ICS2BS_BattleStartRet, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a CS2BS_BattleStartRet message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CS2BS_BattleStartRet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2BS_BattleStartRet;
+
+        /**
+         * Decodes a CS2BS_BattleStartRet message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CS2BS_BattleStartRet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2BS_BattleStartRet;
+
+        /**
+         * Verifies a CS2BS_BattleStartRet message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CS2BS_BattleStartRet message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CS2BS_BattleStartRet
+         */
+        public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleStartRet;
+
+        /**
+         * Creates a plain object from a CS2BS_BattleStartRet message. Also converts values to other types if specified.
+         * @param message CS2BS_BattleStartRet
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Protos.CS2BS_BattleStartRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CS2BS_BattleStartRet to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a CS2BS_BattleEndRet. */
+    interface ICS2BS_BattleEndRet {
+
+        /** CS2BS_BattleEndRet opts */
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    /** Represents a CS2BS_BattleEndRet. */
+    class CS2BS_BattleEndRet implements ICS2BS_BattleEndRet {
+
+        /**
+         * Constructs a new CS2BS_BattleEndRet.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Protos.ICS2BS_BattleEndRet);
+
+        /** CS2BS_BattleEndRet opts. */
+        public opts?: (Protos.IMsgOpts|null);
+
+        /**
+         * Creates a new CS2BS_BattleEndRet instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CS2BS_BattleEndRet instance
+         */
+        public static create(properties?: Protos.ICS2BS_BattleEndRet): Protos.CS2BS_BattleEndRet;
+
+        /**
+         * Encodes the specified CS2BS_BattleEndRet message. Does not implicitly {@link Protos.CS2BS_BattleEndRet.verify|verify} messages.
+         * @param message CS2BS_BattleEndRet message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Protos.ICS2BS_BattleEndRet, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified CS2BS_BattleEndRet message, length delimited. Does not implicitly {@link Protos.CS2BS_BattleEndRet.verify|verify} messages.
+         * @param message CS2BS_BattleEndRet message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Protos.ICS2BS_BattleEndRet, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a CS2BS_BattleEndRet message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CS2BS_BattleEndRet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2BS_BattleEndRet;
+
+        /**
+         * Decodes a CS2BS_BattleEndRet message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CS2BS_BattleEndRet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2BS_BattleEndRet;
+
+        /**
+         * Verifies a CS2BS_BattleEndRet message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CS2BS_BattleEndRet message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CS2BS_BattleEndRet
+         */
+        public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleEndRet;
+
+        /**
+         * Creates a plain object from a CS2BS_BattleEndRet message. Also converts values to other types if specified.
+         * @param message CS2BS_BattleEndRet
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Protos.CS2BS_BattleEndRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CS2BS_BattleEndRet to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };

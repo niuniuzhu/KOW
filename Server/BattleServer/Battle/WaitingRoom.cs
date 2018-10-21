@@ -24,7 +24,10 @@ namespace BattleServer.Battle
 	/// </summary>
 	public class WaitingRoom : IPoolObject
 	{
-		public uint id;
+		private static uint _gid;
+
+		public uint id { get; }
+
 		public int mapID;
 		public long timeout;
 
@@ -35,6 +38,12 @@ namespace BattleServer.Battle
 		private readonly List<WaitingClient> _clients = new List<WaitingClient>();
 
 		private long _time;
+
+		public WaitingRoom()
+		{
+			System.Diagnostics.Debug.Assert( _gid < uint.MaxValue, "maximum id of waiting room!!" );
+			this.id = _gid++;
+		}
 
 		public void Clear()
 		{

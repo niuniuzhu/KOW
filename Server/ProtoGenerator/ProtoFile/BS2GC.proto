@@ -18,3 +18,9 @@ message BS2GC_BattleStart {
 	MsgOpts opts = 1;
 	uint32 id = 2;//战场id
 }
+
+//战场结束
+message BS2GC_BattleEnd {
+	MsgOpts opts = 1;
+	uint32 id = 2;//战场id
+}

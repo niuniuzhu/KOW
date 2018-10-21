@@ -74,5 +74,11 @@ namespace BattleServer
 			SetName = "bysetting",
 			HelpText = "how long the step between two key frame." )]
 		public int keyframeStep { get; set; }
+
+		[Option( "battle_time",
+			Default = 5000,
+			SetName = "bysetting",
+			HelpText = "battle time." )]
+		public int battleTIme { get; set; }
 	}
 }

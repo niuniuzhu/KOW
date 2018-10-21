@@ -44,9 +44,12 @@ enum MsgID {
 	//bs
 	eBS2CS_ReportState = 4000;
 	eBS2CS_BattleInfoRet = 4001;
+	eBS2CS_BattleStart = 4002;
+	eBS2CS_BattleEnd = 4003;
 
 	eBS2GC_LoginRet = 4100;
 	eBS2GC_BattleStart = 4102;
+	eBS2GC_BattleEnd = 4103;
 
 	//cs
 	eCS2LS_GSInfos = 5000;
@@ -58,6 +61,8 @@ enum MsgID {
 	eCS2GS_KickGC = 5101;
 
 	eCS2BS_BattleInfo = 5200;
+	eCS2BS_BattleStartRet = 5201;
+	eCS2BS_BattleEndRet = 5202;
 
 	eCS2GC_BeginMatchRet = 5300;
 	eCS2GC_PlayerJoin = 5301;
@@ -129,7 +134,9 @@ message Global{
 		"LS2DB_Exec":"DB2LS_ExecRet",
 		"GC2CS_BeginMatch":"CS2GC_BeginMatchRet",
 		"CS2BS_BattleInfo":"BS2CS_BattleInfoRet",
-		"CS2GS_KickGC":"GS2CS_KickGCRet"
+		"CS2GS_KickGC":"GS2CS_KickGCRet",
+		"BS2CS_BattleStart":"CS2BS_BattleStartRet",
+		"BS2CS_BattleEnd":"CS2BS_BattleEndRet"
 	}
 }
 </ext>

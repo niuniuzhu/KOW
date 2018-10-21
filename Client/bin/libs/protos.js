@@ -539,6 +539,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface IBS2CS_BattleInfoRet
              * @property {Protos.IMsgOpts|null} [opts] BS2CS_BattleInfoRet opts
+             * @property {number|null} [bid] BS2CS_BattleInfoRet bid
              */
     
             /**
@@ -563,6 +564,14 @@ define(["libs/protobufjs"], function($protobuf) {
              * @instance
              */
             BS2CS_BattleInfoRet.prototype.opts = null;
+    
+            /**
+             * BS2CS_BattleInfoRet bid.
+             * @member {number} bid
+             * @memberof Protos.BS2CS_BattleInfoRet
+             * @instance
+             */
+            BS2CS_BattleInfoRet.prototype.bid = 0;
     
             /**
              * Creates a new BS2CS_BattleInfoRet instance using the specified properties.
@@ -590,6 +599,8 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.bid);
                 return writer;
             };
     
@@ -626,6 +637,9 @@ define(["libs/protobufjs"], function($protobuf) {
                     switch (tag >>> 3) {
                     case 1:
                         message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.bid = reader.uint32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -667,6 +681,9 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (error)
                         return "opts." + error;
                 }
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    if (!$util.isInteger(message.bid))
+                        return "bid: integer expected";
                 return null;
             };
     
@@ -687,6 +704,8 @@ define(["libs/protobufjs"], function($protobuf) {
                         throw TypeError(".Protos.BS2CS_BattleInfoRet.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
+                if (object.bid != null)
+                    message.bid = object.bid >>> 0;
                 return message;
             };
     
@@ -703,10 +722,14 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (!options)
                     options = {};
                 var object = {};
-                if (options.defaults)
+                if (options.defaults) {
                     object.opts = null;
+                    object.bid = 0;
+                }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    object.bid = message.bid;
                 return object;
             };
     
@@ -722,6 +745,436 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             return BS2CS_BattleInfoRet;
+        })();
+    
+        Protos.BS2CS_BattleStart = (function() {
+    
+            /**
+             * Properties of a BS2CS_BattleStart.
+             * @memberof Protos
+             * @interface IBS2CS_BattleStart
+             * @property {Protos.IMsgOpts|null} [opts] BS2CS_BattleStart opts
+             * @property {number|null} [bid] BS2CS_BattleStart bid
+             */
+    
+            /**
+             * Constructs a new BS2CS_BattleStart.
+             * @memberof Protos
+             * @classdesc Represents a BS2CS_BattleStart.
+             * @implements IBS2CS_BattleStart
+             * @constructor
+             * @param {Protos.IBS2CS_BattleStart=} [properties] Properties to set
+             */
+            function BS2CS_BattleStart(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * BS2CS_BattleStart opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.BS2CS_BattleStart
+             * @instance
+             */
+            BS2CS_BattleStart.prototype.opts = null;
+    
+            /**
+             * BS2CS_BattleStart bid.
+             * @member {number} bid
+             * @memberof Protos.BS2CS_BattleStart
+             * @instance
+             */
+            BS2CS_BattleStart.prototype.bid = 0;
+    
+            /**
+             * Creates a new BS2CS_BattleStart instance using the specified properties.
+             * @function create
+             * @memberof Protos.BS2CS_BattleStart
+             * @static
+             * @param {Protos.IBS2CS_BattleStart=} [properties] Properties to set
+             * @returns {Protos.BS2CS_BattleStart} BS2CS_BattleStart instance
+             */
+            BS2CS_BattleStart.create = function create(properties) {
+                return new BS2CS_BattleStart(properties);
+            };
+    
+            /**
+             * Encodes the specified BS2CS_BattleStart message. Does not implicitly {@link Protos.BS2CS_BattleStart.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.BS2CS_BattleStart
+             * @static
+             * @param {Protos.IBS2CS_BattleStart} message BS2CS_BattleStart message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            BS2CS_BattleStart.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.bid);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified BS2CS_BattleStart message, length delimited. Does not implicitly {@link Protos.BS2CS_BattleStart.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.BS2CS_BattleStart
+             * @static
+             * @param {Protos.IBS2CS_BattleStart} message BS2CS_BattleStart message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            BS2CS_BattleStart.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a BS2CS_BattleStart message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.BS2CS_BattleStart
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.BS2CS_BattleStart} BS2CS_BattleStart
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            BS2CS_BattleStart.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleStart();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.bid = reader.uint32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a BS2CS_BattleStart message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.BS2CS_BattleStart
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.BS2CS_BattleStart} BS2CS_BattleStart
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            BS2CS_BattleStart.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a BS2CS_BattleStart message.
+             * @function verify
+             * @memberof Protos.BS2CS_BattleStart
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            BS2CS_BattleStart.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    if (!$util.isInteger(message.bid))
+                        return "bid: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a BS2CS_BattleStart message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.BS2CS_BattleStart
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.BS2CS_BattleStart} BS2CS_BattleStart
+             */
+            BS2CS_BattleStart.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.BS2CS_BattleStart)
+                    return object;
+                var message = new $root.Protos.BS2CS_BattleStart();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.BS2CS_BattleStart.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                if (object.bid != null)
+                    message.bid = object.bid >>> 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a BS2CS_BattleStart message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.BS2CS_BattleStart
+             * @static
+             * @param {Protos.BS2CS_BattleStart} message BS2CS_BattleStart
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            BS2CS_BattleStart.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.opts = null;
+                    object.bid = 0;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    object.bid = message.bid;
+                return object;
+            };
+    
+            /**
+             * Converts this BS2CS_BattleStart to JSON.
+             * @function toJSON
+             * @memberof Protos.BS2CS_BattleStart
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            BS2CS_BattleStart.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return BS2CS_BattleStart;
+        })();
+    
+        Protos.BS2CS_BattleEnd = (function() {
+    
+            /**
+             * Properties of a BS2CS_BattleEnd.
+             * @memberof Protos
+             * @interface IBS2CS_BattleEnd
+             * @property {Protos.IMsgOpts|null} [opts] BS2CS_BattleEnd opts
+             * @property {number|null} [bid] BS2CS_BattleEnd bid
+             */
+    
+            /**
+             * Constructs a new BS2CS_BattleEnd.
+             * @memberof Protos
+             * @classdesc Represents a BS2CS_BattleEnd.
+             * @implements IBS2CS_BattleEnd
+             * @constructor
+             * @param {Protos.IBS2CS_BattleEnd=} [properties] Properties to set
+             */
+            function BS2CS_BattleEnd(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * BS2CS_BattleEnd opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.BS2CS_BattleEnd
+             * @instance
+             */
+            BS2CS_BattleEnd.prototype.opts = null;
+    
+            /**
+             * BS2CS_BattleEnd bid.
+             * @member {number} bid
+             * @memberof Protos.BS2CS_BattleEnd
+             * @instance
+             */
+            BS2CS_BattleEnd.prototype.bid = 0;
+    
+            /**
+             * Creates a new BS2CS_BattleEnd instance using the specified properties.
+             * @function create
+             * @memberof Protos.BS2CS_BattleEnd
+             * @static
+             * @param {Protos.IBS2CS_BattleEnd=} [properties] Properties to set
+             * @returns {Protos.BS2CS_BattleEnd} BS2CS_BattleEnd instance
+             */
+            BS2CS_BattleEnd.create = function create(properties) {
+                return new BS2CS_BattleEnd(properties);
+            };
+    
+            /**
+             * Encodes the specified BS2CS_BattleEnd message. Does not implicitly {@link Protos.BS2CS_BattleEnd.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.BS2CS_BattleEnd
+             * @static
+             * @param {Protos.IBS2CS_BattleEnd} message BS2CS_BattleEnd message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            BS2CS_BattleEnd.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.bid);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified BS2CS_BattleEnd message, length delimited. Does not implicitly {@link Protos.BS2CS_BattleEnd.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.BS2CS_BattleEnd
+             * @static
+             * @param {Protos.IBS2CS_BattleEnd} message BS2CS_BattleEnd message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            BS2CS_BattleEnd.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a BS2CS_BattleEnd message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.BS2CS_BattleEnd
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.BS2CS_BattleEnd} BS2CS_BattleEnd
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            BS2CS_BattleEnd.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleEnd();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.bid = reader.uint32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a BS2CS_BattleEnd message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.BS2CS_BattleEnd
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.BS2CS_BattleEnd} BS2CS_BattleEnd
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            BS2CS_BattleEnd.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a BS2CS_BattleEnd message.
+             * @function verify
+             * @memberof Protos.BS2CS_BattleEnd
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            BS2CS_BattleEnd.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    if (!$util.isInteger(message.bid))
+                        return "bid: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a BS2CS_BattleEnd message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.BS2CS_BattleEnd
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.BS2CS_BattleEnd} BS2CS_BattleEnd
+             */
+            BS2CS_BattleEnd.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.BS2CS_BattleEnd)
+                    return object;
+                var message = new $root.Protos.BS2CS_BattleEnd();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.BS2CS_BattleEnd.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                if (object.bid != null)
+                    message.bid = object.bid >>> 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a BS2CS_BattleEnd message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.BS2CS_BattleEnd
+             * @static
+             * @param {Protos.BS2CS_BattleEnd} message BS2CS_BattleEnd
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            BS2CS_BattleEnd.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.opts = null;
+                    object.bid = 0;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.bid != null && message.hasOwnProperty("bid"))
+                    object.bid = message.bid;
+                return object;
+            };
+    
+            /**
+             * Converts this BS2CS_BattleEnd to JSON.
+             * @function toJSON
+             * @memberof Protos.BS2CS_BattleEnd
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            BS2CS_BattleEnd.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return BS2CS_BattleEnd;
         })();
     
         /**
@@ -755,8 +1208,11 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eGS2GC_Kick=3101 eGS2GC_Kick value
          * @property {number} eBS2CS_ReportState=4000 eBS2CS_ReportState value
          * @property {number} eBS2CS_BattleInfoRet=4001 eBS2CS_BattleInfoRet value
+         * @property {number} eBS2CS_BattleStart=4002 eBS2CS_BattleStart value
+         * @property {number} eBS2CS_BattleEnd=4003 eBS2CS_BattleEnd value
          * @property {number} eBS2GC_LoginRet=4100 eBS2GC_LoginRet value
          * @property {number} eBS2GC_BattleStart=4102 eBS2GC_BattleStart value
+         * @property {number} eBS2GC_BattleEnd=4103 eBS2GC_BattleEnd value
          * @property {number} eCS2LS_GSInfos=5000 eCS2LS_GSInfos value
          * @property {number} eCS2LS_GSInfo=5001 eCS2LS_GSInfo value
          * @property {number} eCS2LS_GSLost=5002 eCS2LS_GSLost value
@@ -764,6 +1220,8 @@ define(["libs/protobufjs"], function($protobuf) {
          * @property {number} eCS2GS_GCLoginRet=5100 eCS2GS_GCLoginRet value
          * @property {number} eCS2GS_KickGC=5101 eCS2GS_KickGC value
          * @property {number} eCS2BS_BattleInfo=5200 eCS2BS_BattleInfo value
+         * @property {number} eCS2BS_BattleStartRet=5201 eCS2BS_BattleStartRet value
+         * @property {number} eCS2BS_BattleEndRet=5202 eCS2BS_BattleEndRet value
          * @property {number} eCS2GC_BeginMatchRet=5300 eCS2GC_BeginMatchRet value
          * @property {number} eCS2GC_PlayerJoin=5301 eCS2GC_PlayerJoin value
          * @property {number} eCS2GC_PlayerLeave=5302 eCS2GC_PlayerLeave value
@@ -802,8 +1260,11 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[3101] = "eGS2GC_Kick"] = 3101;
             values[valuesById[4000] = "eBS2CS_ReportState"] = 4000;
             values[valuesById[4001] = "eBS2CS_BattleInfoRet"] = 4001;
+            values[valuesById[4002] = "eBS2CS_BattleStart"] = 4002;
+            values[valuesById[4003] = "eBS2CS_BattleEnd"] = 4003;
             values[valuesById[4100] = "eBS2GC_LoginRet"] = 4100;
             values[valuesById[4102] = "eBS2GC_BattleStart"] = 4102;
+            values[valuesById[4103] = "eBS2GC_BattleEnd"] = 4103;
             values[valuesById[5000] = "eCS2LS_GSInfos"] = 5000;
             values[valuesById[5001] = "eCS2LS_GSInfo"] = 5001;
             values[valuesById[5002] = "eCS2LS_GSLost"] = 5002;
@@ -811,6 +1272,8 @@ define(["libs/protobufjs"], function($protobuf) {
             values[valuesById[5100] = "eCS2GS_GCLoginRet"] = 5100;
             values[valuesById[5101] = "eCS2GS_KickGC"] = 5101;
             values[valuesById[5200] = "eCS2BS_BattleInfo"] = 5200;
+            values[valuesById[5201] = "eCS2BS_BattleStartRet"] = 5201;
+            values[valuesById[5202] = "eCS2BS_BattleEndRet"] = 5202;
             values[valuesById[5300] = "eCS2GC_BeginMatchRet"] = 5300;
             values[valuesById[5301] = "eCS2GC_PlayerJoin"] = 5301;
             values[valuesById[5302] = "eCS2GC_PlayerLeave"] = 5302;
@@ -2257,6 +2720,221 @@ define(["libs/protobufjs"], function($protobuf) {
             return BS2GC_BattleStart;
         })();
     
+        Protos.BS2GC_BattleEnd = (function() {
+    
+            /**
+             * Properties of a BS2GC_BattleEnd.
+             * @memberof Protos
+             * @interface IBS2GC_BattleEnd
+             * @property {Protos.IMsgOpts|null} [opts] BS2GC_BattleEnd opts
+             * @property {number|null} [id] BS2GC_BattleEnd id
+             */
+    
+            /**
+             * Constructs a new BS2GC_BattleEnd.
+             * @memberof Protos
+             * @classdesc Represents a BS2GC_BattleEnd.
+             * @implements IBS2GC_BattleEnd
+             * @constructor
+             * @param {Protos.IBS2GC_BattleEnd=} [properties] Properties to set
+             */
+            function BS2GC_BattleEnd(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * BS2GC_BattleEnd opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.BS2GC_BattleEnd
+             * @instance
+             */
+            BS2GC_BattleEnd.prototype.opts = null;
+    
+            /**
+             * BS2GC_BattleEnd id.
+             * @member {number} id
+             * @memberof Protos.BS2GC_BattleEnd
+             * @instance
+             */
+            BS2GC_BattleEnd.prototype.id = 0;
+    
+            /**
+             * Creates a new BS2GC_BattleEnd instance using the specified properties.
+             * @function create
+             * @memberof Protos.BS2GC_BattleEnd
+             * @static
+             * @param {Protos.IBS2GC_BattleEnd=} [properties] Properties to set
+             * @returns {Protos.BS2GC_BattleEnd} BS2GC_BattleEnd instance
+             */
+            BS2GC_BattleEnd.create = function create(properties) {
+                return new BS2GC_BattleEnd(properties);
+            };
+    
+            /**
+             * Encodes the specified BS2GC_BattleEnd message. Does not implicitly {@link Protos.BS2GC_BattleEnd.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.BS2GC_BattleEnd
+             * @static
+             * @param {Protos.IBS2GC_BattleEnd} message BS2GC_BattleEnd message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            BS2GC_BattleEnd.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.id != null && message.hasOwnProperty("id"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.id);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified BS2GC_BattleEnd message, length delimited. Does not implicitly {@link Protos.BS2GC_BattleEnd.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.BS2GC_BattleEnd
+             * @static
+             * @param {Protos.IBS2GC_BattleEnd} message BS2GC_BattleEnd message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            BS2GC_BattleEnd.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a BS2GC_BattleEnd message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.BS2GC_BattleEnd
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.BS2GC_BattleEnd} BS2GC_BattleEnd
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            BS2GC_BattleEnd.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_BattleEnd();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.id = reader.uint32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a BS2GC_BattleEnd message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.BS2GC_BattleEnd
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.BS2GC_BattleEnd} BS2GC_BattleEnd
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            BS2GC_BattleEnd.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a BS2GC_BattleEnd message.
+             * @function verify
+             * @memberof Protos.BS2GC_BattleEnd
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            BS2GC_BattleEnd.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                if (message.id != null && message.hasOwnProperty("id"))
+                    if (!$util.isInteger(message.id))
+                        return "id: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a BS2GC_BattleEnd message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.BS2GC_BattleEnd
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.BS2GC_BattleEnd} BS2GC_BattleEnd
+             */
+            BS2GC_BattleEnd.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.BS2GC_BattleEnd)
+                    return object;
+                var message = new $root.Protos.BS2GC_BattleEnd();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.BS2GC_BattleEnd.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                if (object.id != null)
+                    message.id = object.id >>> 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a BS2GC_BattleEnd message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.BS2GC_BattleEnd
+             * @static
+             * @param {Protos.BS2GC_BattleEnd} message BS2GC_BattleEnd
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            BS2GC_BattleEnd.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.opts = null;
+                    object.id = 0;
+                }
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.id != null && message.hasOwnProperty("id"))
+                    object.id = message.id;
+                return object;
+            };
+    
+            /**
+             * Converts this BS2GC_BattleEnd to JSON.
+             * @function toJSON
+             * @memberof Protos.BS2GC_BattleEnd
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            BS2GC_BattleEnd.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return BS2GC_BattleEnd;
+        })();
+    
         Protos.CS2BS_PlayerInfo = (function() {
     
             /**
@@ -2510,7 +3188,6 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface ICS2BS_BattleInfo
              * @property {Protos.IMsgOpts|null} [opts] CS2BS_BattleInfo opts
-             * @property {number|null} [id] CS2BS_BattleInfo id
              * @property {number|null} [mapID] CS2BS_BattleInfo mapID
              * @property {number|null} [timeout] CS2BS_BattleInfo timeout
              * @property {Array.<Protos.ICS2BS_PlayerInfo>|null} [playerInfo] CS2BS_BattleInfo playerInfo
@@ -2539,14 +3216,6 @@ define(["libs/protobufjs"], function($protobuf) {
              * @instance
              */
             CS2BS_BattleInfo.prototype.opts = null;
-    
-            /**
-             * CS2BS_BattleInfo id.
-             * @member {number} id
-             * @memberof Protos.CS2BS_BattleInfo
-             * @instance
-             */
-            CS2BS_BattleInfo.prototype.id = 0;
     
             /**
              * CS2BS_BattleInfo mapID.
@@ -2598,15 +3267,13 @@ define(["libs/protobufjs"], function($protobuf) {
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                if (message.id != null && message.hasOwnProperty("id"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.id);
                 if (message.mapID != null && message.hasOwnProperty("mapID"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.mapID);
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.mapID);
                 if (message.timeout != null && message.hasOwnProperty("timeout"))
-                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.timeout);
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.timeout);
                 if (message.playerInfo != null && message.playerInfo.length)
                     for (var i = 0; i < message.playerInfo.length; ++i)
-                        $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfo[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                        $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfo[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                 return writer;
             };
     
@@ -2645,15 +3312,12 @@ define(["libs/protobufjs"], function($protobuf) {
                         message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                         break;
                     case 2:
-                        message.id = reader.uint32();
-                        break;
-                    case 3:
                         message.mapID = reader.int32();
                         break;
-                    case 4:
+                    case 3:
                         message.timeout = reader.int32();
                         break;
-                    case 5:
+                    case 4:
                         if (!(message.playerInfo && message.playerInfo.length))
                             message.playerInfo = [];
                         message.playerInfo.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
@@ -2698,9 +3362,6 @@ define(["libs/protobufjs"], function($protobuf) {
                     if (error)
                         return "opts." + error;
                 }
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id))
-                        return "id: integer expected";
                 if (message.mapID != null && message.hasOwnProperty("mapID"))
                     if (!$util.isInteger(message.mapID))
                         return "mapID: integer expected";
@@ -2736,8 +3397,6 @@ define(["libs/protobufjs"], function($protobuf) {
                         throw TypeError(".Protos.CS2BS_BattleInfo.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
-                if (object.id != null)
-                    message.id = object.id >>> 0;
                 if (object.mapID != null)
                     message.mapID = object.mapID | 0;
                 if (object.timeout != null)
@@ -2772,14 +3431,11 @@ define(["libs/protobufjs"], function($protobuf) {
                     object.playerInfo = [];
                 if (options.defaults) {
                     object.opts = null;
-                    object.id = 0;
                     object.mapID = 0;
                     object.timeout = 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-                if (message.id != null && message.hasOwnProperty("id"))
-                    object.id = message.id;
                 if (message.mapID != null && message.hasOwnProperty("mapID"))
                     object.mapID = message.mapID;
                 if (message.timeout != null && message.hasOwnProperty("timeout"))
@@ -2804,6 +3460,390 @@ define(["libs/protobufjs"], function($protobuf) {
             };
     
             return CS2BS_BattleInfo;
+        })();
+    
+        Protos.CS2BS_BattleStartRet = (function() {
+    
+            /**
+             * Properties of a CS2BS_BattleStartRet.
+             * @memberof Protos
+             * @interface ICS2BS_BattleStartRet
+             * @property {Protos.IMsgOpts|null} [opts] CS2BS_BattleStartRet opts
+             */
+    
+            /**
+             * Constructs a new CS2BS_BattleStartRet.
+             * @memberof Protos
+             * @classdesc Represents a CS2BS_BattleStartRet.
+             * @implements ICS2BS_BattleStartRet
+             * @constructor
+             * @param {Protos.ICS2BS_BattleStartRet=} [properties] Properties to set
+             */
+            function CS2BS_BattleStartRet(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * CS2BS_BattleStartRet opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @instance
+             */
+            CS2BS_BattleStartRet.prototype.opts = null;
+    
+            /**
+             * Creates a new CS2BS_BattleStartRet instance using the specified properties.
+             * @function create
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @static
+             * @param {Protos.ICS2BS_BattleStartRet=} [properties] Properties to set
+             * @returns {Protos.CS2BS_BattleStartRet} CS2BS_BattleStartRet instance
+             */
+            CS2BS_BattleStartRet.create = function create(properties) {
+                return new CS2BS_BattleStartRet(properties);
+            };
+    
+            /**
+             * Encodes the specified CS2BS_BattleStartRet message. Does not implicitly {@link Protos.CS2BS_BattleStartRet.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @static
+             * @param {Protos.ICS2BS_BattleStartRet} message CS2BS_BattleStartRet message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2BS_BattleStartRet.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified CS2BS_BattleStartRet message, length delimited. Does not implicitly {@link Protos.CS2BS_BattleStartRet.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @static
+             * @param {Protos.ICS2BS_BattleStartRet} message CS2BS_BattleStartRet message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2BS_BattleStartRet.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a CS2BS_BattleStartRet message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.CS2BS_BattleStartRet} CS2BS_BattleStartRet
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2BS_BattleStartRet.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_BattleStartRet();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a CS2BS_BattleStartRet message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.CS2BS_BattleStartRet} CS2BS_BattleStartRet
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2BS_BattleStartRet.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a CS2BS_BattleStartRet message.
+             * @function verify
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CS2BS_BattleStartRet.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a CS2BS_BattleStartRet message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.CS2BS_BattleStartRet} CS2BS_BattleStartRet
+             */
+            CS2BS_BattleStartRet.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.CS2BS_BattleStartRet)
+                    return object;
+                var message = new $root.Protos.CS2BS_BattleStartRet();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.CS2BS_BattleStartRet.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a CS2BS_BattleStartRet message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @static
+             * @param {Protos.CS2BS_BattleStartRet} message CS2BS_BattleStartRet
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CS2BS_BattleStartRet.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults)
+                    object.opts = null;
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                return object;
+            };
+    
+            /**
+             * Converts this CS2BS_BattleStartRet to JSON.
+             * @function toJSON
+             * @memberof Protos.CS2BS_BattleStartRet
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CS2BS_BattleStartRet.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return CS2BS_BattleStartRet;
+        })();
+    
+        Protos.CS2BS_BattleEndRet = (function() {
+    
+            /**
+             * Properties of a CS2BS_BattleEndRet.
+             * @memberof Protos
+             * @interface ICS2BS_BattleEndRet
+             * @property {Protos.IMsgOpts|null} [opts] CS2BS_BattleEndRet opts
+             */
+    
+            /**
+             * Constructs a new CS2BS_BattleEndRet.
+             * @memberof Protos
+             * @classdesc Represents a CS2BS_BattleEndRet.
+             * @implements ICS2BS_BattleEndRet
+             * @constructor
+             * @param {Protos.ICS2BS_BattleEndRet=} [properties] Properties to set
+             */
+            function CS2BS_BattleEndRet(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * CS2BS_BattleEndRet opts.
+             * @member {Protos.IMsgOpts|null|undefined} opts
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @instance
+             */
+            CS2BS_BattleEndRet.prototype.opts = null;
+    
+            /**
+             * Creates a new CS2BS_BattleEndRet instance using the specified properties.
+             * @function create
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @static
+             * @param {Protos.ICS2BS_BattleEndRet=} [properties] Properties to set
+             * @returns {Protos.CS2BS_BattleEndRet} CS2BS_BattleEndRet instance
+             */
+            CS2BS_BattleEndRet.create = function create(properties) {
+                return new CS2BS_BattleEndRet(properties);
+            };
+    
+            /**
+             * Encodes the specified CS2BS_BattleEndRet message. Does not implicitly {@link Protos.CS2BS_BattleEndRet.verify|verify} messages.
+             * @function encode
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @static
+             * @param {Protos.ICS2BS_BattleEndRet} message CS2BS_BattleEndRet message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2BS_BattleEndRet.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified CS2BS_BattleEndRet message, length delimited. Does not implicitly {@link Protos.CS2BS_BattleEndRet.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @static
+             * @param {Protos.ICS2BS_BattleEndRet} message CS2BS_BattleEndRet message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CS2BS_BattleEndRet.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a CS2BS_BattleEndRet message from the specified reader or buffer.
+             * @function decode
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {Protos.CS2BS_BattleEndRet} CS2BS_BattleEndRet
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2BS_BattleEndRet.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_BattleEndRet();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a CS2BS_BattleEndRet message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {Protos.CS2BS_BattleEndRet} CS2BS_BattleEndRet
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CS2BS_BattleEndRet.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a CS2BS_BattleEndRet message.
+             * @function verify
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CS2BS_BattleEndRet.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.opts != null && message.hasOwnProperty("opts")) {
+                    var error = $root.Protos.MsgOpts.verify(message.opts);
+                    if (error)
+                        return "opts." + error;
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a CS2BS_BattleEndRet message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {Protos.CS2BS_BattleEndRet} CS2BS_BattleEndRet
+             */
+            CS2BS_BattleEndRet.fromObject = function fromObject(object) {
+                if (object instanceof $root.Protos.CS2BS_BattleEndRet)
+                    return object;
+                var message = new $root.Protos.CS2BS_BattleEndRet();
+                if (object.opts != null) {
+                    if (typeof object.opts !== "object")
+                        throw TypeError(".Protos.CS2BS_BattleEndRet.opts: object expected");
+                    message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a CS2BS_BattleEndRet message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @static
+             * @param {Protos.CS2BS_BattleEndRet} message CS2BS_BattleEndRet
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CS2BS_BattleEndRet.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults)
+                    object.opts = null;
+                if (message.opts != null && message.hasOwnProperty("opts"))
+                    object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                return object;
+            };
+    
+            /**
+             * Converts this CS2BS_BattleEndRet to JSON.
+             * @function toJSON
+             * @memberof Protos.CS2BS_BattleEndRet
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CS2BS_BattleEndRet.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return CS2BS_BattleEndRet;
         })();
     
         Protos.CS2GC_BeginMatchRet = (function() {

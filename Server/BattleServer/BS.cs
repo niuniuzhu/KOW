@@ -69,8 +69,9 @@ namespace BattleServer
 
 		private void OnHeartBeat( int count )
 		{
-			this.waitingRoomMgr.Update( Consts.HEART_BEAT_INTERVAL );
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+			this.waitingRoomMgr.Update( Consts.HEART_BEAT_INTERVAL );
+			this.battleManager.Update( Consts.HEART_BEAT_INTERVAL );
 		}
 	}
 }

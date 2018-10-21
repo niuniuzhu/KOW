@@ -10,10 +10,19 @@ message CS2BS_PlayerInfo {
 }
 
 //战场信息
-message CS2BS_BattleInfo{
+message CS2BS_BattleInfo {
 	MsgOpts opts = 1;
-	uint32 id = 2;//房间id
-	int32 mapID = 3;//地图id
-	int32 timeout = 4;//连接超时时间
-	repeated CS2BS_PlayerInfo playerInfo = 5;//玩家信息
+	int32 mapID = 2;//地图id
+	int32 timeout = 3;//连接超时时间
+	repeated CS2BS_PlayerInfo playerInfo = 4;//玩家信息
+}
+
+//回应战场开始
+message CS2BS_BattleStartRet {
+	MsgOpts opts = 1;
+}
+
+//回应战场结束
+message CS2BS_BattleEndRet {
+	MsgOpts opts = 1;
 }

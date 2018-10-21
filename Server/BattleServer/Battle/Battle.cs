@@ -1,26 +1,29 @@
-﻿using Core.Misc;
+﻿using System;
+using Core.Misc;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BattleServer.Battle
 {
 	public class Battle : IPoolObject
 	{
-		private static uint _gid;
 
-		public uint id { get; private set; }
+		public uint id => this._battleDes.id;
+
+		public bool finished { get; private set; }
 
 		private readonly StepLocker _stepLocker = new StepLocker();
 		private BattleDescript _battleDes;
-
-		public Battle()
-		{
-			System.Diagnostics.Debug.Assert( _gid < uint.MaxValue, "maximum id of battle!!" );
-			this.id = _gid++;
-		}
+		private readonly System.Diagnostics.Stopwatch _sw = new System.Diagnostics.Stopwatch();
+		private long _lastUpdateTime;
 
 		public void Clear()
 		{
-			this.id = 0;
+			this.finished = false;
 			this._stepLocker.Reset();
+			this._sw.Stop();
+			this._sw.Reset();
+			this._lastUpdateTime = 0;
 		}
 
 		/// <summary>
@@ -30,6 +33,28 @@ namespace BattleServer.Battle
 		{
 			this._battleDes = battleDes;
 			this._stepLocker.Init( this, battleDes.frameRate, battleDes.keyframeStep );
+			this._sw.Start();
+			Task task = Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
+		}
+
+		private void AsyncLoop()
+		{
+			while ( true )
+			{
+				long elapsed = this._sw.ElapsedMilliseconds - this._lastUpdateTime;
+
+				this._stepLocker.Update( elapsed );
+
+				this._lastUpdateTime = this._sw.ElapsedMilliseconds;
+
+				Thread.Sleep( 1 );
+
+				if ( this._sw.ElapsedMilliseconds >= this._battleDes.battleTime )
+				{
+					this.finished = true;
+					break;
+				}
+			}
 		}
 
 		/// <summary>
@@ -50,6 +75,16 @@ namespace BattleServer.Battle
 					Logger.Warn( $"failed to send message to gcNID:{gcNID}" );
 			}
 			BS.instance.netSessionMgr.Broadcast( sids, message );
+		}
+
+		/// <summary>
+		/// 遍历战场所有玩家
+		/// </summary>
+		public void ForeachPlayer( Action<PlayerDescript> handler )
+		{
+			int count = this._battleDes.players.Count;
+			for ( int i = 0; i < count; i++ )
+				handler( this._battleDes.players[i] );
 		}
 
 		/// <summary>

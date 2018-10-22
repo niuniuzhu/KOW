@@ -102,15 +102,15 @@ namespace CentralServer.User
 			user.isConnected = false;
 			user.gsSID = 0;
 
+			//从房间内移除
+			CS.instance.matcher.OnUserKicked( user );
+
 			//判断是否需要下线
 			if ( user.KeepOnline() )
 			{
 				Logger.Info( $"user:{user.gcNID} lost, but keep online" );
 				return;
 			}
-
-			//从房间内移除
-			CS.instance.matcher.OnUserKicked( user );
 
 			this._gcNidToUser.Remove( user.gcNID );
 			this._ukeyToUser.Remove( user.ukey );

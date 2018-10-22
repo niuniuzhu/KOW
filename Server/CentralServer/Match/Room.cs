@@ -1,5 +1,4 @@
-﻿using CentralServer.User;
-using Core.Misc;
+﻿using Core.Misc;
 using Shared;
 using System.Collections.Generic;
 
@@ -47,7 +46,7 @@ namespace CentralServer.Match
 		/// </summary>
 		public bool started;
 
-		private readonly List<PlayerInfo> _players = new List<PlayerInfo>();
+		private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
 		private long _time;
 
 		public Room()
@@ -58,64 +57,40 @@ namespace CentralServer.Match
 
 		public void Clear()
 		{
-			this.RemoveAllPlayers();
+			System.Diagnostics.Debug.Assert( this._players.Count == 0, "remove all players before destroy room." );
 			this._time = 0;
 			this.timeToNitifyPlayerInfos = 0;
 			this.started = false;
 		}
 
-		public bool CanAddPlayer( PlayerInfo player ) => this._players.Count < this.maxPlayers && !this.HasPlayer( player.gcNID );
+		public bool CanAddPlayer( RoomPlayer player ) => this._players.Count < this.maxPlayers && !this.HasPlayer( player.gcNID );
 
 		/// <summary>
 		/// 加入新玩家
 		/// 该方法不检查参数合法性
 		/// </summary>
-		public void AddPlayer( PlayerInfo player )
-		{
-			this._players.Add( player );
-			Logger.Log( $"player:{player} join room:{this.id}" );
-		}
+		public void AddPlayer( RoomPlayer player ) => this._players.Add( player );
 
 		/// <summary>
 		/// 移除玩家
 		/// 该方法不检查参数合法性
 		/// </summary>
-		public void RemovePlayer( PlayerInfo player )
-		{
-			this._players.Remove( player );
-			Logger.Log( $"player:{player} leave room:{this.id}" );
-		}
+		public bool RemovePlayer( RoomPlayer player ) => this._players.Remove( player );
 
 		/// <summary>
-		/// 移除所有玩家(内部调用,通常是房间被销毁时)
+		/// 移除指定索引玩家
 		/// </summary>
-		private void RemoveAllPlayers()
-		{
-			int count = this._players.Count;
-			if ( count == 0 )
-				return;
-			for ( int i = 0; i < count; i++ )
-			{
-				PlayerInfo player = this._players[i];
-				CSUser user = CS.instance.userMgr.GetUser( player.gcNID );
-				System.Diagnostics.Debug.Assert( user != null && user.roomID == this.id,
-												 $"can not find user:{player.gcNID} or user not in romm:{this.id}" );
-				user.inRoom = false;
-				user.roomID = 0;
-				Logger.Log( $"player:{player} leave room:{this.id}" );
-			}
-			this._players.Clear();
-		}
+		public void RemovePlayerAt( int index ) => this._players.RemoveAt( index );
 
 		/// <summary>
 		/// 获取指定索引值的玩家
 		/// </summary>
-		public PlayerInfo GetPlayerAt( int index ) => this._players[index];
+		public RoomPlayer GetPlayerAt( int index ) => this._players[index];
 
 		/// <summary>
 		/// 获取指定id的玩家
 		/// </summary>
-		public PlayerInfo GetPlayer( ulong gcNID )
+		public RoomPlayer GetPlayer( ulong gcNID )
 		{
 			int count = this._players.Count;
 			for ( int i = 0; i < count; i++ )

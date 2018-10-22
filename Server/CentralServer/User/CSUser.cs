@@ -40,7 +40,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家是否在房间内
 		/// </summary>
-		public bool inRoom;
+		public bool IsInRoom;
 
 		/// <summary>
 		/// 当前连接的GS sessionID

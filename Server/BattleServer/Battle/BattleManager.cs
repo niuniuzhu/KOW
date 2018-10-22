@@ -19,7 +19,6 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 开始战斗
 		/// </summary>
-		/// <param name="waitingRoom"></param>
 		public void CreateBattle( WaitingRoom waitingRoom )
 		{
 			Battle battle = POOL.Pop();
@@ -39,7 +38,7 @@ namespace BattleServer.Battle
 			battle.Init( battleDesc );
 			this._runningBattles.Add( battle );
 
-			Logger.Log( $"battle:{battle.id} start" );
+			Logger.Log( $"battle:{battle.id} created" );
 
 			Protos.BS2CS_BattleStart toCSBattleStart = ProtoCreator.Q_BS2CS_BattleStart();
 			toCSBattleStart.Bid = battle.id;
@@ -72,9 +71,16 @@ namespace BattleServer.Battle
 			for ( int i = 0; i < count; i++ )
 			{
 				Battle battle = this._runningBattles[i];
+				//检查战场是否结束
 				if ( battle.finished )
 				{
+					//处理战场结束
 					this.OnBattleEnd( battle );
+					this._runningBattles.RemoveAt( i );
+					POOL.Push( battle );
+					Logger.Log( $"battle:{battle.id} destroied" );
+					--i;
+					--count;
 				}
 			}
 		}

@@ -31,6 +31,28 @@ export class UIMatching implements IUIModule {
 		UIAlert.Show("无法连接服务器", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
 	}
 
+	public OnBeginMatchResult(resp: Protos.CS2GC_BeginMatchRet): void {
+		let error: string;
+		switch (resp.result) {
+			case Protos.CS2GC_BeginMatchRet.EResult.IllegalID:
+				error = "无效网络ID";
+				break;
+			case Protos.CS2GC_BeginMatchRet.EResult.NoRoom:
+				error = "匹配失败";
+				break;
+			case Protos.CS2GC_BeginMatchRet.EResult.UserInBattle:
+				error = "玩家已在战场中";
+				break;
+			case Protos.CS2GC_BeginMatchRet.EResult.UserInRoom:
+				error = "玩家已在匹配中";
+				break;
+			default:
+				error = "匹配失败";
+				break;
+		}
+		UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
+	}
+
 	public OnLoginBSResut(resp: Protos.BS2GC_LoginRet): void {
 		switch (resp.result) {
 			case Protos.BS2GC_LoginRet.EResult.Success:
@@ -45,7 +67,7 @@ export class UIMatching implements IUIModule {
 	public UpdateRoomInfo(roomInfo: Protos.CS2GC_RoomInfo): void {
 		//todo update ui
 	}
-	
+
 	public UpdatePlayers(_players: Protos.ICS2GC_PlayerInfo[]): void {
 	}
 }

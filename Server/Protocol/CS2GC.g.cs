@@ -24,28 +24,30 @@ namespace Protos {
     static CS2GCReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtDUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iuQEKE0NTMkdD",
+            "CgtDUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ipwIKE0NTMkdD",
             "X0JlZ2luTWF0Y2hSZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRz",
-            "EiYKBnJlc3VsdBgCIAEoDjIWLlByb3Rvcy5HbG9iYWwuRUNvbW1vbhIKCgJp",
-            "ZBgDIAEoDRINCgVtYXBJRBgEIAEoBRIRCgltYXhQbGF5ZXIYBSABKAUSLQoL",
-            "cGxheWVySW5mb3MYBiADKAsyGC5Qcm90b3MuQ1MyR0NfUGxheWVySW5mbyJA",
-            "ChBDUzJHQ19QbGF5ZXJJbmZvEg0KBWdjTklEGAEgASgEEgwKBG5hbWUYAiAB",
-            "KAkSDwoHYWN0b3JJRBgDIAEoBSJgChBDUzJHQ19QbGF5ZXJKb2luEh0KBG9w",
-            "dHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxItCgtwbGF5ZXJJbmZvcxgCIAEo",
-            "CzIYLlByb3Rvcy5DUzJHQ19QbGF5ZXJJbmZvIkEKEUNTMkdDX1BsYXllckxl",
-            "YXZlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVnY05JRBgC",
-            "IAEoBCJyCg5DUzJHQ19Sb29tSW5mbxIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
-            "Lk1zZ09wdHMSLQoLcGxheWVySW5mb3MYAiADKAsyGC5Qcm90b3MuQ1MyR0Nf",
-            "UGxheWVySW5mbxISCgpwcm9ncmVzc2VzGAMgAygFIr0BChFDUzJHQ19FbnRl",
-            "ckJhdHRsZRIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NO",
-            "SUQYAiABKAQSCgoCaXAYAyABKAkSDAoEcG9ydBgEIAEoBRIuCgVlcnJvchgF",
-            "IAEoDjIfLlByb3Rvcy5DUzJHQ19FbnRlckJhdHRsZS5FcnJvciIwCgVFcnJv",
-            "chILCgdTdWNjZXNzEAASDgoKQlNOb3RGb3VuZBABEgoKBkJTTG9zdBACYgZw",
-            "cm90bzM="));
+            "EjMKBnJlc3VsdBgCIAEoDjIjLlByb3Rvcy5DUzJHQ19CZWdpbk1hdGNoUmV0",
+            "LkVSZXN1bHQSCgoCaWQYAyABKA0SDQoFbWFwSUQYBCABKAUSEQoJbWF4UGxh",
+            "eWVyGAUgASgFEi0KC3BsYXllckluZm9zGAYgAygLMhguUHJvdG9zLkNTMkdD",
+            "X1BsYXllckluZm8iXwoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVk",
+            "EAESDQoJSWxsZWdhbElEEAISCgoGTm9Sb29tEAMSEAoMVXNlckluQmF0dGxl",
+            "EAQSDgoKVXNlckluUm9vbRAFIkAKEENTMkdDX1BsYXllckluZm8SDQoFZ2NO",
+            "SUQYASABKAQSDAoEbmFtZRgCIAEoCRIPCgdhY3RvcklEGAMgASgFImAKEENT",
+            "MkdDX1BsYXllckpvaW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRz",
+            "Ei0KC3BsYXllckluZm9zGAIgASgLMhguUHJvdG9zLkNTMkdDX1BsYXllcklu",
+            "Zm8iQQoRQ1MyR0NfUGxheWVyTGVhdmUSHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
+            "cy5Nc2dPcHRzEg0KBWdjTklEGAIgASgEInIKDkNTMkdDX1Jvb21JbmZvEh0K",
+            "BG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxItCgtwbGF5ZXJJbmZvcxgC",
+            "IAMoCzIYLlByb3Rvcy5DUzJHQ19QbGF5ZXJJbmZvEhIKCnByb2dyZXNzZXMY",
+            "AyADKAUivQEKEUNTMkdDX0VudGVyQmF0dGxlEh0KBG9wdHMYASABKAsyDy5Q",
+            "cm90b3MuTXNnT3B0cxINCgVnY05JRBgCIAEoBBIKCgJpcBgDIAEoCRIMCgRw",
+            "b3J0GAQgASgFEi4KBWVycm9yGAUgASgOMh8uUHJvdG9zLkNTMkdDX0VudGVy",
+            "QmF0dGxlLkVycm9yIjAKBUVycm9yEgsKB1N1Y2Nlc3MQABIOCgpCU05vdEZv",
+            "dW5kEAESCgoGQlNMb3N0EAJiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result", "Id", "MapID", "MaxPlayer", "PlayerInfos" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result", "Id", "MapID", "MaxPlayer", "PlayerInfos" }, null, new[]{ typeof(global::Protos.CS2GC_BeginMatchRet.Types.EResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerInfo), global::Protos.CS2GC_PlayerInfo.Parser, new[]{ "GcNID", "Name", "ActorID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerJoin), global::Protos.CS2GC_PlayerJoin.Parser, new[]{ "Opts", "PlayerInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerLeave), global::Protos.CS2GC_PlayerLeave.Parser, new[]{ "Opts", "GcNID" }, null, null, null),
@@ -112,9 +114,9 @@ namespace Protos {
 
     /// <summary>Field number for the "result" field.</summary>
     public const int ResultFieldNumber = 2;
-    private global::Protos.Global.Types.ECommon result_ = 0;
+    private global::Protos.CS2GC_BeginMatchRet.Types.EResult result_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.Global.Types.ECommon Result {
+    public global::Protos.CS2GC_BeginMatchRet.Types.EResult Result {
       get { return result_; }
       set {
         result_ = value;
@@ -314,7 +316,7 @@ namespace Protos {
             break;
           }
           case 16: {
-            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
+            result_ = (global::Protos.CS2GC_BeginMatchRet.Types.EResult) input.ReadEnum();
             break;
           }
           case 24: {
@@ -336,6 +338,22 @@ namespace Protos {
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the CS2GC_BeginMatchRet message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum EResult {
+        [pbr::OriginalName("Success")] Success = 0,
+        [pbr::OriginalName("Failed")] Failed = 1,
+        [pbr::OriginalName("IllegalID")] IllegalId = 2,
+        [pbr::OriginalName("NoRoom")] NoRoom = 3,
+        [pbr::OriginalName("UserInBattle")] UserInBattle = 4,
+        [pbr::OriginalName("UserInRoom")] UserInRoom = 5,
+      }
+
+    }
+    #endregion
 
   }
 

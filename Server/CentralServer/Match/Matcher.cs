@@ -32,33 +32,27 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 强制把指定ID玩家踢除
 		/// </summary>
-		public bool OnUserKicked( CSUser user )
+		public void OnUserKicked( CSUser user )
 		{
-			if ( !user.inRoom || !this._idToRoom.TryGetValue( user.roomID, out Room room ) )
-			{
-				Logger.Error( $"player:{user.gcNID} not in room" );
-				return false;
-			}
-			PlayerInfo player = room.GetPlayer( user.gcNID );
-			if ( player == null )
-			{
-				Logger.Error( $"player:{user.gcNID} not in room" );
-				return false;
-			}
+			if ( !user.IsInRoom || !this._idToRoom.TryGetValue( user.roomID, out Room room ) )
+				return;
+
+			RoomPlayer player = room.GetPlayer( user.gcNID );
 			this.RemovePlayer( room, player, user );
-			return true;
 		}
 
 		/// <summary>
 		/// 添加玩家
 		/// </summary>
-		private void AddPlayer( Room room, PlayerInfo player, CSUser user )
+		private void AddPlayer( Room room, RoomPlayer player, CSUser user )
 		{
 			room.AddPlayer( player );
 			user.roomID = room.id;
-			user.inRoom = true;
+			user.IsInRoom = true;
 
-			//通知gc有玩家加入房间
+			Logger.Log( $"user:{user.gcNID} join room:{room.id}" );
+
+			//通知GC有玩家加入房间
 			Protos.CS2GC_PlayerJoin playerJoin = ProtoCreator.Q_CS2GC_PlayerJoin();
 			playerJoin.PlayerInfos = new Protos.CS2GC_PlayerInfo
 			{
@@ -72,11 +66,15 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 移除玩家
 		/// </summary>
-		private void RemovePlayer( Room room, PlayerInfo player, CSUser user )
+		private void RemovePlayer( Room room, RoomPlayer player, CSUser user )
 		{
-			room.RemovePlayer( player );
-			user.inRoom = false;
+			if ( !room.RemovePlayer( player ) )
+				return;
+
+			user.IsInRoom = false;
 			user.roomID = 0;
+
+			Logger.Log( $"user:{user.gcNID} leave room:{room.id}" );
 
 			//通知gc有玩家离开房间
 			Protos.CS2GC_PlayerLeave playerLeave = ProtoCreator.Q_CS2GC_PlayerLeave();
@@ -112,74 +110,96 @@ namespace CentralServer.Match
 
 		private void DestroyRoom( Room room, int type )
 		{
+			//移除房间内所有玩家
+			int count = room.numPlayers;
+			for ( int i = 0; i < count; i++ )
+			{
+				RoomPlayer player = room.GetPlayerAt( i );
+				CSUser user = CS.instance.userMgr.GetUser( player.gcNID );
+				room.RemovePlayerAt( i );
+				user.IsInRoom = false;
+				user.roomID = 0;
+				Logger.Log( $"user:{user.gcNID} leave room:{room.id}" );
+				--i;
+				--count;
+			}
+
 			this._idToRoom.Remove( room.id );
 			if ( type == 0 )
 				this._freeRooms.Remove( room );
 			else if ( type == 1 )
 				this._transits.Remove( room );
+
 			POOL.Push( room );
 			Logger.Log( $"room:{room.id} was destroied" );
 		}
 
 		private Room GetRoom( ulong gcNID )
 		{
-			CSUser user = CS.instance.userMgr.GetUser( gcNID );
-			if ( user == null )
-			{
-				Logger.Error( $"can not find user:{gcNID}" );
-				return null;
-			}
-			if ( user.inRoom && this._idToRoom.TryGetValue( user.roomID, out Room room ) && room.HasPlayer( gcNID ) )
-				return room;
 			return null;
 		}
 
 		/// <summary>
 		/// 处理玩家开始匹配
 		/// </summary>
-		public ErrorCode BeginMatch( uint sid, IMessage message )
+		public void BeginMatch( uint sid, Protos.GC2CS_BeginMatch beginMatch )
 		{
-			//todo 这里需要检查发起匹配的合法性,由于是客户端主动调用的.例如处于战场状态或维护状态不能发起匹配
+			Protos.CS2GC_BeginMatchRet ret = ProtoCreator.R_GC2CS_BeginMatch( beginMatch.Opts.Pid );
 
-			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch ) message;
 			ulong gcNID = beginMatch.Opts.Transid;
-
 			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 			if ( user == null )
 			{
-				Logger.Error( $"invalid gcNID:{gcNID}" );
-				return ErrorCode.Success;
+				Logger.Warn( $"invalid user:{gcNID}" );
+				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.IllegalId;
+				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				return;
 			}
 
-			Protos.CS2GC_BeginMatchRet ret = ProtoCreator.R_GC2CS_BeginMatch( beginMatch.Opts.Pid );
+			if ( user.state == CSUser.State.Battle )
+			{
+				Logger.Warn( $"user:{gcNID} in battle" );
+				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.UserInBattle;
+				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				return;
+			}
+
+			if ( user.IsInRoom )
+			{
+				Logger.Warn( $"user:{gcNID} in room" );
+				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.UserInRoom;
+				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				return;
+			}
 
 			//加入或创建房间
 			Room room = this.JoinRoom();
 			if ( room == null )
 			{
-				ret.Result = Protos.Global.Types.ECommon.Failed;
-				return ErrorCode.Success;
+				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.NoRoom;
+				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				return;
 			}
 
-			ret.Result = Protos.Global.Types.ECommon.Success;
 			ret.Id = room.id;
 			ret.MapID = room.mapID;
 			ret.MaxPlayer = room.maxPlayers;
 			this.FillProtoPlayerInfo( room, ret.PlayerInfos );
 
-			PlayerInfo player = new PlayerInfo( gcNID, user.ukey );
+			RoomPlayer player = new RoomPlayer( gcNID, user.ukey );
 			player.actorID = beginMatch.ActorID;
 
 			if ( !room.CanAddPlayer( player ) )
 			{
 				//加入失败,如果房间没玩家,则销毁房间
 				if ( room.isEmpty )
-				{
-					Logger.Log( $"room:{room.id} was destroied" );
-					POOL.Push( room );
-				}
-				return ErrorCode.Success;
+					this.DestroyRoom( room, 99 );
+				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.Failed;
+				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				return;
 			}
+
+			ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.Success;
 			//发送回应
 			CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 
@@ -191,26 +211,30 @@ namespace CentralServer.Match
 				this._freeRooms.Remove( room );
 				this._fullRooms.Add( room );
 			}
-
-			return ErrorCode.Success;
 		}
 
 		/// <summary>
 		/// 处理玩家提交的信息
 		/// </summary>
-		public ErrorCode OnGc2CsUpdatePlayerInfo( IMessage message )
+		public void UpdatePlayerInfo( Protos.GC2CS_UpdatePlayerInfo updatePlayerInfo )
 		{
-			Protos.GC2CS_UpdatePlayerInfo updatePlayerInfo = ( Protos.GC2CS_UpdatePlayerInfo ) message;
 			ulong gcNID = updatePlayerInfo.Opts.Transid;
-			Room room = this.GetRoom( gcNID );
-			if ( room == null )
-				Logger.Warn( $"player:{gcNID} not in room" );
-			else
+
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+			if ( user == null )
 			{
-				PlayerInfo player = room.GetPlayer( gcNID );//由于上面调用GetRoom方法已确保player存在,这里不用再判空了
-				player.progress = updatePlayerInfo.Progress;
+				Logger.Warn( $"invalid user:{gcNID}" );
+				return;
 			}
-			return ErrorCode.Success;
+
+			if ( !user.IsInRoom || !this._idToRoom.TryGetValue( user.roomID, out Room room ) ||
+				 !room.HasPlayer( gcNID ) )
+			{
+				Logger.Warn( $"user:{gcNID} not in room" );
+				return;
+			}
+			RoomPlayer player = room.GetPlayer( gcNID );
+			player.progress = updatePlayerInfo.Progress;
 		}
 
 		/// <summary>
@@ -223,7 +247,7 @@ namespace CentralServer.Match
 			//输入进度
 			for ( int i = 0; i < room.numPlayers; i++ )
 			{
-				PlayerInfo player = room.GetPlayerAt( i );
+				RoomPlayer player = room.GetPlayerAt( i );
 				roomInfo.Progresses.Add( player.progress );
 			}
 			this.Broadcast( room, roomInfo );
@@ -249,7 +273,7 @@ namespace CentralServer.Match
 			battleInfo.Timeout = ( int ) Consts.WAITING_ROOM_TIME_OUT;
 			for ( int i = 0; i < room.numPlayers; i++ )
 			{
-				PlayerInfo player = room.GetPlayerAt( i );
+				RoomPlayer player = room.GetPlayerAt( i );
 				CSUser user = CS.instance.userMgr.GetUser( player.gcNID );
 				Protos.CS2BS_PlayerInfo pi = new Protos.CS2BS_PlayerInfo
 				{
@@ -273,7 +297,7 @@ namespace CentralServer.Match
 					int count = room.numPlayers;
 					for ( int i = 0; i < count; i++ )
 					{
-						PlayerInfo player = room.GetPlayerAt( i );
+						RoomPlayer player = room.GetPlayerAt( i );
 						CSUser user = CS.instance.userMgr.GetUser( player.ukey );
 						//把房间ID和玩家在BS上的网络ID联系起来,以便在战场结束后迅速找到玩家
 						CS.instance.battleStaging.Add( appropriateBSInfo.lid, appropriateBSInfo.sessionID, ret.Bid, user );
@@ -303,7 +327,7 @@ namespace CentralServer.Match
 		{
 			for ( int i = 0; i < room.numPlayers; i++ )
 			{
-				PlayerInfo player = room.GetPlayerAt( i );
+				RoomPlayer player = room.GetPlayerAt( i );
 				Protos.CS2GC_PlayerInfo pi = new Protos.CS2GC_PlayerInfo();
 				pi.GcNID = player.gcNID;
 				pi.Name = CS.instance.userMgr.GetUser( player.gcNID ).name;
@@ -312,11 +336,11 @@ namespace CentralServer.Match
 			}
 		}
 
-		private void Broadcast( Room room, IMessage msg, ulong gcNID = 0, Action<IMessage, PlayerInfo> msgModifier = null )
+		private void Broadcast( Room room, IMessage msg, ulong gcNID = 0, Action<IMessage, RoomPlayer> msgModifier = null )
 		{
 			for ( int i = 0; i < room.numPlayers; ++i )
 			{
-				PlayerInfo player = room.GetPlayerAt( i );
+				RoomPlayer player = room.GetPlayerAt( i );
 				if ( gcNID != 0 && player.gcNID == gcNID )
 					continue;
 				msgModifier?.Invoke( msg, player );

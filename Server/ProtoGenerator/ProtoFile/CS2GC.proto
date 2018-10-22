@@ -5,8 +5,16 @@ import "Global.proto";
 
 //匹配回应
 message CS2GC_BeginMatchRet {
+	enum EResult {
+		Success = 0;
+		Failed = 1;
+		IllegalID = 2;
+		NoRoom = 3;
+		UserInBattle = 4;
+		UserInRoom = 5;
+	}
 	MsgOpts opts = 1;
-	Global.ECommon result = 2;
+	EResult result = 2;
 	uint32 id = 3;//房间运行时id
 	int32 mapID = 4;//地图id
 	int32 maxPlayer = 5;//房间最大玩家数

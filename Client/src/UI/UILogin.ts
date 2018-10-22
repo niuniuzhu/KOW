@@ -152,7 +152,7 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
 	}
 
-	public OnLoginGSResut(resp: Protos.GS2GC_LoginRet): void {
+	public OnLoginGSResult(resp: Protos.GS2GC_LoginRet): void {
 		this.closeModalWait();
 		switch (resp.result) {
 			case Protos.GS2GC_LoginRet.EResult.SessionExpire:

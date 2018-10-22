@@ -24,7 +24,5 @@ namespace DBServer
 		public int lsPort;
 		public int csPort;
 		public IList<DBEntry> dbs;
-
-		public DBEntry GetDBCfg( DBType dbType ) => this.dbs[( int )dbType];
 	}
 }

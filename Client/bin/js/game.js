@@ -333,6 +333,18 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
+        static Q_BS2CS_BattleStart() {
+            let msg = new protos_1.Protos.BS2CS_BattleStart();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
+            return msg;
+        }
+        static Q_BS2CS_BattleEnd() {
+            let msg = new protos_1.Protos.BS2CS_BattleEnd();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
+            return msg;
+        }
         static Q_BS2GC_LoginRet() {
             let msg = new protos_1.Protos.BS2GC_LoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -340,6 +352,11 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         }
         static Q_BS2GC_BattleStart() {
             let msg = new protos_1.Protos.BS2GC_BattleStart();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
+        static Q_BS2GC_BattleEnd() {
+            let msg = new protos_1.Protos.BS2GC_BattleEnd();
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
@@ -378,6 +395,16 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             let msg = new protos_1.Protos.CS2BS_BattleInfo();
             msg.opts = new protos_1.Protos.MsgOpts();
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
+            return msg;
+        }
+        static Q_CS2BS_BattleStartRet() {
+            let msg = new protos_1.Protos.CS2BS_BattleStartRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
+        static Q_CS2BS_BattleEndRet() {
+            let msg = new protos_1.Protos.CS2BS_BattleEndRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
         static Q_CS2GC_BeginMatchRet() {
@@ -518,6 +545,20 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             msg.opts.rpid = pid;
             return msg;
         }
+        static R_BS2CS_BattleStart(pid) {
+            let msg = new protos_1.Protos.CS2BS_BattleStartRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_BS2CS_BattleEnd(pid) {
+            let msg = new protos_1.Protos.CS2BS_BattleEndRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
         static DecodeMsg(msgID, data, size) {
             switch (msgID) {
                 case 10: {
@@ -624,12 +665,24 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                     let msg = protos_1.Protos.BS2CS_BattleInfoRet.decode(data, size);
                     return msg;
                 }
+                case 4002: {
+                    let msg = protos_1.Protos.BS2CS_BattleStart.decode(data, size);
+                    return msg;
+                }
+                case 4003: {
+                    let msg = protos_1.Protos.BS2CS_BattleEnd.decode(data, size);
+                    return msg;
+                }
                 case 4100: {
                     let msg = protos_1.Protos.BS2GC_LoginRet.decode(data, size);
                     return msg;
                 }
                 case 4102: {
                     let msg = protos_1.Protos.BS2GC_BattleStart.decode(data, size);
+                    return msg;
+                }
+                case 4103: {
+                    let msg = protos_1.Protos.BS2GC_BattleEnd.decode(data, size);
                     return msg;
                 }
                 case 5000: {
@@ -658,6 +711,14 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 }
                 case 5200: {
                     let msg = protos_1.Protos.CS2BS_BattleInfo.decode(data, size);
+                    return msg;
+                }
+                case 5201: {
+                    let msg = protos_1.Protos.CS2BS_BattleStartRet.decode(data, size);
+                    return msg;
+                }
+                case 5202: {
+                    let msg = protos_1.Protos.CS2BS_BattleEndRet.decode(data, size);
                     return msg;
                 }
                 case 5300: {
@@ -799,12 +860,24 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
             let msg = protos_1.Protos.BS2CS_BattleInfoRet.decode(data, size);
             return msg;
         }
+        static D_BS2CS_BattleStart(data, size) {
+            let msg = protos_1.Protos.BS2CS_BattleStart.decode(data, size);
+            return msg;
+        }
+        static D_BS2CS_BattleEnd(data, size) {
+            let msg = protos_1.Protos.BS2CS_BattleEnd.decode(data, size);
+            return msg;
+        }
         static D_BS2GC_LoginRet(data, size) {
             let msg = protos_1.Protos.BS2GC_LoginRet.decode(data, size);
             return msg;
         }
         static D_BS2GC_BattleStart(data, size) {
             let msg = protos_1.Protos.BS2GC_BattleStart.decode(data, size);
+            return msg;
+        }
+        static D_BS2GC_BattleEnd(data, size) {
+            let msg = protos_1.Protos.BS2GC_BattleEnd.decode(data, size);
             return msg;
         }
         static D_CS2LS_GSInfos(data, size) {
@@ -833,6 +906,14 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         }
         static D_CS2BS_BattleInfo(data, size) {
             let msg = protos_1.Protos.CS2BS_BattleInfo.decode(data, size);
+            return msg;
+        }
+        static D_CS2BS_BattleStartRet(data, size) {
+            let msg = protos_1.Protos.CS2BS_BattleStartRet.decode(data, size);
+            return msg;
+        }
+        static D_CS2BS_BattleEndRet(data, size) {
+            let msg = protos_1.Protos.CS2BS_BattleEndRet.decode(data, size);
             return msg;
         }
         static D_CS2GC_BeginMatchRet(data, size) {
@@ -947,11 +1028,20 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 case 4001: {
                     return new protos_1.Protos.BS2CS_BattleInfoRet();
                 }
+                case 4002: {
+                    return new protos_1.Protos.BS2CS_BattleStart();
+                }
+                case 4003: {
+                    return new protos_1.Protos.BS2CS_BattleEnd();
+                }
                 case 4100: {
                     return new protos_1.Protos.BS2GC_LoginRet();
                 }
                 case 4102: {
                     return new protos_1.Protos.BS2GC_BattleStart();
+                }
+                case 4103: {
+                    return new protos_1.Protos.BS2GC_BattleEnd();
                 }
                 case 5000: {
                     return new protos_1.Protos.CS2LS_GSInfos();
@@ -973,6 +1063,12 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 }
                 case 5200: {
                     return new protos_1.Protos.CS2BS_BattleInfo();
+                }
+                case 5201: {
+                    return new protos_1.Protos.CS2BS_BattleStartRet();
+                }
+                case 5202: {
+                    return new protos_1.Protos.CS2BS_BattleEndRet();
                 }
                 case 5300: {
                     return new protos_1.Protos.CS2GC_BeginMatchRet();
@@ -1082,10 +1178,19 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                 case 4001: {
                     return message.opts;
                 }
+                case 4002: {
+                    return message.opts;
+                }
+                case 4003: {
+                    return message.opts;
+                }
                 case 4100: {
                     return message.opts;
                 }
                 case 4102: {
+                    return message.opts;
+                }
+                case 4103: {
                     return message.opts;
                 }
                 case 5000: {
@@ -1107,6 +1212,12 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
                     return message.opts;
                 }
                 case 5200: {
+                    return message.opts;
+                }
+                case 5201: {
+                    return message.opts;
+                }
+                case 5202: {
                     return message.opts;
                 }
                 case 5300: {
@@ -1166,8 +1277,11 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [protos_1.Protos.GS2GC_Kick, 3101],
         [protos_1.Protos.BS2CS_ReportState, 4000],
         [protos_1.Protos.BS2CS_BattleInfoRet, 4001],
+        [protos_1.Protos.BS2CS_BattleStart, 4002],
+        [protos_1.Protos.BS2CS_BattleEnd, 4003],
         [protos_1.Protos.BS2GC_LoginRet, 4100],
         [protos_1.Protos.BS2GC_BattleStart, 4102],
+        [protos_1.Protos.BS2GC_BattleEnd, 4103],
         [protos_1.Protos.CS2LS_GSInfos, 5000],
         [protos_1.Protos.CS2LS_GSInfo, 5001],
         [protos_1.Protos.CS2LS_GSLost, 5002],
@@ -1175,6 +1289,8 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [protos_1.Protos.CS2GS_GCLoginRet, 5100],
         [protos_1.Protos.CS2GS_KickGC, 5101],
         [protos_1.Protos.CS2BS_BattleInfo, 5200],
+        [protos_1.Protos.CS2BS_BattleStartRet, 5201],
+        [protos_1.Protos.CS2BS_BattleEndRet, 5202],
         [protos_1.Protos.CS2GC_BeginMatchRet, 5300],
         [protos_1.Protos.CS2GC_PlayerJoin, 5301],
         [protos_1.Protos.CS2GC_PlayerLeave, 5302],
@@ -1211,8 +1327,11 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [3101, protos_1.Protos.GS2GC_Kick],
         [4000, protos_1.Protos.BS2CS_ReportState],
         [4001, protos_1.Protos.BS2CS_BattleInfoRet],
+        [4002, protos_1.Protos.BS2CS_BattleStart],
+        [4003, protos_1.Protos.BS2CS_BattleEnd],
         [4100, protos_1.Protos.BS2GC_LoginRet],
         [4102, protos_1.Protos.BS2GC_BattleStart],
+        [4103, protos_1.Protos.BS2GC_BattleEnd],
         [5000, protos_1.Protos.CS2LS_GSInfos],
         [5001, protos_1.Protos.CS2LS_GSInfo],
         [5002, protos_1.Protos.CS2LS_GSLost],
@@ -1220,6 +1339,8 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         [5100, protos_1.Protos.CS2GS_GCLoginRet],
         [5101, protos_1.Protos.CS2GS_KickGC],
         [5200, protos_1.Protos.CS2BS_BattleInfo],
+        [5201, protos_1.Protos.CS2BS_BattleStartRet],
+        [5202, protos_1.Protos.CS2BS_BattleEndRet],
         [5300, protos_1.Protos.CS2GC_BeginMatchRet],
         [5301, protos_1.Protos.CS2GC_PlayerJoin],
         [5302, protos_1.Protos.CS2GC_PlayerLeave],
@@ -1475,7 +1596,7 @@ define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connect
                 askLogin.sessionID = sessionID;
                 connector.Send(protos_4.Protos.GC2GS_AskLogin, askLogin, message => {
                     let resp = message;
-                    this._ui.OnLoginGSResut(resp);
+                    this._ui.OnLoginGSResult(resp);
                     switch (resp.result) {
                         case protos_4.Protos.GS2GC_LoginRet.EResult.Success:
                             if (resp.gcState == protos_4.Protos.GS2GC_LoginRet.EGCCState.Battle) {
@@ -1513,6 +1634,27 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
         OnConnectToBSError() {
             UIAlert_1.UIAlert.Show("无法连接服务器", () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
         }
+        OnBeginMatchResult(resp) {
+            let error;
+            switch (resp.result) {
+                case protos_5.Protos.CS2GC_BeginMatchRet.EResult.IllegalID:
+                    error = "无效网络ID";
+                    break;
+                case protos_5.Protos.CS2GC_BeginMatchRet.EResult.NoRoom:
+                    error = "匹配失败";
+                    break;
+                case protos_5.Protos.CS2GC_BeginMatchRet.EResult.UserInBattle:
+                    error = "玩家已在战场中";
+                    break;
+                case protos_5.Protos.CS2GC_BeginMatchRet.EResult.UserInRoom:
+                    error = "玩家已在匹配中";
+                    break;
+                default:
+                    error = "匹配失败";
+                    break;
+            }
+            UIAlert_1.UIAlert.Show(error, () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
+        }
         OnLoginBSResut(resp) {
             switch (resp.result) {
                 case protos_5.Protos.BS2GC_LoginRet.EResult.Success:
@@ -1547,20 +1689,7 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
             Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
             Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
             Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_EnterBattle, this.OnRecvBSInfo.bind(this));
-            let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
-            beginMatch.actorID = 0;
-            Connector_2.Connector.SendToCS(protos_6.Protos.GC2CS_BeginMatch, beginMatch, message => {
-                let resp = message;
-                this._roomID = resp.id;
-                this._mapID = resp.mapID;
-                this._maxPlayers = resp.maxPlayer;
-                for (let i = 0; i < resp.playerInfos.length; i++) {
-                    const playerInfo = resp.playerInfos[i];
-                    this._players.push(playerInfo);
-                }
-                this._ui.UpdatePlayers(this._players);
-                console.log(resp);
-            });
+            this.BeginMatch();
         }
         OnExit() {
             Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
@@ -1608,6 +1737,27 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
                 });
             };
             connector.Connect(bsInfo.ip, bsInfo.port);
+        }
+        BeginMatch() {
+            let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
+            beginMatch.actorID = 0;
+            Connector_2.Connector.SendToCS(protos_6.Protos.GC2CS_BeginMatch, beginMatch, message => {
+                let resp = message;
+                this._ui.OnBeginMatchResult(resp);
+                switch (resp.result) {
+                    case protos_6.Protos.CS2GC_BeginMatchRet.EResult.Success:
+                        this._roomID = resp.id;
+                        this._mapID = resp.mapID;
+                        this._maxPlayers = resp.maxPlayer;
+                        for (let i = 0; i < resp.playerInfos.length; i++) {
+                            const playerInfo = resp.playerInfos[i];
+                            this._players.push(playerInfo);
+                        }
+                        this._ui.UpdatePlayers(this._players);
+                        console.log("begin match");
+                        break;
+                }
+            });
         }
         StartLoad(mapID, playInfos) {
             console.log("start load");
@@ -1778,7 +1928,7 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Sce
             this.closeModalWait();
             UIAlert_2.UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
         }
-        OnLoginGSResut(resp) {
+        OnLoginGSResult(resp) {
             this.closeModalWait();
             switch (resp.result) {
                 case protos_7.Protos.GS2GC_LoginRet.EResult.SessionExpire:
@@ -1900,7 +2050,7 @@ define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
         }
         HandleGSDisconnect(e) {
             RC.Logger.Log("gs connection closed.");
-            UIAlert_3.UIAlert.Show("与服务器断开连接", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true));
+            UIAlert_3.UIAlert.Show("与服务器断开连接", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true), true);
         }
         HandleKick(message) {
             let kick = message;

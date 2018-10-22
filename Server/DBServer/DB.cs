@@ -40,7 +40,7 @@ namespace DBServer
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 			this.netSessionMgr.CreateListener( 0, 65535, ProtoType.TCP, this.netSessionMgr.CreateLSSession ).Start( this.config.lsPort );
 			this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, this.netSessionMgr.CreateGSSession ).Start( this.config.csPort );
-			DBConfig.DBEntry accountDBCfg = this.config.GetDBCfg( DBConfig.DBType.Account );
+			DBConfig.DBEntry accountDBCfg = this.config.dbs[( int ) DBConfig.DBType.Account];
 			this.accountDB.Start( accountDBCfg.ip, accountDBCfg.port, accountDBCfg.pwd, accountDBCfg.user, accountDBCfg.dbname );
 
 			return ErrorCode.Success;

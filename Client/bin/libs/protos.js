@@ -3853,7 +3853,7 @@ define(["libs/protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface ICS2GC_BeginMatchRet
              * @property {Protos.IMsgOpts|null} [opts] CS2GC_BeginMatchRet opts
-             * @property {Protos.Global.ECommon|null} [result] CS2GC_BeginMatchRet result
+             * @property {Protos.CS2GC_BeginMatchRet.EResult|null} [result] CS2GC_BeginMatchRet result
              * @property {number|null} [id] CS2GC_BeginMatchRet id
              * @property {number|null} [mapID] CS2GC_BeginMatchRet mapID
              * @property {number|null} [maxPlayer] CS2GC_BeginMatchRet maxPlayer
@@ -3886,7 +3886,7 @@ define(["libs/protobufjs"], function($protobuf) {
     
             /**
              * CS2GC_BeginMatchRet result.
-             * @member {Protos.Global.ECommon} result
+             * @member {Protos.CS2GC_BeginMatchRet.EResult} result
              * @memberof Protos.CS2GC_BeginMatchRet
              * @instance
              */
@@ -4061,6 +4061,10 @@ define(["libs/protobufjs"], function($protobuf) {
                         return "result: enum value expected";
                     case 0:
                     case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
                         break;
                     }
                 if (message.id != null && message.hasOwnProperty("id"))
@@ -4110,6 +4114,22 @@ define(["libs/protobufjs"], function($protobuf) {
                 case 1:
                     message.result = 1;
                     break;
+                case "IllegalID":
+                case 2:
+                    message.result = 2;
+                    break;
+                case "NoRoom":
+                case 3:
+                    message.result = 3;
+                    break;
+                case "UserInBattle":
+                case 4:
+                    message.result = 4;
+                    break;
+                case "UserInRoom":
+                case 5:
+                    message.result = 5;
+                    break;
                 }
                 if (object.id != null)
                     message.id = object.id >>> 0;
@@ -4155,7 +4175,7 @@ define(["libs/protobufjs"], function($protobuf) {
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
                 if (message.result != null && message.hasOwnProperty("result"))
-                    object.result = options.enums === String ? $root.Protos.Global.ECommon[message.result] : message.result;
+                    object.result = options.enums === String ? $root.Protos.CS2GC_BeginMatchRet.EResult[message.result] : message.result;
                 if (message.id != null && message.hasOwnProperty("id"))
                     object.id = message.id;
                 if (message.mapID != null && message.hasOwnProperty("mapID"))
@@ -4180,6 +4200,28 @@ define(["libs/protobufjs"], function($protobuf) {
             CS2GC_BeginMatchRet.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
+    
+            /**
+             * EResult enum.
+             * @name Protos.CS2GC_BeginMatchRet.EResult
+             * @enum {string}
+             * @property {number} Success=0 Success value
+             * @property {number} Failed=1 Failed value
+             * @property {number} IllegalID=2 IllegalID value
+             * @property {number} NoRoom=3 NoRoom value
+             * @property {number} UserInBattle=4 UserInBattle value
+             * @property {number} UserInRoom=5 UserInRoom value
+             */
+            CS2GC_BeginMatchRet.EResult = (function() {
+                var valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "Success"] = 0;
+                values[valuesById[1] = "Failed"] = 1;
+                values[valuesById[2] = "IllegalID"] = 2;
+                values[valuesById[3] = "NoRoom"] = 3;
+                values[valuesById[4] = "UserInBattle"] = 4;
+                values[valuesById[5] = "UserInRoom"] = 5;
+                return values;
+            })();
     
             return CS2GC_BeginMatchRet;
         })();

@@ -1,6 +1,6 @@
 ﻿namespace CentralServer.Match
 {
-	public class PlayerInfo
+	public class RoomPlayer
 	{
 		public ulong gcNID { get; }
 		public string uname { get; }
@@ -9,7 +9,7 @@
 		public int actorID;
 		public int progress;
 
-		public PlayerInfo( ulong gcNID, uint ukey )
+		public RoomPlayer( ulong gcNID, uint ukey )
 		{
 			this.gcNID = gcNID;
 			this.ukey = ukey;

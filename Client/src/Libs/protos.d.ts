@@ -1673,7 +1673,7 @@ export namespace Protos {
         opts?: (Protos.IMsgOpts|null);
 
         /** CS2GC_BeginMatchRet result */
-        result?: (Protos.Global.ECommon|null);
+        result?: (Protos.CS2GC_BeginMatchRet.EResult|null);
 
         /** CS2GC_BeginMatchRet id */
         id?: (number|null);
@@ -1701,7 +1701,7 @@ export namespace Protos {
         public opts?: (Protos.IMsgOpts|null);
 
         /** CS2GC_BeginMatchRet result. */
-        public result: Protos.Global.ECommon;
+        public result: Protos.CS2GC_BeginMatchRet.EResult;
 
         /** CS2GC_BeginMatchRet id. */
         public id: number;
@@ -1784,6 +1784,19 @@ export namespace Protos {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace CS2GC_BeginMatchRet {
+
+        /** EResult enum. */
+        enum EResult {
+            Success = 0,
+            Failed = 1,
+            IllegalID = 2,
+            NoRoom = 3,
+            UserInBattle = 4,
+            UserInRoom = 5
+        }
     }
 
     /** Properties of a CS2GC_PlayerInfo. */

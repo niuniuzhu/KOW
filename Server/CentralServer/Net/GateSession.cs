@@ -1,6 +1,7 @@
 ﻿using CentralServer.User;
 using Core.Misc;
 using Core.Net;
+using Google.Protobuf;
 using Shared;
 using Shared.Net;
 using BSInfo = Shared.BSInfo;
@@ -16,8 +17,8 @@ namespace CentralServer.Net
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGcaskLogin, this.OnGs2CsGcaskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGclost, this.OnGs2CsGclost );
 
-			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, msg => CS.instance.matcher.BeginMatch( this.id, msg ) );
-			this._msgCenter.Register( Protos.MsgID.EGc2CsUpdatePlayerInfo, msg => CS.instance.matcher.OnGc2CsUpdatePlayerInfo( msg ) );
+			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, this.OnGc2CsBeginMatch );
+			this._msgCenter.Register( Protos.MsgID.EGc2CsUpdatePlayerInfo, this.OnGc2CsUpdatePlayerInfo );
 		}
 
 		protected override void OnEstablish()
@@ -41,7 +42,7 @@ namespace CentralServer.Net
 			Logger.Info( $"GS({this.id}) disconnected with msg:{reason}" );
 		}
 
-		private ErrorCode OnGSAskPing( Google.Protobuf.IMessage message )
+		private ErrorCode OnGSAskPing( IMessage message )
 		{
 			Protos.G_AskPing askPing = ( Protos.G_AskPing ) message;
 			Protos.G_AskPingRet askPingRet = ProtoCreator.R_G_AskPing( askPing.Opts.Pid );
@@ -51,7 +52,7 @@ namespace CentralServer.Net
 			return ErrorCode.Success;
 		}
 
-		private ErrorCode OnGs2CsReportState( Google.Protobuf.IMessage message )
+		private ErrorCode OnGs2CsReportState( IMessage message )
 		{
 			Protos.GS2CS_ReportState reportState = ( Protos.GS2CS_ReportState ) message;
 			this.logicID = reportState.GsInfo.Id;
@@ -61,7 +62,7 @@ namespace CentralServer.Net
 		/// <summary>
 		/// GS请求CS,验证GC登陆的合法性
 		/// </summary>
-		private ErrorCode OnGs2CsGcaskLogin( Google.Protobuf.IMessage message )
+		private ErrorCode OnGs2CsGcaskLogin( IMessage message )
 		{
 			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin ) message;
 			Protos.CS2GS_GCLoginRet gcAskLoginRet = ProtoCreator.R_GS2CS_GCAskLogin( gcAskLogin.Opts.Pid );
@@ -102,11 +103,25 @@ namespace CentralServer.Net
 		/// <summary>
 		/// 客户端与GS断开连接
 		/// </summary>
-		private ErrorCode OnGs2CsGclost( Google.Protobuf.IMessage message )
+		private ErrorCode OnGs2CsGclost( IMessage message )
 		{
 			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost ) message;
 			ulong gcNID = gcLost.SessionID;
 			CS.instance.userMgr.Offline( gcNID );
+			return ErrorCode.Success;
+		}
+
+		private ErrorCode OnGc2CsBeginMatch( IMessage message )
+		{
+			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch ) message;
+			CS.instance.matcher.BeginMatch( this.id, beginMatch );
+			return ErrorCode.Success;
+		}
+
+		private ErrorCode OnGc2CsUpdatePlayerInfo( IMessage message )
+		{
+			Protos.GC2CS_UpdatePlayerInfo updatePlayerInfo = ( Protos.GC2CS_UpdatePlayerInfo ) message;
+			CS.instance.matcher.UpdatePlayerInfo( updatePlayerInfo );
 			return ErrorCode.Success;
 		}
 	}

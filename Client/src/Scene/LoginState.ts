@@ -62,7 +62,7 @@ export class LoginState extends SceneState {
 			askLogin.sessionID = sessionID;
 			connector.Send(Protos.GC2GS_AskLogin, askLogin, message => {
 				let resp: Protos.GS2GC_LoginRet = <Protos.GS2GC_LoginRet>message;
-				this._ui.OnLoginGSResut(resp);
+				this._ui.OnLoginGSResult(resp);
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
 						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {

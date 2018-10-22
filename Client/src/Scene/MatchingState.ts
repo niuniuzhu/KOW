@@ -30,21 +30,7 @@ export class MatchingState extends SceneState {
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnRecvBSInfo.bind(this));
 
-		//请求匹配
-		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
-		beginMatch.actorID = 0;//todo 使用的角色
-		Connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
-			let resp: Protos.CS2GC_BeginMatchRet = <Protos.CS2GC_BeginMatchRet>message;
-			this._roomID = resp.id;
-			this._mapID = resp.mapID;
-			this._maxPlayers = resp.maxPlayer;
-			for (let i = 0; i < resp.playerInfos.length; i++) {
-				const playerInfo = resp.playerInfos[i];
-				this._players.push(playerInfo);
-			}
-			this._ui.UpdatePlayers(this._players);
-			console.log(resp);
-		});
+		this.BeginMatch();
 	}
 
 	protected OnExit(): void {
@@ -101,6 +87,29 @@ export class MatchingState extends SceneState {
 		}
 		//todo 这里最好用kcp连接
 		connector.Connect(bsInfo.ip, bsInfo.port);
+	}
+
+	//请求匹配
+	private BeginMatch(): void {
+		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
+		beginMatch.actorID = 0;//todo 使用的角色
+		Connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
+			let resp: Protos.CS2GC_BeginMatchRet = <Protos.CS2GC_BeginMatchRet>message;
+			this._ui.OnBeginMatchResult(resp);
+			switch (resp.result) {
+				case Protos.CS2GC_BeginMatchRet.EResult.Success:
+					this._roomID = resp.id;
+					this._mapID = resp.mapID;
+					this._maxPlayers = resp.maxPlayer;
+					for (let i = 0; i < resp.playerInfos.length; i++) {
+						const playerInfo = resp.playerInfos[i];
+						this._players.push(playerInfo);
+					}
+					this._ui.UpdatePlayers(this._players);
+					console.log("begin match");
+					break;
+			}
+		});
 	}
 
 	private StartLoad(mapID: number, playInfos: Protos.ICS2GC_PlayerInfo[]): void {

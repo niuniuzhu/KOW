@@ -26,6 +26,7 @@ namespace CentralServer.Match
 			user.gcbsNID = user.ukey | ( ulong ) lid << 32;
 			this._lidToBID.AddToList( lid, bid );
 			this._lbIDToUser.AddToList( lid | ( ulong ) bid << 32, user );
+			Logger.Log( $"user:{user.gcNID} join staging. lid:{lid}, bid:{bid}" );
 		}
 
 		/// <summary>
@@ -44,6 +45,7 @@ namespace CentralServer.Match
 				user.bsSID = 0;
 				user.gcbsNID = 0;
 				user.state = CSUser.State.Idle;
+				Logger.Log( $"user:{user.gcNID} leave staging. lid:{lid}, bid:{bid}" );
 			}
 			this._lbIDToUser.Remove( lbID );
 		}

@@ -1,6 +1,7 @@
 import { SceneState } from "./SceneState";
 import { Connector } from "../Net/Connector";
 import { Protos } from "../libs/protos";
+import { Debug } from "../Misc/Debug";
 
 export class LoginState extends SceneState {
     constructor(type: number) {
@@ -22,6 +23,6 @@ export class LoginState extends SceneState {
     
     private OnBattleStart(message: any):void{
         let battleStart: Protos.BS2GC_BattleStart = <Protos.BS2GC_BattleStart>message;
-        console.log("battle start");
+        Debug.Log("battle start");
     }
 }

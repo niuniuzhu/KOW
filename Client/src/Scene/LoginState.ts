@@ -7,6 +7,7 @@ import { UILogin } from "../UI/UILogin";
 import { SceneState } from "./SceneState";
 import { SceneManager } from "./SceneManager";
 import { Defs } from "../Model/Defs";
+import { Debug } from "../Misc/Debug";
 
 export class LoginState extends SceneState {
 	private readonly _ui: UILogin;
@@ -56,7 +57,7 @@ export class LoginState extends SceneState {
 		let connector = Connector.gsConnector;
 		connector.onerror = () => this._ui.OnConnectToGSError();
 		connector.onopen = () => {
-			console.log("GS Connected");
+			Debug.Log("GS Connected");
 			let askLogin = ProtoCreator.Q_GC2GS_AskLogin();
 			askLogin.pwd = pwd;
 			askLogin.sessionID = sessionID;
@@ -67,7 +68,7 @@ export class LoginState extends SceneState {
 					case Protos.GS2GC_LoginRet.EResult.Success:
 						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
 							//todo
-							console.log("reconnect to battle");
+							Debug.Log("reconnect to battle");
 						}
 						else {
 							SceneManager.ChangeState(SceneManager.State.Matching);

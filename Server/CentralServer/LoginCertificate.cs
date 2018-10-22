@@ -14,13 +14,12 @@ namespace CentralServer
 	{
 		class Entry
 		{
-			public readonly ulong gcNID;
 			public readonly uint ukey;
+			public ulong gcNID;
 			public long loginTime;
 
-			public Entry( ulong gcNID, uint ukey )
+			public Entry( uint ukey )
 			{
-				this.gcNID = gcNID;
 				this.ukey = ukey;
 			}
 		}
@@ -44,13 +43,15 @@ namespace CentralServer
 			//检查entry是否存在
 			if ( !this._ukeyToEntry.TryGetValue( ukey, out Entry entry ) )
 			{
-				entry = new Entry( gcNID, ukey );
+				entry = new Entry( ukey );
 				this._ukeyToEntry[ukey] = entry;
+				this._entries.Add( entry );
 			}
+			//更新网络ID
+			entry.gcNID = gcNID;
 			//更新登陆时间
 			entry.loginTime = TimeUtils.utcTime;
 			this._gcNIDToEntry[gcNID] = entry;
-			this._entries.Add( entry );
 			return ErrorCode.Success;
 		}
 

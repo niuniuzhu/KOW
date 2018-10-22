@@ -4,6 +4,7 @@ import { Connector } from "./Net/Connector";
 import { SceneManager } from "./Scene/SceneManager";
 import { UIAlert } from "./UI/UIAlert";
 import { Protos } from "./libs/protos";
+import { Debug } from "./Misc/Debug";
 
 export class Game {
 	private static _instance: Game;
@@ -21,7 +22,7 @@ export class Game {
 	}
 
 	private LoadDefs(): void {
-		console.log("loading defs...");
+		Debug.Log("loading defs...");
 		Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, this.OnDefsLoadComplete), undefined, Laya.Loader.JSON);
 	}
 
@@ -32,7 +33,7 @@ export class Game {
 	}
 
 	private LoadUIRes(): void {
-		console.log("loading res...");
+		Debug.Log("loading res...");
 		let preloads = Defs.GetPreloads();
 		let urls = [];
 		for (let u of preloads) {
@@ -47,7 +48,7 @@ export class Game {
 	}
 
 	private StartGame(): void {
-		console.log("start game...");
+		Debug.Log("start game...");
 
 		Connector.Init();
 
@@ -79,6 +80,7 @@ export class Game {
 	}
 
 	private HandleKick(message: any): void {
+		Debug.Log("kick by server");
 		let kick: Protos.GS2GC_Kick = <Protos.GS2GC_Kick>message;
 		switch (kick.reason) {
 			case Protos.CS2GS_KickGC.EReason.DuplicateLogin:

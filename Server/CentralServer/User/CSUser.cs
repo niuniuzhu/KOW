@@ -1,5 +1,4 @@
-﻿using CentralServer.Net;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using System;
 
 namespace CentralServer.User
@@ -13,11 +12,6 @@ namespace CentralServer.User
 		}
 
 		/// <summary>
-		/// 网络唯一ID
-		/// </summary>
-		public ulong gcNID { get; }
-
-		/// <summary>
 		/// 登陆密匙
 		/// </summary>
 		public uint ukey { get; }
@@ -26,6 +20,11 @@ namespace CentralServer.User
 		/// 玩家名字
 		/// </summary>
 		public string name { get; }
+
+		/// <summary>
+		/// 网络唯一ID
+		/// </summary>
+		public ulong gcNID;
 
 		/// <summary>
 		/// 玩家是否已连线
@@ -65,11 +64,9 @@ namespace CentralServer.User
 		/// <summary>
 		/// 构造函数
 		/// </summary>
-		/// <param name="gcNID">玩家网络ID</param>
 		/// <param name="ukey">玩家登陆ID</param>
-		public CSUser( ulong gcNID, uint ukey )
+		public CSUser( uint ukey )
 		{
-			this.gcNID = gcNID;
 			this.ukey = ukey;
 			//todo 从redis或db中取回数据
 

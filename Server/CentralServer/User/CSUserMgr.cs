@@ -61,36 +61,48 @@ namespace CentralServer.User
 				{
 					//顶号
 
-					//让前玩家下线
-					this.Offline( user.gcNID );
-
 					Logger.Info( $"user:{user.gcNID} was covered" );
 
 					//通知gc玩家被踢下线
 					Protos.CS2GS_KickGC kickGc = ProtoCreator.Q_CS2GS_KickGC();
 					kickGc.GcNID = user.gcNID;
 					kickGc.Reason = Protos.CS2GS_KickGC.Types.EReason.DuplicateLogin;
-					user.Send( kickGc, msg => { } );
+					gsSession.Send( kickGc, msg =>
+					{
+						//让前玩家下线
+						this.Offline( user.gcNID );
+						user = CreateUser( user );
+					} );
 				}
 			}
 			else
-			{
-				//新玩家上线
-				user = new CSUser( gcNID, ukey );
-				this._ukeyToUser[ukey] = user;
-				this._users.Add( user );
-				isNew = true;
-			}
-			//更新所属session
-			user.gsSID = gsSession.id;
-			this._gsToUser.AddToList( gsSession.id, user );
-			//设置为已连线
-			user.isConnected = true;
-			//更新网络ID
-			this._gcNidToUser[gcNID] = user;
+				user = CreateUser( null );
 
-			Logger.Info( isNew ? $"user:{gcNID} online" : $"user:{gcNID} reconnect" );
 			return user;
+
+			CSUser CreateUser( CSUser inputUser )
+			{
+				if ( inputUser == null )
+				{
+					//新玩家上线
+					inputUser = new CSUser( ukey );
+					this._ukeyToUser[ukey] = inputUser;
+					this._users.Add( inputUser );
+					isNew = true;
+				}
+				//更新网络ID
+				inputUser.gcNID = gcNID;
+				//更新所属session
+				inputUser.gsSID = gsSession.id;
+				this._gsToUser.AddToList( gsSession.id, inputUser );
+				//设置为已连线
+				inputUser.isConnected = true;
+				//更新网络ID
+				this._gcNidToUser[gcNID] = inputUser;
+
+				Logger.Info( isNew ? $"user:{gcNID} online" : $"user:{gcNID} reconnect" );
+				return inputUser;
+			}
 		}
 
 		/// <summary>

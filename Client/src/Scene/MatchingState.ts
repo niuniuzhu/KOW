@@ -4,6 +4,7 @@ import { Protos } from "../libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { SceneState } from "./SceneState";
 import { UIMatching } from "../UI/UIMatching";
+import { Debug } from "../Misc/Debug";
 
 export class MatchingState extends SceneState {
 	private readonly _ui: UIMatching;
@@ -77,7 +78,7 @@ export class MatchingState extends SceneState {
 		let connector = Connector.bsConnector;
 		connector.onerror = () => this._ui.OnConnectToBSError();
 		connector.onopen = () => {
-			console.log("BS Connected");
+			Debug.Log("BS Connected");
 			let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
 			askLogin.sessionID = bsInfo.gcNID;
 			connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
@@ -106,7 +107,7 @@ export class MatchingState extends SceneState {
 						this._players.push(playerInfo);
 					}
 					this._ui.UpdatePlayers(this._players);
-					console.log("begin match");
+					Debug.Log("begin match");
 					break;
 			}
 		});
@@ -114,7 +115,7 @@ export class MatchingState extends SceneState {
 
 	private StartLoad(mapID: number, playInfos: Protos.ICS2GC_PlayerInfo[]): void {
 		//todo preloadall
-		console.log("start load");
+		Debug.Log("start load");
 		this.OnLoadComplete();
 	}
 

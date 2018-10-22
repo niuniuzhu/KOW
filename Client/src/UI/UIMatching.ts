@@ -32,6 +32,8 @@ export class UIMatching implements IUIModule {
 	}
 
 	public OnBeginMatchResult(resp: Protos.CS2GC_BeginMatchRet): void {
+		if (resp.result == Protos.CS2GC_BeginMatchRet.EResult.Success)
+			return;
 		let error: string;
 		switch (resp.result) {
 			case Protos.CS2GC_BeginMatchRet.EResult.IllegalID:
@@ -46,7 +48,7 @@ export class UIMatching implements IUIModule {
 			case Protos.CS2GC_BeginMatchRet.EResult.UserInRoom:
 				error = "玩家已在匹配中";
 				break;
-			default:
+			case Protos.CS2GC_BeginMatchRet.EResult.Failed:
 				error = "匹配失败";
 				break;
 		}

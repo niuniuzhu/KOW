@@ -1546,7 +1546,38 @@ define("Model/Defs", ["require", "exports"], function (require, exports) {
     }
     exports.Defs = Defs;
 });
-define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connector", "Net/ProtoHelper", "Net/WSConnector", "UI/UIManager", "Scene/SceneState", "Scene/SceneManager", "Model/Defs"], function (require, exports, protos_4, Connector_1, ProtoHelper_3, WSConnector_2, UIManager_1, SceneState_1, SceneManager_1, Defs_1) {
+define("Misc/Debug", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Debug {
+        static Log(message) {
+            console.log(message);
+        }
+        static Warn(message) {
+            console.warn(message);
+        }
+        static Error(message) {
+            console.error(message);
+        }
+        static Exception(message) {
+            console.exception(message);
+        }
+        static Info(message) {
+            console.info(message);
+        }
+        static Trace(message) {
+            console.trace(message);
+        }
+        static Debug(message) {
+            console.debug(message);
+        }
+        static Assert(value, message) {
+            console.assert(value, message);
+        }
+    }
+    exports.Debug = Debug;
+});
+define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connector", "Net/ProtoHelper", "Net/WSConnector", "UI/UIManager", "Scene/SceneState", "Scene/SceneManager", "Model/Defs", "Misc/Debug"], function (require, exports, protos_4, Connector_1, ProtoHelper_3, WSConnector_2, UIManager_1, SceneState_1, SceneManager_1, Defs_1, Debug_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoginState extends SceneState_1.SceneState {
@@ -1590,7 +1621,7 @@ define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connect
             let connector = Connector_1.Connector.gsConnector;
             connector.onerror = () => this._ui.OnConnectToGSError();
             connector.onopen = () => {
-                console.log("GS Connected");
+                Debug_1.Debug.Log("GS Connected");
                 let askLogin = ProtoHelper_3.ProtoCreator.Q_GC2GS_AskLogin();
                 askLogin.pwd = pwd;
                 askLogin.sessionID = sessionID;
@@ -1600,7 +1631,7 @@ define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connect
                     switch (resp.result) {
                         case protos_4.Protos.GS2GC_LoginRet.EResult.Success:
                             if (resp.gcState == protos_4.Protos.GS2GC_LoginRet.EGCCState.Battle) {
-                                console.log("reconnect to battle");
+                                Debug_1.Debug.Log("reconnect to battle");
                             }
                             else {
                                 SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching);
@@ -1635,6 +1666,8 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
             UIAlert_1.UIAlert.Show("无法连接服务器", () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
         }
         OnBeginMatchResult(resp) {
+            if (resp.result == protos_5.Protos.CS2GC_BeginMatchRet.EResult.Success)
+                return;
             let error;
             switch (resp.result) {
                 case protos_5.Protos.CS2GC_BeginMatchRet.EResult.IllegalID:
@@ -1649,7 +1682,7 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
                 case protos_5.Protos.CS2GC_BeginMatchRet.EResult.UserInRoom:
                     error = "玩家已在匹配中";
                     break;
-                default:
+                case protos_5.Protos.CS2GC_BeginMatchRet.EResult.Failed:
                     error = "匹配失败";
                     break;
             }
@@ -1671,7 +1704,7 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
     }
     exports.UIMatching = UIMatching;
 });
-define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connector", "../libs/protos", "Net/ProtoHelper", "Scene/SceneState"], function (require, exports, UIManager_2, Connector_2, protos_6, ProtoHelper_4, SceneState_2) {
+define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connector", "../libs/protos", "Net/ProtoHelper", "Scene/SceneState", "Misc/Debug"], function (require, exports, UIManager_2, Connector_2, protos_6, ProtoHelper_4, SceneState_2, Debug_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MatchingState extends SceneState_2.SceneState {
@@ -1728,7 +1761,7 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
             let connector = Connector_2.Connector.bsConnector;
             connector.onerror = () => this._ui.OnConnectToBSError();
             connector.onopen = () => {
-                console.log("BS Connected");
+                Debug_2.Debug.Log("BS Connected");
                 let askLogin = ProtoHelper_4.ProtoCreator.Q_GC2BS_AskLogin();
                 askLogin.sessionID = bsInfo.gcNID;
                 connector.Send(protos_6.Protos.GC2BS_AskLogin, askLogin, message => {
@@ -1754,13 +1787,13 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
                             this._players.push(playerInfo);
                         }
                         this._ui.UpdatePlayers(this._players);
-                        console.log("begin match");
+                        Debug_2.Debug.Log("begin match");
                         break;
                 }
             });
         }
         StartLoad(mapID, playInfos) {
-            console.log("start load");
+            Debug_2.Debug.Log("start load");
             this.OnLoadComplete();
         }
         OnLoadComplete() {
@@ -1993,7 +2026,7 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIM
     }
     exports.UIManager = UIManager;
 });
-define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connector", "Scene/SceneManager", "UI/UIAlert", "./libs/protos"], function (require, exports, UIManager_3, Defs_2, Connector_3, SceneManager_4, UIAlert_3, protos_8) {
+define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connector", "Scene/SceneManager", "UI/UIAlert", "./libs/protos", "Misc/Debug"], function (require, exports, UIManager_3, Defs_2, Connector_3, SceneManager_4, UIAlert_3, protos_8, Debug_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Game {
@@ -2008,7 +2041,7 @@ define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
             this.LoadDefs();
         }
         LoadDefs() {
-            console.log("loading defs...");
+            Debug_3.Debug.Log("loading defs...");
             Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, this.OnDefsLoadComplete), undefined, Laya.Loader.JSON);
         }
         OnDefsLoadComplete() {
@@ -2017,7 +2050,7 @@ define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
             this.LoadUIRes();
         }
         LoadUIRes() {
-            console.log("loading res...");
+            Debug_3.Debug.Log("loading res...");
             let preloads = Defs_2.Defs.GetPreloads();
             let urls = [];
             for (let u of preloads) {
@@ -2030,7 +2063,7 @@ define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
             this.StartGame();
         }
         StartGame() {
-            console.log("start game...");
+            Debug_3.Debug.Log("start game...");
             Connector_3.Connector.Init();
             UIManager_3.UIManager.Init();
             SceneManager_4.SceneManager.Init();
@@ -2053,6 +2086,7 @@ define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
             UIAlert_3.UIAlert.Show("与服务器断开连接", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true), true);
         }
         HandleKick(message) {
+            Debug_3.Debug.Log("kick by server");
             let kick = message;
             switch (kick.reason) {
                 case protos_8.Protos.CS2GS_KickGC.EReason.DuplicateLogin:
@@ -2153,7 +2187,7 @@ define("Events/UIEvent", ["require", "exports", "Events/BaseEvent"], function (r
     UIEvent.POOL = new RC.Collections.Stack();
     exports.UIEvent = UIEvent;
 });
-define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Connector", "../libs/protos"], function (require, exports, SceneState_3, Connector_4, protos_9) {
+define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Connector", "../libs/protos", "Misc/Debug"], function (require, exports, SceneState_3, Connector_4, protos_9, Debug_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoginState extends SceneState_3.SceneState {
@@ -2172,7 +2206,7 @@ define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Conn
         }
         OnBattleStart(message) {
             let battleStart = message;
-            console.log("battle start");
+            Debug_4.Debug.Log("battle start");
         }
     }
     exports.LoginState = LoginState;

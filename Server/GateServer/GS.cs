@@ -12,15 +12,15 @@ namespace GateServer
 	{
 		private static GS _instance;
 		public static GS instance => _instance ?? ( _instance = new GS() );
-
-		public GSNetSessionMgr netSessionMgr { get; } = new GSNetSessionMgr();
-		public GSUserMgr userMgr { get; } = new GSUserMgr();
 		public GSConfig config { get; private set; }
 
-		public GSConfig.State state;
+		public readonly GSNetSessionMgr netSessionMgr = new GSNetSessionMgr();
+		public readonly GSUserMgr userMgr = new GSUserMgr();
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Scheduler _heartBeater = new Scheduler();
+
+		public GSConfig.State state;
 
 		public ErrorCode Initialize( Options opts )
 		{

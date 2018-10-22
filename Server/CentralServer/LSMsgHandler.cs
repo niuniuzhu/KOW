@@ -8,7 +8,7 @@ namespace CentralServer
 		public void NotifyGSInfosToLS( uint sessionID )
 		{
 			Protos.CS2LS_GSInfos gsInfos = ProtoCreator.Q_CS2LS_GSInfos();
-			foreach ( KeyValuePair<uint, GSInfo> kv in this.LIDToGSInfos )
+			foreach ( KeyValuePair<uint, GSInfo> kv in this.lIDToGSInfos )
 			{
 				GSInfo mGSInfo = kv.Value;
 				Protos.GSInfo gsInfo = new Protos.GSInfo

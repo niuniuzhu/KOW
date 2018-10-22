@@ -16,16 +16,18 @@ namespace CentralServer
 		private static CS _instance;
 		public static CS instance => _instance ?? ( _instance = new CS() );
 
-		public CSNetSessionMgr netSessionMgr { get; } = new CSNetSessionMgr();
 		public CSConfig config { get; private set; }
 		public DBConfig dbConfig { get; private set; }
 
+		public readonly CSNetSessionMgr netSessionMgr = new CSNetSessionMgr();
 		public readonly RedisWrapper redisWrapper = new RedisWrapper();
 		public readonly CSUserMgr userMgr = new CSUserMgr();
 		public readonly LoginCertificate certificate = new LoginCertificate();
 		public readonly Matcher matcher = new Matcher();
-		public readonly Dictionary<uint, GSInfo> LIDToGSInfos = new Dictionary<uint, GSInfo>();
-		public readonly Dictionary<uint, BSInfo> LIDToBSInfos = new Dictionary<uint, BSInfo>();
+		public readonly BattleStaging battleStaging = new BattleStaging();
+		public readonly Dictionary<uint, GSInfo> lIDToGSInfos = new Dictionary<uint, GSInfo>();
+		public readonly Dictionary<uint, BSInfo> lIDToBSInfos = new Dictionary<uint, BSInfo>();
+
 		public BSInfo appropriateBSInfo { get; private set; }
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
@@ -101,7 +103,7 @@ namespace CentralServer
 		{
 			this.appropriateBSInfo = null;
 			int minState = int.MaxValue;
-			foreach ( KeyValuePair<uint, BSInfo> kv in this.LIDToBSInfos )
+			foreach ( KeyValuePair<uint, BSInfo> kv in this.lIDToBSInfos )
 			{
 				int state = ( int ) kv.Value.state;
 				if ( state < minState )

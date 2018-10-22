@@ -14,16 +14,17 @@ namespace BattleServer
 		private static BS _instance;
 		public static BS instance => _instance ?? ( _instance = new BS() );
 
-		public BSNetSessionMgr netSessionMgr { get; } = new BSNetSessionMgr();
 		public BSConfig config { get; private set; }
-		public WaitingRoomMgr waitingRoomMgr { get; } = new WaitingRoomMgr();
-		public BattleManager battleManager { get; } = new BattleManager();
-		public BSUserMgr userMgr { get; } = new BSUserMgr();
 
-		public BSConfig.State state;
+		public readonly BSNetSessionMgr netSessionMgr = new BSNetSessionMgr();
+		public readonly WaitingRoomMgr waitingRoomMgr = new WaitingRoomMgr();
+		public readonly BattleManager battleManager = new BattleManager();
+		public readonly BSUserMgr userMgr = new BSUserMgr();
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Scheduler _heartBeater = new Scheduler();
+
+		public BSConfig.State state;
 
 		public ErrorCode Initialize( Options opts )
 		{

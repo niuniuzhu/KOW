@@ -29,7 +29,7 @@ namespace CentralServer.Net
 		protected override void OnClose( string reason )
 		{
 			//踢出所有连接到该GS的玩家
-			CS.instance.userMgr.KickUsers( this );
+			CS.instance.userMgr.KickUsers( this.id );
 
 			//通知LS有GS断开连接了
 			Protos.CS2LS_GSLost gsLost = ProtoCreator.Q_CS2LS_GSLost();
@@ -82,7 +82,8 @@ namespace CentralServer.Net
 					case CSUser.State.Battle:
 						//处于战场状态
 						//检查是否存在BS信息(可能当玩家上线时,BS已丢失)
-						if ( CS.instance.LIDToBSInfos.TryGetValue( user.bsNID, out BSInfo bsInfo ) )
+						if ( CS.instance.netSessionMgr.GetSession( user.bsSID, out INetSession session ) &&
+							 CS.instance.lIDToBSInfos.TryGetValue( ( ( BattleSession ) session ).logicID, out BSInfo bsInfo ) )
 						{
 							gcAskLoginRet.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;
 							gcAskLoginRet.GcNID = user.ukey | ( ulong ) bsInfo.lid << 32;

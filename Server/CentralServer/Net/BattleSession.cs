@@ -18,6 +18,9 @@ namespace CentralServer.Net
 
 		protected override void OnEstablish()
 		{
+			//踢出所有连接到该GS的玩家
+			CS.instance.battleStaging.Remove( this.logicID );
+
 			base.OnEstablish();
 			Logger.Info( $"BS({this.id}) connected" );
 		}
@@ -30,7 +33,7 @@ namespace CentralServer.Net
 			Logger.Info( $"BS({this.id}) disconnected with msg:{reason}" );
 		}
 
-		private ErrorCode OnBSAskPing( Google.Protobuf.IMessage message )
+		private ErrorCode OnBSAskPing( IMessage message )
 		{
 			Protos.G_AskPing askPing = ( Protos.G_AskPing ) message;
 			Protos.G_AskPingRet askPingRet = ProtoCreator.R_G_AskPing( askPing.Opts.Pid );
@@ -40,7 +43,7 @@ namespace CentralServer.Net
 			return ErrorCode.Success;
 		}
 
-		private ErrorCode OnBs2CsReportState( Google.Protobuf.IMessage message )
+		private ErrorCode OnBs2CsReportState( IMessage message )
 		{
 			Protos.BS2CS_ReportState reportState = ( Protos.BS2CS_ReportState ) message;
 			this.logicID = reportState.BsInfo.Id;
@@ -63,9 +66,10 @@ namespace CentralServer.Net
 		private ErrorCode OnBs2CsBattleEnd( IMessage message )
 		{
 			Protos.BS2CS_BattleEnd battleEnd = ( Protos.BS2CS_BattleEnd ) message;
+			//移除指定BS里指定战场里的所有玩家
+			CS.instance.battleStaging.Remove( this.logicID, battleEnd.Bid );
+			//todo 战斗结算
 			Protos.CS2BS_BattleEndRet ret = ProtoCreator.R_BS2CS_BattleEnd( battleEnd.Opts.Pid );
-			CS.instance.matcher.SetUserIdle( battleEnd.Bid. );
-			//todo 需要把玩家状态改变为休闲
 			return ErrorCode.Success;
 		}
 	}

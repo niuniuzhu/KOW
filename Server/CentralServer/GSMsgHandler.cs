@@ -7,11 +7,11 @@ namespace CentralServer
 	{
 		public ErrorCode GStateReportHandler( Protos.GSInfo gsInfoRecv, uint sessionID )
 		{
-			bool hasRecord = this.LIDToGSInfos.TryGetValue( gsInfoRecv.Id, out GSInfo gsInfo );
+			bool hasRecord = this.lIDToGSInfos.TryGetValue( gsInfoRecv.Id, out GSInfo gsInfo );
 			if ( !hasRecord )
 			{
 				gsInfo = new GSInfo();
-				this.LIDToGSInfos[gsInfoRecv.Id] = gsInfo;
+				this.lIDToGSInfos[gsInfoRecv.Id] = gsInfo;
 			}
 			//更新GS信息
 			gsInfo.lid = gsInfoRecv.Id;

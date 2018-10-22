@@ -30,7 +30,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家是否已连线
 		/// </summary>
-		public bool IsConnected;
+		public bool isConnected;
 
 		/// <summary>
 		/// 玩家所在房间ID
@@ -43,14 +43,19 @@ namespace CentralServer.User
 		public bool inRoom;
 
 		/// <summary>
-		/// 当前连接的GS实例
+		/// 当前连接的GS sessionID
 		/// </summary>
-		public GateSession gsSession;
+		public uint gsSID;
 
 		/// <summary>
-		/// 当前连接的BS逻辑ID
+		/// 登录BS使用的网络ID
 		/// </summary>
-		public uint bsNID;
+		public ulong gcbsNID;
+
+		/// <summary>
+		/// 当前连接的BS sessionID
+		/// </summary>
+		public uint bsSID;
 
 		/// <summary>
 		/// 当前状态
@@ -76,8 +81,8 @@ namespace CentralServer.User
 		/// </summary>
 		/// <param name="msg">消息体</param>
 		/// <param name="rpcHandler">RPC回调函数</param>
-		public void Send( IMessage msg, Action<IMessage> rpcHandler = null ) =>
-			this.gsSession?.Send( msg, rpcHandler, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
+		public void Send( IMessage msg, Action<IMessage> rpcHandler = null ) => CS.instance.netSessionMgr.Send(
+			this.gsSID, msg, rpcHandler, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
 
 		/// <summary>
 		/// 是否达到下线的条件

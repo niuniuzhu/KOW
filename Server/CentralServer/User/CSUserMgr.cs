@@ -9,7 +9,7 @@ namespace CentralServer.User
 	{
 		private readonly Dictionary<ulong, CSUser> _gcNidToUser = new Dictionary<ulong, CSUser>();
 		private readonly Dictionary<uint, CSUser> _ukeyToUser = new Dictionary<uint, CSUser>();
-		private readonly Dictionary<GateSession, List<CSUser>> _gsToUser = new Dictionary<GateSession, List<CSUser>>();
+		private readonly Dictionary<uint, List<CSUser>> _gsToUser = new Dictionary<uint, List<CSUser>>();
 		private readonly List<CSUser> _users = new List<CSUser>();
 
 		public void SendToUser( ulong gcNID, IMessage msg )
@@ -57,7 +57,7 @@ namespace CentralServer.User
 			if ( user != null )
 			{
 				//检查玩家是否已连线
-				if ( user.IsConnected )
+				if ( user.isConnected )
 				{
 					//顶号
 
@@ -82,10 +82,10 @@ namespace CentralServer.User
 				isNew = true;
 			}
 			//更新所属session
-			user.gsSession = gsSession;
-			this._gsToUser.AddToList( gsSession, user );
+			user.gsSID = gsSession.id;
+			this._gsToUser.AddToList( gsSession.id, user );
 			//设置为已连线
-			user.IsConnected = true;
+			user.isConnected = true;
 			//更新网络ID
 			this._gcNidToUser[gcNID] = user;
 
@@ -98,9 +98,9 @@ namespace CentralServer.User
 		/// </summary>
 		private void Offline( CSUser user )
 		{
-			this._gsToUser.RemoveFromList( user.gsSession, user );
-			user.IsConnected = false;
-			user.gsSession = null;
+			this._gsToUser.RemoveFromList( user.gsSID, user );
+			user.isConnected = false;
+			user.gsSID = 0;
 
 			//判断是否需要下线
 			if ( user.KeepOnline() )
@@ -136,9 +136,9 @@ namespace CentralServer.User
 		/// <summary>
 		/// 踢走连接到指定gsSsession所有玩家
 		/// </summary>
-		public void KickUsers( GateSession gsSession )
+		public void KickUsers( uint gsSID )
 		{
-			if ( !this._gsToUser.TryGetValue( gsSession, out List<CSUser> users ) )
+			if ( !this._gsToUser.TryGetValue( gsSID, out List<CSUser> users ) )
 				return;
 			int count = users.Count;
 			for ( int i = 0; i < count; i++ )

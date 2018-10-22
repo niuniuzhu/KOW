@@ -45,7 +45,7 @@ namespace BattleServer.Battle
 			toCSBattleStart.Bid = battle.id;
 			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, toCSBattleStart, msgRet =>
 			{
-				//通知客户端战场开始
+				//通知GC战场开始
 				Protos.BS2GC_BattleStart toGCBattleStart = ProtoCreator.Q_BS2GC_BattleStart();
 				toGCBattleStart.Id = battle.id;
 				battle.Broadcast( toGCBattleStart );

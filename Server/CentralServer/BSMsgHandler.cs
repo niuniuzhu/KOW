@@ -6,11 +6,11 @@ namespace CentralServer
 	{
 		public ErrorCode BStateReportHandler( Protos.BSInfo gsInfoRecv, uint nid )
 		{
-			bool hasRecord = this.LIDToBSInfos.TryGetValue( gsInfoRecv.Id, out BSInfo gsInfo );
+			bool hasRecord = this.lIDToBSInfos.TryGetValue( gsInfoRecv.Id, out BSInfo gsInfo );
 			if ( !hasRecord )
 			{
 				gsInfo = new BSInfo();
-				this.LIDToBSInfos[gsInfoRecv.Id] = gsInfo;
+				this.lIDToBSInfos[gsInfoRecv.Id] = gsInfo;
 			}
 			//更新BS信息
 			gsInfo.lid = gsInfoRecv.Id;

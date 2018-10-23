@@ -293,16 +293,18 @@ namespace CentralServer.Match
 					this.NotifyGCBeginFailed( room, Protos.CS2GC_EnterBattle.Types.Error.Bslost );
 				else
 				{
-					Protos.BS2CS_BattleInfoRet ret = ( Protos.BS2CS_BattleInfoRet ) msg;
+					Protos.BS2CS_BattleInfoRet battleInfoRet = ( Protos.BS2CS_BattleInfoRet ) msg;
+					//把玩家移动到战场暂存器里
 					int count = room.numPlayers;
 					for ( int i = 0; i < count; i++ )
 					{
 						RoomPlayer player = room.GetPlayerAt( i );
 						CSUser user = CS.instance.userMgr.GetUser( player.ukey );
 						//把房间ID和玩家在BS上的网络ID联系起来,以便在战场结束后迅速找到玩家
-						CS.instance.battleStaging.Add( appropriateBSInfo.lid, appropriateBSInfo.sessionID, ret.Bid, user );
+						CS.instance.battleStaging.Add( appropriateBSInfo.lid, appropriateBSInfo.sessionID, battleInfoRet.Bid, user );
 					}
 
+					//广播给玩家
 					Protos.CS2GC_EnterBattle enterBattle = ProtoCreator.Q_CS2GC_EnterBattle();
 					enterBattle.Ip = appropriateBSInfo.ip;
 					enterBattle.Port = appropriateBSInfo.port;

@@ -51,7 +51,6 @@ namespace CentralServer.User
 			//移除登陆凭证
 			CS.instance.certificate.Remove( gcNID );
 
-			bool isNew = false;
 			//检查玩家是否还在内存中
 			CSUser user = this.GetUser( ukey );
 			if ( user != null )
@@ -71,7 +70,8 @@ namespace CentralServer.User
 					{
 						//让前玩家下线
 						this.Offline( user.gcNID );
-						user = CreateUser( user );
+						//需要再检查玩家是否被真正下线了
+						user = CreateUser( this.GetUser( ukey ) );
 					} );
 				}
 			}
@@ -82,6 +82,7 @@ namespace CentralServer.User
 
 			CSUser CreateUser( CSUser inputUser )
 			{
+				bool isNew = false;
 				if ( inputUser == null )
 				{
 					//新玩家上线
@@ -108,7 +109,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家下线
 		/// </summary>
-		private void Offline( CSUser user )
+		public void Offline( CSUser user )
 		{
 			this._gsToUser.RemoveFromList( user.gsSID, user );
 			user.isConnected = false;

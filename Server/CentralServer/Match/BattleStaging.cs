@@ -4,6 +4,10 @@ using Core.Misc;
 
 namespace CentralServer.Match
 {
+	/// <summary>
+	/// 战场暂存器
+	/// 管理进入战场的玩家
+	/// </summary>
 	public class BattleStaging
 	{
 		/// <summary>
@@ -45,6 +49,10 @@ namespace CentralServer.Match
 				user.bsSID = 0;
 				user.gcbsNID = 0;
 				user.state = CSUser.State.Idle;
+
+				//检查GC是否已断线
+				if ( !user.isConnected )
+					CS.instance.userMgr.Offline( user );
 				Logger.Log( $"user:{user.gcNID} leave staging. lid:{lid}, bid:{bid}" );
 			}
 			this._lbIDToUser.Remove( lbID );

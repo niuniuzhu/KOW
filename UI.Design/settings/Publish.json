@@ -2,11 +2,11 @@
 	"binaryFormat":true,
 	"codeGeneration":{
 		"classNamePrefix":"UI_",
-		"codePath":"",
-		"codeType":"",
+		"codePath":"D:\\Projects\\kow\\Client\\src\\UI\\Gen",
+		"codeType":"TS",
 		"getMemberByName":false,
 		"ignoreNoname":false,
-		"memberNamePrefix":"m_",
+		"memberNamePrefix":"_",
 		"packageName":""
 	},
 	"compressDesc":true,

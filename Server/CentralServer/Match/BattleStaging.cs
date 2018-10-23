@@ -56,10 +56,11 @@ namespace CentralServer.Match
 				Logger.Log( $"user:{user.gcNID} leave staging. lid:{lid}, bid:{bid}" );
 			}
 			this._lbIDToUser.Remove( lbID );
+			this._lidToBID.RemoveFromList( lid, bid );
 		}
 
 		/// <summary>
-		/// 移除指定逻辑ID的BS里的所有玩家
+		/// 移除指定逻辑ID的BS里的所有战场里所有玩家
 		/// </summary>
 		public void Remove( uint lid )
 		{

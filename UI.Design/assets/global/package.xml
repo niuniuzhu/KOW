@@ -6,6 +6,10 @@
     <component id="w4k42s" name="modelWait.xml" path="/coms/" exported="true"/>
     <component id="vk6y2u" name="alert.xml" path="/coms/" exported="true"/>
     <image id="vk6y2v" name="kuang05.png" path="/assets/" scale="9grid" scale9grid="170,37,340,74"/>
+    <image id="ktvv5" name="anniu.png" path="/assets/"/>
+    <component id="ktvv2w" name="btn1.xml" path="/coms/" exported="true"/>
+    <image id="ktvv8" name="IDkuang.png" path="/assets/" exported="true"/>
+    <image id="ktvva" name="touxiangkuang.png" path="/assets/" exported="true"/>
   </resources>
   <publish name="global"/>
 </packageDescription>

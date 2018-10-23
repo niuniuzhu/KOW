@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="kz9a1uy9" jpegQuality="80" compressPNG="true">
+  <resources>
+    <component id="ktvv0" name="Main.xml" path="/" exported="true"/>
+    <image id="ktvv2" name="01健康游戏忠告（暂定）.jpg" path="/assets/"/>
+    <image id="ktvv3" name="02主界面效果图.jpg" path="/assets/"/>
+    <image id="ktvv4" name="bg01.png" path="/assets/"/>
+    <image id="ktvv7" name="gerenpipei.png" path="/assets/"/>
+    <image id="ktvv9" name="paihangbang.png" path="/assets/"/>
+    <image id="ktvvb" name="yaoqinghaoyou.png" path="/assets/"/>
+  </resources>
+  <publish name="main"/>
+</packageDescription>

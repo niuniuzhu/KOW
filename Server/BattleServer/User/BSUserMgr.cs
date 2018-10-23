@@ -57,6 +57,8 @@ namespace BattleServer.User
 		/// </summary>
 		public void Offline( BSUser user )
 		{
+			if ( user == null )
+				return;
 			if ( user.isConnected )
 			{
 				BS.instance.netSessionMgr.GetSession( user.gcSID, out INetSession session );

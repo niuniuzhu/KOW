@@ -101,9 +101,10 @@ define("FSM/FSM", ["require", "exports"], function (require, exports) {
             this._currentState.Enter(param);
         }
         Update(dt) {
-            if (this._currentState == null)
-                return;
-            this._currentState.Update(dt);
+            if (this.globalState != null)
+                this.globalState.Update(dt);
+            if (this._currentState != null)
+                this._currentState.Update(dt);
         }
     }
     exports.FSM = FSM;
@@ -1519,13 +1520,16 @@ define("Scene/SceneState", ["require", "exports", "FSM/FSMState"], function (req
             super(type);
         }
         OnEnter(param) {
-            this.__ui.Enter(param);
+            if (this.__ui != null)
+                this.__ui.Enter(param);
         }
         OnExit() {
-            this.__ui.Exit();
+            if (this.__ui != null)
+                this.__ui.Exit();
         }
         OnUpdate(dt) {
-            this.__ui.Update(dt);
+            if (this.__ui != null)
+                this.__ui.Update(dt);
         }
     }
     exports.SceneState = SceneState;
@@ -1634,7 +1638,7 @@ define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connect
                                 Debug_1.Debug.Log("reconnect to battle");
                             }
                             else {
-                                SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching);
+                                SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
                             }
                             break;
                     }
@@ -1651,12 +1655,16 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
     class UIMatching {
         get root() { return this._root; }
         constructor() {
+            fairygui.UIPackage.addPackage("res/ui/matching");
+            this._root = fairygui.UIPackage.createObject("matching", "Main").asCom;
         }
         Dispose() {
         }
         Enter(param) {
+            fairygui.GRoot.inst.addChild(this._root);
         }
         Exit() {
+            fairygui.GRoot.inst.removeChild(this._root);
         }
         Update(dt) {
         }
@@ -1821,22 +1829,98 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
     }
     exports.MatchingState = MatchingState;
 });
-define("Scene/SceneManager", ["require", "exports", "FSM/FSM", "Scene/LoginState", "Scene/MatchingState"], function (require, exports, FSM_1, LoginState_1, MatchingState_1) {
+define("UI/UIMain", ["require", "exports", "Scene/SceneManager"], function (require, exports, SceneManager_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class UIMain {
+        get root() { return this._root; }
+        constructor() {
+            fairygui.UIPackage.addPackage("res/ui/main");
+            this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
+            this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
+        }
+        Dispose() {
+        }
+        Enter(param) {
+            fairygui.GRoot.inst.addChild(this._root);
+            this._root.getTransition("t0").play(new laya.utils.Handler(this, () => {
+                this._root.getController("c1").selectedIndex = 1;
+                this._root.getTransition("t1").play();
+            }), 0, 0, 0, -1);
+        }
+        Exit() {
+            fairygui.GRoot.inst.removeChild(this._root);
+        }
+        Update(dt) {
+        }
+        OnResize(e) {
+        }
+        OnAutoMatchBtnClick() {
+            SceneManager_3.SceneManager.ChangeState(SceneManager_3.SceneManager.State.Matching);
+        }
+    }
+    exports.UIMain = UIMain;
+});
+define("Scene/MainState", ["require", "exports", "Scene/SceneState", "UI/UIManager"], function (require, exports, SceneState_3, UIManager_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class MainState extends SceneState_3.SceneState {
+        constructor(type) {
+            super(type);
+            this.__ui = this._ui = UIManager_3.UIManager.main;
+        }
+    }
+    exports.MainState = MainState;
+});
+define("Scene/GlobalState", ["require", "exports", "Scene/SceneState", "Net/Connector", "UI/UIAlert", "Misc/Debug", "../libs/protos", "Scene/SceneManager"], function (require, exports, SceneState_4, Connector_3, UIAlert_2, Debug_3, protos_7, SceneManager_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class GlobalState extends SceneState_4.SceneState {
+        constructor(type) {
+            super(type);
+            Connector_3.Connector.gsConnector.onclose = this.HandleGSDisconnect;
+            Connector_3.Connector.AddListener(Connector_3.Connector.ConnectorType.GS, protos_7.Protos.MsgID.eGS2GC_Kick, this.HandleKick);
+        }
+        HandleGSDisconnect(e) {
+            RC.Logger.Log("gs connection closed.");
+            UIAlert_2.UIAlert.Show("与服务器断开连接", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true), true);
+        }
+        HandleKick(message) {
+            Debug_3.Debug.Log("kick by server");
+            let kick = message;
+            switch (kick.reason) {
+                case protos_7.Protos.CS2GS_KickGC.EReason.DuplicateLogin:
+                    UIAlert_2.UIAlert.Show("另一台设备正在登陆相同的账号", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true), true);
+                    break;
+                default:
+                    UIAlert_2.UIAlert.Show("已被服务器强制下线", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true), true);
+                    break;
+            }
+        }
+    }
+    exports.GlobalState = GlobalState;
+});
+define("Scene/SceneManager", ["require", "exports", "FSM/FSM", "Scene/LoginState", "Scene/MatchingState", "Scene/MainState", "Scene/GlobalState"], function (require, exports, FSM_1, LoginState_1, MatchingState_1, MainState_1, GlobalState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var State;
     (function (State) {
-        State[State["Login"] = 0] = "Login";
-        State[State["Matching"] = 1] = "Matching";
-        State[State["Battle"] = 2] = "Battle";
+        State[State["Global"] = 0] = "Global";
+        State[State["Main"] = 1] = "Main";
+        State[State["Login"] = 2] = "Login";
+        State[State["Matching"] = 3] = "Matching";
+        State[State["Battle"] = 4] = "Battle";
     })(State || (State = {}));
     class SceneManager {
         static get login() { return this._login; }
         static get matching() { return this._matching; }
         static Init() {
+            this._main = new MainState_1.MainState(State.Main);
             this._login = new LoginState_1.LoginState(State.Login);
             this._matching = new MatchingState_1.MatchingState(State.Matching);
             this.fsm = new FSM_1.FSM();
+            this.fsm.globalState = new GlobalState_1.GlobalState(State.Global);
+            this.fsm.AddState(this._main);
             this.fsm.AddState(this._login);
             this.fsm.AddState(this._matching);
         }
@@ -1850,7 +1934,7 @@ define("Scene/SceneManager", ["require", "exports", "FSM/FSM", "Scene/LoginState
     SceneManager.State = State;
     exports.SceneManager = SceneManager;
 });
-define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_7, UIAlert_2, SceneManager_3) {
+define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_8, UIAlert_3, SceneManager_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UILogin extends fairygui.Window {
@@ -1896,70 +1980,70 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Sce
         OnRegBtnClick() {
             let regName = this.contentPane.getChild("reg_name").asTextField.text;
             if (regName == "") {
-                UIAlert_2.UIAlert.Show("无效的用户名");
+                UIAlert_3.UIAlert.Show("无效的用户名");
                 return;
             }
             this.showModalWait();
-            SceneManager_3.SceneManager.login.RequestRegister(regName, 0, 0);
+            SceneManager_5.SceneManager.login.RequestRegister(regName, 0, 0);
         }
         OnLoginBtnClick() {
             let uname = this.contentPane.getChild("name").asTextField.text;
             if (uname == "") {
-                UIAlert_2.UIAlert.Show("无效用户名");
+                UIAlert_3.UIAlert.Show("无效用户名");
                 return;
             }
             this.showModalWait();
-            SceneManager_3.SceneManager.login.RequestLogin(uname, 0, 0);
+            SceneManager_5.SceneManager.login.RequestLogin(uname, 0, 0);
         }
         OnEnterBtnClick() {
             let item = this._areaList.getChildAt(this._areaList.selectedIndex);
             let data = item.data["data"];
             this.showModalWait();
-            SceneManager_3.SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["sid"]);
+            SceneManager_5.SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["sid"]);
         }
         OnAreaClick() {
         }
         OnRegisterResult(resp) {
             this.closeModalWait();
             switch (resp.result) {
-                case protos_7.Protos.LS2GC_AskRegRet.EResult.Success:
+                case protos_8.Protos.LS2GC_AskRegRet.EResult.Success:
                     this.contentPane.getChild("name").asTextField.text = this.contentPane.getChild("reg_name").asTextField.text;
                     this.contentPane.getController("c1").selectedIndex = 0;
-                    UIAlert_2.UIAlert.Show("注册成功");
+                    UIAlert_3.UIAlert.Show("注册成功");
                     break;
-                case protos_7.Protos.LS2GC_AskRegRet.EResult.Failed:
-                    UIAlert_2.UIAlert.Show("注册失败", this.BackToRegister.bind(this));
+                case protos_8.Protos.LS2GC_AskRegRet.EResult.Failed:
+                    UIAlert_3.UIAlert.Show("注册失败", this.BackToRegister.bind(this));
                     break;
-                case protos_7.Protos.LS2GC_AskRegRet.EResult.UnameExists:
-                    UIAlert_2.UIAlert.Show("用户名已存在", this.BackToRegister.bind(this));
+                case protos_8.Protos.LS2GC_AskRegRet.EResult.UnameExists:
+                    UIAlert_3.UIAlert.Show("用户名已存在", this.BackToRegister.bind(this));
                     break;
-                case protos_7.Protos.LS2GC_AskRegRet.EResult.UnameIllegal:
-                    UIAlert_2.UIAlert.Show("无效的用户名", this.BackToRegister.bind(this));
+                case protos_8.Protos.LS2GC_AskRegRet.EResult.UnameIllegal:
+                    UIAlert_3.UIAlert.Show("无效的用户名", this.BackToRegister.bind(this));
                     break;
-                case protos_7.Protos.LS2GC_AskRegRet.EResult.PwdIllegal:
-                    UIAlert_2.UIAlert.Show("无效的密码", this.BackToRegister.bind(this));
+                case protos_8.Protos.LS2GC_AskRegRet.EResult.PwdIllegal:
+                    UIAlert_3.UIAlert.Show("无效的密码", this.BackToRegister.bind(this));
                     break;
             }
         }
         OnLoginResut(resp) {
             this.closeModalWait();
             switch (resp.result) {
-                case protos_7.Protos.LS2GC_AskLoginRet.EResult.Success:
+                case protos_8.Protos.LS2GC_AskLoginRet.EResult.Success:
                     this.HandleLoginLSSuccess(resp);
                     break;
-                case protos_7.Protos.LS2GC_AskLoginRet.EResult.Failed:
-                    UIAlert_2.UIAlert.Show("登陆失败", this.BackToLogin.bind(this));
+                case protos_8.Protos.LS2GC_AskLoginRet.EResult.Failed:
+                    UIAlert_3.UIAlert.Show("登陆失败", this.BackToLogin.bind(this));
                     break;
-                case protos_7.Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
-                    UIAlert_2.UIAlert.Show("请输入正确的用户名", this.BackToLogin.bind(this));
+                case protos_8.Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
+                    UIAlert_3.UIAlert.Show("请输入正确的用户名", this.BackToLogin.bind(this));
                     break;
-                case protos_7.Protos.LS2GC_AskLoginRet.EResult.InvalidPwd:
-                    UIAlert_2.UIAlert.Show("请输入正确的密码", this.BackToLogin.bind(this));
+                case protos_8.Protos.LS2GC_AskLoginRet.EResult.InvalidPwd:
+                    UIAlert_3.UIAlert.Show("请输入正确的密码", this.BackToLogin.bind(this));
                     break;
             }
         }
         OnConnectToLSError(confirmCallback) {
-            UIAlert_2.UIAlert.Show("无法连接服务器", confirmCallback);
+            UIAlert_3.UIAlert.Show("无法连接服务器", confirmCallback);
         }
         HandleLoginLSSuccess(loginResult) {
             this._areaList.removeChildrenToPool();
@@ -1976,38 +2060,18 @@ define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Sce
         }
         OnConnectToGSError() {
             this.closeModalWait();
-            UIAlert_2.UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
+            UIAlert_3.UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
         }
         OnLoginGSResult(resp) {
             this.closeModalWait();
             switch (resp.result) {
-                case protos_7.Protos.GS2GC_LoginRet.EResult.SessionExpire:
-                    UIAlert_2.UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
+                case protos_8.Protos.GS2GC_LoginRet.EResult.SessionExpire:
+                    UIAlert_3.UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
                     break;
             }
         }
     }
     exports.UILogin = UILogin;
-});
-define("UI/UIMain", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class UIMain {
-        get root() { return this._root; }
-        constructor() {
-        }
-        Dispose() {
-        }
-        Enter(param) {
-        }
-        Exit() {
-        }
-        Update(dt) {
-        }
-        OnResize(e) {
-        }
-    }
-    exports.UIMain = UIMain;
 });
 define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIMatching"], function (require, exports, UILogin_1, UIMain_1, UIMatching_1) {
     "use strict";
@@ -2043,22 +2107,22 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIM
     }
     exports.UIManager = UIManager;
 });
-define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connector", "Scene/SceneManager", "UI/UIAlert", "./libs/protos", "Misc/Debug"], function (require, exports, UIManager_3, Defs_2, Connector_3, SceneManager_4, UIAlert_3, protos_8, Debug_3) {
+define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connector", "Scene/SceneManager", "Misc/Debug"], function (require, exports, UIManager_4, Defs_2, Connector_4, SceneManager_6, Debug_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Game {
         static get instance() { return Game._instance; }
         constructor() {
             Game._instance = this;
-            Laya.init(720, 1280);
-            Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_WIDTH;
+            Laya.init(1280, 720);
+            Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
             Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
             Laya.stage.alignV = Laya.Stage.ALIGN_TOP;
-            Laya.stage.screenMode = Laya.Stage.SCREEN_VERTICAL;
+            Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
             this.LoadDefs();
         }
         LoadDefs() {
-            Debug_3.Debug.Log("loading defs...");
+            Debug_4.Debug.Log("loading defs...");
             Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, this.OnDefsLoadComplete), undefined, Laya.Loader.JSON);
         }
         OnDefsLoadComplete() {
@@ -2067,12 +2131,24 @@ define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
             this.LoadUIRes();
         }
         LoadUIRes() {
-            Debug_3.Debug.Log("loading res...");
+            Debug_4.Debug.Log("loading res...");
             let preloads = Defs_2.Defs.GetPreloads();
             let urls = [];
             for (let u of preloads) {
                 let ss = u.split(",");
-                urls.push({ url: "res/ui/" + ss[0], type: ss[1] == "0" ? Laya.Loader.BUFFER : Laya.Loader.IMAGE });
+                let loadType;
+                switch (ss[1]) {
+                    case "1":
+                        loadType = Laya.Loader.IMAGE;
+                        break;
+                    case "2":
+                        loadType = Laya.Loader.SOUND;
+                        break;
+                    default:
+                        loadType = Laya.Loader.BUFFER;
+                        break;
+                }
+                urls.push({ url: "res/ui/" + ss[0], type: loadType });
             }
             Laya.loader.load(urls, Laya.Handler.create(this, this.OnUIResLoadComplete));
         }
@@ -2080,39 +2156,21 @@ define("Game", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
             this.StartGame();
         }
         StartGame() {
-            Debug_3.Debug.Log("start game...");
-            Connector_3.Connector.Init();
-            UIManager_3.UIManager.Init();
-            SceneManager_4.SceneManager.Init();
-            SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login);
-            Connector_3.Connector.gsConnector.onclose = this.HandleGSDisconnect;
-            Connector_3.Connector.AddListener(Connector_3.Connector.ConnectorType.GS, protos_8.Protos.MsgID.eGS2GC_Kick, this.HandleKick);
+            Debug_4.Debug.Log("start game...");
+            Connector_4.Connector.Init();
+            UIManager_4.UIManager.Init();
+            SceneManager_6.SceneManager.Init();
+            SceneManager_6.SceneManager.ChangeState(SceneManager_6.SceneManager.State.Login);
             fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
             Laya.timer.frameLoop(1, this, this.Update);
         }
         Update() {
             let dt = Laya.timer.delta;
-            Connector_3.Connector.Update(dt);
-            SceneManager_4.SceneManager.Update(dt);
+            Connector_4.Connector.Update(dt);
+            SceneManager_6.SceneManager.Update(dt);
         }
         OnResize(e) {
-            UIManager_3.UIManager.OnResize(e);
-        }
-        HandleGSDisconnect(e) {
-            RC.Logger.Log("gs connection closed.");
-            UIAlert_3.UIAlert.Show("与服务器断开连接", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true), true);
-        }
-        HandleKick(message) {
-            Debug_3.Debug.Log("kick by server");
-            let kick = message;
-            switch (kick.reason) {
-                case protos_8.Protos.CS2GS_KickGC.EReason.DuplicateLogin:
-                    UIAlert_3.UIAlert.Show("另一台设备正在登陆相同的账号", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true), true);
-                    break;
-                default:
-                    UIAlert_3.UIAlert.Show("已被服务器强制下线", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Login, null, true), true);
-                    break;
-            }
+            UIManager_4.UIManager.OnResize(e);
         }
     }
     exports.Game = Game;
@@ -2204,32 +2262,32 @@ define("Events/UIEvent", ["require", "exports", "Events/BaseEvent"], function (r
     UIEvent.POOL = new RC.Collections.Stack();
     exports.UIEvent = UIEvent;
 });
-define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Connector", "../libs/protos", "Misc/Debug"], function (require, exports, SceneState_3, Connector_4, protos_9, Debug_4) {
+define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Connector", "../libs/protos", "Misc/Debug"], function (require, exports, SceneState_5, Connector_5, protos_9, Debug_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class LoginState extends SceneState_3.SceneState {
+    class LoginState extends SceneState_5.SceneState {
         constructor(type) {
             super(type);
         }
         OnEnter(param) {
             super.OnEnter(param);
-            Connector_4.Connector.AddListener(Connector_4.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
-            Connector_4.Connector.AddListener(Connector_4.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+            Connector_5.Connector.AddListener(Connector_5.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
+            Connector_5.Connector.AddListener(Connector_5.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
         }
         OnExit() {
-            Connector_4.Connector.RemoveListener(Connector_4.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
-            Connector_4.Connector.RemoveListener(Connector_4.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+            Connector_5.Connector.RemoveListener(Connector_5.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
+            Connector_5.Connector.RemoveListener(Connector_5.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
             super.OnExit();
         }
         OnUpdate(dt) {
         }
         OnBattleStart(message) {
             let battleStart = message;
-            Debug_4.Debug.Log("battle start");
+            Debug_5.Debug.Log("battle start");
         }
         OnBattleEnd(message) {
             let battleStart = message;
-            Debug_4.Debug.Log("battle end");
+            Debug_5.Debug.Log("battle end");
         }
     }
     exports.LoginState = LoginState;

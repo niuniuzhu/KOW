@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1280,720" designImage="ui://dvbmzwcpz78x4" designImageLayer="1">
+  <displayList>
+    <image id="n0_z78x" name="n0" src="z78x1" fileName="assets/bg02.png" xy="0,0"/>
+    <image id="n1_z78x" name="n1" src="z78x3" fileName="assets/vsbg.png" xy="195,322"/>
+    <image id="n2_z78x" name="n2" src="z78x2" fileName="assets/vs.png" xy="523,320"/>
+    <image id="n3_z78x" name="n3" src="ktvva" fileName="assets/touxiangkuang.png" pkg="c7x5i49r" xy="485,126"/>
+    <image id="n4_z78x" name="n4" src="ktvva" fileName="assets/touxiangkuang.png" pkg="c7x5i49r" xy="482,499"/>
+    <image id="n5_z78x" name="n5" src="ktvv8" fileName="assets/IDkuang.png" pkg="c7x5i49r" xy="615,171"/>
+    <image id="n6_z78x" name="n6" src="ktvv8" fileName="assets/IDkuang.png" pkg="c7x5i49r" xy="614,542"/>
+    <text id="n7_z78x" name="n7" xy="615,171" size="204,42" fontSize="20" color="#f6db9b" align="center" vAlign="middle" autoSize="none" text="逍遥的陌生人"/>
+    <text id="n8_z78x" name="n8" xy="614,542" size="204,42" fontSize="20" color="#f6db9b" align="center" vAlign="middle" autoSize="none" text="逍遥的陌生人"/>
+  </displayList>
+</component>

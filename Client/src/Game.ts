@@ -2,9 +2,8 @@ import { UIManager } from "./UI/UIManager";
 import { Defs } from "./Model/Defs";
 import { Connector } from "./Net/Connector";
 import { SceneManager } from "./Scene/SceneManager";
-import { UIAlert } from "./UI/UIAlert";
-import { Protos } from "./libs/protos";
 import { Debug } from "./Misc/Debug";
+import { load } from "protobufjs";
 
 export class Game {
 	private static _instance: Game;
@@ -12,11 +11,11 @@ export class Game {
 
 	constructor() {
 		Game._instance = this;
-		Laya.init(720, 1280);
-		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_WIDTH;
+		Laya.init(1280, 720);
+		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
 		Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
 		Laya.stage.alignV = Laya.Stage.ALIGN_TOP;
-		Laya.stage.screenMode = Laya.Stage.SCREEN_VERTICAL;
+		Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
 		// laya.utils.Stat.show(0, 0);
 		this.LoadDefs();
 	}
@@ -38,7 +37,19 @@ export class Game {
 		let urls = [];
 		for (let u of preloads) {
 			let ss = u.split(",");
-			urls.push({ url: "res/ui/" + ss[0], type: ss[1] == "0" ? Laya.Loader.BUFFER : Laya.Loader.IMAGE });
+			let loadType: string;
+			switch (ss[1]) {
+				case "1":
+					loadType = Laya.Loader.IMAGE;
+					break;
+				case "2":
+					loadType = Laya.Loader.SOUND;
+					break;
+				default:
+					loadType = Laya.Loader.BUFFER;
+					break;
+			}
+			urls.push({ url: "res/ui/" + ss[0], type: loadType });
 		}
 		Laya.loader.load(urls, Laya.Handler.create(this, this.OnUIResLoadComplete));
 	}
@@ -57,9 +68,6 @@ export class Game {
 		SceneManager.Init();
 		SceneManager.ChangeState(SceneManager.State.Login);
 
-		Connector.gsConnector.onclose = this.HandleGSDisconnect;
-		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick);
-
 		fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
 		Laya.timer.frameLoop(1, this, this.Update);
 	}
@@ -72,24 +80,5 @@ export class Game {
 
 	private OnResize(e: laya.events.Event): void {
 		UIManager.OnResize(e);
-	}
-
-	private HandleGSDisconnect(e: Event): void {
-		RC.Logger.Log("gs connection closed.");
-		UIAlert.Show("与服务器断开连接", () => SceneManager.ChangeState(SceneManager.State.Login, null, true), true);
-	}
-
-	private HandleKick(message: any): void {
-		Debug.Log("kick by server");
-		let kick: Protos.GS2GC_Kick = <Protos.GS2GC_Kick>message;
-		switch (kick.reason) {
-			case Protos.CS2GS_KickGC.EReason.DuplicateLogin:
-				UIAlert.Show("另一台设备正在登陆相同的账号", () => SceneManager.ChangeState(SceneManager.State.Login, null, true), true);
-				break;
-
-			default:
-				UIAlert.Show("已被服务器强制下线", () => SceneManager.ChangeState(SceneManager.State.Login, null, true), true);
-				break;
-		}
 	}
 }

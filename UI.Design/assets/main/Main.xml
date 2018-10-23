@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1280,720" designImage="ui://kz9a1uy9ktvv3" designImageLayer="1">
+  <controller name="c1" pages="0,,1," selected="1"/>
+  <displayList>
+    <graph id="n1_ktvv" name="n1" xy="0,0" size="1280,720" type="rect" lineSize="0" fillColor="#ff000000"/>
+    <image id="n2_ktvv" name="n2" src="ktvv4" fileName="assets/bg01.png" xy="0,0" alpha="0.03"/>
+    <image id="n0_ktvv" name="n0" src="ktvv2" fileName="assets/01健康游戏忠告（暂定）.jpg" xy="0,0" alpha="0">
+      <gearDisplay controller="c1" pages="0"/>
+    </image>
+    <component id="n3_ktvv" name="n3" src="ktvv2w" fileName="coms/btn1.xml" pkg="c7x5i49r" xy="546,249" group="n9_z78x">
+      <Button icon="ui://kz9a1uy9ktvv7"/>
+    </component>
+    <component id="n4_ktvv" name="n4" src="ktvv2w" fileName="coms/btn1.xml" pkg="c7x5i49r" xy="545,445" group="n9_z78x">
+      <Button icon="ui://kz9a1uy9ktvvb"/>
+    </component>
+    <image id="n5_ktvv" name="n5" src="ktvva" fileName="assets/touxiangkuang.png" pkg="c7x5i49r" xy="68,38" group="n9_z78x"/>
+    <image id="n6_ktvv" name="n6" src="ktvv9" fileName="assets/paihangbang.png" xy="1023,52" group="n9_z78x"/>
+    <image id="n7_ktvv" name="n7" src="ktvv8" fileName="assets/IDkuang.png" pkg="c7x5i49r" xy="186,70" group="n9_z78x"/>
+    <text id="n8_ktvv" name="n8" xy="186,70" size="204,42" group="n9_z78x" fontSize="20" color="#f6db9b" align="center" vAlign="middle" autoSize="none" text="逍遥的陌生人"/>
+    <group id="n9_z78x" name="n9" xy="68,38" size="1144,472" advanced="true">
+      <gearDisplay controller="c1" pages="1"/>
+    </group>
+  </displayList>
+  <transition name="t0">
+    <item time="0" type="Alpha" target="n2_ktvv" tween="true" startValue="0" endValue="1" duration="24"/>
+    <item time="0" type="Alpha" target="n0_ktvv" tween="true" startValue="0" endValue="1" duration="24"/>
+    <item time="24" type="Alpha" target="n0_ktvv" tween="true" startValue="1" endValue="1" duration="30"/>
+    <item time="54" type="Alpha" target="n0_ktvv" tween="true" startValue="1" endValue="0" duration="18"/>
+  </transition>
+  <transition name="t1">
+    <item time="0" type="Alpha" target="n9_z78x" tween="true" startValue="0" endValue="1" duration="6"/>
+    <item time="0" type="XY" target="n3_ktvv" tween="true" startValue="192,249" endValue="546,249" duration="4" ease="Circ.Out"/>
+    <item time="0" type="XY" target="n4_ktvv" tween="true" startValue="945,445" endValue="545,445" duration="4" ease="Circ.Out"/>
+  </transition>
+</component>

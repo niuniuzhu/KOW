@@ -4,20 +4,24 @@ import { UIAlert } from "./UIAlert";
 import { SceneManager } from "../Scene/SceneManager";
 
 export class UIMatching implements IUIModule {
-	private _root: fairygui.GComponent;
+	private readonly _root: fairygui.GComponent;
 
 	public get root(): fairygui.GComponent { return this._root; }
 
 	constructor() {
+		fairygui.UIPackage.addPackage("res/ui/matching");
+		this._root = fairygui.UIPackage.createObject("matching", "Main").asCom;
 	}
 
 	public Dispose(): void {
 	}
 
 	public Enter(param: any): void {
+		fairygui.GRoot.inst.addChild(this._root);
 	}
 
 	public Exit(): void {
+		fairygui.GRoot.inst.removeChild(this._root);
 	}
 
 	public Update(dt: number): void {

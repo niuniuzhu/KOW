@@ -71,7 +71,7 @@ export class LoginState extends SceneState {
 							Debug.Log("reconnect to battle");
 						}
 						else {
-							SceneManager.ChangeState(SceneManager.State.Matching);
+							SceneManager.ChangeState(SceneManager.State.Main);
 						}
 						break;
 				}

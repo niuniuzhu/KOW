@@ -7,6 +7,7 @@ export class FSM {
 
 	public get currentState(): FSMState { return this._currentState; }
 	public get previousState(): FSMState { return this._previousState; }
+	public globalState: FSMState;
 
 	constructor() {
 		this._stateMap = new Map<number, FSMState>();
@@ -51,8 +52,9 @@ export class FSM {
 	}
 
 	public Update(dt: number): void {
-		if (this._currentState == null)
-			return;
-		this._currentState.Update(dt);
+		if (this.globalState != null)
+			this.globalState.Update(dt);
+		if (this._currentState != null)
+			this._currentState.Update(dt);
 	}
 }

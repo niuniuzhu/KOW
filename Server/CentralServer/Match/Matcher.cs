@@ -267,7 +267,6 @@ namespace CentralServer.Match
 				return;
 			}
 
-			//先通知BS创建战场
 			Protos.CS2BS_BattleInfo battleInfo = ProtoCreator.Q_CS2BS_BattleInfo();
 			battleInfo.MapID = room.mapID;
 			battleInfo.Timeout = ( int ) Consts.WAITING_ROOM_TIME_OUT;
@@ -283,10 +282,10 @@ namespace CentralServer.Match
 				};
 				battleInfo.PlayerInfo.Add( pi );
 			}
-			//发送到BS
+			//通知BS创建战场
 			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, msg =>
 			{
-				//这个回调表示BS通知CS战场创建完成了
+				//BS战场创建完成了
 
 				//避免在消息发送期间,BS可能发生意外丢失,这里需要再检查一次
 				if ( !CS.instance.lIDToBSInfos.ContainsKey( appropriateBSInfo.lid ) )

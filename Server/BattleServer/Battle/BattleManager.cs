@@ -1,4 +1,5 @@
-﻿using Core.Misc;
+﻿using BattleServer.User;
+using Core.Misc;
 using Shared.Net;
 using System.Collections.Generic;
 
@@ -14,27 +15,47 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 检查是否存在指定ID的客户端
 		/// </summary>
-		public bool CheckClient( ulong gcNID ) => this._gcNIDToBattle.ContainsKey( gcNID );
+		public bool IsInBattle( ulong gcNID ) => this._gcNIDToBattle.ContainsKey( gcNID );
+
+		/// <summary>
+		/// 获取指定ID玩家所在的战场
+		/// </summary>
+		public Battle GetBattle( ulong gcNID )
+		{
+			this._gcNIDToBattle.TryGetValue( gcNID, out Battle battle );
+			return battle;
+		}
 
 		/// <summary>
 		/// 开始战斗
 		/// </summary>
-		public void CreateBattle( WaitingRoom waitingRoom )
+		public uint CreateBattle( Protos.CS2BS_BattleInfo battleInfo )
 		{
 			Battle battle = POOL.Pop();
 
+			//初始化战场描述
 			BattleEntry battleEntry;
-			battleEntry.id = waitingRoom.id;
-			battleEntry.mapID = waitingRoom.mapID;
+			battleEntry.mapID = battleInfo.MapID;
 			battleEntry.frameRate = BS.instance.config.frameRate;
 			battleEntry.keyframeStep = BS.instance.config.keyframeStep;
-			battleEntry.players = waitingRoom.GetPlayerEntry();
 			battleEntry.battleTime = BS.instance.config.battleTime;
-
-			int count = battleEntry.players.Count;
+			int count = battleInfo.PlayerInfo.Count;
+			battleEntry.players = new Player[count];
 			for ( int i = 0; i < count; i++ )
-				this._gcNIDToBattle[battleEntry.players[i].gcNID] = battle;
+			{
+				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfo[i];
+				Player player = new Player
+				{
+					gcNID = playerInfo.GcNID,
+					actorID = playerInfo.ActorID,
+					name = playerInfo.Name
+				};
+				battleEntry.players[i] = player;
 
+				this._gcNIDToBattle[playerInfo.GcNID] = battle;
+			}
+
+			//初始化战场
 			battle.Init( battleEntry );
 			this._runningBattles.Add( battle );
 
@@ -49,6 +70,7 @@ namespace BattleServer.Battle
 				toGCBattleStart.Id = battle.id;
 				battle.Broadcast( toGCBattleStart );
 			} );
+			return battle.id;
 		}
 
 		private void OnBattleEnd( Battle battle )
@@ -63,11 +85,44 @@ namespace BattleServer.Battle
 				toGCBattleEnd.Id = battle.id;
 				battle.Broadcast( toGCBattleEnd );
 				//所有玩家下线
-				battle.ForeachPlayer( player =>
-				{
-					BS.instance.userMgr.Offline( player.gcNID );
-				} );
+				int count = battle.players.Length;
+				for ( int i = 0; i < count; i++ )
+					BS.instance.userMgr.Offline( battle.players[i].user );
 			} );
+		}
+
+		/// <summary>
+		/// 玩家建立连接时调用
+		/// </summary>
+		public void OnUserConnected( BSUser user )
+		{
+			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
+			int count = battle.players.Length;
+			for ( var i = 0; i < count; i++ )
+			{
+				Player player = battle.players[i];
+				if ( player.gcNID != user.gcNID )
+					continue;
+				player.user = user;
+				return;
+			}
+		}
+
+		/// <summary>
+		/// 玩家失去连接时调用
+		/// </summary>
+		public void OnUserDisconnected( BSUser user )
+		{
+			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
+			int count = battle.players.Length;
+			for ( var i = 0; i < count; i++ )
+			{
+				Player player = battle.players[i];
+				if ( player.user != user )
+					continue;
+				player.user = null;
+				return;
+			}
 		}
 
 		public void Update( long dt )

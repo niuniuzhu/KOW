@@ -1665,11 +1665,11 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
         OnConnectToBSError() {
             UIAlert_1.UIAlert.Show("无法连接服务器", () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
         }
-        OnBeginMatchResult(resp) {
-            if (resp.result == protos_5.Protos.CS2GC_BeginMatchRet.EResult.Success)
-                return;
-            let error;
-            switch (resp.result) {
+        OnBeginMatchResult(result) {
+            let error = "";
+            switch (result) {
+                case protos_5.Protos.CS2GC_BeginMatchRet.EResult.Success:
+                    break;
                 case protos_5.Protos.CS2GC_BeginMatchRet.EResult.IllegalID:
                     error = "无效网络ID";
                     break;
@@ -1686,10 +1686,22 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
                     error = "匹配失败";
                     break;
             }
-            UIAlert_1.UIAlert.Show(error, () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
+            if (error != "") {
+                UIAlert_1.UIAlert.Show(error, () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
+            }
         }
-        OnLoginBSResut(resp) {
-            switch (resp.result) {
+        OnEnterBattleResult(result) {
+            switch (result) {
+                case protos_5.Protos.CS2GC_EnterBattle.Error.Success:
+                    break;
+                case protos_5.Protos.CS2GC_EnterBattle.Error.BSLost:
+                case protos_5.Protos.CS2GC_EnterBattle.Error.BSNotFound:
+                    UIAlert_1.UIAlert.Show("登录战场失败", () => SceneManager_2.SceneManager.ChangeState(SceneManager_2.SceneManager.State.Matching, null, true));
+                    break;
+            }
+        }
+        OnLoginBSResut(result) {
+            switch (result) {
                 case protos_5.Protos.BS2GC_LoginRet.EResult.Success:
                     break;
                 default:
@@ -1721,14 +1733,14 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
             Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
             Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
             Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_EnterBattle, this.OnRecvBSInfo.bind(this));
+            Connector_2.Connector.AddListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
             this.BeginMatch();
         }
         OnExit() {
             Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
             Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
             Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_EnterBattle, this.OnRecvBSInfo.bind(this));
+            Connector_2.Connector.RemoveListener(Connector_2.Connector.ConnectorType.GS, protos_6.Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
             super.OnExit();
         }
         OnUpdate(dt) {
@@ -1756,27 +1768,32 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
                 }
             }
         }
-        OnRecvBSInfo(message) {
-            let bsInfo = message;
-            let connector = Connector_2.Connector.bsConnector;
-            connector.onerror = () => this._ui.OnConnectToBSError();
-            connector.onopen = () => {
-                Debug_2.Debug.Log("BS Connected");
-                let askLogin = ProtoHelper_4.ProtoCreator.Q_GC2BS_AskLogin();
-                askLogin.sessionID = bsInfo.gcNID;
-                connector.Send(protos_6.Protos.GC2BS_AskLogin, askLogin, message => {
-                    let resp = message;
-                    this._ui.OnLoginBSResut(resp);
-                });
-            };
-            connector.Connect(bsInfo.ip, bsInfo.port);
+        OnEnterBattle(message) {
+            let enterBattle = message;
+            if (enterBattle.error != protos_6.Protos.CS2GC_EnterBattle.Error.Success) {
+                this._ui.OnEnterBattleResult(enterBattle.error);
+            }
+            else {
+                let connector = Connector_2.Connector.bsConnector;
+                connector.onerror = () => this._ui.OnConnectToBSError();
+                connector.onopen = () => {
+                    Debug_2.Debug.Log("BS Connected");
+                    let askLogin = ProtoHelper_4.ProtoCreator.Q_GC2BS_AskLogin();
+                    askLogin.sessionID = enterBattle.gcNID;
+                    connector.Send(protos_6.Protos.GC2BS_AskLogin, askLogin, message => {
+                        let resp = message;
+                        this._ui.OnLoginBSResut(resp.result);
+                    });
+                };
+                connector.Connect(enterBattle.ip, enterBattle.port);
+            }
         }
         BeginMatch() {
             let beginMatch = ProtoHelper_4.ProtoCreator.Q_GC2CS_BeginMatch();
             beginMatch.actorID = 0;
             Connector_2.Connector.SendToCS(protos_6.Protos.GC2CS_BeginMatch, beginMatch, message => {
                 let resp = message;
-                this._ui.OnBeginMatchResult(resp);
+                this._ui.OnBeginMatchResult(resp.result);
                 switch (resp.result) {
                     case protos_6.Protos.CS2GC_BeginMatchRet.EResult.Success:
                         this._roomID = resp.id;
@@ -2197,9 +2214,11 @@ define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Conn
         OnEnter(param) {
             super.OnEnter(param);
             Connector_4.Connector.AddListener(Connector_4.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
+            Connector_4.Connector.AddListener(Connector_4.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
         }
         OnExit() {
             Connector_4.Connector.RemoveListener(Connector_4.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleStart, this.OnBattleStart.bind(this));
+            Connector_4.Connector.RemoveListener(Connector_4.Connector.ConnectorType.BS, protos_9.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
             super.OnExit();
         }
         OnUpdate(dt) {
@@ -2207,6 +2226,10 @@ define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Conn
         OnBattleStart(message) {
             let battleStart = message;
             Debug_4.Debug.Log("battle start");
+        }
+        OnBattleEnd(message) {
+            let battleStart = message;
+            Debug_4.Debug.Log("battle end");
         }
     }
     exports.LoginState = LoginState;

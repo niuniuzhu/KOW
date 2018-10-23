@@ -1,5 +1,4 @@
-﻿using System;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 
 namespace BattleServer.User
 {
@@ -20,6 +19,11 @@ namespace BattleServer.User
 		/// 是否连线中
 		/// </summary>
 		public bool isConnected;
+
+		public BSUser( ulong gcNID )
+		{
+			this.gcNID = gcNID;
+		}
 
 		/// <summary>
 		/// 发送消息

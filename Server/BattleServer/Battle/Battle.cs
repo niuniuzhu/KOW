@@ -1,7 +1,7 @@
 ﻿using BattleServer.User;
 using Core.Misc;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,16 +9,26 @@ namespace BattleServer.Battle
 {
 	public class Battle : IPoolObject
 	{
+		private static uint _gid;
 
-		public uint id => this._battleDes.id;
-
+		public uint id { get; }
 		public bool finished { get; private set; }
+		public int frameRate { get; private set; }
+		public int keyframeStep { get; private set; }
+		public int mapID { get; private set; }
+		public int battleTime { get; private set; }
+		public Player[] players { get; private set; }
 
+		private readonly Stopwatch _sw = new Stopwatch();
 		private readonly StepLocker _stepLocker = new StepLocker();
-		private BattleEntry _battleDes;
-		private readonly System.Diagnostics.Stopwatch _sw = new System.Diagnostics.Stopwatch();
 		private long _lastUpdateTime;
 		private readonly List<uint> _tempSIDs = new List<uint>();
+
+		public Battle()
+		{
+			Debug.Assert( _gid < uint.MaxValue, "maximum id of waiting room!!" );
+			this.id = _gid++;
+		}
 
 		public void Clear()
 		{
@@ -32,12 +42,17 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 初始化
 		/// </summary>
-		public void Init( BattleEntry battleDes )
+		public void Init( BattleEntry battleEntry )
 		{
-			this._battleDes = battleDes;
-			this._stepLocker.Init( this, battleDes.frameRate, battleDes.keyframeStep );
+			this.frameRate = battleEntry.frameRate;
+			this.keyframeStep = battleEntry.keyframeStep;
+			this.mapID = battleEntry.mapID;
+			this.battleTime = battleEntry.battleTime;
+			this.players = battleEntry.players;
+
+			this._stepLocker.Init( this, battleEntry.frameRate, battleEntry.keyframeStep );
 			this._sw.Start();
-			Task task = Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
+			Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
 		}
 
 		private void AsyncLoop()
@@ -52,7 +67,7 @@ namespace BattleServer.Battle
 
 				Thread.Sleep( 1 );
 
-				if ( this._sw.ElapsedMilliseconds >= this._battleDes.battleTime )
+				if ( this._sw.ElapsedMilliseconds >= this.battleTime )
 				{
 					this.finished = true;
 					break;
@@ -67,31 +82,18 @@ namespace BattleServer.Battle
 		/// <param name="gcNIDExcept">剔除gcNID</param>
 		public void Broadcast( Google.Protobuf.IMessage message, ulong gcNIDExcept = 0 )
 		{
-			int count = this._battleDes.players.Count;
+			int count = this.players.Length;
 			for ( int i = 0; i < count; i++ )
 			{
-				ulong gcNID = this._battleDes.players[i].gcNID;
-				if ( gcNIDExcept != 0 && gcNID == gcNIDExcept )
-					continue;
-
-				BSUser user = BS.instance.userMgr.GetUser( gcNID );
-				if ( !user.isConnected )
+				BSUser user = this.players[i].user;
+				//未连接的不广播
+				if ( user == null || !user.isConnected || gcNIDExcept != 0 && gcNIDExcept == user.gcNID )
 					continue;
 
 				this._tempSIDs.Add( user.gcSID );
 			}
 			BS.instance.netSessionMgr.Broadcast( this._tempSIDs, message );
 			this._tempSIDs.Clear();
-		}
-
-		/// <summary>
-		/// 遍历战场所有玩家
-		/// </summary>
-		public void ForeachPlayer( Action<PlayerEntry> handler )
-		{
-			int count = this._battleDes.players.Count;
-			for ( int i = 0; i < count; i++ )
-				handler( this._battleDes.players[i] );
 		}
 
 		/// <summary>

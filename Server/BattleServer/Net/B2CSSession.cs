@@ -84,11 +84,11 @@ namespace BattleServer.Net
 		private ErrorCode OnCs2BsBattleInfo( Google.Protobuf.IMessage message )
 		{
 			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo ) message;
-			//创建等待房间
-			WaitingRoom waitingRoom = BS.instance.waitingRoomMgr.CreateWaitingRoom( battleInfo );
+
+			uint bid = BS.instance.battleManager.CreateBattle( battleInfo );
 
 			Protos.BS2CS_BattleInfoRet battleInfoRet = ProtoCreator.R_CS2BS_BattleInfo( battleInfo.Opts.Pid );
-			battleInfoRet.Bid = waitingRoom.id;
+			battleInfoRet.Bid = bid;
 			this.Send( battleInfoRet );
 			return ErrorCode.Success;
 		}

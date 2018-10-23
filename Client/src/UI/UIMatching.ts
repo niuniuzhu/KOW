@@ -31,11 +31,11 @@ export class UIMatching implements IUIModule {
 		UIAlert.Show("无法连接服务器", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
 	}
 
-	public OnBeginMatchResult(resp: Protos.CS2GC_BeginMatchRet): void {
-		if (resp.result == Protos.CS2GC_BeginMatchRet.EResult.Success)
-			return;
-		let error: string;
-		switch (resp.result) {
+	public OnBeginMatchResult(result: Protos.CS2GC_BeginMatchRet.EResult): void {
+		let error: string = "";
+		switch (result) {
+			case Protos.CS2GC_BeginMatchRet.EResult.Success:
+				break;
 			case Protos.CS2GC_BeginMatchRet.EResult.IllegalID:
 				error = "无效网络ID";
 				break;
@@ -52,11 +52,24 @@ export class UIMatching implements IUIModule {
 				error = "匹配失败";
 				break;
 		}
-		UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
+		if (error != "") {
+			UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
+		}
 	}
 
-	public OnLoginBSResut(resp: Protos.BS2GC_LoginRet): void {
-		switch (resp.result) {
+	public OnEnterBattleResult(result: Protos.CS2GC_EnterBattle.Error): void {
+		switch (result) {
+			case Protos.CS2GC_EnterBattle.Error.Success:
+				break;
+			case Protos.CS2GC_EnterBattle.Error.BSLost:
+			case Protos.CS2GC_EnterBattle.Error.BSNotFound:
+				UIAlert.Show("登录战场失败", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
+				break;
+		}
+	}
+
+	public OnLoginBSResut(result: Protos.BS2GC_LoginRet.EResult): void {
+		switch (result) {
 			case Protos.BS2GC_LoginRet.EResult.Success:
 				break;
 			default:

@@ -22,23 +22,6 @@ namespace BattleServer.User
 			return user;
 		}
 
-		public bool CanOnline( ulong gcNID )
-		{
-			//检查客户端是否在等待房间
-			if ( BS.instance.waitingRoomMgr.CheckClient( gcNID ) )
-			{
-				//在等待房间加入客户端
-				BS.instance.waitingRoomMgr.OnGCLogin( gcNID );
-				return true;
-			}
-			//检查客户端是否在战场
-			if ( BS.instance.battleManager.CheckClient( gcNID ) )
-			{
-				return true;
-			}
-			return false;
-		}
-
 		/// <summary>
 		/// 玩家上线,客户端请求登录时调用
 		/// </summary>
@@ -47,19 +30,24 @@ namespace BattleServer.User
 		/// <returns>返回玩家实例</returns>
 		public BSUser Online( ulong gcNID, uint sid )
 		{
-			//这里不进行合法性检测,调用前确保能上线
+			//检查玩家是否在战场
+			if ( !BS.instance.battleManager.IsInBattle( gcNID ) )
+				return null;
 
 			//检查玩家是否还在内存中
 			BSUser user = this.GetUser( gcNID );
 			if ( user == null )
 			{
-				user = new BSUser();
+				user = new BSUser( gcNID );
 				this._gcNidToUser.Add( gcNID, user );
 			}
-			//更新网络ID
+			//更新sessionID
 			user.gcSID = sid;
 			//更新连接标记
 			user.isConnected = true;
+
+			BS.instance.battleManager.OnUserConnected( user );
+
 			Logger.Info( $"user:{gcNID} online" );
 			return user;
 		}
@@ -69,13 +57,13 @@ namespace BattleServer.User
 		/// </summary>
 		public void Offline( BSUser user )
 		{
-			this.Disconnect( user );
-			this._gcNidToUser.Remove( user.gcNID );
 			if ( user.isConnected )
 			{
 				BS.instance.netSessionMgr.GetSession( user.gcSID, out INetSession session );
 				session.DelayClose( 500, "offline" );
 			}
+			this.Disconnect( user );
+			this._gcNidToUser.Remove( user.gcNID );
 			Logger.Info( $"user:{user.gcNID} offline" );
 		}
 
@@ -98,6 +86,7 @@ namespace BattleServer.User
 		/// </summary>
 		public void Disconnect( BSUser user )
 		{
+			BS.instance.battleManager.OnUserDisconnected( user );
 			user.isConnected = false;
 			user.gcSID = 0;
 		}

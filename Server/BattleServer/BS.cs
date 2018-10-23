@@ -18,7 +18,6 @@ namespace BattleServer
 		public BSConfig config { get; private set; }
 
 		public readonly BSNetSessionMgr netSessionMgr = new BSNetSessionMgr();
-		public readonly WaitingRoomMgr waitingRoomMgr = new WaitingRoomMgr();
 		public readonly BattleManager battleManager = new BattleManager();
 		public readonly BSUserMgr userMgr = new BSUserMgr();
 
@@ -72,7 +71,6 @@ namespace BattleServer
 		private void OnHeartBeat( int count )
 		{
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
-			this.waitingRoomMgr.Update( Consts.HEART_BEAT_INTERVAL );
 			this.battleManager.Update( Consts.HEART_BEAT_INTERVAL );
 		}
 	}

@@ -29,7 +29,7 @@ export class MatchingState extends SceneState {
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnRecvBSInfo.bind(this));
+		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
 
 		this.BeginMatch();
 	}
@@ -38,7 +38,7 @@ export class MatchingState extends SceneState {
 		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
 		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
 		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnRecvBSInfo.bind(this));
+		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
 		super.OnExit();
 	}
 
@@ -73,21 +73,26 @@ export class MatchingState extends SceneState {
 	}
 
 	//cs下发bs的连接信息
-	private OnRecvBSInfo(message: any): void {
-		let bsInfo: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
-		let connector = Connector.bsConnector;
-		connector.onerror = () => this._ui.OnConnectToBSError();
-		connector.onopen = () => {
-			Debug.Log("BS Connected");
-			let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
-			askLogin.sessionID = bsInfo.gcNID;
-			connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
-				let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
-				this._ui.OnLoginBSResut(resp);
-			});
+	private OnEnterBattle(message: any): void {
+		let enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
+		if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
+			this._ui.OnEnterBattleResult(enterBattle.error);
 		}
-		//todo 这里最好用kcp连接
-		connector.Connect(bsInfo.ip, bsInfo.port);
+		else {
+			let connector = Connector.bsConnector;
+			connector.onerror = () => this._ui.OnConnectToBSError();
+			connector.onopen = () => {
+				Debug.Log("BS Connected");
+				let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
+				askLogin.sessionID = enterBattle.gcNID;
+				connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
+					let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
+					this._ui.OnLoginBSResut(resp.result);
+				});
+			}
+			//todo 这里最好用kcp连接
+			connector.Connect(enterBattle.ip, enterBattle.port);
+		}
 	}
 
 	//请求匹配
@@ -96,7 +101,7 @@ export class MatchingState extends SceneState {
 		beginMatch.actorID = 0;//todo 使用的角色
 		Connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
 			let resp: Protos.CS2GC_BeginMatchRet = <Protos.CS2GC_BeginMatchRet>message;
-			this._ui.OnBeginMatchResult(resp);
+			this._ui.OnBeginMatchResult(resp.result);
 			switch (resp.result) {
 				case Protos.CS2GC_BeginMatchRet.EResult.Success:
 					this._roomID = resp.id;

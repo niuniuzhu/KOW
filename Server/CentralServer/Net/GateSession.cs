@@ -29,6 +29,10 @@ namespace CentralServer.Net
 
 		protected override void OnClose( string reason )
 		{
+			//更新GS列表
+			CS.instance.lIDToGSInfos.Remove( this.logicID );
+			CS.instance.UpdateAppropriateGSInfo();
+
 			//踢出所有连接到该GS的玩家
 			CS.instance.userMgr.KickUsers( this.id );
 
@@ -55,8 +59,41 @@ namespace CentralServer.Net
 		private ErrorCode OnGs2CsReportState( IMessage message )
 		{
 			Protos.GS2CS_ReportState reportState = ( Protos.GS2CS_ReportState ) message;
-			this.logicID = reportState.GsInfo.Id;
-			return CS.instance.GStateReportHandler( reportState.GsInfo, this.id );
+			return this.GStateReportHandler( reportState.GsInfo, this.id );
+		}
+
+		private ErrorCode GStateReportHandler( Protos.GSInfo gsInfoRecv, uint sessionID )
+		{
+			this.logicID = gsInfoRecv.Id;
+			bool hasRecord = CS.instance.lIDToGSInfos.TryGetValue( this.logicID, out GSInfo gsInfo );
+			if ( !hasRecord )
+			{
+				gsInfo = new GSInfo();
+				CS.instance.lIDToGSInfos[this.logicID] = gsInfo;
+			}
+			//更新GS信息
+			gsInfo.lid = this.logicID;
+			gsInfo.sessionID = sessionID;
+			gsInfo.name = gsInfoRecv.Name;
+			gsInfo.ip = gsInfoRecv.Ip;
+			gsInfo.port = gsInfoRecv.Port;
+			gsInfo.password = gsInfoRecv.Password;
+			gsInfo.state = ( GSInfo.State ) gsInfoRecv.State;
+			Logger.Log( $"report from GS:{gsInfo}" );
+
+			//转发到LS
+			Protos.CS2LS_GSInfo nGSInfo = ProtoCreator.Q_CS2LS_GSInfo();
+			nGSInfo.GsInfo = new Protos.GSInfo()
+			{
+				Id = gsInfo.lid,
+				Name = gsInfo.name,
+				Ip = gsInfo.ip,
+				Port = gsInfo.port,
+				Password = gsInfo.password,
+				State = ( Protos.GSInfo.Types.State ) gsInfo.state
+			};
+			CS.instance.netSessionMgr.Send( SessionType.ServerLS, nGSInfo );
+			return ErrorCode.Success;
 		}
 
 		/// <summary>

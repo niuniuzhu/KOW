@@ -29,6 +29,7 @@ namespace CentralServer
 		public readonly Dictionary<uint, BSInfo> lIDToBSInfos = new Dictionary<uint, BSInfo>();
 
 		public BSInfo appropriateBSInfo { get; private set; }
+		public GSInfo appropriateGSInfo { get; private set; }
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Scheduler _heartBeater = new Scheduler();
@@ -99,7 +100,22 @@ namespace CentralServer
 		/// <summary>
 		/// 更新最适合的BS
 		/// </summary>
-		private void UpdateAppropriateBSInfo()
+		public void UpdateAppropriateGSInfo()
+		{
+			this.appropriateGSInfo = null;
+			int minState = int.MaxValue;
+			foreach ( KeyValuePair<uint, GSInfo> kv in this.lIDToGSInfos )
+			{
+				int state = ( int ) kv.Value.state;
+				if ( state < minState )
+					this.appropriateGSInfo = kv.Value;
+			}
+		}
+
+		/// <summary>
+		/// 更新最适合的BS
+		/// </summary>
+		public void UpdateAppropriateBSInfo()
 		{
 			this.appropriateBSInfo = null;
 			int minState = int.MaxValue;

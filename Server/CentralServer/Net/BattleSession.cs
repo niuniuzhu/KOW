@@ -18,17 +18,20 @@ namespace CentralServer.Net
 
 		protected override void OnEstablish()
 		{
-			//踢出所有连接到该GS的玩家
-			CS.instance.battleStaging.Remove( this.logicID );
-
 			base.OnEstablish();
 			Logger.Info( $"BS({this.id}) connected" );
 		}
 
 		protected override void OnClose( string reason )
 		{
-			this.logicID = 0;
+			//更新BS列表
+			CS.instance.lIDToBSInfos.Remove( this.logicID );
+			CS.instance.UpdateAppropriateBSInfo();
 
+			//踢出所有连接到该GS的玩家
+			CS.instance.battleStaging.Remove( this.logicID );
+
+			this.logicID = 0;
 			base.OnClose( reason );
 			Logger.Info( $"BS({this.id}) disconnected with msg:{reason}" );
 		}
@@ -46,8 +49,26 @@ namespace CentralServer.Net
 		private ErrorCode OnBs2CsReportState( IMessage message )
 		{
 			Protos.BS2CS_ReportState reportState = ( Protos.BS2CS_ReportState ) message;
-			this.logicID = reportState.BsInfo.Id;
-			return CS.instance.BStateReportHandler( reportState.BsInfo, this.id );
+			return this.BStateReportHandler( reportState.BsInfo, this.id );
+		}
+
+		private ErrorCode BStateReportHandler( Protos.BSInfo gsInfoRecv, uint nid )
+		{
+			this.logicID = gsInfoRecv.Id;
+			bool hasRecord = CS.instance.lIDToBSInfos.TryGetValue( this.logicID, out BSInfo gsInfo );
+			if ( !hasRecord )
+			{
+				gsInfo = new BSInfo();
+				CS.instance.lIDToBSInfos[this.logicID] = gsInfo;
+			}
+			//更新BS信息
+			gsInfo.lid = this.logicID;
+			gsInfo.sessionID = nid;
+			gsInfo.ip = gsInfoRecv.Ip;
+			gsInfo.port = gsInfoRecv.Port;
+			gsInfo.state = ( BSInfo.State ) gsInfoRecv.State;
+			Logger.Log( $"report from BS:{gsInfo}" );
+			return ErrorCode.Success;
 		}
 
 		/// <summary>
@@ -57,6 +78,7 @@ namespace CentralServer.Net
 		{
 			Protos.BS2CS_BattleStart battleStart = ( Protos.BS2CS_BattleStart ) message;
 			Protos.CS2BS_BattleStartRet ret = ProtoCreator.R_BS2CS_BattleStart( battleStart.Opts.Pid );
+			this.Send( ret );
 			return ErrorCode.Success;
 		}
 
@@ -70,6 +92,7 @@ namespace CentralServer.Net
 			CS.instance.battleStaging.Remove( this.logicID, battleEnd.Bid );
 			//todo 战斗结算
 			Protos.CS2BS_BattleEndRet ret = ProtoCreator.R_BS2CS_BattleEnd( battleEnd.Opts.Pid );
+			this.Send( ret );
 			return ErrorCode.Success;
 		}
 	}

@@ -17,14 +17,14 @@ namespace CentralServer.User
 		public uint ukey { get; }
 
 		/// <summary>
-		/// 玩家名字
-		/// </summary>
-		public string name { get; }
-
-		/// <summary>
 		/// 网络唯一ID
 		/// </summary>
 		public ulong gcNID;
+
+		/// <summary>
+		/// 玩家名字
+		/// </summary>
+		public string name { get; }
 
 		/// <summary>
 		/// 玩家是否已连线
@@ -77,9 +77,8 @@ namespace CentralServer.User
 		/// 发送消息
 		/// </summary>
 		/// <param name="msg">消息体</param>
-		/// <param name="rpcHandler">RPC回调函数</param>
-		public void Send( IMessage msg, Action<IMessage> rpcHandler = null ) => CS.instance.netSessionMgr.Send(
-			this.gsSID, msg, rpcHandler, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
+		public void Send( IMessage msg ) => CS.instance.netSessionMgr.Send(
+			this.gsSID, msg, null, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
 
 		/// <summary>
 		/// 是否达到下线的条件

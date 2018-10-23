@@ -23,19 +23,19 @@ namespace BattleServer.Battle
 		{
 			Battle battle = POOL.Pop();
 
-			BattleDescript battleDesc;
-			battleDesc.id = waitingRoom.id;
-			battleDesc.mapID = waitingRoom.mapID;
-			battleDesc.frameRate = BS.instance.config.frameRate;
-			battleDesc.keyframeStep = BS.instance.config.keyframeStep;
-			battleDesc.players = waitingRoom.GetPlayerDescripts();
-			battleDesc.battleTime = BS.instance.config.battleTime;
+			BattleEntry battleEntry;
+			battleEntry.id = waitingRoom.id;
+			battleEntry.mapID = waitingRoom.mapID;
+			battleEntry.frameRate = BS.instance.config.frameRate;
+			battleEntry.keyframeStep = BS.instance.config.keyframeStep;
+			battleEntry.players = waitingRoom.GetPlayerEntry();
+			battleEntry.battleTime = BS.instance.config.battleTime;
 
-			int count = battleDesc.players.Count;
+			int count = battleEntry.players.Count;
 			for ( int i = 0; i < count; i++ )
-				this._gcNIDToBattle[battleDesc.players[i].gcNID] = battle;
+				this._gcNIDToBattle[battleEntry.players[i].gcNID] = battle;
 
-			battle.Init( battleDesc );
+			battle.Init( battleEntry );
 			this._runningBattles.Add( battle );
 
 			Logger.Log( $"battle:{battle.id} created" );
@@ -62,6 +62,11 @@ namespace BattleServer.Battle
 				Protos.BS2GC_BattleEnd toGCBattleEnd = ProtoCreator.Q_BS2GC_BattleEnd();
 				toGCBattleEnd.Id = battle.id;
 				battle.Broadcast( toGCBattleEnd );
+				//所有玩家下线
+				battle.ForeachPlayer( player =>
+				{
+					BS.instance.userMgr.Offline( player.gcNID );
+				} );
 			} );
 		}
 

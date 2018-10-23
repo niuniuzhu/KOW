@@ -2,17 +2,17 @@
 
 namespace BattleServer.Battle
 {
-	public struct BattleDescript
+	public struct BattleEntry
 	{
 		public uint id;
 		public int frameRate;
 		public int keyframeStep;
 		public int mapID;
-		public List<PlayerDescript> players;
+		public List<PlayerEntry> players;
 		public int battleTime;
 	}
 
-	public struct PlayerDescript
+	public struct PlayerEntry
 	{
 		public ulong gcNID;
 		public string name;

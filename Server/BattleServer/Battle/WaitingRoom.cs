@@ -83,20 +83,20 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 获取战场描述里的玩家信息
 		/// </summary>
-		public List<PlayerDescript> GetPlayerDescripts()
+		public List<PlayerEntry> GetPlayerEntry()
 		{
-			List<PlayerDescript> playerDescripts = new List<PlayerDescript>();
+			List<PlayerEntry> playerEntries = new List<PlayerEntry>();
 			int count = this._clients.Count;
 			for ( var i = 0; i < count; i++ )
 			{
 				WaitingClient client = this._clients[i];
-				PlayerDescript playerDescript;
-				playerDescript.gcNID = client.gcNID;
-				playerDescript.actorID = client.actorID;
-				playerDescript.name = client.name;
-				playerDescripts.Add( playerDescript );
+				PlayerEntry playerEntry;
+				playerEntry.gcNID = client.gcNID;
+				playerEntry.actorID = client.actorID;
+				playerEntry.name = client.name;
+				playerEntries.Add( playerEntry );
 			}
-			return playerDescripts;
+			return playerEntries;
 		}
 
 		public void Update( long dt )

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Shared;
 using Shared.Net;
 using System.IO;
+using BattleServer.User;
 
 namespace BattleServer
 {

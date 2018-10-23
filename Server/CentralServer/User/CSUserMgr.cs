@@ -7,8 +7,8 @@ namespace CentralServer.User
 {
 	public class CSUserMgr
 	{
-		private readonly Dictionary<ulong, CSUser> _gcNidToUser = new Dictionary<ulong, CSUser>();
 		private readonly Dictionary<uint, CSUser> _ukeyToUser = new Dictionary<uint, CSUser>();
+		private readonly Dictionary<ulong, CSUser> _gcNidToUser = new Dictionary<ulong, CSUser>();
 		private readonly Dictionary<uint, List<CSUser>> _gsToUser = new Dictionary<uint, List<CSUser>>();
 		private readonly List<CSUser> _users = new List<CSUser>();
 
@@ -69,7 +69,7 @@ namespace CentralServer.User
 					gsSession.Send( kickGc, msg =>
 					{
 						//让前玩家下线
-						this.Offline( user.gcNID );
+						this.Offline( user );
 						//需要再检查玩家是否被真正下线了
 						user = CreateUser( this.GetUser( ukey ) );
 					} );

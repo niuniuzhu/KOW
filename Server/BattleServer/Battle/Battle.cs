@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BattleServer.User;
 using Core.Misc;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,9 +15,10 @@ namespace BattleServer.Battle
 		public bool finished { get; private set; }
 
 		private readonly StepLocker _stepLocker = new StepLocker();
-		private BattleDescript _battleDes;
+		private BattleEntry _battleDes;
 		private readonly System.Diagnostics.Stopwatch _sw = new System.Diagnostics.Stopwatch();
 		private long _lastUpdateTime;
+		private readonly List<uint> _tempSIDs = new List<uint>();
 
 		public void Clear()
 		{
@@ -29,7 +32,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 初始化
 		/// </summary>
-		public void Init( BattleDescript battleDes )
+		public void Init( BattleEntry battleDes )
 		{
 			this._battleDes = battleDes;
 			this._stepLocker.Init( this, battleDes.frameRate, battleDes.keyframeStep );
@@ -65,22 +68,26 @@ namespace BattleServer.Battle
 		public void Broadcast( Google.Protobuf.IMessage message, ulong gcNIDExcept = 0 )
 		{
 			int count = this._battleDes.players.Count;
-			uint[] sids = new uint[count];
 			for ( int i = 0; i < count; i++ )
 			{
 				ulong gcNID = this._battleDes.players[i].gcNID;
 				if ( gcNIDExcept != 0 && gcNID == gcNIDExcept )
 					continue;
-				if ( !BS.instance.userMgr.GetClientSID( gcNID, out sids[i] ) )
-					Logger.Warn( $"failed to send message to gcNID:{gcNID}" );
+
+				BSUser user = BS.instance.userMgr.GetUser( gcNID );
+				if ( !user.isConnected )
+					continue;
+
+				this._tempSIDs.Add( user.gcSID );
 			}
-			BS.instance.netSessionMgr.Broadcast( sids, message );
+			BS.instance.netSessionMgr.Broadcast( this._tempSIDs, message );
+			this._tempSIDs.Clear();
 		}
 
 		/// <summary>
 		/// 遍历战场所有玩家
 		/// </summary>
-		public void ForeachPlayer( Action<PlayerDescript> handler )
+		public void ForeachPlayer( Action<PlayerEntry> handler )
 		{
 			int count = this._battleDes.players.Count;
 			for ( int i = 0; i < count; i++ )

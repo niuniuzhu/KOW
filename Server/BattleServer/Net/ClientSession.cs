@@ -1,4 +1,5 @@
-﻿using Core.Misc;
+﻿using BattleServer.User;
+using Core.Misc;
 using Core.Net;
 using Shared;
 using Shared.Net;
@@ -28,7 +29,8 @@ namespace BattleServer.Net
 			base.OnClose( reason );
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );
 
-			BS.instance.userMgr.RemoveClient( this._gcNID );
+			if ( reason != "offline" )
+				BS.instance.userMgr.Disconnect( this._gcNID );
 
 			this._activeTime = 0;
 			this._gcNID = 0;
@@ -47,7 +49,8 @@ namespace BattleServer.Net
 
 			Protos.BS2GC_LoginRet loginRet = ProtoCreator.R_GC2BS_AskLogin( login.Opts.Pid );
 
-			if ( this.HandleGCLogin( this._gcNID ) )
+			BSUser user = BS.instance.userMgr.Online( this._gcNID, this.id );
+			if ( user != null )
 				loginRet.Result = Protos.BS2GC_LoginRet.Types.EResult.Success;
 			else
 			{
@@ -56,27 +59,6 @@ namespace BattleServer.Net
 			}
 			this.Send( loginRet );
 			return ErrorCode.Success;
-		}
-
-		private bool HandleGCLogin( ulong gcNID )
-		{
-			//检查客户端是否在等待房间
-			if ( BS.instance.waitingRoomMgr.CheckClient( this._gcNID ) )
-			{
-				Logger.Log( $"client:{gcNID} join room" );
-				BS.instance.userMgr.AddClient( this._gcNID, this.id );
-				//在等待房间加入客户端
-				BS.instance.waitingRoomMgr.OnGCLogin( this._gcNID );
-				return true;
-			}
-			//检查客户端是否在战场
-			if ( BS.instance.battleManager.CheckClient( this._gcNID ) )
-			{
-				Logger.Log( $"client:{gcNID} join battle" );
-				BS.instance.userMgr.AddClient( this._gcNID, this.id );
-				return true;
-			}
-			return false;
 		}
 
 		private ErrorCode OnGc2BsKeepAlive( Google.Protobuf.IMessage message )

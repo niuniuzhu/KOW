@@ -1353,7 +1353,7 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
     ]);
     exports.ProtoCreator = ProtoCreator;
 });
-define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter", "../libs/protos", "Net/ProtoHelper", "libs/long"], function (require, exports, ByteUtils_1, MsgCenter_1, protos_2, ProtoHelper_1, Long) {
+define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter", "Net/ProtoHelper", "../Libs/long", "../Libs/protos"], function (require, exports, ByteUtils_1, MsgCenter_1, ProtoHelper_1, Long, protos_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class WSConnector {

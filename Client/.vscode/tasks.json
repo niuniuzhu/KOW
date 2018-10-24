@@ -9,7 +9,24 @@
 			"command": "tsc",
 			"args": [
 				"-p",
-				"./"
+				"./tsconfig.json"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Build wx",
+			"type": "shell",
+			"command": "tsc",
+			"args": [
+				"-p",
+				"./tsconfig_es6.json"
 			],
 			"group": "build",
 			"presentation": {

@@ -1,5 +1,3 @@
-import { stringify } from "querystring";
-
 export class Debug {
 	public static Log(message: any) {
 		console.log(message);

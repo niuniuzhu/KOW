@@ -1,8 +1,8 @@
 import { ByteUtils } from "./ByteUtils";
 import { MsgCenter } from "./MsgCenter";
-import { Protos } from "../libs/protos";
+import * as Long from "../Libs/long";
+import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "./ProtoHelper";
-import Long = require("libs/long");
 
 export class WSConnector {
 	public get connected(): boolean { return this._socket != null && this._socket.readyState == WebSocket.OPEN };

@@ -1,6 +1,6 @@
 require.config({
 	paths: {
-		Main: 'js/main'
+		Main: './js/main'
 	}
 });
 

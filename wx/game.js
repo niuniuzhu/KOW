@@ -1,2 +1,1 @@
-require("js/main.js");
-require.config();
+require("./js/Main");

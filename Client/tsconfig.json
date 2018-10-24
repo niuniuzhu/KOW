@@ -3,7 +3,7 @@
 		"module": "amd",
 		"target": "es6",
 		"outDir": "./bin/js",
-		"outFile": "./bin/js/game.js",
+		"outFile": "./bin/js/main.js",
 		"inlineSourceMap": false,
 		"inlineSources": false,
 		"sourceMap": true,

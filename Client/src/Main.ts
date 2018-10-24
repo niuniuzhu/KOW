@@ -3,14 +3,14 @@ import { Defs } from "./Model/Defs";
 import { Connector } from "./Net/Connector";
 import { SceneManager } from "./Scene/SceneManager";
 import { Debug } from "./Misc/Debug";
-import { load } from "protobufjs";
 
-export class Game {
-	private static _instance: Game;
-	public static get instance(): Game { return Game._instance; }
+export class Main {
+	private static _instance: Main;
+	public static get instance(): Main { return Main._instance; }
 
 	constructor() {
-		Game._instance = this;
+		Main._instance = this;
+		Laya.MiniAdpter.init();
 		Laya.init(1280, 720);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
 		Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;

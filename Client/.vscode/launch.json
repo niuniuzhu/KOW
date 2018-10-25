@@ -2,17 +2,30 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "client",
+			"name": "kow(local)",
 			"type": "chrome",
 			"request": "launch",
-			"file": "${workspaceRoot}/Bin/index.html",
+			"file": "${workspaceRoot}/bin/index.html",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
 				"--auto-open-devtools-for-tabs"
 			],
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",
-			"disableNetworkCache": true,
+			"disableNetworkCache": true
+		},
+		{
+			"name": "kow(http)",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:8080",
+			"runtimeArgs": [
+				"--allow-file-access-from-files",
+				"--auto-open-devtools-for-tabs"
+			],
+			"sourceMaps": true,
+			"webRoot": "${workspaceRoot}",
+			"disableNetworkCache": true
 		}
 	]
 }

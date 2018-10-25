@@ -24,4 +24,3 @@ export class Debug {
         console.assert(value, message);
     }
 }
-//# sourceMappingURL=Debug.js.map

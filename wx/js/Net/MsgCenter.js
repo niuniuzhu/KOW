@@ -14,4 +14,3 @@ export class MsgCenter {
         return this._generalHandlers.get(msgID);
     }
 }
-//# sourceMappingURL=MsgCenter.js.map

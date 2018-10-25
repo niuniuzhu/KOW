@@ -19,4 +19,3 @@ export class UIEvent extends BaseEvent {
 }
 UIEvent.NETWORK_DISCONNECT = 10500;
 UIEvent.POOL = new RC.Collections.Stack();
-//# sourceMappingURL=UIEvent.js.map

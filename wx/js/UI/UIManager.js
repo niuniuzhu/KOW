@@ -30,4 +30,3 @@ export class UIManager {
         }
     }
 }
-//# sourceMappingURL=UIManager.js.map

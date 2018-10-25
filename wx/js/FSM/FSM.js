@@ -44,4 +44,3 @@ export class FSM {
             this._currentState.Update(dt);
     }
 }
-//# sourceMappingURL=FSM.js.map

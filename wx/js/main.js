@@ -1,7 +1,8 @@
-import { UIManager } from "./UI/UIManager";
 import { Defs } from "./Model/Defs";
-import { Connector } from "./Net/Connector";
+import { UIManager } from "./UI/UIManager";
 import { SceneManager } from "./Scene/SceneManager";
+import { Connector } from "./Net/Connector";
+import { ProtoCreator } from "./Net/ProtoHelper";
 import { Debug } from "./Misc/Debug";
 export class Main {
     static get instance() { return Main._instance; }
@@ -51,6 +52,7 @@ export class Main {
     }
     StartGame() {
         Debug.Log("start game...");
+        ProtoCreator.Init();
         Connector.Init();
         UIManager.Init();
         SceneManager.Init();
@@ -67,4 +69,3 @@ export class Main {
         UIManager.OnResize(e);
     }
 }
-//# sourceMappingURL=Main.js.map

@@ -1,6 +1,6 @@
 import { WSConnector } from "./WSConnector";
 import { ProtoCreator } from "./ProtoHelper";
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 
 enum ConnectorType {
 	GS,

@@ -16,4 +16,3 @@ export class SceneState extends FSMState {
             this.__ui.Update(dt);
     }
 }
-//# sourceMappingURL=SceneState.js.map

@@ -1,6 +1,6 @@
 import { SceneState } from "./SceneState";
 import { Connector } from "../Net/Connector";
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 import { Debug } from "../Misc/Debug";
 
 export class LoginState extends SceneState {

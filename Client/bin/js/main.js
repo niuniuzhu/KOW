@@ -1,3 +1,19 @@
+define("Model/Defs", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Defs {
+        static get config() { return Defs._config; }
+        static Init(json) {
+            Defs._defs = json;
+            Defs._config = RC.Utils.Hashtable.GetMap(Defs._defs, "config");
+        }
+        static GetPreloads() {
+            let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "preloads");
+            return arr;
+        }
+    }
+    exports.Defs = Defs;
+});
 define("UI/IUIModule", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -183,10 +199,108 @@ define("Net/MsgCenter", ["require", "exports"], function (require, exports) {
     }
     exports.MsgCenter = MsgCenter;
 });
-define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (require, exports, protos_1) {
+define("Net/ProtoHelper", ["require", "exports", "../Libs/protos"], function (require, exports, protos_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ProtoCreator {
+        static Init() {
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.G_AskPing, 10);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.G_AskPingRet, 11);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LS_AskRegister, 1000);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LS_AskLogin, 1001);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LS_AskSmartLogin, 1002);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2GS_AskLogin, 1100);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2GS_KeepAlive, 1101);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_AskLogin, 1200);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_KeepAlive, 1201);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2CS_BeginMatch, 1300);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2CS_UpdatePlayerInfo, 1301);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2GC_GSInfo, 2000);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2GC_AskRegRet, 2001);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2GC_AskLoginRet, 2002);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2CS_GCLogin, 2100);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2DB_QueryAccount, 2200);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2DB_QueryLogin, 2201);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2DB_Exec, 2202);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2CS_ReportState, 3000);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2CS_GCAskLogin, 3001);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2CS_GCLost, 3002);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2CS_KickGCRet, 3003);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2GC_LoginRet, 3100);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2GC_Kick, 3101);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_ReportState, 4000);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_BattleInfoRet, 4001);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_BattleStart, 4002);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_BattleEnd, 4003);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_LoginRet, 4100);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_BattleStart, 4102);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_BattleEnd, 4103);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSInfos, 5000);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSInfo, 5001);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSLost, 5002);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GCLoginRet, 5003);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GS_GCLoginRet, 5100);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GS_KickGC, 5101);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2BS_BattleInfo, 5200);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2BS_BattleStartRet, 5201);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2BS_BattleEndRet, 5202);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_BeginMatchRet, 5300);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_PlayerJoin, 5301);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_PlayerLeave, 5302);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_RoomInfo, 5303);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_EnterBattle, 5304);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_QueryAccountRet, 8000);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_QueryLoginRet, 8001);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_ExecRet, 8002);
+            ProtoCreator._ID2TYPE.set(10, protos_1.Protos.G_AskPing);
+            ProtoCreator._ID2TYPE.set(11, protos_1.Protos.G_AskPingRet);
+            ProtoCreator._ID2TYPE.set(1000, protos_1.Protos.GC2LS_AskRegister);
+            ProtoCreator._ID2TYPE.set(1001, protos_1.Protos.GC2LS_AskLogin);
+            ProtoCreator._ID2TYPE.set(1002, protos_1.Protos.GC2LS_AskSmartLogin);
+            ProtoCreator._ID2TYPE.set(1100, protos_1.Protos.GC2GS_AskLogin);
+            ProtoCreator._ID2TYPE.set(1101, protos_1.Protos.GC2GS_KeepAlive);
+            ProtoCreator._ID2TYPE.set(1200, protos_1.Protos.GC2BS_AskLogin);
+            ProtoCreator._ID2TYPE.set(1201, protos_1.Protos.GC2BS_KeepAlive);
+            ProtoCreator._ID2TYPE.set(1300, protos_1.Protos.GC2CS_BeginMatch);
+            ProtoCreator._ID2TYPE.set(1301, protos_1.Protos.GC2CS_UpdatePlayerInfo);
+            ProtoCreator._ID2TYPE.set(2000, protos_1.Protos.LS2GC_GSInfo);
+            ProtoCreator._ID2TYPE.set(2001, protos_1.Protos.LS2GC_AskRegRet);
+            ProtoCreator._ID2TYPE.set(2002, protos_1.Protos.LS2GC_AskLoginRet);
+            ProtoCreator._ID2TYPE.set(2100, protos_1.Protos.LS2CS_GCLogin);
+            ProtoCreator._ID2TYPE.set(2200, protos_1.Protos.LS2DB_QueryAccount);
+            ProtoCreator._ID2TYPE.set(2201, protos_1.Protos.LS2DB_QueryLogin);
+            ProtoCreator._ID2TYPE.set(2202, protos_1.Protos.LS2DB_Exec);
+            ProtoCreator._ID2TYPE.set(3000, protos_1.Protos.GS2CS_ReportState);
+            ProtoCreator._ID2TYPE.set(3001, protos_1.Protos.GS2CS_GCAskLogin);
+            ProtoCreator._ID2TYPE.set(3002, protos_1.Protos.GS2CS_GCLost);
+            ProtoCreator._ID2TYPE.set(3003, protos_1.Protos.GS2CS_KickGCRet);
+            ProtoCreator._ID2TYPE.set(3100, protos_1.Protos.GS2GC_LoginRet);
+            ProtoCreator._ID2TYPE.set(3101, protos_1.Protos.GS2GC_Kick);
+            ProtoCreator._ID2TYPE.set(4000, protos_1.Protos.BS2CS_ReportState);
+            ProtoCreator._ID2TYPE.set(4001, protos_1.Protos.BS2CS_BattleInfoRet);
+            ProtoCreator._ID2TYPE.set(4002, protos_1.Protos.BS2CS_BattleStart);
+            ProtoCreator._ID2TYPE.set(4003, protos_1.Protos.BS2CS_BattleEnd);
+            ProtoCreator._ID2TYPE.set(4100, protos_1.Protos.BS2GC_LoginRet);
+            ProtoCreator._ID2TYPE.set(4102, protos_1.Protos.BS2GC_BattleStart);
+            ProtoCreator._ID2TYPE.set(4103, protos_1.Protos.BS2GC_BattleEnd);
+            ProtoCreator._ID2TYPE.set(5000, protos_1.Protos.CS2LS_GSInfos);
+            ProtoCreator._ID2TYPE.set(5001, protos_1.Protos.CS2LS_GSInfo);
+            ProtoCreator._ID2TYPE.set(5002, protos_1.Protos.CS2LS_GSLost);
+            ProtoCreator._ID2TYPE.set(5003, protos_1.Protos.CS2LS_GCLoginRet);
+            ProtoCreator._ID2TYPE.set(5100, protos_1.Protos.CS2GS_GCLoginRet);
+            ProtoCreator._ID2TYPE.set(5101, protos_1.Protos.CS2GS_KickGC);
+            ProtoCreator._ID2TYPE.set(5200, protos_1.Protos.CS2BS_BattleInfo);
+            ProtoCreator._ID2TYPE.set(5201, protos_1.Protos.CS2BS_BattleStartRet);
+            ProtoCreator._ID2TYPE.set(5202, protos_1.Protos.CS2BS_BattleEndRet);
+            ProtoCreator._ID2TYPE.set(5300, protos_1.Protos.CS2GC_BeginMatchRet);
+            ProtoCreator._ID2TYPE.set(5301, protos_1.Protos.CS2GC_PlayerJoin);
+            ProtoCreator._ID2TYPE.set(5302, protos_1.Protos.CS2GC_PlayerLeave);
+            ProtoCreator._ID2TYPE.set(5303, protos_1.Protos.CS2GC_RoomInfo);
+            ProtoCreator._ID2TYPE.set(5304, protos_1.Protos.CS2GC_EnterBattle);
+            ProtoCreator._ID2TYPE.set(8000, protos_1.Protos.DB2LS_QueryAccountRet);
+            ProtoCreator._ID2TYPE.set(8001, protos_1.Protos.DB2LS_QueryLoginRet);
+            ProtoCreator._ID2TYPE.set(8002, protos_1.Protos.DB2LS_ExecRet);
+        }
         static MakeTransMessage(msg, transTarget, transID) {
             msg.opts.flag |= 1 << 3;
             msg.opts.flag |= 1 << (3 + transTarget);
@@ -1251,106 +1365,8 @@ define("Net/ProtoHelper", ["require", "exports", "../libs/protos"], function (re
         static GetMsgIDByType(type) { return ProtoCreator._TYPE2ID.get(type); }
         static GetMsgID(message) { return ProtoCreator._TYPE2ID.get(message.constructor); }
     }
-    ProtoCreator._TYPE2ID = new Map([
-        [protos_1.Protos.G_AskPing, 10],
-        [protos_1.Protos.G_AskPingRet, 11],
-        [protos_1.Protos.GC2LS_AskRegister, 1000],
-        [protos_1.Protos.GC2LS_AskLogin, 1001],
-        [protos_1.Protos.GC2LS_AskSmartLogin, 1002],
-        [protos_1.Protos.GC2GS_AskLogin, 1100],
-        [protos_1.Protos.GC2GS_KeepAlive, 1101],
-        [protos_1.Protos.GC2BS_AskLogin, 1200],
-        [protos_1.Protos.GC2BS_KeepAlive, 1201],
-        [protos_1.Protos.GC2CS_BeginMatch, 1300],
-        [protos_1.Protos.GC2CS_UpdatePlayerInfo, 1301],
-        [protos_1.Protos.LS2GC_GSInfo, 2000],
-        [protos_1.Protos.LS2GC_AskRegRet, 2001],
-        [protos_1.Protos.LS2GC_AskLoginRet, 2002],
-        [protos_1.Protos.LS2CS_GCLogin, 2100],
-        [protos_1.Protos.LS2DB_QueryAccount, 2200],
-        [protos_1.Protos.LS2DB_QueryLogin, 2201],
-        [protos_1.Protos.LS2DB_Exec, 2202],
-        [protos_1.Protos.GS2CS_ReportState, 3000],
-        [protos_1.Protos.GS2CS_GCAskLogin, 3001],
-        [protos_1.Protos.GS2CS_GCLost, 3002],
-        [protos_1.Protos.GS2CS_KickGCRet, 3003],
-        [protos_1.Protos.GS2GC_LoginRet, 3100],
-        [protos_1.Protos.GS2GC_Kick, 3101],
-        [protos_1.Protos.BS2CS_ReportState, 4000],
-        [protos_1.Protos.BS2CS_BattleInfoRet, 4001],
-        [protos_1.Protos.BS2CS_BattleStart, 4002],
-        [protos_1.Protos.BS2CS_BattleEnd, 4003],
-        [protos_1.Protos.BS2GC_LoginRet, 4100],
-        [protos_1.Protos.BS2GC_BattleStart, 4102],
-        [protos_1.Protos.BS2GC_BattleEnd, 4103],
-        [protos_1.Protos.CS2LS_GSInfos, 5000],
-        [protos_1.Protos.CS2LS_GSInfo, 5001],
-        [protos_1.Protos.CS2LS_GSLost, 5002],
-        [protos_1.Protos.CS2LS_GCLoginRet, 5003],
-        [protos_1.Protos.CS2GS_GCLoginRet, 5100],
-        [protos_1.Protos.CS2GS_KickGC, 5101],
-        [protos_1.Protos.CS2BS_BattleInfo, 5200],
-        [protos_1.Protos.CS2BS_BattleStartRet, 5201],
-        [protos_1.Protos.CS2BS_BattleEndRet, 5202],
-        [protos_1.Protos.CS2GC_BeginMatchRet, 5300],
-        [protos_1.Protos.CS2GC_PlayerJoin, 5301],
-        [protos_1.Protos.CS2GC_PlayerLeave, 5302],
-        [protos_1.Protos.CS2GC_RoomInfo, 5303],
-        [protos_1.Protos.CS2GC_EnterBattle, 5304],
-        [protos_1.Protos.DB2LS_QueryAccountRet, 8000],
-        [protos_1.Protos.DB2LS_QueryLoginRet, 8001],
-        [protos_1.Protos.DB2LS_ExecRet, 8002],
-    ]);
-    ProtoCreator._ID2TYPE = new Map([
-        [10, protos_1.Protos.G_AskPing],
-        [11, protos_1.Protos.G_AskPingRet],
-        [1000, protos_1.Protos.GC2LS_AskRegister],
-        [1001, protos_1.Protos.GC2LS_AskLogin],
-        [1002, protos_1.Protos.GC2LS_AskSmartLogin],
-        [1100, protos_1.Protos.GC2GS_AskLogin],
-        [1101, protos_1.Protos.GC2GS_KeepAlive],
-        [1200, protos_1.Protos.GC2BS_AskLogin],
-        [1201, protos_1.Protos.GC2BS_KeepAlive],
-        [1300, protos_1.Protos.GC2CS_BeginMatch],
-        [1301, protos_1.Protos.GC2CS_UpdatePlayerInfo],
-        [2000, protos_1.Protos.LS2GC_GSInfo],
-        [2001, protos_1.Protos.LS2GC_AskRegRet],
-        [2002, protos_1.Protos.LS2GC_AskLoginRet],
-        [2100, protos_1.Protos.LS2CS_GCLogin],
-        [2200, protos_1.Protos.LS2DB_QueryAccount],
-        [2201, protos_1.Protos.LS2DB_QueryLogin],
-        [2202, protos_1.Protos.LS2DB_Exec],
-        [3000, protos_1.Protos.GS2CS_ReportState],
-        [3001, protos_1.Protos.GS2CS_GCAskLogin],
-        [3002, protos_1.Protos.GS2CS_GCLost],
-        [3003, protos_1.Protos.GS2CS_KickGCRet],
-        [3100, protos_1.Protos.GS2GC_LoginRet],
-        [3101, protos_1.Protos.GS2GC_Kick],
-        [4000, protos_1.Protos.BS2CS_ReportState],
-        [4001, protos_1.Protos.BS2CS_BattleInfoRet],
-        [4002, protos_1.Protos.BS2CS_BattleStart],
-        [4003, protos_1.Protos.BS2CS_BattleEnd],
-        [4100, protos_1.Protos.BS2GC_LoginRet],
-        [4102, protos_1.Protos.BS2GC_BattleStart],
-        [4103, protos_1.Protos.BS2GC_BattleEnd],
-        [5000, protos_1.Protos.CS2LS_GSInfos],
-        [5001, protos_1.Protos.CS2LS_GSInfo],
-        [5002, protos_1.Protos.CS2LS_GSLost],
-        [5003, protos_1.Protos.CS2LS_GCLoginRet],
-        [5100, protos_1.Protos.CS2GS_GCLoginRet],
-        [5101, protos_1.Protos.CS2GS_KickGC],
-        [5200, protos_1.Protos.CS2BS_BattleInfo],
-        [5201, protos_1.Protos.CS2BS_BattleStartRet],
-        [5202, protos_1.Protos.CS2BS_BattleEndRet],
-        [5300, protos_1.Protos.CS2GC_BeginMatchRet],
-        [5301, protos_1.Protos.CS2GC_PlayerJoin],
-        [5302, protos_1.Protos.CS2GC_PlayerLeave],
-        [5303, protos_1.Protos.CS2GC_RoomInfo],
-        [5304, protos_1.Protos.CS2GC_EnterBattle],
-        [8000, protos_1.Protos.DB2LS_QueryAccountRet],
-        [8001, protos_1.Protos.DB2LS_QueryLoginRet],
-        [8002, protos_1.Protos.DB2LS_ExecRet],
-    ]);
+    ProtoCreator._TYPE2ID = new Map();
+    ProtoCreator._ID2TYPE = new Map();
     exports.ProtoCreator = ProtoCreator;
 });
 define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter", "../Libs/long", "../Libs/protos", "Net/ProtoHelper"], function (require, exports, ByteUtils_1, MsgCenter_1, Long, protos_2, ProtoHelper_1) {
@@ -1458,7 +1474,7 @@ define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter
     }
     exports.WSConnector = WSConnector;
 });
-define("Net/Connector", ["require", "exports", "Net/WSConnector", "Net/ProtoHelper", "../libs/protos"], function (require, exports, WSConnector_1, ProtoHelper_2, protos_3) {
+define("Net/Connector", ["require", "exports", "Net/WSConnector", "Net/ProtoHelper", "../Libs/protos"], function (require, exports, WSConnector_1, ProtoHelper_2, protos_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var ConnectorType;
@@ -1534,22 +1550,6 @@ define("Scene/SceneState", ["require", "exports", "FSM/FSMState"], function (req
     }
     exports.SceneState = SceneState;
 });
-define("Model/Defs", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class Defs {
-        static get config() { return Defs._config; }
-        static Init(json) {
-            Defs._defs = json;
-            Defs._config = RC.Utils.Hashtable.GetMap(Defs._defs, "config");
-        }
-        static GetPreloads() {
-            let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "preloads");
-            return arr;
-        }
-    }
-    exports.Defs = Defs;
-});
 define("Misc/Debug", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1581,7 +1581,7 @@ define("Misc/Debug", ["require", "exports"], function (require, exports) {
     }
     exports.Debug = Debug;
 });
-define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connector", "Net/ProtoHelper", "Net/WSConnector", "UI/UIManager", "Scene/SceneState", "Scene/SceneManager", "Model/Defs", "Misc/Debug"], function (require, exports, protos_4, Connector_1, ProtoHelper_3, WSConnector_2, UIManager_1, SceneState_1, SceneManager_1, Defs_1, Debug_1) {
+define("Scene/LoginState", ["require", "exports", "../Libs/protos", "Net/Connector", "Net/ProtoHelper", "Net/WSConnector", "UI/UIManager", "Scene/SceneState", "Scene/SceneManager", "Model/Defs", "Misc/Debug"], function (require, exports, protos_4, Connector_1, ProtoHelper_3, WSConnector_2, UIManager_1, SceneState_1, SceneManager_1, Defs_1, Debug_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoginState extends SceneState_1.SceneState {
@@ -1649,7 +1649,7 @@ define("Scene/LoginState", ["require", "exports", "../libs/protos", "Net/Connect
     }
     exports.LoginState = LoginState;
 });
-define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_5, UIAlert_1, SceneManager_2) {
+define("UI/UIMatching", ["require", "exports", "../Libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_5, UIAlert_1, SceneManager_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMatching {
@@ -1724,7 +1724,7 @@ define("UI/UIMatching", ["require", "exports", "../libs/protos", "UI/UIAlert", "
     }
     exports.UIMatching = UIMatching;
 });
-define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connector", "../libs/protos", "Net/ProtoHelper", "Scene/SceneState", "Misc/Debug"], function (require, exports, UIManager_2, Connector_2, protos_6, ProtoHelper_4, SceneState_2, Debug_2) {
+define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connector", "../Libs/protos", "Net/ProtoHelper", "Scene/SceneState", "Misc/Debug"], function (require, exports, UIManager_2, Connector_2, protos_6, ProtoHelper_4, SceneState_2, Debug_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MatchingState extends SceneState_2.SceneState {
@@ -1872,7 +1872,7 @@ define("Scene/MainState", ["require", "exports", "Scene/SceneState", "UI/UIManag
     }
     exports.MainState = MainState;
 });
-define("Scene/GlobalState", ["require", "exports", "Scene/SceneState", "Net/Connector", "UI/UIAlert", "Misc/Debug", "../libs/protos", "Scene/SceneManager"], function (require, exports, SceneState_4, Connector_3, UIAlert_2, Debug_3, protos_7, SceneManager_4) {
+define("Scene/GlobalState", ["require", "exports", "Scene/SceneState", "Net/Connector", "UI/UIAlert", "Misc/Debug", "../Libs/protos", "Scene/SceneManager"], function (require, exports, SceneState_4, Connector_3, UIAlert_2, Debug_3, protos_7, SceneManager_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class GlobalState extends SceneState_4.SceneState {
@@ -1934,7 +1934,7 @@ define("Scene/SceneManager", ["require", "exports", "FSM/FSM", "Scene/LoginState
     SceneManager.State = State;
     exports.SceneManager = SceneManager;
 });
-define("UI/UILogin", ["require", "exports", "../libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_8, UIAlert_3, SceneManager_5) {
+define("UI/UILogin", ["require", "exports", "../Libs/protos", "UI/UIAlert", "Scene/SceneManager"], function (require, exports, protos_8, UIAlert_3, SceneManager_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UILogin extends fairygui.Window {
@@ -2107,7 +2107,7 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIM
     }
     exports.UIManager = UIManager;
 });
-define("Main", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connector", "Scene/SceneManager", "Misc/Debug"], function (require, exports, UIManager_4, Defs_2, Connector_4, SceneManager_6, Debug_4) {
+define("Main", ["require", "exports", "Model/Defs", "UI/UIManager", "Scene/SceneManager", "Net/Connector", "Net/ProtoHelper", "Misc/Debug"], function (require, exports, Defs_2, UIManager_4, SceneManager_6, Connector_4, ProtoHelper_5, Debug_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
@@ -2158,6 +2158,7 @@ define("Main", ["require", "exports", "UI/UIManager", "Model/Defs", "Net/Connect
         }
         StartGame() {
             Debug_4.Debug.Log("start game...");
+            ProtoHelper_5.ProtoCreator.Init();
             Connector_4.Connector.Init();
             UIManager_4.UIManager.Init();
             SceneManager_6.SceneManager.Init();
@@ -2263,7 +2264,7 @@ define("Events/UIEvent", ["require", "exports", "Events/BaseEvent"], function (r
     UIEvent.POOL = new RC.Collections.Stack();
     exports.UIEvent = UIEvent;
 });
-define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Connector", "../libs/protos", "Misc/Debug"], function (require, exports, SceneState_5, Connector_5, protos_9, Debug_5) {
+define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Connector", "../Libs/protos", "Misc/Debug"], function (require, exports, SceneState_5, Connector_5, protos_9, Debug_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoginState extends SceneState_5.SceneState {

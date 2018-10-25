@@ -1,4 +1,4 @@
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 import { SceneManager } from "../Scene/SceneManager";
 export class UILogin extends fairygui.Window {
@@ -135,4 +135,3 @@ export class UILogin extends fairygui.Window {
         }
     }
 }
-//# sourceMappingURL=UILogin.js.map

@@ -1,6 +1,6 @@
 import { UIManager } from "../UI/UIManager";
 import { Connector } from "../Net/Connector";
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { SceneState } from "./SceneState";
 import { UIMatching } from "../UI/UIMatching";

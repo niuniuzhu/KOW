@@ -1,7 +1,8 @@
-import { UIManager } from "./UI/UIManager";
 import { Defs } from "./Model/Defs";
-import { Connector } from "./Net/Connector";
+import { UIManager } from "./UI/UIManager";
 import { SceneManager } from "./Scene/SceneManager";
+import { Connector } from "./Net/Connector";
+import { ProtoCreator } from "./Net/ProtoHelper";
 import { Debug } from "./Misc/Debug";
 
 export class Main {
@@ -61,10 +62,9 @@ export class Main {
 	private StartGame(): void {
 		Debug.Log("start game...");
 
+		ProtoCreator.Init();
 		Connector.Init();
-
 		UIManager.Init();
-
 		SceneManager.Init();
 		SceneManager.ChangeState(SceneManager.State.Login);
 

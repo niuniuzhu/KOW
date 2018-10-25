@@ -36,4 +36,3 @@ export class EventManager {
 }
 EventManager.HANDLERS = {};
 EventManager.PENDING_LIST = new RC.Collections.Queue();
-//# sourceMappingURL=EventManager.js.map

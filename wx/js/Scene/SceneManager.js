@@ -32,4 +32,3 @@ export class SceneManager {
     }
 }
 SceneManager.State = State;
-//# sourceMappingURL=SceneManager.js.map

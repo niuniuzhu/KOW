@@ -1,5 +1,5 @@
 import { IUIModule } from "./IUIModule";
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 import { SceneManager } from "../Scene/SceneManager";
 

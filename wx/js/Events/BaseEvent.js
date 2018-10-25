@@ -13,4 +13,3 @@ export class BaseEvent {
         EventManager.Invoke(this);
     }
 }
-//# sourceMappingURL=BaseEvent.js.map

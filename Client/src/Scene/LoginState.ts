@@ -1,4 +1,4 @@
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { WSConnector } from "../Net/WSConnector";

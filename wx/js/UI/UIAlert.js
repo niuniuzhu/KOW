@@ -23,4 +23,3 @@ export class UIAlert {
         UIAlert._hideHandler();
     }
 }
-//# sourceMappingURL=UIAlert.js.map

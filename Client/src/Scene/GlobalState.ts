@@ -2,7 +2,7 @@ import { SceneState } from "./SceneState";
 import { Connector } from "../Net/Connector";
 import { UIAlert } from "../UI/UIAlert";
 import { Debug } from "../Misc/Debug";
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 import { SceneManager } from "./SceneManager";
 
 export class GlobalState extends SceneState {

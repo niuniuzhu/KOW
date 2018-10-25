@@ -26,4 +26,3 @@ export class UIMain {
         SceneManager.ChangeState(SceneManager.State.Matching);
     }
 }
-//# sourceMappingURL=UIMain.js.map

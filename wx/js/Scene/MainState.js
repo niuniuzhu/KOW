@@ -6,4 +6,3 @@ export class MainState extends SceneState {
         this.__ui = this._ui = UIManager.main;
     }
 }
-//# sourceMappingURL=MainState.js.map

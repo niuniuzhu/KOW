@@ -1,6 +1,6 @@
 import { WSConnector } from "./WSConnector";
 import { ProtoCreator } from "./ProtoHelper";
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 var ConnectorType;
 (function (ConnectorType) {
     ConnectorType[ConnectorType["GS"] = 0] = "GS";
@@ -50,4 +50,3 @@ export class Connector {
 }
 Connector.ConnectorType = ConnectorType;
 Connector.PING_INTERVAL = 10000;
-//# sourceMappingURL=Connector.js.map

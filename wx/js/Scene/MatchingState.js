@@ -1,6 +1,6 @@
 import { UIManager } from "../UI/UIManager";
 import { Connector } from "../Net/Connector";
-import { Protos } from "../libs/protos";
+import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { SceneState } from "./SceneState";
 import { Debug } from "../Misc/Debug";
@@ -104,4 +104,3 @@ export class MatchingState extends SceneState {
         Connector.SendToCS(Protos.GC2CS_UpdatePlayerInfo, msg);
     }
 }
-//# sourceMappingURL=MatchingState.js.map

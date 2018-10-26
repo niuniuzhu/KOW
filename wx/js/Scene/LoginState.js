@@ -6,7 +6,7 @@ import { UIManager } from "../UI/UIManager";
 import { SceneState } from "./SceneState";
 import { SceneManager } from "./SceneManager";
 import { Defs } from "../Model/Defs";
-import { Debug } from "../Misc/Debug";
+import { Logger } from "../RC/Utils/Logger";
 export class LoginState extends SceneState {
     constructor(type) {
         super(type);
@@ -19,7 +19,7 @@ export class LoginState extends SceneState {
         register.sdk = sdk;
         let connector = new WSConnector();
         connector.onerror = () => this._ui.OnConnectToLSError(() => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
-        connector.onclose = () => RC.Logger.Log("connection closed.");
+        connector.onclose = () => Logger.Log("connection closed.");
         connector.onopen = () => {
             connector.Send(Protos.GC2LS_AskRegister, register, message => {
                 let resp = message;
@@ -35,7 +35,7 @@ export class LoginState extends SceneState {
         login.sdk = sdk;
         let connector = new WSConnector();
         connector.onerror = () => this._ui.OnConnectToLSError(() => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
-        connector.onclose = () => RC.Logger.Log("connection closed.");
+        connector.onclose = () => Logger.Log("connection closed.");
         connector.onopen = () => {
             connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
                 let resp = message;
@@ -48,7 +48,7 @@ export class LoginState extends SceneState {
         let connector = Connector.gsConnector;
         connector.onerror = () => this._ui.OnConnectToGSError();
         connector.onopen = () => {
-            Debug.Log("GS Connected");
+            Logger.Log("GS Connected");
             let askLogin = ProtoCreator.Q_GC2GS_AskLogin();
             askLogin.pwd = pwd;
             askLogin.sessionID = sessionID;
@@ -58,7 +58,7 @@ export class LoginState extends SceneState {
                 switch (resp.result) {
                     case Protos.GS2GC_LoginRet.EResult.Success:
                         if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
-                            Debug.Log("reconnect to battle");
+                            Logger.Log("reconnect to battle");
                         }
                         else {
                             SceneManager.ChangeState(SceneManager.State.Main);

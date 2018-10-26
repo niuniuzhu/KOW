@@ -3,6 +3,7 @@ import { MsgCenter } from "./MsgCenter";
 import * as Long from "../Libs/long";
 import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "./ProtoHelper";
+import { Logger } from "../RC/Utils/Logger";
 
 export class WSConnector {
 	public get connected(): boolean { return this._socket != null && this._socket.readyState == WebSocket.OPEN };
@@ -66,7 +67,7 @@ export class WSConnector {
 		transTarget: Protos.MsgOpts.TransTarget = Protos.MsgOpts.TransTarget.Undefine,
 		nsid: Long = Long.ZERO): void {
 		let opts = ProtoCreator.GetMsgOpts(message);
-		RC.Logger.Assert(opts != null, "invalid message options");
+		Logger.Assert(opts != null, "invalid message options");
 
 		if (transTarget != Protos.MsgOpts.TransTarget.Undefine) {
 			opts.flag |= 1 << 3; //mark as transpose
@@ -82,7 +83,7 @@ export class WSConnector {
 
 			if (rpcHandler != null) {
 				if (this._rpcHandlers.has(opts.pid))
-					RC.Logger.Warn("packet id collision!!");
+					Logger.Warn("packet id collision!!");
 				this._rpcHandlers.set(opts.pid, rpcHandler);
 			}
 		}
@@ -111,11 +112,11 @@ export class WSConnector {
 		let message = ProtoCreator.DecodeMsg(msgID, data, data.length - 4);
 		//检查第一个字段是否Protos.Packet类型
 		let opts = ProtoCreator.GetMsgOpts(message);
-		RC.Logger.Assert(opts != null, "invalid msg options");
+		Logger.Assert(opts != null, "invalid msg options");
 		//是否rpc消息
 		if ((opts.flag & (1 << Protos.MsgOpts.Flag.RESP)) > 0) {
 			let rcpHandler = this._rpcHandlers.get(opts.rpid);
-			RC.Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
+			Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
 			this._rpcHandlers.delete(opts.rpid);
 			rcpHandler(message);//调用回调函数
 		} else {
@@ -123,7 +124,7 @@ export class WSConnector {
 			if (handler != null)
 				handler(message);
 			else
-				RC.Logger.Warn(`invalid msg:${msgID}`);
+				Logger.Warn(`invalid msg:${msgID}`);
 		}
 	}
 

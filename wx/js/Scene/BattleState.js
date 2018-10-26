@@ -1,7 +1,7 @@
 import { SceneState } from "./SceneState";
 import { Connector } from "../Net/Connector";
 import { Protos } from "../Libs/protos";
-import { Debug } from "../Misc/Debug";
+import { Logger } from "../RC/Utils/Logger";
 export class LoginState extends SceneState {
     constructor(type) {
         super(type);
@@ -20,10 +20,10 @@ export class LoginState extends SceneState {
     }
     OnBattleStart(message) {
         let battleStart = message;
-        Debug.Log("battle start");
+        Logger.Log("battle start");
     }
     OnBattleEnd(message) {
         let battleStart = message;
-        Debug.Log("battle end");
+        Logger.Log("battle end");
     }
 }

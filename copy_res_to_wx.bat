@@ -1,0 +1,1 @@
+xcopy .\Client\bin\res .\wx\res /s/y

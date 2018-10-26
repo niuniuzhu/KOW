@@ -1,4 +1,5 @@
 import { BaseEvent } from "./BaseEvent";
+import { Queue } from "../RC/Collections/Index";
 
 export interface IEventCallback {
 	(e: BaseEvent): void;
@@ -6,7 +7,7 @@ export interface IEventCallback {
 
 export class EventManager {
 	private static readonly HANDLERS: { [key: number]: IEventCallback[] } = {};
-	private static readonly PENDING_LIST: RC.Collections.Queue<BaseEvent> = new RC.Collections.Queue<BaseEvent>();
+	private static readonly PENDING_LIST: Queue<BaseEvent> = new Queue<BaseEvent>();
 
 	public static AddListener(type: number, handler: IEventCallback): void {
 		let list = EventManager.HANDLERS[type];

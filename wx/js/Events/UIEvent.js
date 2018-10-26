@@ -1,4 +1,5 @@
 import { BaseEvent } from "./BaseEvent";
+import { Stack } from "../RC/Collections/Index";
 export class UIEvent extends BaseEvent {
     static Get() {
         if (UIEvent.POOL.size() > 0)
@@ -18,4 +19,4 @@ export class UIEvent extends BaseEvent {
     }
 }
 UIEvent.NETWORK_DISCONNECT = 10500;
-UIEvent.POOL = new RC.Collections.Stack();
+UIEvent.POOL = new Stack();

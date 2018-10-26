@@ -1,3 +1,4 @@
+import { Queue } from "../RC/Collections/Index";
 export class EventManager {
     static AddListener(type, handler) {
         let list = EventManager.HANDLERS[type];
@@ -35,4 +36,4 @@ export class EventManager {
     }
 }
 EventManager.HANDLERS = {};
-EventManager.PENDING_LIST = new RC.Collections.Queue();
+EventManager.PENDING_LIST = new Queue();

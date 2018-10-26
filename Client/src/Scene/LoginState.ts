@@ -7,7 +7,7 @@ import { UILogin } from "../UI/UILogin";
 import { SceneState } from "./SceneState";
 import { SceneManager } from "./SceneManager";
 import { Defs } from "../Model/Defs";
-import { Debug } from "../Misc/Debug";
+import { Logger } from "../RC/Utils/Logger";
 
 export class LoginState extends SceneState {
 	private readonly _ui: UILogin;
@@ -25,7 +25,7 @@ export class LoginState extends SceneState {
 
 		let connector = new WSConnector();
 		connector.onerror = () => this._ui.OnConnectToLSError(() => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
-		connector.onclose = () => RC.Logger.Log("connection closed.");
+		connector.onclose = () => Logger.Log("connection closed.");
 		connector.onopen = () => {
 			connector.Send(Protos.GC2LS_AskRegister, register, message => {
 				let resp: Protos.LS2GC_AskRegRet = <Protos.LS2GC_AskRegRet>message;
@@ -43,7 +43,7 @@ export class LoginState extends SceneState {
 
 		let connector = new WSConnector();
 		connector.onerror = () => this._ui.OnConnectToLSError(() => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
-		connector.onclose = () => RC.Logger.Log("connection closed.");
+		connector.onclose = () => Logger.Log("connection closed.");
 		connector.onopen = () => {
 			connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
 				let resp: Protos.LS2GC_AskLoginRet = <Protos.LS2GC_AskLoginRet>message;
@@ -57,7 +57,7 @@ export class LoginState extends SceneState {
 		let connector = Connector.gsConnector;
 		connector.onerror = () => this._ui.OnConnectToGSError();
 		connector.onopen = () => {
-			Debug.Log("GS Connected");
+			Logger.Log("GS Connected");
 			let askLogin = ProtoCreator.Q_GC2GS_AskLogin();
 			askLogin.pwd = pwd;
 			askLogin.sessionID = sessionID;
@@ -68,7 +68,7 @@ export class LoginState extends SceneState {
 					case Protos.GS2GC_LoginRet.EResult.Success:
 						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
 							//todo
-							Debug.Log("reconnect to battle");
+							Logger.Log("reconnect to battle");
 						}
 						else {
 							SceneManager.ChangeState(SceneManager.State.Main);

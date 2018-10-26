@@ -1,9 +1,9 @@
 import { SceneState } from "./SceneState";
 import { Connector } from "../Net/Connector";
 import { UIAlert } from "../UI/UIAlert";
-import { Debug } from "../Misc/Debug";
 import { Protos } from "../Libs/protos";
 import { SceneManager } from "./SceneManager";
+import { Logger } from "../RC/Utils/Logger";
 
 export class GlobalState extends SceneState {
 	constructor(type: number) {
@@ -14,12 +14,12 @@ export class GlobalState extends SceneState {
 	}
 
 	private HandleGSDisconnect(e: Event): void {
-		RC.Logger.Log("gs connection closed.");
+		Logger.Log("gs connection closed.");
 		UIAlert.Show("与服务器断开连接", () => SceneManager.ChangeState(SceneManager.State.Login, null, true), true);
 	}
 
 	private HandleKick(message: any): void {
-		Debug.Log("kick by server");
+		Logger.Log("kick by server");
 		let kick: Protos.GS2GC_Kick = <Protos.GS2GC_Kick>message;
 		switch (kick.reason) {
 			case Protos.CS2GS_KickGC.EReason.DuplicateLogin:

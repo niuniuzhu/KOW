@@ -3,7 +3,7 @@ import { UIManager } from "./UI/UIManager";
 import { SceneManager } from "./Scene/SceneManager";
 import { Connector } from "./Net/Connector";
 import { ProtoCreator } from "./Net/ProtoHelper";
-import { Debug } from "./Misc/Debug";
+import { Logger } from "./RC/Utils/Logger";
 
 export class Main {
 	private static _instance: Main;
@@ -22,7 +22,7 @@ export class Main {
 	}
 
 	private LoadDefs(): void {
-		Debug.Log("loading defs...");
+		Logger.Log("loading defs...");
 		Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, this.OnDefsLoadComplete), undefined, Laya.Loader.JSON);
 	}
 
@@ -33,7 +33,7 @@ export class Main {
 	}
 
 	private LoadUIRes(): void {
-		Debug.Log("loading res...");
+		Logger.Log("loading res...");
 		let preloads = Defs.GetPreloads();
 		let urls = [];
 		for (let u of preloads) {
@@ -60,7 +60,7 @@ export class Main {
 	}
 
 	private StartGame(): void {
-		Debug.Log("start game...");
+		Logger.Log("start game...");
 
 		ProtoCreator.Init();
 		Connector.Init();

@@ -1,4 +1,8 @@
+echo off
+echo generating for vscode
 dotnet bin/ProtoGenerator.dll ts ./ProtoFile ../../Client/src/Net/ProtoHelper.ts
-call pbjs -t static-module -w amd --dependency libs/protobufjs --force-long -o ..\..\Client\bin\libs\protos.js .\ProtoFile\*.proto
-call pbts -o ..\..\Client\src\libs\protos.d.ts ..\..\Client\bin\libs\protos.js --no-comments
-call pbjs -t static-module -w amd --no-comments --dependency libs/protobufjs --force-long -o ..\..\Client\bin\libs\protos.js .\ProtoFile\*.proto
+call pbjs -t static-module -w amd --dependency ./protobufjs --force-long -o ..\..\Client\bin\libs\protos.js .\ProtoFile\*.proto
+call pbts --no-comments -n -o ..\..\Client\src\libs\protos.d.ts ..\..\Client\bin\libs\protos.js
+
+echo generating for wx_mini
+call pbjs -t static-module -w es6 --es6 --no-comments --dependency protobufjs --force-long -o ..\..\wx\js\Libs\protos.js .\ProtoFile\*.proto

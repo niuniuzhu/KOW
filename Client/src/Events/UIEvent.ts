@@ -1,10 +1,11 @@
 import { BaseEvent } from "./BaseEvent";
+import { Stack } from "../RC/Collections/Index";
 
 export class UIEvent extends BaseEvent {
 
 	public static readonly NETWORK_DISCONNECT: number = 10500;
 
-	private static readonly POOL: RC.Collections.Stack<UIEvent> = new RC.Collections.Stack<UIEvent>();
+	private static readonly POOL: Stack<UIEvent> = new Stack<UIEvent>();
 
 	private static Get(): UIEvent {
 		if (UIEvent.POOL.size() > 0)

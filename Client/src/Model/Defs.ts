@@ -1,3 +1,5 @@
+import { Hashtable } from "../RC/Utils/Hashtable";
+
 type pair = { [k: string]: any };
 
 export class Defs {
@@ -8,11 +10,11 @@ export class Defs {
 
 	public static Init(json: JSON) {
 		Defs._defs = json;
-		Defs._config = RC.Utils.Hashtable.GetMap(Defs._defs, "config");
+		Defs._config = Hashtable.GetMap(Defs._defs, "config");
 	}
 
 	public static GetPreloads(): string[] {
-		let arr = RC.Utils.Hashtable.GetArray(Defs._defs, "preloads");
+		let arr = Hashtable.GetArray(Defs._defs, "preloads");
 		return arr;
 	}
 }

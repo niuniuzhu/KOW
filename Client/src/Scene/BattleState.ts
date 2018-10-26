@@ -1,7 +1,7 @@
 import { SceneState } from "./SceneState";
 import { Connector } from "../Net/Connector";
 import { Protos } from "../Libs/protos";
-import { Debug } from "../Misc/Debug";
+import { Logger } from "../RC/Utils/Logger";
 
 export class LoginState extends SceneState {
     constructor(type: number) {
@@ -25,11 +25,11 @@ export class LoginState extends SceneState {
     
     private OnBattleStart(message: any):void{
         let battleStart: Protos.BS2GC_BattleStart = <Protos.BS2GC_BattleStart>message;
-        Debug.Log("battle start");
+        Logger.Log("battle start");
     }
     
     private OnBattleEnd(message: any):void{
         let battleStart: Protos.BS2GC_BattleStart = <Protos.BS2GC_BattleStart>message;
-        Debug.Log("battle end");
+        Logger.Log("battle end");
     }
 }

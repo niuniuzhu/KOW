@@ -3,6 +3,7 @@ import { MsgCenter } from "./MsgCenter";
 import * as Long from "../Libs/long";
 import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "./ProtoHelper";
+import { Logger } from "../RC/Utils/Logger";
 export class WSConnector {
     constructor() {
         this._pid = 0;
@@ -48,7 +49,7 @@ export class WSConnector {
     }
     Send(msgType, message, rpcHandler = null, transTarget = Protos.MsgOpts.TransTarget.Undefine, nsid = Long.ZERO) {
         let opts = ProtoCreator.GetMsgOpts(message);
-        RC.Logger.Assert(opts != null, "invalid message options");
+        Logger.Assert(opts != null, "invalid message options");
         if (transTarget != Protos.MsgOpts.TransTarget.Undefine) {
             opts.flag |= 1 << 3;
             opts.flag |= 1 << (3 + transTarget);
@@ -60,7 +61,7 @@ export class WSConnector {
                 opts.transid = nsid;
             if (rpcHandler != null) {
                 if (this._rpcHandlers.has(opts.pid))
-                    RC.Logger.Warn("packet id collision!!");
+                    Logger.Warn("packet id collision!!");
                 this._rpcHandlers.set(opts.pid, rpcHandler);
             }
         }
@@ -82,10 +83,10 @@ export class WSConnector {
         data.copyWithin(0, 4);
         let message = ProtoCreator.DecodeMsg(msgID, data, data.length - 4);
         let opts = ProtoCreator.GetMsgOpts(message);
-        RC.Logger.Assert(opts != null, "invalid msg options");
+        Logger.Assert(opts != null, "invalid msg options");
         if ((opts.flag & (1 << Protos.MsgOpts.Flag.RESP)) > 0) {
             let rcpHandler = this._rpcHandlers.get(opts.rpid);
-            RC.Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
+            Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
             this._rpcHandlers.delete(opts.rpid);
             rcpHandler(message);
         }
@@ -94,7 +95,7 @@ export class WSConnector {
             if (handler != null)
                 handler(message);
             else
-                RC.Logger.Warn(`invalid msg:${msgID}`);
+                Logger.Warn(`invalid msg:${msgID}`);
         }
     }
     Update(dt) {

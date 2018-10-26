@@ -9,7 +9,7 @@
 		"memberNamePrefix":"_",
 		"packageName":""
 	},
-	"compressDesc":true,
+	"compressDesc":false,
 	"fileExtension":"fui",
 	"packageCount":2,
 	"path":"D:\\Projects\\kow\\Client\\bin\\res\\ui"

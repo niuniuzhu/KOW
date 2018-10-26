@@ -23,9 +23,8 @@
     </group>
   </displayList>
   <transition name="t0">
-    <item time="0" type="Alpha" target="n0_ktvv" tween="true" startValue="0" endValue="1" duration="24"/>
-    <item time="24" type="Alpha" target="n0_ktvv" tween="true" startValue="1" endValue="1" duration="30"/>
-    <item time="54" type="Alpha" target="n0_ktvv" tween="true" startValue="1" endValue="0" duration="18"/>
+    <item time="0" type="Alpha" target="n10_v43z" tween="true" startValue="0" endValue="1" duration="36"/>
+    <item time="36" type="Alpha" target="n10_v43z" tween="true" startValue="1"/>
   </transition>
   <transition name="t1">
     <item time="0" type="Alpha" target="n9_z78x" tween="true" startValue="0" endValue="1" duration="6"/>

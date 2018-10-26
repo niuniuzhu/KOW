@@ -4776,22 +4776,22 @@ define("Main", ["require", "exports", "UI/UIManager", "Scene/SceneManager", "Net
                 logoRoot.name = "logoRoot";
                 fairygui.GRoot.inst.addChild(logoRoot);
                 logoRoot.getTransition("t0").play(new laya.utils.Handler(this, () => {
-                    logoRoot.getTransition("t1").play(new laya.utils.Handler(this, () => {
-                        this._aniComplete = true;
-                        this.CheckReady();
-                    }), 1, 0, 0, -1);
+                    this._fadeInComplete = true;
+                    this.CheckPreloadComplete();
                 }), 1, 0, 0, -1);
                 Preloader_1.Preloader.Load(() => {
                     this._preloadComplete = true;
-                    this.CheckReady();
+                    this.CheckPreloadComplete();
                 });
             }));
         }
-        CheckReady() {
-            if (this._aniComplete && this._preloadComplete) {
-                let logoRoot = fairygui.GRoot.inst.getChild("logoRoot");
-                logoRoot.dispose();
-                this.StartGame();
+        CheckPreloadComplete() {
+            if (this._fadeInComplete && this._preloadComplete) {
+                let logoRoot = fairygui.GRoot.inst.getChild("logoRoot").asCom;
+                logoRoot.getTransition("t1").play(new laya.utils.Handler(this, () => {
+                    logoRoot.dispose();
+                    this.StartGame();
+                }), 1, 0, 0, -1);
             }
         }
         StartGame() {

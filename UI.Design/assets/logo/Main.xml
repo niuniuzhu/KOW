@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1280,720">
+  <displayList>
+    <graph id="n0_p7qk" name="n0" xy="0,0" size="1280,720" type="rect" lineSize="0" fillColor="#ff000000"/>
+    <image id="n1_p7qk" name="n1" src="p7qk0" fileName="assets/bjtu.png" xy="155,114" alpha="0"/>
+    <component id="n4_p7qk" name="n4" src="p7qk3" fileName="loading.xml" xy="580,511" filter="color" filterData="0.00,-1.00,0.00,0.00" customData="0&#xD;"/>
+    <component id="n7_p7qk" name="n7" src="p7qk5" fileName="loading2.xml" xy="580,511" alpha="0" blend="add" filter="color" filterData="0.00,-1.00,0.00,0.00"/>
+  </displayList>
+  <transition name="t0">
+    <item time="0" type="Alpha" target="n1_p7qk" tween="true" startValue="0" endValue="1" duration="48" ease="Cubic.Out"/>
+    <item time="0" type="Alpha" target="n4_p7qk" tween="true" startValue="0" endValue="1" duration="48" ease="Cubic.Out"/>
+    <item time="0" type="Alpha" target="n7_p7qk" tween="true" startValue="0" endValue="1" duration="48" ease="Cubic.Out"/>
+    <item time="90" type="Alpha" target="n1_p7qk" value="1"/>
+  </transition>
+  <transition name="t1">
+    <item time="0" type="Alpha" target="n7_p7qk" tween="true" startValue="1" endValue="0" duration="27" ease="Linear"/>
+    <item time="0" type="Alpha" target="n4_p7qk" tween="true" startValue="1" endValue="0" duration="27" ease="Linear"/>
+    <item time="0" type="Alpha" target="n1_p7qk" tween="true" startValue="1" endValue="0" duration="27" ease="Linear"/>
+    <item time="42" type="Alpha" target="n1_p7qk" value="0"/>
+  </transition>
+</component>

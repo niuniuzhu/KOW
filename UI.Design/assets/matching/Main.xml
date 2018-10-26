@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="1280,720" designImage="ui://dvbmzwcpz78x4" designImageLayer="1">
+<component size="1280,720" designImageLayer="1">
   <displayList>
-    <image id="n0_z78x" name="n0" src="z78x1" fileName="assets/bg02.png" xy="0,0"/>
+    <image id="n0_z78x" name="n0" src="v43z5" fileName="assets/bj02.png" xy="0,0" size="1280,720"/>
     <image id="n1_z78x" name="n1" src="z78x3" fileName="assets/vsbg.png" xy="195,322"/>
     <image id="n2_z78x" name="n2" src="z78x2" fileName="assets/vs.png" xy="523,320"/>
     <image id="n3_z78x" name="n3" src="ktvva" fileName="assets/touxiangkuang.png" pkg="c7x5i49r" xy="485,126"/>

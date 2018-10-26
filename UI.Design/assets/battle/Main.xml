@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1280,720" designImage="ui://0ukkx0atv43z1a">
+  <displayList>
+    <component id="n6_p7qk" name="n6" src="p7qk1l" fileName="assets/layer_battle.xml" xy="640,360"/>
+    <component id="n0_v43z" name="n0" src="v43z1e" fileName="skillBtn.xml" xy="1033,558" group="n7_p7qk"/>
+    <component id="n1_v43z" name="n1" src="v43z1f" fileName="skillBtn2.xml" xy="1126,414" group="n7_p7qk"/>
+    <image id="n2_v43z" name="n2" src="v43zt" fileName="assets/shizhong.png" xy="14,107" group="n7_p7qk"/>
+    <component id="n3_p7qk" name="joystick" src="p7qk1g" fileName="Joystick.xml" xy="31,501" group="n7_p7qk" visible="false"/>
+    <image id="n4_p7qk" name="n4" src="v43z15" fileName="assets/xin.png" xy="23,31" group="n7_p7qk"/>
+    <component id="n5_p7qk" name="n5" src="p7qk1j" fileName="hp_bar.xml" xy="83,36" group="n7_p7qk">
+      <ProgressBar value="50" max="100"/>
+    </component>
+    <group id="n7_p7qk" name="n7" xy="14,31" size="1222,670"/>
+  </displayList>
+</component>

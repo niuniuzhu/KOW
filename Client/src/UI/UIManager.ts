@@ -14,8 +14,6 @@ export class UIManager {
 	public static get matching(): UIMatching { return UIManager._matching; }
 
 	public static Init(): void {
-		Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
-
 		fairygui.UIPackage.addPackage("res/ui/global");
 		fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
 		fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="1280,720" designImage="ui://kz9a1uy9ktvv3" designImageLayer="1">
-  <controller name="c1" pages="0,,1," selected="1"/>
+<component size="1280,720" designImageLayer="1">
+  <controller name="c1" pages="0,,1," selected="0"/>
   <displayList>
     <graph id="n1_ktvv" name="n1" xy="0,0" size="1280,720" type="rect" lineSize="0" fillColor="#ff000000"/>
-    <image id="n2_ktvv" name="n2" src="ktvv4" fileName="assets/bg01.png" xy="0,0" alpha="0.03"/>
-    <image id="n0_ktvv" name="n0" src="ktvv2" fileName="assets/01健康游戏忠告（暂定）.jpg" xy="0,0" alpha="0">
+    <image id="n10_v43z" name="n10" src="v43zd" fileName="assets/bj01.png" xy="0,0" size="1280,720"/>
+    <image id="n11_v43z" name="n11" src="v43zc" fileName="assets/bg01a.png" xy="0,378"/>
+    <image id="n0_ktvv" name="n0" src="v43ze" fileName="assets/bjtu.png" xy="155,205" alpha="0">
       <gearDisplay controller="c1" pages="0"/>
     </image>
     <component id="n3_ktvv" name="n3" src="ktvv2w" fileName="coms/btn1.xml" pkg="c7x5i49r" xy="546,249" group="n9_z78x">
@@ -22,7 +23,6 @@
     </group>
   </displayList>
   <transition name="t0">
-    <item time="0" type="Alpha" target="n2_ktvv" tween="true" startValue="0" endValue="1" duration="24"/>
     <item time="0" type="Alpha" target="n0_ktvv" tween="true" startValue="0" endValue="1" duration="24"/>
     <item time="24" type="Alpha" target="n0_ktvv" tween="true" startValue="1" endValue="1" duration="30"/>
     <item time="54" type="Alpha" target="n0_ktvv" tween="true" startValue="1" endValue="0" duration="18"/>

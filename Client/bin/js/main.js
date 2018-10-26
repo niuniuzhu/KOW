@@ -4685,7 +4685,6 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIM
         static get main() { return UIManager._main; }
         static get matching() { return UIManager._matching; }
         static Init() {
-            Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
             fairygui.UIPackage.addPackage("res/ui/global");
             fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
             fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
@@ -4711,31 +4710,20 @@ define("UI/UIManager", ["require", "exports", "UI/UILogin", "UI/UIMain", "UI/UIM
     }
     exports.UIManager = UIManager;
 });
-define("Main", ["require", "exports", "Model/Defs", "UI/UIManager", "Scene/SceneManager", "Net/Connector", "Net/ProtoHelper", "RC/Utils/Logger"], function (require, exports, Defs_2, UIManager_4, SceneManager_6, Connector_4, ProtoHelper_5, Logger_5) {
+define("Preloader", ["require", "exports", "RC/Utils/Logger", "Model/Defs"], function (require, exports, Logger_5, Defs_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class Main {
-        static get instance() { return Main._instance; }
-        constructor() {
-            Main._instance = this;
-            Laya.MiniAdpter.init();
-            Laya.init(1280, 720);
-            Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
-            Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
-            Laya.stage.alignV = Laya.Stage.ALIGN_TOP;
-            Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
-            this.LoadDefs();
-        }
-        LoadDefs() {
+    class Preloader {
+        static get complete() { return this._complete; }
+        static Load(completeHandler) {
             Logger_5.Logger.Log("loading defs...");
-            Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, this.OnDefsLoadComplete), undefined, Laya.Loader.JSON);
+            Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, () => {
+                let json = Laya.loader.getRes("res/defs/b_defs.json");
+                Defs_2.Defs.Init(json);
+                this.LoadUIRes(completeHandler);
+            }), undefined, Laya.Loader.JSON);
         }
-        OnDefsLoadComplete() {
-            let json = Laya.loader.getRes("res/defs/b_defs.json");
-            Defs_2.Defs.Init(json);
-            this.LoadUIRes();
-        }
-        LoadUIRes() {
+        static LoadUIRes(completeHandler) {
             Logger_5.Logger.Log("loading res...");
             let preloads = Defs_2.Defs.GetPreloads();
             let urls = [];
@@ -4755,13 +4743,59 @@ define("Main", ["require", "exports", "Model/Defs", "UI/UIManager", "Scene/Scene
                 }
                 urls.push({ url: "res/ui/" + ss[0], type: loadType });
             }
-            Laya.loader.load(urls, Laya.Handler.create(this, this.OnUIResLoadComplete));
+            Laya.loader.load(urls, Laya.Handler.create(this, completeHandler));
         }
-        OnUIResLoadComplete() {
-            this.StartGame();
+    }
+    Preloader._complete = false;
+    exports.Preloader = Preloader;
+});
+define("Main", ["require", "exports", "UI/UIManager", "Scene/SceneManager", "Net/Connector", "Net/ProtoHelper", "RC/Utils/Logger", "Preloader"], function (require, exports, UIManager_4, SceneManager_6, Connector_4, ProtoHelper_5, Logger_6, Preloader_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Main {
+        static get instance() { return Main._instance; }
+        constructor() {
+            Main._instance = this;
+            Laya.MiniAdpter.init();
+            Laya.init(1280, 720);
+            Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
+            Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
+            Laya.stage.alignV = Laya.Stage.ALIGN_TOP;
+            Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
+            fairygui.UIConfig.packageFileExtension = "bin";
+            this.ShowLogo();
+        }
+        ShowLogo() {
+            let urls = [];
+            urls.push({ url: "res/ui/logo.bin", type: Laya.Loader.BUFFER });
+            urls.push({ url: "res/ui/logo_atlas0.png", type: Laya.Loader.IMAGE });
+            Laya.loader.load(urls, Laya.Handler.create(this, () => {
+                Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
+                fairygui.UIPackage.addPackage("res/ui/logo");
+                let logoRoot = fairygui.UIPackage.createObject("logo", "Main").asCom;
+                logoRoot.name = "logoRoot";
+                fairygui.GRoot.inst.addChild(logoRoot);
+                logoRoot.getTransition("t0").play(new laya.utils.Handler(this, () => {
+                    logoRoot.getTransition("t1").play(new laya.utils.Handler(this, () => {
+                        this._aniComplete = true;
+                        this.CheckReady();
+                    }), 1, 0, 0, -1);
+                }), 1, 0, 0, -1);
+                Preloader_1.Preloader.Load(() => {
+                    this._preloadComplete = true;
+                    this.CheckReady();
+                });
+            }));
+        }
+        CheckReady() {
+            if (this._aniComplete && this._preloadComplete) {
+                let logoRoot = fairygui.GRoot.inst.getChild("logoRoot");
+                logoRoot.dispose();
+                this.StartGame();
+            }
         }
         StartGame() {
-            Logger_5.Logger.Log("start game...");
+            Logger_6.Logger.Log("start game...");
             ProtoHelper_5.ProtoCreator.Init();
             Connector_4.Connector.Init();
             UIManager_4.UIManager.Init();
@@ -8764,7 +8798,7 @@ define("RC/Utils/Timer", ["require", "exports"], function (require, exports) {
     }
     exports.Timer = Timer;
 });
-define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Connector", "../Libs/protos", "RC/Utils/Logger"], function (require, exports, SceneState_5, Connector_5, protos_9, Logger_6) {
+define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Connector", "../Libs/protos", "RC/Utils/Logger"], function (require, exports, SceneState_5, Connector_5, protos_9, Logger_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoginState extends SceneState_5.SceneState {
@@ -8785,11 +8819,11 @@ define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Conn
         }
         OnBattleStart(message) {
             let battleStart = message;
-            Logger_6.Logger.Log("battle start");
+            Logger_7.Logger.Log("battle start");
         }
         OnBattleEnd(message) {
             let battleStart = message;
-            Logger_6.Logger.Log("battle end");
+            Logger_7.Logger.Log("battle end");
         }
     }
     exports.LoginState = LoginState;

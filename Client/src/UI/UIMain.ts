@@ -13,6 +13,7 @@ export class UIMain implements IUIModule {
 	}
 
 	public Dispose(): void {
+		this._root.dispose();
 	}
 
 	public Enter(param: any): void {

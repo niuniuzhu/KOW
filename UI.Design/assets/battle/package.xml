@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <packageDescription id="0ukkx0at" jpegQuality="80" compressPNG="true">
   <resources>
-    <component id="v43z0" name="Main.xml" path="/"/>
+    <component id="v43z0" name="Main.xml" path="/" exported="true"/>
     <image id="v43z1" name="bujibao.png" path="/assets/"/>
     <image id="v43z2" name="dazhao.png" path="/assets/"/>
     <image id="v43z3" name="dazhaodutiao.png" path="/assets/"/>

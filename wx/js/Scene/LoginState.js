@@ -18,7 +18,7 @@ export class LoginState extends SceneState {
         register.platform = platform;
         register.sdk = sdk;
         let connector = new WSConnector();
-        connector.onerror = () => this._ui.OnConnectToLSError(() => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
+        connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
         connector.onclose = () => Logger.Log("connection closed.");
         connector.onopen = () => {
             connector.Send(Protos.GC2LS_AskRegister, register, message => {
@@ -34,7 +34,7 @@ export class LoginState extends SceneState {
         login.platform = platform;
         login.sdk = sdk;
         let connector = new WSConnector();
-        connector.onerror = () => this._ui.OnConnectToLSError(() => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
+        connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
         connector.onclose = () => Logger.Log("connection closed.");
         connector.onopen = () => {
             connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {

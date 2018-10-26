@@ -1,4 +1,3 @@
-import { Defs } from "./Model/Defs";
 import { UIManager } from "./UI/UIManager";
 import { SceneManager } from "./Scene/SceneManager";
 import { Connector } from "./Net/Connector";
@@ -18,8 +17,8 @@ export class Main {
 		Laya.MiniAdpter.init();
 		Laya.init(1280, 720);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
-		Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
-		Laya.stage.alignV = Laya.Stage.ALIGN_TOP;
+		Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
+		Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
 		Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
 		// laya.utils.Stat.show(0, 0);
 
@@ -37,6 +36,8 @@ export class Main {
 			fairygui.UIPackage.addPackage("res/ui/logo");
 			let logoRoot = fairygui.UIPackage.createObject("logo", "Main").asCom;
 			logoRoot.name = "logoRoot";
+			logoRoot.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
+			logoRoot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
 			fairygui.GRoot.inst.addChild(logoRoot);
 
 			logoRoot.getTransition("t0").play(new laya.utils.Handler(this, () => {

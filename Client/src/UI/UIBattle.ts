@@ -10,6 +10,8 @@ export class UIBattle implements IUIModule  {
 		this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
 		this._root.getChild("n0").onClick(this, this.OnSkillBtnClick);
 		this._root.getChild("n1").onClick(this, this.OnSkill2BtnClick);
+		this._root.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
+		this._root.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
 	}
 
 	public Dispose(): void {

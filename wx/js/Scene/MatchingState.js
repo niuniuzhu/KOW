@@ -4,6 +4,7 @@ import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { SceneState } from "./SceneState";
 import { Logger } from "../RC/Utils/Logger";
+import { SceneManager } from "./SceneManager";
 export class MatchingState extends SceneState {
     constructor(type) {
         super(type);
@@ -68,6 +69,11 @@ export class MatchingState extends SceneState {
                 connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
                     let resp = message;
                     this._ui.OnLoginBSResut(resp.result);
+                    switch (resp.result) {
+                        case Protos.BS2GC_LoginRet.EResult.Success:
+                            SceneManager.ChangeState(SceneManager.State.Battle);
+                            break;
+                    }
                 });
             };
             connector.Connect(enterBattle.ip, enterBattle.port);

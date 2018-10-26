@@ -1,8 +1,9 @@
 import { FSM } from "../FSM/FSM";
-import { LoginState } from "./LoginState";
-import { MatchingState } from "./MatchingState";
 import { MainState } from "./MainState";
+import { LoginState } from "./LoginState";
 import { GlobalState } from "./GlobalState";
+import { MatchingState } from "./MatchingState";
+import { BattleState } from "./BattleState";
 var State;
 (function (State) {
     State[State["Global"] = 0] = "Global";
@@ -18,11 +19,13 @@ export class SceneManager {
         this._main = new MainState(State.Main);
         this._login = new LoginState(State.Login);
         this._matching = new MatchingState(State.Matching);
+        this._battle = new BattleState(State.Battle);
         this.fsm = new FSM();
         this.fsm.globalState = new GlobalState(State.Global);
         this.fsm.AddState(this._main);
         this.fsm.AddState(this._login);
         this.fsm.AddState(this._matching);
+        this.fsm.AddState(this._battle);
     }
     static ChangeState(state, param = null, force = false) {
         this.fsm.ChangeState(state, param, force);

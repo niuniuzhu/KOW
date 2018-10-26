@@ -129,8 +129,8 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		}
 	}
 
-	public OnConnectToLSError(confirmCallback: () => void): void {
-		UIAlert.Show("无法连接服务器", confirmCallback);
+	public OnConnectToLSError(e:Event, confirmCallback: () => void): void {
+		UIAlert.Show("无法连接服务器[" + e.toString() + "]", confirmCallback);
 	}
 
 	private HandleLoginLSSuccess(loginResult: Protos.LS2GC_AskLoginRet): void {

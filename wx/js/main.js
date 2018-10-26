@@ -1,9 +1,9 @@
-import { Defs } from "./Model/Defs";
 import { UIManager } from "./UI/UIManager";
 import { SceneManager } from "./Scene/SceneManager";
 import { Connector } from "./Net/Connector";
 import { ProtoCreator } from "./Net/ProtoHelper";
 import { Logger } from "./RC/Utils/Logger";
+import { Preloader } from "./Preloader";
 export class Main {
     static get instance() { return Main._instance; }
     constructor() {
@@ -11,44 +11,42 @@ export class Main {
         Laya.MiniAdpter.init();
         Laya.init(1280, 720);
         Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
-        Laya.stage.alignH = Laya.Stage.ALIGN_LEFT;
-        Laya.stage.alignV = Laya.Stage.ALIGN_TOP;
+        Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
+        Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
         Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
-        this.LoadDefs();
+        fairygui.UIConfig.packageFileExtension = "bin";
+        this.ShowLogo();
     }
-    LoadDefs() {
-        Logger.Log("loading defs...");
-        Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, this.OnDefsLoadComplete), undefined, Laya.Loader.JSON);
-    }
-    OnDefsLoadComplete() {
-        let json = Laya.loader.getRes("res/defs/b_defs.json");
-        Defs.Init(json);
-        this.LoadUIRes();
-    }
-    LoadUIRes() {
-        Logger.Log("loading res...");
-        let preloads = Defs.GetPreloads();
+    ShowLogo() {
         let urls = [];
-        for (let u of preloads) {
-            let ss = u.split(",");
-            let loadType;
-            switch (ss[1]) {
-                case "1":
-                    loadType = Laya.Loader.IMAGE;
-                    break;
-                case "2":
-                    loadType = Laya.Loader.SOUND;
-                    break;
-                default:
-                    loadType = Laya.Loader.BUFFER;
-                    break;
-            }
-            urls.push({ url: "res/ui/" + ss[0], type: loadType });
-        }
-        Laya.loader.load(urls, Laya.Handler.create(this, this.OnUIResLoadComplete));
+        urls.push({ url: "res/ui/logo.bin", type: Laya.Loader.BUFFER });
+        urls.push({ url: "res/ui/logo_atlas0.png", type: Laya.Loader.IMAGE });
+        Laya.loader.load(urls, Laya.Handler.create(this, () => {
+            Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
+            fairygui.UIPackage.addPackage("res/ui/logo");
+            let logoRoot = fairygui.UIPackage.createObject("logo", "Main").asCom;
+            logoRoot.name = "logoRoot";
+            logoRoot.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
+            logoRoot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
+            fairygui.GRoot.inst.addChild(logoRoot);
+            logoRoot.getTransition("t0").play(new laya.utils.Handler(this, () => {
+                this._fadeInComplete = true;
+                this.CheckPreloadComplete();
+            }), 1, 0, 0, -1);
+            Preloader.Load(() => {
+                this._preloadComplete = true;
+                this.CheckPreloadComplete();
+            });
+        }));
     }
-    OnUIResLoadComplete() {
-        this.StartGame();
+    CheckPreloadComplete() {
+        if (this._fadeInComplete && this._preloadComplete) {
+            let logoRoot = fairygui.GRoot.inst.getChild("logoRoot").asCom;
+            logoRoot.getTransition("t1").play(new laya.utils.Handler(this, () => {
+                logoRoot.dispose();
+                this.StartGame();
+            }), 1, 0, 0, -1);
+        }
     }
     StartGame() {
         Logger.Log("start game...");

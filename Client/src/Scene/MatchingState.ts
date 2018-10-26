@@ -5,6 +5,7 @@ import { ProtoCreator } from "../Net/ProtoHelper";
 import { SceneState } from "./SceneState";
 import { UIMatching } from "../UI/UIMatching";
 import { Logger } from "../RC/Utils/Logger";
+import { SceneManager } from "./SceneManager";
 
 export class MatchingState extends SceneState {
 	private readonly _ui: UIMatching;
@@ -88,6 +89,11 @@ export class MatchingState extends SceneState {
 				connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
 					let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
 					this._ui.OnLoginBSResut(resp.result);
+					switch (resp.result) {
+						case Protos.BS2GC_LoginRet.EResult.Success:
+							SceneManager.ChangeState(SceneManager.State.Battle);
+							break;
+					}
 				});
 			}
 			//todo 这里最好用kcp连接

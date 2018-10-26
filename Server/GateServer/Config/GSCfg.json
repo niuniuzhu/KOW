@@ -1,7 +1,7 @@
 {
     "gsID": 30001,
     "name": "local",
-    "externalIP": "127.0.0.1",
+    "externalIP": "192.168.0.108",
     "externalPort": 30001,
     "password": "123456",
     "maxConnection": 10000,

@@ -61,15 +61,15 @@ namespace BattleServer.Battle
 
 			Logger.Log( $"battle:{battle.id} created" );
 
-			Protos.BS2CS_BattleStart toCSBattleStart = ProtoCreator.Q_BS2CS_BattleStart();
-			toCSBattleStart.Bid = battle.id;
-			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, toCSBattleStart, msgRet =>
-			{
-				//通知GC战场开始
-				Protos.BS2GC_BattleStart toGCBattleStart = ProtoCreator.Q_BS2GC_BattleStart();
-				toGCBattleStart.Id = battle.id;
-				battle.Broadcast( toGCBattleStart );
-			} );
+			//Protos.BS2CS_BattleStart toCSBattleStart = ProtoCreator.Q_BS2CS_BattleStart();
+			//toCSBattleStart.Bid = battle.id;
+			//BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, toCSBattleStart, msgRet =>
+			//{
+			//	//通知GC战场开始
+			//	Protos.BS2GC_BattleStart toGCBattleStart = ProtoCreator.Q_BS2GC_BattleStart();
+			//	toGCBattleStart.Id = battle.id;
+			//	battle.Broadcast( toGCBattleStart );
+			//} );
 			return battle.id;
 		}
 

@@ -5,8 +5,11 @@ export class UIMain {
         fairygui.UIPackage.addPackage("res/ui/main");
         this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
         this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
+        this._root.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
+        this._root.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
     }
     Dispose() {
+        this._root.dispose();
     }
     Enter(param) {
         fairygui.GRoot.inst.addChild(this._root);

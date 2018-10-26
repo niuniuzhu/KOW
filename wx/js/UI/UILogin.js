@@ -106,8 +106,8 @@ export class UILogin extends fairygui.Window {
                 break;
         }
     }
-    OnConnectToLSError(confirmCallback) {
-        UIAlert.Show("无法连接服务器", confirmCallback);
+    OnConnectToLSError(e, confirmCallback) {
+        UIAlert.Show("无法连接服务器[" + e.toString() + "]", confirmCallback);
     }
     HandleLoginLSSuccess(loginResult) {
         this._areaList.removeChildrenToPool();

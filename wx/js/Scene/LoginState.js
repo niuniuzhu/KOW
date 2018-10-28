@@ -39,6 +39,7 @@ export class LoginState extends SceneState {
         connector.onopen = () => {
             connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
                 let resp = message;
+                Logger.Log("gcNID:" + resp.sessionID);
                 this._ui.OnLoginResut(resp);
             });
         };

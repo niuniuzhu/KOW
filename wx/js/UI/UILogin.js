@@ -63,7 +63,7 @@ export class UILogin extends fairygui.Window {
         let item = this._areaList.getChildAt(this._areaList.selectedIndex);
         let data = item.data["data"];
         this.showModalWait();
-        SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["sid"]);
+        SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
     }
     OnAreaClick() {
     }
@@ -116,7 +116,7 @@ export class UILogin extends fairygui.Window {
             let gsInfo = loginResult.gsInfos[i];
             let item = this._areaList.addItemFromPool().asButton;
             item.title = gsInfo.name;
-            item.data = { "data": gsInfo, "sid": loginResult.sessionID };
+            item.data = { "data": gsInfo, "gcNID": loginResult.sessionID };
         }
         if (count > 0)
             this._areaList.selectedIndex = 0;

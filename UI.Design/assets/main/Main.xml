@@ -21,15 +21,14 @@
     <group id="n12_p3fq" name="n12" xy="68,38" size="322,96" group="n9_z78x" advanced="true">
       <relation target="" sidePair="left-left,top-top"/>
     </group>
-    <component id="n3_ktvv" name="n3" src="ktvv2w" fileName="coms/btn1.xml" pkg="c7x5i49r" xy="546,229" group="n13_p3fq">
+    <component id="n3_ktvv" name="n3" src="ktvv2w" fileName="coms/btn1.xml" pkg="c7x5i49r" xy="546,229" group="n9_z78x">
+      <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://kz9a1uy9ktvv7"/>
     </component>
-    <component id="n4_ktvv" name="n4" src="ktvv2w" fileName="coms/btn1.xml" pkg="c7x5i49r" xy="545,425" group="n13_p3fq">
+    <component id="n4_ktvv" name="n4" src="ktvv2w" fileName="coms/btn1.xml" pkg="c7x5i49r" xy="545,425" group="n9_z78x">
+      <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://kz9a1uy9ktvvb"/>
     </component>
-    <group id="n13_p3fq" name="n13" xy="545,229" size="188,261" group="n9_z78x" advanced="true">
-      <relation target="" sidePair="center-center,middle-middle"/>
-    </group>
     <group id="n9_z78x" name="n9" xy="68,38" size="1144,452" advanced="true">
       <gearDisplay controller="c1" pages="1"/>
     </group>

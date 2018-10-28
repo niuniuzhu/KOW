@@ -4,6 +4,8 @@ import { Connector } from "./Net/Connector";
 import { ProtoCreator } from "./Net/ProtoHelper";
 import { Logger } from "./RC/Utils/Logger";
 import { Preloader } from "./Preloader";
+import * as $protobuf from "./Libs/protobufjs";
+import * as Long from "./Libs/long";
 export class Main {
     static get instance() { return Main._instance; }
     constructor() {
@@ -50,6 +52,10 @@ export class Main {
     }
     StartGame() {
         Logger.Log("start game...");
+        if (typeof wx !== "undefined") {
+            $protobuf.util.Long = Long.default.prototype.constructor;
+            $protobuf.configure();
+        }
         ProtoCreator.Init();
         Connector.Init();
         UIManager.Init();

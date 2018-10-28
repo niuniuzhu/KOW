@@ -139,9 +139,9 @@ define("UI/UIMain", ["require", "exports", "Scene/SceneManager"], function (requ
         constructor() {
             fairygui.UIPackage.addPackage("res/ui/main");
             this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
-            this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
             this._root.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
             this._root.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
+            this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
         }
         Dispose() {
             this._root.dispose();
@@ -1452,7 +1452,7 @@ define("RC/Utils/Logger", ["require", "exports"], function (require, exports) {
     }
     exports.Logger = Logger;
 });
-define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter", "../Libs/long", "../Libs/protos", "Net/ProtoHelper", "RC/Utils/Logger"], function (require, exports, ByteUtils_1, MsgCenter_1, Long, protos_2, ProtoHelper_1, Logger_1) {
+define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter", "../Libs/protos", "Net/ProtoHelper", "RC/Utils/Logger", "../Libs/long"], function (require, exports, ByteUtils_1, MsgCenter_1, protos_2, ProtoHelper_1, Logger_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class WSConnector {
@@ -4245,7 +4245,7 @@ define("Scene/LoginState", ["require", "exports", "../Libs/protos", "Net/Connect
             register.platform = platform;
             register.sdk = sdk;
             let connector = new WSConnector_2.WSConnector();
-            connector.onerror = () => this._ui.OnConnectToLSError(() => connector.Connect(Defs_1.Defs.config["ls_ip"], Defs_1.Defs.config["ls_port"]));
+            connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => connector.Connect(Defs_1.Defs.config["ls_ip"], Defs_1.Defs.config["ls_port"]));
             connector.onclose = () => Logger_2.Logger.Log("connection closed.");
             connector.onopen = () => {
                 connector.Send(protos_4.Protos.GC2LS_AskRegister, register, message => {
@@ -4261,11 +4261,12 @@ define("Scene/LoginState", ["require", "exports", "../Libs/protos", "Net/Connect
             login.platform = platform;
             login.sdk = sdk;
             let connector = new WSConnector_2.WSConnector();
-            connector.onerror = () => this._ui.OnConnectToLSError(() => connector.Connect(Defs_1.Defs.config["ls_ip"], Defs_1.Defs.config["ls_port"]));
+            connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => connector.Connect(Defs_1.Defs.config["ls_ip"], Defs_1.Defs.config["ls_port"]));
             connector.onclose = () => Logger_2.Logger.Log("connection closed.");
             connector.onopen = () => {
                 connector.Send(protos_4.Protos.GC2LS_AskSmartLogin, login, message => {
                     let resp = message;
+                    Logger_2.Logger.Log("gcNID:" + resp.sessionID);
                     this._ui.OnLoginResut(resp);
                 });
             };
@@ -4673,7 +4674,7 @@ define("UI/UILogin", ["require", "exports", "../Libs/protos", "UI/UIAlert", "Sce
             let item = this._areaList.getChildAt(this._areaList.selectedIndex);
             let data = item.data["data"];
             this.showModalWait();
-            SceneManager_7.SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["sid"]);
+            SceneManager_7.SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
         }
         OnAreaClick() {
         }
@@ -4716,8 +4717,8 @@ define("UI/UILogin", ["require", "exports", "../Libs/protos", "UI/UIAlert", "Sce
                     break;
             }
         }
-        OnConnectToLSError(confirmCallback) {
-            UIAlert_3.UIAlert.Show("无法连接服务器", confirmCallback);
+        OnConnectToLSError(e, confirmCallback) {
+            UIAlert_3.UIAlert.Show("无法连接服务器[" + e.toString() + "]", confirmCallback);
         }
         HandleLoginLSSuccess(loginResult) {
             this._areaList.removeChildrenToPool();
@@ -4726,7 +4727,7 @@ define("UI/UILogin", ["require", "exports", "../Libs/protos", "UI/UIAlert", "Sce
                 let gsInfo = loginResult.gsInfos[i];
                 let item = this._areaList.addItemFromPool().asButton;
                 item.title = gsInfo.name;
-                item.data = { "data": gsInfo, "sid": loginResult.sessionID };
+                item.data = { "data": gsInfo, "gcNID": loginResult.sessionID };
             }
             if (count > 0)
                 this._areaList.selectedIndex = 0;
@@ -4822,7 +4823,7 @@ define("Preloader", ["require", "exports", "RC/Utils/Logger", "Model/Defs"], fun
     Preloader._complete = false;
     exports.Preloader = Preloader;
 });
-define("Main", ["require", "exports", "UI/UIManager", "Scene/SceneManager", "Net/Connector", "Net/ProtoHelper", "RC/Utils/Logger", "Preloader"], function (require, exports, UIManager_5, SceneManager_8, Connector_5, ProtoHelper_5, Logger_7, Preloader_1) {
+define("Main", ["require", "exports", "UI/UIManager", "Scene/SceneManager", "Net/Connector", "Net/ProtoHelper", "RC/Utils/Logger", "Preloader", "./Libs/protobufjs", "./Libs/long"], function (require, exports, UIManager_5, SceneManager_8, Connector_5, ProtoHelper_5, Logger_7, Preloader_1, $protobuf, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
@@ -4871,6 +4872,10 @@ define("Main", ["require", "exports", "UI/UIManager", "Scene/SceneManager", "Net
         }
         StartGame() {
             Logger_7.Logger.Log("start game...");
+            if (typeof wx !== "undefined") {
+                $protobuf.util.Long = Long.default.prototype.constructor;
+                $protobuf.configure();
+            }
             ProtoHelper_5.ProtoCreator.Init();
             Connector_5.Connector.Init();
             UIManager_5.UIManager.Init();

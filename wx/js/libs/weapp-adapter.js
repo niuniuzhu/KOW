@@ -1428,6 +1428,9 @@
 	  }, {
 	    key: 'send',
 	    value: function send(data) {
+        if (data instanceof Uint8Array) {
+          data = data.buffer
+        }
 	      if (typeof data !== 'string' && !(data instanceof ArrayBuffer)) {
 	        throw new TypeError('Failed to send message: The data ' + data + ' is invalid')
 	      }

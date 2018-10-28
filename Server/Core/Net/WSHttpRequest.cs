@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Core.Net
 {
@@ -20,5 +21,13 @@ namespace Core.Net
 		public string[] subProtocols => this.headers.TryGetValue( "Sec-WebSocket-Protocol", out string value )
 											? value.Split( new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries )
 											: new string[0];
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( KeyValuePair<string, string> kv in this.headers )
+				sb.AppendLine( $"{kv.Key}:{kv.Value}" );
+			return $"method:{this.method}, path:{this.path}, body:{this.body}, scheme:{this.scheme}, headers:{sb}";
+		}
 	}
 }

@@ -49,7 +49,9 @@ export class WSConnector {
     }
     Send(msgType, message, rpcHandler = null, transTarget = Protos.MsgOpts.TransTarget.Undefine, nsid = Long.ZERO) {
         let opts = ProtoCreator.GetMsgOpts(message);
-        Logger.Assert(opts != null, "invalid message options");
+        if (opts == null) {
+            Logger.Error("invalid message options");
+        }
         if (transTarget != Protos.MsgOpts.TransTarget.Undefine) {
             opts.flag |= 1 << 3;
             opts.flag |= 1 << (3 + transTarget);
@@ -83,10 +85,14 @@ export class WSConnector {
         data.copyWithin(0, 4);
         let message = ProtoCreator.DecodeMsg(msgID, data, data.length - 4);
         let opts = ProtoCreator.GetMsgOpts(message);
-        Logger.Assert(opts != null, "invalid msg options");
+        if (opts == null) {
+            Logger.Error("invalid msg options");
+        }
         if ((opts.flag & (1 << Protos.MsgOpts.Flag.RESP)) > 0) {
             let rcpHandler = this._rpcHandlers.get(opts.rpid);
-            Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
+            if (rcpHandler == null) {
+                Logger.Error("RPC handler not found with message:" + msgID);
+            }
             this._rpcHandlers.delete(opts.rpid);
             rcpHandler(message);
         }

@@ -67,7 +67,9 @@ export class WSConnector {
 		transTarget: Protos.MsgOpts.TransTarget = Protos.MsgOpts.TransTarget.Undefine,
 		nsid: Long = Long.ZERO): void {
 		let opts = ProtoCreator.GetMsgOpts(message);
-		Logger.Assert(opts != null, "invalid message options");
+		if (opts == null) {
+			Logger.Error("invalid message options");
+		}
 
 		if (transTarget != Protos.MsgOpts.TransTarget.Undefine) {
 			opts.flag |= 1 << 3; //mark as transpose
@@ -112,11 +114,15 @@ export class WSConnector {
 		let message = ProtoCreator.DecodeMsg(msgID, data, data.length - 4);
 		//检查第一个字段是否Protos.Packet类型
 		let opts = ProtoCreator.GetMsgOpts(message);
-		Logger.Assert(opts != null, "invalid msg options");
+		if (opts == null) {
+			Logger.Error("invalid msg options");
+		}
 		//是否rpc消息
 		if ((opts.flag & (1 << Protos.MsgOpts.Flag.RESP)) > 0) {
 			let rcpHandler = this._rpcHandlers.get(opts.rpid);
-			Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
+			if (rcpHandler == null) {
+				Logger.Error("RPC handler not found with message:" + msgID);
+			}
 			this._rpcHandlers.delete(opts.rpid);
 			rcpHandler(message);//调用回调函数
 		} else {

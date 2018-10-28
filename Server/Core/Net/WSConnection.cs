@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Core.Misc;
 
 namespace Core.Net
 {
@@ -59,7 +60,7 @@ namespace Core.Net
 					WSHttpRequest request = ProcessHandShakeData( cache.GetBuffer(), 0, cache.length, this.scheme );
 					if ( request == null )
 						break;
-
+					Logger.Log( request );
 					string subProtocol = Negotiate( this.subProtocols, request.subProtocols );
 					byte[] responseData = ProcessHybi13Handshake( request, subProtocol );
 					if ( responseData == null )
@@ -102,7 +103,7 @@ namespace Core.Net
 
 		private static WSHttpRequest ProcessHandShakeData( byte[] data, int offset, int size, string scheme )
 		{
-			string body = Encoding.UTF8.GetString( data, offset, size );
+			string body = Encoding.ASCII.GetString( data, offset, size );
 			Match match = ProtoConfig.REQUEST_REGEX.Match( body );
 
 			if ( !match.Success )
@@ -145,13 +146,13 @@ namespace Core.Net
 			builder.AppendLine( "Connection: Upgrade" );
 			string responseKey =
 				Convert.ToBase64String(
-					SHA1.Create().ComputeHash( Encoding.UTF8.GetBytes( request["Sec-WebSocket-Key"] + ProtoConfig.WSRespGuid ) ) );
+					SHA1.Create().ComputeHash( Encoding.ASCII.GetBytes( request["Sec-WebSocket-Key"] + ProtoConfig.WSRespGuid ) ) );
 			builder.AppendLine( $"Sec-WebSocket-Accept: {responseKey}" );
 			if ( !string.IsNullOrEmpty( subProtocol ) )
 				builder.AppendLine( $"Sec-WebSocket-Protocol: {subProtocol}" );
 			builder.AppendLine();
 			// Logger.Info( builder.ToString() );
-			return Encoding.UTF8.GetBytes( builder.ToString() );
+			return Encoding.ASCII.GetBytes( builder.ToString() );
 		}
 
 		/// <summary>

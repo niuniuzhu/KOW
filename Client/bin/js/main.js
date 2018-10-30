@@ -1500,7 +1500,9 @@ define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter
         }
         Send(msgType, message, rpcHandler = null, transTarget = protos_2.Protos.MsgOpts.TransTarget.Undefine, nsid = Long.ZERO) {
             let opts = ProtoHelper_1.ProtoCreator.GetMsgOpts(message);
-            Logger_1.Logger.Assert(opts != null, "invalid message options");
+            if (opts == null) {
+                Logger_1.Logger.Error("invalid message options");
+            }
             if (transTarget != protos_2.Protos.MsgOpts.TransTarget.Undefine) {
                 opts.flag |= 1 << 3;
                 opts.flag |= 1 << (3 + transTarget);
@@ -1534,10 +1536,14 @@ define("Net/WSConnector", ["require", "exports", "Net/ByteUtils", "Net/MsgCenter
             data.copyWithin(0, 4);
             let message = ProtoHelper_1.ProtoCreator.DecodeMsg(msgID, data, data.length - 4);
             let opts = ProtoHelper_1.ProtoCreator.GetMsgOpts(message);
-            Logger_1.Logger.Assert(opts != null, "invalid msg options");
+            if (opts == null) {
+                Logger_1.Logger.Error("invalid msg options");
+            }
             if ((opts.flag & (1 << protos_2.Protos.MsgOpts.Flag.RESP)) > 0) {
                 let rcpHandler = this._rpcHandlers.get(opts.rpid);
-                Logger_1.Logger.Assert(rcpHandler != null, "RPC handler not found with message:" + msgID);
+                if (rcpHandler == null) {
+                    Logger_1.Logger.Error("RPC handler not found with message:" + msgID);
+                }
                 this._rpcHandlers.delete(opts.rpid);
                 rcpHandler(message);
             }
@@ -4513,20 +4519,168 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
     }
     exports.MatchingState = MatchingState;
 });
-define("UI/UIBattle", ["require", "exports"], function (require, exports) {
+define("UI/Joystick", ["require", "exports", "RC/Math/Vec2"], function (require, exports, Vec2_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Joystick extends fairygui.GComponent {
+        constructor() {
+            super();
+            this.radius = 100;
+            this.cen = Vec2_5.Vec2.zero;
+            this.resetDuration = 1;
+            this._axis = Vec2_5.Vec2.zero;
+            this.draggable = true;
+            this._tween = new laya.utils.Tween();
+        }
+        set touchPosition(value) { this.axis = value.Sub(this.cen); }
+        get axis() { return this._axis; }
+        set axis(value) {
+            let length = value.Magnitude();
+            let normalAxis = length < 0.0001 ? Vec2_5.Vec2.zero : value.DivN(length);
+            if (this._core != null) {
+                let touchAxis = value;
+                if (touchAxis.SqrMagnitude() >= this.radius * this.radius)
+                    touchAxis = normalAxis.MulN(this.radius);
+                this._core.x = touchAxis.x + this.cen.x;
+                this._core.y = touchAxis.y + this.cen.y;
+            }
+            if (this._axis == normalAxis)
+                return;
+            this._axis = normalAxis;
+            this.onChanged(this._axis);
+        }
+        get worldAxis() {
+            let point;
+            this.localToGlobal(this._axis.x, this._axis.y, point);
+            return new Vec2_5.Vec2(point.x, point.y);
+        }
+        get sprite() { return this.displayObject; }
+        constructFromXML(xml) {
+            super.constructFromXML(xml);
+            this.cen = new Vec2_5.Vec2(this.width * 0.5, this.height * 0.5);
+            this.displayObject.on(laya.events.Event.MOUSE_DOWN, this, this.OnPointerDown);
+        }
+        dispose() {
+            this._tween.clear();
+            super.dispose();
+        }
+        Reset(fadeOut = false) {
+            if (fadeOut) {
+                this._tween.to(this.axis, { x: 0, y: 0 }, this.resetDuration, laya.utils.Ease.quadOut);
+            }
+            else {
+                this.axis = Vec2_5.Vec2.zero;
+            }
+        }
+        SetAxis(position) {
+            let point;
+            this.globalToLocal(position.x, position.y, point);
+            this.touchPosition = new Vec2_5.Vec2(point.x, point.y);
+        }
+        OnPointerDown(e) {
+            this.SetAxis(new Vec2_5.Vec2(e.stageX, e.stageY));
+        }
+        OnDrag(e) {
+            this.SetAxis(new Vec2_5.Vec2(e.stageX, e.stageY));
+        }
+        OnPointerUp(e) {
+            this.Reset(true);
+        }
+    }
+    exports.Joystick = Joystick;
+});
+define("UI/GestureState", ["require", "exports", "RC/Math/Vec2"], function (require, exports, Vec2_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class GestureState {
+        constructor() {
+            this._tween = new laya.utils.Tween();
+        }
+        get joystick() {
+            return this._joystick;
+        }
+        set joystick(value) {
+            if (this._joystick == value)
+                return;
+            this._joystick = value;
+            if (this._joystick != null) {
+                this._joystick.touchable = false;
+                this._joystick.radius = this._joystick.width * 0.5;
+                this._joystick.resetDuration = 0.2;
+                this._joystick.onChanged = this.onChanged;
+            }
+        }
+        Dispose() {
+            this._joystick.dispose;
+            this._joystick = null;
+        }
+        OnTouchBegin(px, py) {
+            this._active = true;
+            this._touchTime = 0;
+            this._touchPosition = new Vec2_6.Vec2(px, py);
+        }
+        OnTouchEnd() {
+            this._active = false;
+            this.HideJoystick();
+        }
+        OnDrag(px, py) {
+            this._active = true;
+            this.ShowJoystick(this._touchPosition);
+            let point;
+            this._joystick.globalToLocal(px, py, point);
+            this._joystick.touchPosition = new Vec2_6.Vec2(point.x, point.y);
+        }
+        ShowJoystick(point) {
+            this._joystick.visible = true;
+            let point2;
+            this._joystick.parent.globalToLocal(point.x, point.y, point2);
+            this._joystick.x = point2.x - this._joystick.width * 0.5;
+            this._joystick.y = point2.y - this._joystick.height * 0.5;
+            this._tween.to(this._joystick.sprite, { alpha: 1 }, 0.2, laya.utils.Ease.quadOut);
+        }
+        HideJoystick() {
+            this._joystick.Reset(true);
+            this._tween.to(this._joystick.sprite, { alpha: 0 }, 0.2, laya.utils.Ease.quadOut, new laya.utils.Handler(this, this.OnJoystickHideComplete));
+        }
+        OnJoystickHideComplete() {
+            this._joystick.visible = false;
+        }
+        Update(dt) {
+            if (!this._active)
+                return;
+            if (!this._joystick.visible) {
+                this._touchTime += dt;
+                if (this._touchTime >= GestureState.TIME_TO_SHOW_JOYSTICK) {
+                    this.ShowJoystick(this._touchPosition);
+                    this._joystick.Reset();
+                }
+            }
+        }
+    }
+    GestureState.TIME_TO_SHOW_JOYSTICK = 500;
+    exports.GestureState = GestureState;
+});
+define("UI/UIBattle", ["require", "exports", "UI/GestureState", "UI/Joystick"], function (require, exports, GestureState_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
-        get root() { return this._root; }
         constructor() {
+            this._gestureState = new GestureState_1.GestureState();
             fairygui.UIPackage.addPackage("res/ui/battle");
+            fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick_1.Joystick);
             this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
             this._root.getChild("n0").onClick(this, this.OnSkillBtnClick);
             this._root.getChild("n1").onClick(this, this.OnSkill2BtnClick);
             this._root.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
             this._root.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
+            this._root.displayObject.on(laya.events.Event.DRAG_START, this, this.OnDragStart);
+            this._root.displayObject.on(laya.events.Event.DRAG_END, this, this.OnDragEnd);
+            this._root.displayObject.on(laya.events.Event.DRAG_MOVE, this, this.OnDrag);
+            this._gestureState.joystick = this._root.getChild("joystick");
         }
+        get root() { return this._root; }
         Dispose() {
+            this._gestureState.Dispose();
             this._root.dispose();
         }
         Enter(param) {
@@ -4536,12 +4690,25 @@ define("UI/UIBattle", ["require", "exports"], function (require, exports) {
             fairygui.GRoot.inst.removeChild(this._root);
         }
         Update(dt) {
+            this._gestureState.Update(dt);
         }
         OnResize(e) {
         }
         OnSkillBtnClick() {
         }
         OnSkill2BtnClick() {
+        }
+        OnDragStart(e) {
+            if (e.touchId == 0)
+                this._gestureState.OnTouchBegin(e.stageX, e.stageY);
+        }
+        OnDragEnd(e) {
+            if (e.touchId == 0)
+                this._gestureState.OnTouchEnd();
+        }
+        OnDrag(e) {
+            if (e.touchId == 0)
+                this._gestureState.OnDrag(e.stageX, e.stageY);
         }
     }
     exports.UIBattle = UIBattle;
@@ -8492,7 +8659,7 @@ define("RC/Math/Mat4", ["require", "exports", "RC/Math/Vec4", "RC/Math/Vec3", "R
     }
     exports.Mat4 = Mat4;
 });
-define("RC/Math/Rect", ["require", "exports", "RC/Math/Vec2", "RC/Math/MathUtils"], function (require, exports, Vec2_5, MathUtils_10) {
+define("RC/Math/Rect", ["require", "exports", "RC/Math/Vec2", "RC/Math/MathUtils"], function (require, exports, Vec2_7, MathUtils_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Rect {
@@ -8503,22 +8670,22 @@ define("RC/Math/Rect", ["require", "exports", "RC/Math/Vec2", "RC/Math/MathUtils
         set x(value) { this._xMin = value; }
         get y() { return this._yMin; }
         set y(value) { this._yMin = value; }
-        get position() { return new Vec2_5.Vec2(this._xMin, this._yMin); }
+        get position() { return new Vec2_7.Vec2(this._xMin, this._yMin); }
         set position(value) {
             this._xMin = value.x;
             this._yMin = value.y;
         }
-        get center() { return new Vec2_5.Vec2(this.x + this._width / 2, this.y + this._height / 2); }
+        get center() { return new Vec2_7.Vec2(this.x + this._width / 2, this.y + this._height / 2); }
         set center(value) {
             this._xMin = value.x - this._width / 2;
             this._yMin = value.y - this._height / 2;
         }
-        get min() { return new Vec2_5.Vec2(this.xMin, this.yMin); }
+        get min() { return new Vec2_7.Vec2(this.xMin, this.yMin); }
         set min(value) {
             this.xMin = value.x;
             this.yMin = value.y;
         }
-        get max() { return new Vec2_5.Vec2(this.xMax, this.yMax); }
+        get max() { return new Vec2_7.Vec2(this.xMax, this.yMax); }
         set max(value) {
             this.xMax = value.x;
             this.yMax = value.y;
@@ -8527,7 +8694,7 @@ define("RC/Math/Rect", ["require", "exports", "RC/Math/Vec2", "RC/Math/MathUtils
         set width(value) { this._width = value; }
         get height() { return this._height; }
         set height(value) { this.height = value; }
-        get size() { return new Vec2_5.Vec2(this._width, this._height); }
+        get size() { return new Vec2_7.Vec2(this._width, this._height); }
         set size(value) {
             this._width = value.x;
             this._height = value.y;
@@ -8617,10 +8784,10 @@ define("RC/Math/Rect", ["require", "exports", "RC/Math/Vec2", "RC/Math/MathUtils
             return other.xMax > rect.xMin && other.xMin < rect.xMax && other.yMax > rect.yMin && other.yMin < rect.yMax;
         }
         static NormalizedToPoint(rectangle, normalizedRectCoordinates) {
-            return new Vec2_5.Vec2(MathUtils_10.MathUtils.Lerp(rectangle.x, rectangle.xMax, normalizedRectCoordinates.x), MathUtils_10.MathUtils.Lerp(rectangle.y, rectangle.yMax, normalizedRectCoordinates.y));
+            return new Vec2_7.Vec2(MathUtils_10.MathUtils.Lerp(rectangle.x, rectangle.xMax, normalizedRectCoordinates.x), MathUtils_10.MathUtils.Lerp(rectangle.y, rectangle.yMax, normalizedRectCoordinates.y));
         }
         static PointToNormalized(rectangle, point) {
-            return new Vec2_5.Vec2(MathUtils_10.MathUtils.InverseLerp(rectangle.x, rectangle.xMax, point.x), MathUtils_10.MathUtils.InverseLerp(rectangle.y, rectangle.yMax, point.y));
+            return new Vec2_7.Vec2(MathUtils_10.MathUtils.InverseLerp(rectangle.x, rectangle.xMax, point.x), MathUtils_10.MathUtils.InverseLerp(rectangle.y, rectangle.yMax, point.y));
         }
     }
     exports.Rect = Rect;

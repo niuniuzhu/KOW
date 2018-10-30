@@ -9,5 +9,5 @@
     "gcLive": 15000,
     "frameRate": 20,
     "keyFrameStep": 4,
-	"battleTIme": 10000
+	"battleTIme": 180000
 }

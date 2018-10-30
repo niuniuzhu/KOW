@@ -18,7 +18,7 @@ export class UIAlert {
 		UIAlert._hideHandler = removeHandler;
 		if (UIAlert._hideHandler != null)
 			UIAlert._com.on(laya.events.Event.REMOVED, null, UIAlert.OnHide);
-		Graphic.uiRoot.inst.showPopup(UIAlert._com);//todo 这里会触发回调函数.......
+		fairygui.GRoot.inst.showPopup(UIAlert._com, Graphic.uiRoot);//todo 这里会触发回调函数.......
 		UIAlert._com.center();
 		UIAlert._com.getChild("text").asTextField.text = content;
 		UIAlert._isShowing = true;

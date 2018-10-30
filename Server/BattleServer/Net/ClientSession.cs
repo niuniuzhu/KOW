@@ -15,6 +15,7 @@ namespace BattleServer.Net
 		{
 			this._msgCenter.Register( Protos.MsgID.EGc2BsAskLogin, this.OnGc2BsAskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGc2BsKeepAlive, this.OnGc2BsKeepAlive );
+			this._msgCenter.Register( Protos.MsgID.EGc2BsRequestSnapshot, this.OnGc2BsRequestSnapShot );
 		}
 
 		protected override void OnEstablish()
@@ -51,10 +52,10 @@ namespace BattleServer.Net
 
 			BSUser user = BS.instance.userMgr.Online( this._gcNID, this.id );
 			if ( user != null )
-				loginRet.Result = Protos.BS2GC_LoginRet.Types.EResult.Success;
+				loginRet.Result = Protos.Global.Types.ECommon.Success;
 			else
 			{
-				loginRet.Result = Protos.BS2GC_LoginRet.Types.EResult.Failed;
+				loginRet.Result = Protos.Global.Types.ECommon.Failed;
 				this.DelayClose( 500, "client login failed" );
 			}
 			this.Send( loginRet );
@@ -64,6 +65,12 @@ namespace BattleServer.Net
 		private ErrorCode OnGc2BsKeepAlive( Google.Protobuf.IMessage message )
 		{
 			this._activeTime = TimeUtils.utcTime;
+			return ErrorCode.Success;
+		}
+
+		private ErrorCode OnGc2BsRequestSnapShot( Google.Protobuf.IMessage message )
+		{
+			BS.instance.battleManager.OnRequestSnapshot( this._gcNID, ( Protos.GC2BS_RequestSnapshot ) message );
 			return ErrorCode.Success;
 		}
 	}

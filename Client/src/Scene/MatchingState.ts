@@ -91,8 +91,8 @@ export class MatchingState extends SceneState {
 					let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
 					this._ui.OnLoginBSResut(resp.result);
 					switch (resp.result) {
-						case Protos.BS2GC_LoginRet.EResult.Success:
-							SceneManager.ChangeState(SceneManager.State.Battle);
+						case Protos.Global.ECommon.Success:
+							this.RequestBattleState();
 							break;
 					}
 				});
@@ -123,6 +123,14 @@ export class MatchingState extends SceneState {
 					break;
 			}
 		});
+	}
+
+	private RequestBattleState(): void {
+		let requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
+		Connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
+			SceneManager.ChangeState(SceneManager.State.Battle);
+		});
+
 	}
 
 	private StartLoad(mapID: number, playerInfos: Protos.ICS2GC_PlayerInfo[]): void {

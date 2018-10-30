@@ -5,6 +5,7 @@ using Shared;
 using Shared.Net;
 using System;
 using System.Collections.Generic;
+using BattleServer.Battle.Snapshot;
 
 namespace BattleServer.Battle
 {
@@ -119,40 +120,6 @@ namespace BattleServer.Battle
 			} );
 		}
 
-		/// <summary>
-		/// 玩家建立连接时调用
-		/// </summary>
-		public void OnUserConnected( BSUser user )
-		{
-			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
-			int count = battle.players.Length;
-			for ( var i = 0; i < count; i++ )
-			{
-				Player player = battle.players[i];
-				if ( player.gcNID != user.gcNID )
-					continue;
-				player.user = user;
-				return;
-			}
-		}
-
-		/// <summary>
-		/// 玩家失去连接时调用
-		/// </summary>
-		public void OnUserDisconnected( BSUser user )
-		{
-			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
-			int count = battle.players.Length;
-			for ( var i = 0; i < count; i++ )
-			{
-				Player player = battle.players[i];
-				if ( player.user != user )
-					continue;
-				player.user = null;
-				return;
-			}
-		}
-
 		public void Update( long dt )
 		{
 			int count = this._runningBattles.Count;
@@ -171,6 +138,61 @@ namespace BattleServer.Battle
 					--count;
 				}
 			}
+		}
+
+		/// <summary>
+		/// 玩家建立连接时调用
+		/// </summary>
+		internal void OnUserConnected( BSUser user )
+		{
+			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
+			int count = battle.players.Length;
+			for ( var i = 0; i < count; i++ )
+			{
+				Player player = battle.players[i];
+				if ( player.gcNID != user.gcNID )
+					continue;
+				player.user = user;
+				return;
+			}
+		}
+
+		/// <summary>
+		/// 玩家失去连接时调用
+		/// </summary>
+		internal void OnUserDisconnected( BSUser user )
+		{
+			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
+			int count = battle.players.Length;
+			for ( var i = 0; i < count; i++ )
+			{
+				Player player = battle.players[i];
+				if ( player.user != user )
+					continue;
+				player.user = null;
+				return;
+			}
+		}
+
+		/// <summary>
+		/// 玩家请求获取当前战场状态
+		/// </summary>
+		internal void OnRequestSnapshot( ulong gcNID, Protos.GC2BS_RequestSnapshot request )
+		{
+			Protos.BS2GC_RequestSnapshotRet ret = ProtoCreator.R_GC2BS_RequestSnapshot( request.Opts.Pid );
+			BSUser user = BS.instance.userMgr.GetUser( gcNID );
+			do
+			{
+				Battle battle = this.GetBattle( gcNID );
+				if ( battle == null )
+				{
+					ret.Result = Protos.BS2GC_RequestSnapshotRet.Types.EResult.InvalidBattle;
+					break;
+				}
+				FrameSnapshot snapshot = battle.GetSnapshot( request.Frame );
+				break;
+			} while ( true );
+			user.Send( ret );
 		}
 	}
 }

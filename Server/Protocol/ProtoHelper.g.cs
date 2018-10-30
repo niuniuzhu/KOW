@@ -15,6 +15,7 @@ public static class ProtoCreator {
 		{typeof(Protos.GC2GS_KeepAlive), (Protos.MsgID)1101},
 		{typeof(Protos.GC2BS_AskLogin), (Protos.MsgID)1200},
 		{typeof(Protos.GC2BS_KeepAlive), (Protos.MsgID)1201},
+		{typeof(Protos.GC2BS_RequestSnapshot), (Protos.MsgID)1202},
 		{typeof(Protos.GC2CS_BeginMatch), (Protos.MsgID)1300},
 		{typeof(Protos.GC2CS_UpdatePlayerInfo), (Protos.MsgID)1301},
 		{typeof(Protos.LS2GC_GSInfo), (Protos.MsgID)2000},
@@ -37,6 +38,7 @@ public static class ProtoCreator {
 		{typeof(Protos.BS2GC_LoginRet), (Protos.MsgID)4100},
 		{typeof(Protos.BS2GC_BattleStart), (Protos.MsgID)4102},
 		{typeof(Protos.BS2GC_BattleEnd), (Protos.MsgID)4103},
+		{typeof(Protos.BS2GC_RequestSnapshotRet), (Protos.MsgID)4104},
 		{typeof(Protos.CS2LS_GSInfos), (Protos.MsgID)5000},
 		{typeof(Protos.CS2LS_GSInfo), (Protos.MsgID)5001},
 		{typeof(Protos.CS2LS_GSLost), (Protos.MsgID)5002},
@@ -66,6 +68,7 @@ public static class ProtoCreator {
 		{(Protos.MsgID)1101, typeof(Protos.GC2GS_KeepAlive)},
 		{(Protos.MsgID)1200, typeof(Protos.GC2BS_AskLogin)},
 		{(Protos.MsgID)1201, typeof(Protos.GC2BS_KeepAlive)},
+		{(Protos.MsgID)1202, typeof(Protos.GC2BS_RequestSnapshot)},
 		{(Protos.MsgID)1300, typeof(Protos.GC2CS_BeginMatch)},
 		{(Protos.MsgID)1301, typeof(Protos.GC2CS_UpdatePlayerInfo)},
 		{(Protos.MsgID)2000, typeof(Protos.LS2GC_GSInfo)},
@@ -88,6 +91,7 @@ public static class ProtoCreator {
 		{(Protos.MsgID)4100, typeof(Protos.BS2GC_LoginRet)},
 		{(Protos.MsgID)4102, typeof(Protos.BS2GC_BattleStart)},
 		{(Protos.MsgID)4103, typeof(Protos.BS2GC_BattleEnd)},
+		{(Protos.MsgID)4104, typeof(Protos.BS2GC_RequestSnapshotRet)},
 		{(Protos.MsgID)5000, typeof(Protos.CS2LS_GSInfos)},
 		{(Protos.MsgID)5001, typeof(Protos.CS2LS_GSInfo)},
 		{(Protos.MsgID)5002, typeof(Protos.CS2LS_GSLost)},
@@ -166,6 +170,13 @@ public static class ProtoCreator {
 	public static Protos.GC2BS_KeepAlive Q_GC2BS_KeepAlive() {
 		var msg = new Protos.GC2BS_KeepAlive();
 		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Protos.GC2BS_RequestSnapshot Q_GC2BS_RequestSnapshot() {
+		var msg = new Protos.GC2BS_RequestSnapshot();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Rpc;
 		return msg;
 	}
 
@@ -305,6 +316,12 @@ public static class ProtoCreator {
 
 	public static Protos.BS2GC_BattleEnd Q_BS2GC_BattleEnd() {
 		var msg = new Protos.BS2GC_BattleEnd();
+		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Protos.BS2GC_RequestSnapshotRet Q_BS2GC_RequestSnapshotRet() {
+		var msg = new Protos.BS2GC_RequestSnapshotRet();
 		msg.Opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -544,6 +561,14 @@ public static class ProtoCreator {
 		return msg;
 	}
 
+	public static Protos.BS2GC_RequestSnapshotRet R_GC2BS_RequestSnapshot( uint pid ) {
+		var msg = new Protos.BS2GC_RequestSnapshotRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
 	#endregion
 
 	#region decode message static functions
@@ -591,6 +616,11 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)1201: {
 				var msg = new Protos.GC2BS_KeepAlive();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
+			case (Protos.MsgID)1202: {
+				var msg = new Protos.GC2BS_RequestSnapshot();
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
@@ -701,6 +731,11 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)4103: {
 				var msg = new Protos.BS2GC_BattleEnd();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
+			case (Protos.MsgID)4104: {
+				var msg = new Protos.BS2GC_RequestSnapshotRet();
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
@@ -847,6 +882,12 @@ public static class ProtoCreator {
 		return msg;
 	}
 
+	public static Protos.GC2BS_RequestSnapshot D_GC2BS_RequestSnapshot( byte[] data, int offset, int size ) {
+		var msg = new Protos.GC2BS_RequestSnapshot();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
 	public static Protos.GC2CS_BeginMatch D_GC2CS_BeginMatch( byte[] data, int offset, int size ) {
 		var msg = new Protos.GC2CS_BeginMatch();
 		msg.MergeFrom( data, offset, size );
@@ -975,6 +1016,12 @@ public static class ProtoCreator {
 
 	public static Protos.BS2GC_BattleEnd D_BS2GC_BattleEnd( byte[] data, int offset, int size ) {
 		var msg = new Protos.BS2GC_BattleEnd();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
+	public static Protos.BS2GC_RequestSnapshotRet D_BS2GC_RequestSnapshotRet( byte[] data, int offset, int size ) {
+		var msg = new Protos.BS2GC_RequestSnapshotRet();
 		msg.MergeFrom( data, offset, size );
 		return msg;
 	}
@@ -1113,6 +1160,9 @@ public static class ProtoCreator {
 			case (Protos.MsgID)1201: {
 				return new Protos.GC2BS_KeepAlive();
 			}
+			case (Protos.MsgID)1202: {
+				return new Protos.GC2BS_RequestSnapshot();
+			}
 			case (Protos.MsgID)1300: {
 				return new Protos.GC2CS_BeginMatch();
 			}
@@ -1178,6 +1228,9 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)4103: {
 				return new Protos.BS2GC_BattleEnd();
+			}
+			case (Protos.MsgID)4104: {
+				return new Protos.BS2GC_RequestSnapshotRet();
 			}
 			case (Protos.MsgID)5000: {
 				return new Protos.CS2LS_GSInfos();
@@ -1266,6 +1319,9 @@ public static class ProtoCreator {
 			case (Protos.MsgID)1201: {
 				return ((Protos.GC2BS_KeepAlive)message).Opts;
 			}
+			case (Protos.MsgID)1202: {
+				return ((Protos.GC2BS_RequestSnapshot)message).Opts;
+			}
 			case (Protos.MsgID)1300: {
 				return ((Protos.GC2CS_BeginMatch)message).Opts;
 			}
@@ -1331,6 +1387,9 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)4103: {
 				return ((Protos.BS2GC_BattleEnd)message).Opts;
+			}
+			case (Protos.MsgID)4104: {
+				return ((Protos.BS2GC_RequestSnapshotRet)message).Opts;
 			}
 			case (Protos.MsgID)5000: {
 				return ((Protos.CS2LS_GSInfos)message).Opts;

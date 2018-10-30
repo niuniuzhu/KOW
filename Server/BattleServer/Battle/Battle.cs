@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using BattleServer.Battle.Snapshot;
 
 namespace BattleServer.Battle
 {
-	public class Battle : IPoolObject
+	public class Battle : IPoolObject, ISnapshotable
 	{
 		private static uint _gid;
 
@@ -21,8 +22,9 @@ namespace BattleServer.Battle
 
 		private readonly Stopwatch _sw = new Stopwatch();
 		private readonly StepLocker _stepLocker = new StepLocker();
-		private long _lastUpdateTime;
+		private readonly SnapshotMgr _snapshotMgr = new SnapshotMgr();
 		private readonly List<uint> _tempSIDs = new List<uint>();
+		private long _lastUpdateTime;
 
 		public Battle()
 		{
@@ -112,6 +114,17 @@ namespace BattleServer.Battle
 		/// <param name="dt">流逝时间</param>
 		public void UpdateLogic( int frame, int dt )
 		{
+		}
+
+		/// <summary>
+		/// 获取指定帧数下的战场快照
+		/// </summary>
+		/// <param name="frame">指定帧数下的快速,-1表示最近的快照</param>
+		public FrameSnapshot GetSnapshot( int frame = -1 ) => this._snapshotMgr.GetSnapshot( frame );
+
+		public ISnapshotObject MakeSnapshot( object data )
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

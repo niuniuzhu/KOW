@@ -3,8 +3,7 @@ import { Protos } from "../Libs/protos";
 export class PreloadInstance {
 	private static _init: boolean;
 
-	public static map: fairygui.GComponent;
-	public static players: Map<number, fairygui.GComponent>;
+	public static instances: Map<string, fairygui.GComponent>;
 
 	private static LoadPacket(mapID: number, playerInfos: Protos.ICS2GC_PlayerInfo[], completeHandler: () => void): void {
 		let urls = [];
@@ -25,18 +24,17 @@ export class PreloadInstance {
 	}
 
 	private static LoadAssets(mapID: number, playerInfos: Protos.ICS2GC_PlayerInfo[], completeHandler: () => void): void {
-		this.map = fairygui.UIPackage.createObject("assets", "m" + mapID).asCom;
-		this.players = new Map<number, fairygui.GComponent>();
+		this.instances = new Map<string, fairygui.GComponent>();
+		this.instances.set("map", fairygui.UIPackage.createObject("assets", "m" + mapID).asCom);
 		let count = playerInfos.length;
 		for (let i = 0; i < count; i++) {
 			const playerInfo = playerInfos[i];
-			this.players.set(playerInfo.actorID, fairygui.UIPackage.createObject("assets", "e" + playerInfo.actorID).asCom);
+			this.instances.set("e" + playerInfo.actorID, fairygui.UIPackage.createObject("assets", "e" + playerInfo.actorID).asCom);
 		}
 		completeHandler();
 	}
 
-	public static Clear():void{
-		this.map = null;
-		this.players = null;
+	public static Clear(): void {
+		this.instances.clear();
 	}
 }

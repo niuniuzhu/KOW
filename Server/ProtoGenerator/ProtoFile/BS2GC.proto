@@ -2,15 +2,12 @@
 package Protos;
 
 import "Global.proto";
+import "any.proto";
 
 //登录结果
 message BS2GC_LoginRet {
-	enum EResult{
-		Success = 0;
-		Failed = 1;
-	}
 	MsgOpts opts = 1;
-	EResult result = 2;
+	Global.ECommon result = 2;
 }
 
 //战场开始
@@ -23,4 +20,36 @@ message BS2GC_BattleStart {
 message BS2GC_BattleEnd {
 	MsgOpts opts = 1;
 	uint32 id = 2;//战场id
+}
+
+//玩家信息
+message BS2GC_PlayerInfo {
+	uint64 gcNID = 1;//玩家登陆id
+	string name = 2;//玩家名字
+	int32 actorID = 3;//角色id
+	map<int32,Any> attrs = 4;//属性
+}
+
+//快照
+message BS2GC_Snapshot {
+	int32 frame = 1;
+	repeated BS2GC_PlayerInfo playerInfos = 9;
+}
+
+//回应战场快照
+message BS2GC_RequestSnapshotRet {
+	enum EResult {
+		Success = 0;
+		InvalidUser = 1;
+		InvalidBattle = 2;
+	}
+	MsgOpts opts = 1;
+	EResult result = 2;
+	int32 mapID = 3;
+	int32 framRate = 4;
+	int32 keyframeStep = 5;
+	int32 timeout = 6;
+	int32 currTime = 7;
+	int32 currFrame = 8;
+	BS2GC_Snapshot snapshot = 9;
 }

@@ -20,6 +20,12 @@ namespace CentralServer
 			HelpText = "Specify configuration file for database." )]
 		public string dbCfg { get; set; }
 
+		[Option( 'f', "defs",
+			Default = "",
+			SetName = "bycfg",
+			HelpText = "Specify definition file." )]
+		public string defs { get; set; }
+
 		[Option( "id",
 			Default = ( uint )1,
 			SetName = "bysetting",

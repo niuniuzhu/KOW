@@ -14,16 +14,22 @@ namespace CentralServer.Match
 
 		public uint id { get; }
 
-		public int mapID { get; }
-
 		public int numPlayers => this._players.Count;
 
-		public int maxPlayers => Consts.ROOM_MAX_PLAYERS;
+		/// <summary>
+		/// 地图ID
+		/// </summary>
+		public int mapID;
+
+		/// <summary>
+		/// 地图最大玩家数
+		/// </summary>
+		public int maxPlayers;
 
 		/// <summary>
 		/// 获取房间是否满员
 		/// </summary>
-		public bool isFull => this._players.Count == Consts.ROOM_MAX_PLAYERS;
+		public bool isFull => this._players.Count == this.maxPlayers;
 
 		/// <summary>
 		/// 房间是否没有玩家

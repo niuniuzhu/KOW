@@ -4,6 +4,7 @@ using CentralServer.User;
 using Core.Misc;
 using Core.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Shared;
 using Shared.DB;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace CentralServer
 
 		public CSConfig config { get; private set; }
 		public DBConfig dbConfig { get; private set; }
+		public JObject defs { get; private set; }
 
 		public readonly CSNetSessionMgr netSessionMgr = new CSNetSessionMgr();
 		public readonly RedisWrapper redisWrapper = new RedisWrapper();
@@ -36,6 +38,15 @@ namespace CentralServer
 
 		public ErrorCode Initialize( Options opts )
 		{
+			try
+			{
+				this.defs = ( JObject ) JsonConvert.DeserializeObject( File.ReadAllText( opts.defs ) );
+			}
+			catch ( System.Exception e )
+			{
+				Logger.Error( e );
+				return ErrorCode.DefsLoadFailed;
+			}
 			if ( string.IsNullOrEmpty( opts.cfg ) )
 			{
 				this.config = new CSConfig();

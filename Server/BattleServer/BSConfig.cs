@@ -17,9 +17,6 @@
 		public long reportInterval;
 		public long pingInterval;
 		public long gcLive;
-		public int frameRate;
-		public int keyframeStep;
-		public int battleTime;
 
 		public void CopyFromCLIOptions( Options opts )
 		{
@@ -31,9 +28,6 @@
 			this.reportInterval = opts.reportInterval;
 			this.pingInterval = opts.pingInterval;
 			this.gcLive = opts.gcLive;
-			this.frameRate = opts.frameRate;
-			this.keyframeStep = opts.keyframeStep;
-			this.battleTime = opts.battleTIme;
 		}
 	}
 }

@@ -11,3 +11,8 @@ message GC2BS_AskLogin {
 message GC2BS_KeepAlive {
 	MsgOpts opts = 1;
 }
+
+//请求BS当前游戏状态
+message GCC2BS_RequestState {
+	MsgOpts opts = 1;
+}

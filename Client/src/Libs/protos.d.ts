@@ -57,12 +57,14 @@ export namespace Protos {
 
     interface IBS2CS_BattleInfoRet {
         opts?: (Protos.IMsgOpts|null);
+        result?: (Protos.Global.ECommon|null);
         bid?: (number|null);
     }
 
     class BS2CS_BattleInfoRet implements IBS2CS_BattleInfoRet {
         constructor(properties?: Protos.IBS2CS_BattleInfoRet);
         public opts?: (Protos.IMsgOpts|null);
+        public result: Protos.Global.ECommon;
         public bid: number;
         public static create(properties?: Protos.IBS2CS_BattleInfoRet): Protos.BS2CS_BattleInfoRet;
         public static encode(message: Protos.IBS2CS_BattleInfoRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -471,6 +473,8 @@ export namespace Protos {
         gcNID?: (Long|null);
         name?: (string|null);
         actorID?: (number|null);
+        bornX?: (number|null);
+        bornY?: (number|null);
     }
 
     class CS2GC_PlayerInfo implements ICS2GC_PlayerInfo {
@@ -478,6 +482,8 @@ export namespace Protos {
         public gcNID: Long;
         public name: string;
         public actorID: number;
+        public bornX: number;
+        public bornY: number;
         public static create(properties?: Protos.ICS2GC_PlayerInfo): Protos.CS2GC_PlayerInfo;
         public static encode(message: Protos.ICS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -582,7 +588,8 @@ export namespace Protos {
         enum Error {
             Success = 0,
             BSNotFound = 1,
-            BSLost = 2
+            BSLost = 2,
+            BattleCreateFailed = 3
         }
     }
 

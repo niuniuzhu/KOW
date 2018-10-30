@@ -1,6 +1,7 @@
 import { IUIModule } from "./IUIModule";
 import { GestureState } from "./GestureState";
 import { Joystick } from "./Joystick";
+import { Graphic } from "../Graphic";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
@@ -15,8 +16,8 @@ export class UIBattle implements IUIModule {
 		this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
 		this._root.getChild("n0").onClick(this, this.OnSkillBtnClick);
 		this._root.getChild("n1").onClick(this, this.OnSkill2BtnClick);
-		this._root.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
-		this._root.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
+		this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
+		this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
 		this._root.displayObject.on(laya.events.Event.DRAG_START, this, this.OnDragStart);
 		this._root.displayObject.on(laya.events.Event.DRAG_END, this, this.OnDragEnd);
 		this._root.displayObject.on(laya.events.Event.DRAG_MOVE, this, this.OnDrag);
@@ -30,11 +31,11 @@ export class UIBattle implements IUIModule {
 	}
 
 	public Enter(param: any): void {
-		fairygui.GRoot.inst.addChild(this._root);
+		Graphic.uiRoot.addChild(this._root);
 	}
 
 	public Exit(): void {
-		fairygui.GRoot.inst.removeChild(this._root);
+		Graphic.uiRoot.removeChild(this._root);
 	}
 
 	public Update(dt: number): void {

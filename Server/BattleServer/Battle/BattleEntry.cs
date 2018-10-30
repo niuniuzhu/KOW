@@ -24,5 +24,7 @@ namespace BattleServer.Battle
 		//以下是属性
 		public string name;
 		public int actorID;
+		public int bornX;
+		public int bornY;
 	}
 }

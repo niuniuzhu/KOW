@@ -2,7 +2,7 @@
   "profiles": {
     "BattleServer": {
       "commandName": "Project",
-      "commandLineArgs": "-c Config/BSCfg.json"
+      "commandLineArgs": "-c Config/BSCfg.json -f Config/battle_defs.json"
     }
   }
 }

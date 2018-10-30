@@ -1,14 +1,11 @@
 {
-	"hidden_packages": [],
 	"docs": [
-		"0ukkx0at",
-		"v43z0",
-		"kz9a1uy9",
-		"ktvv0",
-		"0ukkx0at",
+		"yiq63fi0",
 		"p7qk1m"
 	],
 	"expanded_nodes": [
+		"yiq63fi0",
+		"/",
 		"0ukkx0at",
 		"/",
 		"05ewitws",
@@ -19,7 +16,8 @@
 		"/"
 	],
 	"active_doc": [
-		"0ukkx0at",
+		"yiq63fi0",
 		"p7qk1m"
-	]
+	],
+	"hidden_packages": []
 }

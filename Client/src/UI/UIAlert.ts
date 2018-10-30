@@ -1,3 +1,5 @@
+import { Graphic } from "../Graphic";
+
 export class UIAlert {
 	private static _com: fairygui.GComponent;
 	private static _hideHandler: () => void;
@@ -6,8 +8,8 @@ export class UIAlert {
 
 	public static get isShowing(): boolean { return UIAlert._isShowing; }
 
-	public static Show(content: string, removeHandler: () => void = null, isModal:boolean = false, scour:boolean = true): void {
-		if ( UIAlert._isShowing && (UIAlert._isModal || !scour) ){
+	public static Show(content: string, removeHandler: () => void = null, isModal: boolean = false, scour: boolean = true): void {
+		if (UIAlert._isShowing && (UIAlert._isModal || !scour)) {
 			return;
 		}
 		if (null == UIAlert._com) {
@@ -16,7 +18,7 @@ export class UIAlert {
 		UIAlert._hideHandler = removeHandler;
 		if (UIAlert._hideHandler != null)
 			UIAlert._com.on(laya.events.Event.REMOVED, null, UIAlert.OnHide);
-		fairygui.GRoot.inst.showPopup(UIAlert._com);//todo 这里会触发回调函数.......
+		Graphic.uiRoot.inst.showPopup(UIAlert._com);//todo 这里会触发回调函数.......
 		UIAlert._com.center();
 		UIAlert._com.getChild("text").asTextField.text = content;
 		UIAlert._isShowing = true;

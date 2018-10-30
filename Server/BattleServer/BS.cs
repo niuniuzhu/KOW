@@ -1,12 +1,13 @@
 ﻿using BattleServer.Battle;
 using BattleServer.Net;
+using BattleServer.User;
 using Core.Misc;
 using Core.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Shared;
 using Shared.Net;
 using System.IO;
-using BattleServer.User;
 
 namespace BattleServer
 {
@@ -16,6 +17,7 @@ namespace BattleServer
 		public static BS instance => _instance ?? ( _instance = new BS() );
 
 		public BSConfig config { get; private set; }
+		public JObject defs { get; private set; }
 
 		public readonly BSNetSessionMgr netSessionMgr = new BSNetSessionMgr();
 		public readonly BattleManager battleManager = new BattleManager();
@@ -28,6 +30,15 @@ namespace BattleServer
 
 		public ErrorCode Initialize( Options opts )
 		{
+			try
+			{
+				this.defs = ( JObject ) JsonConvert.DeserializeObject( File.ReadAllText( opts.defs ) );
+			}
+			catch ( System.Exception e )
+			{
+				Logger.Error( e );
+				return ErrorCode.DefsLoadFailed;
+			}
 			if ( string.IsNullOrEmpty( opts.cfg ) )
 			{
 				this.config = new BSConfig();

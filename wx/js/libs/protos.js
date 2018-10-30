@@ -293,6 +293,7 @@ export const Protos = $root.Protos = (() => {
         }
 
         BS2CS_BattleInfoRet.prototype.opts = null;
+        BS2CS_BattleInfoRet.prototype.result = 0;
         BS2CS_BattleInfoRet.prototype.bid = 0;
 
         BS2CS_BattleInfoRet.create = function create(properties) {
@@ -304,8 +305,10 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.result != null && message.hasOwnProperty("result"))
+                writer.uint32(16).int32(message.result);
             if (message.bid != null && message.hasOwnProperty("bid"))
-                writer.uint32(16).uint32(message.bid);
+                writer.uint32(24).uint32(message.bid);
             return writer;
         };
 
@@ -324,6 +327,9 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
+                    message.result = reader.int32();
+                    break;
+                case 3:
                     message.bid = reader.uint32();
                     break;
                 default:
@@ -348,6 +354,14 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
+            if (message.result != null && message.hasOwnProperty("result"))
+                switch (message.result) {
+                default:
+                    return "result: enum value expected";
+                case 0:
+                case 1:
+                    break;
+                }
             if (message.bid != null && message.hasOwnProperty("bid"))
                 if (!$util.isInteger(message.bid))
                     return "bid: integer expected";
@@ -363,6 +377,16 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.BS2CS_BattleInfoRet.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
+            switch (object.result) {
+            case "Success":
+            case 0:
+                message.result = 0;
+                break;
+            case "Failed":
+            case 1:
+                message.result = 1;
+                break;
+            }
             if (object.bid != null)
                 message.bid = object.bid >>> 0;
             return message;
@@ -374,10 +398,13 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
+                object.result = options.enums === String ? "Success" : 0;
                 object.bid = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = options.enums === String ? $root.Protos.Global.ECommon[message.result] : message.result;
             if (message.bid != null && message.hasOwnProperty("bid"))
                 object.bid = message.bid;
             return object;
@@ -2220,6 +2247,8 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
         CS2GC_PlayerInfo.prototype.name = "";
         CS2GC_PlayerInfo.prototype.actorID = 0;
+        CS2GC_PlayerInfo.prototype.bornX = 0;
+        CS2GC_PlayerInfo.prototype.bornY = 0;
 
         CS2GC_PlayerInfo.create = function create(properties) {
             return new CS2GC_PlayerInfo(properties);
@@ -2234,6 +2263,10 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(18).string(message.name);
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 writer.uint32(24).int32(message.actorID);
+            if (message.bornX != null && message.hasOwnProperty("bornX"))
+                writer.uint32(32).int32(message.bornX);
+            if (message.bornY != null && message.hasOwnProperty("bornY"))
+                writer.uint32(40).int32(message.bornY);
             return writer;
         };
 
@@ -2256,6 +2289,12 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 3:
                     message.actorID = reader.int32();
+                    break;
+                case 4:
+                    message.bornX = reader.int32();
+                    break;
+                case 5:
+                    message.bornY = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2283,6 +2322,12 @@ export const Protos = $root.Protos = (() => {
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 if (!$util.isInteger(message.actorID))
                     return "actorID: integer expected";
+            if (message.bornX != null && message.hasOwnProperty("bornX"))
+                if (!$util.isInteger(message.bornX))
+                    return "bornX: integer expected";
+            if (message.bornY != null && message.hasOwnProperty("bornY"))
+                if (!$util.isInteger(message.bornY))
+                    return "bornY: integer expected";
             return null;
         };
 
@@ -2303,6 +2348,10 @@ export const Protos = $root.Protos = (() => {
                 message.name = String(object.name);
             if (object.actorID != null)
                 message.actorID = object.actorID | 0;
+            if (object.bornX != null)
+                message.bornX = object.bornX | 0;
+            if (object.bornY != null)
+                message.bornY = object.bornY | 0;
             return message;
         };
 
@@ -2318,6 +2367,8 @@ export const Protos = $root.Protos = (() => {
                     object.gcNID = options.longs === String ? "0" : 0;
                 object.name = "";
                 object.actorID = 0;
+                object.bornX = 0;
+                object.bornY = 0;
             }
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 if (typeof message.gcNID === "number")
@@ -2328,6 +2379,10 @@ export const Protos = $root.Protos = (() => {
                 object.name = message.name;
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 object.actorID = message.actorID;
+            if (message.bornX != null && message.hasOwnProperty("bornX"))
+                object.bornX = message.bornX;
+            if (message.bornY != null && message.hasOwnProperty("bornY"))
+                object.bornY = message.bornY;
             return object;
         };
 
@@ -2837,6 +2892,7 @@ export const Protos = $root.Protos = (() => {
                 case 0:
                 case 1:
                 case 2:
+                case 3:
                     break;
                 }
             return null;
@@ -2876,6 +2932,10 @@ export const Protos = $root.Protos = (() => {
             case "BSLost":
             case 2:
                 message.error = 2;
+                break;
+            case "BattleCreateFailed":
+            case 3:
+                message.error = 3;
                 break;
             }
             return message;
@@ -2921,6 +2981,7 @@ export const Protos = $root.Protos = (() => {
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "BSNotFound"] = 1;
             values[valuesById[2] = "BSLost"] = 2;
+            values[valuesById[3] = "BattleCreateFailed"] = 3;
             return values;
         })();
 

@@ -6,7 +6,7 @@ import { UIManager } from "../UI/UIManager";
 import { UILogin } from "../UI/UILogin";
 import { SceneState } from "./SceneState";
 import { SceneManager } from "./SceneManager";
-import { Defs } from "../Model/Defs";
+import { Defs } from "../Defs";
 import { Logger } from "../RC/Utils/Logger";
 
 export class LoginState extends SceneState {

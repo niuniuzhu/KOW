@@ -539,6 +539,7 @@ define(["./protobufjs"], function($protobuf) {
              * @memberof Protos
              * @interface IBS2CS_BattleInfoRet
              * @property {Protos.IMsgOpts|null} [opts] BS2CS_BattleInfoRet opts
+             * @property {Protos.Global.ECommon|null} [result] BS2CS_BattleInfoRet result
              * @property {number|null} [bid] BS2CS_BattleInfoRet bid
              */
     
@@ -564,6 +565,14 @@ define(["./protobufjs"], function($protobuf) {
              * @instance
              */
             BS2CS_BattleInfoRet.prototype.opts = null;
+    
+            /**
+             * BS2CS_BattleInfoRet result.
+             * @member {Protos.Global.ECommon} result
+             * @memberof Protos.BS2CS_BattleInfoRet
+             * @instance
+             */
+            BS2CS_BattleInfoRet.prototype.result = 0;
     
             /**
              * BS2CS_BattleInfoRet bid.
@@ -599,8 +608,10 @@ define(["./protobufjs"], function($protobuf) {
                     writer = $Writer.create();
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.result != null && message.hasOwnProperty("result"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
                 if (message.bid != null && message.hasOwnProperty("bid"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.bid);
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.bid);
                 return writer;
             };
     
@@ -639,6 +650,9 @@ define(["./protobufjs"], function($protobuf) {
                         message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                         break;
                     case 2:
+                        message.result = reader.int32();
+                        break;
+                    case 3:
                         message.bid = reader.uint32();
                         break;
                     default:
@@ -681,6 +695,14 @@ define(["./protobufjs"], function($protobuf) {
                     if (error)
                         return "opts." + error;
                 }
+                if (message.result != null && message.hasOwnProperty("result"))
+                    switch (message.result) {
+                    default:
+                        return "result: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
                 if (message.bid != null && message.hasOwnProperty("bid"))
                     if (!$util.isInteger(message.bid))
                         return "bid: integer expected";
@@ -704,6 +726,16 @@ define(["./protobufjs"], function($protobuf) {
                         throw TypeError(".Protos.BS2CS_BattleInfoRet.opts: object expected");
                     message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
                 }
+                switch (object.result) {
+                case "Success":
+                case 0:
+                    message.result = 0;
+                    break;
+                case "Failed":
+                case 1:
+                    message.result = 1;
+                    break;
+                }
                 if (object.bid != null)
                     message.bid = object.bid >>> 0;
                 return message;
@@ -724,10 +756,13 @@ define(["./protobufjs"], function($protobuf) {
                 var object = {};
                 if (options.defaults) {
                     object.opts = null;
+                    object.result = options.enums === String ? "Success" : 0;
                     object.bid = 0;
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+                if (message.result != null && message.hasOwnProperty("result"))
+                    object.result = options.enums === String ? $root.Protos.Global.ECommon[message.result] : message.result;
                 if (message.bid != null && message.hasOwnProperty("bid"))
                     object.bid = message.bid;
                 return object;
@@ -4235,6 +4270,8 @@ define(["./protobufjs"], function($protobuf) {
              * @property {Long|null} [gcNID] CS2GC_PlayerInfo gcNID
              * @property {string|null} [name] CS2GC_PlayerInfo name
              * @property {number|null} [actorID] CS2GC_PlayerInfo actorID
+             * @property {number|null} [bornX] CS2GC_PlayerInfo bornX
+             * @property {number|null} [bornY] CS2GC_PlayerInfo bornY
              */
     
             /**
@@ -4277,6 +4314,22 @@ define(["./protobufjs"], function($protobuf) {
             CS2GC_PlayerInfo.prototype.actorID = 0;
     
             /**
+             * CS2GC_PlayerInfo bornX.
+             * @member {number} bornX
+             * @memberof Protos.CS2GC_PlayerInfo
+             * @instance
+             */
+            CS2GC_PlayerInfo.prototype.bornX = 0;
+    
+            /**
+             * CS2GC_PlayerInfo bornY.
+             * @member {number} bornY
+             * @memberof Protos.CS2GC_PlayerInfo
+             * @instance
+             */
+            CS2GC_PlayerInfo.prototype.bornY = 0;
+    
+            /**
              * Creates a new CS2GC_PlayerInfo instance using the specified properties.
              * @function create
              * @memberof Protos.CS2GC_PlayerInfo
@@ -4306,6 +4359,10 @@ define(["./protobufjs"], function($protobuf) {
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
                 if (message.actorID != null && message.hasOwnProperty("actorID"))
                     writer.uint32(/* id 3, wireType 0 =*/24).int32(message.actorID);
+                if (message.bornX != null && message.hasOwnProperty("bornX"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.bornX);
+                if (message.bornY != null && message.hasOwnProperty("bornY"))
+                    writer.uint32(/* id 5, wireType 0 =*/40).int32(message.bornY);
                 return writer;
             };
     
@@ -4348,6 +4405,12 @@ define(["./protobufjs"], function($protobuf) {
                         break;
                     case 3:
                         message.actorID = reader.int32();
+                        break;
+                    case 4:
+                        message.bornX = reader.int32();
+                        break;
+                    case 5:
+                        message.bornY = reader.int32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -4393,6 +4456,12 @@ define(["./protobufjs"], function($protobuf) {
                 if (message.actorID != null && message.hasOwnProperty("actorID"))
                     if (!$util.isInteger(message.actorID))
                         return "actorID: integer expected";
+                if (message.bornX != null && message.hasOwnProperty("bornX"))
+                    if (!$util.isInteger(message.bornX))
+                        return "bornX: integer expected";
+                if (message.bornY != null && message.hasOwnProperty("bornY"))
+                    if (!$util.isInteger(message.bornY))
+                        return "bornY: integer expected";
                 return null;
             };
     
@@ -4421,6 +4490,10 @@ define(["./protobufjs"], function($protobuf) {
                     message.name = String(object.name);
                 if (object.actorID != null)
                     message.actorID = object.actorID | 0;
+                if (object.bornX != null)
+                    message.bornX = object.bornX | 0;
+                if (object.bornY != null)
+                    message.bornY = object.bornY | 0;
                 return message;
             };
     
@@ -4445,6 +4518,8 @@ define(["./protobufjs"], function($protobuf) {
                         object.gcNID = options.longs === String ? "0" : 0;
                     object.name = "";
                     object.actorID = 0;
+                    object.bornX = 0;
+                    object.bornY = 0;
                 }
                 if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                     if (typeof message.gcNID === "number")
@@ -4455,6 +4530,10 @@ define(["./protobufjs"], function($protobuf) {
                     object.name = message.name;
                 if (message.actorID != null && message.hasOwnProperty("actorID"))
                     object.actorID = message.actorID;
+                if (message.bornX != null && message.hasOwnProperty("bornX"))
+                    object.bornX = message.bornX;
+                if (message.bornY != null && message.hasOwnProperty("bornY"))
+                    object.bornY = message.bornY;
                 return object;
             };
     
@@ -5411,6 +5490,7 @@ define(["./protobufjs"], function($protobuf) {
                     case 0:
                     case 1:
                     case 2:
+                    case 3:
                         break;
                     }
                 return null;
@@ -5458,6 +5538,10 @@ define(["./protobufjs"], function($protobuf) {
                 case "BSLost":
                 case 2:
                     message.error = 2;
+                    break;
+                case "BattleCreateFailed":
+                case 3:
+                    message.error = 3;
                     break;
                 }
                 return message;
@@ -5521,12 +5605,14 @@ define(["./protobufjs"], function($protobuf) {
              * @property {number} Success=0 Success value
              * @property {number} BSNotFound=1 BSNotFound value
              * @property {number} BSLost=2 BSLost value
+             * @property {number} BattleCreateFailed=3 BattleCreateFailed value
              */
             CS2GC_EnterBattle.Error = (function() {
                 var valuesById = {}, values = Object.create(valuesById);
                 values[valuesById[0] = "Success"] = 0;
                 values[valuesById[1] = "BSNotFound"] = 1;
                 values[valuesById[2] = "BSLost"] = 2;
+                values[valuesById[3] = "BattleCreateFailed"] = 3;
                 return values;
             })();
     

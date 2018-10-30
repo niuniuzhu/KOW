@@ -31,24 +31,25 @@ namespace Protos {
             "eWVyGAUgASgFEi0KC3BsYXllckluZm9zGAYgAygLMhguUHJvdG9zLkNTMkdD",
             "X1BsYXllckluZm8iXwoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVk",
             "EAESDQoJSWxsZWdhbElEEAISCgoGTm9Sb29tEAMSEAoMVXNlckluQmF0dGxl",
-            "EAQSDgoKVXNlckluUm9vbRAFIkAKEENTMkdDX1BsYXllckluZm8SDQoFZ2NO",
-            "SUQYASABKAQSDAoEbmFtZRgCIAEoCRIPCgdhY3RvcklEGAMgASgFImAKEENT",
-            "MkdDX1BsYXllckpvaW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRz",
-            "Ei0KC3BsYXllckluZm9zGAIgASgLMhguUHJvdG9zLkNTMkdDX1BsYXllcklu",
-            "Zm8iQQoRQ1MyR0NfUGxheWVyTGVhdmUSHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
-            "cy5Nc2dPcHRzEg0KBWdjTklEGAIgASgEInIKDkNTMkdDX1Jvb21JbmZvEh0K",
-            "BG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxItCgtwbGF5ZXJJbmZvcxgC",
-            "IAMoCzIYLlByb3Rvcy5DUzJHQ19QbGF5ZXJJbmZvEhIKCnByb2dyZXNzZXMY",
-            "AyADKAUivQEKEUNTMkdDX0VudGVyQmF0dGxlEh0KBG9wdHMYASABKAsyDy5Q",
-            "cm90b3MuTXNnT3B0cxINCgVnY05JRBgCIAEoBBIKCgJpcBgDIAEoCRIMCgRw",
-            "b3J0GAQgASgFEi4KBWVycm9yGAUgASgOMh8uUHJvdG9zLkNTMkdDX0VudGVy",
-            "QmF0dGxlLkVycm9yIjAKBUVycm9yEgsKB1N1Y2Nlc3MQABIOCgpCU05vdEZv",
-            "dW5kEAESCgoGQlNMb3N0EAJiBnByb3RvMw=="));
+            "EAQSDgoKVXNlckluUm9vbRAFIl4KEENTMkdDX1BsYXllckluZm8SDQoFZ2NO",
+            "SUQYASABKAQSDAoEbmFtZRgCIAEoCRIPCgdhY3RvcklEGAMgASgFEg0KBWJv",
+            "cm5YGAQgASgFEg0KBWJvcm5ZGAUgASgFImAKEENTMkdDX1BsYXllckpvaW4S",
+            "HQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEi0KC3BsYXllckluZm9z",
+            "GAIgASgLMhguUHJvdG9zLkNTMkdDX1BsYXllckluZm8iQQoRQ1MyR0NfUGxh",
+            "eWVyTGVhdmUSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdj",
+            "TklEGAIgASgEInIKDkNTMkdDX1Jvb21JbmZvEh0KBG9wdHMYASABKAsyDy5Q",
+            "cm90b3MuTXNnT3B0cxItCgtwbGF5ZXJJbmZvcxgCIAMoCzIYLlByb3Rvcy5D",
+            "UzJHQ19QbGF5ZXJJbmZvEhIKCnByb2dyZXNzZXMYAyADKAUi1QEKEUNTMkdD",
+            "X0VudGVyQmF0dGxlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIN",
+            "CgVnY05JRBgCIAEoBBIKCgJpcBgDIAEoCRIMCgRwb3J0GAQgASgFEi4KBWVy",
+            "cm9yGAUgASgOMh8uUHJvdG9zLkNTMkdDX0VudGVyQmF0dGxlLkVycm9yIkgK",
+            "BUVycm9yEgsKB1N1Y2Nlc3MQABIOCgpCU05vdEZvdW5kEAESCgoGQlNMb3N0",
+            "EAISFgoSQmF0dGxlQ3JlYXRlRmFpbGVkEANiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result", "Id", "MapID", "MaxPlayer", "PlayerInfos" }, null, new[]{ typeof(global::Protos.CS2GC_BeginMatchRet.Types.EResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerInfo), global::Protos.CS2GC_PlayerInfo.Parser, new[]{ "GcNID", "Name", "ActorID" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerInfo), global::Protos.CS2GC_PlayerInfo.Parser, new[]{ "GcNID", "Name", "ActorID", "BornX", "BornY" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerJoin), global::Protos.CS2GC_PlayerJoin.Parser, new[]{ "Opts", "PlayerInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerLeave), global::Protos.CS2GC_PlayerLeave.Parser, new[]{ "Opts", "GcNID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RoomInfo), global::Protos.CS2GC_RoomInfo.Parser, new[]{ "Opts", "PlayerInfos", "Progresses" }, null, null, null),
@@ -385,6 +386,8 @@ namespace Protos {
       gcNID_ = other.gcNID_;
       name_ = other.name_;
       actorID_ = other.actorID_;
+      bornX_ = other.bornX_;
+      bornY_ = other.bornY_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -435,6 +438,28 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "bornX" field.</summary>
+    public const int BornXFieldNumber = 4;
+    private int bornX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int BornX {
+      get { return bornX_; }
+      set {
+        bornX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "bornY" field.</summary>
+    public const int BornYFieldNumber = 5;
+    private int bornY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int BornY {
+      get { return bornY_; }
+      set {
+        bornY_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CS2GC_PlayerInfo);
@@ -451,6 +476,8 @@ namespace Protos {
       if (GcNID != other.GcNID) return false;
       if (Name != other.Name) return false;
       if (ActorID != other.ActorID) return false;
+      if (BornX != other.BornX) return false;
+      if (BornY != other.BornY) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -460,6 +487,8 @@ namespace Protos {
       if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (ActorID != 0) hash ^= ActorID.GetHashCode();
+      if (BornX != 0) hash ^= BornX.GetHashCode();
+      if (BornY != 0) hash ^= BornY.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -485,6 +514,14 @@ namespace Protos {
         output.WriteRawTag(24);
         output.WriteInt32(ActorID);
       }
+      if (BornX != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(BornX);
+      }
+      if (BornY != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(BornY);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -501,6 +538,12 @@ namespace Protos {
       }
       if (ActorID != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
+      }
+      if (BornX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(BornX);
+      }
+      if (BornY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(BornY);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -521,6 +564,12 @@ namespace Protos {
       }
       if (other.ActorID != 0) {
         ActorID = other.ActorID;
+      }
+      if (other.BornX != 0) {
+        BornX = other.BornX;
+      }
+      if (other.BornY != 0) {
+        BornY = other.BornY;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -543,6 +592,14 @@ namespace Protos {
           }
           case 24: {
             ActorID = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            BornX = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            BornY = input.ReadInt32();
             break;
           }
         }
@@ -1342,6 +1399,10 @@ namespace Protos {
         ///bs意外丢失
         /// </summary>
         [pbr::OriginalName("BSLost")] Bslost = 2,
+        /// <summary>
+        ///BS创建战场失败
+        /// </summary>
+        [pbr::OriginalName("BattleCreateFailed")] BattleCreateFailed = 3,
       }
 
     }

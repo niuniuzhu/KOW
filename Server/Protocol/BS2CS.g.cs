@@ -29,18 +29,19 @@ namespace Protos {
             "YXRlGAYgASgOMhQuUHJvdG9zLkJTSW5mby5TdGF0ZSIwCgVTdGF0ZRIICgRG",
             "cmVlEAASCAoEQnVzeRABEggKBEZ1bGwQAhIJCgVDbG9zZRADIlIKEUJTMkNT",
             "X1JlcG9ydFN0YXRlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIe",
-            "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvIkEKE0JTMkNTX0JhdHRs",
-            "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgsKA2Jp",
-            "ZBgCIAEoDSI/ChFCUzJDU19CYXR0bGVTdGFydBIdCgRvcHRzGAEgASgLMg8u",
-            "UHJvdG9zLk1zZ09wdHMSCwoDYmlkGAIgASgNIj0KD0JTMkNTX0JhdHRsZUVu",
-            "ZBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSCwoDYmlkGAIgASgN",
-            "YgZwcm90bzM="));
+            "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvImkKE0JTMkNTX0JhdHRs",
+            "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiYKBnJl",
+            "c3VsdBgCIAEoDjIWLlByb3Rvcy5HbG9iYWwuRUNvbW1vbhILCgNiaWQYAyAB",
+            "KA0iPwoRQlMyQ1NfQmF0dGxlU3RhcnQSHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
+            "cy5Nc2dPcHRzEgsKA2JpZBgCIAEoDSI9Cg9CUzJDU19CYXR0bGVFbmQSHQoE",
+            "b3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgsKA2JpZBgCIAEoDWIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BSInfo), global::Protos.BSInfo.Parser, new[]{ "Id", "Ip", "Port", "State" }, null, new[]{ typeof(global::Protos.BSInfo.Types.State) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_ReportState), global::Protos.BS2CS_ReportState.Parser, new[]{ "Opts", "BsInfo" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts", "Bid" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts", "Result", "Bid" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleStart), global::Protos.BS2CS_BattleStart.Parser, new[]{ "Opts", "Bid" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEnd), global::Protos.BS2CS_BattleEnd.Parser, new[]{ "Opts", "Bid" }, null, null, null)
           }));
@@ -477,6 +478,7 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public BS2CS_BattleInfoRet(BS2CS_BattleInfoRet other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      result_ = other.result_;
       bid_ = other.bid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -497,9 +499,26 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 2;
+    private global::Protos.Global.Types.ECommon result_ = 0;
+    /// <summary>
+    ///创建战场结果
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.ECommon Result {
+      get { return result_; }
+      set {
+        result_ = value;
+      }
+    }
+
     /// <summary>Field number for the "bid" field.</summary>
-    public const int BidFieldNumber = 2;
+    public const int BidFieldNumber = 3;
     private uint bid_;
+    /// <summary>
+    ///战场id
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Bid {
       get { return bid_; }
@@ -522,6 +541,7 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
+      if (Result != other.Result) return false;
       if (Bid != other.Bid) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -530,6 +550,7 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
       if (Bid != 0) hash ^= Bid.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -548,8 +569,12 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (Bid != 0) {
+      if (Result != 0) {
         output.WriteRawTag(16);
+        output.WriteEnum((int) Result);
+      }
+      if (Bid != 0) {
+        output.WriteRawTag(24);
         output.WriteUInt32(Bid);
       }
       if (_unknownFields != null) {
@@ -562,6 +587,9 @@ namespace Protos {
       int size = 0;
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
       if (Bid != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Bid);
@@ -582,6 +610,9 @@ namespace Protos {
           opts_ = new global::Protos.MsgOpts();
         }
         Opts.MergeFrom(other.Opts);
+      }
+      if (other.Result != 0) {
+        Result = other.Result;
       }
       if (other.Bid != 0) {
         Bid = other.Bid;
@@ -605,6 +636,10 @@ namespace Protos {
             break;
           }
           case 16: {
+            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
+            break;
+          }
+          case 24: {
             Bid = input.ReadUInt32();
             break;
           }

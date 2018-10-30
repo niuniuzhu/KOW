@@ -2,6 +2,7 @@ import { IUIModule } from "./IUIModule";
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 import { SceneManager } from "../Scene/SceneManager";
+import { Graphic } from "../Graphic";
 
 export class UIMatching implements IUIModule {
 	private readonly _root: fairygui.GComponent;
@@ -11,17 +12,19 @@ export class UIMatching implements IUIModule {
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/matching");
 		this._root = fairygui.UIPackage.createObject("matching", "Main").asCom;
+		this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
+		this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
 	}
 
 	public Dispose(): void {
 	}
 
 	public Enter(param: any): void {
-		fairygui.GRoot.inst.addChild(this._root);
+		Graphic.uiRoot.addChild(this._root);
 	}
 
 	public Exit(): void {
-		fairygui.GRoot.inst.removeChild(this._root);
+		Graphic.uiRoot.removeChild(this._root);
 	}
 
 	public Update(dt: number): void {
@@ -67,6 +70,7 @@ export class UIMatching implements IUIModule {
 				break;
 			case Protos.CS2GC_EnterBattle.Error.BSLost:
 			case Protos.CS2GC_EnterBattle.Error.BSNotFound:
+			case Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
 				UIAlert.Show("登录战场失败", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
 				break;
 		}

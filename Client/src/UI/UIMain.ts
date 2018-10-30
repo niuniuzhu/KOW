@@ -1,5 +1,6 @@
 import { IUIModule } from "./IUIModule";
 import { SceneManager } from "../Scene/SceneManager";
+import { Graphic } from "../Graphic";
 
 export class UIMain implements IUIModule {
 	private readonly _root: fairygui.GComponent;
@@ -9,8 +10,8 @@ export class UIMain implements IUIModule {
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/main");
 		this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
-		this._root.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
-		this._root.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
+		this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
+		this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
 		this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
 	}
 
@@ -19,7 +20,7 @@ export class UIMain implements IUIModule {
 	}
 
 	public Enter(param: any): void {
-		fairygui.GRoot.inst.addChild(this._root);
+		Graphic.uiRoot.addChild(this._root);
 		this._root.getTransition("t0").play(new laya.utils.Handler(this, () => {
 			this._root.getController("c1").selectedIndex = 1;
 			this._root.getTransition("t1").play();
@@ -27,7 +28,7 @@ export class UIMain implements IUIModule {
 	}
 
 	public Exit(): void {
-		fairygui.GRoot.inst.removeChild(this._root);
+		Graphic.uiRoot.removeChild(this._root);
 	}
 
 	public Update(dt: number): void {

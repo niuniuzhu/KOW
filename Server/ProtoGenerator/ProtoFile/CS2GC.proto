@@ -50,6 +50,7 @@ message CS2GC_EnterBattle {
 		Success = 0;
 		BSNotFound = 1;//找不到bs
 		BSLost = 2;//bs意外丢失
+		BattleCreateFailed = 3;//BS创建战场失败
 	}
 	MsgOpts opts = 1;
 	uint64 gcNID = 2;//登录bs时进行校验的id

@@ -15,6 +15,12 @@ namespace BattleServer
 			HelpText = "Specify configuration file." )]
 		public string cfg { get; set; }
 
+		[Option( 'f', "defs",
+			Default = "",
+			SetName = "bycfg",
+			HelpText = "Specify definition file." )]
+		public string defs { get; set; }
+
 		[Option( "id",
 			Default = ( uint )30001,
 			SetName = "bysetting",
@@ -62,23 +68,5 @@ namespace BattleServer
 			SetName = "bysetting",
 			HelpText = "gate client live time." )]
 		public long gcLive { get; set; }
-
-		[Option( "frameRate",
-			Default = 200,
-			SetName = "bysetting",
-			HelpText = "the frame rate of the logical update." )]
-		public int frameRate { get; set; }
-
-		[Option( "keyframeStep",
-			Default = 4,
-			SetName = "bysetting",
-			HelpText = "how long the step between two key frame." )]
-		public int keyframeStep { get; set; }
-
-		[Option( "battle_time",
-			Default = 5000,
-			SetName = "bysetting",
-			HelpText = "battle time." )]
-		public int battleTIme { get; set; }
 	}
 }

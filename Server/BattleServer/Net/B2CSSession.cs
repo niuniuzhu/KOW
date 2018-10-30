@@ -1,5 +1,4 @@
-﻿using BattleServer.Battle;
-using Core.Misc;
+﻿using Core.Misc;
 using Core.Net;
 using Shared;
 using Shared.Net;
@@ -85,10 +84,13 @@ namespace BattleServer.Net
 		{
 			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo ) message;
 
-			uint bid = BS.instance.battleManager.CreateBattle( battleInfo );
+			ErrorCode errorCode =  BS.instance.battleManager.CreateBattle( battleInfo, out uint bid );
 
 			Protos.BS2CS_BattleInfoRet battleInfoRet = ProtoCreator.R_CS2BS_BattleInfo( battleInfo.Opts.Pid );
 			battleInfoRet.Bid = bid;
+			battleInfoRet.Result = errorCode == ErrorCode.Success
+				                       ? Protos.Global.Types.ECommon.Success
+				                       : Protos.Global.Types.ECommon.Failed;
 			this.Send( battleInfoRet );
 			return ErrorCode.Success;
 		}

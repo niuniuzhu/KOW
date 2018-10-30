@@ -1,0 +1,21 @@
+{
+    "map": {
+        "m0": {
+            "frame_rate": 20,
+            "keyframe_step": 4,
+            "timeout": 180000,
+            "max_players": 2,
+            "born_pos": [
+                0,
+                100,
+                0,
+                -100
+            ]
+        }
+    },
+    "entity": {
+        "e0": {
+
+        }
+    }
+}

@@ -50,11 +50,6 @@ namespace Shared
 		public static readonly Regex REGEX_PWD = new Regex( @"" );
 
 		/// <summary>
-		/// 房间最大玩家数量
-		/// </summary>
-		public const int ROOM_MAX_PLAYERS = 1;
-
-		/// <summary>
 		/// 房间超时时间
 		/// </summary>
 		public const long ROOM_TIME_OUT = 5000;
@@ -76,6 +71,7 @@ namespace Shared
 		Failed,
 		//config
 		CfgLoadFailed,
+		DefsLoadFailed,
 		DBCfgLoadFailed,
 		//db
 		InvalidDatabase,

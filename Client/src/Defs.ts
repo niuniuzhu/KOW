@@ -1,4 +1,4 @@
-import { Hashtable } from "../RC/Utils/Hashtable";
+import { Hashtable } from "./RC/Utils/Hashtable";
 
 type pair = { [k: string]: any };
 

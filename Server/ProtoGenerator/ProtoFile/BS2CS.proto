@@ -25,7 +25,8 @@ message BS2CS_ReportState {
 //回应战场信息
 message BS2CS_BattleInfoRet {
 	MsgOpts opts = 1;
-	uint32 bid = 2;
+	Global.ECommon result = 2;//创建战场结果
+	uint32 bid = 3;//战场id
 }
 
 //战场开始

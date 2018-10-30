@@ -23,4 +23,10 @@
 	  </ProjectReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Config\battle_defs.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

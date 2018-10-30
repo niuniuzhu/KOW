@@ -1,6 +1,9 @@
 ﻿using BattleServer.User;
 using Core.Misc;
+using Newtonsoft.Json.Linq;
+using Shared;
 using Shared.Net;
+using System;
 using System.Collections.Generic;
 
 namespace BattleServer.Battle
@@ -29,16 +32,39 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 开始战斗
 		/// </summary>
-		public uint CreateBattle( Protos.CS2BS_BattleInfo battleInfo )
+		public ErrorCode CreateBattle( Protos.CS2BS_BattleInfo battleInfo, out uint bid )
 		{
+			bid = 0;
+			int frameRate, keyframeStep, timeout;
+			JArray bornPos;
+			try
+			{
+				JObject mapDef = ( JObject ) BS.instance.defs["map"]["m" + battleInfo.MapID];
+				frameRate = ( int ) mapDef["frame_rate"];
+				keyframeStep = ( int ) mapDef["keyframe_step"];
+				timeout = ( int ) mapDef["timeout"];
+				bornPos = ( JArray ) mapDef["born_pos"];
+				int maxPlayer = ( int ) mapDef["max_players"];
+				if ( maxPlayer != battleInfo.PlayerInfo.Count )
+					return ErrorCode.Failed;
+				if ( bornPos.Count != maxPlayer * 2 )
+					return ErrorCode.Failed;
+			}
+			catch ( Exception e )
+			{
+				Logger.Error( e.ToString() );
+				return ErrorCode.Failed;
+			}
+
 			Battle battle = POOL.Pop();
+			bid = battle.id;
 
 			//初始化战场描述
 			BattleEntry battleEntry;
 			battleEntry.mapID = battleInfo.MapID;
-			battleEntry.frameRate = BS.instance.config.frameRate;
-			battleEntry.keyframeStep = BS.instance.config.keyframeStep;
-			battleEntry.battleTime = BS.instance.config.battleTime;
+			battleEntry.frameRate = frameRate;
+			battleEntry.keyframeStep = keyframeStep;
+			battleEntry.battleTime = timeout;
 			int count = battleInfo.PlayerInfo.Count;
 			battleEntry.players = new Player[count];
 			for ( int i = 0; i < count; i++ )
@@ -48,7 +74,9 @@ namespace BattleServer.Battle
 				{
 					gcNID = playerInfo.GcNID,
 					actorID = playerInfo.ActorID,
-					name = playerInfo.Name
+					name = playerInfo.Name,
+					bornX = ( int ) bornPos[i * 2],
+					bornY = ( int ) bornPos[i * 2 + 1]
 				};
 				battleEntry.players[i] = player;
 
@@ -70,7 +98,7 @@ namespace BattleServer.Battle
 			//	toGCBattleStart.Id = battle.id;
 			//	battle.Broadcast( toGCBattleStart );
 			//} );
-			return battle.id;
+			return ErrorCode.Success;
 		}
 
 		private void OnBattleEnd( Battle battle )

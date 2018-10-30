@@ -6,6 +6,7 @@ import { Logger } from "./RC/Utils/Logger";
 import { Preloader } from "./Preloader";
 import * as $protobuf from "./Libs/protobufjs";
 import * as Long from "./Libs/long";
+import { Graphic } from "./Graphic";
 
 export class Main {
 	private static _instance: Main;
@@ -73,6 +74,7 @@ export class Main {
 		}
 		ProtoCreator.Init();
 		Connector.Init();
+		Graphic.Init();
 		UIManager.Init();
 		SceneManager.Init();
 		SceneManager.ChangeState(SceneManager.State.Login);

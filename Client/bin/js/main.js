@@ -1,3 +1,4 @@
+"use strict";
 define("UI/IUIModule", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -32,7 +33,7 @@ define("UI/UIAlert", ["require", "exports"], function (require, exports) {
     }
     exports.UIAlert = UIAlert;
 });
-define("FSM/FSMState", ["require", "exports"], function (require, exports) {
+define("RC/FSM/FSMState", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class FSMState {
@@ -58,58 +59,7 @@ define("FSM/FSMState", ["require", "exports"], function (require, exports) {
     }
     exports.FSMState = FSMState;
 });
-define("FSM/FSM", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class FSM {
-        get currentState() { return this._currentState; }
-        get previousState() { return this._previousState; }
-        constructor() {
-            this._stateMap = new Map();
-        }
-        AddState(state) {
-            if (this._stateMap.has(state.type))
-                return false;
-            this._stateMap.set(state.type, state);
-            return true;
-        }
-        RemoveState(type) {
-            return this._stateMap.delete(type);
-        }
-        HasState(type) {
-            return this._stateMap.has(type);
-        }
-        LeaveState(type) {
-            if (!this._stateMap.has(type))
-                return false;
-            let state = this._stateMap.get(type);
-            state.Exit();
-            return true;
-        }
-        ChangeState(type, param = null, force = false) {
-            if (!this._stateMap.has(type))
-                return false;
-            if (this._currentState != null) {
-                if (!force && this._currentState.type == type)
-                    return false;
-                this._currentState.Exit();
-                this._previousState = this._currentState;
-                this._currentState = null;
-            }
-            let state = this._stateMap.get(type);
-            this._currentState = state;
-            this._currentState.Enter(param);
-        }
-        Update(dt) {
-            if (this.globalState != null)
-                this.globalState.Update(dt);
-            if (this._currentState != null)
-                this._currentState.Update(dt);
-        }
-    }
-    exports.FSM = FSM;
-});
-define("Scene/SceneState", ["require", "exports", "FSM/FSMState"], function (require, exports, FSMState_1) {
+define("Scene/SceneState", ["require", "exports", "RC/FSM/FSMState"], function (require, exports, FSMState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class SceneState extends FSMState_1.FSMState {
@@ -4389,6 +4339,7 @@ define("UI/UIMatching", ["require", "exports", "../Libs/protos", "UI/UIAlert", "
                     break;
                 case protos_6.Protos.CS2GC_EnterBattle.Error.BSLost:
                 case protos_6.Protos.CS2GC_EnterBattle.Error.BSNotFound:
+                case protos_6.Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
                     UIAlert_2.UIAlert.Show("登录战场失败", () => SceneManager_4.SceneManager.ChangeState(SceneManager_4.SceneManager.State.Matching, null, true));
                     break;
             }
@@ -4409,7 +4360,44 @@ define("UI/UIMatching", ["require", "exports", "../Libs/protos", "UI/UIAlert", "
     }
     exports.UIMatching = UIMatching;
 });
-define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connector", "../Libs/protos", "Net/ProtoHelper", "Scene/SceneState", "RC/Utils/Logger", "Scene/SceneManager"], function (require, exports, UIManager_3, Connector_3, protos_7, ProtoHelper_4, SceneState_4, Logger_4, SceneManager_5) {
+define("Scene/PreloadInstance", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class PreloadInstance {
+        static LoadPacket(mapID, playerInfos, completeHandler) {
+            let urls = [];
+            urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
+            urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
+            Laya.loader.load(urls, Laya.Handler.create(this, () => {
+                fairygui.UIPackage.addPackage("res/ui/assets");
+                this.LoadAssets(mapID, playerInfos, completeHandler);
+            }));
+        }
+        static Load(mapID, playerInfos, completeHandler) {
+            if (!this._init) {
+                this.LoadPacket(mapID, playerInfos, completeHandler);
+                this._init = true;
+            }
+            this.LoadAssets(mapID, playerInfos, completeHandler);
+        }
+        static LoadAssets(mapID, playerInfos, completeHandler) {
+            this.map = fairygui.UIPackage.createObject("assets", "m" + mapID).asCom;
+            this.players = new Map();
+            let count = playerInfos.length;
+            for (let i = 0; i < count; i++) {
+                const playerInfo = playerInfos[i];
+                this.players.set(playerInfo.actorID, fairygui.UIPackage.createObject("assets", "e" + playerInfo.actorID).asCom);
+            }
+            completeHandler();
+        }
+        static Clear() {
+            this.map = null;
+            this.players = null;
+        }
+    }
+    exports.PreloadInstance = PreloadInstance;
+});
+define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connector", "../Libs/protos", "Net/ProtoHelper", "Scene/SceneState", "RC/Utils/Logger", "Scene/SceneManager", "Scene/PreloadInstance"], function (require, exports, UIManager_3, Connector_3, protos_7, ProtoHelper_4, SceneState_4, Logger_4, SceneManager_5, PreloadInstance_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MatchingState extends SceneState_4.SceneState {
@@ -4507,11 +4495,12 @@ define("Scene/MatchingState", ["require", "exports", "UI/UIManager", "Net/Connec
                 }
             });
         }
-        StartLoad(mapID, playInfos) {
-            Logger_4.Logger.Log("start load");
-            this.OnLoadComplete();
+        StartLoad(mapID, playerInfos) {
+            Logger_4.Logger.Log("instancing");
+            PreloadInstance_1.PreloadInstance.Load(mapID, playerInfos, this.OnInstancingComplete);
         }
-        OnLoadComplete() {
+        OnInstancingComplete() {
+            Logger_4.Logger.Log("instancing complete");
             let msg = ProtoHelper_4.ProtoCreator.Q_GC2CS_UpdatePlayerInfo();
             msg.progress = 100;
             Connector_3.Connector.SendToCS(protos_7.Protos.GC2CS_UpdatePlayerInfo, msg);
@@ -4740,7 +4729,7 @@ define("Scene/BattleState", ["require", "exports", "Scene/SceneState", "Net/Conn
     }
     exports.BattleState = BattleState;
 });
-define("Scene/SceneManager", ["require", "exports", "FSM/FSM", "Scene/MainState", "Scene/LoginState", "Scene/GlobalState", "Scene/MatchingState", "Scene/BattleState"], function (require, exports, FSM_1, MainState_1, LoginState_1, GlobalState_1, MatchingState_1, BattleState_1) {
+define("Scene/SceneManager", ["require", "exports", "../FSM/FSM", "Scene/MainState", "Scene/LoginState", "Scene/GlobalState", "Scene/MatchingState", "Scene/BattleState"], function (require, exports, FSM_1, MainState_1, LoginState_1, GlobalState_1, MatchingState_1, BattleState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var State;
@@ -7816,6 +7805,57 @@ define("RC/Crypto/MD5", ["require", "exports"], function (require, exports) {
     Md5.hexOut = [];
     Md5.onePassHasher = new Md5();
     exports.Md5 = Md5;
+});
+define("RC/FSM/FSM", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class FSM {
+        get currentState() { return this._currentState; }
+        get previousState() { return this._previousState; }
+        constructor() {
+            this._stateMap = new Map();
+        }
+        AddState(state) {
+            if (this._stateMap.has(state.type))
+                return false;
+            this._stateMap.set(state.type, state);
+            return true;
+        }
+        RemoveState(type) {
+            return this._stateMap.delete(type);
+        }
+        HasState(type) {
+            return this._stateMap.has(type);
+        }
+        LeaveState(type) {
+            if (!this._stateMap.has(type))
+                return false;
+            let state = this._stateMap.get(type);
+            state.Exit();
+            return true;
+        }
+        ChangeState(type, param = null, force = false) {
+            if (!this._stateMap.has(type))
+                return false;
+            if (this._currentState != null) {
+                if (!force && this._currentState.type == type)
+                    return false;
+                this._currentState.Exit();
+                this._previousState = this._currentState;
+                this._currentState = null;
+            }
+            let state = this._stateMap.get(type);
+            this._currentState = state;
+            this._currentState.Enter(param);
+        }
+        Update(dt) {
+            if (this.globalState != null)
+                this.globalState.Update(dt);
+            if (this._currentState != null)
+                this._currentState.Update(dt);
+        }
+    }
+    exports.FSM = FSM;
 });
 define("RC/Math/Bounds", ["require", "exports", "RC/Math/MathUtils", "RC/Math/Vec3"], function (require, exports, MathUtils_8, Vec3_5) {
     "use strict";

@@ -6,6 +6,7 @@ import { SceneState } from "./SceneState";
 import { UIMatching } from "../UI/UIMatching";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
+import { PreloadInstance } from "./PreloadInstance";
 
 export class MatchingState extends SceneState {
 	private readonly _ui: UIMatching;
@@ -124,14 +125,15 @@ export class MatchingState extends SceneState {
 		});
 	}
 
-	private StartLoad(mapID: number, playInfos: Protos.ICS2GC_PlayerInfo[]): void {
+	private StartLoad(mapID: number, playerInfos: Protos.ICS2GC_PlayerInfo[]): void {
 		//todo preloadall
-		Logger.Log("start load");
-		this.OnLoadComplete();
+		Logger.Log("instancing");
+		PreloadInstance.Load(mapID, playerInfos, this.OnInstancingComplete);
 	}
 
 	//通知cs加载完成
-	public OnLoadComplete(): void {
+	public OnInstancingComplete(): void {
+		Logger.Log("instancing complete");
 		let msg = ProtoCreator.Q_GC2CS_UpdatePlayerInfo();
 		msg.progress = 100;
 		Connector.SendToCS(Protos.GC2CS_UpdatePlayerInfo, msg);

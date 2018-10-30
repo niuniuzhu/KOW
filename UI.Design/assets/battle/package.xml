@@ -57,10 +57,7 @@
     <component id="p7qk1h" name="Core.xml" path="/"/>
     <component id="p7qk1i" name="nuqi.xml" path="/"/>
     <component id="p7qk1j" name="hp_bar.xml" path="/"/>
-    <image id="p7qk1k" name="ground.png" path="/maps/m0/" scale="" qualityOption="custom" quality="10" atlas="alone"/>
     <component id="p7qk1l" name="layer_battle.xml" path="/assets/"/>
-    <component id="p7qk1m" name="ground.xml" path="/maps/m0/" exported="true"/>
-    <component id="p7qk1o" name="e0.xml" path="/entities/" exported="true"/>
   </resources>
   <publish name="battle"/>
 </packageDescription>

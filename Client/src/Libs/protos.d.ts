@@ -301,15 +301,51 @@ export namespace Protos {
         }
     }
 
+    interface IBS2GC_PlayerInfo {
+        gcNID?: (Long|null);
+        name?: (string|null);
+        actorID?: (number|null);
+        attrs?: ({ [k: string]: number }|null);
+    }
+
+    class BS2GC_PlayerInfo implements IBS2GC_PlayerInfo {
+        constructor(properties?: Protos.IBS2GC_PlayerInfo);
+        public gcNID: Long;
+        public name: string;
+        public actorID: number;
+        public attrs: { [k: string]: number };
+        public static create(properties?: Protos.IBS2GC_PlayerInfo): Protos.BS2GC_PlayerInfo;
+        public static encode(message: Protos.IBS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IBS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_PlayerInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_PlayerInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_PlayerInfo;
+        public static toObject(message: Protos.BS2GC_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
     interface IBS2GC_LoginRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.Global.ECommon|null);
+        rndSeed?: (number|null);
+        frameRate?: (number|null);
+        keyframeStep?: (number|null);
+        battleTime?: (number|null);
+        mapID?: (number|null);
+        playerInfo?: (Protos.IBS2GC_PlayerInfo[]|null);
     }
 
     class BS2GC_LoginRet implements IBS2GC_LoginRet {
         constructor(properties?: Protos.IBS2GC_LoginRet);
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.Global.ECommon;
+        public rndSeed: number;
+        public frameRate: number;
+        public keyframeStep: number;
+        public battleTime: number;
+        public mapID: number;
+        public playerInfo: Protos.IBS2GC_PlayerInfo[];
         public static create(properties?: Protos.IBS2GC_LoginRet): Protos.BS2GC_LoginRet;
         public static encode(message: Protos.IBS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -361,73 +397,37 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
-    interface IBS2GC_PlayerInfo {
-        gcNID?: (Long|null);
-        name?: (string|null);
-        actorID?: (number|null);
-        attrs?: ({ [k: string]: IAny }|null);
-    }
-
-    class BS2GC_PlayerInfo implements IBS2GC_PlayerInfo {
-        constructor(properties?: Protos.IBS2GC_PlayerInfo);
-        public gcNID: Long;
-        public name: string;
-        public actorID: number;
-        public attrs: { [k: string]: IAny };
-        public static create(properties?: Protos.IBS2GC_PlayerInfo): Protos.BS2GC_PlayerInfo;
-        public static encode(message: Protos.IBS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_PlayerInfo;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_PlayerInfo;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_PlayerInfo;
-        public static toObject(message: Protos.BS2GC_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
-    interface IBS2GC_Snapshot {
-        frame?: (number|null);
+    interface ISnapshot {
+        currFrame?: (number|null);
         playerInfos?: (Protos.IBS2GC_PlayerInfo[]|null);
     }
 
-    class BS2GC_Snapshot implements IBS2GC_Snapshot {
-        constructor(properties?: Protos.IBS2GC_Snapshot);
-        public frame: number;
+    class Snapshot implements ISnapshot {
+        constructor(properties?: Protos.ISnapshot);
+        public currFrame: number;
         public playerInfos: Protos.IBS2GC_PlayerInfo[];
-        public static create(properties?: Protos.IBS2GC_Snapshot): Protos.BS2GC_Snapshot;
-        public static encode(message: Protos.IBS2GC_Snapshot, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS2GC_Snapshot, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_Snapshot;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_Snapshot;
+        public static create(properties?: Protos.ISnapshot): Protos.Snapshot;
+        public static encode(message: Protos.ISnapshot, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ISnapshot, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.Snapshot;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.Snapshot;
         public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_Snapshot;
-        public static toObject(message: Protos.BS2GC_Snapshot, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public static fromObject(object: { [k: string]: any }): Protos.Snapshot;
+        public static toObject(message: Protos.Snapshot, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
     interface IBS2GC_RequestSnapshotRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.BS2GC_RequestSnapshotRet.EResult|null);
-        mapID?: (number|null);
-        framRate?: (number|null);
-        keyframeStep?: (number|null);
-        timeout?: (number|null);
-        currTime?: (number|null);
-        currFrame?: (number|null);
-        snapshot?: (Protos.IBS2GC_Snapshot|null);
+        snapshot?: (Protos.ISnapshot|null);
     }
 
     class BS2GC_RequestSnapshotRet implements IBS2GC_RequestSnapshotRet {
         constructor(properties?: Protos.IBS2GC_RequestSnapshotRet);
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.BS2GC_RequestSnapshotRet.EResult;
-        public mapID: number;
-        public framRate: number;
-        public keyframeStep: number;
-        public timeout: number;
-        public currTime: number;
-        public currFrame: number;
-        public snapshot?: (Protos.IBS2GC_Snapshot|null);
+        public snapshot?: (Protos.ISnapshot|null);
         public static create(properties?: Protos.IBS2GC_RequestSnapshotRet): Protos.BS2GC_RequestSnapshotRet;
         public static encode(message: Protos.IBS2GC_RequestSnapshotRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2GC_RequestSnapshotRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -452,6 +452,7 @@ export namespace Protos {
         gcNID?: (Long|null);
         name?: (string|null);
         actorID?: (number|null);
+        team?: (number|null);
     }
 
     class CS2BS_PlayerInfo implements ICS2BS_PlayerInfo {
@@ -459,6 +460,7 @@ export namespace Protos {
         public gcNID: Long;
         public name: string;
         public actorID: number;
+        public team: number;
         public static create(properties?: Protos.ICS2BS_PlayerInfo): Protos.CS2BS_PlayerInfo;
         public static encode(message: Protos.ICS2BS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2BS_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -473,7 +475,7 @@ export namespace Protos {
     interface ICS2BS_BattleInfo {
         opts?: (Protos.IMsgOpts|null);
         mapID?: (number|null);
-        timeout?: (number|null);
+        connTimeout?: (number|null);
         playerInfo?: (Protos.ICS2BS_PlayerInfo[]|null);
     }
 
@@ -481,7 +483,7 @@ export namespace Protos {
         constructor(properties?: Protos.ICS2BS_BattleInfo);
         public opts?: (Protos.IMsgOpts|null);
         public mapID: number;
-        public timeout: number;
+        public connTimeout: number;
         public playerInfo: Protos.ICS2BS_PlayerInfo[];
         public static create(properties?: Protos.ICS2BS_BattleInfo): Protos.CS2BS_BattleInfo;
         public static encode(message: Protos.ICS2BS_BattleInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -574,6 +576,7 @@ export namespace Protos {
         gcNID?: (Long|null);
         name?: (string|null);
         actorID?: (number|null);
+        team?: (number|null);
     }
 
     class CS2GC_PlayerInfo implements ICS2GC_PlayerInfo {
@@ -581,6 +584,7 @@ export namespace Protos {
         public gcNID: Long;
         public name: string;
         public actorID: number;
+        public team: number;
         public static create(properties?: Protos.ICS2GC_PlayerInfo): Protos.CS2GC_PlayerInfo;
         public static encode(message: Protos.ICS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1101,12 +1105,14 @@ export namespace Protos {
 
     interface IGC2CS_BeginMatch {
         opts?: (Protos.IMsgOpts|null);
+        mode?: (Protos.GC2CS_BeginMatch.EMode|null);
         actorID?: (number|null);
     }
 
     class GC2CS_BeginMatch implements IGC2CS_BeginMatch {
         constructor(properties?: Protos.IGC2CS_BeginMatch);
         public opts?: (Protos.IMsgOpts|null);
+        public mode: Protos.GC2CS_BeginMatch.EMode;
         public actorID: number;
         public static create(properties?: Protos.IGC2CS_BeginMatch): Protos.GC2CS_BeginMatch;
         public static encode(message: Protos.IGC2CS_BeginMatch, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1117,6 +1123,15 @@ export namespace Protos {
         public static fromObject(object: { [k: string]: any }): Protos.GC2CS_BeginMatch;
         public static toObject(message: Protos.GC2CS_BeginMatch, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace GC2CS_BeginMatch {
+
+        enum EMode {
+            Single1V1 = 0,
+            Single2V2 = 1,
+            Team2V2 = 2
+        }
     }
 
     interface IGC2CS_UpdatePlayerInfo {

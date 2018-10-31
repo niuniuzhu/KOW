@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "f24d570d83db671bbd367b341168d9eaf7ea7dc6"
+    "signature": "017a3682f57a409540a584fb04e1ec8baf4c168d"
   },
   "compilationOptions": {},
   "targets": {
@@ -10,7 +10,6 @@
         "dependencies": {
           "CommandLineParser": "2.3.0",
           "Core": "1.0.0",
-          "Newtonsoft.Json": "11.0.2",
           "Protocol": "1.0.0",
           "Shared": "1.0.0"
         },
@@ -117,14 +116,6 @@
           "lib/netcoreapp2.0/MySql.Data.dll": {
             "assemblyVersion": "8.0.12.0",
             "fileVersion": "8.0.12.0"
-          }
-        }
-      },
-      "Newtonsoft.Json/11.0.2": {
-        "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {
-            "assemblyVersion": "11.0.0.0",
-            "fileVersion": "11.0.2.21924"
           }
         }
       },
@@ -1144,13 +1135,6 @@
       "sha512": "sha512-vcVmD7C/socXjlyzY2vjF+bq/NdxrMtQqPym9pZxk6qfUK7dq/KX8XrY/wa5TYp3IHM1JR0UzEfBKNCGmtr1Lg==",
       "path": "mysql.data/8.0.12",
       "hashPath": "mysql.data.8.0.12.nupkg.sha512"
-    },
-    "Newtonsoft.Json/11.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
-      "path": "newtonsoft.json/11.0.2",
-      "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
     },
     "Pipelines.Sockets.Unofficial/1.0.7": {
       "type": "package",

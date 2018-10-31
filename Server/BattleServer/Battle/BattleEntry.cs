@@ -1,30 +1,17 @@
-﻿using BattleServer.User;
-
-namespace BattleServer.Battle
+﻿namespace BattleServer.Battle
 {
 	public struct BattleEntry
 	{
-		public int frameRate;
-		public int keyframeStep;
+		public class Player
+		{
+			public ulong gcNID;
+			public string name;
+			public int actorID;
+			public int team;
+		}
+
+		public int rndSeed;
 		public int mapID;
 		public Player[] players;
-		public int battleTime;
-	}
-
-	public class Player
-	{
-		/// <summary>
-		/// 所属玩家实例
-		/// </summary>
-		public BSUser user;
-		/// <summary>
-		/// 网络ID
-		/// </summary>
-		public ulong gcNID;
-		//以下是属性
-		public string name;
-		public int actorID;
-		public int bornX;
-		public int bornY;
 	}
 }

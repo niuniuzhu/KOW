@@ -28,7 +28,7 @@ export class FSM {
 		return this._stateMap.has(type);
 	}
 
-	public LeaveState(type: number): boolean {
+	public ExitState(type: number): boolean {
 		if (!this._stateMap.has(type))
 			return false;
 		let state = this._stateMap.get(type);
@@ -49,6 +49,7 @@ export class FSM {
 		let state = this._stateMap.get(type);
 		this._currentState = state;
 		this._currentState.Enter(param);
+		return true;
 	}
 
 	public Update(dt: number): void {

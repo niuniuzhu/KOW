@@ -1,4 +1,5 @@
-﻿using BattleServer.User;
+﻿using BattleServer.Battle.Model;
+using BattleServer.User;
 using Core.Misc;
 using Core.Net;
 using Shared;
@@ -52,7 +53,28 @@ namespace BattleServer.Net
 
 			BSUser user = BS.instance.userMgr.Online( this._gcNID, this.id );
 			if ( user != null )
+			{
+				//把战场的初始状态下发到GC
+				Battle.Battle battle = BS.instance.battleManager.GetBattle( this._gcNID );
+				loginRet.RndSeed = battle.rndSeed;
+				loginRet.FrameRate = battle.frameRate;
+				loginRet.KeyframeStep = battle.keyframeStep;
+				loginRet.BattleTime = battle.battleTime;
+				loginRet.MapID = battle.mapID;
+
+				int count = battle.numPlayers;
+				for ( int i = 0; i < count; i++ )
+				{
+					Player player = battle.GetPlayerAt( i );
+					Protos.BS2GC_PlayerInfo playerInfo = new Protos.BS2GC_PlayerInfo();
+					playerInfo.GcNID = player.id;
+					playerInfo.Name = player.name;
+					playerInfo.ActorID = player.actorID;
+					player.attribute.Foreach( ( attr, value ) => { playerInfo.Attrs[( int ) attr] = ( float ) value; } );
+					loginRet.PlayerInfo.Add( playerInfo );
+				}
 				loginRet.Result = Protos.Global.Types.ECommon.Success;
+			}
 			else
 			{
 				loginRet.Result = Protos.Global.Types.ECommon.Failed;

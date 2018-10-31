@@ -24,15 +24,17 @@ namespace Protos {
     static GC2CSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtHQzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iQgoQR0MyQ1Nf",
-            "QmVnaW5NYXRjaBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDwoH",
-            "YWN0b3JJRBgCIAEoBSJJChZHQzJDU19VcGRhdGVQbGF5ZXJJbmZvEh0KBG9w",
-            "dHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIQCghwcm9ncmVzcxgCIAEoBWIG",
-            "cHJvdG8z"));
+            "CgtHQzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ipAEKEEdDMkNT",
+            "X0JlZ2luTWF0Y2gSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiwK",
+            "BG1vZGUYAiABKA4yHi5Qcm90b3MuR0MyQ1NfQmVnaW5NYXRjaC5FTW9kZRIP",
+            "CgdhY3RvcklEGAMgASgFIjIKBUVNb2RlEg0KCVNpbmdsZTFWMRAAEg0KCVNp",
+            "bmdsZTJWMhABEgsKB1RlYW0yVjIQAiJJChZHQzJDU19VcGRhdGVQbGF5ZXJJ",
+            "bmZvEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIQCghwcm9ncmVz",
+            "cxgCIAEoBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_BeginMatch), global::Protos.GC2CS_BeginMatch.Parser, new[]{ "Opts", "ActorID" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_BeginMatch), global::Protos.GC2CS_BeginMatch.Parser, new[]{ "Opts", "Mode", "ActorID" }, null, new[]{ typeof(global::Protos.GC2CS_BeginMatch.Types.EMode) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_UpdatePlayerInfo), global::Protos.GC2CS_UpdatePlayerInfo.Parser, new[]{ "Opts", "Progress" }, null, null, null)
           }));
     }
@@ -69,6 +71,7 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GC2CS_BeginMatch(GC2CS_BeginMatch other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      mode_ = other.mode_;
       actorID_ = other.actorID_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -89,11 +92,25 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "mode" field.</summary>
+    public const int ModeFieldNumber = 2;
+    private global::Protos.GC2CS_BeginMatch.Types.EMode mode_ = 0;
+    /// <summary>
+    ///匹配模式
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.GC2CS_BeginMatch.Types.EMode Mode {
+      get { return mode_; }
+      set {
+        mode_ = value;
+      }
+    }
+
     /// <summary>Field number for the "actorID" field.</summary>
-    public const int ActorIDFieldNumber = 2;
+    public const int ActorIDFieldNumber = 3;
     private int actorID_;
     /// <summary>
-    ///匹配前选择的角色id
+    ///匹配前选择的角色id 
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int ActorID {
@@ -117,6 +134,7 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
+      if (Mode != other.Mode) return false;
       if (ActorID != other.ActorID) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -125,6 +143,7 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Mode != 0) hash ^= Mode.GetHashCode();
       if (ActorID != 0) hash ^= ActorID.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -143,8 +162,12 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (ActorID != 0) {
+      if (Mode != 0) {
         output.WriteRawTag(16);
+        output.WriteEnum((int) Mode);
+      }
+      if (ActorID != 0) {
+        output.WriteRawTag(24);
         output.WriteInt32(ActorID);
       }
       if (_unknownFields != null) {
@@ -157,6 +180,9 @@ namespace Protos {
       int size = 0;
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Mode != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Mode);
       }
       if (ActorID != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
@@ -177,6 +203,9 @@ namespace Protos {
           opts_ = new global::Protos.MsgOpts();
         }
         Opts.MergeFrom(other.Opts);
+      }
+      if (other.Mode != 0) {
+        Mode = other.Mode;
       }
       if (other.ActorID != 0) {
         ActorID = other.ActorID;
@@ -200,12 +229,41 @@ namespace Protos {
             break;
           }
           case 16: {
+            mode_ = (global::Protos.GC2CS_BeginMatch.Types.EMode) input.ReadEnum();
+            break;
+          }
+          case 24: {
             ActorID = input.ReadInt32();
             break;
           }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the GC2CS_BeginMatch message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      /// <summary>
+      ///todo 匹配模式
+      /// </summary>
+      public enum EMode {
+        /// <summary>
+        ///单人随机匹配
+        /// </summary>
+        [pbr::OriginalName("Single1V1")] Single1V1 = 0,
+        /// <summary>
+        ///多人随机匹配
+        /// </summary>
+        [pbr::OriginalName("Single2V2")] Single2V2 = 1,
+        /// <summary>
+        ///多人组队匹配
+        /// </summary>
+        [pbr::OriginalName("Team2V2")] Team2V2 = 2,
+      }
+
+    }
+    #endregion
 
   }
 

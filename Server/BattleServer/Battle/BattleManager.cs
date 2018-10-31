@@ -1,11 +1,11 @@
-﻿using BattleServer.User;
+﻿using BattleServer.Battle.Model;
+using BattleServer.Battle.Snapshot;
+using BattleServer.User;
 using Core.Misc;
-using Newtonsoft.Json.Linq;
 using Shared;
 using Shared.Net;
 using System;
 using System.Collections.Generic;
-using BattleServer.Battle.Snapshot;
 
 namespace BattleServer.Battle
 {
@@ -13,7 +13,17 @@ namespace BattleServer.Battle
 	{
 		private static readonly ObjectPool<Battle> POOL = new ObjectPool<Battle>();
 
+		/// <summary>
+		/// 战场随机种子产生器
+		/// </summary>
+		private readonly Random _random = new Random();
+		/// <summary>
+		/// 客户端网络ID到战场的映射表
+		/// </summary>
 		private readonly Dictionary<ulong, Battle> _gcNIDToBattle = new Dictionary<ulong, Battle>();
+		/// <summary>
+		/// 运行中的战场列表
+		/// </summary>
 		private readonly List<Battle> _runningBattles = new List<Battle>();
 
 		/// <summary>
@@ -35,49 +45,24 @@ namespace BattleServer.Battle
 		/// </summary>
 		public ErrorCode CreateBattle( Protos.CS2BS_BattleInfo battleInfo, out uint bid )
 		{
-			bid = 0;
-			int frameRate, keyframeStep, timeout;
-			JArray bornPos;
-			try
-			{
-				JObject mapDef = ( JObject ) BS.instance.defs["map"]["m" + battleInfo.MapID];
-				frameRate = ( int ) mapDef["frame_rate"];
-				keyframeStep = ( int ) mapDef["keyframe_step"];
-				timeout = ( int ) mapDef["timeout"];
-				bornPos = ( JArray ) mapDef["born_pos"];
-				int maxPlayer = ( int ) mapDef["max_players"];
-				if ( maxPlayer != battleInfo.PlayerInfo.Count )
-					return ErrorCode.Failed;
-				if ( bornPos.Count != maxPlayer * 2 )
-					return ErrorCode.Failed;
-			}
-			catch ( Exception e )
-			{
-				Logger.Error( e.ToString() );
-				return ErrorCode.Failed;
-			}
-
 			Battle battle = POOL.Pop();
 			bid = battle.id;
 
 			//初始化战场描述
 			BattleEntry battleEntry;
+			battleEntry.rndSeed = this._random.Next();
 			battleEntry.mapID = battleInfo.MapID;
-			battleEntry.frameRate = frameRate;
-			battleEntry.keyframeStep = keyframeStep;
-			battleEntry.battleTime = timeout;
 			int count = battleInfo.PlayerInfo.Count;
-			battleEntry.players = new Player[count];
+			battleEntry.players = new BattleEntry.Player[count];
 			for ( int i = 0; i < count; i++ )
 			{
 				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfo[i];
-				Player player = new Player
+				BattleEntry.Player player = new BattleEntry.Player
 				{
 					gcNID = playerInfo.GcNID,
 					actorID = playerInfo.ActorID,
 					name = playerInfo.Name,
-					bornX = ( int ) bornPos[i * 2],
-					bornY = ( int ) bornPos[i * 2 + 1]
+					team = playerInfo.Team
 				};
 				battleEntry.players[i] = player;
 
@@ -114,9 +99,9 @@ namespace BattleServer.Battle
 				toGCBattleEnd.Id = battle.id;
 				battle.Broadcast( toGCBattleEnd );
 				//所有玩家下线
-				int count = battle.players.Length;
+				int count = battle.numPlayers;
 				for ( int i = 0; i < count; i++ )
-					BS.instance.userMgr.Offline( battle.players[i].user );
+					BS.instance.userMgr.Offline( battle.GetPlayerAt( i ).user );
 			} );
 		}
 
@@ -146,11 +131,11 @@ namespace BattleServer.Battle
 		internal void OnUserConnected( BSUser user )
 		{
 			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
-			int count = battle.players.Length;
+			int count = battle.numPlayers;
 			for ( var i = 0; i < count; i++ )
 			{
-				Player player = battle.players[i];
-				if ( player.gcNID != user.gcNID )
+				Player player = battle.GetPlayerAt( i );
+				if ( player.id != user.gcNID )
 					continue;
 				player.user = user;
 				return;
@@ -163,10 +148,10 @@ namespace BattleServer.Battle
 		internal void OnUserDisconnected( BSUser user )
 		{
 			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
-			int count = battle.players.Length;
+			int count = battle.numPlayers;
 			for ( var i = 0; i < count; i++ )
 			{
-				Player player = battle.players[i];
+				Player player = battle.GetPlayerAt( i );
 				if ( player.user != user )
 					continue;
 				player.user = null;

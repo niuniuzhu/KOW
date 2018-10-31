@@ -30,7 +30,7 @@ namespace CentralServer
 			Default = ( uint )1,
 			SetName = "bysetting",
 			HelpText = "ID for central server." )]
-		public uint cdID { get; set; }
+		public uint csID { get; set; }
 
 		[Option( "ls_port",
 			Default = 10001,

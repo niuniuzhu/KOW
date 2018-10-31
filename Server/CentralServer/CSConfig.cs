@@ -1,4 +1,7 @@
-﻿namespace CentralServer
+﻿using System.Collections;
+using Core.Misc;
+
+namespace CentralServer
 {
 	public class CSConfig
 	{
@@ -12,9 +15,22 @@
 		public string redisPwd;
 		public long sessionExpTime;
 
+		public void CopyFromJson( Hashtable json )
+		{
+			this.csID = json.GetUInt( "csID" );
+			this.lsPort = json.GetInt( "lsPort" );
+			this.gsPort = json.GetInt( "gsPort" );
+			this.bsPort = json.GetInt( "bsPort" );
+			this.maxGSNum = json.GetInt( "maxGSNum" );
+			this.redisIP = json.GetString( "redisIP" );
+			this.redisPort = json.GetInt( "redisPort" );
+			this.redisPwd = json.GetString( "redisPwd" );
+			this.sessionExpTime = json.GetLong( "sessionExpTime" );
+		}
+
 		public void CopyFromCLIOptions( Options opts )
 		{
-			this.csID = opts.cdID;
+			this.csID = opts.csID;
 			this.lsPort = opts.lsPort;
 			this.gsPort = opts.gsPort;
 			this.bsPort = opts.bsPort;

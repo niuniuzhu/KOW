@@ -3,21 +3,20 @@ using BattleServer.Net;
 using BattleServer.User;
 using Core.Misc;
 using Core.Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Shared;
+using Shared.Battle;
 using Shared.Net;
+using System.Collections;
 using System.IO;
 
 namespace BattleServer
 {
-	public partial class BS
+	public class BS
 	{
 		private static BS _instance;
 		public static BS instance => _instance ?? ( _instance = new BS() );
 
 		public BSConfig config { get; private set; }
-		public JObject defs { get; private set; }
 
 		public readonly BSNetSessionMgr netSessionMgr = new BSNetSessionMgr();
 		public readonly BattleManager battleManager = new BattleManager();
@@ -32,7 +31,7 @@ namespace BattleServer
 		{
 			try
 			{
-				this.defs = ( JObject ) JsonConvert.DeserializeObject( File.ReadAllText( opts.defs ) );
+				Defs.Init( ( Hashtable ) MiniJSON.JsonDecode( File.ReadAllText( opts.defs ) ) );
 			}
 			catch ( System.Exception e )
 			{
@@ -47,7 +46,8 @@ namespace BattleServer
 			}
 			try
 			{
-				this.config = JsonConvert.DeserializeObject<BSConfig>( File.ReadAllText( opts.cfg ) );
+				this.config = new BSConfig();
+				this.config.CopyFromJson( ( Hashtable ) MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
 			}
 			catch ( System.Exception e )
 			{

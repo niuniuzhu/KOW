@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.Misc;
 
 namespace BattleServer.Battle.Snapshot
 {

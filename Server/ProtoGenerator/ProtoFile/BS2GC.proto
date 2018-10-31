@@ -2,12 +2,25 @@
 package Protos;
 
 import "Global.proto";
-import "any.proto";
+
+//玩家信息
+message BS2GC_PlayerInfo {
+	uint64 gcNID = 1;//玩家登陆id
+	string name = 2;//玩家名字
+	int32 actorID = 3;//角色id
+	map<int32, float> attrs = 4;//属性
+}
 
 //登录结果
 message BS2GC_LoginRet {
 	MsgOpts opts = 1;
 	Global.ECommon result = 2;
+	int32 rndSeed = 3;//随机种子
+	int32 frameRate = 4;//逻辑帧速
+	int32 keyframeStep = 5;//关键帧步长
+	int32 battleTime = 6;//战场限时
+	int32 mapID = 7;//地图id
+	repeated BS2GC_PlayerInfo playerInfo = 8;//玩家信息
 }
 
 //战场开始
@@ -22,18 +35,10 @@ message BS2GC_BattleEnd {
 	uint32 id = 2;//战场id
 }
 
-//玩家信息
-message BS2GC_PlayerInfo {
-	uint64 gcNID = 1;//玩家登陆id
-	string name = 2;//玩家名字
-	int32 actorID = 3;//角色id
-	map<int32,Any> attrs = 4;//属性
-}
-
 //快照
-message BS2GC_Snapshot {
-	int32 frame = 1;
-	repeated BS2GC_PlayerInfo playerInfos = 9;
+message Snapshot {
+	int32 currFrame = 1;
+	repeated BS2GC_PlayerInfo playerInfos = 2;
 }
 
 //回应战场快照
@@ -45,11 +50,5 @@ message BS2GC_RequestSnapshotRet {
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;
-	int32 mapID = 3;
-	int32 framRate = 4;
-	int32 keyframeStep = 5;
-	int32 timeout = 6;
-	int32 currTime = 7;
-	int32 currFrame = 8;
-	BS2GC_Snapshot snapshot = 9;
+	Snapshot snapshot = 3;
 }

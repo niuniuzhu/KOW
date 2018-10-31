@@ -1,7 +1,6 @@
 ﻿namespace BattleServer.Battle.Model
 {
-	public class Attr
+	public static class BUtils
 	{
-		
 	}
 }

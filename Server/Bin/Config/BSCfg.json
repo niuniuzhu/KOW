@@ -6,8 +6,5 @@
     "csPort": 10003,
     "reportInterval": 10000,
     "pingInterval": 10000,
-    "gcLive": 15000,
-    "frameRate": 20,
-    "keyFrameStep": 4,
-	"battleTIme": 180000
+    "gcLive": 15000
 }

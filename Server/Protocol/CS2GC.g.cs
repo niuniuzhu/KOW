@@ -31,25 +31,25 @@ namespace Protos {
             "eWVyGAUgASgFEi0KC3BsYXllckluZm9zGAYgAygLMhguUHJvdG9zLkNTMkdD",
             "X1BsYXllckluZm8iXwoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVk",
             "EAESDQoJSWxsZWdhbElEEAISCgoGTm9Sb29tEAMSEAoMVXNlckluQmF0dGxl",
-            "EAQSDgoKVXNlckluUm9vbRAFIkAKEENTMkdDX1BsYXllckluZm8SDQoFZ2NO",
-            "SUQYASABKAQSDAoEbmFtZRgCIAEoCRIPCgdhY3RvcklEGAMgASgFImAKEENT",
-            "MkdDX1BsYXllckpvaW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRz",
-            "Ei0KC3BsYXllckluZm9zGAIgASgLMhguUHJvdG9zLkNTMkdDX1BsYXllcklu",
-            "Zm8iQQoRQ1MyR0NfUGxheWVyTGVhdmUSHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
-            "cy5Nc2dPcHRzEg0KBWdjTklEGAIgASgEInIKDkNTMkdDX1Jvb21JbmZvEh0K",
-            "BG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxItCgtwbGF5ZXJJbmZvcxgC",
-            "IAMoCzIYLlByb3Rvcy5DUzJHQ19QbGF5ZXJJbmZvEhIKCnByb2dyZXNzZXMY",
-            "AyADKAUi1QEKEUNTMkdDX0VudGVyQmF0dGxlEh0KBG9wdHMYASABKAsyDy5Q",
-            "cm90b3MuTXNnT3B0cxINCgVnY05JRBgCIAEoBBIKCgJpcBgDIAEoCRIMCgRw",
-            "b3J0GAQgASgFEi4KBWVycm9yGAUgASgOMh8uUHJvdG9zLkNTMkdDX0VudGVy",
-            "QmF0dGxlLkVycm9yIkgKBUVycm9yEgsKB1N1Y2Nlc3MQABIOCgpCU05vdEZv",
-            "dW5kEAESCgoGQlNMb3N0EAISFgoSQmF0dGxlQ3JlYXRlRmFpbGVkEANiBnBy",
-            "b3RvMw=="));
+            "EAQSDgoKVXNlckluUm9vbRAFIk4KEENTMkdDX1BsYXllckluZm8SDQoFZ2NO",
+            "SUQYASABKAQSDAoEbmFtZRgCIAEoCRIPCgdhY3RvcklEGAMgASgFEgwKBHRl",
+            "YW0YBCABKAUiYAoQQ1MyR0NfUGxheWVySm9pbhIdCgRvcHRzGAEgASgLMg8u",
+            "UHJvdG9zLk1zZ09wdHMSLQoLcGxheWVySW5mb3MYAiABKAsyGC5Qcm90b3Mu",
+            "Q1MyR0NfUGxheWVySW5mbyJBChFDUzJHQ19QbGF5ZXJMZWF2ZRIdCgRvcHRz",
+            "GAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NOSUQYAiABKAQicgoOQ1My",
+            "R0NfUm9vbUluZm8SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEi0K",
+            "C3BsYXllckluZm9zGAIgAygLMhguUHJvdG9zLkNTMkdDX1BsYXllckluZm8S",
+            "EgoKcHJvZ3Jlc3NlcxgDIAMoBSLVAQoRQ1MyR0NfRW50ZXJCYXR0bGUSHQoE",
+            "b3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdjTklEGAIgASgEEgoK",
+            "AmlwGAMgASgJEgwKBHBvcnQYBCABKAUSLgoFZXJyb3IYBSABKA4yHy5Qcm90",
+            "b3MuQ1MyR0NfRW50ZXJCYXR0bGUuRXJyb3IiSAoFRXJyb3ISCwoHU3VjY2Vz",
+            "cxAAEg4KCkJTTm90Rm91bmQQARIKCgZCU0xvc3QQAhIWChJCYXR0bGVDcmVh",
+            "dGVGYWlsZWQQA2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result", "Id", "MapID", "MaxPlayer", "PlayerInfos" }, null, new[]{ typeof(global::Protos.CS2GC_BeginMatchRet.Types.EResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerInfo), global::Protos.CS2GC_PlayerInfo.Parser, new[]{ "GcNID", "Name", "ActorID" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerInfo), global::Protos.CS2GC_PlayerInfo.Parser, new[]{ "GcNID", "Name", "ActorID", "Team" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerJoin), global::Protos.CS2GC_PlayerJoin.Parser, new[]{ "Opts", "PlayerInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerLeave), global::Protos.CS2GC_PlayerLeave.Parser, new[]{ "Opts", "GcNID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RoomInfo), global::Protos.CS2GC_RoomInfo.Parser, new[]{ "Opts", "PlayerInfos", "Progresses" }, null, null, null),
@@ -386,6 +386,7 @@ namespace Protos {
       gcNID_ = other.gcNID_;
       name_ = other.name_;
       actorID_ = other.actorID_;
+      team_ = other.team_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -436,6 +437,20 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "team" field.</summary>
+    public const int TeamFieldNumber = 4;
+    private int team_;
+    /// <summary>
+    ///所在队伍
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Team {
+      get { return team_; }
+      set {
+        team_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CS2GC_PlayerInfo);
@@ -452,6 +467,7 @@ namespace Protos {
       if (GcNID != other.GcNID) return false;
       if (Name != other.Name) return false;
       if (ActorID != other.ActorID) return false;
+      if (Team != other.Team) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -461,6 +477,7 @@ namespace Protos {
       if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (ActorID != 0) hash ^= ActorID.GetHashCode();
+      if (Team != 0) hash ^= Team.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -486,6 +503,10 @@ namespace Protos {
         output.WriteRawTag(24);
         output.WriteInt32(ActorID);
       }
+      if (Team != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Team);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -502,6 +523,9 @@ namespace Protos {
       }
       if (ActorID != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
+      }
+      if (Team != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Team);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -522,6 +546,9 @@ namespace Protos {
       }
       if (other.ActorID != 0) {
         ActorID = other.ActorID;
+      }
+      if (other.Team != 0) {
+        Team = other.Team;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -544,6 +571,10 @@ namespace Protos {
           }
           case 24: {
             ActorID = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Team = input.ReadInt32();
             break;
           }
         }

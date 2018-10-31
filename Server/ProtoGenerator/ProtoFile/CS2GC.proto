@@ -25,7 +25,7 @@ message CS2GC_PlayerInfo {
 	uint64 gcNID = 1;//玩家网络id
 	string name = 2;//玩家名字
 	int32 actorID = 3;//角色id
-	int32 team =4;//所在队伍
+	int32 team = 4;//所在队伍
 }
 
 message CS2GC_PlayerJoin {

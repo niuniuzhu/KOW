@@ -141,11 +141,6 @@ namespace CentralServer.Match
 			Logger.Log( $"room:{room.id} was destroied" );
 		}
 
-		private Room GetRoom( ulong gcNID )
-		{
-			return null;
-		}
-
 		/// <summary>
 		/// 处理玩家开始匹配
 		/// </summary>
@@ -330,10 +325,10 @@ namespace CentralServer.Match
 							 enterBattle.Ip = appropriateBSInfo.ip;
 							 enterBattle.Port = appropriateBSInfo.port;
 							 this.Broadcast( room, enterBattle, 0, ( m, player ) =>
-						 {
-							 Protos.CS2GC_EnterBattle m2 = ( Protos.CS2GC_EnterBattle ) m;
-							 m2.GcNID = player.ukey | ( ulong ) appropriateBSInfo.lid << 32;
-						 } );
+							 {
+								 Protos.CS2GC_EnterBattle m2 = ( Protos.CS2GC_EnterBattle ) m;
+								 m2.GcNID = player.ukey | ( ulong ) appropriateBSInfo.lid << 32;
+							 } );
 						 }
 					 }
 					 this.DestroyRoom( room, 1 );

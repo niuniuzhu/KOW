@@ -70,7 +70,11 @@ namespace BattleServer.Battle
 			}
 
 			//初始化战场
-			battle.Init( battleEntry );
+			if ( !battle.Init( battleEntry ) )
+			{
+				POOL.Push( battle );
+				return ErrorCode.Failed;
+			}
 			this._runningBattles.Add( battle );
 
 			Logger.Log( $"battle:{battle.id} created" );

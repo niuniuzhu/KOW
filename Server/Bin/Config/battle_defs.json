@@ -4,7 +4,7 @@
             "frame_rate": 20,
             "keyframe_step": 4,
             "timeout": 180000,
-            "max_players": 2,
+            "max_players": 1,
             "born_pos": [
                 [
                     0,

@@ -12,7 +12,7 @@ message GC2BS_KeepAlive {
 	MsgOpts opts = 1;
 }
 
-//请求BS当前游戏状态
+//请求BS当前游戏快照
 message GC2BS_RequestSnapshot {
 	MsgOpts opts = 1;
 	int32 frame = 2;

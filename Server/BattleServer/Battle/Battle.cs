@@ -115,11 +115,14 @@ namespace BattleServer.Battle
 				return false;
 
 			this._snapshotMgr.Create( this.frame, this.MakeInitSnapshot() );
-
 			this._stepLocker.Init( this, this.frameRate, this.keyframeStep );
+			return true;
+		}
+
+		public void Start()
+		{
 			this._sw.Start();
 			Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
-			return true;
 		}
 
 		public bool LoadDefs()
@@ -176,7 +179,7 @@ namespace BattleServer.Battle
 			this._tempSIDs.Clear();
 			this._frame = 0;
 			this._lastUpdateTime = 0;
-			this._stepLocker.Reset();
+			this._stepLocker.Clear();
 			this._sw.Stop();
 			this._sw.Reset();
 		}
@@ -238,15 +241,12 @@ namespace BattleServer.Battle
 		{
 			while ( true )
 			{
-				long elapsed = this._sw.ElapsedMilliseconds - this._lastUpdateTime;
-
+				long now = this._sw.ElapsedMilliseconds;
+				long elapsed = now - this._lastUpdateTime;
 				this._stepLocker.Update( elapsed );
-
-				this._lastUpdateTime = this._sw.ElapsedMilliseconds;
-
+				this._lastUpdateTime = now;
 				Thread.Sleep( 1 );
-
-				if ( this._sw.ElapsedMilliseconds >= this.battleTime )
+				if ( now >= this.battleTime )
 				{
 					this.finished = true;
 					break;

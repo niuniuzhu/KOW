@@ -87,12 +87,14 @@ export class MatchingState extends SceneState {
 				Logger.Log("BS Connected");
 				let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
 				askLogin.sessionID = enterBattle.gcNID;
+				//请求登陆BS
 				connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
 					let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
 					this._ui.OnLoginBSResut(resp.result);
 					switch (resp.result) {
 						case Protos.Global.ECommon.Success:
-							this.RequestBattleState();
+							//登陆BS成功,切换到战场状态
+							SceneManager.ChangeState(SceneManager.State.Battle, resp);
 							break;
 					}
 				});
@@ -106,11 +108,14 @@ export class MatchingState extends SceneState {
 	private BeginMatch(): void {
 		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
 		beginMatch.actorID = 0;//todo 使用的角色
+		//请求CS开始匹配
 		Connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
 			let resp: Protos.CS2GC_BeginMatchRet = <Protos.CS2GC_BeginMatchRet>message;
 			this._ui.OnBeginMatchResult(resp.result);
 			switch (resp.result) {
 				case Protos.CS2GC_BeginMatchRet.EResult.Success:
+					//开始匹配成功
+					//这里不用判断是否满员,下发的房间玩家里不包含自己,会在PlayerJoin消息里通知
 					this._roomID = resp.id;
 					this._mapID = resp.mapID;
 					this._maxPlayers = resp.maxPlayer;
@@ -123,14 +128,6 @@ export class MatchingState extends SceneState {
 					break;
 			}
 		});
-	}
-
-	private RequestBattleState(): void {
-		let requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
-		Connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
-			SceneManager.ChangeState(SceneManager.State.Battle);
-		});
-
 	}
 
 	private StartLoad(mapID: number, playerInfos: Protos.ICS2GC_PlayerInfo[]): void {

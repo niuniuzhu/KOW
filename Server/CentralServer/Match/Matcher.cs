@@ -186,6 +186,7 @@ namespace CentralServer.Match
 			ret.Id = room.id;
 			ret.MapID = room.mapID;
 			ret.MaxPlayer = room.maxPlayers;
+			//此时还没有加入该GC
 			this.FillProtoPlayerInfo( room, ret.PlayerInfos );
 
 			RoomPlayer player = new RoomPlayer( gcNID, user.ukey );
@@ -214,6 +215,7 @@ namespace CentralServer.Match
 			//发送回应
 			CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 
+			//加入并通知GC
 			this.AddPlayer( room, player, user );
 
 			if ( room.isFull )

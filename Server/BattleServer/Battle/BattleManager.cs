@@ -81,6 +81,8 @@ namespace BattleServer.Battle
 			//把战场加入工作列表
 			this._workingBattles.Add( battle );
 
+			battle.Start();
+
 			Logger.Log( $"battle:{battle.id} created" );
 
 			//Protos.BS2CS_BattleStart toCSBattleStart = ProtoCreator.Q_BS2CS_BattleStart();

@@ -76,9 +76,9 @@ export class UIMatching implements IUIModule {
 		}
 	}
 
-	public OnLoginBSResut(result: Protos.BS2GC_LoginRet.EResult): void {
+	public OnLoginBSResut(result: Protos.Global.ECommon): void {
 		switch (result) {
-			case Protos.BS2GC_LoginRet.EResult.Success:
+			case Protos.Global.ECommon.Success:
 				break;
 			default:
 				//进入失败重新匹配,暂时的处理方式

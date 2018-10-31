@@ -17,7 +17,7 @@
 			this._msPerFrame = 1000 / this.frameRate;
 		}
 
-		public void Reset()
+		public void Clear()
 		{
 			this._frame = 0;
 			this._battle = null;

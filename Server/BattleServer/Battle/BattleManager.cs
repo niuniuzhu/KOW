@@ -22,9 +22,9 @@ namespace BattleServer.Battle
 		/// </summary>
 		private readonly Dictionary<ulong, Battle> _gcNIDToBattle = new Dictionary<ulong, Battle>();
 		/// <summary>
-		/// 运行中的战场列表
+		/// 运作中的战场列表
 		/// </summary>
-		private readonly List<Battle> _runningBattles = new List<Battle>();
+		private readonly List<Battle> _workingBattles = new List<Battle>();
 
 		/// <summary>
 		/// 检查是否存在指定ID的客户端
@@ -45,9 +45,6 @@ namespace BattleServer.Battle
 		/// </summary>
 		public ErrorCode CreateBattle( Protos.CS2BS_BattleInfo battleInfo, out uint bid )
 		{
-			Battle battle = POOL.Pop();
-			bid = battle.id;
-
 			//初始化战场描述
 			BattleEntry battleEntry;
 			battleEntry.rndSeed = this._random.Next();
@@ -65,17 +62,24 @@ namespace BattleServer.Battle
 					team = playerInfo.Team
 				};
 				battleEntry.players[i] = player;
-
-				this._gcNIDToBattle[playerInfo.GcNID] = battle;
 			}
 
 			//初始化战场
+			Battle battle = POOL.Pop();
+			bid = battle.id;
 			if ( !battle.Init( battleEntry ) )
 			{
 				POOL.Push( battle );
 				return ErrorCode.Failed;
 			}
-			this._runningBattles.Add( battle );
+
+			//建立玩家ID和战场的映射
+			count = battle.numPlayers;
+			for ( int i = 0; i < count; i++ )
+				this._gcNIDToBattle[battle.GetPlayerAt( i ).id] = battle;
+
+			//把战场加入工作列表
+			this._workingBattles.Add( battle );
 
 			Logger.Log( $"battle:{battle.id} created" );
 
@@ -105,24 +109,30 @@ namespace BattleServer.Battle
 				//所有玩家下线
 				int count = battle.numPlayers;
 				for ( int i = 0; i < count; i++ )
-					BS.instance.userMgr.Offline( battle.GetPlayerAt( i ).user );
+				{
+					Player player = battle.GetPlayerAt( i );
+					BS.instance.userMgr.Offline( player.user );
+					//解除玩家ID和战场的映射
+					this._gcNIDToBattle.Remove( player.id );
+				}
+				//处理battle的身后事
+				battle.End();
+				POOL.Push( battle );
 			} );
 		}
 
 		public void Update( long dt )
 		{
-			int count = this._runningBattles.Count;
+			int count = this._workingBattles.Count;
 			for ( int i = 0; i < count; i++ )
 			{
-				Battle battle = this._runningBattles[i];
+				Battle battle = this._workingBattles[i];
 				//检查战场是否结束
 				if ( battle.finished )
 				{
 					//处理战场结束
 					this.OnBattleEnd( battle );
-					battle.End();
-					this._runningBattles.RemoveAt( i );
-					POOL.Push( battle );
+					this._workingBattles.RemoveAt( i );
 					Logger.Log( $"battle:{battle.id} destroied" );
 					--i;
 					--count;

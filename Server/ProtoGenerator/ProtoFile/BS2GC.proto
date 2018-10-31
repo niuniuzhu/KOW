@@ -5,7 +5,7 @@ import "Global.proto";
 
 //玩家信息
 message BS2GC_PlayerInfo {
-	uint64 gcNID = 1;//玩家登陆id
+	uint64 gcNID = 1;//玩家ID
 	string name = 2;//玩家名字
 	int32 actorID = 3;//角色id
 	map<int32, float> attrs = 4;//属性
@@ -35,12 +35,6 @@ message BS2GC_BattleEnd {
 	uint32 id = 2;//战场id
 }
 
-//快照
-message Snapshot {
-	int32 currFrame = 1;
-	repeated BS2GC_PlayerInfo playerInfos = 2;
-}
-
 //回应战场快照
 message BS2GC_RequestSnapshotRet {
 	enum EResult {
@@ -50,5 +44,7 @@ message BS2GC_RequestSnapshotRet {
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;
-	Snapshot snapshot = 3;
+	int32 reqFrame = 3;//请求快照的帧数
+	int32 curFrame = 4;//当前服务端帧数
+	bytes snapshot = 5;//快照数据
 }

@@ -1916,129 +1916,6 @@ export const Protos = $root.Protos = (() => {
         return BS2GC_BattleEnd;
     })();
 
-    Protos.Snapshot = (function() {
-
-        function Snapshot(properties) {
-            this.playerInfos = [];
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        Snapshot.prototype.currFrame = 0;
-        Snapshot.prototype.playerInfos = $util.emptyArray;
-
-        Snapshot.create = function create(properties) {
-            return new Snapshot(properties);
-        };
-
-        Snapshot.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.currFrame != null && message.hasOwnProperty("currFrame"))
-                writer.uint32(8).int32(message.currFrame);
-            if (message.playerInfos != null && message.playerInfos.length)
-                for (let i = 0; i < message.playerInfos.length; ++i)
-                    $root.Protos.BS2GC_PlayerInfo.encode(message.playerInfos[i], writer.uint32(18).fork()).ldelim();
-            return writer;
-        };
-
-        Snapshot.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        Snapshot.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.Snapshot();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.currFrame = reader.int32();
-                    break;
-                case 2:
-                    if (!(message.playerInfos && message.playerInfos.length))
-                        message.playerInfos = [];
-                    message.playerInfos.push($root.Protos.BS2GC_PlayerInfo.decode(reader, reader.uint32()));
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        Snapshot.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        Snapshot.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.currFrame != null && message.hasOwnProperty("currFrame"))
-                if (!$util.isInteger(message.currFrame))
-                    return "currFrame: integer expected";
-            if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
-                if (!Array.isArray(message.playerInfos))
-                    return "playerInfos: array expected";
-                for (let i = 0; i < message.playerInfos.length; ++i) {
-                    let error = $root.Protos.BS2GC_PlayerInfo.verify(message.playerInfos[i]);
-                    if (error)
-                        return "playerInfos." + error;
-                }
-            }
-            return null;
-        };
-
-        Snapshot.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.Snapshot)
-                return object;
-            let message = new $root.Protos.Snapshot();
-            if (object.currFrame != null)
-                message.currFrame = object.currFrame | 0;
-            if (object.playerInfos) {
-                if (!Array.isArray(object.playerInfos))
-                    throw TypeError(".Protos.Snapshot.playerInfos: array expected");
-                message.playerInfos = [];
-                for (let i = 0; i < object.playerInfos.length; ++i) {
-                    if (typeof object.playerInfos[i] !== "object")
-                        throw TypeError(".Protos.Snapshot.playerInfos: object expected");
-                    message.playerInfos[i] = $root.Protos.BS2GC_PlayerInfo.fromObject(object.playerInfos[i]);
-                }
-            }
-            return message;
-        };
-
-        Snapshot.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.playerInfos = [];
-            if (options.defaults)
-                object.currFrame = 0;
-            if (message.currFrame != null && message.hasOwnProperty("currFrame"))
-                object.currFrame = message.currFrame;
-            if (message.playerInfos && message.playerInfos.length) {
-                object.playerInfos = [];
-                for (let j = 0; j < message.playerInfos.length; ++j)
-                    object.playerInfos[j] = $root.Protos.BS2GC_PlayerInfo.toObject(message.playerInfos[j], options);
-            }
-            return object;
-        };
-
-        Snapshot.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return Snapshot;
-    })();
-
     Protos.BS2GC_RequestSnapshotRet = (function() {
 
         function BS2GC_RequestSnapshotRet(properties) {
@@ -2050,7 +1927,9 @@ export const Protos = $root.Protos = (() => {
 
         BS2GC_RequestSnapshotRet.prototype.opts = null;
         BS2GC_RequestSnapshotRet.prototype.result = 0;
-        BS2GC_RequestSnapshotRet.prototype.snapshot = null;
+        BS2GC_RequestSnapshotRet.prototype.reqFrame = 0;
+        BS2GC_RequestSnapshotRet.prototype.curFrame = 0;
+        BS2GC_RequestSnapshotRet.prototype.snapshot = $util.newBuffer([]);
 
         BS2GC_RequestSnapshotRet.create = function create(properties) {
             return new BS2GC_RequestSnapshotRet(properties);
@@ -2063,8 +1942,12 @@ export const Protos = $root.Protos = (() => {
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.result != null && message.hasOwnProperty("result"))
                 writer.uint32(16).int32(message.result);
+            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                writer.uint32(24).int32(message.reqFrame);
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                writer.uint32(32).int32(message.curFrame);
             if (message.snapshot != null && message.hasOwnProperty("snapshot"))
-                $root.Protos.Snapshot.encode(message.snapshot, writer.uint32(26).fork()).ldelim();
+                writer.uint32(42).bytes(message.snapshot);
             return writer;
         };
 
@@ -2086,7 +1969,13 @@ export const Protos = $root.Protos = (() => {
                     message.result = reader.int32();
                     break;
                 case 3:
-                    message.snapshot = $root.Protos.Snapshot.decode(reader, reader.uint32());
+                    message.reqFrame = reader.int32();
+                    break;
+                case 4:
+                    message.curFrame = reader.int32();
+                    break;
+                case 5:
+                    message.snapshot = reader.bytes();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2119,11 +2008,15 @@ export const Protos = $root.Protos = (() => {
                 case 2:
                     break;
                 }
-            if (message.snapshot != null && message.hasOwnProperty("snapshot")) {
-                let error = $root.Protos.Snapshot.verify(message.snapshot);
-                if (error)
-                    return "snapshot." + error;
-            }
+            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                if (!$util.isInteger(message.reqFrame))
+                    return "reqFrame: integer expected";
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                if (!$util.isInteger(message.curFrame))
+                    return "curFrame: integer expected";
+            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
+                if (!(message.snapshot && typeof message.snapshot.length === "number" || $util.isString(message.snapshot)))
+                    return "snapshot: buffer expected";
             return null;
         };
 
@@ -2150,11 +2043,15 @@ export const Protos = $root.Protos = (() => {
                 message.result = 2;
                 break;
             }
-            if (object.snapshot != null) {
-                if (typeof object.snapshot !== "object")
-                    throw TypeError(".Protos.BS2GC_RequestSnapshotRet.snapshot: object expected");
-                message.snapshot = $root.Protos.Snapshot.fromObject(object.snapshot);
-            }
+            if (object.reqFrame != null)
+                message.reqFrame = object.reqFrame | 0;
+            if (object.curFrame != null)
+                message.curFrame = object.curFrame | 0;
+            if (object.snapshot != null)
+                if (typeof object.snapshot === "string")
+                    $util.base64.decode(object.snapshot, message.snapshot = $util.newBuffer($util.base64.length(object.snapshot)), 0);
+                else if (object.snapshot.length)
+                    message.snapshot = object.snapshot;
             return message;
         };
 
@@ -2165,14 +2062,26 @@ export const Protos = $root.Protos = (() => {
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
-                object.snapshot = null;
+                object.reqFrame = 0;
+                object.curFrame = 0;
+                if (options.bytes === String)
+                    object.snapshot = "";
+                else {
+                    object.snapshot = [];
+                    if (options.bytes !== Array)
+                        object.snapshot = $util.newBuffer(object.snapshot);
+                }
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.result != null && message.hasOwnProperty("result"))
                 object.result = options.enums === String ? $root.Protos.BS2GC_RequestSnapshotRet.EResult[message.result] : message.result;
+            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                object.reqFrame = message.reqFrame;
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                object.curFrame = message.curFrame;
             if (message.snapshot != null && message.hasOwnProperty("snapshot"))
-                object.snapshot = $root.Protos.Snapshot.toObject(message.snapshot, options);
+                object.snapshot = options.bytes === String ? $util.base64.encode(message.snapshot, 0, message.snapshot.length) : options.bytes === Array ? Array.prototype.slice.call(message.snapshot) : message.snapshot;
             return object;
         };
 

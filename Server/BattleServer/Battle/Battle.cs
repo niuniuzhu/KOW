@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections;
-using BattleServer.Battle.Model;
+﻿using BattleServer.Battle.Model;
 using BattleServer.Battle.Snapshot;
 using BattleServer.User;
+using Core.FMath;
 using Core.Misc;
+using Shared.Battle;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.FMath;
-using Shared.Battle;
 
 namespace BattleServer.Battle
 {
@@ -68,7 +69,7 @@ namespace BattleServer.Battle
 
 		private Player[] _players;
 		private readonly List<Entity> _entities = new List<Entity>();
-		private readonly Dictionary<ulong, Entity> _idToEntity = new Dictionary<ulong, Entity>();
+		private readonly SortedDictionary<ulong, Entity> _idToEntity = new SortedDictionary<ulong, Entity>();
 
 		private readonly Stopwatch _sw = new Stopwatch();
 		private readonly StepLocker _stepLocker = new StepLocker();
@@ -77,19 +78,26 @@ namespace BattleServer.Battle
 		private int _frame;
 		private long _lastUpdateTime;
 
+		/// <summary>
+		/// stream for building the snapshot
+		/// </summary>
+		private readonly MemoryStream _ms = new MemoryStream();
+
+		/// <summary>
+		/// snapshot writer
+		/// </summary>
+		private readonly Google.Protobuf.CodedOutputStream _snapshotWriter;
+
 		public Battle()
 		{
 			Debug.Assert( _gid < uint.MaxValue, "maximum id of waiting room!!" );
 			this.id = _gid++;
+			this._snapshotWriter = new Google.Protobuf.CodedOutputStream( this._ms );
 		}
 
 		public void Clear()
 		{
-			this.finished = false;
-			this._stepLocker.Reset();
-			this._sw.Stop();
-			this._sw.Reset();
-			this._lastUpdateTime = 0;
+			//在End方法已经清理了
 		}
 
 		/// <summary>
@@ -106,7 +114,7 @@ namespace BattleServer.Battle
 			if ( !this.CreatePlayers( battleEntry.players ) )
 				return false;
 
-			this.MakeInitSnapshot();
+			this._snapshotMgr.Create( this.frame, this.MakeInitSnapshot() );
 
 			this._stepLocker.Init( this, this.frameRate, this.keyframeStep );
 			this._sw.Start();
@@ -152,6 +160,25 @@ namespace BattleServer.Battle
 				return false;
 			}
 			return true;
+		}
+
+		public void End()
+		{
+			this.finished = false;
+			int count = this._entities.Count;
+			for ( int i = 0; i < count; i++ )
+				this._entities[i].Dispose();
+			this._players = null;
+			this._entities.Clear();
+			this._idToEntity.Clear();
+			this._ms.SetLength( 0 );
+			this._snapshotMgr.Clear();
+			this._tempSIDs.Clear();
+			this._frame = 0;
+			this._lastUpdateTime = 0;
+			this._stepLocker.Reset();
+			this._sw.Stop();
+			this._sw.Reset();
 		}
 
 		/// <summary>
@@ -271,25 +298,30 @@ namespace BattleServer.Battle
 		/// 获取指定帧数下的战场快照
 		/// </summary>
 		/// <param name="frame">指定帧数下的快速,-1表示最近的快照</param>
-		public FrameSnapshot GetSnapshot( int frame = -1 ) => this._snapshotMgr.GetSnapshot( frame );
+		public FrameSnapshot GetSnapshot( int frame = -1 ) => this._snapshotMgr.Get( frame );
 
 		/// <summary>
 		/// 制作一份初始化快照
 		/// </summary>
-		private void MakeInitSnapshot()
+		public Google.Protobuf.ByteString MakeInitSnapshot()
 		{
-			BattleSnapshot snapshot = BattleSnapshot.Create();
-			snapshot.frame = 0;
-			snapshot.time = 0;
+			Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( this._ms );
+			writer.Flush();
+			Google.Protobuf.ByteString byteString = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int ) this._ms.Length );
+			this._ms.SetLength( 0 );
+			return byteString;
 		}
 
 		/// <summary>
-		/// 根据提供的数据制作一份快照
+		/// 制作快照
 		/// </summary>
-		public ISnapshotObject MakeSnapshot( object data )
+		public void MakeSnapshot( Google.Protobuf.CodedOutputStream writer )
 		{
-			BattleSnapshot snapshot = BattleSnapshot.Create();
-			return snapshot;
+			writer.WriteInt32( this.frame );
+			int count = this._idToEntity.Count;
+			writer.WriteInt32( count );
+			foreach ( KeyValuePair<ulong, Entity> kv in this._idToEntity )
+				kv.Value.MakeSnapshot( writer );
 		}
 	}
 }

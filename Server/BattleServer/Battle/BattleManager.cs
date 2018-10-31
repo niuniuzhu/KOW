@@ -116,6 +116,7 @@ namespace BattleServer.Battle
 				{
 					//处理战场结束
 					this.OnBattleEnd( battle );
+					battle.End();
 					this._runningBattles.RemoveAt( i );
 					POOL.Push( battle );
 					Logger.Log( $"battle:{battle.id} destroied" );
@@ -160,7 +161,7 @@ namespace BattleServer.Battle
 		}
 
 		/// <summary>
-		/// 玩家请求获取当前战场状态
+		/// 玩家请求获取当前战场快照
 		/// </summary>
 		internal void OnRequestSnapshot( ulong gcNID, Protos.GC2BS_RequestSnapshot request )
 		{
@@ -175,8 +176,10 @@ namespace BattleServer.Battle
 					break;
 				}
 				FrameSnapshot snapshot = battle.GetSnapshot( request.Frame );
-				break;
-			} while ( true );
+				ret.ReqFrame = request.Frame;
+				ret.CurFrame = battle.frame;
+				ret.Snapshot = snapshot.data;
+			} while ( false );
 			user.Send( ret );
 		}
 	}

@@ -36,13 +36,12 @@ namespace Protos {
             "LlByb3Rvcy5CUzJHQ19QbGF5ZXJJbmZvIj4KEUJTMkdDX0JhdHRsZVN0YXJ0",
             "Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIKCgJpZBgCIAEoDSI8",
             "Cg9CUzJHQ19CYXR0bGVFbmQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dP",
-            "cHRzEgoKAmlkGAIgASgNIkwKCFNuYXBzaG90EhEKCWN1cnJGcmFtZRgBIAEo",
-            "BRItCgtwbGF5ZXJJbmZvcxgCIAMoCzIYLlByb3Rvcy5CUzJHQ19QbGF5ZXJJ",
-            "bmZvItMBChhCUzJHQ19SZXF1ZXN0U25hcHNob3RSZXQSHQoEb3B0cxgBIAEo",
-            "CzIPLlByb3Rvcy5Nc2dPcHRzEjgKBnJlc3VsdBgCIAEoDjIoLlByb3Rvcy5C",
-            "UzJHQ19SZXF1ZXN0U25hcHNob3RSZXQuRVJlc3VsdBIiCghzbmFwc2hvdBgD",
-            "IAEoCzIQLlByb3Rvcy5TbmFwc2hvdCI6CgdFUmVzdWx0EgsKB1N1Y2Nlc3MQ",
-            "ABIPCgtJbnZhbGlkVXNlchABEhEKDUludmFsaWRCYXR0bGUQAmIGcHJvdG8z"));
+            "cHRzEgoKAmlkGAIgASgNIuUBChhCUzJHQ19SZXF1ZXN0U25hcHNob3RSZXQS",
+            "HQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEjgKBnJlc3VsdBgCIAEo",
+            "DjIoLlByb3Rvcy5CUzJHQ19SZXF1ZXN0U25hcHNob3RSZXQuRVJlc3VsdBIQ",
+            "CghyZXFGcmFtZRgDIAEoBRIQCghjdXJGcmFtZRgEIAEoBRIQCghzbmFwc2hv",
+            "dBgFIAEoDCI6CgdFUmVzdWx0EgsKB1N1Y2Nlc3MQABIPCgtJbnZhbGlkVXNl",
+            "chABEhEKDUludmFsaWRCYXR0bGUQAmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -50,8 +49,7 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_LoginRet), global::Protos.BS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "RndSeed", "FrameRate", "KeyframeStep", "BattleTime", "MapID", "PlayerInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleStart), global::Protos.BS2GC_BattleStart.Parser, new[]{ "Opts", "Id" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleEnd), global::Protos.BS2GC_BattleEnd.Parser, new[]{ "Opts", "Id" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Snapshot), global::Protos.Snapshot.Parser, new[]{ "CurrFrame", "PlayerInfos" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestSnapshotRet), global::Protos.BS2GC_RequestSnapshotRet.Parser, new[]{ "Opts", "Result", "Snapshot" }, null, new[]{ typeof(global::Protos.BS2GC_RequestSnapshotRet.Types.EResult) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestSnapshotRet), global::Protos.BS2GC_RequestSnapshotRet.Parser, new[]{ "Opts", "Result", "ReqFrame", "CurFrame", "Snapshot" }, null, new[]{ typeof(global::Protos.BS2GC_RequestSnapshotRet.Types.EResult) }, null)
           }));
     }
     #endregion
@@ -102,7 +100,7 @@ namespace Protos {
     public const int GcNIDFieldNumber = 1;
     private ulong gcNID_;
     /// <summary>
-    ///玩家登陆id
+    ///玩家ID
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong GcNID {
@@ -961,158 +959,6 @@ namespace Protos {
   }
 
   /// <summary>
-  ///快照
-  /// </summary>
-  public sealed partial class Snapshot : pb::IMessage<Snapshot> {
-    private static readonly pb::MessageParser<Snapshot> _parser = new pb::MessageParser<Snapshot>(() => new Snapshot());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Snapshot> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[4]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Snapshot() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Snapshot(Snapshot other) : this() {
-      currFrame_ = other.currFrame_;
-      playerInfos_ = other.playerInfos_.Clone();
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Snapshot Clone() {
-      return new Snapshot(this);
-    }
-
-    /// <summary>Field number for the "currFrame" field.</summary>
-    public const int CurrFrameFieldNumber = 1;
-    private int currFrame_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CurrFrame {
-      get { return currFrame_; }
-      set {
-        currFrame_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "playerInfos" field.</summary>
-    public const int PlayerInfosFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Protos.BS2GC_PlayerInfo> _repeated_playerInfos_codec
-        = pb::FieldCodec.ForMessage(18, global::Protos.BS2GC_PlayerInfo.Parser);
-    private readonly pbc::RepeatedField<global::Protos.BS2GC_PlayerInfo> playerInfos_ = new pbc::RepeatedField<global::Protos.BS2GC_PlayerInfo>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Protos.BS2GC_PlayerInfo> PlayerInfos {
-      get { return playerInfos_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as Snapshot);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(Snapshot other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (CurrFrame != other.CurrFrame) return false;
-      if(!playerInfos_.Equals(other.playerInfos_)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (CurrFrame != 0) hash ^= CurrFrame.GetHashCode();
-      hash ^= playerInfos_.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (CurrFrame != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(CurrFrame);
-      }
-      playerInfos_.WriteTo(output, _repeated_playerInfos_codec);
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (CurrFrame != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurrFrame);
-      }
-      size += playerInfos_.CalculateSize(_repeated_playerInfos_codec);
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(Snapshot other) {
-      if (other == null) {
-        return;
-      }
-      if (other.CurrFrame != 0) {
-        CurrFrame = other.CurrFrame;
-      }
-      playerInfos_.Add(other.playerInfos_);
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            CurrFrame = input.ReadInt32();
-            break;
-          }
-          case 18: {
-            playerInfos_.AddEntriesFrom(input, _repeated_playerInfos_codec);
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  /// <summary>
   ///回应战场快照
   /// </summary>
   public sealed partial class BS2GC_RequestSnapshotRet : pb::IMessage<BS2GC_RequestSnapshotRet> {
@@ -1123,7 +969,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1142,7 +988,9 @@ namespace Protos {
     public BS2GC_RequestSnapshotRet(BS2GC_RequestSnapshotRet other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       result_ = other.result_;
-      snapshot_ = other.snapshot_ != null ? other.snapshot_.Clone() : null;
+      reqFrame_ = other.reqFrame_;
+      curFrame_ = other.curFrame_;
+      snapshot_ = other.snapshot_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1173,14 +1021,45 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "snapshot" field.</summary>
-    public const int SnapshotFieldNumber = 3;
-    private global::Protos.Snapshot snapshot_;
+    /// <summary>Field number for the "reqFrame" field.</summary>
+    public const int ReqFrameFieldNumber = 3;
+    private int reqFrame_;
+    /// <summary>
+    ///请求快照的帧数
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.Snapshot Snapshot {
+    public int ReqFrame {
+      get { return reqFrame_; }
+      set {
+        reqFrame_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "curFrame" field.</summary>
+    public const int CurFrameFieldNumber = 4;
+    private int curFrame_;
+    /// <summary>
+    ///当前服务端帧数
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CurFrame {
+      get { return curFrame_; }
+      set {
+        curFrame_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "snapshot" field.</summary>
+    public const int SnapshotFieldNumber = 5;
+    private pb::ByteString snapshot_ = pb::ByteString.Empty;
+    /// <summary>
+    ///快照数据
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pb::ByteString Snapshot {
       get { return snapshot_; }
       set {
-        snapshot_ = value;
+        snapshot_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -1199,7 +1078,9 @@ namespace Protos {
       }
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Result != other.Result) return false;
-      if (!object.Equals(Snapshot, other.Snapshot)) return false;
+      if (ReqFrame != other.ReqFrame) return false;
+      if (CurFrame != other.CurFrame) return false;
+      if (Snapshot != other.Snapshot) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1208,7 +1089,9 @@ namespace Protos {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
-      if (snapshot_ != null) hash ^= Snapshot.GetHashCode();
+      if (ReqFrame != 0) hash ^= ReqFrame.GetHashCode();
+      if (CurFrame != 0) hash ^= CurFrame.GetHashCode();
+      if (Snapshot.Length != 0) hash ^= Snapshot.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1230,9 +1113,17 @@ namespace Protos {
         output.WriteRawTag(16);
         output.WriteEnum((int) Result);
       }
-      if (snapshot_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(Snapshot);
+      if (ReqFrame != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(ReqFrame);
+      }
+      if (CurFrame != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(CurFrame);
+      }
+      if (Snapshot.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteBytes(Snapshot);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1248,8 +1139,14 @@ namespace Protos {
       if (Result != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
-      if (snapshot_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Snapshot);
+      if (ReqFrame != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ReqFrame);
+      }
+      if (CurFrame != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurFrame);
+      }
+      if (Snapshot.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Snapshot);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1271,11 +1168,14 @@ namespace Protos {
       if (other.Result != 0) {
         Result = other.Result;
       }
-      if (other.snapshot_ != null) {
-        if (snapshot_ == null) {
-          snapshot_ = new global::Protos.Snapshot();
-        }
-        Snapshot.MergeFrom(other.Snapshot);
+      if (other.ReqFrame != 0) {
+        ReqFrame = other.ReqFrame;
+      }
+      if (other.CurFrame != 0) {
+        CurFrame = other.CurFrame;
+      }
+      if (other.Snapshot.Length != 0) {
+        Snapshot = other.Snapshot;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1299,11 +1199,16 @@ namespace Protos {
             result_ = (global::Protos.BS2GC_RequestSnapshotRet.Types.EResult) input.ReadEnum();
             break;
           }
-          case 26: {
-            if (snapshot_ == null) {
-              snapshot_ = new global::Protos.Snapshot();
-            }
-            input.ReadMessage(snapshot_);
+          case 24: {
+            ReqFrame = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            CurFrame = input.ReadInt32();
+            break;
+          }
+          case 42: {
+            Snapshot = input.ReadBytes();
             break;
           }
         }

@@ -18,7 +18,9 @@ namespace BattleServer.Battle.Model
 
 	public class Attribute
 	{
-		private readonly Dictionary<Attr, Fix64> _map = new Dictionary<Attr, Fix64>();
+		private readonly SortedDictionary<Attr, Fix64> _map = new SortedDictionary<Attr, Fix64>();
+
+		public int count => this._map.Count;
 
 		public void Foreach( Action<Attr, Fix64> handler )
 		{

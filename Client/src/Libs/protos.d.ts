@@ -397,37 +397,21 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
-    interface ISnapshot {
-        currFrame?: (number|null);
-        playerInfos?: (Protos.IBS2GC_PlayerInfo[]|null);
-    }
-
-    class Snapshot implements ISnapshot {
-        constructor(properties?: Protos.ISnapshot);
-        public currFrame: number;
-        public playerInfos: Protos.IBS2GC_PlayerInfo[];
-        public static create(properties?: Protos.ISnapshot): Protos.Snapshot;
-        public static encode(message: Protos.ISnapshot, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.ISnapshot, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.Snapshot;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.Snapshot;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.Snapshot;
-        public static toObject(message: Protos.Snapshot, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
     interface IBS2GC_RequestSnapshotRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.BS2GC_RequestSnapshotRet.EResult|null);
-        snapshot?: (Protos.ISnapshot|null);
+        reqFrame?: (number|null);
+        curFrame?: (number|null);
+        snapshot?: (Uint8Array|null);
     }
 
     class BS2GC_RequestSnapshotRet implements IBS2GC_RequestSnapshotRet {
         constructor(properties?: Protos.IBS2GC_RequestSnapshotRet);
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.BS2GC_RequestSnapshotRet.EResult;
-        public snapshot?: (Protos.ISnapshot|null);
+        public reqFrame: number;
+        public curFrame: number;
+        public snapshot: Uint8Array;
         public static create(properties?: Protos.IBS2GC_RequestSnapshotRet): Protos.BS2GC_RequestSnapshotRet;
         public static encode(message: Protos.IBS2GC_RequestSnapshotRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2GC_RequestSnapshotRet, writer?: $protobuf.Writer): $protobuf.Writer;

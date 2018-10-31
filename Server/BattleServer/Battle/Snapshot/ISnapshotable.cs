@@ -5,8 +5,7 @@
 		/// <summary>
 		/// 制作快照
 		/// </summary>
-		/// <param name="data">所需的数据</param>
 		/// <returns>返回快照对象</returns>
-		ISnapshotObject MakeSnapshot( object data );
+		void MakeSnapshot( Google.Protobuf.CodedOutputStream writer );
 	}
 }

@@ -3626,237 +3626,6 @@ define(["./protobufjs"], function($protobuf) {
             return BS2GC_BattleEnd;
         })();
     
-        Protos.Snapshot = (function() {
-    
-            /**
-             * Properties of a Snapshot.
-             * @memberof Protos
-             * @interface ISnapshot
-             * @property {number|null} [currFrame] Snapshot currFrame
-             * @property {Array.<Protos.IBS2GC_PlayerInfo>|null} [playerInfos] Snapshot playerInfos
-             */
-    
-            /**
-             * Constructs a new Snapshot.
-             * @memberof Protos
-             * @classdesc Represents a Snapshot.
-             * @implements ISnapshot
-             * @constructor
-             * @param {Protos.ISnapshot=} [properties] Properties to set
-             */
-            function Snapshot(properties) {
-                this.playerInfos = [];
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-    
-            /**
-             * Snapshot currFrame.
-             * @member {number} currFrame
-             * @memberof Protos.Snapshot
-             * @instance
-             */
-            Snapshot.prototype.currFrame = 0;
-    
-            /**
-             * Snapshot playerInfos.
-             * @member {Array.<Protos.IBS2GC_PlayerInfo>} playerInfos
-             * @memberof Protos.Snapshot
-             * @instance
-             */
-            Snapshot.prototype.playerInfos = $util.emptyArray;
-    
-            /**
-             * Creates a new Snapshot instance using the specified properties.
-             * @function create
-             * @memberof Protos.Snapshot
-             * @static
-             * @param {Protos.ISnapshot=} [properties] Properties to set
-             * @returns {Protos.Snapshot} Snapshot instance
-             */
-            Snapshot.create = function create(properties) {
-                return new Snapshot(properties);
-            };
-    
-            /**
-             * Encodes the specified Snapshot message. Does not implicitly {@link Protos.Snapshot.verify|verify} messages.
-             * @function encode
-             * @memberof Protos.Snapshot
-             * @static
-             * @param {Protos.ISnapshot} message Snapshot message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            Snapshot.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.currFrame != null && message.hasOwnProperty("currFrame"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int32(message.currFrame);
-                if (message.playerInfos != null && message.playerInfos.length)
-                    for (var i = 0; i < message.playerInfos.length; ++i)
-                        $root.Protos.BS2GC_PlayerInfo.encode(message.playerInfos[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                return writer;
-            };
-    
-            /**
-             * Encodes the specified Snapshot message, length delimited. Does not implicitly {@link Protos.Snapshot.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof Protos.Snapshot
-             * @static
-             * @param {Protos.ISnapshot} message Snapshot message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            Snapshot.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-    
-            /**
-             * Decodes a Snapshot message from the specified reader or buffer.
-             * @function decode
-             * @memberof Protos.Snapshot
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {Protos.Snapshot} Snapshot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            Snapshot.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.Snapshot();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.currFrame = reader.int32();
-                        break;
-                    case 2:
-                        if (!(message.playerInfos && message.playerInfos.length))
-                            message.playerInfos = [];
-                        message.playerInfos.push($root.Protos.BS2GC_PlayerInfo.decode(reader, reader.uint32()));
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-    
-            /**
-             * Decodes a Snapshot message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof Protos.Snapshot
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {Protos.Snapshot} Snapshot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            Snapshot.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-    
-            /**
-             * Verifies a Snapshot message.
-             * @function verify
-             * @memberof Protos.Snapshot
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Snapshot.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.currFrame != null && message.hasOwnProperty("currFrame"))
-                    if (!$util.isInteger(message.currFrame))
-                        return "currFrame: integer expected";
-                if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
-                    if (!Array.isArray(message.playerInfos))
-                        return "playerInfos: array expected";
-                    for (var i = 0; i < message.playerInfos.length; ++i) {
-                        var error = $root.Protos.BS2GC_PlayerInfo.verify(message.playerInfos[i]);
-                        if (error)
-                            return "playerInfos." + error;
-                    }
-                }
-                return null;
-            };
-    
-            /**
-             * Creates a Snapshot message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof Protos.Snapshot
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {Protos.Snapshot} Snapshot
-             */
-            Snapshot.fromObject = function fromObject(object) {
-                if (object instanceof $root.Protos.Snapshot)
-                    return object;
-                var message = new $root.Protos.Snapshot();
-                if (object.currFrame != null)
-                    message.currFrame = object.currFrame | 0;
-                if (object.playerInfos) {
-                    if (!Array.isArray(object.playerInfos))
-                        throw TypeError(".Protos.Snapshot.playerInfos: array expected");
-                    message.playerInfos = [];
-                    for (var i = 0; i < object.playerInfos.length; ++i) {
-                        if (typeof object.playerInfos[i] !== "object")
-                            throw TypeError(".Protos.Snapshot.playerInfos: object expected");
-                        message.playerInfos[i] = $root.Protos.BS2GC_PlayerInfo.fromObject(object.playerInfos[i]);
-                    }
-                }
-                return message;
-            };
-    
-            /**
-             * Creates a plain object from a Snapshot message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof Protos.Snapshot
-             * @static
-             * @param {Protos.Snapshot} message Snapshot
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Snapshot.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.arrays || options.defaults)
-                    object.playerInfos = [];
-                if (options.defaults)
-                    object.currFrame = 0;
-                if (message.currFrame != null && message.hasOwnProperty("currFrame"))
-                    object.currFrame = message.currFrame;
-                if (message.playerInfos && message.playerInfos.length) {
-                    object.playerInfos = [];
-                    for (var j = 0; j < message.playerInfos.length; ++j)
-                        object.playerInfos[j] = $root.Protos.BS2GC_PlayerInfo.toObject(message.playerInfos[j], options);
-                }
-                return object;
-            };
-    
-            /**
-             * Converts this Snapshot to JSON.
-             * @function toJSON
-             * @memberof Protos.Snapshot
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Snapshot.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-    
-            return Snapshot;
-        })();
-    
         Protos.BS2GC_RequestSnapshotRet = (function() {
     
             /**
@@ -3865,7 +3634,9 @@ define(["./protobufjs"], function($protobuf) {
              * @interface IBS2GC_RequestSnapshotRet
              * @property {Protos.IMsgOpts|null} [opts] BS2GC_RequestSnapshotRet opts
              * @property {Protos.BS2GC_RequestSnapshotRet.EResult|null} [result] BS2GC_RequestSnapshotRet result
-             * @property {Protos.ISnapshot|null} [snapshot] BS2GC_RequestSnapshotRet snapshot
+             * @property {number|null} [reqFrame] BS2GC_RequestSnapshotRet reqFrame
+             * @property {number|null} [curFrame] BS2GC_RequestSnapshotRet curFrame
+             * @property {Uint8Array|null} [snapshot] BS2GC_RequestSnapshotRet snapshot
              */
     
             /**
@@ -3900,12 +3671,28 @@ define(["./protobufjs"], function($protobuf) {
             BS2GC_RequestSnapshotRet.prototype.result = 0;
     
             /**
-             * BS2GC_RequestSnapshotRet snapshot.
-             * @member {Protos.ISnapshot|null|undefined} snapshot
+             * BS2GC_RequestSnapshotRet reqFrame.
+             * @member {number} reqFrame
              * @memberof Protos.BS2GC_RequestSnapshotRet
              * @instance
              */
-            BS2GC_RequestSnapshotRet.prototype.snapshot = null;
+            BS2GC_RequestSnapshotRet.prototype.reqFrame = 0;
+    
+            /**
+             * BS2GC_RequestSnapshotRet curFrame.
+             * @member {number} curFrame
+             * @memberof Protos.BS2GC_RequestSnapshotRet
+             * @instance
+             */
+            BS2GC_RequestSnapshotRet.prototype.curFrame = 0;
+    
+            /**
+             * BS2GC_RequestSnapshotRet snapshot.
+             * @member {Uint8Array} snapshot
+             * @memberof Protos.BS2GC_RequestSnapshotRet
+             * @instance
+             */
+            BS2GC_RequestSnapshotRet.prototype.snapshot = $util.newBuffer([]);
     
             /**
              * Creates a new BS2GC_RequestSnapshotRet instance using the specified properties.
@@ -3935,8 +3722,12 @@ define(["./protobufjs"], function($protobuf) {
                     $root.Protos.MsgOpts.encode(message.opts, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                 if (message.result != null && message.hasOwnProperty("result"))
                     writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
+                if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.reqFrame);
+                if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.curFrame);
                 if (message.snapshot != null && message.hasOwnProperty("snapshot"))
-                    $root.Protos.Snapshot.encode(message.snapshot, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.snapshot);
                 return writer;
             };
     
@@ -3978,7 +3769,13 @@ define(["./protobufjs"], function($protobuf) {
                         message.result = reader.int32();
                         break;
                     case 3:
-                        message.snapshot = $root.Protos.Snapshot.decode(reader, reader.uint32());
+                        message.reqFrame = reader.int32();
+                        break;
+                    case 4:
+                        message.curFrame = reader.int32();
+                        break;
+                    case 5:
+                        message.snapshot = reader.bytes();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -4029,11 +3826,15 @@ define(["./protobufjs"], function($protobuf) {
                     case 2:
                         break;
                     }
-                if (message.snapshot != null && message.hasOwnProperty("snapshot")) {
-                    var error = $root.Protos.Snapshot.verify(message.snapshot);
-                    if (error)
-                        return "snapshot." + error;
-                }
+                if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                    if (!$util.isInteger(message.reqFrame))
+                        return "reqFrame: integer expected";
+                if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                    if (!$util.isInteger(message.curFrame))
+                        return "curFrame: integer expected";
+                if (message.snapshot != null && message.hasOwnProperty("snapshot"))
+                    if (!(message.snapshot && typeof message.snapshot.length === "number" || $util.isString(message.snapshot)))
+                        return "snapshot: buffer expected";
                 return null;
             };
     
@@ -4068,11 +3869,15 @@ define(["./protobufjs"], function($protobuf) {
                     message.result = 2;
                     break;
                 }
-                if (object.snapshot != null) {
-                    if (typeof object.snapshot !== "object")
-                        throw TypeError(".Protos.BS2GC_RequestSnapshotRet.snapshot: object expected");
-                    message.snapshot = $root.Protos.Snapshot.fromObject(object.snapshot);
-                }
+                if (object.reqFrame != null)
+                    message.reqFrame = object.reqFrame | 0;
+                if (object.curFrame != null)
+                    message.curFrame = object.curFrame | 0;
+                if (object.snapshot != null)
+                    if (typeof object.snapshot === "string")
+                        $util.base64.decode(object.snapshot, message.snapshot = $util.newBuffer($util.base64.length(object.snapshot)), 0);
+                    else if (object.snapshot.length)
+                        message.snapshot = object.snapshot;
                 return message;
             };
     
@@ -4092,14 +3897,26 @@ define(["./protobufjs"], function($protobuf) {
                 if (options.defaults) {
                     object.opts = null;
                     object.result = options.enums === String ? "Success" : 0;
-                    object.snapshot = null;
+                    object.reqFrame = 0;
+                    object.curFrame = 0;
+                    if (options.bytes === String)
+                        object.snapshot = "";
+                    else {
+                        object.snapshot = [];
+                        if (options.bytes !== Array)
+                            object.snapshot = $util.newBuffer(object.snapshot);
+                    }
                 }
                 if (message.opts != null && message.hasOwnProperty("opts"))
                     object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
                 if (message.result != null && message.hasOwnProperty("result"))
                     object.result = options.enums === String ? $root.Protos.BS2GC_RequestSnapshotRet.EResult[message.result] : message.result;
+                if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                    object.reqFrame = message.reqFrame;
+                if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                    object.curFrame = message.curFrame;
                 if (message.snapshot != null && message.hasOwnProperty("snapshot"))
-                    object.snapshot = $root.Protos.Snapshot.toObject(message.snapshot, options);
+                    object.snapshot = options.bytes === String ? $util.base64.encode(message.snapshot, 0, message.snapshot.length) : options.bytes === Array ? Array.prototype.slice.call(message.snapshot) : message.snapshot;
                 return object;
             };
     

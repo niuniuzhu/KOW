@@ -1,8 +1,10 @@
-﻿namespace BattleServer.Battle.Snapshot
+﻿using Google.Protobuf;
+
+namespace BattleServer.Battle.Snapshot
 {
 	public class FrameSnapshot
 	{
-		public BattleSnapshot battleSnapshot;
-		public EntitySnapshot[] entitySnapshots;
+		public int frame;
+		public ByteString data;
 	}
 }

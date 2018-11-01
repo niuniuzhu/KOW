@@ -40,7 +40,15 @@ message BS2GC_BattleEnd {
 	uint32 id = 2;//战场id
 }
 
+//帧行为,参考GC2BS.GC2BS_Action
+message BS2GC_FrameActon {
+	int32 inputFlag = 1;
+	float dx = 2;
+	float dy = 3;
+}
+
 message BS2GC_Action {
 	MsgOpts opts = 1;
 	int32 frame = 2;
+	map<uint64, BS2GC_FrameActon> actions = 3; 
 }

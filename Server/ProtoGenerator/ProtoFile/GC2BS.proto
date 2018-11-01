@@ -20,15 +20,8 @@ message GC2BS_RequestSnapshot {
 
 //帧行为
 message GC2BS_Action {
-	//输入位标记
-	enum InputFlag {
-		None = 0;
-		Move = 1;
-		Skill1 = 2;
-		Skill2 = 4;
-	}
 	MsgOpts opts = 1;
-	InputFlag inputFlag = 2;
-	float dirX = 3;
-	float dirY = 4;
+	int32 inputFlag = 2;
+	float dx = 3;
+	float dy = 4;
 }

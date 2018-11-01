@@ -1,5 +1,8 @@
 ﻿namespace BattleServer.Battle
 {
+	/// <summary>
+	/// 锁步器
+	/// </summary>
 	public class StepLocker
 	{
 		public int frameRate = 50;//20ms/sec

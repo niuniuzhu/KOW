@@ -29,18 +29,16 @@ namespace Protos {
             "c3Npb25JRBgCIAEoBCIwCg9HQzJCU19LZWVwQWxpdmUSHQoEb3B0cxgBIAEo",
             "CzIPLlByb3Rvcy5Nc2dPcHRzIkUKFUdDMkJTX1JlcXVlc3RTbmFwc2hvdBId",
             "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiABKAUi",
-            "tQEKDEdDMkJTX0FjdGlvbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09w",
-            "dHMSMQoJaW5wdXRGbGFnGAIgASgOMh4uUHJvdG9zLkdDMkJTX0FjdGlvbi5J",
-            "bnB1dEZsYWcSDAoEZGlyWBgDIAEoAhIMCgRkaXJZGAQgASgCIjcKCUlucHV0",
-            "RmxhZxIICgROb25lEAASCAoETW92ZRABEgoKBlNraWxsMRACEgoKBlNraWxs",
-            "MhAEYgZwcm90bzM="));
+            "WAoMR0MyQlNfQWN0aW9uEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0",
+            "cxIRCglpbnB1dEZsYWcYAiABKAUSCgoCZHgYAyABKAISCgoCZHkYBCABKAJi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_AskLogin), global::Protos.GC2BS_AskLogin.Parser, new[]{ "Opts", "SessionID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_KeepAlive), global::Protos.GC2BS_KeepAlive.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestSnapshot), global::Protos.GC2BS_RequestSnapshot.Parser, new[]{ "Opts", "Frame" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_Action), global::Protos.GC2BS_Action.Parser, new[]{ "Opts", "InputFlag", "DirX", "DirY" }, null, new[]{ typeof(global::Protos.GC2BS_Action.Types.InputFlag) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_Action), global::Protos.GC2BS_Action.Parser, new[]{ "Opts", "InputFlag", "Dx", "Dy" }, null, null, null)
           }));
     }
     #endregion
@@ -541,8 +539,8 @@ namespace Protos {
     public GC2BS_Action(GC2BS_Action other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       inputFlag_ = other.inputFlag_;
-      dirX_ = other.dirX_;
-      dirY_ = other.dirY_;
+      dx_ = other.dx_;
+      dy_ = other.dy_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -564,34 +562,34 @@ namespace Protos {
 
     /// <summary>Field number for the "inputFlag" field.</summary>
     public const int InputFlagFieldNumber = 2;
-    private global::Protos.GC2BS_Action.Types.InputFlag inputFlag_ = 0;
+    private int inputFlag_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.GC2BS_Action.Types.InputFlag InputFlag {
+    public int InputFlag {
       get { return inputFlag_; }
       set {
         inputFlag_ = value;
       }
     }
 
-    /// <summary>Field number for the "dirX" field.</summary>
-    public const int DirXFieldNumber = 3;
-    private float dirX_;
+    /// <summary>Field number for the "dx" field.</summary>
+    public const int DxFieldNumber = 3;
+    private float dx_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public float DirX {
-      get { return dirX_; }
+    public float Dx {
+      get { return dx_; }
       set {
-        dirX_ = value;
+        dx_ = value;
       }
     }
 
-    /// <summary>Field number for the "dirY" field.</summary>
-    public const int DirYFieldNumber = 4;
-    private float dirY_;
+    /// <summary>Field number for the "dy" field.</summary>
+    public const int DyFieldNumber = 4;
+    private float dy_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public float DirY {
-      get { return dirY_; }
+    public float Dy {
+      get { return dy_; }
       set {
-        dirY_ = value;
+        dy_ = value;
       }
     }
 
@@ -610,8 +608,8 @@ namespace Protos {
       }
       if (!object.Equals(Opts, other.Opts)) return false;
       if (InputFlag != other.InputFlag) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(DirX, other.DirX)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(DirY, other.DirY)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Dx, other.Dx)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Dy, other.Dy)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -620,8 +618,8 @@ namespace Protos {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (InputFlag != 0) hash ^= InputFlag.GetHashCode();
-      if (DirX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(DirX);
-      if (DirY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(DirY);
+      if (Dx != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Dx);
+      if (Dy != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Dy);
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -641,15 +639,15 @@ namespace Protos {
       }
       if (InputFlag != 0) {
         output.WriteRawTag(16);
-        output.WriteEnum((int) InputFlag);
+        output.WriteInt32(InputFlag);
       }
-      if (DirX != 0F) {
+      if (Dx != 0F) {
         output.WriteRawTag(29);
-        output.WriteFloat(DirX);
+        output.WriteFloat(Dx);
       }
-      if (DirY != 0F) {
+      if (Dy != 0F) {
         output.WriteRawTag(37);
-        output.WriteFloat(DirY);
+        output.WriteFloat(Dy);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -663,12 +661,12 @@ namespace Protos {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
       if (InputFlag != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) InputFlag);
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InputFlag);
       }
-      if (DirX != 0F) {
+      if (Dx != 0F) {
         size += 1 + 4;
       }
-      if (DirY != 0F) {
+      if (Dy != 0F) {
         size += 1 + 4;
       }
       if (_unknownFields != null) {
@@ -691,11 +689,11 @@ namespace Protos {
       if (other.InputFlag != 0) {
         InputFlag = other.InputFlag;
       }
-      if (other.DirX != 0F) {
-        DirX = other.DirX;
+      if (other.Dx != 0F) {
+        Dx = other.Dx;
       }
-      if (other.DirY != 0F) {
-        DirY = other.DirY;
+      if (other.Dy != 0F) {
+        Dy = other.Dy;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -716,37 +714,20 @@ namespace Protos {
             break;
           }
           case 16: {
-            inputFlag_ = (global::Protos.GC2BS_Action.Types.InputFlag) input.ReadEnum();
+            InputFlag = input.ReadInt32();
             break;
           }
           case 29: {
-            DirX = input.ReadFloat();
+            Dx = input.ReadFloat();
             break;
           }
           case 37: {
-            DirY = input.ReadFloat();
+            Dy = input.ReadFloat();
             break;
           }
         }
       }
     }
-
-    #region Nested types
-    /// <summary>Container for nested types declared in the GC2BS_Action message type.</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static partial class Types {
-      /// <summary>
-      ///输入位标记
-      /// </summary>
-      public enum InputFlag {
-        [pbr::OriginalName("None")] None = 0,
-        [pbr::OriginalName("Move")] Move = 1,
-        [pbr::OriginalName("Skill1")] Skill1 = 2,
-        [pbr::OriginalName("Skill2")] Skill2 = 4,
-      }
-
-    }
-    #endregion
 
   }
 

@@ -12,7 +12,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Protos;
 
 #endregion
 
@@ -153,13 +152,19 @@ namespace BattleServer.Battle
 			this.rndSeed = battleEntry.rndSeed;
 			this.mapID = battleEntry.mapID;
 
+			//加载战场配置
 			if ( !this.LoadDefs() )
 				return false;
 
+			//创建玩家
 			if ( !this.CreatePlayers( battleEntry.players ) )
 				return false;
 
+			//创建初始化快照
 			this._snapshotMgr.Create( this.frame, this.MakeInitSnapshot() );
+			//初始化帧行为管理器
+			this._frameActionMgr.Init( this );
+			//初始化锁步器
 			this._stepLocker.Init( this, this.frameRate, this.keyframeStep );
 			return true;
 		}
@@ -173,6 +178,9 @@ namespace BattleServer.Battle
 			Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
 		}
 
+		/// <summary>
+		/// 加载战场配置
+		/// </summary>
 		public bool LoadDefs()
 		{
 			Hashtable mapDef = Defs.GetMap( this.mapID );
@@ -213,6 +221,9 @@ namespace BattleServer.Battle
 			return true;
 		}
 
+		/// <summary>
+		/// 清理战场
+		/// </summary>
 		public void End()
 		{
 			this.finished = false;
@@ -224,6 +235,7 @@ namespace BattleServer.Battle
 			this._entities.Clear();
 			this._idToEntity.Clear();
 			this._ms.SetLength( 0 );
+			this._frameActionMgr.Clear();
 			this._snapshotMgr.Clear();
 			this._tempSIDs.Clear();
 			this._lastUpdateTime = 0;
@@ -334,11 +346,14 @@ namespace BattleServer.Battle
 		/// </summary>
 		/// <param name="frame">当前帧数</param>
 		/// <param name="dt">流逝时间</param>
-		public void OnKeyframe( int frame, int dt )
+		internal void OnKeyframe( int frame, int dt )
 		{
 			//把玩家的操作指令广播到所有玩家
 			Protos.BS2GC_Action action = ProtoCreator.Q_BS2GC_Action();
 			action.Frame = frame;
+			this._frameActionMgr.Save( frame );
+			this._frameActionMgr.Pull( action.Actions );
+			this._frameActionMgr.Clear();
 			this.Broadcast( action );
 		}
 
@@ -347,7 +362,7 @@ namespace BattleServer.Battle
 		/// </summary>
 		/// <param name="frame">当前帧数</param>
 		/// <param name="dt">流逝时间</param>
-		public void UpdateLogic( int frame, int dt )
+		internal void UpdateLogic( int frame, int dt )
 		{
 			this.frame = frame;
 		}
@@ -382,9 +397,6 @@ namespace BattleServer.Battle
 				kv.Value.MakeSnapshot( writer );
 		}
 
-		public void HandleGCAction( ulong gcNID, GC2BS_Action action )
-		{
-			//this.GetEntity( gcNID )
-		}
+		public void HandleGCAction( ulong gcNID, Protos.GC2BS_Action action ) => this._frameActionMgr.MergeFromProto( gcNID, action );
 	}
 }

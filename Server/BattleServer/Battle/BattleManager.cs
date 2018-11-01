@@ -226,13 +226,14 @@ namespace BattleServer.Battle
 
 		public void OnGCFrameAction( ulong gcNID, Protos.GC2BS_Action action )
 		{
-			Protos.BS2GC_RequestSnapshotRet ret = ProtoCreator.R_GC2BS_RequestSnapshot( action.Opts.Pid );
 			Battle battle = this.GetBattle( gcNID );
 			if ( battle == null )
 			{
 				Logger.Warn( $"can not find battle for gcNID:{gcNID}" );
 				return;
 			}
+			if ( battle.finished )
+				return;
 			battle.HandleGCAction( gcNID, action );
 		}
 	}

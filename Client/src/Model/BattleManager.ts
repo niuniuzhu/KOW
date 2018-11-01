@@ -7,29 +7,37 @@ import { SceneManager } from "../Scene/SceneManager";
 import { ProtoCreator } from "../Net/ProtoHelper";
 
 export class BattleManager {
-	private _vBattle: VBattle;
 	private _lBattle: Battle;
+	private _vBattle: VBattle;
+	private _init: boolean;
 
 	constructor() {
-		this._vBattle = new VBattle();
 		this._lBattle = new Battle();
+		this._vBattle = new VBattle();
 	}
 
 	public Init(loginRet: Protos.BS2GC_LoginRet): void {
 		Connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
-		this._vBattle.Init(loginRet);
 		this._lBattle.Init(loginRet);
+		this._vBattle.Init(loginRet);
 		//请求快照
 		this.RequestSnapshot();
+		this._init = true;
 		Logger.Log("battle start");
 	}
 
 	public Clear(): void {
+		this._init = false;
+		this._lBattle.Clear();
+		this._vBattle.Clear();
 		Connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
 	}
 
 	public Update(dt: number): void {
-
+		if (!this._init)
+			return;
+		this._lBattle.Update(dt);
+		this._vBattle.Update(dt);
 	}
 
 	private OnBattleEnd(message: any): void {

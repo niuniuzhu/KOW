@@ -1,4 +1,5 @@
-﻿using BattleServer.Battle.Model;
+﻿#region imports
+using BattleServer.Battle.Model;
 using BattleServer.Battle.Snapshot;
 using BattleServer.User;
 using Core.FMath;
@@ -11,6 +12,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Protos;
+
+#endregion
 
 namespace BattleServer.Battle
 {
@@ -22,14 +26,17 @@ namespace BattleServer.Battle
 		/// 战场ID
 		/// </summary>
 		public uint id { get; }
+
 		/// <summary>
 		/// 标志战场是否结束
 		/// </summary>
 		public bool finished { get; private set; }
+
 		/// <summary>
 		/// 帧率
 		/// </summary>
 		public int frameRate { get; private set; }
+
 		/// <summary>
 		/// 关键帧步长
 		/// </summary>
@@ -38,44 +45,82 @@ namespace BattleServer.Battle
 		/// 地图ID
 		/// </summary>
 		public int mapID { get; private set; }
+
 		/// <summary>
 		/// 随机种子
 		/// </summary>
 		public int rndSeed { get; private set; }
+
 		/// <summary>
 		/// 当前已运行帧数
 		/// </summary>
-		public int frame => this._frame;
+		public int frame { get; private set; }
+
 		/// <summary>
 		/// 战场限时
 		/// </summary>
 		public int battleTime { get; private set; }
+
 		/// <summary>
 		/// 队伍的出生点
 		/// </summary>
 		public FVec2[] bornPoses { get; private set; }
+
 		/// <summary>
 		/// 队伍的出生朝向
 		/// </summary>
 		public FVec2[] bornDirs { get; private set; }
+
 		/// <summary>
 		/// 玩家数量
 		/// </summary>
 		public int numPlayers => this._players.Length;
+
 		/// <summary>
 		/// 实体数量
 		/// </summary>
 		public int numEntities => this._entities.Count;
 
+		/// <summary>
+		/// 所有玩家列表
+		/// </summary>
 		private Player[] _players;
+
+		/// <summary>
+		/// 所有实体列表
+		/// </summary>
 		private readonly List<Entity> _entities = new List<Entity>();
+
+		/// <summary>
+		/// 实体ID到实体的映射
+		/// </summary>
 		private readonly SortedDictionary<ulong, Entity> _idToEntity = new SortedDictionary<ulong, Entity>();
 
+		/// <summary>
+		/// 计时器
+		/// </summary>
 		private readonly Stopwatch _sw = new Stopwatch();
+
+		/// <summary>
+		/// 锁步器
+		/// </summary>
 		private readonly StepLocker _stepLocker = new StepLocker();
+
+		/// <summary>
+		/// 快照管理器
+		/// </summary>
 		private readonly SnapshotMgr _snapshotMgr = new SnapshotMgr();
+
+		/// <summary>
+		/// 帧行为管理器
+		/// </summary>
+		private readonly FrameActionMgr _frameActionMgr = new FrameActionMgr();
+
+		/// <summary>
+		/// 用于广播的临时SID表
+		/// </summary>
 		private readonly List<uint> _tempSIDs = new List<uint>();
-		private int _frame;
+
 		private long _lastUpdateTime;
 
 		/// <summary>
@@ -119,6 +164,9 @@ namespace BattleServer.Battle
 			return true;
 		}
 
+		/// <summary>
+		/// 战场开始
+		/// </summary>
 		public void Start()
 		{
 			this._sw.Start();
@@ -168,6 +216,7 @@ namespace BattleServer.Battle
 		public void End()
 		{
 			this.finished = false;
+			this.frame = 0;
 			int count = this._entities.Count;
 			for ( int i = 0; i < count; i++ )
 				this._entities[i].Dispose();
@@ -177,7 +226,6 @@ namespace BattleServer.Battle
 			this._ms.SetLength( 0 );
 			this._snapshotMgr.Clear();
 			this._tempSIDs.Clear();
-			this._frame = 0;
 			this._lastUpdateTime = 0;
 			this._stepLocker.Clear();
 			this._sw.Stop();
@@ -230,8 +278,14 @@ namespace BattleServer.Battle
 
 		/// <summary>
 		/// 获取指定索引的玩家
+		/// 该函数是线程安全的
 		/// </summary>
-		public Player GetPlayerAt( int index ) => this._players[index];
+		public Player GetPlayerAt( int index )
+		{
+			if ( index < 0 || index >= this._players.Length )
+				return null;
+			return this._players[index];
+		}
 
 		/// <summary>
 		/// 战场主循环
@@ -255,20 +309,20 @@ namespace BattleServer.Battle
 		}
 
 		/// <summary>
-		/// 广播消息
+		/// 广播消息到所有玩家
+		/// 该函数在战场线程调用,是线程不安全的,但由于几乎没有写操作,暂时不加锁
 		/// </summary>
-		/// <param name="message">消息</param>
-		/// <param name="gcNIDExcept">剔除gcNID</param>
-		public void Broadcast( Google.Protobuf.IMessage message, ulong gcNIDExcept = 0 )
+		private void Broadcast( Google.Protobuf.IMessage message, ulong gcNIDExcept = 0 )
 		{
-			int count = this._players.Length;
+			int count = this.numPlayers;
 			for ( int i = 0; i < count; i++ )
 			{
-				BSUser user = this._players[i].user;
+				Player player = this.GetPlayerAt( i );
+				//这个判断防止其他线程修改了player表导致取得空指针
+				BSUser user = player?.user;
 				//未连接的不广播
 				if ( user == null || !user.isConnected || gcNIDExcept != 0 && gcNIDExcept == user.gcNID )
 					continue;
-
 				this._tempSIDs.Add( user.gcSID );
 			}
 			BS.instance.netSessionMgr.Broadcast( this._tempSIDs, message );
@@ -282,6 +336,10 @@ namespace BattleServer.Battle
 		/// <param name="dt">流逝时间</param>
 		public void OnKeyframe( int frame, int dt )
 		{
+			//把玩家的操作指令广播到所有玩家
+			Protos.BS2GC_Action action = ProtoCreator.Q_BS2GC_Action();
+			action.Frame = frame;
+			this.Broadcast( action );
 		}
 
 		/// <summary>
@@ -291,7 +349,7 @@ namespace BattleServer.Battle
 		/// <param name="dt">流逝时间</param>
 		public void UpdateLogic( int frame, int dt )
 		{
-			Interlocked.Increment( ref this._frame );
+			this.frame = frame;
 		}
 
 		/// <summary>
@@ -303,7 +361,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 制作一份初始化快照
 		/// </summary>
-		public Google.Protobuf.ByteString MakeInitSnapshot()
+		private Google.Protobuf.ByteString MakeInitSnapshot()
 		{
 			Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( this._ms );
 			writer.Flush();
@@ -322,6 +380,11 @@ namespace BattleServer.Battle
 			writer.WriteInt32( count );
 			foreach ( KeyValuePair<ulong, Entity> kv in this._idToEntity )
 				kv.Value.MakeSnapshot( writer );
+		}
+
+		public void HandleGCAction( ulong gcNID, GC2BS_Action action )
+		{
+			//this.GetEntity( gcNID )
 		}
 	}
 }

@@ -1,19 +1,22 @@
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 import { SceneManager } from "../Scene/SceneManager";
+import { Graphic } from "../Graphic";
 export class UIMatching {
     get root() { return this._root; }
     constructor() {
         fairygui.UIPackage.addPackage("res/ui/matching");
         this._root = fairygui.UIPackage.createObject("matching", "Main").asCom;
+        this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
+        this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
     }
     Dispose() {
     }
     Enter(param) {
-        fairygui.GRoot.inst.addChild(this._root);
+        Graphic.uiRoot.addChild(this._root);
     }
     Exit() {
-        fairygui.GRoot.inst.removeChild(this._root);
+        Graphic.uiRoot.removeChild(this._root);
     }
     Update(dt) {
     }
@@ -53,13 +56,14 @@ export class UIMatching {
                 break;
             case Protos.CS2GC_EnterBattle.Error.BSLost:
             case Protos.CS2GC_EnterBattle.Error.BSNotFound:
+            case Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
                 UIAlert.Show("登录战场失败", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
                 break;
         }
     }
     OnLoginBSResut(result) {
         switch (result) {
-            case Protos.BS2GC_LoginRet.EResult.Success:
+            case Protos.Global.ECommon.Success:
                 break;
             default:
                 UIAlert.Show("进入战场失败", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));

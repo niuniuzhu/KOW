@@ -32,6 +32,11 @@ namespace BattleServer.Battle
 		public bool IsInBattle( ulong gcNID ) => this._gcNIDToBattle.ContainsKey( gcNID );
 
 		/// <summary>
+		/// 广播用的临时SID表
+		/// </summary>
+		private readonly List<uint> _tempSIDs = new List<uint>();
+
+		/// <summary>
 		/// 获取指定ID玩家所在的战场
 		/// </summary>
 		public Battle GetBattle( ulong gcNID )
@@ -97,32 +102,6 @@ namespace BattleServer.Battle
 			return ErrorCode.Success;
 		}
 
-		private void OnBattleEnd( Battle battle )
-		{
-			//通知CS战场结束
-			Protos.BS2CS_BattleEnd toCSBattleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
-			toCSBattleEnd.Bid = battle.id;
-			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, toCSBattleEnd, msgRet =>
-			{
-				//通知客户端战场结束
-				Protos.BS2GC_BattleEnd toGCBattleEnd = ProtoCreator.Q_BS2GC_BattleEnd();
-				toGCBattleEnd.Id = battle.id;
-				battle.Broadcast( toGCBattleEnd );
-				//所有玩家下线
-				int count = battle.numPlayers;
-				for ( int i = 0; i < count; i++ )
-				{
-					Player player = battle.GetPlayerAt( i );
-					BS.instance.userMgr.Offline( player.user );
-					//解除玩家ID和战场的映射
-					this._gcNIDToBattle.Remove( player.id );
-				}
-				//处理battle的身后事
-				battle.End();
-				POOL.Push( battle );
-			} );
-		}
-
 		public void Update( long dt )
 		{
 			int count = this._workingBattles.Count;
@@ -140,6 +119,52 @@ namespace BattleServer.Battle
 					--count;
 				}
 			}
+		}
+
+		/// <summary>
+		/// 对战场上所有玩家进行广播
+		/// </summary>
+		private void Broadcast( Battle battle, Google.Protobuf.IMessage message, ulong gcNIDExcept = 0 )
+		{
+			int count = battle.numPlayers;
+			for ( int i = 0; i < count; i++ )
+			{
+				Player player = battle.GetPlayerAt( i );
+				//这个判断防止其他线程修改了player表导致取得空指针
+				BSUser user = player?.user;
+				//未连接的不广播
+				if ( user == null || !user.isConnected || gcNIDExcept != 0 && gcNIDExcept == user.gcNID )
+					continue;
+				this._tempSIDs.Add( user.gcSID );
+			}
+			BS.instance.netSessionMgr.Broadcast( this._tempSIDs, message );
+			this._tempSIDs.Clear();
+		}
+
+		private void OnBattleEnd( Battle battle )
+		{
+			//通知CS战场结束
+			Protos.BS2CS_BattleEnd toCSBattleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
+			toCSBattleEnd.Bid = battle.id;
+			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, toCSBattleEnd, msgRet =>
+			{
+				//通知客户端战场结束
+				Protos.BS2GC_BattleEnd toGCBattleEnd = ProtoCreator.Q_BS2GC_BattleEnd();
+				toGCBattleEnd.Id = battle.id;
+				this.Broadcast( battle, toGCBattleEnd );
+				//所有玩家下线
+				int count = battle.numPlayers;
+				for ( int i = 0; i < count; i++ )
+				{
+					Player player = battle.GetPlayerAt( i );
+					BS.instance.userMgr.Offline( player.user );
+					//解除玩家ID和战场的映射
+					this._gcNIDToBattle.Remove( player.id );
+				}
+				//处理battle的身后事
+				battle.End();
+				POOL.Push( battle );
+			} );
 		}
 
 		/// <summary>
@@ -182,21 +207,33 @@ namespace BattleServer.Battle
 		internal void OnRequestSnapshot( ulong gcNID, Protos.GC2BS_RequestSnapshot request )
 		{
 			Protos.BS2GC_RequestSnapshotRet ret = ProtoCreator.R_GC2BS_RequestSnapshot( request.Opts.Pid );
-			BSUser user = BS.instance.userMgr.GetUser( gcNID );
-			do
+			Battle battle = this.GetBattle( gcNID );
+			if ( battle == null )
 			{
-				Battle battle = this.GetBattle( gcNID );
-				if ( battle == null )
-				{
-					ret.Result = Protos.BS2GC_RequestSnapshotRet.Types.EResult.InvalidBattle;
-					break;
-				}
+				Logger.Warn( $"can not find battle for gcNID:{gcNID}" );
+				ret.Result = Protos.BS2GC_RequestSnapshotRet.Types.EResult.InvalidBattle;
+			}
+			else
+			{
 				FrameSnapshot snapshot = battle.GetSnapshot( request.Frame );
 				ret.ReqFrame = request.Frame;
 				ret.CurFrame = battle.frame;
 				ret.Snapshot = snapshot.data;
-			} while ( false );
+			}
+			BSUser user = BS.instance.userMgr.GetUser( gcNID );
 			user.Send( ret );
+		}
+
+		public void OnGCFrameAction( ulong gcNID, Protos.GC2BS_Action action )
+		{
+			Protos.BS2GC_RequestSnapshotRet ret = ProtoCreator.R_GC2BS_RequestSnapshot( action.Opts.Pid );
+			Battle battle = this.GetBattle( gcNID );
+			if ( battle == null )
+			{
+				Logger.Warn( $"can not find battle for gcNID:{gcNID}" );
+				return;
+			}
+			battle.HandleGCAction( gcNID, action );
 		}
 	}
 }

@@ -28,14 +28,19 @@ namespace Protos {
             "QXNrTG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEhEKCXNl",
             "c3Npb25JRBgCIAEoBCIwCg9HQzJCU19LZWVwQWxpdmUSHQoEb3B0cxgBIAEo",
             "CzIPLlByb3Rvcy5Nc2dPcHRzIkUKFUdDMkJTX1JlcXVlc3RTbmFwc2hvdBId",
-            "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiABKAVi",
-            "BnByb3RvMw=="));
+            "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiABKAUi",
+            "tQEKDEdDMkJTX0FjdGlvbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09w",
+            "dHMSMQoJaW5wdXRGbGFnGAIgASgOMh4uUHJvdG9zLkdDMkJTX0FjdGlvbi5J",
+            "bnB1dEZsYWcSDAoEZGlyWBgDIAEoAhIMCgRkaXJZGAQgASgCIjcKCUlucHV0",
+            "RmxhZxIICgROb25lEAASCAoETW92ZRABEgoKBlNraWxsMRACEgoKBlNraWxs",
+            "MhAEYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_AskLogin), global::Protos.GC2BS_AskLogin.Parser, new[]{ "Opts", "SessionID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_KeepAlive), global::Protos.GC2BS_KeepAlive.Parser, new[]{ "Opts" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestSnapshot), global::Protos.GC2BS_RequestSnapshot.Parser, new[]{ "Opts", "Frame" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestSnapshot), global::Protos.GC2BS_RequestSnapshot.Parser, new[]{ "Opts", "Frame" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_Action), global::Protos.GC2BS_Action.Parser, new[]{ "Opts", "InputFlag", "DirX", "DirY" }, null, new[]{ typeof(global::Protos.GC2BS_Action.Types.InputFlag) }, null)
           }));
     }
     #endregion
@@ -341,7 +346,7 @@ namespace Protos {
   }
 
   /// <summary>
-  ///请求BS当前游戏状态
+  ///请求BS当前游戏快照
   /// </summary>
   public sealed partial class GC2BS_RequestSnapshot : pb::IMessage<GC2BS_RequestSnapshot> {
     private static readonly pb::MessageParser<GC2BS_RequestSnapshot> _parser = new pb::MessageParser<GC2BS_RequestSnapshot>(() => new GC2BS_RequestSnapshot());
@@ -503,6 +508,245 @@ namespace Protos {
         }
       }
     }
+
+  }
+
+  /// <summary>
+  ///帧行为
+  /// </summary>
+  public sealed partial class GC2BS_Action : pb::IMessage<GC2BS_Action> {
+    private static readonly pb::MessageParser<GC2BS_Action> _parser = new pb::MessageParser<GC2BS_Action>(() => new GC2BS_Action());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GC2BS_Action> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_Action() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_Action(GC2BS_Action other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      inputFlag_ = other.inputFlag_;
+      dirX_ = other.dirX_;
+      dirY_ = other.dirY_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_Action Clone() {
+      return new GC2BS_Action(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "inputFlag" field.</summary>
+    public const int InputFlagFieldNumber = 2;
+    private global::Protos.GC2BS_Action.Types.InputFlag inputFlag_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.GC2BS_Action.Types.InputFlag InputFlag {
+      get { return inputFlag_; }
+      set {
+        inputFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dirX" field.</summary>
+    public const int DirXFieldNumber = 3;
+    private float dirX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float DirX {
+      get { return dirX_; }
+      set {
+        dirX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dirY" field.</summary>
+    public const int DirYFieldNumber = 4;
+    private float dirY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float DirY {
+      get { return dirY_; }
+      set {
+        dirY_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GC2BS_Action);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GC2BS_Action other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (InputFlag != other.InputFlag) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(DirX, other.DirX)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(DirY, other.DirY)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (InputFlag != 0) hash ^= InputFlag.GetHashCode();
+      if (DirX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(DirX);
+      if (DirY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(DirY);
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (InputFlag != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) InputFlag);
+      }
+      if (DirX != 0F) {
+        output.WriteRawTag(29);
+        output.WriteFloat(DirX);
+      }
+      if (DirY != 0F) {
+        output.WriteRawTag(37);
+        output.WriteFloat(DirY);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (InputFlag != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) InputFlag);
+      }
+      if (DirX != 0F) {
+        size += 1 + 4;
+      }
+      if (DirY != 0F) {
+        size += 1 + 4;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GC2BS_Action other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.InputFlag != 0) {
+        InputFlag = other.InputFlag;
+      }
+      if (other.DirX != 0F) {
+        DirX = other.DirX;
+      }
+      if (other.DirY != 0F) {
+        DirY = other.DirY;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            inputFlag_ = (global::Protos.GC2BS_Action.Types.InputFlag) input.ReadEnum();
+            break;
+          }
+          case 29: {
+            DirX = input.ReadFloat();
+            break;
+          }
+          case 37: {
+            DirY = input.ReadFloat();
+            break;
+          }
+        }
+      }
+    }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the GC2BS_Action message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      /// <summary>
+      ///输入位标记
+      /// </summary>
+      public enum InputFlag {
+        [pbr::OriginalName("None")] None = 0,
+        [pbr::OriginalName("Move")] Move = 1,
+        [pbr::OriginalName("Skill1")] Skill1 = 2,
+        [pbr::OriginalName("Skill2")] Skill2 = 4,
+      }
+
+    }
+    #endregion
 
   }
 

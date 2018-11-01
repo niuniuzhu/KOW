@@ -1,5 +1,5 @@
 import { Logger } from "./RC/Utils/Logger";
-import { Defs } from "./Model/Defs";
+import { Defs } from "./Defs";
 export class Preloader {
     static get complete() { return this._complete; }
     static Load(completeHandler) {

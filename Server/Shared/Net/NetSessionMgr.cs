@@ -9,7 +9,7 @@ namespace Shared.Net
 	{
 		private readonly Dictionary<SessionType, List<NetSessionBase>> _typeToSession = new Dictionary<SessionType, List<NetSessionBase>>();
 		private readonly List<NetSessionBase> _sessionsToRemove = new List<NetSessionBase>();
-		private readonly ObjectPool<StreamBuffer> _bufferPool = new ObjectPool<StreamBuffer>( 10, 5 );
+		private readonly ThreadSafeObjectPool<StreamBuffer> _bufferPool = new ThreadSafeObjectPool<StreamBuffer>( 10, 5 );
 
 		/// <summary>
 		/// 创建监听器
@@ -143,14 +143,10 @@ namespace Shared.Net
 		/// </summary>
 		/// <param name="sessionIds">session id</param>
 		/// <param name="msg">消息</param>
-		/// <param name="transTarget">转发目标</param>
-		/// <param name="nsid">转发的网络id</param>
-		public void Broadcast( IEnumerable<uint> sessionIds, IMessage msg,
-							   Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine,
-							   ulong nsid = 0u )
+		public void Broadcast( IEnumerable<uint> sessionIds, IMessage msg )
 		{
 			StreamBuffer buffer = this._bufferPool.Pop();
-			NetSessionBase.EncodeMessage( buffer, msg, transTarget, nsid );
+			NetSessionBase.EncodeMessage( buffer, msg );
 			byte[] data = buffer.GetBuffer();
 			int length = buffer.length;
 
@@ -162,7 +158,6 @@ namespace Shared.Net
 					continue;
 				( ( NetSessionBase ) session ).Send( data, 0, length );
 			}
-
 			enumerator.Dispose();
 
 			this._bufferPool.Push( buffer );

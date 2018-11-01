@@ -1,5 +1,4 @@
-﻿using BattleServer.Battle.Model;
-using BattleServer.User;
+﻿using BattleServer.User;
 using Core.Misc;
 using Core.Net;
 using Shared;
@@ -17,6 +16,7 @@ namespace BattleServer.Net
 			this._msgCenter.Register( Protos.MsgID.EGc2BsAskLogin, this.OnGc2BsAskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGc2BsKeepAlive, this.OnGc2BsKeepAlive );
 			this._msgCenter.Register( Protos.MsgID.EGc2BsRequestSnapshot, this.OnGc2BsRequestSnapShot );
+			this._msgCenter.Register( Protos.MsgID.EGc2BsAction, this.OnGc2BsAction );
 		}
 
 		protected override void OnEstablish()
@@ -61,18 +61,6 @@ namespace BattleServer.Net
 				loginRet.KeyframeStep = battle.keyframeStep;
 				loginRet.BattleTime = battle.battleTime;
 				loginRet.MapID = battle.mapID;
-
-				int count = battle.numPlayers;
-				for ( int i = 0; i < count; i++ )
-				{
-					Player player = battle.GetPlayerAt( i );
-					Protos.BS2GC_PlayerInfo playerInfo = new Protos.BS2GC_PlayerInfo();
-					playerInfo.GcNID = player.id;
-					playerInfo.Name = player.name;
-					playerInfo.ActorID = player.actorID;
-					player.attribute.Foreach( ( attr, value ) => { playerInfo.Attrs[( int ) attr] = ( float ) value; } );
-					loginRet.PlayerInfo.Add( playerInfo );
-				}
 				loginRet.Result = Protos.Global.Types.ECommon.Success;
 			}
 			else
@@ -93,6 +81,12 @@ namespace BattleServer.Net
 		private ErrorCode OnGc2BsRequestSnapShot( Google.Protobuf.IMessage message )
 		{
 			BS.instance.battleManager.OnRequestSnapshot( this._gcNID, ( Protos.GC2BS_RequestSnapshot ) message );
+			return ErrorCode.Success;
+		}
+
+		private ErrorCode OnGc2BsAction( Google.Protobuf.IMessage message )
+		{
+			BS.instance.battleManager.OnGCFrameAction( this._gcNID, ( Protos.GC2BS_Action ) message );
 			return ErrorCode.Success;
 		}
 	}

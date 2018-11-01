@@ -6,6 +6,7 @@ import { Logger } from "./RC/Utils/Logger";
 import { Preloader } from "./Preloader";
 import * as $protobuf from "./Libs/protobufjs";
 import * as Long from "./Libs/long";
+import { Graphic } from "./Graphic";
 export class Main {
     static get instance() { return Main._instance; }
     constructor() {
@@ -16,6 +17,7 @@ export class Main {
         Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
         Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
         Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
+        let worker = new Worker("js/worker.js");
         fairygui.UIConfig.packageFileExtension = "bin";
         this.ShowLogo();
     }
@@ -58,6 +60,7 @@ export class Main {
         }
         ProtoCreator.Init();
         Connector.Init();
+        Graphic.Init();
         UIManager.Init();
         SceneManager.Init();
         SceneManager.ChangeState(SceneManager.State.Login);

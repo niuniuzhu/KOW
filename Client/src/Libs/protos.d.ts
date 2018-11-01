@@ -301,30 +301,6 @@ export namespace Protos {
         }
     }
 
-    interface IBS2GC_PlayerInfo {
-        gcNID?: (Long|null);
-        name?: (string|null);
-        actorID?: (number|null);
-        attrs?: ({ [k: string]: number }|null);
-    }
-
-    class BS2GC_PlayerInfo implements IBS2GC_PlayerInfo {
-        constructor(properties?: Protos.IBS2GC_PlayerInfo);
-        public gcNID: Long;
-        public name: string;
-        public actorID: number;
-        public attrs: { [k: string]: number };
-        public static create(properties?: Protos.IBS2GC_PlayerInfo): Protos.BS2GC_PlayerInfo;
-        public static encode(message: Protos.IBS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_PlayerInfo;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_PlayerInfo;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_PlayerInfo;
-        public static toObject(message: Protos.BS2GC_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
     interface IBS2GC_LoginRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.Global.ECommon|null);
@@ -333,7 +309,6 @@ export namespace Protos {
         keyframeStep?: (number|null);
         battleTime?: (number|null);
         mapID?: (number|null);
-        playerInfo?: (Protos.IBS2GC_PlayerInfo[]|null);
     }
 
     class BS2GC_LoginRet implements IBS2GC_LoginRet {
@@ -345,7 +320,6 @@ export namespace Protos {
         public keyframeStep: number;
         public battleTime: number;
         public mapID: number;
-        public playerInfo: Protos.IBS2GC_PlayerInfo[];
         public static create(properties?: Protos.IBS2GC_LoginRet): Protos.BS2GC_LoginRet;
         public static encode(message: Protos.IBS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;

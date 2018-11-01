@@ -5,6 +5,7 @@ import { ProtoCreator } from "../Net/ProtoHelper";
 import { SceneState } from "./SceneState";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
+import { PreloadInstance } from "./PreloadInstance";
 export class MatchingState extends SceneState {
     constructor(type) {
         super(type);
@@ -70,8 +71,8 @@ export class MatchingState extends SceneState {
                     let resp = message;
                     this._ui.OnLoginBSResut(resp.result);
                     switch (resp.result) {
-                        case Protos.BS2GC_LoginRet.EResult.Success:
-                            SceneManager.ChangeState(SceneManager.State.Battle);
+                        case Protos.Global.ECommon.Success:
+                            SceneManager.ChangeState(SceneManager.State.Battle, resp);
                             break;
                     }
                 });
@@ -100,11 +101,12 @@ export class MatchingState extends SceneState {
             }
         });
     }
-    StartLoad(mapID, playInfos) {
-        Logger.Log("start load");
-        this.OnLoadComplete();
+    StartLoad(mapID, playerInfos) {
+        Logger.Log("instancing");
+        PreloadInstance.Load(mapID, playerInfos, this.OnInstancingComplete);
     }
-    OnLoadComplete() {
+    OnInstancingComplete() {
+        Logger.Log("instancing complete");
         let msg = ProtoCreator.Q_GC2CS_UpdatePlayerInfo();
         msg.progress = 100;
         Connector.SendToCS(Protos.GC2CS_UpdatePlayerInfo, msg);

@@ -24,7 +24,6 @@ export class Main {
 		Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
 		Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
 		// laya.utils.Stat.show(0, 0);
-
 		fairygui.UIConfig.packageFileExtension = "bin";
 
 		this.ShowLogo();

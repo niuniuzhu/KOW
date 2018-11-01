@@ -18,6 +18,7 @@ enum MsgID {
 	eGC2BS_AskLogin = 1200;
 	eGC2BS_KeepAlive = 1201;
 	eGC2BS_RequestSnapshot = 1202;
+	eGC2BS_Action = 1203;
 
 	eGC2CS_BeginMatch = 1300;
 	eGC2CS_UpdatePlayerInfo = 1301;
@@ -52,6 +53,7 @@ enum MsgID {
 	eBS2GC_BattleStart = 4102;
 	eBS2GC_BattleEnd = 4103;
 	eBS2GC_RequestSnapshotRet = 4104;
+	eBS2GC_Action = 4105;
 
 	//cs
 	eCS2LS_GSInfos = 5000;

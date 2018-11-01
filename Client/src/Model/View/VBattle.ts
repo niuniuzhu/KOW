@@ -7,4 +7,11 @@ export class VBattle {
 	public Init(loginRet: Protos.BS2GC_LoginRet): void {
 		Graphic.battleRoot.addChild(PreloadInstance.instances.get(Consts.ASSETS_MAP_PREFIX + loginRet.mapID));
 	}
+
+	public Clear(): void {
+
+	}
+
+	public Update(dt: number): void {
+	}
 }

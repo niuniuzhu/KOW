@@ -1,4 +1,4 @@
-define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/protos", "../Net/ProtoHelper", "./SceneState", "../RC/Utils/Logger", "./SceneManager", "./PreloadInstance"], function (require, exports, UIManager_1, Connector_1, protos_1, ProtoHelper_1, SceneState_1, Logger_1, SceneManager_1, PreloadInstance_1) {
+define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/protos", "../Net/ProtoHelper", "./SceneState", "../RC/Utils/Logger", "./SceneManager", "./PreloadInstance", "../Env"], function (require, exports, UIManager_1, Connector_1, protos_1, ProtoHelper_1, SceneState_1, Logger_1, SceneManager_1, PreloadInstance_1, Env_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MatchingState extends SceneState_1.SceneState {
@@ -72,7 +72,12 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
                         }
                     });
                 };
-                connector.Connect(enterBattle.ip, enterBattle.port);
+                if (Env_1.Env.platform == Env_1.Env.Platform.Editor) {
+                    connector.Connect("localhost", enterBattle.port);
+                }
+                else {
+                    connector.Connect(enterBattle.ip, enterBattle.port);
+                }
             }
         }
         BeginMatch() {

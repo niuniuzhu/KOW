@@ -1,3 +1,3 @@
 require(["./js/Main"], function (G) {
-	new G.Main();
+	new G.Main("{\"platform\": 0}");
 })

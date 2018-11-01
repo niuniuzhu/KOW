@@ -17,7 +17,9 @@ export class BattleManager {
 	}
 
 	public Init(loginRet: Protos.BS2GC_LoginRet): void {
+		Connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_Action, this.OnFrameAction.bind(this));
 		Connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+
 		this._lBattle.Init(loginRet);
 		this._vBattle.Init(loginRet);
 		//请求快照
@@ -30,6 +32,8 @@ export class BattleManager {
 		this._init = false;
 		this._lBattle.Clear();
 		this._vBattle.Clear();
+
+		Connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_Action, this.OnFrameAction.bind(this));
 		Connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
 	}
 
@@ -41,9 +45,14 @@ export class BattleManager {
 	}
 
 	private OnBattleEnd(message: any): void {
-		let battleEnd: Protos.BS2GC_BattleEnd = <Protos.BS2GC_BattleEnd>message;
+		let battleEnd = <Protos.BS2GC_BattleEnd>message;
 		Logger.Log("battle end");
 		SceneManager.ChangeState(SceneManager.State.Main);
+	}
+
+	private OnFrameAction(message: any): void {
+		let frameAction = <Protos.BS2GC_Action>message;
+		Logger.Log(frameAction.frame);
 	}
 
 	private RequestSnapshot(): void {

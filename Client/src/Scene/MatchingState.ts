@@ -7,6 +7,7 @@ import { UIMatching } from "../UI/UIMatching";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
 import { PreloadInstance } from "./PreloadInstance";
+import { Env } from "../Env";
 
 export class MatchingState extends SceneState {
 	private readonly _ui: UIMatching;
@@ -100,7 +101,12 @@ export class MatchingState extends SceneState {
 				});
 			}
 			//todo 这里最好用kcp连接
-			connector.Connect(enterBattle.ip, enterBattle.port);
+			if (Env.platform == Env.Platform.Editor) {
+				connector.Connect("localhost", enterBattle.port);
+			}
+			else {
+				connector.Connect(enterBattle.ip, enterBattle.port);
+			}
 		}
 	}
 

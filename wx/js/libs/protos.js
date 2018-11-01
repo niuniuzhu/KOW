@@ -755,6 +755,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[1200] = "eGC2BS_AskLogin"] = 1200;
         values[valuesById[1201] = "eGC2BS_KeepAlive"] = 1201;
         values[valuesById[1202] = "eGC2BS_RequestSnapshot"] = 1202;
+        values[valuesById[1203] = "eGC2BS_Action"] = 1203;
         values[valuesById[1300] = "eGC2CS_BeginMatch"] = 1300;
         values[valuesById[1301] = "eGC2CS_UpdatePlayerInfo"] = 1301;
         values[valuesById[2000] = "eLS2GC_GSInfo"] = 2000;
@@ -778,6 +779,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[4102] = "eBS2GC_BattleStart"] = 4102;
         values[valuesById[4103] = "eBS2GC_BattleEnd"] = 4103;
         values[valuesById[4104] = "eBS2GC_RequestSnapshotRet"] = 4104;
+        values[valuesById[4105] = "eBS2GC_Action"] = 4105;
         values[valuesById[5000] = "eCS2LS_GSInfos"] = 5000;
         values[valuesById[5001] = "eCS2LS_GSInfo"] = 5001;
         values[valuesById[5002] = "eCS2LS_GSLost"] = 5002;
@@ -1307,179 +1309,9 @@ export const Protos = $root.Protos = (() => {
         return Global;
     })();
 
-    Protos.BS2GC_PlayerInfo = (function() {
-
-        function BS2GC_PlayerInfo(properties) {
-            this.attrs = {};
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        BS2GC_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-        BS2GC_PlayerInfo.prototype.name = "";
-        BS2GC_PlayerInfo.prototype.actorID = 0;
-        BS2GC_PlayerInfo.prototype.attrs = $util.emptyObject;
-
-        BS2GC_PlayerInfo.create = function create(properties) {
-            return new BS2GC_PlayerInfo(properties);
-        };
-
-        BS2GC_PlayerInfo.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                writer.uint32(8).uint64(message.gcNID);
-            if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(18).string(message.name);
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                writer.uint32(24).int32(message.actorID);
-            if (message.attrs != null && message.hasOwnProperty("attrs"))
-                for (let keys = Object.keys(message.attrs), i = 0; i < keys.length; ++i)
-                    writer.uint32(34).fork().uint32(8).int32(keys[i]).uint32(21).float(message.attrs[keys[i]]).ldelim();
-            return writer;
-        };
-
-        BS2GC_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        BS2GC_PlayerInfo.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_PlayerInfo(), key;
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.gcNID = reader.uint64();
-                    break;
-                case 2:
-                    message.name = reader.string();
-                    break;
-                case 3:
-                    message.actorID = reader.int32();
-                    break;
-                case 4:
-                    reader.skip().pos++;
-                    if (message.attrs === $util.emptyObject)
-                        message.attrs = {};
-                    key = reader.int32();
-                    reader.pos++;
-                    message.attrs[key] = reader.float();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        BS2GC_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        BS2GC_PlayerInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
-                    return "gcNID: integer|Long expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                if (!$util.isInteger(message.actorID))
-                    return "actorID: integer expected";
-            if (message.attrs != null && message.hasOwnProperty("attrs")) {
-                if (!$util.isObject(message.attrs))
-                    return "attrs: object expected";
-                let key = Object.keys(message.attrs);
-                for (let i = 0; i < key.length; ++i) {
-                    if (!$util.key32Re.test(key[i]))
-                        return "attrs: integer key{k:int32} expected";
-                    if (typeof message.attrs[key[i]] !== "number")
-                        return "attrs: number{k:int32} expected";
-                }
-            }
-            return null;
-        };
-
-        BS2GC_PlayerInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.BS2GC_PlayerInfo)
-                return object;
-            let message = new $root.Protos.BS2GC_PlayerInfo();
-            if (object.gcNID != null)
-                if ($util.Long)
-                    (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
-                else if (typeof object.gcNID === "string")
-                    message.gcNID = parseInt(object.gcNID, 10);
-                else if (typeof object.gcNID === "number")
-                    message.gcNID = object.gcNID;
-                else if (typeof object.gcNID === "object")
-                    message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.actorID != null)
-                message.actorID = object.actorID | 0;
-            if (object.attrs) {
-                if (typeof object.attrs !== "object")
-                    throw TypeError(".Protos.BS2GC_PlayerInfo.attrs: object expected");
-                message.attrs = {};
-                for (let keys = Object.keys(object.attrs), i = 0; i < keys.length; ++i)
-                    message.attrs[keys[i]] = Number(object.attrs[keys[i]]);
-            }
-            return message;
-        };
-
-        BS2GC_PlayerInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.objects || options.defaults)
-                object.attrs = {};
-            if (options.defaults) {
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
-                    object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.gcNID = options.longs === String ? "0" : 0;
-                object.name = "";
-                object.actorID = 0;
-            }
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                if (typeof message.gcNID === "number")
-                    object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
-                else
-                    object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                object.actorID = message.actorID;
-            let keys2;
-            if (message.attrs && (keys2 = Object.keys(message.attrs)).length) {
-                object.attrs = {};
-                for (let j = 0; j < keys2.length; ++j)
-                    object.attrs[keys2[j]] = options.json && !isFinite(message.attrs[keys2[j]]) ? String(message.attrs[keys2[j]]) : message.attrs[keys2[j]];
-            }
-            return object;
-        };
-
-        BS2GC_PlayerInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return BS2GC_PlayerInfo;
-    })();
-
     Protos.BS2GC_LoginRet = (function() {
 
         function BS2GC_LoginRet(properties) {
-            this.playerInfo = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -1493,7 +1325,6 @@ export const Protos = $root.Protos = (() => {
         BS2GC_LoginRet.prototype.keyframeStep = 0;
         BS2GC_LoginRet.prototype.battleTime = 0;
         BS2GC_LoginRet.prototype.mapID = 0;
-        BS2GC_LoginRet.prototype.playerInfo = $util.emptyArray;
 
         BS2GC_LoginRet.create = function create(properties) {
             return new BS2GC_LoginRet(properties);
@@ -1516,9 +1347,6 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(48).int32(message.battleTime);
             if (message.mapID != null && message.hasOwnProperty("mapID"))
                 writer.uint32(56).int32(message.mapID);
-            if (message.playerInfo != null && message.playerInfo.length)
-                for (let i = 0; i < message.playerInfo.length; ++i)
-                    $root.Protos.BS2GC_PlayerInfo.encode(message.playerInfo[i], writer.uint32(66).fork()).ldelim();
             return writer;
         };
 
@@ -1553,11 +1381,6 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 7:
                     message.mapID = reader.int32();
-                    break;
-                case 8:
-                    if (!(message.playerInfo && message.playerInfo.length))
-                        message.playerInfo = [];
-                    message.playerInfo.push($root.Protos.BS2GC_PlayerInfo.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1604,15 +1427,6 @@ export const Protos = $root.Protos = (() => {
             if (message.mapID != null && message.hasOwnProperty("mapID"))
                 if (!$util.isInteger(message.mapID))
                     return "mapID: integer expected";
-            if (message.playerInfo != null && message.hasOwnProperty("playerInfo")) {
-                if (!Array.isArray(message.playerInfo))
-                    return "playerInfo: array expected";
-                for (let i = 0; i < message.playerInfo.length; ++i) {
-                    let error = $root.Protos.BS2GC_PlayerInfo.verify(message.playerInfo[i]);
-                    if (error)
-                        return "playerInfo." + error;
-                }
-            }
             return null;
         };
 
@@ -1645,16 +1459,6 @@ export const Protos = $root.Protos = (() => {
                 message.battleTime = object.battleTime | 0;
             if (object.mapID != null)
                 message.mapID = object.mapID | 0;
-            if (object.playerInfo) {
-                if (!Array.isArray(object.playerInfo))
-                    throw TypeError(".Protos.BS2GC_LoginRet.playerInfo: array expected");
-                message.playerInfo = [];
-                for (let i = 0; i < object.playerInfo.length; ++i) {
-                    if (typeof object.playerInfo[i] !== "object")
-                        throw TypeError(".Protos.BS2GC_LoginRet.playerInfo: object expected");
-                    message.playerInfo[i] = $root.Protos.BS2GC_PlayerInfo.fromObject(object.playerInfo[i]);
-                }
-            }
             return message;
         };
 
@@ -1662,8 +1466,6 @@ export const Protos = $root.Protos = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.arrays || options.defaults)
-                object.playerInfo = [];
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -1687,11 +1489,6 @@ export const Protos = $root.Protos = (() => {
                 object.battleTime = message.battleTime;
             if (message.mapID != null && message.hasOwnProperty("mapID"))
                 object.mapID = message.mapID;
-            if (message.playerInfo && message.playerInfo.length) {
-                object.playerInfo = [];
-                for (let j = 0; j < message.playerInfo.length; ++j)
-                    object.playerInfo[j] = $root.Protos.BS2GC_PlayerInfo.toObject(message.playerInfo[j], options);
-            }
             return object;
         };
 
@@ -1700,6 +1497,190 @@ export const Protos = $root.Protos = (() => {
         };
 
         return BS2GC_LoginRet;
+    })();
+
+    Protos.BS2GC_RequestSnapshotRet = (function() {
+
+        function BS2GC_RequestSnapshotRet(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        BS2GC_RequestSnapshotRet.prototype.opts = null;
+        BS2GC_RequestSnapshotRet.prototype.result = 0;
+        BS2GC_RequestSnapshotRet.prototype.reqFrame = 0;
+        BS2GC_RequestSnapshotRet.prototype.curFrame = 0;
+        BS2GC_RequestSnapshotRet.prototype.snapshot = $util.newBuffer([]);
+
+        BS2GC_RequestSnapshotRet.create = function create(properties) {
+            return new BS2GC_RequestSnapshotRet(properties);
+        };
+
+        BS2GC_RequestSnapshotRet.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.result != null && message.hasOwnProperty("result"))
+                writer.uint32(16).int32(message.result);
+            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                writer.uint32(24).int32(message.reqFrame);
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                writer.uint32(32).int32(message.curFrame);
+            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
+                writer.uint32(42).bytes(message.snapshot);
+            return writer;
+        };
+
+        BS2GC_RequestSnapshotRet.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        BS2GC_RequestSnapshotRet.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_RequestSnapshotRet();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.result = reader.int32();
+                    break;
+                case 3:
+                    message.reqFrame = reader.int32();
+                    break;
+                case 4:
+                    message.curFrame = reader.int32();
+                    break;
+                case 5:
+                    message.snapshot = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        BS2GC_RequestSnapshotRet.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        BS2GC_RequestSnapshotRet.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.result != null && message.hasOwnProperty("result"))
+                switch (message.result) {
+                default:
+                    return "result: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
+            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                if (!$util.isInteger(message.reqFrame))
+                    return "reqFrame: integer expected";
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                if (!$util.isInteger(message.curFrame))
+                    return "curFrame: integer expected";
+            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
+                if (!(message.snapshot && typeof message.snapshot.length === "number" || $util.isString(message.snapshot)))
+                    return "snapshot: buffer expected";
+            return null;
+        };
+
+        BS2GC_RequestSnapshotRet.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.BS2GC_RequestSnapshotRet)
+                return object;
+            let message = new $root.Protos.BS2GC_RequestSnapshotRet();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.BS2GC_RequestSnapshotRet.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            switch (object.result) {
+            case "Success":
+            case 0:
+                message.result = 0;
+                break;
+            case "InvalidUser":
+            case 1:
+                message.result = 1;
+                break;
+            case "InvalidBattle":
+            case 2:
+                message.result = 2;
+                break;
+            }
+            if (object.reqFrame != null)
+                message.reqFrame = object.reqFrame | 0;
+            if (object.curFrame != null)
+                message.curFrame = object.curFrame | 0;
+            if (object.snapshot != null)
+                if (typeof object.snapshot === "string")
+                    $util.base64.decode(object.snapshot, message.snapshot = $util.newBuffer($util.base64.length(object.snapshot)), 0);
+                else if (object.snapshot.length)
+                    message.snapshot = object.snapshot;
+            return message;
+        };
+
+        BS2GC_RequestSnapshotRet.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.result = options.enums === String ? "Success" : 0;
+                object.reqFrame = 0;
+                object.curFrame = 0;
+                if (options.bytes === String)
+                    object.snapshot = "";
+                else {
+                    object.snapshot = [];
+                    if (options.bytes !== Array)
+                        object.snapshot = $util.newBuffer(object.snapshot);
+                }
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = options.enums === String ? $root.Protos.BS2GC_RequestSnapshotRet.EResult[message.result] : message.result;
+            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
+                object.reqFrame = message.reqFrame;
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                object.curFrame = message.curFrame;
+            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
+                object.snapshot = options.bytes === String ? $util.base64.encode(message.snapshot, 0, message.snapshot.length) : options.bytes === Array ? Array.prototype.slice.call(message.snapshot) : message.snapshot;
+            return object;
+        };
+
+        BS2GC_RequestSnapshotRet.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        BS2GC_RequestSnapshotRet.EResult = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "Success"] = 0;
+            values[valuesById[1] = "InvalidUser"] = 1;
+            values[valuesById[2] = "InvalidBattle"] = 2;
+            return values;
+        })();
+
+        return BS2GC_RequestSnapshotRet;
     })();
 
     Protos.BS2GC_BattleStart = (function() {
@@ -1916,66 +1897,54 @@ export const Protos = $root.Protos = (() => {
         return BS2GC_BattleEnd;
     })();
 
-    Protos.BS2GC_RequestSnapshotRet = (function() {
+    Protos.BS2GC_FrameActon = (function() {
 
-        function BS2GC_RequestSnapshotRet(properties) {
+        function BS2GC_FrameActon(properties) {
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
 
-        BS2GC_RequestSnapshotRet.prototype.opts = null;
-        BS2GC_RequestSnapshotRet.prototype.result = 0;
-        BS2GC_RequestSnapshotRet.prototype.reqFrame = 0;
-        BS2GC_RequestSnapshotRet.prototype.curFrame = 0;
-        BS2GC_RequestSnapshotRet.prototype.snapshot = $util.newBuffer([]);
+        BS2GC_FrameActon.prototype.inputFlag = 0;
+        BS2GC_FrameActon.prototype.dx = 0;
+        BS2GC_FrameActon.prototype.dy = 0;
 
-        BS2GC_RequestSnapshotRet.create = function create(properties) {
-            return new BS2GC_RequestSnapshotRet(properties);
+        BS2GC_FrameActon.create = function create(properties) {
+            return new BS2GC_FrameActon(properties);
         };
 
-        BS2GC_RequestSnapshotRet.encode = function encode(message, writer) {
+        BS2GC_FrameActon.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.result != null && message.hasOwnProperty("result"))
-                writer.uint32(16).int32(message.result);
-            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
-                writer.uint32(24).int32(message.reqFrame);
-            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
-                writer.uint32(32).int32(message.curFrame);
-            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
-                writer.uint32(42).bytes(message.snapshot);
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                writer.uint32(8).int32(message.inputFlag);
+            if (message.dx != null && message.hasOwnProperty("dx"))
+                writer.uint32(21).float(message.dx);
+            if (message.dy != null && message.hasOwnProperty("dy"))
+                writer.uint32(29).float(message.dy);
             return writer;
         };
 
-        BS2GC_RequestSnapshotRet.encodeDelimited = function encodeDelimited(message, writer) {
+        BS2GC_FrameActon.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
-        BS2GC_RequestSnapshotRet.decode = function decode(reader, length) {
+        BS2GC_FrameActon.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_RequestSnapshotRet();
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_FrameActon();
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    message.inputFlag = reader.int32();
                     break;
                 case 2:
-                    message.result = reader.int32();
+                    message.dx = reader.float();
                     break;
                 case 3:
-                    message.reqFrame = reader.int32();
-                    break;
-                case 4:
-                    message.curFrame = reader.int32();
-                    break;
-                case 5:
-                    message.snapshot = reader.bytes();
+                    message.dy = reader.float();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1985,13 +1954,138 @@ export const Protos = $root.Protos = (() => {
             return message;
         };
 
-        BS2GC_RequestSnapshotRet.decodeDelimited = function decodeDelimited(reader) {
+        BS2GC_FrameActon.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
-        BS2GC_RequestSnapshotRet.verify = function verify(message) {
+        BS2GC_FrameActon.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                if (!$util.isInteger(message.inputFlag))
+                    return "inputFlag: integer expected";
+            if (message.dx != null && message.hasOwnProperty("dx"))
+                if (typeof message.dx !== "number")
+                    return "dx: number expected";
+            if (message.dy != null && message.hasOwnProperty("dy"))
+                if (typeof message.dy !== "number")
+                    return "dy: number expected";
+            return null;
+        };
+
+        BS2GC_FrameActon.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.BS2GC_FrameActon)
+                return object;
+            let message = new $root.Protos.BS2GC_FrameActon();
+            if (object.inputFlag != null)
+                message.inputFlag = object.inputFlag | 0;
+            if (object.dx != null)
+                message.dx = Number(object.dx);
+            if (object.dy != null)
+                message.dy = Number(object.dy);
+            return message;
+        };
+
+        BS2GC_FrameActon.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.inputFlag = 0;
+                object.dx = 0;
+                object.dy = 0;
+            }
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                object.inputFlag = message.inputFlag;
+            if (message.dx != null && message.hasOwnProperty("dx"))
+                object.dx = options.json && !isFinite(message.dx) ? String(message.dx) : message.dx;
+            if (message.dy != null && message.hasOwnProperty("dy"))
+                object.dy = options.json && !isFinite(message.dy) ? String(message.dy) : message.dy;
+            return object;
+        };
+
+        BS2GC_FrameActon.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return BS2GC_FrameActon;
+    })();
+
+    Protos.BS2GC_Action = (function() {
+
+        function BS2GC_Action(properties) {
+            this.actions = {};
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        BS2GC_Action.prototype.opts = null;
+        BS2GC_Action.prototype.frame = 0;
+        BS2GC_Action.prototype.actions = $util.emptyObject;
+
+        BS2GC_Action.create = function create(properties) {
+            return new BS2GC_Action(properties);
+        };
+
+        BS2GC_Action.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                writer.uint32(16).int32(message.frame);
+            if (message.actions != null && message.hasOwnProperty("actions"))
+                for (let keys = Object.keys(message.actions), i = 0; i < keys.length; ++i) {
+                    writer.uint32(26).fork().uint32(8).uint64(keys[i]);
+                    $root.Protos.BS2GC_FrameActon.encode(message.actions[keys[i]], writer.uint32(18).fork()).ldelim().ldelim();
+                }
+            return writer;
+        };
+
+        BS2GC_Action.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        BS2GC_Action.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_Action(), key;
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.frame = reader.int32();
+                    break;
+                case 3:
+                    reader.skip().pos++;
+                    if (message.actions === $util.emptyObject)
+                        message.actions = {};
+                    key = reader.uint64();
+                    reader.pos++;
+                    message.actions[typeof key === "object" ? $util.longToHash(key) : key] = $root.Protos.BS2GC_FrameActon.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        BS2GC_Action.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        BS2GC_Action.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
@@ -1999,105 +2093,78 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
-            if (message.result != null && message.hasOwnProperty("result"))
-                switch (message.result) {
-                default:
-                    return "result: enum value expected";
-                case 0:
-                case 1:
-                case 2:
-                    break;
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                if (!$util.isInteger(message.frame))
+                    return "frame: integer expected";
+            if (message.actions != null && message.hasOwnProperty("actions")) {
+                if (!$util.isObject(message.actions))
+                    return "actions: object expected";
+                let key = Object.keys(message.actions);
+                for (let i = 0; i < key.length; ++i) {
+                    if (!$util.key64Re.test(key[i]))
+                        return "actions: integer|Long key{k:uint64} expected";
+                    {
+                        let error = $root.Protos.BS2GC_FrameActon.verify(message.actions[key[i]]);
+                        if (error)
+                            return "actions." + error;
+                    }
                 }
-            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
-                if (!$util.isInteger(message.reqFrame))
-                    return "reqFrame: integer expected";
-            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
-                if (!$util.isInteger(message.curFrame))
-                    return "curFrame: integer expected";
-            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
-                if (!(message.snapshot && typeof message.snapshot.length === "number" || $util.isString(message.snapshot)))
-                    return "snapshot: buffer expected";
+            }
             return null;
         };
 
-        BS2GC_RequestSnapshotRet.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.BS2GC_RequestSnapshotRet)
+        BS2GC_Action.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.BS2GC_Action)
                 return object;
-            let message = new $root.Protos.BS2GC_RequestSnapshotRet();
+            let message = new $root.Protos.BS2GC_Action();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
-                    throw TypeError(".Protos.BS2GC_RequestSnapshotRet.opts: object expected");
+                    throw TypeError(".Protos.BS2GC_Action.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
-            switch (object.result) {
-            case "Success":
-            case 0:
-                message.result = 0;
-                break;
-            case "InvalidUser":
-            case 1:
-                message.result = 1;
-                break;
-            case "InvalidBattle":
-            case 2:
-                message.result = 2;
-                break;
+            if (object.frame != null)
+                message.frame = object.frame | 0;
+            if (object.actions) {
+                if (typeof object.actions !== "object")
+                    throw TypeError(".Protos.BS2GC_Action.actions: object expected");
+                message.actions = {};
+                for (let keys = Object.keys(object.actions), i = 0; i < keys.length; ++i) {
+                    if (typeof object.actions[keys[i]] !== "object")
+                        throw TypeError(".Protos.BS2GC_Action.actions: object expected");
+                    message.actions[keys[i]] = $root.Protos.BS2GC_FrameActon.fromObject(object.actions[keys[i]]);
+                }
             }
-            if (object.reqFrame != null)
-                message.reqFrame = object.reqFrame | 0;
-            if (object.curFrame != null)
-                message.curFrame = object.curFrame | 0;
-            if (object.snapshot != null)
-                if (typeof object.snapshot === "string")
-                    $util.base64.decode(object.snapshot, message.snapshot = $util.newBuffer($util.base64.length(object.snapshot)), 0);
-                else if (object.snapshot.length)
-                    message.snapshot = object.snapshot;
             return message;
         };
 
-        BS2GC_RequestSnapshotRet.toObject = function toObject(message, options) {
+        BS2GC_Action.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
             let object = {};
+            if (options.objects || options.defaults)
+                object.actions = {};
             if (options.defaults) {
                 object.opts = null;
-                object.result = options.enums === String ? "Success" : 0;
-                object.reqFrame = 0;
-                object.curFrame = 0;
-                if (options.bytes === String)
-                    object.snapshot = "";
-                else {
-                    object.snapshot = [];
-                    if (options.bytes !== Array)
-                        object.snapshot = $util.newBuffer(object.snapshot);
-                }
+                object.frame = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.result != null && message.hasOwnProperty("result"))
-                object.result = options.enums === String ? $root.Protos.BS2GC_RequestSnapshotRet.EResult[message.result] : message.result;
-            if (message.reqFrame != null && message.hasOwnProperty("reqFrame"))
-                object.reqFrame = message.reqFrame;
-            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
-                object.curFrame = message.curFrame;
-            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
-                object.snapshot = options.bytes === String ? $util.base64.encode(message.snapshot, 0, message.snapshot.length) : options.bytes === Array ? Array.prototype.slice.call(message.snapshot) : message.snapshot;
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                object.frame = message.frame;
+            let keys2;
+            if (message.actions && (keys2 = Object.keys(message.actions)).length) {
+                object.actions = {};
+                for (let j = 0; j < keys2.length; ++j)
+                    object.actions[keys2[j]] = $root.Protos.BS2GC_FrameActon.toObject(message.actions[keys2[j]], options);
+            }
             return object;
         };
 
-        BS2GC_RequestSnapshotRet.prototype.toJSON = function toJSON() {
+        BS2GC_Action.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        BS2GC_RequestSnapshotRet.EResult = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
-            values[valuesById[0] = "Success"] = 0;
-            values[valuesById[1] = "InvalidUser"] = 1;
-            values[valuesById[2] = "InvalidBattle"] = 2;
-            return values;
-        })();
-
-        return BS2GC_RequestSnapshotRet;
+        return BS2GC_Action;
     })();
 
     Protos.CS2BS_PlayerInfo = (function() {
@@ -5852,6 +5919,141 @@ export const Protos = $root.Protos = (() => {
         };
 
         return GC2BS_RequestSnapshot;
+    })();
+
+    Protos.GC2BS_Action = (function() {
+
+        function GC2BS_Action(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2BS_Action.prototype.opts = null;
+        GC2BS_Action.prototype.inputFlag = 0;
+        GC2BS_Action.prototype.dx = 0;
+        GC2BS_Action.prototype.dy = 0;
+
+        GC2BS_Action.create = function create(properties) {
+            return new GC2BS_Action(properties);
+        };
+
+        GC2BS_Action.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                writer.uint32(16).int32(message.inputFlag);
+            if (message.dx != null && message.hasOwnProperty("dx"))
+                writer.uint32(29).float(message.dx);
+            if (message.dy != null && message.hasOwnProperty("dy"))
+                writer.uint32(37).float(message.dy);
+            return writer;
+        };
+
+        GC2BS_Action.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2BS_Action.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_Action();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.inputFlag = reader.int32();
+                    break;
+                case 3:
+                    message.dx = reader.float();
+                    break;
+                case 4:
+                    message.dy = reader.float();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2BS_Action.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2BS_Action.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                if (!$util.isInteger(message.inputFlag))
+                    return "inputFlag: integer expected";
+            if (message.dx != null && message.hasOwnProperty("dx"))
+                if (typeof message.dx !== "number")
+                    return "dx: number expected";
+            if (message.dy != null && message.hasOwnProperty("dy"))
+                if (typeof message.dy !== "number")
+                    return "dy: number expected";
+            return null;
+        };
+
+        GC2BS_Action.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2BS_Action)
+                return object;
+            let message = new $root.Protos.GC2BS_Action();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.GC2BS_Action.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.inputFlag != null)
+                message.inputFlag = object.inputFlag | 0;
+            if (object.dx != null)
+                message.dx = Number(object.dx);
+            if (object.dy != null)
+                message.dy = Number(object.dy);
+            return message;
+        };
+
+        GC2BS_Action.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.inputFlag = 0;
+                object.dx = 0;
+                object.dy = 0;
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                object.inputFlag = message.inputFlag;
+            if (message.dx != null && message.hasOwnProperty("dx"))
+                object.dx = options.json && !isFinite(message.dx) ? String(message.dx) : message.dx;
+            if (message.dy != null && message.hasOwnProperty("dy"))
+                object.dy = options.json && !isFinite(message.dy) ? String(message.dy) : message.dy;
+            return object;
+        };
+
+        GC2BS_Action.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GC2BS_Action;
     })();
 
     Protos.GC2CS_BeginMatch = (function() {

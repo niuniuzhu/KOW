@@ -8,6 +8,7 @@ import { SceneState } from "./SceneState";
 import { SceneManager } from "./SceneManager";
 import { Defs } from "../Defs";
 import { Logger } from "../RC/Utils/Logger";
+import { Env } from "../Env";
 
 export class LoginState extends SceneState {
 	private readonly _ui: UILogin;
@@ -17,6 +18,15 @@ export class LoginState extends SceneState {
 		this.__ui = this._ui = UIManager.login;
 	}
 
+	private ConnectToLS(connector: WSConnector): void {
+		if (Env.platform == Env.Platform.Editor) {
+			connector.Connect("localhost", Defs.config["ls_port"]);
+		}
+		else {
+			connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]);
+		}
+	}
+
 	public RequestRegister(uname: string, platform: number, sdk: number): void {
 		let register = ProtoCreator.Q_GC2LS_AskRegister();
 		register.name = uname;
@@ -24,7 +34,7 @@ export class LoginState extends SceneState {
 		register.sdk = sdk;
 
 		let connector = new WSConnector();
-		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
+		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => this.ConnectToLS(connector));
 		connector.onclose = () => Logger.Log("connection closed.");
 		connector.onopen = () => {
 			connector.Send(Protos.GC2LS_AskRegister, register, message => {
@@ -32,7 +42,7 @@ export class LoginState extends SceneState {
 				this._ui.OnRegisterResult(resp);
 			});
 		}
-		connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]);
+		this.ConnectToLS(connector);
 	}
 
 	public RequestLogin(uname: string, platform: number, sdk: number): void {
@@ -42,7 +52,7 @@ export class LoginState extends SceneState {
 		login.sdk = sdk;
 
 		let connector = new WSConnector();
-		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]));
+		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => this.ConnectToLS(connector));
 		connector.onclose = () => Logger.Log("connection closed.");
 		connector.onopen = () => {
 			connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
@@ -51,7 +61,7 @@ export class LoginState extends SceneState {
 				this._ui.OnLoginResut(resp);
 			});
 		};
-		connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]);
+		this.ConnectToLS(connector);
 	}
 
 	public RequestLoginGS(ip: string, port: number, pwd: string, sessionID: Long): void {
@@ -78,6 +88,11 @@ export class LoginState extends SceneState {
 				}
 			});
 		}
-		connector.Connect(ip, port);
+		if (Env.platform == Env.Platform.Editor) {
+			connector.Connect("localhost", port);
+		}
+		else {
+			connector.Connect(ip, port);
+		}
 	}
 }

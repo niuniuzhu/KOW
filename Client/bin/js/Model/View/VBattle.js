@@ -5,6 +5,10 @@ define(["require", "exports", "../../Graphic", "../../Scene/PreloadInstance", ".
         Init(loginRet) {
             Graphic_1.Graphic.battleRoot.addChild(PreloadInstance_1.PreloadInstance.instances.get(Consts_1.Consts.ASSETS_MAP_PREFIX + loginRet.mapID));
         }
+        Clear() {
+        }
+        Update(dt) {
+        }
     }
     exports.VBattle = VBattle;
 });

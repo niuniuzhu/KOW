@@ -31,15 +31,15 @@ export class Battle {
 
 	public Update(dt: number): void {
 		this._elapsed += dt;
-		while (this._elapsed >= this._msPerFrame) {
-			this._elapsed -= this._msPerFrame;
+		// while (this._elapsed >= this._msPerFrame) {
+		// 	this._elapsed -= this._msPerFrame;
 
-			if (this._frame % this.keyframeStep == 0)
-				this._battle.OnKeyframe(this._frame, this._msPerFrame);
+		// 	if (this._frame % this.keyframeStep == 0)
+		// 		this._battle.OnKeyframe(this._frame, this._msPerFrame);
 
-			this._battle.UpdateLogic(this._frame, this._msPerFrame);
+		// 	this._battle.UpdateLogic(this._frame, this._msPerFrame);
 
-			++this._frame;
-		}
+		// 	++this._frame;
+		// }
 	}
 }

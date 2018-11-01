@@ -1,3 +1,4 @@
+import { Consts } from "./Consts";
 import { UIManager } from "./UI/UIManager";
 import { SceneManager } from "./Scene/SceneManager";
 import { Connector } from "./Net/Connector";
@@ -7,6 +8,8 @@ import { Preloader } from "./Preloader";
 import * as $protobuf from "./Libs/protobufjs";
 import * as Long from "./Libs/long";
 import { Graphic } from "./Graphic";
+import { Env } from "./Env";
+import { Hashtable } from "./RC/Utils/Hashtable";
 
 export class Main {
 	private static _instance: Main;
@@ -15,16 +18,19 @@ export class Main {
 	private _fadeInComplete: boolean;
 	private _preloadComplete: boolean;
 
-	constructor() {
+	constructor(config: string) {
 		Main._instance = this;
 		Laya.MiniAdpter.init();
-		Laya.init(1280, 720);
+		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
 		Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
 		Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
 		Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
 		// laya.utils.Stat.show(0, 0);
 		fairygui.UIConfig.packageFileExtension = "bin";
+
+		let kv = JSON.parse(config);
+		Env.platform = Hashtable.GetNumber(kv, "platform");
 
 		this.ShowLogo();
 	}
@@ -67,7 +73,7 @@ export class Main {
 	private StartGame(): void {
 		Logger.Log("start game...");
 
-		if (typeof wx !== "undefined") {
+		if (Env.platform == Env.Platform.WXMini) {
 			$protobuf.util.Long = <$protobuf.Constructor<Long>>(<any>Long).default.prototype.constructor;
 			$protobuf.configure();
 		}

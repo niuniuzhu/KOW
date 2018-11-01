@@ -1,17 +1,19 @@
-define(["require", "exports", "./UI/UIManager", "./Scene/SceneManager", "./Net/Connector", "./Net/ProtoHelper", "./RC/Utils/Logger", "./Preloader", "./Libs/protobufjs", "./Libs/long", "./Graphic"], function (require, exports, UIManager_1, SceneManager_1, Connector_1, ProtoHelper_1, Logger_1, Preloader_1, $protobuf, Long, Graphic_1) {
+define(["require", "exports", "./Consts", "./UI/UIManager", "./Scene/SceneManager", "./Net/Connector", "./Net/ProtoHelper", "./RC/Utils/Logger", "./Preloader", "./Libs/protobufjs", "./Libs/long", "./Graphic", "./Env", "./RC/Utils/Hashtable"], function (require, exports, Consts_1, UIManager_1, SceneManager_1, Connector_1, ProtoHelper_1, Logger_1, Preloader_1, $protobuf, Long, Graphic_1, Env_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
         static get instance() { return Main._instance; }
-        constructor() {
+        constructor(config) {
             Main._instance = this;
             Laya.MiniAdpter.init();
-            Laya.init(1280, 720);
+            Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);
             Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
             Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
             Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
             Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
             fairygui.UIConfig.packageFileExtension = "bin";
+            let kv = JSON.parse(config);
+            Env_1.Env.platform = Hashtable_1.Hashtable.GetNumber(kv, "platform");
             this.ShowLogo();
         }
         ShowLogo() {
@@ -47,7 +49,7 @@ define(["require", "exports", "./UI/UIManager", "./Scene/SceneManager", "./Net/C
         }
         StartGame() {
             Logger_1.Logger.Log("start game...");
-            if (typeof wx !== "undefined") {
+            if (Env_1.Env.platform == Env_1.Env.Platform.WXMini) {
                 $protobuf.util.Long = Long.default.prototype.constructor;
                 $protobuf.configure();
             }
@@ -64,7 +66,6 @@ define(["require", "exports", "./UI/UIManager", "./Scene/SceneManager", "./Net/C
             let dt = Laya.timer.delta;
             Connector_1.Connector.Update(dt);
             SceneManager_1.SceneManager.Update(dt);
-            Logger_1.Logger.Log(dt);
         }
         OnResize(e) {
             UIManager_1.UIManager.OnResize(e);

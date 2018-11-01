@@ -20,7 +20,7 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
             register.platform = platform;
             register.sdk = sdk;
             let connector = new WSConnector_1.WSConnector();
-            connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => this.ConnectToLS(connector));
+            connector.onerror = (e) => this._ui.OnConnectToLSError(e);
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
             connector.onopen = () => {
                 connector.Send(protos_1.Protos.GC2LS_AskRegister, register, message => {
@@ -36,7 +36,7 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
             login.platform = platform;
             login.sdk = sdk;
             let connector = new WSConnector_1.WSConnector();
-            connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => this.ConnectToLS(connector));
+            connector.onerror = (e) => this._ui.OnConnectToLSError(e);
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
             connector.onopen = () => {
                 connector.Send(protos_1.Protos.GC2LS_AskSmartLogin, login, message => {
@@ -61,7 +61,7 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
                             if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {
-                                Logger_1.Logger.Log("reconnect to battle");
+                                this.ReconnectToBS(resp);
                             }
                             else {
                                 SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
@@ -75,6 +75,30 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
             }
             else {
                 connector.Connect(ip, port);
+            }
+        }
+        ReconnectToBS(ret) {
+            let connector = Connector_1.Connector.bsConnector;
+            connector.onerror = (e) => this._ui.OnConnectToBSError(e);
+            connector.onopen = () => {
+                Logger_1.Logger.Log("BS Connected");
+                let askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();
+                askLogin.sessionID = ret.gcNID;
+                connector.Send(protos_1.Protos.GC2BS_AskLogin, askLogin, message => {
+                    let resp = message;
+                    this._ui.OnLoginBSResut(resp.result);
+                    switch (resp.result) {
+                        case protos_1.Protos.Global.ECommon.Success:
+                            SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Battle, resp);
+                            break;
+                    }
+                });
+            };
+            if (Env_1.Env.platform == Env_1.Env.Platform.Editor) {
+                connector.Connect("localhost", ret.bsPort);
+            }
+            else {
+                connector.Connect(ret.bsIP, ret.bsPort);
             }
         }
     }

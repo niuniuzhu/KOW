@@ -33,9 +33,8 @@ export class UIMatching implements IUIModule {
 	public OnResize(e: laya.events.Event): void {
 	}
 
-	public OnConnectToBSError(): void {
-		//进入失败重新匹配,暂时的处理方式
-		UIAlert.Show("无法连接服务器", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
+	public OnConnectToBSError(e: Event): void {
+		UIAlert.Show("无法连接服务器[" + e.toString() + "]", () => SceneManager.ChangeState(SceneManager.State.Login));
 	}
 
 	public OnBeginMatchResult(result: Protos.CS2GC_BeginMatchRet.EResult): void {
@@ -60,7 +59,7 @@ export class UIMatching implements IUIModule {
 				break;
 		}
 		if (error != "") {
-			UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
+			UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Login));
 		}
 	}
 
@@ -71,7 +70,7 @@ export class UIMatching implements IUIModule {
 			case Protos.CS2GC_EnterBattle.Error.BSLost:
 			case Protos.CS2GC_EnterBattle.Error.BSNotFound:
 			case Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
-				UIAlert.Show("登录战场失败", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
+				UIAlert.Show("登录战场失败", () => SceneManager.ChangeState(SceneManager.State.Login));
 				break;
 		}
 	}
@@ -81,8 +80,7 @@ export class UIMatching implements IUIModule {
 			case Protos.Global.ECommon.Success:
 				break;
 			default:
-				//进入失败重新匹配,暂时的处理方式
-				UIAlert.Show("进入战场失败", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
+				UIAlert.Show("进入战场失败", () => SceneManager.ChangeState(SceneManager.State.Login));
 				break;
 		}
 	}

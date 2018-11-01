@@ -57,7 +57,7 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
             }
             else {
                 let connector = Connector_1.Connector.bsConnector;
-                connector.onerror = () => this._ui.OnConnectToBSError();
+                connector.onerror = (e) => this._ui.OnConnectToBSError(e);
                 connector.onopen = () => {
                     Logger_1.Logger.Log("BS Connected");
                     let askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();

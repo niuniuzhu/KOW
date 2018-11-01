@@ -129,8 +129,12 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		}
 	}
 
-	public OnConnectToLSError(e:Event, confirmCallback: () => void): void {
-		UIAlert.Show("无法连接服务器[" + e.toString() + "]", confirmCallback);
+	public OnConnectToLSError(e:Event): void {
+		UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
+	}
+
+	public OnConnectToBSError(e: Event): void {
+		UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
 	}
 
 	private HandleLoginLSSuccess(loginResult: Protos.LS2GC_AskLoginRet): void {
@@ -157,6 +161,16 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		switch (resp.result) {
 			case Protos.GS2GC_LoginRet.EResult.SessionExpire:
 				UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
+				break;
+		}
+	}
+
+	public OnLoginBSResut(result: Protos.Global.ECommon): void {
+		switch (result) {
+			case Protos.Global.ECommon.Success:
+				break;
+			default:
+				UIAlert.Show("进入战场失败", () => SceneManager.ChangeState(SceneManager.State.Login));
 				break;
 		}
 	}

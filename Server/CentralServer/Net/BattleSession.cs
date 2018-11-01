@@ -52,9 +52,9 @@ namespace CentralServer.Net
 			return this.BStateReportHandler( reportState.BsInfo, this.id );
 		}
 
-		private ErrorCode BStateReportHandler( Protos.BSInfo gsInfoRecv, uint nid )
+		private ErrorCode BStateReportHandler( Protos.BSInfo BSInfoRecv, uint nid )
 		{
-			this.logicID = gsInfoRecv.Id;
+			this.logicID = BSInfoRecv.Id;
 			bool hasRecord = CS.instance.lIDToBSInfos.TryGetValue( this.logicID, out BSInfo gsInfo );
 			if ( !hasRecord )
 			{
@@ -64,9 +64,9 @@ namespace CentralServer.Net
 			//更新BS信息
 			gsInfo.lid = this.logicID;
 			gsInfo.sessionID = nid;
-			gsInfo.ip = gsInfoRecv.Ip;
-			gsInfo.port = gsInfoRecv.Port;
-			gsInfo.state = ( BSInfo.State ) gsInfoRecv.State;
+			gsInfo.ip = BSInfoRecv.Ip;
+			gsInfo.port = BSInfoRecv.Port;
+			gsInfo.state = ( BSInfo.State ) BSInfoRecv.State;
 			Logger.Log( $"report from BS:{gsInfo}" );
 			return ErrorCode.Success;
 		}

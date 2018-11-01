@@ -62,9 +62,9 @@ namespace CentralServer.Net
 			return this.GStateReportHandler( reportState.GsInfo, this.id );
 		}
 
-		private ErrorCode GStateReportHandler( Protos.GSInfo gsInfoRecv, uint sessionID )
+		private ErrorCode GStateReportHandler( Protos.GSInfo GSInfoRecv, uint sessionID )
 		{
-			this.logicID = gsInfoRecv.Id;
+			this.logicID = GSInfoRecv.Id;
 			bool hasRecord = CS.instance.lIDToGSInfos.TryGetValue( this.logicID, out GSInfo gsInfo );
 			if ( !hasRecord )
 			{
@@ -74,11 +74,11 @@ namespace CentralServer.Net
 			//更新GS信息
 			gsInfo.lid = this.logicID;
 			gsInfo.sessionID = sessionID;
-			gsInfo.name = gsInfoRecv.Name;
-			gsInfo.ip = gsInfoRecv.Ip;
-			gsInfo.port = gsInfoRecv.Port;
-			gsInfo.password = gsInfoRecv.Password;
-			gsInfo.state = ( GSInfo.State ) gsInfoRecv.State;
+			gsInfo.name = GSInfoRecv.Name;
+			gsInfo.ip = GSInfoRecv.Ip;
+			gsInfo.port = GSInfoRecv.Port;
+			gsInfo.password = GSInfoRecv.Password;
+			gsInfo.state = ( GSInfo.State ) GSInfoRecv.State;
 			Logger.Log( $"report from GS:{gsInfo}" );
 
 			//转发到LS

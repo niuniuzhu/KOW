@@ -55,7 +55,7 @@ namespace CentralServer.User
 			CSUser user = this.GetUser( ukey );
 			if ( user != null )
 			{
-				//检查玩家是否已连线
+				//检查玩家是否已连接
 				if ( user.isConnected )
 				{
 					//顶号
@@ -68,11 +68,15 @@ namespace CentralServer.User
 					kickGc.Reason = Protos.CS2GS_KickGC.Types.EReason.DuplicateLogin;
 					gsSession.Send( kickGc, msg =>
 					{
-						//让前玩家下线
-						this.Offline( user );
-						//需要再检查玩家是否被真正下线了
-						user = CreateUser( this.GetUser( ukey ) );
+						//让前玩家下线,这里可能无法下线
+						bool result = this.Offline( user );
+						user = CreateUser( result ? null : user );
 					} );
+				}
+				else
+				{
+					//玩家未连接,但在线
+					user = CreateUser( user );
 				}
 			}
 			else
@@ -109,7 +113,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家下线
 		/// </summary>
-		public void Offline( CSUser user )
+		public bool Offline( CSUser user )
 		{
 			this._gsToUser.RemoveFromList( user.gsSID, user );
 			user.isConnected = false;
@@ -122,7 +126,7 @@ namespace CentralServer.User
 			if ( user.KeepOnline() )
 			{
 				Logger.Info( $"user:{user.gcNID} lost, but keep online" );
-				return;
+				return false;
 			}
 
 			this._gcNidToUser.Remove( user.gcNID );
@@ -130,6 +134,7 @@ namespace CentralServer.User
 			this._users.Remove( user );
 
 			Logger.Info( $"user:{user.gcNID} offline" );
+			return true;
 		}
 
 		/// <summary>

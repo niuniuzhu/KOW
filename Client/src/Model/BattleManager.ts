@@ -5,6 +5,7 @@ import { Connector } from "../Net/Connector";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { ProtoCreator } from "../Net/ProtoHelper";
+import Queue from "../RC/Collections/Queue";
 
 export class BattleManager {
 	private _lBattle: Battle;
@@ -51,8 +52,7 @@ export class BattleManager {
 	}
 
 	private OnFrameAction(message: any): void {
-		let frameAction = <Protos.BS2GC_Action>message;
-		Logger.Log(frameAction.frame);
+		this._lBattle.OnFrameAction(message);
 	}
 
 	private RequestSnapshot(): void {

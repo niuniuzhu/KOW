@@ -23,7 +23,7 @@ namespace BattleServer
 
 		public void CopyFromJson( Hashtable json )
 		{
-			this.id = json.GetUInt( "id" );
+			this.id = json.GetUInt( "ID" );
 			this.externalIP = json.GetString( "externalIP" );
 			this.externalPort = json.GetInt( "externalPort" );
 			this.csIP = json.GetString( "csIP" );

@@ -83,7 +83,7 @@ export class MatchingState extends SceneState {
 		}
 		else {
 			let connector = Connector.bsConnector;
-			connector.onerror = () => this._ui.OnConnectToBSError();
+			connector.onerror = (e) => this._ui.OnConnectToBSError(e);
 			connector.onopen = () => {
 				Logger.Log("BS Connected");
 				let askLogin = ProtoCreator.Q_GC2BS_AskLogin();

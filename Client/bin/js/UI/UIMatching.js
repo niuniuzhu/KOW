@@ -21,8 +21,8 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
         }
         OnResize(e) {
         }
-        OnConnectToBSError() {
-            UIAlert_1.UIAlert.Show("无法连接服务器", () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching, null, true));
+        OnConnectToBSError(e) {
+            UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
         }
         OnBeginMatchResult(result) {
             let error = "";
@@ -46,7 +46,7 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                     break;
             }
             if (error != "") {
-                UIAlert_1.UIAlert.Show(error, () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching, null, true));
+                UIAlert_1.UIAlert.Show(error, () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
             }
         }
         OnEnterBattleResult(result) {
@@ -56,7 +56,7 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                 case protos_1.Protos.CS2GC_EnterBattle.Error.BSLost:
                 case protos_1.Protos.CS2GC_EnterBattle.Error.BSNotFound:
                 case protos_1.Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
-                    UIAlert_1.UIAlert.Show("登录战场失败", () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching, null, true));
+                    UIAlert_1.UIAlert.Show("登录战场失败", () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
                     break;
             }
         }
@@ -65,7 +65,7 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                 case protos_1.Protos.Global.ECommon.Success:
                     break;
                 default:
-                    UIAlert_1.UIAlert.Show("进入战场失败", () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching, null, true));
+                    UIAlert_1.UIAlert.Show("进入战场失败", () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
                     break;
             }
         }

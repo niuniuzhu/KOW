@@ -106,8 +106,11 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                     break;
             }
         }
-        OnConnectToLSError(e, confirmCallback) {
-            UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", confirmCallback);
+        OnConnectToLSError(e) {
+            UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
+        }
+        OnConnectToBSError(e) {
+            UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
         }
         HandleLoginLSSuccess(loginResult) {
             this._areaList.removeChildrenToPool();
@@ -131,6 +134,15 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
             switch (resp.result) {
                 case protos_1.Protos.GS2GC_LoginRet.EResult.SessionExpire:
                     UIAlert_1.UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
+                    break;
+            }
+        }
+        OnLoginBSResut(result) {
+            switch (result) {
+                case protos_1.Protos.Global.ECommon.Success:
+                    break;
+                default:
+                    UIAlert_1.UIAlert.Show("进入战场失败", () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
                     break;
             }
         }

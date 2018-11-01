@@ -34,8 +34,7 @@ define(["require", "exports", "./View/VBattle", "./Logic/Battle", "../Libs/proto
             SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
         }
         OnFrameAction(message) {
-            let frameAction = message;
-            Logger_1.Logger.Log(frameAction.frame);
+            this._lBattle.OnFrameAction(message);
         }
         RequestSnapshot() {
             let requestState = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestSnapshot();

@@ -34,7 +34,7 @@ export class LoginState extends SceneState {
 		register.sdk = sdk;
 
 		let connector = new WSConnector();
-		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => this.ConnectToLS(connector));
+		connector.onerror = (e) => this._ui.OnConnectToLSError(e);
 		connector.onclose = () => Logger.Log("connection closed.");
 		connector.onopen = () => {
 			connector.Send(Protos.GC2LS_AskRegister, register, message => {
@@ -52,7 +52,7 @@ export class LoginState extends SceneState {
 		login.sdk = sdk;
 
 		let connector = new WSConnector();
-		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => this.ConnectToLS(connector));
+		connector.onerror = (e) => this._ui.OnConnectToLSError(e);
 		connector.onclose = () => Logger.Log("connection closed.");
 		connector.onopen = () => {
 			connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
@@ -78,8 +78,7 @@ export class LoginState extends SceneState {
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
 						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
-							//todo
-							Logger.Log("reconnect to battle");
+							this.ReconnectToBS(resp);
 						}
 						else {
 							SceneManager.ChangeState(SceneManager.State.Main);
@@ -93,6 +92,34 @@ export class LoginState extends SceneState {
 		}
 		else {
 			connector.Connect(ip, port);
+		}
+	}
+
+	private ReconnectToBS(ret: Protos.GS2GC_LoginRet): void {
+		let connector = Connector.bsConnector;
+		connector.onerror = (e) => this._ui.OnConnectToBSError(e);
+		connector.onopen = () => {
+			Logger.Log("BS Connected");
+			let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
+			askLogin.sessionID = ret.gcNID;
+			//请求登陆BS
+			connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
+				let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
+				this._ui.OnLoginBSResut(resp.result);
+				switch (resp.result) {
+					case Protos.Global.ECommon.Success:
+						//登陆BS成功,切换到战场状态
+						SceneManager.ChangeState(SceneManager.State.Battle, resp);
+						break;
+				}
+			});
+		}
+		//todo 这里最好用kcp连接
+		if (Env.platform == Env.Platform.Editor) {
+			connector.Connect("localhost", ret.bsPort);
+		}
+		else {
+			connector.Connect(ret.bsIP, ret.bsPort);
 		}
 	}
 }

@@ -8,6 +8,7 @@
 		private int _frame;
 		private int _msPerFrame;
 		private Battle _battle;
+		private long _elapsed;
 
 		public void Init( Battle battle, int frameRate, int keyframeStep )
 		{
@@ -15,19 +16,21 @@
 			this.frameRate = frameRate;
 			this.keyframeStep = keyframeStep;
 			this._msPerFrame = 1000 / this.frameRate;
+			this._frame = 0;
+			this._elapsed = 0;
 		}
 
 		public void Clear()
 		{
-			this._frame = 0;
 			this._battle = null;
 		}
 
-		public void Update(long elapsed )
+		public void Update( long dt )
 		{
-			while ( elapsed >= this._msPerFrame )
+			this._elapsed += dt;
+			while ( this._elapsed >= this._msPerFrame )
 			{
-				elapsed -= this._msPerFrame;
+				this._elapsed -= this._msPerFrame;
 
 				if ( this._frame % this.keyframeStep == 0 )
 					this._battle.OnKeyframe( this._frame, this._msPerFrame );

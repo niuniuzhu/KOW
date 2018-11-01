@@ -242,8 +242,8 @@ namespace BattleServer.Battle
 			while ( true )
 			{
 				long now = this._sw.ElapsedMilliseconds;
-				long elapsed = now - this._lastUpdateTime;
-				this._stepLocker.Update( elapsed );
+				long dt = now - this._lastUpdateTime;
+				this._stepLocker.Update( dt );
 				this._lastUpdateTime = now;
 				Thread.Sleep( 1 );
 				if ( now >= this.battleTime )

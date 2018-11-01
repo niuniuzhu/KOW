@@ -73,6 +73,8 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
         }
         UpdatePlayers(_players) {
         }
+        HandleFullPlayer() {
+        }
     }
     exports.UIMatching = UIMatching;
 });

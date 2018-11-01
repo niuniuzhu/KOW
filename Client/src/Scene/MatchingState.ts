@@ -6,8 +6,6 @@ import { SceneState } from "./SceneState";
 import { UIMatching } from "../UI/UIMatching";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
-import { PreloadInstance } from "./PreloadInstance";
-import { Env } from "../Env";
 
 export class MatchingState extends SceneState {
 	private readonly _ui: UIMatching;
@@ -19,6 +17,10 @@ export class MatchingState extends SceneState {
 	constructor(type: number) {
 		super(type);
 		this.__ui = this._ui = UIManager.matching;
+
+		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
+		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
+		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
 	}
 
 	protected OnEnter(param: any): void {
@@ -29,19 +31,10 @@ export class MatchingState extends SceneState {
 		this._maxPlayers = 0;
 		this._players = [];
 
-		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
-		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
-		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
-
 		this.BeginMatch();
 	}
 
 	protected OnExit(): void {
-		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
-		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
-		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-		Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
 		super.OnExit();
 	}
 
@@ -59,7 +52,7 @@ export class MatchingState extends SceneState {
 		this._ui.UpdatePlayers(this._players);
 		//是否满员
 		if (this._players.length == this._maxPlayers) {
-			this.StartLoad(this._mapID, this._players);
+			this._ui.HandleFullPlayer(() => SceneManager.ChangeState(SceneManager.State.Loading));
 		}
 	}
 
@@ -71,41 +64,6 @@ export class MatchingState extends SceneState {
 				this._players.splice(i, 1);
 				this._ui.UpdatePlayers(this._players);
 				return;
-			}
-		}
-	}
-
-	//cs下发bs的连接信息
-	private OnEnterBattle(message: any): void {
-		let enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
-		if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
-			this._ui.OnEnterBattleResult(enterBattle.error);
-		}
-		else {
-			let connector = Connector.bsConnector;
-			connector.onerror = (e) => this._ui.OnConnectToBSError(e);
-			connector.onopen = () => {
-				Logger.Log("BS Connected");
-				let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
-				askLogin.sessionID = enterBattle.gcNID;
-				//请求登陆BS
-				connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
-					let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
-					this._ui.OnLoginBSResut(resp.result);
-					switch (resp.result) {
-						case Protos.Global.ECommon.Success:
-							//登陆BS成功,切换到战场状态
-							SceneManager.ChangeState(SceneManager.State.Battle, resp);
-							break;
-					}
-				});
-			}
-			//todo 这里最好用kcp连接
-			if (Env.platform == Env.Platform.Editor) {
-				connector.Connect("localhost", enterBattle.port);
-			}
-			else {
-				connector.Connect(enterBattle.ip, enterBattle.port);
 			}
 		}
 	}
@@ -134,19 +92,5 @@ export class MatchingState extends SceneState {
 					break;
 			}
 		});
-	}
-
-	private StartLoad(mapID: number, playerInfos: Protos.ICS2GC_PlayerInfo[]): void {
-		//todo preloadall
-		Logger.Log("instancing");
-		PreloadInstance.Load(mapID, playerInfos, this.OnInstancingComplete);
-	}
-
-	//通知cs加载完成
-	public OnInstancingComplete(): void {
-		Logger.Log("instancing complete");
-		let msg = ProtoCreator.Q_GC2CS_UpdatePlayerInfo();
-		msg.progress = 100;
-		Connector.SendToCS(Protos.GC2CS_UpdatePlayerInfo, msg);
 	}
 }

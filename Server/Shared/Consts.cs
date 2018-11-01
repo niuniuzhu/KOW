@@ -50,11 +50,6 @@ namespace Shared
 		public static readonly Regex REGEX_PWD = new Regex( @"" );
 
 		/// <summary>
-		/// 房间超时时间
-		/// </summary>
-		public const long ROOM_TIME_OUT = 5000;
-
-		/// <summary>
 		/// 连接BS超时时间
 		/// </summary>
 		public const long WAITING_ROOM_TIME_OUT = 5000;

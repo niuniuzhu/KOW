@@ -151,7 +151,6 @@ export namespace Protos {
         eGC2BS_RequestSnapshot = 1202,
         eGC2BS_Action = 1203,
         eGC2CS_BeginMatch = 1300,
-        eGC2CS_UpdatePlayerInfo = 1301,
         eLS2GC_GSInfo = 2000,
         eLS2GC_AskRegRet = 2001,
         eLS2GC_AskLoginRet = 2002,
@@ -1160,26 +1159,6 @@ export namespace Protos {
             Single2V2 = 1,
             Team2V2 = 2
         }
-    }
-
-    interface IGC2CS_UpdatePlayerInfo {
-        opts?: (Protos.IMsgOpts|null);
-        progress?: (number|null);
-    }
-
-    class GC2CS_UpdatePlayerInfo implements IGC2CS_UpdatePlayerInfo {
-        constructor(properties?: Protos.IGC2CS_UpdatePlayerInfo);
-        public opts?: (Protos.IMsgOpts|null);
-        public progress: number;
-        public static create(properties?: Protos.IGC2CS_UpdatePlayerInfo): Protos.GC2CS_UpdatePlayerInfo;
-        public static encode(message: Protos.IGC2CS_UpdatePlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IGC2CS_UpdatePlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2CS_UpdatePlayerInfo;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2CS_UpdatePlayerInfo;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.GC2CS_UpdatePlayerInfo;
-        public static toObject(message: Protos.GC2CS_UpdatePlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
     }
 
     interface IGC2GS_AskLogin {

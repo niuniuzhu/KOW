@@ -28,14 +28,11 @@ namespace Protos {
             "X0JlZ2luTWF0Y2gSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiwK",
             "BG1vZGUYAiABKA4yHi5Qcm90b3MuR0MyQ1NfQmVnaW5NYXRjaC5FTW9kZRIP",
             "CgdhY3RvcklEGAMgASgFIjIKBUVNb2RlEg0KCVNpbmdsZTFWMRAAEg0KCVNp",
-            "bmdsZTJWMhABEgsKB1RlYW0yVjIQAiJJChZHQzJDU19VcGRhdGVQbGF5ZXJJ",
-            "bmZvEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIQCghwcm9ncmVz",
-            "cxgCIAEoBWIGcHJvdG8z"));
+            "bmdsZTJWMhABEgsKB1RlYW0yVjIQAmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_BeginMatch), global::Protos.GC2CS_BeginMatch.Parser, new[]{ "Opts", "Mode", "ActorID" }, null, new[]{ typeof(global::Protos.GC2CS_BeginMatch.Types.EMode) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_UpdatePlayerInfo), global::Protos.GC2CS_UpdatePlayerInfo.Parser, new[]{ "Opts", "Progress" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_BeginMatch), global::Protos.GC2CS_BeginMatch.Parser, new[]{ "Opts", "Mode", "ActorID" }, null, new[]{ typeof(global::Protos.GC2CS_BeginMatch.Types.EMode) }, null)
           }));
     }
     #endregion
@@ -264,172 +261,6 @@ namespace Protos {
 
     }
     #endregion
-
-  }
-
-  /// <summary>
-  ///更新玩家信息
-  /// </summary>
-  public sealed partial class GC2CS_UpdatePlayerInfo : pb::IMessage<GC2CS_UpdatePlayerInfo> {
-    private static readonly pb::MessageParser<GC2CS_UpdatePlayerInfo> _parser = new pb::MessageParser<GC2CS_UpdatePlayerInfo>(() => new GC2CS_UpdatePlayerInfo());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<GC2CS_UpdatePlayerInfo> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.GC2CSReflection.Descriptor.MessageTypes[1]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GC2CS_UpdatePlayerInfo() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GC2CS_UpdatePlayerInfo(GC2CS_UpdatePlayerInfo other) : this() {
-      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      progress_ = other.progress_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GC2CS_UpdatePlayerInfo Clone() {
-      return new GC2CS_UpdatePlayerInfo(this);
-    }
-
-    /// <summary>Field number for the "opts" field.</summary>
-    public const int OptsFieldNumber = 1;
-    private global::Protos.MsgOpts opts_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.MsgOpts Opts {
-      get { return opts_; }
-      set {
-        opts_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "progress" field.</summary>
-    public const int ProgressFieldNumber = 2;
-    private int progress_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Progress {
-      get { return progress_; }
-      set {
-        progress_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as GC2CS_UpdatePlayerInfo);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(GC2CS_UpdatePlayerInfo other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(Opts, other.Opts)) return false;
-      if (Progress != other.Progress) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (Progress != 0) hash ^= Progress.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (opts_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Opts);
-      }
-      if (Progress != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Progress);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (opts_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
-      }
-      if (Progress != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Progress);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(GC2CS_UpdatePlayerInfo other) {
-      if (other == null) {
-        return;
-      }
-      if (other.opts_ != null) {
-        if (opts_ == null) {
-          opts_ = new global::Protos.MsgOpts();
-        }
-        Opts.MergeFrom(other.Opts);
-      }
-      if (other.Progress != 0) {
-        Progress = other.Progress;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (opts_ == null) {
-              opts_ = new global::Protos.MsgOpts();
-            }
-            input.ReadMessage(opts_);
-            break;
-          }
-          case 16: {
-            Progress = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
 
   }
 

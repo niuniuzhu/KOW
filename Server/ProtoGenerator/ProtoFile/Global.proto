@@ -21,7 +21,6 @@ enum MsgID {
 	eGC2BS_Action = 1203;
 
 	eGC2CS_BeginMatch = 1300;
-	eGC2CS_UpdatePlayerInfo = 1301;
 	
 	//ls
 	eLS2GC_GSInfo = 2000;

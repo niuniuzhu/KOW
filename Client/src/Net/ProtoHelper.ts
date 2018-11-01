@@ -21,7 +21,6 @@ export class ProtoCreator {
 		ProtoCreator._TYPE2ID.set( Protos.GC2BS_RequestSnapshot, <Protos.MsgID>1202 );
 		ProtoCreator._TYPE2ID.set( Protos.GC2BS_Action, <Protos.MsgID>1203 );
 		ProtoCreator._TYPE2ID.set( Protos.GC2CS_BeginMatch, <Protos.MsgID>1300 );
-		ProtoCreator._TYPE2ID.set( Protos.GC2CS_UpdatePlayerInfo, <Protos.MsgID>1301 );
 		ProtoCreator._TYPE2ID.set( Protos.LS2GC_GSInfo, <Protos.MsgID>2000 );
 		ProtoCreator._TYPE2ID.set( Protos.LS2GC_AskRegRet, <Protos.MsgID>2001 );
 		ProtoCreator._TYPE2ID.set( Protos.LS2GC_AskLoginRet, <Protos.MsgID>2002 );
@@ -74,7 +73,6 @@ export class ProtoCreator {
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1202, Protos.GC2BS_RequestSnapshot );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1203, Protos.GC2BS_Action );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1300, Protos.GC2CS_BeginMatch );
-		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1301, Protos.GC2CS_UpdatePlayerInfo );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>2000, Protos.LS2GC_GSInfo );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>2001, Protos.LS2GC_AskRegRet );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>2002, Protos.LS2GC_AskLoginRet );
@@ -197,12 +195,6 @@ export class ProtoCreator {
 		let msg = new Protos.GC2CS_BeginMatch();
 		msg.opts = new Protos.MsgOpts();
 		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
-		return msg;
-	}
-
-	public static Q_GC2CS_UpdatePlayerInfo(): Protos.GC2CS_UpdatePlayerInfo {
-		let msg = new Protos.GC2CS_UpdatePlayerInfo();
-		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
 
@@ -637,10 +629,6 @@ export class ProtoCreator {
 				let msg = Protos.GC2CS_BeginMatch.decode(data, size);
 				return msg;
 			}
-			case 1301: {
-				let msg = Protos.GC2CS_UpdatePlayerInfo.decode(data, size);
-				return msg;
-			}
 			case 2000: {
 				let msg = Protos.LS2GC_GSInfo.decode(data, size);
 				return msg;
@@ -858,11 +846,6 @@ export class ProtoCreator {
 
 	public static D_GC2CS_BeginMatch(data: Uint8Array, size: number): Protos.GC2CS_BeginMatch {
 		let msg = Protos.GC2CS_BeginMatch.decode(data, size);
-		return msg;
-	}
-
-	public static D_GC2CS_UpdatePlayerInfo(data: Uint8Array, size: number): Protos.GC2CS_UpdatePlayerInfo {
-		let msg = Protos.GC2CS_UpdatePlayerInfo.decode(data, size);
 		return msg;
 	}
 
@@ -1100,9 +1083,6 @@ export class ProtoCreator {
 			case 1300: {
 				return new Protos.GC2CS_BeginMatch();
 			}
-			case 1301: {
-				return new Protos.GC2CS_UpdatePlayerInfo();
-			}
 			case 2000: {
 				return new Protos.LS2GC_GSInfo();
 			}
@@ -1262,9 +1242,6 @@ export class ProtoCreator {
 			}
 			case 1300: {
 				return (<Protos.GC2CS_BeginMatch>message).opts;
-			}
-			case 1301: {
-				return (<Protos.GC2CS_UpdatePlayerInfo>message).opts;
 			}
 			case 2000: {
 				return (<Protos.LS2GC_GSInfo>message).opts;

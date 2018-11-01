@@ -18,7 +18,6 @@ public static class ProtoCreator {
 		{typeof(Protos.GC2BS_RequestSnapshot), (Protos.MsgID)1202},
 		{typeof(Protos.GC2BS_Action), (Protos.MsgID)1203},
 		{typeof(Protos.GC2CS_BeginMatch), (Protos.MsgID)1300},
-		{typeof(Protos.GC2CS_UpdatePlayerInfo), (Protos.MsgID)1301},
 		{typeof(Protos.LS2GC_GSInfo), (Protos.MsgID)2000},
 		{typeof(Protos.LS2GC_AskRegRet), (Protos.MsgID)2001},
 		{typeof(Protos.LS2GC_AskLoginRet), (Protos.MsgID)2002},
@@ -73,7 +72,6 @@ public static class ProtoCreator {
 		{(Protos.MsgID)1202, typeof(Protos.GC2BS_RequestSnapshot)},
 		{(Protos.MsgID)1203, typeof(Protos.GC2BS_Action)},
 		{(Protos.MsgID)1300, typeof(Protos.GC2CS_BeginMatch)},
-		{(Protos.MsgID)1301, typeof(Protos.GC2CS_UpdatePlayerInfo)},
 		{(Protos.MsgID)2000, typeof(Protos.LS2GC_GSInfo)},
 		{(Protos.MsgID)2001, typeof(Protos.LS2GC_AskRegRet)},
 		{(Protos.MsgID)2002, typeof(Protos.LS2GC_AskLoginRet)},
@@ -194,12 +192,6 @@ public static class ProtoCreator {
 		var msg = new Protos.GC2CS_BeginMatch();
 		msg.Opts = new Protos.MsgOpts();
 		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Rpc;
-		return msg;
-	}
-
-	public static Protos.GC2CS_UpdatePlayerInfo Q_GC2CS_UpdatePlayerInfo() {
-		var msg = new Protos.GC2CS_UpdatePlayerInfo();
-		msg.Opts = new Protos.MsgOpts();
 		return msg;
 	}
 
@@ -650,11 +642,6 @@ public static class ProtoCreator {
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
-			case (Protos.MsgID)1301: {
-				var msg = new Protos.GC2CS_UpdatePlayerInfo();
-				msg.MergeFrom( data, offset, size );
-				return msg;
-			}
 			case (Protos.MsgID)2000: {
 				var msg = new Protos.LS2GC_GSInfo();
 				msg.MergeFrom( data, offset, size );
@@ -922,12 +909,6 @@ public static class ProtoCreator {
 
 	public static Protos.GC2CS_BeginMatch D_GC2CS_BeginMatch( byte[] data, int offset, int size ) {
 		var msg = new Protos.GC2CS_BeginMatch();
-		msg.MergeFrom( data, offset, size );
-		return msg;
-	}
-
-	public static Protos.GC2CS_UpdatePlayerInfo D_GC2CS_UpdatePlayerInfo( byte[] data, int offset, int size ) {
-		var msg = new Protos.GC2CS_UpdatePlayerInfo();
 		msg.MergeFrom( data, offset, size );
 		return msg;
 	}
@@ -1207,9 +1188,6 @@ public static class ProtoCreator {
 			case (Protos.MsgID)1300: {
 				return new Protos.GC2CS_BeginMatch();
 			}
-			case (Protos.MsgID)1301: {
-				return new Protos.GC2CS_UpdatePlayerInfo();
-			}
 			case (Protos.MsgID)2000: {
 				return new Protos.LS2GC_GSInfo();
 			}
@@ -1371,9 +1349,6 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)1300: {
 				return ((Protos.GC2CS_BeginMatch)message).Opts;
-			}
-			case (Protos.MsgID)1301: {
-				return ((Protos.GC2CS_UpdatePlayerInfo)message).Opts;
 			}
 			case (Protos.MsgID)2000: {
 				return ((Protos.LS2GC_GSInfo)message).Opts;

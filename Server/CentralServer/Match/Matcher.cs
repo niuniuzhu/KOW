@@ -16,15 +16,7 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 还在等待玩家进入的房间
 		/// </summary>
-		private readonly List<Room> _freeRooms = new List<Room>();
-		/// <summary>
-		/// 满员的房间
-		/// </summary>
-		private readonly List<Room> _fullRooms = new List<Room>();
-		/// <summary>
-		/// 等待消息确认的房间
-		/// </summary>
-		private readonly List<Room> _transits = new List<Room>();
+		private readonly List<Room> _openRooms = new List<Room>();
 		/// <summary>
 		/// 房间ID对应的房间实例
 		/// </summary>
@@ -84,17 +76,17 @@ namespace CentralServer.Match
 			this.Broadcast( room, playerLeave );
 
 			if ( room.isEmpty )
-				this.DestroyRoom( room, 0 );
+				this.DestroyRoom( room );
 		}
 
 		private Room JoinRoom()
 		{
 			Room room;
-			if ( this._freeRooms.Count > 0 )
+			if ( this._openRooms.Count > 0 )
 			{
 				//todo 当前随机加入处理
 				Random rnd = new Random();
-				room = this._freeRooms[rnd.Next( 0, this._freeRooms.Count )];
+				room = this._openRooms[rnd.Next( 0, this._openRooms.Count )];
 			}
 			else
 				room = this.CreateRoom();
@@ -110,12 +102,12 @@ namespace CentralServer.Match
 			room.mapID = rnd.Next( 0, mapCount );
 			room.maxPlayers = Defs.GetMap( room.mapID ).GetInt( "max_players" );
 			Logger.Log( $"room:{room.id} was created" );
-			this._freeRooms.Add( room );
+			this._openRooms.Add( room );
 			this._idToRoom[room.id] = room;
 			return room;
 		}
 
-		private void DestroyRoom( Room room, int type )
+		private void DestroyRoom( Room room )
 		{
 			//移除房间内所有玩家
 			int count = room.numPlayers;
@@ -132,10 +124,7 @@ namespace CentralServer.Match
 			}
 
 			this._idToRoom.Remove( room.id );
-			if ( type == 0 )
-				this._freeRooms.Remove( room );
-			else if ( type == 1 )
-				this._transits.Remove( room );
+			this._openRooms.Remove( room );
 
 			POOL.Push( room );
 			Logger.Log( $"room:{room.id} was destroied" );
@@ -205,7 +194,7 @@ namespace CentralServer.Match
 			{
 				//加入失败,如果房间没玩家,则销毁房间
 				if ( room.isEmpty )
-					this.DestroyRoom( room, 99 );
+					this.DestroyRoom( room );
 				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.Failed;
 				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 				return;
@@ -219,51 +208,7 @@ namespace CentralServer.Match
 			this.AddPlayer( room, player, user );
 
 			if ( room.isFull )
-			{
-				room.started = true;
-				this._freeRooms.Remove( room );
-				this._fullRooms.Add( room );
-			}
-		}
-
-		/// <summary>
-		/// 处理玩家提交的信息
-		/// </summary>
-		public void UpdatePlayerInfo( Protos.GC2CS_UpdatePlayerInfo updatePlayerInfo )
-		{
-			ulong gcNID = updatePlayerInfo.Opts.Transid;
-
-			CSUser user = CS.instance.userMgr.GetUser( gcNID );
-			if ( user == null )
-			{
-				Logger.Warn( $"invalid user:{gcNID}" );
-				return;
-			}
-
-			if ( !user.IsInRoom || !this._idToRoom.TryGetValue( user.roomID, out Room room ) ||
-				 !room.HasPlayer( gcNID ) )
-			{
-				Logger.Warn( $"user:{gcNID} not in room" );
-				return;
-			}
-			RoomPlayer player = room.GetPlayer( gcNID );
-			player.progress = updatePlayerInfo.Progress;
-		}
-
-		/// <summary>
-		/// 通知客户端更新房间信息
-		/// </summary>
-		private void NotifyRoomInfos( Room room )
-		{
-			Protos.CS2GC_RoomInfo roomInfo = ProtoCreator.Q_CS2GC_RoomInfo();
-			this.FillProtoPlayerInfo( room, roomInfo.PlayerInfos );
-			//输入进度
-			for ( int i = 0; i < room.numPlayers; i++ )
-			{
-				RoomPlayer player = room.GetPlayerAt( i );
-				roomInfo.Progresses.Add( player.progress );
-			}
-			this.Broadcast( room, roomInfo );
+				this.BeginBattle( room );
 		}
 
 		/// <summary>
@@ -276,7 +221,7 @@ namespace CentralServer.Match
 			if ( appropriateBSInfo == null )
 			{
 				this.NotifyGCEnterBattleFailed( room, Protos.CS2GC_EnterBattle.Types.Error.BsnotFound );
-				this.DestroyRoom( room, 1 );
+				this.DestroyRoom( room );
 				return;
 			}
 
@@ -333,7 +278,7 @@ namespace CentralServer.Match
 							 } );
 						 }
 					 }
-					 this.DestroyRoom( room, 1 );
+					 this.DestroyRoom( room );
 				 } );
 		}
 
@@ -367,30 +312,6 @@ namespace CentralServer.Match
 					continue;
 				msgModifier?.Invoke( msg, player );
 				CS.instance.userMgr.SendToUser( player.gcNID, msg );
-			}
-		}
-
-		public void OnHeartBeat( long dt )
-		{
-			int count = this._fullRooms.Count;
-			for ( int i = 0; i < count; i++ )
-			{
-				Room room = this._fullRooms[i];
-				room.Update( dt );
-
-				if ( room.timeToNitifyPlayerInfos == 0 )
-					this.NotifyRoomInfos( room );
-
-				//未满员的放假继续等待
-				//检查房间是否所有玩家准备完成或者超时
-				if ( room.started && ( room.CheckAllPlayerReady() || room.timeout ) )
-				{
-					this._fullRooms.RemoveAt( i );
-					this._transits.Add( room );
-					this.BeginBattle( room );
-					--i;
-					--count;
-				}
 			}
 		}
 	}

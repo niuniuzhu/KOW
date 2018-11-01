@@ -757,7 +757,6 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[1202] = "eGC2BS_RequestSnapshot"] = 1202;
         values[valuesById[1203] = "eGC2BS_Action"] = 1203;
         values[valuesById[1300] = "eGC2CS_BeginMatch"] = 1300;
-        values[valuesById[1301] = "eGC2CS_UpdatePlayerInfo"] = 1301;
         values[valuesById[2000] = "eLS2GC_GSInfo"] = 2000;
         values[valuesById[2001] = "eLS2GC_AskRegRet"] = 2001;
         values[valuesById[2002] = "eLS2GC_AskLoginRet"] = 2002;
@@ -6201,113 +6200,6 @@ export const Protos = $root.Protos = (() => {
         })();
 
         return GC2CS_BeginMatch;
-    })();
-
-    Protos.GC2CS_UpdatePlayerInfo = (function() {
-
-        function GC2CS_UpdatePlayerInfo(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        GC2CS_UpdatePlayerInfo.prototype.opts = null;
-        GC2CS_UpdatePlayerInfo.prototype.progress = 0;
-
-        GC2CS_UpdatePlayerInfo.create = function create(properties) {
-            return new GC2CS_UpdatePlayerInfo(properties);
-        };
-
-        GC2CS_UpdatePlayerInfo.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                writer.uint32(16).int32(message.progress);
-            return writer;
-        };
-
-        GC2CS_UpdatePlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        GC2CS_UpdatePlayerInfo.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2CS_UpdatePlayerInfo();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                    break;
-                case 2:
-                    message.progress = reader.int32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        GC2CS_UpdatePlayerInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        GC2CS_UpdatePlayerInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
-                if (error)
-                    return "opts." + error;
-            }
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                if (!$util.isInteger(message.progress))
-                    return "progress: integer expected";
-            return null;
-        };
-
-        GC2CS_UpdatePlayerInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.GC2CS_UpdatePlayerInfo)
-                return object;
-            let message = new $root.Protos.GC2CS_UpdatePlayerInfo();
-            if (object.opts != null) {
-                if (typeof object.opts !== "object")
-                    throw TypeError(".Protos.GC2CS_UpdatePlayerInfo.opts: object expected");
-                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-            }
-            if (object.progress != null)
-                message.progress = object.progress | 0;
-            return message;
-        };
-
-        GC2CS_UpdatePlayerInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.opts = null;
-                object.progress = 0;
-            }
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                object.progress = message.progress;
-            return object;
-        };
-
-        GC2CS_UpdatePlayerInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return GC2CS_UpdatePlayerInfo;
     })();
 
     Protos.GC2GS_AskLogin = (function() {

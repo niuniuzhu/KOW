@@ -15,9 +15,3 @@ message GC2CS_BeginMatch {
 	EMode mode = 2;//匹配模式
 	int32 actorID = 3;//匹配前选择的角色id 
 }
-
-//更新玩家信息
-message GC2CS_UpdatePlayerInfo {
-	MsgOpts opts = 1;
-	int32 progress = 2;
-}

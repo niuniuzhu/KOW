@@ -1,4 +1,4 @@
-define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/protos", "../Net/ProtoHelper", "./SceneState", "../RC/Utils/Logger", "./SceneManager", "./PreloadInstance", "../Env"], function (require, exports, UIManager_1, Connector_1, protos_1, ProtoHelper_1, SceneState_1, Logger_1, SceneManager_1, PreloadInstance_1, Env_1) {
+define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/protos", "../Net/ProtoHelper", "./SceneState", "../RC/Utils/Logger", "./SceneManager", "../Env"], function (require, exports, UIManager_1, Connector_1, protos_1, ProtoHelper_1, SceneState_1, Logger_1, SceneManager_1, Env_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MatchingState extends SceneState_1.SceneState {
@@ -36,7 +36,7 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
             this._players.push(playerJoin.playerInfos);
             this._ui.UpdatePlayers(this._players);
             if (this._players.length == this._maxPlayers) {
-                this.StartLoad(this._mapID, this._players);
+                this._ui.HandleFullPlayer();
             }
         }
         OnPlayerLeave(message) {
@@ -100,16 +100,6 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
                         break;
                 }
             });
-        }
-        StartLoad(mapID, playerInfos) {
-            Logger_1.Logger.Log("instancing");
-            PreloadInstance_1.PreloadInstance.Load(mapID, playerInfos, this.OnInstancingComplete);
-        }
-        OnInstancingComplete() {
-            Logger_1.Logger.Log("instancing complete");
-            let msg = ProtoHelper_1.ProtoCreator.Q_GC2CS_UpdatePlayerInfo();
-            msg.progress = 100;
-            Connector_1.Connector.SendToCS(protos_1.Protos.GC2CS_UpdatePlayerInfo, msg);
         }
     }
     exports.MatchingState = MatchingState;

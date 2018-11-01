@@ -8,7 +8,6 @@
 
 		public int actorID;
 		public int team;
-		public int progress;
 
 		public RoomPlayer( ulong gcNID, uint ukey )
 		{

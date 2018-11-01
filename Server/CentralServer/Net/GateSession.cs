@@ -18,7 +18,6 @@ namespace CentralServer.Net
 			this._msgCenter.Register( Protos.MsgID.EGs2CsGclost, this.OnGs2CsGclost );
 
 			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, this.OnGc2CsBeginMatch );
-			this._msgCenter.Register( Protos.MsgID.EGc2CsUpdatePlayerInfo, this.OnGc2CsUpdatePlayerInfo );
 		}
 
 		protected override void OnEstablish()
@@ -152,13 +151,6 @@ namespace CentralServer.Net
 		{
 			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch ) message;
 			CS.instance.matcher.BeginMatch( this.id, beginMatch );
-			return ErrorCode.Success;
-		}
-
-		private ErrorCode OnGc2CsUpdatePlayerInfo( IMessage message )
-		{
-			Protos.GC2CS_UpdatePlayerInfo updatePlayerInfo = ( Protos.GC2CS_UpdatePlayerInfo ) message;
-			CS.instance.matcher.UpdatePlayerInfo( updatePlayerInfo );
 			return ErrorCode.Success;
 		}
 	}

@@ -4,12 +4,14 @@ import { LoginState } from "./LoginState";
 import { GlobalState } from "./GlobalState";
 import { MatchingState } from "./MatchingState";
 import { BattleState } from "./BattleState";
+import { LoadingState } from "./LoadingState";
 
 enum State {
 	Global,
 	Main,
 	Login,
 	Matching,
+	Loading,
 	Battle
 }
 
@@ -24,12 +26,14 @@ export class SceneManager {
 	private static _main: MainState;
 	private static _login: LoginState;
 	private static _matching: MatchingState;
+	private static _loading: LoadingState;
 	private static _battle: BattleState;
 
 	public static Init(): void {
 		this._main = new MainState(State.Main);
 		this._login = new LoginState(State.Login);
 		this._matching = new MatchingState(State.Matching);
+		this._loading = new LoadingState(State.Loading);
 		this._battle = new BattleState(State.Battle);
 
 		this.fsm = new FSM();
@@ -37,6 +41,7 @@ export class SceneManager {
 		this.fsm.AddState(this._main);
 		this.fsm.AddState(this._login);
 		this.fsm.AddState(this._matching);
+		this.fsm.AddState(this._loading);
 		this.fsm.AddState(this._battle);
 	}
 

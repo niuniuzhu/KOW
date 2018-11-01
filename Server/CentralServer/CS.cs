@@ -103,7 +103,6 @@ namespace CentralServer
 		{
 			this.UpdateAppropriateBSInfo();
 			this.certificate.OnHeartBeat();
-			this.matcher.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			this.redisWrapper.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 		}

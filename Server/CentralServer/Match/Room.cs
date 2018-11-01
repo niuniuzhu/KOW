@@ -1,5 +1,4 @@
 ﻿using Core.Misc;
-using Shared;
 using System.Collections.Generic;
 
 namespace CentralServer.Match
@@ -36,24 +35,7 @@ namespace CentralServer.Match
 		/// </summary>
 		public bool isEmpty => this._players.Count == 0;
 
-		/// <summary>
-		/// 房间是否超时
-		/// 无论玩家在载入过程中是否丢失,只要超时就会进入战场,玩家以后可以断线重连的方式进入战场
-		/// </summary>
-		public bool timeout => this._time >= Consts.ROOM_TIME_OUT;
-
-		/// <summary>
-		/// 是否到达同步玩家信息的时间
-		/// </summary>
-		public long timeToNitifyPlayerInfos { private set; get; }
-
-		/// <summary>
-		/// 是否满员后开始等待玩家载入战场
-		/// </summary>
-		public bool started;
-
 		private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
-		private long _time;
 
 		public Room()
 		{
@@ -64,9 +46,6 @@ namespace CentralServer.Match
 		public void Clear()
 		{
 			System.Diagnostics.Debug.Assert( this._players.Count == 0, "remove all players before destroy room." );
-			this._time = 0;
-			this.timeToNitifyPlayerInfos = 0;
-			this.started = false;
 		}
 
 		public bool CanAddPlayer( RoomPlayer player ) => this._players.Count < this.maxPlayers && !this.HasPlayer( player.gcNID );
@@ -119,31 +98,6 @@ namespace CentralServer.Match
 					return true;
 			}
 			return false;
-		}
-
-		/// <summary>
-		/// 检查房间是否所有玩家准备完成
-		/// </summary>
-		public bool CheckAllPlayerReady()
-		{
-			int count = this._players.Count;
-			for ( int i = 0; i < count; i++ )
-			{
-				if ( this._players[i].progress < 100 )
-					return false;
-			}
-			return true;
-		}
-
-		public void Update( long dt )
-		{
-			this.timeToNitifyPlayerInfos += dt;
-			if ( this.timeToNitifyPlayerInfos >= Consts.NOTIFY_PLAYERINFO_INTERVAL )
-				this.timeToNitifyPlayerInfos = 0;
-
-			//只要满员就开始计时,即使玩家载入过程中丢失也照样开始游戏
-			if ( this.started )
-				this._time += dt;
 		}
 	}
 }

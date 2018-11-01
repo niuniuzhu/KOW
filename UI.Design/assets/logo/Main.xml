@@ -19,9 +19,9 @@
     <item time="90" type="Alpha" target="n1_p7qk" value="1"/>
   </transition>
   <transition name="t1">
-    <item time="0" type="Alpha" target="n7_p7qk" tween="true" startValue="1" endValue="0" duration="27" ease="Linear"/>
-    <item time="0" type="Alpha" target="n4_p7qk" tween="true" startValue="1" endValue="0" duration="27" ease="Linear"/>
-    <item time="0" type="Alpha" target="n1_p7qk" tween="true" startValue="1" endValue="0" duration="27" ease="Linear"/>
-    <item time="42" type="Alpha" target="n1_p7qk" value="0"/>
+    <item time="0" type="Alpha" target="n7_p7qk" tween="true" startValue="1" endValue="0" duration="24" ease="Linear"/>
+    <item time="0" type="Alpha" target="n4_p7qk" tween="true" startValue="1" endValue="0" duration="24" ease="Linear"/>
+    <item time="0" type="Alpha" target="n1_p7qk" tween="true" startValue="1" endValue="0" duration="24" ease="Linear"/>
+    <item time="30" type="Alpha" target="n1_p7qk" value="0"/>
   </transition>
 </component>

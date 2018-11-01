@@ -33,10 +33,6 @@ export class UIMatching implements IUIModule {
 	public OnResize(e: laya.events.Event): void {
 	}
 
-	public OnConnectToBSError(e: Event): void {
-		UIAlert.Show("无法连接服务器[" + e.toString() + "]", () => SceneManager.ChangeState(SceneManager.State.Login));
-	}
-
 	public OnBeginMatchResult(result: Protos.CS2GC_BeginMatchRet.EResult): void {
 		let error: string = "";
 		switch (result) {
@@ -63,32 +59,14 @@ export class UIMatching implements IUIModule {
 		}
 	}
 
-	public OnEnterBattleResult(result: Protos.CS2GC_EnterBattle.Error): void {
-		switch (result) {
-			case Protos.CS2GC_EnterBattle.Error.Success:
-				break;
-			case Protos.CS2GC_EnterBattle.Error.BSLost:
-			case Protos.CS2GC_EnterBattle.Error.BSNotFound:
-			case Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
-				UIAlert.Show("登录战场失败", () => SceneManager.ChangeState(SceneManager.State.Login));
-				break;
-		}
-	}
-
-	public OnLoginBSResut(result: Protos.Global.ECommon): void {
-		switch (result) {
-			case Protos.Global.ECommon.Success:
-				break;
-			default:
-				UIAlert.Show("进入战场失败", () => SceneManager.ChangeState(SceneManager.State.Login));
-				break;
-		}
-	}
-
 	public UpdateRoomInfo(roomInfo: Protos.CS2GC_RoomInfo): void {
 		//todo update ui
 	}
 
 	public UpdatePlayers(_players: Protos.ICS2GC_PlayerInfo[]): void {
+	}
+
+	public HandleFullPlayer(completeHandler: () => void): void {
+		completeHandler();
 	}
 }

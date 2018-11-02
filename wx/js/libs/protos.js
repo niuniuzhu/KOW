@@ -1896,126 +1896,9 @@ export const Protos = $root.Protos = (() => {
         return BS2GC_BattleEnd;
     })();
 
-    Protos.BS2GC_FrameActon = (function() {
-
-        function BS2GC_FrameActon(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        BS2GC_FrameActon.prototype.inputFlag = 0;
-        BS2GC_FrameActon.prototype.dx = 0;
-        BS2GC_FrameActon.prototype.dy = 0;
-
-        BS2GC_FrameActon.create = function create(properties) {
-            return new BS2GC_FrameActon(properties);
-        };
-
-        BS2GC_FrameActon.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
-                writer.uint32(8).int32(message.inputFlag);
-            if (message.dx != null && message.hasOwnProperty("dx"))
-                writer.uint32(21).float(message.dx);
-            if (message.dy != null && message.hasOwnProperty("dy"))
-                writer.uint32(29).float(message.dy);
-            return writer;
-        };
-
-        BS2GC_FrameActon.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        BS2GC_FrameActon.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_FrameActon();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.inputFlag = reader.int32();
-                    break;
-                case 2:
-                    message.dx = reader.float();
-                    break;
-                case 3:
-                    message.dy = reader.float();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        BS2GC_FrameActon.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        BS2GC_FrameActon.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
-                if (!$util.isInteger(message.inputFlag))
-                    return "inputFlag: integer expected";
-            if (message.dx != null && message.hasOwnProperty("dx"))
-                if (typeof message.dx !== "number")
-                    return "dx: number expected";
-            if (message.dy != null && message.hasOwnProperty("dy"))
-                if (typeof message.dy !== "number")
-                    return "dy: number expected";
-            return null;
-        };
-
-        BS2GC_FrameActon.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.BS2GC_FrameActon)
-                return object;
-            let message = new $root.Protos.BS2GC_FrameActon();
-            if (object.inputFlag != null)
-                message.inputFlag = object.inputFlag | 0;
-            if (object.dx != null)
-                message.dx = Number(object.dx);
-            if (object.dy != null)
-                message.dy = Number(object.dy);
-            return message;
-        };
-
-        BS2GC_FrameActon.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.inputFlag = 0;
-                object.dx = 0;
-                object.dy = 0;
-            }
-            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
-                object.inputFlag = message.inputFlag;
-            if (message.dx != null && message.hasOwnProperty("dx"))
-                object.dx = options.json && !isFinite(message.dx) ? String(message.dx) : message.dx;
-            if (message.dy != null && message.hasOwnProperty("dy"))
-                object.dy = options.json && !isFinite(message.dy) ? String(message.dy) : message.dy;
-            return object;
-        };
-
-        BS2GC_FrameActon.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return BS2GC_FrameActon;
-    })();
-
     Protos.BS2GC_Action = (function() {
 
         function BS2GC_Action(properties) {
-            this.actions = {};
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -2024,7 +1907,7 @@ export const Protos = $root.Protos = (() => {
 
         BS2GC_Action.prototype.opts = null;
         BS2GC_Action.prototype.frame = 0;
-        BS2GC_Action.prototype.actions = $util.emptyObject;
+        BS2GC_Action.prototype.action = $util.newBuffer([]);
 
         BS2GC_Action.create = function create(properties) {
             return new BS2GC_Action(properties);
@@ -2037,11 +1920,8 @@ export const Protos = $root.Protos = (() => {
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.frame != null && message.hasOwnProperty("frame"))
                 writer.uint32(16).int32(message.frame);
-            if (message.actions != null && message.hasOwnProperty("actions"))
-                for (let keys = Object.keys(message.actions), i = 0; i < keys.length; ++i) {
-                    writer.uint32(26).fork().uint32(8).uint64(keys[i]);
-                    $root.Protos.BS2GC_FrameActon.encode(message.actions[keys[i]], writer.uint32(18).fork()).ldelim().ldelim();
-                }
+            if (message.action != null && message.hasOwnProperty("action"))
+                writer.uint32(26).bytes(message.action);
             return writer;
         };
 
@@ -2052,7 +1932,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_Action.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_Action(), key;
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_Action();
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
@@ -2063,12 +1943,7 @@ export const Protos = $root.Protos = (() => {
                     message.frame = reader.int32();
                     break;
                 case 3:
-                    reader.skip().pos++;
-                    if (message.actions === $util.emptyObject)
-                        message.actions = {};
-                    key = reader.uint64();
-                    reader.pos++;
-                    message.actions[typeof key === "object" ? $util.longToHash(key) : key] = $root.Protos.BS2GC_FrameActon.decode(reader, reader.uint32());
+                    message.action = reader.bytes();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2095,20 +1970,9 @@ export const Protos = $root.Protos = (() => {
             if (message.frame != null && message.hasOwnProperty("frame"))
                 if (!$util.isInteger(message.frame))
                     return "frame: integer expected";
-            if (message.actions != null && message.hasOwnProperty("actions")) {
-                if (!$util.isObject(message.actions))
-                    return "actions: object expected";
-                let key = Object.keys(message.actions);
-                for (let i = 0; i < key.length; ++i) {
-                    if (!$util.key64Re.test(key[i]))
-                        return "actions: integer|Long key{k:uint64} expected";
-                    {
-                        let error = $root.Protos.BS2GC_FrameActon.verify(message.actions[key[i]]);
-                        if (error)
-                            return "actions." + error;
-                    }
-                }
-            }
+            if (message.action != null && message.hasOwnProperty("action"))
+                if (!(message.action && typeof message.action.length === "number" || $util.isString(message.action)))
+                    return "action: buffer expected";
             return null;
         };
 
@@ -2123,16 +1987,11 @@ export const Protos = $root.Protos = (() => {
             }
             if (object.frame != null)
                 message.frame = object.frame | 0;
-            if (object.actions) {
-                if (typeof object.actions !== "object")
-                    throw TypeError(".Protos.BS2GC_Action.actions: object expected");
-                message.actions = {};
-                for (let keys = Object.keys(object.actions), i = 0; i < keys.length; ++i) {
-                    if (typeof object.actions[keys[i]] !== "object")
-                        throw TypeError(".Protos.BS2GC_Action.actions: object expected");
-                    message.actions[keys[i]] = $root.Protos.BS2GC_FrameActon.fromObject(object.actions[keys[i]]);
-                }
-            }
+            if (object.action != null)
+                if (typeof object.action === "string")
+                    $util.base64.decode(object.action, message.action = $util.newBuffer($util.base64.length(object.action)), 0);
+                else if (object.action.length)
+                    message.action = object.action;
             return message;
         };
 
@@ -2140,22 +1999,23 @@ export const Protos = $root.Protos = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.objects || options.defaults)
-                object.actions = {};
             if (options.defaults) {
                 object.opts = null;
                 object.frame = 0;
+                if (options.bytes === String)
+                    object.action = "";
+                else {
+                    object.action = [];
+                    if (options.bytes !== Array)
+                        object.action = $util.newBuffer(object.action);
+                }
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.frame != null && message.hasOwnProperty("frame"))
                 object.frame = message.frame;
-            let keys2;
-            if (message.actions && (keys2 = Object.keys(message.actions)).length) {
-                object.actions = {};
-                for (let j = 0; j < keys2.length; ++j)
-                    object.actions[keys2[j]] = $root.Protos.BS2GC_FrameActon.toObject(message.actions[keys2[j]], options);
-            }
+            if (message.action != null && message.hasOwnProperty("action"))
+                object.action = options.bytes === String ? $util.base64.encode(message.action, 0, message.action.length) : options.bytes === Array ? Array.prototype.slice.call(message.action) : message.action;
             return object;
         };
 

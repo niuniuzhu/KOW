@@ -56,7 +56,7 @@ export class Battle implements ISnapshotable {
 		this._frame = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
-			const id = <Long>reader.int64();
+			const id = <Long>reader.uint64();
 			const entity = this.CreateChampion(id);
 			entity.DecodeSnapshot(reader);
 		}

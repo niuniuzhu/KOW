@@ -348,12 +348,11 @@ namespace BattleServer.Battle
 		/// <param name="dt">流逝时间</param>
 		internal void OnKeyframe( int frame, int dt )
 		{
+			this._frameActionMgr.Save( frame );
 			//把玩家的操作指令广播到所有玩家
 			Protos.BS2GC_Action action = ProtoCreator.Q_BS2GC_Action();
 			action.Frame = frame;
-			this._frameActionMgr.Save( frame );
-			this._frameActionMgr.Pull( action.Actions );
-			this._frameActionMgr.Clear();
+			action.Action = this._frameActionMgr.latestHistory;
 			this.Broadcast( action );
 		}
 
@@ -381,9 +380,9 @@ namespace BattleServer.Battle
 			Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( this._ms );
 			this.EncodeSnapshot( writer );
 			writer.Flush();
-			Google.Protobuf.ByteString byteString = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int ) this._ms.Length );
+			Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int ) this._ms.Length );
 			this._ms.SetLength( 0 );
-			return byteString;
+			return data;
 		}
 
 		/// <summary>

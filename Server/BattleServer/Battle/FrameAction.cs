@@ -42,14 +42,6 @@ namespace BattleServer.Battle
 		}
 
 		/// <summary>
-		/// 清理
-		/// </summary>
-		public void Clear()
-		{
-			this.inputFlag = 0;
-		}
-
-		/// <summary>
 		/// 合并Action
 		/// 在两个关键帧之间所有的输入都需要合并
 		/// 合并规则是:相同标志位的,后者覆盖前者,不同标志位则使用并操作
@@ -72,6 +64,18 @@ namespace BattleServer.Battle
 			{
 				this.inputFlag |= InputFlag.Skill2;
 			}
+		}
+
+		public void Serialize( Google.Protobuf.CodedOutputStream writer )
+		{
+			writer.WriteUInt64( this.gcNID );
+			writer.WriteInt32( ( int ) this.inputFlag );
+			if ( ( this.inputFlag & InputFlag.Move ) > 0 )
+			{
+				writer.WriteFloat( ( float ) this.dx );
+				writer.WriteFloat( ( float ) this.dy );
+			}
+			writer.Flush();
 		}
 	}
 }

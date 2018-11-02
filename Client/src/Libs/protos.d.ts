@@ -407,39 +407,17 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
-    interface IBS2GC_FrameActon {
-        inputFlag?: (number|null);
-        dx?: (number|null);
-        dy?: (number|null);
-    }
-
-    class BS2GC_FrameActon implements IBS2GC_FrameActon {
-        constructor(properties?: Protos.IBS2GC_FrameActon);
-        public inputFlag: number;
-        public dx: number;
-        public dy: number;
-        public static create(properties?: Protos.IBS2GC_FrameActon): Protos.BS2GC_FrameActon;
-        public static encode(message: Protos.IBS2GC_FrameActon, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS2GC_FrameActon, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_FrameActon;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_FrameActon;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_FrameActon;
-        public static toObject(message: Protos.BS2GC_FrameActon, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
     interface IBS2GC_Action {
         opts?: (Protos.IMsgOpts|null);
         frame?: (number|null);
-        actions?: ({ [k: string]: Protos.IBS2GC_FrameActon }|null);
+        action?: (Uint8Array|null);
     }
 
     class BS2GC_Action implements IBS2GC_Action {
         constructor(properties?: Protos.IBS2GC_Action);
         public opts?: (Protos.IMsgOpts|null);
         public frame: number;
-        public actions: { [k: string]: Protos.IBS2GC_FrameActon };
+        public action: Uint8Array;
         public static create(properties?: Protos.IBS2GC_Action): Protos.BS2GC_Action;
         public static encode(message: Protos.IBS2GC_Action, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2GC_Action, writer?: $protobuf.Writer): $protobuf.Writer;

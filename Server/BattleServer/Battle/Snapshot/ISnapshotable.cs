@@ -6,6 +6,6 @@
 		/// 制作快照
 		/// </summary>
 		/// <returns>返回快照对象</returns>
-		void MakeSnapshot( Google.Protobuf.CodedOutputStream writer );
+		void EncodeSnapshot( Google.Protobuf.CodedOutputStream writer );
 	}
 }

@@ -65,7 +65,7 @@ export class UILogin extends fairygui.Window implements IUIModule {
 			return;
 		}
 		this.showModalWait();
-		SceneManager.login.RequestRegister(regName, 0, 0);
+		SceneManager.login.Register(regName, 0, 0);
 	}
 
 	private OnLoginBtnClick(): void {
@@ -75,14 +75,14 @@ export class UILogin extends fairygui.Window implements IUIModule {
 			return;
 		}
 		this.showModalWait();
-		SceneManager.login.RequestLogin(uname, 0, 0);
+		SceneManager.login.Login(uname, 0, 0);
 	}
 
 	private OnEnterBtnClick(): void {
 		let item = this._areaList.getChildAt(this._areaList.selectedIndex);
 		let data: Protos.GSInfo = <Protos.GSInfo>item.data["data"];
 		this.showModalWait();
-		SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
+		SceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
 	}
 
 	private OnAreaClick(): void {
@@ -133,10 +133,6 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
 	}
 
-	public OnConnectToBSError(e: Event): void {
-		UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
-	}
-
 	private HandleLoginLSSuccess(loginResult: Protos.LS2GC_AskLoginRet): void {
 		this._areaList.removeChildrenToPool();
 		let count = loginResult.gsInfos.length;
@@ -161,16 +157,6 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		switch (resp.result) {
 			case Protos.GS2GC_LoginRet.EResult.SessionExpire:
 				UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
-				break;
-		}
-	}
-
-	public OnLoginBSResut(result: Protos.Global.ECommon): void {
-		switch (result) {
-			case Protos.Global.ECommon.Success:
-				break;
-			default:
-				UIAlert.Show("进入战场失败", () => SceneManager.ChangeState(SceneManager.State.Login));
 				break;
 		}
 	}

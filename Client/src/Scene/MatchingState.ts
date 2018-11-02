@@ -7,6 +7,9 @@ import { UIMatching } from "../UI/UIMatching";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
 
+/**
+ * 匹配状态
+ */
 export class MatchingState extends SceneState {
 	private readonly _ui: UIMatching;
 	private _roomID: number;
@@ -14,6 +17,9 @@ export class MatchingState extends SceneState {
 	private _maxPlayers: number;
 	private _players: Protos.ICS2GC_PlayerInfo[];
 
+	/**
+	 * 构造函数
+	 */
 	constructor(type: number) {
 		super(type);
 		this.__ui = this._ui = UIManager.matching;
@@ -42,22 +48,22 @@ export class MatchingState extends SceneState {
 	}
 
 	private OnUpdateRoomInfo(message: any): void {
-		let roomInfo: Protos.CS2GC_RoomInfo = <Protos.CS2GC_RoomInfo>message;
+		const roomInfo: Protos.CS2GC_RoomInfo = <Protos.CS2GC_RoomInfo>message;
 		this._ui.UpdateRoomInfo(roomInfo);
 	}
 
 	private OnPlayerJoint(message: any): void {
-		let playerJoin: Protos.CS2GC_PlayerJoin = <Protos.CS2GC_PlayerJoin>message;
+		const playerJoin: Protos.CS2GC_PlayerJoin = <Protos.CS2GC_PlayerJoin>message;
 		this._players.push(playerJoin.playerInfos);
 		this._ui.UpdatePlayers(this._players);
-		//是否满员
 		if (this._players.length == this._maxPlayers) {
+			//满员后切换到加载资源状态
 			this._ui.HandleFullPlayer(() => SceneManager.ChangeState(SceneManager.State.Loading));
 		}
 	}
 
 	private OnPlayerLeave(message: any): void {
-		let playerLeave: Protos.CS2GC_PlayerLeave = <Protos.CS2GC_PlayerLeave>message;
+		const playerLeave: Protos.CS2GC_PlayerLeave = <Protos.CS2GC_PlayerLeave>message;
 		for (let i = 0; i < this._players.length; i++) {
 			const player = this._players[i];
 			if (player.gcNID == playerLeave.gcNID) {
@@ -68,13 +74,15 @@ export class MatchingState extends SceneState {
 		}
 	}
 
-	//请求匹配
+	/**
+	 * 请求匹配
+	 */
 	private BeginMatch(): void {
-		let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
+		const beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
 		beginMatch.actorID = 0;//todo 使用的角色
 		//请求CS开始匹配
 		Connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
-			let resp: Protos.CS2GC_BeginMatchRet = <Protos.CS2GC_BeginMatchRet>message;
+			const resp: Protos.CS2GC_BeginMatchRet = <Protos.CS2GC_BeginMatchRet>message;
 			this._ui.OnBeginMatchResult(resp.result);
 			switch (resp.result) {
 				case Protos.CS2GC_BeginMatchRet.EResult.Success:

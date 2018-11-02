@@ -23,11 +23,11 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
         OnUpdate(dt) {
         }
         OnUpdateRoomInfo(message) {
-            let roomInfo = message;
+            const roomInfo = message;
             this._ui.UpdateRoomInfo(roomInfo);
         }
         OnPlayerJoint(message) {
-            let playerJoin = message;
+            const playerJoin = message;
             this._players.push(playerJoin.playerInfos);
             this._ui.UpdatePlayers(this._players);
             if (this._players.length == this._maxPlayers) {
@@ -35,7 +35,7 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
             }
         }
         OnPlayerLeave(message) {
-            let playerLeave = message;
+            const playerLeave = message;
             for (let i = 0; i < this._players.length; i++) {
                 const player = this._players[i];
                 if (player.gcNID == playerLeave.gcNID) {
@@ -46,10 +46,10 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
             }
         }
         BeginMatch() {
-            let beginMatch = ProtoHelper_1.ProtoCreator.Q_GC2CS_BeginMatch();
+            const beginMatch = ProtoHelper_1.ProtoCreator.Q_GC2CS_BeginMatch();
             beginMatch.actorID = 0;
             Connector_1.Connector.SendToCS(protos_1.Protos.GC2CS_BeginMatch, beginMatch, message => {
-                let resp = message;
+                const resp = message;
                 this._ui.OnBeginMatchResult(resp.result);
                 switch (resp.result) {
                     case protos_1.Protos.CS2GC_BeginMatchRet.EResult.Success:

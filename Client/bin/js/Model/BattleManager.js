@@ -2,16 +2,16 @@ define(["require", "exports", "./View/VBattle", "./Logic/Battle", "../Libs/proto
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleManager {
-        static get instance() {
-            if (this._instance == null)
-                this._instance = new BattleManager();
-            return this._instance;
-        }
         constructor() {
             Connector_1.Connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_Action, this.OnFrameAction.bind(this));
             Connector_1.Connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
             this._lBattle = new Battle_1.Battle();
             this._vBattle = new VBattle_1.VBattle();
+        }
+        static get instance() {
+            if (this._instance == null)
+                this._instance = new BattleManager();
+            return this._instance;
         }
         Init(battleInfo) {
             this._lBattle.Init(battleInfo);
@@ -39,6 +39,7 @@ define(["require", "exports", "./View/VBattle", "./Logic/Battle", "../Libs/proto
             this._lBattle.OnFrameAction(message);
         }
     }
+    BattleManager.MAX_FRAME_CHASE = 10;
     exports.BattleManager = BattleManager;
 });
 //# sourceMappingURL=BattleManager.js.map

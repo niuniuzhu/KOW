@@ -1,4 +1,4 @@
-define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../UI/UIManager", "../Net/Connector", "../Libs/protos", "../RC/Utils/Logger", "../Net/ProtoHelper", "../Env", "../Model/BattleManager"], function (require, exports, SceneState_1, BattleInfo_1, UIManager_1, Connector_1, protos_1, Logger_1, ProtoHelper_1, Env_1, BattleManager_1) {
+define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../UI/UIManager", "../Net/Connector", "../Libs/protos", "../RC/Utils/Logger", "../Net/ProtoHelper", "../Env", "../Model/BattleManager", "./SceneManager"], function (require, exports, SceneState_1, BattleInfo_1, UIManager_1, Connector_1, protos_1, Logger_1, ProtoHelper_1, Env_1, BattleManager_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoadingState extends SceneState_1.SceneState {
@@ -11,36 +11,39 @@ define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../UI/UIMa
         OnEnterBattle(message) {
             let enterBattle = message;
             if (enterBattle.error != protos_1.Protos.CS2GC_EnterBattle.Error.Success) {
-                this._ui.OnEnterBattleResult(enterBattle.error);
+                this._ui.OnEnterBattleResult(enterBattle.error, () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
             }
             else {
-                let connector = Connector_1.Connector.bsConnector;
-                connector.onerror = (e) => this._ui.OnConnectToBSError(e);
-                connector.onopen = () => {
-                    Logger_1.Logger.Log("BS Connected");
-                    let askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();
-                    askLogin.sessionID = enterBattle.gcNID;
-                    connector.Send(protos_1.Protos.GC2BS_AskLogin, askLogin, message => {
-                        let resp = message;
-                        this._ui.OnLoginBSResut(resp.result);
-                        switch (resp.result) {
-                            case protos_1.Protos.Global.ECommon.Success:
-                                this._battleInfo.rndSeed = resp.rndSeed;
-                                this._battleInfo.frameRate = resp.frameRate;
-                                this._battleInfo.keyframeStep = resp.keyframeStep;
-                                this._battleInfo.battleTime = resp.battleTime;
-                                this._battleInfo.mapID = resp.mapID;
-                                this.RequestSnapshot();
-                                break;
-                        }
-                    });
-                };
-                if (Env_1.Env.platform == Env_1.Env.Platform.Editor) {
-                    connector.Connect("localhost", enterBattle.port);
-                }
-                else {
-                    connector.Connect(enterBattle.ip, enterBattle.port);
-                }
+                this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+            }
+        }
+        ConnectToBS(gcNID, ip, port) {
+            let connector = Connector_1.Connector.bsConnector;
+            connector.onerror = (e) => this._ui.OnConnectToBSError(e, () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
+            connector.onopen = () => {
+                Logger_1.Logger.Log("BS Connected");
+                let askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();
+                askLogin.sessionID = gcNID;
+                connector.Send(protos_1.Protos.GC2BS_AskLogin, askLogin, message => {
+                    let resp = message;
+                    this._ui.OnLoginBSResut(resp.result, () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
+                    switch (resp.result) {
+                        case protos_1.Protos.Global.ECommon.Success:
+                            this._battleInfo.rndSeed = resp.rndSeed;
+                            this._battleInfo.frameRate = resp.frameRate;
+                            this._battleInfo.keyframeStep = resp.keyframeStep;
+                            this._battleInfo.battleTime = resp.battleTime;
+                            this._battleInfo.mapID = resp.mapID;
+                            this.RequestSnapshot();
+                            break;
+                    }
+                });
+            };
+            if (Env_1.Env.platform == Env_1.Env.Platform.Editor) {
+                connector.Connect("localhost", port);
+            }
+            else {
+                connector.Connect(ip, port);
             }
         }
         RequestSnapshot() {

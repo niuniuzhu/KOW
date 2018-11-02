@@ -48,7 +48,7 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                 return;
             }
             this.showModalWait();
-            SceneManager_1.SceneManager.login.RequestRegister(regName, 0, 0);
+            SceneManager_1.SceneManager.login.Register(regName, 0, 0);
         }
         OnLoginBtnClick() {
             let uname = this.contentPane.getChild("name").asTextField.text;
@@ -57,13 +57,13 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                 return;
             }
             this.showModalWait();
-            SceneManager_1.SceneManager.login.RequestLogin(uname, 0, 0);
+            SceneManager_1.SceneManager.login.Login(uname, 0, 0);
         }
         OnEnterBtnClick() {
             let item = this._areaList.getChildAt(this._areaList.selectedIndex);
             let data = item.data["data"];
             this.showModalWait();
-            SceneManager_1.SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
+            SceneManager_1.SceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
         }
         OnAreaClick() {
         }
@@ -109,9 +109,6 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
         OnConnectToLSError(e) {
             UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
         }
-        OnConnectToBSError(e) {
-            UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
-        }
         HandleLoginLSSuccess(loginResult) {
             this._areaList.removeChildrenToPool();
             let count = loginResult.gsInfos.length;
@@ -134,15 +131,6 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
             switch (resp.result) {
                 case protos_1.Protos.GS2GC_LoginRet.EResult.SessionExpire:
                     UIAlert_1.UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
-                    break;
-            }
-        }
-        OnLoginBSResut(result) {
-            switch (result) {
-                case protos_1.Protos.Global.ECommon.Success:
-                    break;
-                default:
-                    UIAlert_1.UIAlert.Show("进入战场失败", () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
                     break;
             }
         }

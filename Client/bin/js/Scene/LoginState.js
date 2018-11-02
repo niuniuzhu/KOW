@@ -14,54 +14,55 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
                 connector.Connect(Defs_1.Defs.config["ls_ip"], Defs_1.Defs.config["ls_port"]);
             }
         }
-        RequestRegister(uname, platform, sdk) {
-            let register = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskRegister();
+        Register(uname, platform, sdk) {
+            const register = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskRegister();
             register.name = uname;
             register.platform = platform;
             register.sdk = sdk;
-            let connector = new WSConnector_1.WSConnector();
+            const connector = new WSConnector_1.WSConnector();
             connector.onerror = (e) => this._ui.OnConnectToLSError(e);
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
             connector.onopen = () => {
                 connector.Send(protos_1.Protos.GC2LS_AskRegister, register, message => {
-                    let resp = message;
+                    const resp = message;
                     this._ui.OnRegisterResult(resp);
                 });
             };
             this.ConnectToLS(connector);
         }
-        RequestLogin(uname, platform, sdk) {
-            let login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskSmartLogin();
+        Login(uname, platform, sdk) {
+            const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskSmartLogin();
             login.name = uname;
             login.platform = platform;
             login.sdk = sdk;
-            let connector = new WSConnector_1.WSConnector();
+            const connector = new WSConnector_1.WSConnector();
             connector.onerror = (e) => this._ui.OnConnectToLSError(e);
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
             connector.onopen = () => {
                 connector.Send(protos_1.Protos.GC2LS_AskSmartLogin, login, message => {
-                    let resp = message;
+                    const resp = message;
                     Logger_1.Logger.Log("gcNID:" + resp.sessionID);
                     this._ui.OnLoginResut(resp);
                 });
             };
             this.ConnectToLS(connector);
         }
-        RequestLoginGS(ip, port, pwd, sessionID) {
-            let connector = Connector_1.Connector.gsConnector;
+        LoginGS(ip, port, pwd, gcNID) {
+            const connector = Connector_1.Connector.gsConnector;
             connector.onerror = () => this._ui.OnConnectToGSError();
             connector.onopen = () => {
                 Logger_1.Logger.Log("GS Connected");
-                let askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();
+                const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();
                 askLogin.pwd = pwd;
-                askLogin.sessionID = sessionID;
+                askLogin.sessionID = gcNID;
                 connector.Send(protos_1.Protos.GC2GS_AskLogin, askLogin, message => {
-                    let resp = message;
+                    const resp = message;
                     this._ui.OnLoginGSResult(resp);
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
                             if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {
-                                this.ReconnectToBS(resp);
+                                SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading);
+                                SceneManager_1.SceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
                             }
                             else {
                                 SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
@@ -75,30 +76,6 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
             }
             else {
                 connector.Connect(ip, port);
-            }
-        }
-        ReconnectToBS(ret) {
-            let connector = Connector_1.Connector.bsConnector;
-            connector.onerror = (e) => this._ui.OnConnectToBSError(e);
-            connector.onopen = () => {
-                Logger_1.Logger.Log("BS Connected");
-                let askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();
-                askLogin.sessionID = ret.gcNID;
-                connector.Send(protos_1.Protos.GC2BS_AskLogin, askLogin, message => {
-                    let resp = message;
-                    this._ui.OnLoginBSResut(resp.result);
-                    switch (resp.result) {
-                        case protos_1.Protos.Global.ECommon.Success:
-                            SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Battle, resp);
-                            break;
-                    }
-                });
-            };
-            if (Env_1.Env.platform == Env_1.Env.Platform.Editor) {
-                connector.Connect("localhost", ret.bsPort);
-            }
-            else {
-                connector.Connect(ret.bsIP, ret.bsPort);
             }
         }
     }

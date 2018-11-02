@@ -12,18 +12,17 @@ define(["require", "exports", "./Consts", "./UI/UIManager", "./Scene/SceneManage
             Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
             Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
             fairygui.UIConfig.packageFileExtension = "bin";
-            let kv = JSON.parse(config);
-            Env_1.Env.platform = Hashtable_1.Hashtable.GetNumber(kv, "platform");
+            Env_1.Env.platform = Hashtable_1.Hashtable.GetNumber(JSON.parse(config), "platform");
             this.ShowLogo();
         }
         ShowLogo() {
-            let urls = [];
+            const urls = [];
             urls.push({ url: "res/ui/logo.bin", type: Laya.Loader.BUFFER });
             urls.push({ url: "res/ui/logo_atlas0.png", type: Laya.Loader.IMAGE });
             Laya.loader.load(urls, Laya.Handler.create(this, () => {
                 Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
                 fairygui.UIPackage.addPackage("res/ui/logo");
-                let logoRoot = fairygui.UIPackage.createObject("logo", "Main").asCom;
+                const logoRoot = fairygui.UIPackage.createObject("logo", "Main").asCom;
                 logoRoot.name = "logoRoot";
                 logoRoot.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);
                 logoRoot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
@@ -40,7 +39,7 @@ define(["require", "exports", "./Consts", "./UI/UIManager", "./Scene/SceneManage
         }
         CheckPreloadComplete() {
             if (this._fadeInComplete && this._preloadComplete) {
-                let logoRoot = fairygui.GRoot.inst.getChild("logoRoot").asCom;
+                const logoRoot = fairygui.GRoot.inst.getChild("logoRoot").asCom;
                 logoRoot.getTransition("t1").play(new laya.utils.Handler(this, () => {
                     logoRoot.dispose();
                     this.StartGame();
@@ -63,7 +62,7 @@ define(["require", "exports", "./Consts", "./UI/UIManager", "./Scene/SceneManage
             Laya.timer.frameLoop(1, this, this.Update);
         }
         Update() {
-            let dt = Laya.timer.delta;
+            const dt = Laya.timer.delta;
             Connector_1.Connector.Update(dt);
             SceneManager_1.SceneManager.Update(dt);
         }

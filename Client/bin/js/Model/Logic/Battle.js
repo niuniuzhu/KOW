@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Collections/Queue", "../../RC/Utils/Logger"], function (require, exports, Queue_1, Logger_1) {
+define(["require", "exports", "../../RC/Collections/Queue", "./Champion", "../../Libs/protobufjs"], function (require, exports, Queue_1, Champion_1, $protobuf) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -13,6 +13,8 @@ define(["require", "exports", "../../RC/Collections/Queue", "../../RC/Utils/Logg
             this._logicElapsed = 0;
             this._realElapsed = 0;
             this._frameActions = new Queue_1.default();
+            this._entities = [];
+            this._idToEntity = new Map();
         }
         get frameRate() { return this._frameRate; }
         get keyframeStep() { return this._keyframeStep; }
@@ -25,6 +27,8 @@ define(["require", "exports", "../../RC/Collections/Queue", "../../RC/Utils/Logg
             this._timeout = battleInfo.battleTime;
             this._mapID = battleInfo.mapID;
             this._msPerFrame = 1000 / this._frameRate;
+            const reader = $protobuf.Reader.create(battleInfo.snapshot);
+            this.DecodeSnapshot(reader);
         }
         Clear() {
             this._frame = 0;
@@ -33,10 +37,19 @@ define(["require", "exports", "../../RC/Collections/Queue", "../../RC/Utils/Logg
             this._realElapsed = 0;
             this._frameActions.clear();
         }
+        DecodeSnapshot(reader) {
+            this._frame = reader.int32();
+            const count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const id = reader.int64();
+                const entity = this.CreateChampion(id);
+                entity.DecodeSnapshot(reader);
+            }
+        }
         Update(dt) {
             this._realElapsed += dt;
             while (!this._frameActions.isEmpty()) {
-                let frameAction = this._frameActions.dequeue();
+                const frameAction = this._frameActions.dequeue();
                 let length = frameAction.frame - this.frame;
                 while (length >= 0) {
                     if (length == 0)
@@ -65,11 +78,17 @@ define(["require", "exports", "../../RC/Collections/Queue", "../../RC/Utils/Logg
         HandleFrameAction(frameAction) {
         }
         UpdateLogic(rdt, dt) {
-            Logger_1.Logger.Log("rdt:" + rdt + ",dt:" + dt);
             ++this._frame;
         }
         OnFrameAction(frameAction) {
             this._frameActions.enqueue(frameAction);
+        }
+        CreateChampion(id) {
+            const entity = new Champion_1.Champion();
+            entity.Init(id, this);
+            this._entities.push(entity);
+            this._entities;
+            return entity;
         }
     }
     exports.Battle = Battle;

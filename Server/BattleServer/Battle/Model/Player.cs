@@ -2,7 +2,7 @@
 
 namespace BattleServer.Battle.Model
 {
-	public class Player : Entity
+	public class Player : Champion
 	{
 		/// <summary>
 		/// 所属玩家实例

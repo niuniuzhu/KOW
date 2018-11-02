@@ -8,12 +8,19 @@ import { Logger } from "../RC/Utils/Logger";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Env } from "../Env";
 import { BattleManager } from "../Model/BattleManager";
+import { SceneManager } from "./SceneManager";
 
+/**
+ * 加载资源状态
+ */
 export class LoadingState extends SceneState {
 	private readonly _ui: UILoading;
 	private readonly _battleInfo: BattleInfo;
 	private _assetsLoadComplete: boolean;
 
+	/**
+	 * 构造函数
+	 */
 	constructor(type: number) {
 		super(type);
 		this.__ui = this._ui = UIManager.loading;
@@ -22,45 +29,59 @@ export class LoadingState extends SceneState {
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
 	}
 
+	/**
+	 * 服务端已准备好战场,客户端连接BS获取战场信息,并载入资源,获取快照,初始化战场
+	 * @param message 协议
+	 */
 	private OnEnterBattle(message: any): void {
 		let enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
 		if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
-			this._ui.OnEnterBattleResult(enterBattle.error);
+			this._ui.OnEnterBattleResult(enterBattle.error, () => SceneManager.ChangeState(SceneManager.State.Login));
 		}
 		else {
-			let connector = Connector.bsConnector;
-			connector.onerror = (e) => this._ui.OnConnectToBSError(e);
-			connector.onopen = () => {
-				Logger.Log("BS Connected");
-				let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
-				askLogin.sessionID = enterBattle.gcNID;
-				//请求登陆BS
-				connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
-					let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
-					this._ui.OnLoginBSResut(resp.result);
+			this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+		}
+	}
 
-					switch (resp.result) {
-						case Protos.Global.ECommon.Success:
-							//把数据保存,加载资源后用于创建战场
-							this._battleInfo.rndSeed = resp.rndSeed;
-							this._battleInfo.frameRate = resp.frameRate;
-							this._battleInfo.keyframeStep = resp.keyframeStep;
-							this._battleInfo.battleTime = resp.battleTime;
-							this._battleInfo.mapID = resp.mapID;
+	/**
+	 * 连接到BS
+	 * @param gcNID 客户端网络ID
+	 * @param ip BS IP
+	 * @param port BS port
+	 */
+	public ConnectToBS(gcNID: Long, ip: string, port: number) {
+		let connector = Connector.bsConnector;
+		connector.onerror = (e) => this._ui.OnConnectToBSError(e, () => SceneManager.ChangeState(SceneManager.State.Login));
+		connector.onopen = () => {
+			Logger.Log("BS Connected");
+			let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
+			askLogin.sessionID = gcNID;
+			//请求登陆BS
+			connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
+				let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
+				this._ui.OnLoginBSResut(resp.result, () => SceneManager.ChangeState(SceneManager.State.Login));
 
-							//请求快照
-							this.RequestSnapshot();
-							break;
-					}
-				});
-			}
-			//todo 这里最好用kcp连接
-			if (Env.platform == Env.Platform.Editor) {
-				connector.Connect("localhost", enterBattle.port);
-			}
-			else {
-				connector.Connect(enterBattle.ip, enterBattle.port);
-			}
+				switch (resp.result) {
+					case Protos.Global.ECommon.Success:
+						//把数据保存,加载资源后用于创建战场
+						this._battleInfo.rndSeed = resp.rndSeed;
+						this._battleInfo.frameRate = resp.frameRate;
+						this._battleInfo.keyframeStep = resp.keyframeStep;
+						this._battleInfo.battleTime = resp.battleTime;
+						this._battleInfo.mapID = resp.mapID;
+
+						//请求快照
+						this.RequestSnapshot();
+						break;
+				}
+			});
+		}
+		//todo 这里最好用kcp连接
+		if (Env.platform == Env.Platform.Editor) {
+			connector.Connect("localhost", port);
+		}
+		else {
+			connector.Connect(ip, port);
 		}
 	}
 
@@ -80,7 +101,7 @@ export class LoadingState extends SceneState {
 	}
 
 	/**
-	 * 
+	 * 读取资源载入内存
 	 */
 	private LoadAssets(): void {
 		if (this._assetsLoadComplete) {
@@ -98,7 +119,11 @@ export class LoadingState extends SceneState {
 		}
 	}
 
+	/**
+	 * 准备战场环境
+	 */
 	private PrepareBattle(): void {
+		//初始化战场,解码快照
 		BattleManager.instance.Init(this._battleInfo);
 	}
 }

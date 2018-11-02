@@ -27,7 +27,15 @@ namespace BattleServer.Battle.Model
 
 		public FVec2 position;
 		public FVec2 direction;
-		
+
+		public Entity()
+		{
+			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Idle, this ) );
+			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Move, this ) );
+			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Attack, this ) );
+			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Die, this ) );
+		}
+
 		public bool Init( BattleEntry.Player entry )
 		{
 			this.id = entry.gcNID;
@@ -36,10 +44,6 @@ namespace BattleServer.Battle.Model
 			this.name = entry.name;
 			if ( !this.LoadDef() )
 				return false;
-			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Idle, this ) );
-			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Move, this ) );
-			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Attack, this ) );
-			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Die, this ) );
 			this.fsm.ChangeState( ( int ) EntityState.Type.Idle );
 			return true;
 		}
@@ -54,10 +58,12 @@ namespace BattleServer.Battle.Model
 			}
 			try
 			{
-				this.attribute.Set( Attr.MHP, ( Fix64 ) mapDef.GetInt( "mhp" ) );
-				this.attribute.Set( Attr.MMP, ( Fix64 ) mapDef.GetInt( "mmp" ) );
-				this.attribute.Set( Attr.MOVE_SPEED, ( Fix64 ) mapDef.GetInt( "move_speed" ) );
-				this.attribute.Set( Attr.TURN_SPEED, ( Fix64 ) mapDef.GetInt( "turn_speed" ) );
+				this.attribute.Set( Attr.MHP, ( Fix64 ) mapDef.GetFloat( "mhp" ) );
+				this.attribute.Set( Attr.HP, this.attribute.Get( Attr.MHP ) );
+				this.attribute.Set( Attr.MMP, ( Fix64 ) mapDef.GetFloat( "mmp" ) );
+				this.attribute.Set( Attr.MP, this.attribute.Get( Attr.MMP ) );
+				this.attribute.Set( Attr.MOVE_SPEED, ( Fix64 ) mapDef.GetFloat( "move_speed" ) );
+				this.attribute.Set( Attr.TURN_SPEED, ( Fix64 ) mapDef.GetFloat( "turn_speed" ) );
 				//todo more....
 			}
 			catch ( Exception e )
@@ -76,7 +82,7 @@ namespace BattleServer.Battle.Model
 		/// <summary>
 		/// 制作快照
 		/// </summary>
-		public virtual void MakeSnapshot( Google.Protobuf.CodedOutputStream writer )
+		public virtual void EncodeSnapshot( Google.Protobuf.CodedOutputStream writer )
 		{
 			writer.WriteUInt64( this.id );
 			writer.WriteInt32( this.actorID );
@@ -84,7 +90,7 @@ namespace BattleServer.Battle.Model
 			writer.WriteString( this.name );
 			writer.WriteFloat( ( float ) this.position.x );
 			writer.WriteFloat( ( float ) this.position.y );
-			writer.WriteFloat( ( float ) this.direction.y );
+			writer.WriteFloat( ( float ) this.direction.x );
 			writer.WriteFloat( ( float ) this.direction.y );
 			writer.WriteInt32( this.fsm.currentState.type );
 			writer.WriteInt32( ( ( EntityState ) this.fsm.currentState ).time );

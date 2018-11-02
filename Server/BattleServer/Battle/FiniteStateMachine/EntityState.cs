@@ -16,7 +16,7 @@ namespace BattleServer.Battle.FiniteStateMachine
 		/// <summary>
 		/// 所属实体
 		/// </summary>
-		public Entity owner;
+		public Entity owner { get; }
 
 		/// <summary>
 		/// 状态的运行时间

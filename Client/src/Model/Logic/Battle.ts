@@ -1,9 +1,13 @@
-import { Protos } from "../../Libs/protos";
+import { ISnapshotable } from "../ISnapshotable";
 import Queue from "../../RC/Collections/Queue";
-import { Logger } from "../../RC/Utils/Logger";
+import { Protos } from "../../Libs/protos";
 import { BattleInfo } from "../BattleInfo";
+import { Entity } from "./Entity";
+import { Champion } from "./Champion";
+import * as $protobuf from "../../Libs/protobufjs";
+import * as Long from "../../Libs/long";
 
-export class Battle {
+export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
 	private _keyframeStep: number = 0;
 	private _timeout: number = 0;
@@ -22,14 +26,22 @@ export class Battle {
 	private _realElapsed: number = 0;
 
 	private readonly _frameActions: Queue<Protos.BS2GC_Action> = new Queue<Protos.BS2GC_Action>();
+	private readonly _entities: Entity[] = [];
+	private readonly _idToEntity: Map<number, Entity> = new Map<number, Entity>();
 
+	/**
+	 * 初始化
+	 * @param battleInfo 战场信息
+	 */
 	public Init(battleInfo: BattleInfo): void {
 		this._frameRate = battleInfo.frameRate;
 		this._keyframeStep = battleInfo.keyframeStep;
 		this._timeout = battleInfo.battleTime;
 		this._mapID = battleInfo.mapID
-
 		this._msPerFrame = 1000 / this._frameRate;
+
+		const reader = $protobuf.Reader.create(battleInfo.snapshot);
+		this.DecodeSnapshot(reader);
 	}
 
 	public Clear(): void {
@@ -40,10 +52,20 @@ export class Battle {
 		this._frameActions.clear();
 	}
 
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._frame = reader.int32();
+		const count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const id = <Long>reader.int64();
+			const entity = this.CreateChampion(id);
+			entity.DecodeSnapshot(reader);
+		}
+	}
+
 	public Update(dt: number): void {
 		this._realElapsed += dt;
 		while (!this._frameActions.isEmpty()) {
-			let frameAction = this._frameActions.dequeue();
+			const frameAction = this._frameActions.dequeue();
 			let length = frameAction.frame - this.frame;
 			while (length >= 0) {
 				if (length == 0)
@@ -79,11 +101,22 @@ export class Battle {
 	}
 
 	private UpdateLogic(rdt: number, dt: number): void {
-		Logger.Log("rdt:" + rdt + ",dt:" + dt);
 		++this._frame;
 	}
 
+	/**
+	 * 处理服务端下发的帧行为
+	 * @param frameAction 协议
+	 */
 	public OnFrameAction(frameAction: Protos.BS2GC_Action): void {
 		this._frameActions.enqueue(frameAction);
+	}
+
+	public CreateChampion(id: Long): Champion {
+		const entity = new Champion();
+		entity.Init(id, this);
+		this._entities.push(entity);
+		this._entities
+		return entity;
 	}
 }

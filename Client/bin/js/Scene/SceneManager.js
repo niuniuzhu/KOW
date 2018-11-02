@@ -11,8 +11,11 @@ define(["require", "exports", "../RC/FSM/FSM", "./MainState", "./LoginState", ".
         State[State["Battle"] = 5] = "Battle";
     })(State || (State = {}));
     class SceneManager {
+        static get main() { return this._main; }
         static get login() { return this._login; }
         static get matching() { return this._matching; }
+        static get loading() { return this._loading; }
+        static get battle() { return this._battle; }
         static Init() {
             this._main = new MainState_1.MainState(State.Main);
             this._login = new LoginState_1.LoginState(State.Login);

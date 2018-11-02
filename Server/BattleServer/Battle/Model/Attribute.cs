@@ -16,26 +16,42 @@ namespace BattleServer.Battle.Model
 		TURN_SPEED
 	}
 
+	/// <summary>
+	/// 属性管理器
+	/// </summary>
 	public class Attribute
 	{
 		private readonly SortedDictionary<Attr, Fix64> _map = new SortedDictionary<Attr, Fix64>();
 
 		public int count => this._map.Count;
 
+		/// <summary>
+		/// 遍历属性
+		/// </summary>
+		/// <param name="handler">回调函数</param>
 		public void Foreach( Action<Attr, Fix64> handler )
 		{
 			foreach ( KeyValuePair<Attr, Fix64> kv in this._map )
 				handler( kv.Key, kv.Value );
 		}
 
+		/// <summary>
+		/// 设置属性值
+		/// </summary>
 		public void Set( Attr attr, Fix64 value ) => this._map[attr] = value;
 
+		/// <summary>
+		/// 获取属性值
+		/// </summary>
 		public Fix64 Get( Attr attr )
 		{
 			this._map.TryGetValue( attr, out Fix64 value );
 			return value;
 		}
 
+		/// <summary>
+		/// 是否存在指定属性
+		/// </summary>
 		public bool Contains( Attr attr ) => this._map.ContainsKey( attr );
 
 		public void Add( Attr attr, Fix64 delta )

@@ -379,7 +379,7 @@ namespace BattleServer.Battle
 		private Google.Protobuf.ByteString MakeInitSnapshot()
 		{
 			Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( this._ms );
-			this.MakeSnapshot( writer );
+			this.EncodeSnapshot( writer );
 			writer.Flush();
 			Google.Protobuf.ByteString byteString = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int ) this._ms.Length );
 			this._ms.SetLength( 0 );
@@ -389,13 +389,13 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 制作快照
 		/// </summary>
-		public void MakeSnapshot( Google.Protobuf.CodedOutputStream writer )
+		public void EncodeSnapshot( Google.Protobuf.CodedOutputStream writer )
 		{
 			writer.WriteInt32( this.frame );
 			int count = this._idToEntity.Count;
 			writer.WriteInt32( count );
 			foreach ( KeyValuePair<ulong, Entity> kv in this._idToEntity )
-				kv.Value.MakeSnapshot( writer );
+				kv.Value.EncodeSnapshot( writer );
 		}
 
 		public void HandleGCAction( ulong gcNID, Protos.GC2BS_Action action ) => this._frameActionMgr.MergeFromProto( gcNID, action );

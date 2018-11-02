@@ -20,8 +20,11 @@ export class SceneManager {
 
 	public static fsm: FSM;
 
+	public static get main(): MainState { return this._main; }
 	public static get login(): LoginState { return this._login; }
 	public static get matching(): MatchingState { return this._matching; }
+	public static get loading(): LoadingState { return this._loading; }
+	public static get battle(): BattleState { return this._battle; }
 
 	private static _main: MainState;
 	private static _login: LoginState;

@@ -7,8 +7,5 @@ export class BattleInfo {
 
 	public reqFrame: number;
 	public curFrame: number;
-
-	public DecodeSnapshot(): void {
-
-	}
+	public snapshot: Uint8Array;
 }

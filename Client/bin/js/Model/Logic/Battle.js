@@ -19,11 +19,11 @@ define(["require", "exports", "../../RC/Collections/Queue", "../../RC/Utils/Logg
         get timeout() { return this._timeout; }
         get mapID() { return this._mapID; }
         get frame() { return this._frame; }
-        Init(loginRet) {
-            this._frameRate = loginRet.frameRate;
-            this._keyframeStep = loginRet.keyframeStep;
-            this._timeout = loginRet.battleTime;
-            this._mapID = loginRet.mapID;
+        Init(battleInfo) {
+            this._frameRate = battleInfo.frameRate;
+            this._keyframeStep = battleInfo.keyframeStep;
+            this._timeout = battleInfo.battleTime;
+            this._mapID = battleInfo.mapID;
             this._msPerFrame = 1000 / this._frameRate;
         }
         Clear() {

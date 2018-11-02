@@ -7,11 +7,12 @@ import { Protos } from "../Libs/protos";
 import { Logger } from "../RC/Utils/Logger";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Env } from "../Env";
-import { PreloadInstance } from "./PreloadInstance";
+import { BattleManager } from "../Model/BattleManager";
 
 export class LoadingState extends SceneState {
 	private readonly _ui: UILoading;
 	private readonly _battleInfo: BattleInfo;
+	private _assetsLoadComplete: boolean;
 
 	constructor(type: number) {
 		super(type);
@@ -21,7 +22,6 @@ export class LoadingState extends SceneState {
 		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
 	}
 
-	//cs下发bs的连接信息
 	private OnEnterBattle(message: any): void {
 		let enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
 		if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
@@ -38,7 +38,7 @@ export class LoadingState extends SceneState {
 				connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
 					let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
 					this._ui.OnLoginBSResut(resp.result);
-					
+
 					switch (resp.result) {
 						case Protos.Global.ECommon.Success:
 							//把数据保存,加载资源后用于创建战场
@@ -64,6 +64,9 @@ export class LoadingState extends SceneState {
 		}
 	}
 
+	/**
+	 * 请求快照
+	 */
 	private RequestSnapshot(): void {
 		let requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
 		requestState.frame = 0;
@@ -71,24 +74,31 @@ export class LoadingState extends SceneState {
 			let ret = <Protos.BS2GC_RequestSnapshotRet>msg;
 			this._battleInfo.reqFrame = ret.reqFrame;
 			this._battleInfo.curFrame = ret.curFrame;
-			//解码快照
-
-			//开始加载资源
-			this.StartLoad(resp);
+			this._battleInfo.snapshot = ret.snapshot;
+			this.LoadAssets();
 		});
 	}
 
-	private StartLoad(): void {
-		//todo preloadall
-		Logger.Log("instancing");
-		PreloadInstance.Load(mapID, playerInfos, this.OnInstancingComplete);
+	/**
+	 * 
+	 */
+	private LoadAssets(): void {
+		if (this._assetsLoadComplete) {
+			this.PrepareBattle();
+		}
+		else {
+			const urls = [];
+			urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
+			urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
+			Laya.loader.load(urls, Laya.Handler.create(this, () => {
+				fairygui.UIPackage.addPackage("res/ui/assets");
+				this._assetsLoadComplete = true;
+				this.PrepareBattle();
+			}));
+		}
 	}
 
-	//通知cs加载完成
-	public OnInstancingComplete(): void {
-		Logger.Log("instancing complete");
-		let msg = ProtoCreator.Q_GC2CS_UpdatePlayerInfo();
-		msg.progress = 100;
-		Connector.SendToCS(Protos.GC2CS_UpdatePlayerInfo, msg);
+	private PrepareBattle(): void {
+		BattleManager.instance.Init(this._battleInfo);
 	}
 }

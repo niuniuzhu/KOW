@@ -1,6 +1,7 @@
 import { Protos } from "../../Libs/protos";
 import Queue from "../../RC/Collections/Queue";
 import { Logger } from "../../RC/Utils/Logger";
+import { BattleInfo } from "../BattleInfo";
 
 export class Battle {
 	private _frameRate: number = 0;
@@ -22,11 +23,11 @@ export class Battle {
 
 	private readonly _frameActions: Queue<Protos.BS2GC_Action> = new Queue<Protos.BS2GC_Action>();
 
-	public Init(loginRet: Protos.BS2GC_LoginRet): void {
-		this._frameRate = loginRet.frameRate;
-		this._keyframeStep = loginRet.keyframeStep;
-		this._timeout = loginRet.battleTime;
-		this._mapID = loginRet.mapID
+	public Init(battleInfo: BattleInfo): void {
+		this._frameRate = battleInfo.frameRate;
+		this._keyframeStep = battleInfo.keyframeStep;
+		this._timeout = battleInfo.battleTime;
+		this._mapID = battleInfo.mapID
 
 		this._msPerFrame = 1000 / this._frameRate;
 	}

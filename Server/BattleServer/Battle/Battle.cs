@@ -374,11 +374,12 @@ namespace BattleServer.Battle
 		public FrameSnapshot GetSnapshot( int frame = -1 ) => this._snapshotMgr.Get( frame );
 
 		/// <summary>
-		/// 制作一份初始化快照
+		/// 制作初始化快照
 		/// </summary>
 		private Google.Protobuf.ByteString MakeInitSnapshot()
 		{
 			Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( this._ms );
+			this.MakeSnapshot( writer );
 			writer.Flush();
 			Google.Protobuf.ByteString byteString = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int ) this._ms.Length );
 			this._ms.SetLength( 0 );

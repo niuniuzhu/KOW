@@ -4,8 +4,16 @@ import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
+import { BattleInfo } from "./BattleInfo";
 
 export class BattleManager {
+	private static _instance: BattleManager;
+	public static get instance(): BattleManager {
+		if (this._instance == null)
+			this._instance = new BattleManager();
+		return this._instance;
+	}
+
 	private _lBattle: Battle;
 	private _vBattle: VBattle;
 	private _init: boolean;
@@ -18,10 +26,9 @@ export class BattleManager {
 		this._vBattle = new VBattle();
 	}
 
-	public Init(loginRet: Protos.BS2GC_LoginRet): void {
-
-		this._lBattle.Init(loginRet);
-		this._vBattle.Init(loginRet);
+	public Init(battleInfo: BattleInfo): void {
+		this._lBattle.Init(battleInfo);
+		this._vBattle.Init(battleInfo);
 		this._init = true;
 		Logger.Log("battle start");
 	}

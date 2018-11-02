@@ -1,17 +1,19 @@
 import { Graphic } from "../../Graphic";
-import { Protos } from "../../Libs/protos";
-import { PreloadInstance } from "../../Scene/PreloadInstance";
 import { Consts } from "../../Consts";
+import { BattleInfo } from "../BattleInfo";
 
 export class VBattle {
-	public Init(loginRet: Protos.BS2GC_LoginRet): void {
-		Graphic.battleRoot.addChild(PreloadInstance.instances.get(Consts.ASSETS_MAP_PREFIX + loginRet.mapID));
+	private _root: fairygui.GComponent;
+
+	public Init(battleInfo: BattleInfo): void {
+		this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
+		Graphic.battleRoot.addChild(this._root);
 	}
 
 	public Clear(): void {
 
 	}
 
-	public Update(dt: number): void {
+	public Update(dt:number): void {
 	}
 }

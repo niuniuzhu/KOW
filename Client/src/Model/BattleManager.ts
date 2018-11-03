@@ -16,9 +16,14 @@ export class BattleManager {
 	 * 获取单例
 	 */
 	public static get instance(): BattleManager {
-		if (this._instance == null)
-			this._instance = new BattleManager();
 		return this._instance;
+	}
+
+	/**
+	 * 初始化单例
+	 */
+	public static Init():void{
+		this._instance = new BattleManager();
 	}
 
 	/**

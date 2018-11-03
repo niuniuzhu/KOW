@@ -6,6 +6,7 @@ import { BattleInfo } from "../BattleInfo";
 import { Champion } from "./Champion";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Logger } from "../../RC/Utils/Logger";
+import { FrameActionGroup } from "../FrameActionGroup";
 
 export class Battle implements ISnapshotable {
 	/**
@@ -30,7 +31,7 @@ export class Battle implements ISnapshotable {
 	private _logicElapsed: number = 0;
 	private _realElapsed: number = 0;
 
-	private readonly _frameActions: Queue<FrameAction> = new Queue<FrameAction>();
+	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
 	private readonly _entities: Entity[] = [];
 	private readonly _idToEntity: Map<Long, Entity> = new Map<Long, Entity>();
 
@@ -60,7 +61,7 @@ export class Battle implements ISnapshotable {
 		this._nextKeyFrame = 0;
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
-		this._frameActions.clear();
+		this._frameActionGroups.clear();
 	}
 
 	/**
@@ -79,22 +80,23 @@ export class Battle implements ISnapshotable {
 
 	/**
 	 * 追赶服务端帧数
-	 * @param rdt 真实流逝时间
-	 * @param dt 逻辑流逝时间
 	 */
 	public Chase(): void {
-		while (!this._frameActions.isEmpty()) {
-			const frameAction = this._frameActions.dequeue();
-			let length = frameAction.frame - this.frame;
+		while (!this._frameActionGroups.isEmpty()) {
+			const frameActionGroup = this._frameActionGroups.dequeue();
+			let length = frameActionGroup.frame - this.frame;
 			while (length >= 0) {
-				if (length == 0)
-					this.ApplyFrameAction(frameAction);
+				if (length == 0) {
+					for (let i = 0; i < frameActionGroup.numActions; ++i) {
+						this.ApplyFrameAction(frameActionGroup[i]);
+					}
+				}
 				else {
 					this.UpdateLogic(0, this._msPerFrame);
 				}
 				--length;
 			}
-			this._nextKeyFrame = frameAction.frame + this.keyframeStep;
+			this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
 		}
 	}
 
@@ -136,7 +138,6 @@ export class Battle implements ISnapshotable {
 	 * @param frameAction 帧行为
 	 */
 	private ApplyFrameAction(frameAction: FrameAction): void {
-		this._frameActions.clear();
 	}
 
 	/**
@@ -144,6 +145,7 @@ export class Battle implements ISnapshotable {
 	 * @param msg 协议
 	 */
 	public OnFrameAction(frame: number, data: Uint8Array): void {
+		const fag = new FrameActionGroup(frame);
 		const count = data[0];
 		// data = data.subarray(1, data.length - 1);
 		const reader = $protobuf.Reader.create(data);
@@ -151,8 +153,9 @@ export class Battle implements ISnapshotable {
 		for (let i = 0; i < count; ++i) {
 			const frameAction = new FrameAction(frame);
 			frameAction.DeSerialize(reader);
-			this._frameActions.enqueue(frameAction);
+			fag.Add(frameAction);
 		}
+		this._frameActionGroups.enqueue(fag);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", "./Champion", "../../Libs/protobufjs", "../../RC/Utils/Logger"], function (require, exports, Queue_1, FrameAction_1, Champion_1, $protobuf, Logger_1) {
+define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", "./Champion", "../../Libs/protobufjs", "../../RC/Utils/Logger", "../FrameActionGroup"], function (require, exports, Queue_1, FrameAction_1, Champion_1, $protobuf, Logger_1, FrameActionGroup_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -12,8 +12,7 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             this._nextKeyFrame = 0;
             this._logicElapsed = 0;
             this._realElapsed = 0;
-            this._chaseCount = 0;
-            this._frameActions = new Queue_1.default();
+            this._frameActionGroups = new Queue_1.default();
             this._entities = [];
             this._idToEntity = new Map();
         }
@@ -39,8 +38,7 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             this._nextKeyFrame = 0;
             this._logicElapsed = 0;
             this._realElapsed = 0;
-            this._chaseCount = 0;
-            this._frameActions.clear();
+            this._frameActionGroups.clear();
         }
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
@@ -52,18 +50,21 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             }
         }
         Chase() {
-            while (!this._frameActions.isEmpty()) {
-                const frameAction = this._frameActions.dequeue();
-                let length = frameAction.frame - this.frame;
+            while (!this._frameActionGroups.isEmpty()) {
+                const frameActionGroup = this._frameActionGroups.dequeue();
+                let length = frameActionGroup.frame - this.frame;
                 while (length >= 0) {
-                    if (length == 0)
-                        this.ApplyFrameAction(frameAction);
+                    if (length == 0) {
+                        for (let i = 0; i < frameActionGroup.numActions; ++i) {
+                            this.ApplyFrameAction(frameActionGroup[i]);
+                        }
+                    }
                     else {
                         this.UpdateLogic(0, this._msPerFrame);
                     }
                     --length;
                 }
-                this._nextKeyFrame = frameAction.frame + this.keyframeStep;
+                this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
             }
         }
         Update(dt) {
@@ -92,17 +93,19 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             }
         }
         ApplyFrameAction(frameAction) {
-            this._frameActions.clear();
+            this._frameActionGroups.clear();
         }
         OnFrameAction(frame, data) {
+            const fag = new FrameActionGroup_1.FrameActionGroup(frame);
             const count = data[0];
             const reader = $protobuf.Reader.create(data);
             reader.pos = 1;
             for (let i = 0; i < count; ++i) {
                 const frameAction = new FrameAction_1.FrameAction(frame);
                 frameAction.DeSerialize(reader);
-                this._frameActions.enqueue(frameAction);
+                fag.Add(frameAction);
             }
+            this._frameActionGroups.enqueue(fag);
         }
         CreateChampion(id) {
             const entity = new Champion_1.Champion();

@@ -1,15 +1,16 @@
 import { Consts } from "./Consts";
-import { UIManager } from "./UI/UIManager";
-import { SceneManager } from "./Scene/SceneManager";
-import { Connector } from "./Net/Connector";
-import { ProtoCreator } from "./Net/ProtoHelper";
-import { Logger } from "./RC/Utils/Logger";
-import { Preloader } from "./Preloader";
-import * as $protobuf from "./Libs/protobufjs";
-import * as Long from "./Libs/long";
-import { Graphic } from "./Graphic";
 import { Env } from "./Env";
 import { Hashtable } from "./RC/Utils/Hashtable";
+import { Preloader } from "./Preloader";
+import { Logger } from "./RC/Utils/Logger";
+import Long = require("./Libs/long");
+import { ProtoCreator } from "./Net/ProtoHelper";
+import { Connector } from "./Net/Connector";
+import { Graphic } from "./Graphic";
+import { UIManager } from "./UI/UIManager";
+import { SceneManager } from "./Scene/SceneManager";
+import { BattleManager } from "./Model/BattleManager";
+import * as $protobuf from "./Libs/protobufjs";
 
 export class Main {
 	private static _instance: Main;
@@ -81,6 +82,7 @@ export class Main {
 		Graphic.Init();
 		UIManager.Init();
 		SceneManager.Init();
+		BattleManager.Init();
 		SceneManager.ChangeState(SceneManager.State.Login);
 
 		fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);

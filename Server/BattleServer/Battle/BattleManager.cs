@@ -46,6 +46,22 @@ namespace BattleServer.Battle
 		}
 
 		/// <summary>
+		/// 检查指定玩家ID所在的战场是否有效(存在?结束?)
+		/// </summary>
+		public Battle GetValidedBattle( ulong gcNID )
+		{
+			Battle battle = this.GetBattle( gcNID );
+			if ( battle == null )
+			{
+				Logger.Warn( $"can not find battle for gcNID:{gcNID}" );
+				return null;
+			}
+			if ( battle.finished )
+				return null;
+			return battle;
+		}
+
+		/// <summary>
 		/// 开始战斗
 		/// </summary>
 		public ErrorCode CreateBattle( Protos.CS2BS_BattleInfo battleInfo, out uint bid )
@@ -204,9 +220,8 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 玩家请求获取当前战场快照
 		/// </summary>
-		internal void OnRequestSnapshot( ulong gcNID, Protos.GC2BS_RequestSnapshot request )
+		internal void HandleRequestSnapshot( ulong gcNID, Protos.GC2BS_RequestSnapshot request, Protos.BS2GC_RequestSnapshotRet ret )
 		{
-			Protos.BS2GC_RequestSnapshotRet ret = ProtoCreator.R_GC2BS_RequestSnapshot( request.Opts.Pid );
 			Battle battle = this.GetBattle( gcNID );
 			if ( battle == null )
 			{
@@ -220,21 +235,27 @@ namespace BattleServer.Battle
 				ret.CurFrame = battle.frame;
 				ret.Snapshot = snapshot.data;
 			}
-			BSUser user = BS.instance.userMgr.GetUser( gcNID );
-			user.Send( ret );
 		}
 
-		public void OnGCFrameAction( ulong gcNID, Protos.GC2BS_Action action )
+		/// <summary>
+		/// 处理玩家提交的帧行为
+		/// </summary>
+		public void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message )
 		{
-			Battle battle = this.GetBattle( gcNID );
-			if ( battle == null )
-			{
-				Logger.Warn( $"can not find battle for gcNID:{gcNID}" );
-				return;
-			}
-			if ( battle.finished )
-				return;
-			battle.HandleGCAction( gcNID, action );
+			Battle battle = this.GetValidedBattle( gcNID );
+			battle?.HandleFrameAction( gcNID, message );
+		}
+
+		/// <summary>
+		/// 处理玩家请求帧行为的历史数据
+		/// </summary>
+		/// <param name="from">起始帧</param>
+		/// <param name="to">结束帧</param>
+		/// <param name="ret">需要填充的消息</param>
+		public void HandleRequestFrameActions( ulong gcNID, int from, int to, Protos.BS2GC_RequestFrameActionsRet ret )
+		{
+			Battle battle = this.GetValidedBattle( gcNID );
+			battle?.HandleRequestFrameActions( from, to, ret );
 		}
 	}
 }

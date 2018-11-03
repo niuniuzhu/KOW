@@ -9,7 +9,7 @@ define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../UI/UIMa
             Connector_1.Connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
         }
         OnEnterBattle(message) {
-            let enterBattle = message;
+            const enterBattle = message;
             if (enterBattle.error != protos_1.Protos.CS2GC_EnterBattle.Error.Success) {
                 this._ui.OnEnterBattleResult(enterBattle.error, () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
             }
@@ -18,14 +18,14 @@ define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../UI/UIMa
             }
         }
         ConnectToBS(gcNID, ip, port) {
-            let connector = Connector_1.Connector.bsConnector;
+            const connector = Connector_1.Connector.bsConnector;
             connector.onerror = (e) => this._ui.OnConnectToBSError(e, () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
             connector.onopen = () => {
                 Logger_1.Logger.Log("BS Connected");
-                let askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();
+                const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();
                 askLogin.sessionID = gcNID;
                 connector.Send(protos_1.Protos.GC2BS_AskLogin, askLogin, message => {
-                    let resp = message;
+                    const resp = message;
                     this._ui.OnLoginBSResut(resp.result, () => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
                     switch (resp.result) {
                         case protos_1.Protos.Global.ECommon.Success:
@@ -47,19 +47,19 @@ define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../UI/UIMa
             }
         }
         RequestSnapshot() {
-            let requestState = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestSnapshot();
+            const requestState = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestSnapshot();
             requestState.frame = 0;
             Connector_1.Connector.SendToBS(protos_1.Protos.GC2BS_RequestSnapshot, requestState, msg => {
-                let ret = msg;
+                const ret = msg;
                 this._battleInfo.reqFrame = ret.reqFrame;
-                this._battleInfo.curFrame = ret.curFrame;
+                this._battleInfo.serverFrame = ret.curFrame;
                 this._battleInfo.snapshot = ret.snapshot;
                 this.LoadAssets();
             });
         }
         LoadAssets() {
             if (this._assetsLoadComplete) {
-                this.PrepareBattle();
+                this.InitBattle();
             }
             else {
                 const urls = [];
@@ -68,12 +68,13 @@ define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../UI/UIMa
                 Laya.loader.load(urls, Laya.Handler.create(this, () => {
                     fairygui.UIPackage.addPackage("res/ui/assets");
                     this._assetsLoadComplete = true;
-                    this.PrepareBattle();
+                    this.InitBattle();
                 }));
             }
         }
-        PrepareBattle() {
-            BattleManager_1.BattleManager.instance.Init(this._battleInfo);
+        InitBattle() {
+            BattleManager_1.BattleManager.instance.Init(this._battleInfo, () => {
+            });
         }
     }
     exports.LoadingState = LoadingState;

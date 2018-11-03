@@ -6,17 +6,17 @@ define(["require", "exports", "./RC/Utils/Logger", "./Defs"], function (require,
         static Load(completeHandler) {
             Logger_1.Logger.Log("loading defs...");
             Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, () => {
-                let json = Laya.loader.getRes("res/defs/b_defs.json");
+                const json = Laya.loader.getRes("res/defs/b_defs.json");
                 Defs_1.Defs.Init(json);
                 this.LoadUIRes(completeHandler);
             }), undefined, Laya.Loader.JSON);
         }
         static LoadUIRes(completeHandler) {
             Logger_1.Logger.Log("loading res...");
-            let preloads = Defs_1.Defs.GetPreloads();
-            let urls = [];
-            for (let u of preloads) {
-                let ss = u.split(",");
+            const preloads = Defs_1.Defs.GetPreloads();
+            const urls = [];
+            for (const u of preloads) {
+                const ss = u.split(",");
                 let loadType;
                 switch (ss[1]) {
                     case "1":

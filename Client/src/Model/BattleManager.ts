@@ -5,6 +5,7 @@ import { Connector } from "../Net/Connector";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { BattleInfo } from "./BattleInfo";
+import { ProtoCreator } from "../Net/ProtoHelper";
 
 /**
  * 战场管理器
@@ -21,11 +22,6 @@ export class BattleManager {
 	}
 
 	/**
-	 * 每帧追帧上限
-	 */
-	private static readonly MAX_FRAME_CHASE:number = 10;
-
-	/**
 	 * 逻辑战场
 	 */
 	private _lBattle: Battle;
@@ -35,11 +31,14 @@ export class BattleManager {
 	private _vBattle: VBattle;
 	private _init: boolean;
 
+	public get lBattle(): Battle { return this._lBattle; }
+	public get vBattle(): VBattle { return this._vBattle; }
+
 	/**
 	 * 构造函数
 	 */
 	constructor() {
-		Connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_Action, this.OnFrameAction.bind(this));
+		Connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
 		Connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
 
 		this._lBattle = new Battle();
@@ -50,20 +49,24 @@ export class BattleManager {
 	 * 初始化
 	 * @param battleInfo 战场信息
 	 */
-	public Init(battleInfo: BattleInfo): void {
+	public Init(battleInfo: BattleInfo, completeHandler: () => void): void {
 		this._lBattle.Init(battleInfo);
 		this._vBattle.Init(battleInfo);
 		this._init = true;
-		Logger.Log("battle start");
-	}
 
-	/**
-	 * 清理战场
-	 */
-	public Clear(): void {
-		this._init = false;
-		this._lBattle.Clear();
-		this._vBattle.Clear();
+		//请求帧行为历史记录
+		const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
+		request.from = this._lBattle.frame;
+		request.to = battleInfo.serverFrame;
+		Connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
+			const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
+			this.HandleRequestFrameActionsRet(ret.frames, ret.actions);
+			//追赶服务端帧数
+			this._lBattle.Chase();
+			Logger.Log("battle start");
+			//回调函数
+			completeHandler();
+		});
 	}
 
 	public Update(dt: number): void {
@@ -78,7 +81,9 @@ export class BattleManager {
 	 * @param message 协议
 	 */
 	private OnBattleEnd(message: any): void {
-		let battleEnd = <Protos.BS2GC_BattleEnd>message;
+		const battleEnd = <Protos.BS2GC_BattleEnd>message;
+		this._lBattle.End();
+		this._init = false;
 		Logger.Log("battle end");
 		SceneManager.ChangeState(SceneManager.State.Main);
 	}
@@ -88,6 +93,19 @@ export class BattleManager {
 	 * @param message 协议
 	 */
 	private OnFrameAction(message: any): void {
-		this._lBattle.OnFrameAction(message);
+		const frameAction = <Protos.BS2GC_FrameAction>message;
+		this._lBattle.OnFrameAction(frameAction.frame, frameAction.action);
+	}
+
+	/**
+	 * 处理服务端回应的帧行为历史记录
+	 * @param frames 帧数列表
+	 * @param actions 帧行为列表
+	 */
+	private HandleRequestFrameActionsRet(frames: number[], actions: Uint8Array[]): any {
+		const count = frames.length;
+		for (let i = 0; i < count; ++i) {
+			this._lBattle.OnFrameAction(frames[i], actions[i]);
+		}
 	}
 }

@@ -34,7 +34,7 @@ export class LoadingState extends SceneState {
 	 * @param message 协议
 	 */
 	private OnEnterBattle(message: any): void {
-		let enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
+		const enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
 		if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
 			this._ui.OnEnterBattleResult(enterBattle.error, () => SceneManager.ChangeState(SceneManager.State.Login));
 		}
@@ -50,15 +50,15 @@ export class LoadingState extends SceneState {
 	 * @param port BS port
 	 */
 	public ConnectToBS(gcNID: Long, ip: string, port: number) {
-		let connector = Connector.bsConnector;
+		const connector = Connector.bsConnector;
 		connector.onerror = (e) => this._ui.OnConnectToBSError(e, () => SceneManager.ChangeState(SceneManager.State.Login));
 		connector.onopen = () => {
 			Logger.Log("BS Connected");
-			let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
+			const askLogin = ProtoCreator.Q_GC2BS_AskLogin();
 			askLogin.sessionID = gcNID;
 			//请求登陆BS
 			connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
-				let resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
+				const resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
 				this._ui.OnLoginBSResut(resp.result, () => SceneManager.ChangeState(SceneManager.State.Login));
 
 				switch (resp.result) {
@@ -89,12 +89,12 @@ export class LoadingState extends SceneState {
 	 * 请求快照
 	 */
 	private RequestSnapshot(): void {
-		let requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
+		const requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
 		requestState.frame = 0;
 		Connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
-			let ret = <Protos.BS2GC_RequestSnapshotRet>msg;
+			const ret = <Protos.BS2GC_RequestSnapshotRet>msg;
 			this._battleInfo.reqFrame = ret.reqFrame;
-			this._battleInfo.curFrame = ret.curFrame;
+			this._battleInfo.serverFrame = ret.curFrame;
 			this._battleInfo.snapshot = ret.snapshot;
 			this.LoadAssets();
 		});
@@ -105,7 +105,7 @@ export class LoadingState extends SceneState {
 	 */
 	private LoadAssets(): void {
 		if (this._assetsLoadComplete) {
-			this.PrepareBattle();
+			this.InitBattle();
 		}
 		else {
 			const urls = [];
@@ -114,7 +114,8 @@ export class LoadingState extends SceneState {
 			Laya.loader.load(urls, Laya.Handler.create(this, () => {
 				fairygui.UIPackage.addPackage("res/ui/assets");
 				this._assetsLoadComplete = true;
-				this.PrepareBattle();
+
+				this.InitBattle();
 			}));
 		}
 	}
@@ -122,8 +123,10 @@ export class LoadingState extends SceneState {
 	/**
 	 * 准备战场环境
 	 */
-	private PrepareBattle(): void {
+	private InitBattle(): void {
 		//初始化战场,解码快照
-		BattleManager.instance.Init(this._battleInfo);
+		BattleManager.instance.Init(this._battleInfo, ()=>{
+			
+		});
 	}
 }

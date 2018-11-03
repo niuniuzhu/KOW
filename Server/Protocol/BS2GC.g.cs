@@ -36,9 +36,11 @@ namespace Protos {
             "U3VjY2VzcxAAEg8KC0ludmFsaWRVc2VyEAESEQoNSW52YWxpZEJhdHRsZRAC",
             "Ij4KEUJTMkdDX0JhdHRsZVN0YXJ0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
             "TXNnT3B0cxIKCgJpZBgCIAEoDSI8Cg9CUzJHQ19CYXR0bGVFbmQSHQoEb3B0",
-            "cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgoKAmlkGAIgASgNIkwKDEJTMkdD",
-            "X0FjdGlvbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJh",
-            "bWUYAiABKAUSDgoGYWN0aW9uGAMgASgMYgZwcm90bzM="));
+            "cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgoKAmlkGAIgASgNIlEKEUJTMkdD",
+            "X0ZyYW1lQWN0aW9uEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIN",
+            "CgVmcmFtZRgCIAEoBRIOCgZhY3Rpb24YAyABKAwiXgocQlMyR0NfUmVxdWVz",
+            "dEZyYW1lQWN0aW9uc1JldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09w",
+            "dHMSDgoGZnJhbWVzGAIgAygFEg8KB2FjdGlvbnMYAyADKAxiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -46,7 +48,8 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestSnapshotRet), global::Protos.BS2GC_RequestSnapshotRet.Parser, new[]{ "Opts", "Result", "ReqFrame", "CurFrame", "Snapshot" }, null, new[]{ typeof(global::Protos.BS2GC_RequestSnapshotRet.Types.EResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleStart), global::Protos.BS2GC_BattleStart.Parser, new[]{ "Opts", "Id" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleEnd), global::Protos.BS2GC_BattleEnd.Parser, new[]{ "Opts", "Id" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_Action), global::Protos.BS2GC_Action.Parser, new[]{ "Opts", "Frame", "Action" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_FrameAction), global::Protos.BS2GC_FrameAction.Parser, new[]{ "Opts", "Frame", "Action" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestFrameActionsRet), global::Protos.BS2GC_RequestFrameActionsRet.Parser, new[]{ "Opts", "Frames", "Actions" }, null, null, null)
           }));
     }
     #endregion
@@ -984,11 +987,14 @@ namespace Protos {
 
   }
 
-  public sealed partial class BS2GC_Action : pb::IMessage<BS2GC_Action> {
-    private static readonly pb::MessageParser<BS2GC_Action> _parser = new pb::MessageParser<BS2GC_Action>(() => new BS2GC_Action());
+  /// <summary>
+  ///广播帧行为
+  /// </summary>
+  public sealed partial class BS2GC_FrameAction : pb::IMessage<BS2GC_FrameAction> {
+    private static readonly pb::MessageParser<BS2GC_FrameAction> _parser = new pb::MessageParser<BS2GC_FrameAction>(() => new BS2GC_FrameAction());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<BS2GC_Action> Parser { get { return _parser; } }
+    public static pb::MessageParser<BS2GC_FrameAction> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -1001,14 +1007,14 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_Action() {
+    public BS2GC_FrameAction() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_Action(BS2GC_Action other) : this() {
+    public BS2GC_FrameAction(BS2GC_FrameAction other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       frame_ = other.frame_;
       action_ = other.action_;
@@ -1016,8 +1022,8 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_Action Clone() {
-      return new BS2GC_Action(this);
+    public BS2GC_FrameAction Clone() {
+      return new BS2GC_FrameAction(this);
     }
 
     /// <summary>Field number for the "opts" field.</summary>
@@ -1058,11 +1064,11 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as BS2GC_Action);
+      return Equals(other as BS2GC_FrameAction);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(BS2GC_Action other) {
+    public bool Equals(BS2GC_FrameAction other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1130,7 +1136,7 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(BS2GC_Action other) {
+    public void MergeFrom(BS2GC_FrameAction other) {
       if (other == null) {
         return;
       }
@@ -1170,6 +1176,185 @@ namespace Protos {
           }
           case 26: {
             Action = input.ReadBytes();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///回应请求帧行为记录
+  /// </summary>
+  public sealed partial class BS2GC_RequestFrameActionsRet : pb::IMessage<BS2GC_RequestFrameActionsRet> {
+    private static readonly pb::MessageParser<BS2GC_RequestFrameActionsRet> _parser = new pb::MessageParser<BS2GC_RequestFrameActionsRet>(() => new BS2GC_RequestFrameActionsRet());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BS2GC_RequestFrameActionsRet> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2GC_RequestFrameActionsRet() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2GC_RequestFrameActionsRet(BS2GC_RequestFrameActionsRet other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      frames_ = other.frames_.Clone();
+      actions_ = other.actions_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2GC_RequestFrameActionsRet Clone() {
+      return new BS2GC_RequestFrameActionsRet(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "frames" field.</summary>
+    public const int FramesFieldNumber = 2;
+    private static readonly pb::FieldCodec<int> _repeated_frames_codec
+        = pb::FieldCodec.ForInt32(18);
+    private readonly pbc::RepeatedField<int> frames_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Frames {
+      get { return frames_; }
+    }
+
+    /// <summary>Field number for the "actions" field.</summary>
+    public const int ActionsFieldNumber = 3;
+    private static readonly pb::FieldCodec<pb::ByteString> _repeated_actions_codec
+        = pb::FieldCodec.ForBytes(26);
+    private readonly pbc::RepeatedField<pb::ByteString> actions_ = new pbc::RepeatedField<pb::ByteString>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<pb::ByteString> Actions {
+      get { return actions_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BS2GC_RequestFrameActionsRet);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BS2GC_RequestFrameActionsRet other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if(!frames_.Equals(other.frames_)) return false;
+      if(!actions_.Equals(other.actions_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      hash ^= frames_.GetHashCode();
+      hash ^= actions_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      frames_.WriteTo(output, _repeated_frames_codec);
+      actions_.WriteTo(output, _repeated_actions_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      size += frames_.CalculateSize(_repeated_frames_codec);
+      size += actions_.CalculateSize(_repeated_actions_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BS2GC_RequestFrameActionsRet other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      frames_.Add(other.frames_);
+      actions_.Add(other.actions_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 18:
+          case 16: {
+            frames_.AddEntriesFrom(input, _repeated_frames_codec);
+            break;
+          }
+          case 26: {
+            actions_.AddEntriesFrom(input, _repeated_actions_codec);
             break;
           }
         }

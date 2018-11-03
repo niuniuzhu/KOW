@@ -29,16 +29,19 @@ namespace Protos {
             "c3Npb25JRBgCIAEoBCIwCg9HQzJCU19LZWVwQWxpdmUSHQoEb3B0cxgBIAEo",
             "CzIPLlByb3Rvcy5Nc2dPcHRzIkUKFUdDMkJTX1JlcXVlc3RTbmFwc2hvdBId",
             "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiABKAUi",
-            "WAoMR0MyQlNfQWN0aW9uEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0",
-            "cxIRCglpbnB1dEZsYWcYAiABKAUSCgoCZHgYAyABKAISCgoCZHkYBCABKAJi",
-            "BnByb3RvMw=="));
+            "XQoRR0MyQlNfRnJhbWVBY3Rpb24SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5N",
+            "c2dPcHRzEhEKCWlucHV0RmxhZxgCIAEoBRIKCgJkeBgDIAEoAhIKCgJkeRgE",
+            "IAEoAiJUChlHQzJCU19SZXF1ZXN0RnJhbWVBY3Rpb25zEh0KBG9wdHMYASAB",
+            "KAsyDy5Qcm90b3MuTXNnT3B0cxIMCgRmcm9tGAIgASgFEgoKAnRvGAMgASgF",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_AskLogin), global::Protos.GC2BS_AskLogin.Parser, new[]{ "Opts", "SessionID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_KeepAlive), global::Protos.GC2BS_KeepAlive.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestSnapshot), global::Protos.GC2BS_RequestSnapshot.Parser, new[]{ "Opts", "Frame" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_Action), global::Protos.GC2BS_Action.Parser, new[]{ "Opts", "InputFlag", "Dx", "Dy" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_FrameAction), global::Protos.GC2BS_FrameAction.Parser, new[]{ "Opts", "InputFlag", "Dx", "Dy" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestFrameActions), global::Protos.GC2BS_RequestFrameActions.Parser, new[]{ "Opts", "From", "To" }, null, null, null)
           }));
     }
     #endregion
@@ -512,11 +515,11 @@ namespace Protos {
   /// <summary>
   ///帧行为
   /// </summary>
-  public sealed partial class GC2BS_Action : pb::IMessage<GC2BS_Action> {
-    private static readonly pb::MessageParser<GC2BS_Action> _parser = new pb::MessageParser<GC2BS_Action>(() => new GC2BS_Action());
+  public sealed partial class GC2BS_FrameAction : pb::IMessage<GC2BS_FrameAction> {
+    private static readonly pb::MessageParser<GC2BS_FrameAction> _parser = new pb::MessageParser<GC2BS_FrameAction>(() => new GC2BS_FrameAction());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<GC2BS_Action> Parser { get { return _parser; } }
+    public static pb::MessageParser<GC2BS_FrameAction> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -529,14 +532,14 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GC2BS_Action() {
+    public GC2BS_FrameAction() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GC2BS_Action(GC2BS_Action other) : this() {
+    public GC2BS_FrameAction(GC2BS_FrameAction other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       inputFlag_ = other.inputFlag_;
       dx_ = other.dx_;
@@ -545,8 +548,8 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GC2BS_Action Clone() {
-      return new GC2BS_Action(this);
+    public GC2BS_FrameAction Clone() {
+      return new GC2BS_FrameAction(this);
     }
 
     /// <summary>Field number for the "opts" field.</summary>
@@ -595,11 +598,11 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as GC2BS_Action);
+      return Equals(other as GC2BS_FrameAction);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(GC2BS_Action other) {
+    public bool Equals(GC2BS_FrameAction other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -676,7 +679,7 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(GC2BS_Action other) {
+    public void MergeFrom(GC2BS_FrameAction other) {
       if (other == null) {
         return;
       }
@@ -723,6 +726,206 @@ namespace Protos {
           }
           case 37: {
             Dy = input.ReadFloat();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///请求帧行为记录
+  /// </summary>
+  public sealed partial class GC2BS_RequestFrameActions : pb::IMessage<GC2BS_RequestFrameActions> {
+    private static readonly pb::MessageParser<GC2BS_RequestFrameActions> _parser = new pb::MessageParser<GC2BS_RequestFrameActions>(() => new GC2BS_RequestFrameActions());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GC2BS_RequestFrameActions> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_RequestFrameActions() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_RequestFrameActions(GC2BS_RequestFrameActions other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      from_ = other.from_;
+      to_ = other.to_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_RequestFrameActions Clone() {
+      return new GC2BS_RequestFrameActions(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "from" field.</summary>
+    public const int FromFieldNumber = 2;
+    private int from_;
+    /// <summary>
+    ///开始帧数
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int From {
+      get { return from_; }
+      set {
+        from_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "to" field.</summary>
+    public const int ToFieldNumber = 3;
+    private int to_;
+    /// <summary>
+    ///结束帧数
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int To {
+      get { return to_; }
+      set {
+        to_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GC2BS_RequestFrameActions);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GC2BS_RequestFrameActions other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (From != other.From) return false;
+      if (To != other.To) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (From != 0) hash ^= From.GetHashCode();
+      if (To != 0) hash ^= To.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (From != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(From);
+      }
+      if (To != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(To);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (From != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(From);
+      }
+      if (To != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(To);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GC2BS_RequestFrameActions other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.From != 0) {
+        From = other.From;
+      }
+      if (other.To != 0) {
+        To = other.To;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            From = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            To = input.ReadInt32();
             break;
           }
         }

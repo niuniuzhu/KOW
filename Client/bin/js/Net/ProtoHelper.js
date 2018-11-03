@@ -13,7 +13,8 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_AskLogin, 1200);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_KeepAlive, 1201);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_RequestSnapshot, 1202);
-            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_Action, 1203);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_FrameAction, 1203);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_RequestFrameActions, 1204);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2CS_BeginMatch, 1300);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2GC_GSInfo, 2000);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2GC_AskRegRet, 2001);
@@ -36,7 +37,8 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_BattleStart, 4102);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_BattleEnd, 4103);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_RequestSnapshotRet, 4104);
-            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_Action, 4105);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_FrameAction, 4105);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_RequestFrameActionsRet, 4106);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSInfos, 5000);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSInfo, 5001);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSLost, 5002);
@@ -64,7 +66,8 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             ProtoCreator._ID2TYPE.set(1200, protos_1.Protos.GC2BS_AskLogin);
             ProtoCreator._ID2TYPE.set(1201, protos_1.Protos.GC2BS_KeepAlive);
             ProtoCreator._ID2TYPE.set(1202, protos_1.Protos.GC2BS_RequestSnapshot);
-            ProtoCreator._ID2TYPE.set(1203, protos_1.Protos.GC2BS_Action);
+            ProtoCreator._ID2TYPE.set(1203, protos_1.Protos.GC2BS_FrameAction);
+            ProtoCreator._ID2TYPE.set(1204, protos_1.Protos.GC2BS_RequestFrameActions);
             ProtoCreator._ID2TYPE.set(1300, protos_1.Protos.GC2CS_BeginMatch);
             ProtoCreator._ID2TYPE.set(2000, protos_1.Protos.LS2GC_GSInfo);
             ProtoCreator._ID2TYPE.set(2001, protos_1.Protos.LS2GC_AskRegRet);
@@ -87,7 +90,8 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             ProtoCreator._ID2TYPE.set(4102, protos_1.Protos.BS2GC_BattleStart);
             ProtoCreator._ID2TYPE.set(4103, protos_1.Protos.BS2GC_BattleEnd);
             ProtoCreator._ID2TYPE.set(4104, protos_1.Protos.BS2GC_RequestSnapshotRet);
-            ProtoCreator._ID2TYPE.set(4105, protos_1.Protos.BS2GC_Action);
+            ProtoCreator._ID2TYPE.set(4105, protos_1.Protos.BS2GC_FrameAction);
+            ProtoCreator._ID2TYPE.set(4106, protos_1.Protos.BS2GC_RequestFrameActionsRet);
             ProtoCreator._ID2TYPE.set(5000, protos_1.Protos.CS2LS_GSInfos);
             ProtoCreator._ID2TYPE.set(5001, protos_1.Protos.CS2LS_GSInfo);
             ProtoCreator._ID2TYPE.set(5002, protos_1.Protos.CS2LS_GSLost);
@@ -168,9 +172,15 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
-        static Q_GC2BS_Action() {
-            let msg = new protos_1.Protos.GC2BS_Action();
+        static Q_GC2BS_FrameAction() {
+            let msg = new protos_1.Protos.GC2BS_FrameAction();
             msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
+        static Q_GC2BS_RequestFrameActions() {
+            let msg = new protos_1.Protos.GC2BS_RequestFrameActions();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
             return msg;
         }
         static Q_GC2CS_BeginMatch() {
@@ -291,8 +301,13 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
-        static Q_BS2GC_Action() {
-            let msg = new protos_1.Protos.BS2GC_Action();
+        static Q_BS2GC_FrameAction() {
+            let msg = new protos_1.Protos.BS2GC_FrameAction();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
+        static Q_BS2GC_RequestFrameActionsRet() {
+            let msg = new protos_1.Protos.BS2GC_RequestFrameActionsRet();
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
@@ -502,6 +517,13 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts.rpid = pid;
             return msg;
         }
+        static R_GC2BS_RequestFrameActions(pid) {
+            let msg = new protos_1.Protos.BS2GC_RequestFrameActionsRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
         static DecodeMsg(msgID, data, size) {
             switch (msgID) {
                 case 10: {
@@ -545,7 +567,11 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return msg;
                 }
                 case 1203: {
-                    let msg = protos_1.Protos.GC2BS_Action.decode(data, size);
+                    let msg = protos_1.Protos.GC2BS_FrameAction.decode(data, size);
+                    return msg;
+                }
+                case 1204: {
+                    let msg = protos_1.Protos.GC2BS_RequestFrameActions.decode(data, size);
                     return msg;
                 }
                 case 1300: {
@@ -637,7 +663,11 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return msg;
                 }
                 case 4105: {
-                    let msg = protos_1.Protos.BS2GC_Action.decode(data, size);
+                    let msg = protos_1.Protos.BS2GC_FrameAction.decode(data, size);
+                    return msg;
+                }
+                case 4106: {
+                    let msg = protos_1.Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
                     return msg;
                 }
                 case 5000: {
@@ -751,8 +781,12 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             let msg = protos_1.Protos.GC2BS_RequestSnapshot.decode(data, size);
             return msg;
         }
-        static D_GC2BS_Action(data, size) {
-            let msg = protos_1.Protos.GC2BS_Action.decode(data, size);
+        static D_GC2BS_FrameAction(data, size) {
+            let msg = protos_1.Protos.GC2BS_FrameAction.decode(data, size);
+            return msg;
+        }
+        static D_GC2BS_RequestFrameActions(data, size) {
+            let msg = protos_1.Protos.GC2BS_RequestFrameActions.decode(data, size);
             return msg;
         }
         static D_GC2CS_BeginMatch(data, size) {
@@ -843,8 +877,12 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             let msg = protos_1.Protos.BS2GC_RequestSnapshotRet.decode(data, size);
             return msg;
         }
-        static D_BS2GC_Action(data, size) {
-            let msg = protos_1.Protos.BS2GC_Action.decode(data, size);
+        static D_BS2GC_FrameAction(data, size) {
+            let msg = protos_1.Protos.BS2GC_FrameAction.decode(data, size);
+            return msg;
+        }
+        static D_BS2GC_RequestFrameActionsRet(data, size) {
+            let msg = protos_1.Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
             return msg;
         }
         static D_CS2LS_GSInfos(data, size) {
@@ -948,7 +986,10 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return new protos_1.Protos.GC2BS_RequestSnapshot();
                 }
                 case 1203: {
-                    return new protos_1.Protos.GC2BS_Action();
+                    return new protos_1.Protos.GC2BS_FrameAction();
+                }
+                case 1204: {
+                    return new protos_1.Protos.GC2BS_RequestFrameActions();
                 }
                 case 1300: {
                     return new protos_1.Protos.GC2CS_BeginMatch();
@@ -1017,7 +1058,10 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return new protos_1.Protos.BS2GC_RequestSnapshotRet();
                 }
                 case 4105: {
-                    return new protos_1.Protos.BS2GC_Action();
+                    return new protos_1.Protos.BS2GC_FrameAction();
+                }
+                case 4106: {
+                    return new protos_1.Protos.BS2GC_RequestFrameActionsRet();
                 }
                 case 5000: {
                     return new protos_1.Protos.CS2LS_GSInfos();
@@ -1109,6 +1153,9 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                 case 1203: {
                     return message.opts;
                 }
+                case 1204: {
+                    return message.opts;
+                }
                 case 1300: {
                     return message.opts;
                 }
@@ -1176,6 +1223,9 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return message.opts;
                 }
                 case 4105: {
+                    return message.opts;
+                }
+                case 4106: {
                     return message.opts;
                 }
                 case 5000: {

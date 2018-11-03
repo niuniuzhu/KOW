@@ -19,9 +19,16 @@ message GC2BS_RequestSnapshot {
 }
 
 //帧行为
-message GC2BS_Action {
+message GC2BS_FrameAction {
 	MsgOpts opts = 1;
 	int32 inputFlag = 2;
 	float dx = 3;
 	float dy = 4;
+}
+
+//请求帧行为记录
+message GC2BS_RequestFrameActions {
+	MsgOpts opts = 1;
+	int32 from = 2;//开始帧数
+	int32 to = 3;//结束帧数
 }

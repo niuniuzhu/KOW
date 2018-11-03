@@ -350,7 +350,7 @@ namespace BattleServer.Battle
 		{
 			this._frameActionMgr.Save( frame );
 			//把玩家的操作指令广播到所有玩家
-			Protos.BS2GC_Action action = ProtoCreator.Q_BS2GC_Action();
+			Protos.BS2GC_FrameAction action = ProtoCreator.Q_BS2GC_FrameAction();
 			action.Frame = frame;
 			action.Action = this._frameActionMgr.latestHistory;
 			this.Broadcast( action );
@@ -397,6 +397,18 @@ namespace BattleServer.Battle
 				kv.Value.EncodeSnapshot( writer );
 		}
 
-		public void HandleGCAction( ulong gcNID, Protos.GC2BS_Action action ) => this._frameActionMgr.MergeFromProto( gcNID, action );
+		/// <summary>
+		/// 处理玩家提交的帧行为
+		/// </summary>
+		public void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message ) => this._frameActionMgr.MergeFromProto( gcNID, message );
+
+		/// <summary>
+		/// 处理玩家请求帧行为的历史数据
+		/// </summary>
+		/// <param name="from">起始帧</param>
+		/// <param name="to">结束帧</param>
+		/// <param name="ret">需要填充的消息</param>
+		public void HandleRequestFrameActions( int from, int to, Protos.BS2GC_RequestFrameActionsRet ret ) =>
+			this._frameActionMgr.FillHistoryToMessage( from, to, ret );
 	}
 }

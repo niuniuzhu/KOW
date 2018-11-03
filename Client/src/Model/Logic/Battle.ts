@@ -1,13 +1,17 @@
 import { ISnapshotable } from "../ISnapshotable";
 import Queue from "../../RC/Collections/Queue";
-import { Protos } from "../../Libs/protos";
-import { BattleInfo } from "../BattleInfo";
+import { FrameAction } from "../FrameAction";
 import { Entity } from "./Entity";
+import { BattleInfo } from "../BattleInfo";
 import { Champion } from "./Champion";
 import * as $protobuf from "../../Libs/protobufjs";
-import * as Long from "../../Libs/long";
 
 export class Battle implements ISnapshotable {
+	/**
+	 * 每帧追帧上限
+	 */
+	private static readonly MAX_FRAME_CHASE: number = 10;
+
 	private _frameRate: number = 0;
 	private _keyframeStep: number = 0;
 	private _timeout: number = 0;
@@ -24,10 +28,11 @@ export class Battle implements ISnapshotable {
 	private _nextKeyFrame: number = 0;
 	private _logicElapsed: number = 0;
 	private _realElapsed: number = 0;
+	private _chaseCount: number = 0;
 
-	private readonly _frameActions: Queue<Protos.BS2GC_Action> = new Queue<Protos.BS2GC_Action>();
+	private readonly _frameActions: Queue<FrameAction> = new Queue<FrameAction>();
 	private readonly _entities: Entity[] = [];
-	private readonly _idToEntity: Map<number, Entity> = new Map<number, Entity>();
+	private readonly _idToEntity: Map<Long, Entity> = new Map<Long, Entity>();
 
 	/**
 	 * 初始化
@@ -44,15 +49,26 @@ export class Battle implements ISnapshotable {
 		this.DecodeSnapshot(reader);
 	}
 
-	public Clear(): void {
+	/**
+	 * 战场结束
+	 */
+	public End(): void {
+		const count = this._entities.length;
+		for (let i = 0; i < count; i++)
+			this._entities[i].Dispose();
 		this._frame = 0;
 		this._nextKeyFrame = 0;
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
+		this._chaseCount = 0;
 		this._frameActions.clear();
 	}
 
+	/**
+	 * 反编码快照
+	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		//设置当前战场的帧数为快照的帧数
 		this._frame = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
@@ -62,23 +78,32 @@ export class Battle implements ISnapshotable {
 		}
 	}
 
-	public Update(dt: number): void {
-		this._realElapsed += dt;
+	/**
+	 * 追赶服务端帧数
+	 * @param rdt 真实流逝时间
+	 * @param dt 逻辑流逝时间
+	 */
+	public Chase(): void {
 		while (!this._frameActions.isEmpty()) {
 			const frameAction = this._frameActions.dequeue();
 			let length = frameAction.frame - this.frame;
 			while (length >= 0) {
 				if (length == 0)
-					this.HandleFrameAction(frameAction);
+					this.ApplyFrameAction(frameAction);
 				else {
-					this.UpdateLogic(this._realElapsed, this._msPerFrame);
-					this._realElapsed = 0;
+					this.UpdateLogic(0, this._msPerFrame);
 				}
 				--length;
 			}
 			this._nextKeyFrame = frameAction.frame + this.keyframeStep;
 		}
+	}
 
+	public Update(dt: number): void {
+		//追帧
+		this.Chase();
+
+		this._realElapsed += dt;
 		if (this.frame < this._nextKeyFrame) {
 			this._logicElapsed += dt;
 
@@ -97,26 +122,47 @@ export class Battle implements ISnapshotable {
 		}
 	}
 
-	private HandleFrameAction(frameAction: Protos.BS2GC_Action): void {
-	}
-
 	private UpdateLogic(rdt: number, dt: number): void {
 		++this._frame;
+		const count = this._entities.length;
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			entity.Update(dt);
+		}
+	}
+
+	/**
+	 * 应用帧行为
+	 * @param frameAction 帧行为
+	 */
+	private ApplyFrameAction(frameAction: FrameAction): void {
+		this._frameActions.clear();
 	}
 
 	/**
 	 * 处理服务端下发的帧行为
-	 * @param frameAction 协议
+	 * @param msg 协议
 	 */
-	public OnFrameAction(frameAction: Protos.BS2GC_Action): void {
-		this._frameActions.enqueue(frameAction);
+	public OnFrameAction(frame: number, data: Uint8Array): void {
+		const count = data[0];
+		// data = data.subarray(1, data.length - 1);
+		const reader = $protobuf.Reader.create(data);
+		reader.pos = 1;
+		for (let i = 0; i < count; ++i) {
+			const frameAction = new FrameAction(frame);
+			frameAction.DeSerialize(reader);
+			this._frameActions.enqueue(frameAction);
+		}
 	}
 
+	/**
+	 * 创建英雄
+	 */
 	public CreateChampion(id: Long): Champion {
 		const entity = new Champion();
 		entity.Init(id, this);
 		this._entities.push(entity);
-		this._entities
+		this._idToEntity.set(entity.id, entity);
 		return entity;
 	}
 }

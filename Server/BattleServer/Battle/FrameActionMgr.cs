@@ -60,37 +60,6 @@ namespace BattleServer.Battle
 		}
 
 		/// <summary>
-		/// 从收到的玩家数据合并到帧行为
-		/// 主线程调用
-		/// </summary>
-		public void MergeFromProto( ulong gcNID, Protos.GC2BS_Action action )
-		{
-			lock ( this._gcNIDToAction )
-			{
-				FrameAction frameAction = this._gcNIDToAction[gcNID];
-				frameAction.MergeFromProto( action );
-			}
-		}
-
-		/// <summary>
-		/// 获取指定范围内的帧行为集合
-		/// </summary>
-		/// <param name="actions">提供保存的容器</param>
-		/// <param name="from">开始帧数</param>
-		/// <param name="to">结束帧数, -1表示最新帧数</param>
-		public void GetHistory( IDictionary<int, Google.Protobuf.ByteString> actions, int from = 0, int to = -1 )
-		{
-			from = from < 0 ? 0 : from;
-			to = to < 0 ? this._battle.frame : ( to > this._battle.frame ? this._battle.frame : to );
-			int fromIndex = from / this._battle.keyframeStep + 1;
-			int toIndex = to / this._battle.keyframeStep;
-			IList<int> keys = this._histroy.Keys;
-			IList<Google.Protobuf.ByteString> values = this._histroy.Values;
-			for ( int i = fromIndex; i <= toIndex; i++ )
-				actions[keys[i]] = values[i];
-		}
-
-		/// <summary>
 		/// 把帧行为保存到历史列表
 		/// 填充后会清空当前帧的帧行为
 		/// 战场线程调用
@@ -115,6 +84,40 @@ namespace BattleServer.Battle
 			Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int ) this._ms.Length );
 			this._ms.SetLength( 0 );
 			this._histroy[frame] = data;
+		}
+
+		/// <summary>
+		/// 从收到的玩家数据合并到帧行为
+		/// 主线程调用
+		/// </summary>
+		public void MergeFromProto( ulong gcNID, Protos.GC2BS_FrameAction action )
+		{
+			lock ( this._gcNIDToAction )
+			{
+				FrameAction frameAction = this._gcNIDToAction[gcNID];
+				frameAction.MergeFromProto( action );
+			}
+		}
+
+		/// <summary>
+		/// 获取指定范围内的帧行为集合
+		/// </summary>
+		/// <param name="from">开始帧数</param>
+		/// <param name="to">结束帧数, -1表示最新帧数</param>
+		/// <param name="ret">需要填充的消息</param>
+		public void FillHistoryToMessage( int from, int to, Protos.BS2GC_RequestFrameActionsRet ret )
+		{
+			from = from < 0 ? 0 : from;
+			to = to < 0 ? this._battle.frame : ( to > this._battle.frame ? this._battle.frame : to );
+			int fromIndex = from / this._battle.keyframeStep + 1;
+			int toIndex = to / this._battle.keyframeStep;
+			IList<int> keys = this._histroy.Keys;
+			IList<Google.Protobuf.ByteString> values = this._histroy.Values;
+			for ( int i = fromIndex; i <= toIndex; i++ )
+			{
+				ret.Frames.Add( keys[i] );
+				ret.Actions.Add( values[i] );
+			}
 		}
 	}
 }

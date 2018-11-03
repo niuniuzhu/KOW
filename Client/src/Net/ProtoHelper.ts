@@ -19,7 +19,8 @@ export class ProtoCreator {
 		ProtoCreator._TYPE2ID.set( Protos.GC2BS_AskLogin, <Protos.MsgID>1200 );
 		ProtoCreator._TYPE2ID.set( Protos.GC2BS_KeepAlive, <Protos.MsgID>1201 );
 		ProtoCreator._TYPE2ID.set( Protos.GC2BS_RequestSnapshot, <Protos.MsgID>1202 );
-		ProtoCreator._TYPE2ID.set( Protos.GC2BS_Action, <Protos.MsgID>1203 );
+		ProtoCreator._TYPE2ID.set( Protos.GC2BS_FrameAction, <Protos.MsgID>1203 );
+		ProtoCreator._TYPE2ID.set( Protos.GC2BS_RequestFrameActions, <Protos.MsgID>1204 );
 		ProtoCreator._TYPE2ID.set( Protos.GC2CS_BeginMatch, <Protos.MsgID>1300 );
 		ProtoCreator._TYPE2ID.set( Protos.LS2GC_GSInfo, <Protos.MsgID>2000 );
 		ProtoCreator._TYPE2ID.set( Protos.LS2GC_AskRegRet, <Protos.MsgID>2001 );
@@ -42,7 +43,8 @@ export class ProtoCreator {
 		ProtoCreator._TYPE2ID.set( Protos.BS2GC_BattleStart, <Protos.MsgID>4102 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2GC_BattleEnd, <Protos.MsgID>4103 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2GC_RequestSnapshotRet, <Protos.MsgID>4104 );
-		ProtoCreator._TYPE2ID.set( Protos.BS2GC_Action, <Protos.MsgID>4105 );
+		ProtoCreator._TYPE2ID.set( Protos.BS2GC_FrameAction, <Protos.MsgID>4105 );
+		ProtoCreator._TYPE2ID.set( Protos.BS2GC_RequestFrameActionsRet, <Protos.MsgID>4106 );
 		ProtoCreator._TYPE2ID.set( Protos.CS2LS_GSInfos, <Protos.MsgID>5000 );
 		ProtoCreator._TYPE2ID.set( Protos.CS2LS_GSInfo, <Protos.MsgID>5001 );
 		ProtoCreator._TYPE2ID.set( Protos.CS2LS_GSLost, <Protos.MsgID>5002 );
@@ -71,7 +73,8 @@ export class ProtoCreator {
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1200, Protos.GC2BS_AskLogin );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1201, Protos.GC2BS_KeepAlive );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1202, Protos.GC2BS_RequestSnapshot );
-		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1203, Protos.GC2BS_Action );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1203, Protos.GC2BS_FrameAction );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1204, Protos.GC2BS_RequestFrameActions );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>1300, Protos.GC2CS_BeginMatch );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>2000, Protos.LS2GC_GSInfo );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>2001, Protos.LS2GC_AskRegRet );
@@ -94,7 +97,8 @@ export class ProtoCreator {
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4102, Protos.BS2GC_BattleStart );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4103, Protos.BS2GC_BattleEnd );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4104, Protos.BS2GC_RequestSnapshotRet );
-		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4105, Protos.BS2GC_Action );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4105, Protos.BS2GC_FrameAction );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4106, Protos.BS2GC_RequestFrameActionsRet );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>5000, Protos.CS2LS_GSInfos );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>5001, Protos.CS2LS_GSInfo );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>5002, Protos.CS2LS_GSLost );
@@ -185,9 +189,16 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static Q_GC2BS_Action(): Protos.GC2BS_Action {
-		let msg = new Protos.GC2BS_Action();
+	public static Q_GC2BS_FrameAction(): Protos.GC2BS_FrameAction {
+		let msg = new Protos.GC2BS_FrameAction();
 		msg.opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Q_GC2BS_RequestFrameActions(): Protos.GC2BS_RequestFrameActions {
+		let msg = new Protos.GC2BS_RequestFrameActions();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
 		return msg;
 	}
 
@@ -331,8 +342,14 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static Q_BS2GC_Action(): Protos.BS2GC_Action {
-		let msg = new Protos.BS2GC_Action();
+	public static Q_BS2GC_FrameAction(): Protos.BS2GC_FrameAction {
+		let msg = new Protos.BS2GC_FrameAction();
+		msg.opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Q_BS2GC_RequestFrameActionsRet(): Protos.BS2GC_RequestFrameActionsRet {
+		let msg = new Protos.BS2GC_RequestFrameActionsRet();
 		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -578,6 +595,14 @@ export class ProtoCreator {
 		return msg;
 	}
 
+	public static R_GC2BS_RequestFrameActions(pid: number): Protos.BS2GC_RequestFrameActionsRet {
+		let msg = new Protos.BS2GC_RequestFrameActionsRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
 
 	public static DecodeMsg(msgID: Protos.MsgID, data: Uint8Array, size: number): any {
 		switch ( msgID ) {
@@ -622,7 +647,11 @@ export class ProtoCreator {
 				return msg;
 			}
 			case 1203: {
-				let msg = Protos.GC2BS_Action.decode(data, size);
+				let msg = Protos.GC2BS_FrameAction.decode(data, size);
+				return msg;
+			}
+			case 1204: {
+				let msg = Protos.GC2BS_RequestFrameActions.decode(data, size);
 				return msg;
 			}
 			case 1300: {
@@ -714,7 +743,11 @@ export class ProtoCreator {
 				return msg;
 			}
 			case 4105: {
-				let msg = Protos.BS2GC_Action.decode(data, size);
+				let msg = Protos.BS2GC_FrameAction.decode(data, size);
+				return msg;
+			}
+			case 4106: {
+				let msg = Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
 				return msg;
 			}
 			case 5000: {
@@ -839,8 +872,13 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static D_GC2BS_Action(data: Uint8Array, size: number): Protos.GC2BS_Action {
-		let msg = Protos.GC2BS_Action.decode(data, size);
+	public static D_GC2BS_FrameAction(data: Uint8Array, size: number): Protos.GC2BS_FrameAction {
+		let msg = Protos.GC2BS_FrameAction.decode(data, size);
+		return msg;
+	}
+
+	public static D_GC2BS_RequestFrameActions(data: Uint8Array, size: number): Protos.GC2BS_RequestFrameActions {
+		let msg = Protos.GC2BS_RequestFrameActions.decode(data, size);
 		return msg;
 	}
 
@@ -954,8 +992,13 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static D_BS2GC_Action(data: Uint8Array, size: number): Protos.BS2GC_Action {
-		let msg = Protos.BS2GC_Action.decode(data, size);
+	public static D_BS2GC_FrameAction(data: Uint8Array, size: number): Protos.BS2GC_FrameAction {
+		let msg = Protos.BS2GC_FrameAction.decode(data, size);
+		return msg;
+	}
+
+	public static D_BS2GC_RequestFrameActionsRet(data: Uint8Array, size: number): Protos.BS2GC_RequestFrameActionsRet {
+		let msg = Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
 		return msg;
 	}
 
@@ -1078,7 +1121,10 @@ export class ProtoCreator {
 				return new Protos.GC2BS_RequestSnapshot();
 			}
 			case 1203: {
-				return new Protos.GC2BS_Action();
+				return new Protos.GC2BS_FrameAction();
+			}
+			case 1204: {
+				return new Protos.GC2BS_RequestFrameActions();
 			}
 			case 1300: {
 				return new Protos.GC2CS_BeginMatch();
@@ -1147,7 +1193,10 @@ export class ProtoCreator {
 				return new Protos.BS2GC_RequestSnapshotRet();
 			}
 			case 4105: {
-				return new Protos.BS2GC_Action();
+				return new Protos.BS2GC_FrameAction();
+			}
+			case 4106: {
+				return new Protos.BS2GC_RequestFrameActionsRet();
 			}
 			case 5000: {
 				return new Protos.CS2LS_GSInfos();
@@ -1238,7 +1287,10 @@ export class ProtoCreator {
 				return (<Protos.GC2BS_RequestSnapshot>message).opts;
 			}
 			case 1203: {
-				return (<Protos.GC2BS_Action>message).opts;
+				return (<Protos.GC2BS_FrameAction>message).opts;
+			}
+			case 1204: {
+				return (<Protos.GC2BS_RequestFrameActions>message).opts;
 			}
 			case 1300: {
 				return (<Protos.GC2CS_BeginMatch>message).opts;
@@ -1307,7 +1359,10 @@ export class ProtoCreator {
 				return (<Protos.BS2GC_RequestSnapshotRet>message).opts;
 			}
 			case 4105: {
-				return (<Protos.BS2GC_Action>message).opts;
+				return (<Protos.BS2GC_FrameAction>message).opts;
+			}
+			case 4106: {
+				return (<Protos.BS2GC_RequestFrameActionsRet>message).opts;
 			}
 			case 5000: {
 				return (<Protos.CS2LS_GSInfos>message).opts;

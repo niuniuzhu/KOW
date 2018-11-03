@@ -40,8 +40,16 @@ message BS2GC_BattleEnd {
 	uint32 id = 2;//战场id
 }
 
-message BS2GC_Action {
+//广播帧行为
+message BS2GC_FrameAction {
 	MsgOpts opts = 1;
 	int32 frame = 2;
 	bytes action = 3;//玩家ID到帧行为(已序列化)的映射
+}
+
+//回应请求帧行为记录
+message BS2GC_RequestFrameActionsRet {
+	MsgOpts opts = 1;
+	repeated int32 frames = 2;
+	repeated bytes actions = 3;
 }

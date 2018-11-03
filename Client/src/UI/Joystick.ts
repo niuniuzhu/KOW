@@ -7,8 +7,8 @@ export class Joystick extends fairygui.GComponent {
 	public set touchPosition(value: Vec2) { this.axis = value.Sub(this.cen); }
 	public get axis(): Vec2 { return this._axis; }
 	public set axis(value: Vec2) {
-		let length = value.Magnitude();
-		let normalAxis = length < 0.0001 ? Vec2.zero : value.DivN(length);
+		const length = value.Magnitude();
+		const normalAxis = length < 0.0001 ? Vec2.zero : value.DivN(length);
 
 		if (this._core != null) {
 			let touchAxis = value;

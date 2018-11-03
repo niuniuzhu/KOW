@@ -22,6 +22,14 @@ namespace BattleServer.User
 			return user;
 		}
 
+		public bool SendToUser( ulong gcNID, Google.Protobuf.IMessage message )
+		{
+			BSUser user = this.GetUser( gcNID );
+			if ( user == null )
+				return false;
+			return user.Send( message );
+		}
+
 		/// <summary>
 		/// 玩家上线,客户端请求登录时调用
 		/// </summary>

@@ -16,7 +16,8 @@ namespace BattleServer.Net
 			this._msgCenter.Register( Protos.MsgID.EGc2BsAskLogin, this.OnGc2BsAskLogin );
 			this._msgCenter.Register( Protos.MsgID.EGc2BsKeepAlive, this.OnGc2BsKeepAlive );
 			this._msgCenter.Register( Protos.MsgID.EGc2BsRequestSnapshot, this.OnGc2BsRequestSnapShot );
-			this._msgCenter.Register( Protos.MsgID.EGc2BsAction, this.OnGc2BsAction );
+			this._msgCenter.Register( Protos.MsgID.EGc2BsFrameAction, this.OnGc2BsFrameAction );
+			this._msgCenter.Register( Protos.MsgID.EGc2BsRequestFrameActions, this.OnGc2BsRequestFrameActions );
 		}
 
 		protected override void OnEstablish()
@@ -80,13 +81,25 @@ namespace BattleServer.Net
 
 		private ErrorCode OnGc2BsRequestSnapShot( Google.Protobuf.IMessage message )
 		{
-			BS.instance.battleManager.OnRequestSnapshot( this._gcNID, ( Protos.GC2BS_RequestSnapshot ) message );
+			Protos.GC2BS_RequestSnapshot request = ( Protos.GC2BS_RequestSnapshot ) message;
+			Protos.BS2GC_RequestSnapshotRet ret = ProtoCreator.R_GC2BS_RequestSnapshot( request.Opts.Pid );
+			BS.instance.battleManager.HandleRequestSnapshot( this._gcNID, request, ret );
+			this.Send( ret );
 			return ErrorCode.Success;
 		}
 
-		private ErrorCode OnGc2BsAction( Google.Protobuf.IMessage message )
+		private ErrorCode OnGc2BsFrameAction( Google.Protobuf.IMessage message )
 		{
-			BS.instance.battleManager.OnGCFrameAction( this._gcNID, ( Protos.GC2BS_Action ) message );
+			BS.instance.battleManager.HandleFrameAction( this._gcNID, ( Protos.GC2BS_FrameAction ) message );
+			return ErrorCode.Success;
+		}
+
+		private ErrorCode OnGc2BsRequestFrameActions( Google.Protobuf.IMessage message )
+		{
+			Protos.GC2BS_RequestFrameActions request = ( Protos.GC2BS_RequestFrameActions ) message;
+			Protos.BS2GC_RequestFrameActionsRet ret = ProtoCreator.R_GC2BS_RequestFrameActions( request.Opts.Pid );
+			BS.instance.battleManager.HandleRequestFrameActions( this._gcNID, request.From, request.To, ret );
+			this.Send( ret );
 			return ErrorCode.Success;
 		}
 	}

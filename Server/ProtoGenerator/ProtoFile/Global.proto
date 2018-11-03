@@ -18,7 +18,8 @@ enum MsgID {
 	eGC2BS_AskLogin = 1200;
 	eGC2BS_KeepAlive = 1201;
 	eGC2BS_RequestSnapshot = 1202;
-	eGC2BS_Action = 1203;
+	eGC2BS_FrameAction = 1203;
+	eGC2BS_RequestFrameActions = 1204;
 
 	eGC2CS_BeginMatch = 1300;
 	
@@ -52,7 +53,8 @@ enum MsgID {
 	eBS2GC_BattleStart = 4102;
 	eBS2GC_BattleEnd = 4103;
 	eBS2GC_RequestSnapshotRet = 4104;
-	eBS2GC_Action = 4105;
+	eBS2GC_FrameAction = 4105;
+	eBS2GC_RequestFrameActionsRet = 4106;
 
 	//cs
 	eCS2LS_GSInfos = 5000;
@@ -140,7 +142,8 @@ message Global{
 		"CS2GS_KickGC":"GS2CS_KickGCRet",
 		"BS2CS_BattleStart":"CS2BS_BattleStartRet",
 		"BS2CS_BattleEnd":"CS2BS_BattleEndRet",
-		"GC2BS_RequestSnapshot":"BS2GC_RequestSnapshotRet"
+		"GC2BS_RequestSnapshot":"BS2GC_RequestSnapshotRet",
+		"GC2BS_RequestFrameActions":"BS2GC_RequestFrameActionsRet"
 	}
 }
 </ext>

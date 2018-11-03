@@ -149,7 +149,8 @@ export namespace Protos {
         eGC2BS_AskLogin = 1200,
         eGC2BS_KeepAlive = 1201,
         eGC2BS_RequestSnapshot = 1202,
-        eGC2BS_Action = 1203,
+        eGC2BS_FrameAction = 1203,
+        eGC2BS_RequestFrameActions = 1204,
         eGC2CS_BeginMatch = 1300,
         eLS2GC_GSInfo = 2000,
         eLS2GC_AskRegRet = 2001,
@@ -172,7 +173,8 @@ export namespace Protos {
         eBS2GC_BattleStart = 4102,
         eBS2GC_BattleEnd = 4103,
         eBS2GC_RequestSnapshotRet = 4104,
-        eBS2GC_Action = 4105,
+        eBS2GC_FrameAction = 4105,
+        eBS2GC_RequestFrameActionsRet = 4106,
         eCS2LS_GSInfos = 5000,
         eCS2LS_GSInfo = 5001,
         eCS2LS_GSLost = 5002,
@@ -407,25 +409,47 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
-    interface IBS2GC_Action {
+    interface IBS2GC_FrameAction {
         opts?: (Protos.IMsgOpts|null);
         frame?: (number|null);
         action?: (Uint8Array|null);
     }
 
-    class BS2GC_Action implements IBS2GC_Action {
-        constructor(properties?: Protos.IBS2GC_Action);
+    class BS2GC_FrameAction implements IBS2GC_FrameAction {
+        constructor(properties?: Protos.IBS2GC_FrameAction);
         public opts?: (Protos.IMsgOpts|null);
         public frame: number;
         public action: Uint8Array;
-        public static create(properties?: Protos.IBS2GC_Action): Protos.BS2GC_Action;
-        public static encode(message: Protos.IBS2GC_Action, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS2GC_Action, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_Action;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_Action;
+        public static create(properties?: Protos.IBS2GC_FrameAction): Protos.BS2GC_FrameAction;
+        public static encode(message: Protos.IBS2GC_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IBS2GC_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_FrameAction;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_FrameAction;
         public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_Action;
-        public static toObject(message: Protos.BS2GC_Action, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_FrameAction;
+        public static toObject(message: Protos.BS2GC_FrameAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IBS2GC_RequestFrameActionsRet {
+        opts?: (Protos.IMsgOpts|null);
+        frames?: (number[]|null);
+        actions?: (Uint8Array[]|null);
+    }
+
+    class BS2GC_RequestFrameActionsRet implements IBS2GC_RequestFrameActionsRet {
+        constructor(properties?: Protos.IBS2GC_RequestFrameActionsRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public frames: number[];
+        public actions: Uint8Array[];
+        public static create(properties?: Protos.IBS2GC_RequestFrameActionsRet): Protos.BS2GC_RequestFrameActionsRet;
+        public static encode(message: Protos.IBS2GC_RequestFrameActionsRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IBS2GC_RequestFrameActionsRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_RequestFrameActionsRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_RequestFrameActionsRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_RequestFrameActionsRet;
+        public static toObject(message: Protos.BS2GC_RequestFrameActionsRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
@@ -1084,27 +1108,49 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
-    interface IGC2BS_Action {
+    interface IGC2BS_FrameAction {
         opts?: (Protos.IMsgOpts|null);
         inputFlag?: (number|null);
         dx?: (number|null);
         dy?: (number|null);
     }
 
-    class GC2BS_Action implements IGC2BS_Action {
-        constructor(properties?: Protos.IGC2BS_Action);
+    class GC2BS_FrameAction implements IGC2BS_FrameAction {
+        constructor(properties?: Protos.IGC2BS_FrameAction);
         public opts?: (Protos.IMsgOpts|null);
         public inputFlag: number;
         public dx: number;
         public dy: number;
-        public static create(properties?: Protos.IGC2BS_Action): Protos.GC2BS_Action;
-        public static encode(message: Protos.IGC2BS_Action, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IGC2BS_Action, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2BS_Action;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2BS_Action;
+        public static create(properties?: Protos.IGC2BS_FrameAction): Protos.GC2BS_FrameAction;
+        public static encode(message: Protos.IGC2BS_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2BS_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2BS_FrameAction;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2BS_FrameAction;
         public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.GC2BS_Action;
-        public static toObject(message: Protos.GC2BS_Action, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public static fromObject(object: { [k: string]: any }): Protos.GC2BS_FrameAction;
+        public static toObject(message: Protos.GC2BS_FrameAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2BS_RequestFrameActions {
+        opts?: (Protos.IMsgOpts|null);
+        from?: (number|null);
+        to?: (number|null);
+    }
+
+    class GC2BS_RequestFrameActions implements IGC2BS_RequestFrameActions {
+        constructor(properties?: Protos.IGC2BS_RequestFrameActions);
+        public opts?: (Protos.IMsgOpts|null);
+        public from: number;
+        public to: number;
+        public static create(properties?: Protos.IGC2BS_RequestFrameActions): Protos.GC2BS_RequestFrameActions;
+        public static encode(message: Protos.IGC2BS_RequestFrameActions, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2BS_RequestFrameActions, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2BS_RequestFrameActions;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2BS_RequestFrameActions;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2BS_RequestFrameActions;
+        public static toObject(message: Protos.GC2BS_RequestFrameActions, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

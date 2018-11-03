@@ -9,7 +9,7 @@ export class Preloader {
 	public static Load(completeHandler: () => void): void {
 		Logger.Log("loading defs...");
 		Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, () => {
-			let json: JSON = Laya.loader.getRes("res/defs/b_defs.json");
+			const json: JSON = Laya.loader.getRes("res/defs/b_defs.json");
 			Defs.Init(json);
 			this.LoadUIRes(completeHandler);
 		}), undefined, Laya.Loader.JSON);
@@ -17,10 +17,10 @@ export class Preloader {
 
 	private static LoadUIRes(completeHandler: () => void): void {
 		Logger.Log("loading res...");
-		let preloads = Defs.GetPreloads();
-		let urls = [];
-		for (let u of preloads) {
-			let ss = u.split(",");
+		const preloads = Defs.GetPreloads();
+		const urls = [];
+		for (const u of preloads) {
+			const ss = u.split(",");
 			let loadType: string;
 			switch (ss[1]) {
 				case "1":

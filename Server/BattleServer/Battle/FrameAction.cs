@@ -47,7 +47,7 @@ namespace BattleServer.Battle
 		/// 合并规则是:相同标志位的,后者覆盖前者,不同标志位则使用并操作
 		/// 例如:在第n帧输入方向,n+1帧输入skill1,n+2帧再次输入方向,则最终结果是采用n+2帧的方向和skill1
 		/// </summary>
-		public void MergeFromProto( Protos.GC2BS_Action action )
+		public void MergeFromProto( Protos.GC2BS_FrameAction action )
 		{
 			InputFlag f = ( InputFlag ) action.InputFlag;
 			if ( ( f & InputFlag.Move ) > 0 )

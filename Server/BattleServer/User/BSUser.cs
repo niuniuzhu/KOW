@@ -29,11 +29,11 @@ namespace BattleServer.User
 		/// 发送消息
 		/// </summary>
 		/// <param name="msg">消息体</param>
-		public void Send( IMessage msg )
+		public bool Send( IMessage msg )
 		{
 			if ( !this.isConnected )
-				return;
-			BS.instance.netSessionMgr.Send( this.gcSID, msg, null, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
+				return false;
+			return BS.instance.netSessionMgr.Send( this.gcSID, msg, null, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
 		}
 	}
 }

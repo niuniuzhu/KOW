@@ -130,11 +130,12 @@ namespace Shared.Net
 		/// <param name="rpcHandler">rcp回调函数</param>
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
-		public void Send( uint sessionId, IMessage msg, System.Action<IMessage> rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
+		public bool Send( uint sessionId, IMessage msg, System.Action<IMessage> rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
 		{
 			if ( !this.GetSession( sessionId, out INetSession session ) )
-				return;
+				return false;
 			( ( NetSessionBase ) session ).Send( msg, rpcHandler, transTarget, nsid );
+			return true;
 		}
 
 		/// <summary>
@@ -172,15 +173,16 @@ namespace Shared.Net
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
 		/// <param name="all">是否在查询消息类型时对所有结果生效</param>
-		public void Send( SessionType sessionType, IMessage msg, System.Action<IMessage> rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u, bool all = true )
+		public bool Send( SessionType sessionType, IMessage msg, System.Action<IMessage> rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u, bool all = true )
 		{
 			if ( !this._typeToSession.TryGetValue( sessionType, out List<NetSessionBase> sessions ) )
-				return;
+				return false;
 			if ( !all )
 				sessions[0].Send( msg, rpcHandler, transTarget, nsid );
 			else
 				foreach ( NetSessionBase session in sessions )
 					session.Send( msg, rpcHandler, transTarget, nsid );
+			return true;
 		}
 
 		/// <summary>
@@ -190,11 +192,12 @@ namespace Shared.Net
 		/// <param name="data">数据</param>
 		/// <param name="offset">数据偏移量</param>
 		/// <param name="size">数据长度</param>
-		public void Send( uint sessionId, byte[] data, int offset, int size )
+		public bool Send( uint sessionId, byte[] data, int offset, int size )
 		{
 			if ( !this.GetSession( sessionId, out INetSession session ) )
-				return;
+				return false;
 			session.Send( data, offset, size );
+			return true;
 		}
 
 		/// <summary>
@@ -205,15 +208,16 @@ namespace Shared.Net
 		/// <param name="offset">数据偏移量</param>
 		/// <param name="size">数据长度</param>
 		/// <param name="once">在查询消息类型时是否只对第一个结果生效</param>
-		public void Send( SessionType sessionType, byte[] data, int offset, int size, bool once )
+		public bool Send( SessionType sessionType, byte[] data, int offset, int size, bool once )
 		{
 			if ( !this._typeToSession.TryGetValue( sessionType, out List<NetSessionBase> sessions ) )
-				return;
+				return false;
 			if ( once )
 				sessions[0].Send( data, offset, size );
 			else
 				foreach ( NetSessionBase session in sessions )
 					session.Send( data, offset, size );
+			return true;
 		}
 	}
 }

@@ -22,6 +22,8 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/FSM/FSM", "../FSM/
             this._battle = battle;
             this._fsm.ChangeState(EntityState_1.EntityState.Type.Idle);
         }
+        Dispose() {
+        }
         DecodeSnapshot(reader) {
             this._actorID = reader.int32();
             this._team = reader.int32();
@@ -34,6 +36,9 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/FSM/FSM", "../FSM/
             for (let i = 0; i < count; i++) {
                 this.attribute.Set(reader.int32(), reader.float());
             }
+        }
+        Update(dt) {
+            this._fsm.Update(dt);
         }
     }
     exports.Entity = Entity;

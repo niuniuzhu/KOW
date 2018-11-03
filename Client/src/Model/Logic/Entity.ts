@@ -38,6 +38,10 @@ export class Entity implements ISnapshotable {
 		this._fsm.ChangeState(EntityState.Type.Idle);
 	}
 
+	public Dispose(): void {
+
+	}
+
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._actorID = reader.int32();
 		this._team = reader.int32();
@@ -50,5 +54,9 @@ export class Entity implements ISnapshotable {
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), reader.float());
 		}
+	}
+
+	public Update(dt: number): void {
+		this._fsm.Update(dt);
 	}
 }

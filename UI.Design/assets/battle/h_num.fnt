@@ -1,4 +1,4 @@
-info creator=UIBuilder
+info creator=UIBuilder colored=true
 char id=48 img=v43z5 xoffset=0 yoffset=0 xadvance=0
 char id=49 img=v43z6 xoffset=0 yoffset=0 xadvance=0
 char id=50 img=v43z7 xoffset=0 yoffset=0 xadvance=0

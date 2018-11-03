@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1280,720" designImageLayer="1">
-  <controller name="c1" pages="0,,1," selected="0"/>
   <displayList>
-    <graph id="n1_ktvv" name="n1" xy="0,0" size="1280,720" type="rect" lineSize="0" fillColor="#ff000000"/>
-    <image id="n10_v43z" name="n10" src="v43zd" fileName="assets/bj01.png" xy="0,0" size="1280,720">
+    <image id="n10_v43z" name="n10" src="ia2h30" fileName="assets/bj.png" pkg="c7x5i49r" xy="0,2" size="1280,720">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
     <image id="n11_v43z" name="n11" src="v43zc" fileName="assets/bg01a.png" xy="0,378">
       <relation target="" sidePair="width-width,top-bottom"/>
-    </image>
-    <image id="n0_ktvv" name="n0" src="v43ze" fileName="assets/bjtu.png" xy="155,205" alpha="0">
-      <gearDisplay controller="c1" pages="0"/>
-    </image>
-    <image id="n6_ktvv" name="n6" src="ktvv9" fileName="assets/paihangbang.png" xy="1023,52" group="n9_z78x">
-      <relation target="" sidePair="right-right,top-top"/>
     </image>
     <image id="n5_ktvv" name="n5" src="ktvva" fileName="assets/touxiangkuang.png" pkg="c7x5i49r" xy="68,38" group="n12_p3fq"/>
     <image id="n7_ktvv" name="n7" src="ktvv8" fileName="assets/IDkuang.png" pkg="c7x5i49r" xy="186,70" group="n12_p3fq"/>
@@ -29,17 +21,11 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://kz9a1uy9ktvvb"/>
     </component>
-    <group id="n9_z78x" name="n9" xy="68,38" size="1144,452" advanced="true">
-      <gearDisplay controller="c1" pages="1"/>
-    </group>
+    <group id="n9_z78x" name="n9" xy="68,38" size="665,452" advanced="true"/>
   </displayList>
   <transition name="t0">
-    <item time="0" type="Alpha" target="n10_v43z" tween="true" startValue="0" endValue="1" duration="24"/>
-    <item time="24" type="Alpha" target="n10_v43z" tween="true" startValue="1"/>
-  </transition>
-  <transition name="t1">
-    <item time="0" type="Alpha" target="n9_z78x" tween="true" startValue="0" endValue="1" duration="6"/>
-    <item time="0" type="XY" target="n3_ktvv" tween="true" startValue="192,249" endValue="546,249" duration="4" ease="Circ.Out"/>
-    <item time="0" type="XY" target="n4_ktvv" tween="true" startValue="945,445" endValue="545,445" duration="4" ease="Circ.Out"/>
+    <item time="0" type="Alpha" target="n9_z78x" tween="true" startValue="0" endValue="1" duration="5"/>
+    <item time="0" type="XY" target="n3_ktvv" tween="true" startValue="192,249" endValue="546,249" duration="3" ease="Circ.Out"/>
+    <item time="0" type="XY" target="n4_ktvv" tween="true" startValue="945,445" endValue="545,445" duration="3" ease="Circ.Out"/>
   </transition>
 </component>

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", "./Champion", "../../Libs/protobufjs"], function (require, exports, Queue_1, FrameAction_1, Champion_1, $protobuf) {
+define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", "./Champion", "../../Libs/protobufjs", "../../RC/Utils/Logger"], function (require, exports, Queue_1, FrameAction_1, Champion_1, $protobuf, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -84,6 +84,7 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
         }
         UpdateLogic(rdt, dt) {
             ++this._frame;
+            Logger_1.Logger.Log("f" + this._frame);
             const count = this._entities.length;
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];

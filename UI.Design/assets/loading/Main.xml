@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1280,720">
+  <displayList>
+    <image id="n0_ia2h" name="n0" src="ia2h30" fileName="assets/bj.png" pkg="c7x5i49r" xy="0,0" size="1280,720">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <component id="n1_ia2h" name="n1" src="ia2h4" fileName="progress.xml" xy="267,599">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <ProgressBar value="13" max="100"/>
+    </component>
+  </displayList>
+</component>

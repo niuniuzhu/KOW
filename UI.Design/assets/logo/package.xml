@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <packageDescription id="05ewitws" jpegQuality="80" compressPNG="true">
   <resources>
-    <image id="p7qk0" name="bjtu.png" path="/assets/" scale="" qualityOption="custom" quality="50"/>
     <component id="p7qk1" name="Main.xml" path="/" exported="true"/>
     <movieclip id="p7qk2" name="mat_ani.jta" path="/"/>
     <image id="v43z6" name="loader_01.png" path="/matching_ani/"/>
@@ -26,6 +25,7 @@
     <component id="p7qk3" name="loading.xml" path="/"/>
     <image id="p7qk4" name="bg01a.png" path="/assets/"/>
     <component id="p7qk5" name="loading2.xml" path="/"/>
+    <image id="ia2hp" name="gamelogo.png" path="/assets/"/>
   </resources>
   <publish name="logo"/>
 </packageDescription>

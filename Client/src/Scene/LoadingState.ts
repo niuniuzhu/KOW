@@ -114,8 +114,9 @@ export class LoadingState extends SceneState {
 			Laya.loader.load(urls, Laya.Handler.create(this, () => {
 				fairygui.UIPackage.addPackage("res/ui/assets");
 				this._assetsLoadComplete = true;
-
 				this.InitBattle();
+			}), new laya.utils.Handler(this, p => {
+				this._ui.OnLoadProgress(p);
 			}));
 		}
 	}
@@ -125,8 +126,8 @@ export class LoadingState extends SceneState {
 	 */
 	private InitBattle(): void {
 		//初始化战场,解码快照
-		BattleManager.instance.Init(this._battleInfo, ()=>{
-			
+		BattleManager.instance.Init(this._battleInfo, () => {
+			SceneManager.ChangeState(SceneManager.State.Battle);
 		});
 	}
 }

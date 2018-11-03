@@ -5,6 +5,7 @@ import { Entity } from "./Entity";
 import { BattleInfo } from "../BattleInfo";
 import { Champion } from "./Champion";
 import * as $protobuf from "../../Libs/protobufjs";
+import { Logger } from "../../RC/Utils/Logger";
 
 export class Battle implements ISnapshotable {
 	/**
@@ -28,7 +29,6 @@ export class Battle implements ISnapshotable {
 	private _nextKeyFrame: number = 0;
 	private _logicElapsed: number = 0;
 	private _realElapsed: number = 0;
-	private _chaseCount: number = 0;
 
 	private readonly _frameActions: Queue<FrameAction> = new Queue<FrameAction>();
 	private readonly _entities: Entity[] = [];
@@ -60,7 +60,6 @@ export class Battle implements ISnapshotable {
 		this._nextKeyFrame = 0;
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
-		this._chaseCount = 0;
 		this._frameActions.clear();
 	}
 
@@ -124,6 +123,7 @@ export class Battle implements ISnapshotable {
 
 	private UpdateLogic(rdt: number, dt: number): void {
 		++this._frame;
+		Logger.Log("f" + this._frame);
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];

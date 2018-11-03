@@ -47,7 +47,7 @@ export class Main {
 			logoRoot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
 			fairygui.GRoot.inst.addChild(logoRoot);
 
-			logoRoot.getTransition("t0").play(new laya.utils.Handler(this, () => {
+			logoRoot.getTransition("t0").play(Laya.Handler.create(this, () => {
 				this._fadeInComplete = true;
 				this.CheckPreloadComplete();
 			}), 1, 0, 0, -1);
@@ -62,7 +62,7 @@ export class Main {
 	private CheckPreloadComplete(): void {
 		if (this._fadeInComplete && this._preloadComplete) {
 			const logoRoot = fairygui.GRoot.inst.getChild("logoRoot").asCom;
-			logoRoot.getTransition("t1").play(new laya.utils.Handler(this, () => {
+			logoRoot.getTransition("t1").play(Laya.Handler.create(this, () => {
 				logoRoot.dispose();
 				this.StartGame();
 			}), 1, 0, 0, -1);

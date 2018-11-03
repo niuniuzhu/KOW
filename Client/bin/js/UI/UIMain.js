@@ -15,10 +15,7 @@ define(["require", "exports", "../Scene/SceneManager", "../Graphic"], function (
         }
         Enter(param) {
             Graphic_1.Graphic.uiRoot.addChild(this._root);
-            this._root.getTransition("t0").play(new laya.utils.Handler(this, () => {
-                this._root.getController("c1").selectedIndex = 1;
-                this._root.getTransition("t1").play();
-            }), 0, 0, 0, -1);
+            this._root.getTransition("t0").play();
         }
         Exit() {
             Graphic_1.Graphic.uiRoot.removeChild(this._root);

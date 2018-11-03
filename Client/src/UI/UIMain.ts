@@ -21,10 +21,7 @@ export class UIMain implements IUIModule {
 
 	public Enter(param: any): void {
 		Graphic.uiRoot.addChild(this._root);
-		this._root.getTransition("t0").play(new laya.utils.Handler(this, () => {
-			this._root.getController("c1").selectedIndex = 1;
-			this._root.getTransition("t1").play();
-		}), 0, 0, 0, -1);
+		this._root.getTransition("t0").play();
 	}
 
 	public Exit(): void {

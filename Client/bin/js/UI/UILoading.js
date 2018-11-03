@@ -1,16 +1,25 @@
-define(["require", "exports", "../Libs/protos", "./UIAlert"], function (require, exports, protos_1, UIAlert_1) {
+define(["require", "exports", "../Libs/protos", "./UIAlert", "../Graphic"], function (require, exports, protos_1, UIAlert_1, Graphic_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UILoading {
         get root() { return this._root; }
         constructor() {
+            fairygui.UIPackage.addPackage("res/ui/loading");
+            this._root = fairygui.UIPackage.createObject("loading", "Main").asCom;
+            this._root.setSize(Graphic_1.Graphic.uiRoot.width, Graphic_1.Graphic.uiRoot.height);
+            this._root.addRelation(Graphic_1.Graphic.uiRoot, fairygui.RelationType.Size);
+            this._progressBar = this._root.getChild("n0").asProgress;
+            this._progressBar.max = 100;
+            this._progressBar.value = 10;
         }
         Dispose() {
             this._root.dispose();
         }
         Enter(param) {
+            Graphic_1.Graphic.uiRoot.addChild(this._root);
         }
         Exit() {
+            Graphic_1.Graphic.uiRoot.removeChild(this._root);
         }
         Update(dt) {
         }
@@ -38,6 +47,9 @@ define(["require", "exports", "../Libs/protos", "./UIAlert"], function (require,
                     UIAlert_1.UIAlert.Show("进入战场失败", onConfirm);
                     break;
             }
+        }
+        OnLoadProgress(p) {
+            this._progressBar.value = 10 + p * 90;
         }
     }
     exports.UILoading = UILoading;

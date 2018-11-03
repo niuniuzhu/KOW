@@ -43,11 +43,10 @@
     <image id="v43z13" name="x_9.png" path="/assets/fonts/"/>
     <image id="v43z14" name="x_j.png" path="/assets/fonts/"/>
     <image id="v43z15" name="xin.png" path="/assets/"/>
-    <image id="v43z16" name="xuetiao.png" path="/assets/"/>
-    <image id="v43z17" name="xuetiaodi.png" path="/assets/"/>
+    <image id="v43z16" name="xuetiao.png" path="/assets/" scale="tile"/>
+    <image id="v43z17" name="xuetiaodi.png" path="/assets/" scale="tile"/>
     <image id="v43z18" name="yaogan01.png" path="/assets/"/>
     <image id="v43z19" name="yaogan02.png" path="/assets/"/>
-    <image id="v43z1a" name="05战斗页面效果图.jpg" path="/assets/"/>
     <font id="v43z1b" name="h_num.fnt" path="/" exported="true"/>
     <font id="v43z1c" name="d_num.fnt" path="/" exported="true"/>
     <font id="v43z1d" name="t_num.fnt" path="/" exported="true"/>
@@ -58,6 +57,7 @@
     <component id="p7qk1i" name="nuqi.xml" path="/"/>
     <component id="p7qk1j" name="hp_bar.xml" path="/"/>
     <component id="p7qk1l" name="layer_battle.xml" path="/assets/"/>
+    <image id="ia2h1m" name="05战斗页面效果图(1).jpg" path="/assets/"/>
   </resources>
   <publish name="battle"/>
 </packageDescription>

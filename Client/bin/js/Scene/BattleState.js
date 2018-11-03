@@ -8,7 +8,6 @@ define(["require", "exports", "./SceneState", "../UI/UIManager"], function (requ
         }
         OnEnter(param) {
             super.OnEnter(param);
-            let loginRet = param;
         }
         OnExit() {
             super.OnExit();

@@ -5,13 +5,14 @@
     <sound id="lqz41s" name="click.wav" path="/assets/" exported="true"/>
     <component id="w4k42s" name="modelWait.xml" path="/coms/" exported="true"/>
     <component id="vk6y2u" name="alert.xml" path="/coms/" exported="true"/>
-    <image id="ktvv5" name="anniu.png" path="/assets/"/>
     <component id="ktvv2w" name="btn1.xml" path="/coms/" exported="true"/>
     <image id="ktvv8" name="IDkuang.png" path="/assets/" exported="true"/>
     <image id="ktvva" name="touxiangkuang.png" path="/assets/" exported="true"/>
     <image id="v43z2x" name="anniuwenzi_01.png" path="/assets/"/>
     <image id="v43z2y" name="anniuwenzi_02.png" path="/assets/"/>
     <image id="v43z2z" name="tanchukuang.png" path="/assets/" scale="9grid" scale9grid="255,77,150,230"/>
+    <image id="ia2h30" name="bj.png" path="/assets/" exported="true" scale="tile"/>
+    <image id="ia2h31" name="anniu.png" path="/assets/"/>
   </resources>
   <publish name="global"/>
 </packageDescription>

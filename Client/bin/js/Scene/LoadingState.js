@@ -69,11 +69,14 @@ define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../UI/UIMa
                     fairygui.UIPackage.addPackage("res/ui/assets");
                     this._assetsLoadComplete = true;
                     this.InitBattle();
+                }), new laya.utils.Handler(this, p => {
+                    this._ui.OnLoadProgress(p);
                 }));
             }
         }
         InitBattle() {
             BattleManager_1.BattleManager.instance.Init(this._battleInfo, () => {
+                SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Battle);
             });
         }
     }

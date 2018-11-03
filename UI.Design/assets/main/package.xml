@@ -7,8 +7,6 @@
     <image id="ktvv9" name="paihangbang.png" path="/assets/"/>
     <image id="ktvvb" name="yaoqinghaoyou.png" path="/assets/"/>
     <image id="v43zc" name="bg01a.png" path="/assets/"/>
-    <image id="v43zd" name="bj01.png" path="/assets/" scale="tile"/>
-    <image id="v43ze" name="bjtu.png" path="/assets/"/>
   </resources>
   <publish name="main"/>
 </packageDescription>

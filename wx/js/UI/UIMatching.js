@@ -22,9 +22,6 @@ export class UIMatching {
     }
     OnResize(e) {
     }
-    OnConnectToBSError() {
-        UIAlert.Show("无法连接服务器", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
-    }
     OnBeginMatchResult(result) {
         let error = "";
         switch (result) {
@@ -47,31 +44,14 @@ export class UIMatching {
                 break;
         }
         if (error != "") {
-            UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
-        }
-    }
-    OnEnterBattleResult(result) {
-        switch (result) {
-            case Protos.CS2GC_EnterBattle.Error.Success:
-                break;
-            case Protos.CS2GC_EnterBattle.Error.BSLost:
-            case Protos.CS2GC_EnterBattle.Error.BSNotFound:
-            case Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
-                UIAlert.Show("登录战场失败", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
-                break;
-        }
-    }
-    OnLoginBSResut(result) {
-        switch (result) {
-            case Protos.Global.ECommon.Success:
-                break;
-            default:
-                UIAlert.Show("进入战场失败", () => SceneManager.ChangeState(SceneManager.State.Matching, null, true));
-                break;
+            UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Login));
         }
     }
     UpdateRoomInfo(roomInfo) {
     }
     UpdatePlayers(_players) {
+    }
+    HandleFullPlayer(completeHandler) {
+        completeHandler();
     }
 }

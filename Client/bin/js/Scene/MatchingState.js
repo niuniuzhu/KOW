@@ -28,8 +28,7 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
         }
         OnPlayerJoint(message) {
             const playerJoin = message;
-            this._players.push(playerJoin.playerInfos);
-            this._ui.UpdatePlayers(this._players);
+            this._ui.OnPlayerJoin(playerJoin.playerInfos);
             if (this._players.length == this._maxPlayers) {
                 this._ui.HandleFullPlayer(() => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading));
             }
@@ -40,7 +39,7 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
                 const player = this._players[i];
                 if (player.gcNID == playerLeave.gcNID) {
                     this._players.splice(i, 1);
-                    this._ui.UpdatePlayers(this._players);
+                    this._ui.OnPlayerLeave(player);
                     return;
                 }
             }
@@ -60,7 +59,6 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
                             const playerInfo = resp.playerInfos[i];
                             this._players.push(playerInfo);
                         }
-                        this._ui.UpdatePlayers(this._players);
                         Logger_1.Logger.Log("begin match");
                         break;
                 }

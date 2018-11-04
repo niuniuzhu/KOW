@@ -48,7 +48,9 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
         }
         UpdateRoomInfo(roomInfo) {
         }
-        UpdatePlayers(_players) {
+        OnPlayerJoin(player) {
+        }
+        OnPlayerLeave(player) {
         }
         HandleFullPlayer(completeHandler) {
             completeHandler();

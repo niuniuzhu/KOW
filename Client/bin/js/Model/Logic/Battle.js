@@ -93,7 +93,6 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             }
         }
         ApplyFrameAction(frameAction) {
-            this._frameActionGroups.clear();
         }
         OnFrameAction(frame, data) {
             const fag = new FrameActionGroup_1.FrameActionGroup(frame);

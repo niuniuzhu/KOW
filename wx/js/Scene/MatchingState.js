@@ -5,11 +5,13 @@ import { ProtoCreator } from "../Net/ProtoHelper";
 import { SceneState } from "./SceneState";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
-import { PreloadInstance } from "./PreloadInstance";
 export class MatchingState extends SceneState {
     constructor(type) {
         super(type);
         this.__ui = this._ui = UIManager.matching;
+        Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
+        Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
+        Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
     }
     OnEnter(param) {
         super.OnEnter(param);
@@ -17,35 +19,27 @@ export class MatchingState extends SceneState {
         this._mapID = 0;
         this._maxPlayers = 0;
         this._players = [];
-        Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
-        Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
-        Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-        Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
         this.BeginMatch();
     }
     OnExit() {
-        Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
-        Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
-        Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
-        Connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
         super.OnExit();
     }
     OnUpdate(dt) {
     }
     OnUpdateRoomInfo(message) {
-        let roomInfo = message;
+        const roomInfo = message;
         this._ui.UpdateRoomInfo(roomInfo);
     }
     OnPlayerJoint(message) {
-        let playerJoin = message;
+        const playerJoin = message;
         this._players.push(playerJoin.playerInfos);
         this._ui.UpdatePlayers(this._players);
         if (this._players.length == this._maxPlayers) {
-            this.StartLoad(this._mapID, this._players);
+            this._ui.HandleFullPlayer(() => SceneManager.ChangeState(SceneManager.State.Loading));
         }
     }
     OnPlayerLeave(message) {
-        let playerLeave = message;
+        const playerLeave = message;
         for (let i = 0; i < this._players.length; i++) {
             const player = this._players[i];
             if (player.gcNID == playerLeave.gcNID) {
@@ -55,36 +49,11 @@ export class MatchingState extends SceneState {
             }
         }
     }
-    OnEnterBattle(message) {
-        let enterBattle = message;
-        if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
-            this._ui.OnEnterBattleResult(enterBattle.error);
-        }
-        else {
-            let connector = Connector.bsConnector;
-            connector.onerror = () => this._ui.OnConnectToBSError();
-            connector.onopen = () => {
-                Logger.Log("BS Connected");
-                let askLogin = ProtoCreator.Q_GC2BS_AskLogin();
-                askLogin.sessionID = enterBattle.gcNID;
-                connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
-                    let resp = message;
-                    this._ui.OnLoginBSResut(resp.result);
-                    switch (resp.result) {
-                        case Protos.Global.ECommon.Success:
-                            SceneManager.ChangeState(SceneManager.State.Battle, resp);
-                            break;
-                    }
-                });
-            };
-            connector.Connect(enterBattle.ip, enterBattle.port);
-        }
-    }
     BeginMatch() {
-        let beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
+        const beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
         beginMatch.actorID = 0;
         Connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
-            let resp = message;
+            const resp = message;
             this._ui.OnBeginMatchResult(resp.result);
             switch (resp.result) {
                 case Protos.CS2GC_BeginMatchRet.EResult.Success:
@@ -100,15 +69,5 @@ export class MatchingState extends SceneState {
                     break;
             }
         });
-    }
-    StartLoad(mapID, playerInfos) {
-        Logger.Log("instancing");
-        PreloadInstance.Load(mapID, playerInfos, this.OnInstancingComplete);
-    }
-    OnInstancingComplete() {
-        Logger.Log("instancing complete");
-        let msg = ProtoCreator.Q_GC2CS_UpdatePlayerInfo();
-        msg.progress = 100;
-        Connector.SendToCS(Protos.GC2CS_UpdatePlayerInfo, msg);
     }
 }

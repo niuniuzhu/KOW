@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS `account_user`;
 CREATE TABLE `account_user` (
   `id` int (11) unsigned NOT NULL AUTO_INCREMENT,
   `sdk` tinyint(4) unsigned NOT NULL,
-  `uname` varchar(32) NOT NULL,
+  `uname` varchar(36) NOT NULL,
   `pwd` varchar(32) NOT NULL,
   `last_login_time` bigint(20) NOT NULL,
   `last_login_ip` varchar(46) NOT NULL,

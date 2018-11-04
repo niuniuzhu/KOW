@@ -8,7 +8,7 @@ using System.IO;
 
 namespace GateServer
 {
-	public partial class GS
+	public class GS
 	{
 		private static GS _instance;
 		public static GS instance => _instance ?? ( _instance = new GS() );

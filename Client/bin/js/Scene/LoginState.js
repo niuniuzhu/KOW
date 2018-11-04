@@ -49,7 +49,7 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
         }
         LoginGS(ip, port, pwd, gcNID) {
             const connector = Connector_1.Connector.gsConnector;
-            connector.onerror = () => this._ui.OnConnectToGSError();
+            connector.onerror = (e) => this._ui.OnConnectToGSError(e);
             connector.onopen = () => {
                 Logger_1.Logger.Log("GS Connected");
                 const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();

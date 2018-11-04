@@ -1,4 +1,4 @@
-define(["require", "exports", "./Consts", "./UI/UIManager", "./Scene/SceneManager", "./Net/Connector", "./Net/ProtoHelper", "./RC/Utils/Logger", "./Preloader", "./Libs/protobufjs", "./Libs/long", "./Graphic", "./Env", "./RC/Utils/Hashtable"], function (require, exports, Consts_1, UIManager_1, SceneManager_1, Connector_1, ProtoHelper_1, Logger_1, Preloader_1, $protobuf, Long, Graphic_1, Env_1, Hashtable_1) {
+define(["require", "exports", "./Consts", "./Env", "./RC/Utils/Hashtable", "./Preloader", "./RC/Utils/Logger", "./Net/ProtoHelper", "./Net/Connector", "./Graphic", "./UI/UIManager", "./Scene/SceneManager", "./Model/BattleManager", "./Libs/protobufjs", "./Libs/long"], function (require, exports, Consts_1, Env_1, Hashtable_1, Preloader_1, Logger_1, ProtoHelper_1, Connector_1, Graphic_1, UIManager_1, SceneManager_1, BattleManager_1, $protobuf, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
@@ -12,7 +12,8 @@ define(["require", "exports", "./Consts", "./UI/UIManager", "./Scene/SceneManage
             Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
             Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
             fairygui.UIConfig.packageFileExtension = "bin";
-            Env_1.Env.platform = Hashtable_1.Hashtable.GetNumber(JSON.parse(config), "platform");
+            const cfgJson = JSON.parse(config);
+            Env_1.Env.platform = Hashtable_1.Hashtable.GetNumber(cfgJson, "platform");
             this.ShowLogo();
         }
         ShowLogo() {
@@ -57,6 +58,7 @@ define(["require", "exports", "./Consts", "./UI/UIManager", "./Scene/SceneManage
             Graphic_1.Graphic.Init();
             UIManager_1.UIManager.Init();
             SceneManager_1.SceneManager.Init();
+            BattleManager_1.BattleManager.Init();
             SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login);
             fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
             Laya.timer.frameLoop(1, this, this.Update);

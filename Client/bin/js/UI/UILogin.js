@@ -122,9 +122,9 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                 this._areaList.selectedIndex = 0;
             this.contentPane.getController("c1").selectedIndex = 2;
         }
-        OnConnectToGSError() {
+        OnConnectToGSError(e) {
             this.closeModalWait();
-            UIAlert_1.UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
+            UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
         }
         OnLoginGSResult(resp) {
             this.closeModalWait();

@@ -129,7 +129,7 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		}
 	}
 
-	public OnConnectToLSError(e:Event): void {
+	public OnConnectToLSError(e: Event): void {
 		UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
 	}
 
@@ -147,9 +147,9 @@ export class UILogin extends fairygui.Window implements IUIModule {
 		this.contentPane.getController("c1").selectedIndex = 2;
 	}
 
-	public OnConnectToGSError(): void {
+	public OnConnectToGSError(e: Event): void {
 		this.closeModalWait();
-		UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
+		UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
 	}
 
 	public OnLoginGSResult(resp: Protos.GS2GC_LoginRet): void {

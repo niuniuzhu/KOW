@@ -3,9 +3,10 @@ define(["require", "exports", "./View/VBattle", "./Logic/Battle", "../Libs/proto
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleManager {
         static get instance() {
-            if (this._instance == null)
-                this._instance = new BattleManager();
             return this._instance;
+        }
+        static Init() {
+            this._instance = new BattleManager();
         }
         get lBattle() { return this._lBattle; }
         get vBattle() { return this._vBattle; }

@@ -85,7 +85,7 @@ export class LoginState extends SceneState {
 	 */
 	public LoginGS(ip: string, port: number, pwd: string, gcNID: Long): void {
 		const connector = Connector.gsConnector;
-		connector.onerror = () => this._ui.OnConnectToGSError();
+		connector.onerror = (e) => this._ui.OnConnectToGSError(e);
 		connector.onopen = () => {
 			Logger.Log("GS Connected");
 			const askLogin = ProtoCreator.Q_GC2GS_AskLogin();

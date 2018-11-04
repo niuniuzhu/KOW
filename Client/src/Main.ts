@@ -3,7 +3,6 @@ import { Env } from "./Env";
 import { Hashtable } from "./RC/Utils/Hashtable";
 import { Preloader } from "./Preloader";
 import { Logger } from "./RC/Utils/Logger";
-import Long = require("./Libs/long");
 import { ProtoCreator } from "./Net/ProtoHelper";
 import { Connector } from "./Net/Connector";
 import { Graphic } from "./Graphic";
@@ -11,6 +10,7 @@ import { UIManager } from "./UI/UIManager";
 import { SceneManager } from "./Scene/SceneManager";
 import { BattleManager } from "./Model/BattleManager";
 import * as $protobuf from "./Libs/protobufjs";
+import * as Long from "./Libs/long";
 
 export class Main {
 	private static _instance: Main;
@@ -30,7 +30,8 @@ export class Main {
 		// laya.utils.Stat.show(0, 0);
 		fairygui.UIConfig.packageFileExtension = "bin";
 
-		Env.platform = Hashtable.GetNumber(JSON.parse(config), "platform");
+		const cfgJson = JSON.parse(config);
+		Env.platform = Hashtable.GetNumber(cfgJson, "platform");
 
 		this.ShowLogo();
 	}

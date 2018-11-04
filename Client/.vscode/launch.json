@@ -26,6 +26,19 @@
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",
 			"disableNetworkCache": true
+		},
+		{
+			"name": "kow(pressure)",
+			"type": "chrome",
+			"request": "launch",
+			"file": "${workspaceRoot}/bin/index.html?mode=1",
+			"runtimeArgs": [
+				"--allow-file-access-from-files",
+				"--auto-open-devtools-for-tabs"
+			],
+			"sourceMaps": true,
+			"webRoot": "${workspaceRoot}",
+			"disableNetworkCache": true
 		}
 	]
 }

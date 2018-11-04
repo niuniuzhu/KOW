@@ -47,7 +47,7 @@ export class GestureState {
     }
     HideJoystick() {
         this._joystick.Reset(true);
-        this._tween.to(this._joystick.sprite, { alpha: 0 }, 0.2, laya.utils.Ease.quadOut, new laya.utils.Handler(this, this.OnJoystickHideComplete));
+        this._tween.to(this._joystick.sprite, { alpha: 0 }, 0.2, laya.utils.Ease.quadOut, Laya.Handler.create(this, this.OnJoystickHideComplete));
     }
     OnJoystickHideComplete() {
         this._joystick.visible = false;

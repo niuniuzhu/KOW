@@ -48,7 +48,7 @@ export class UILogin extends fairygui.Window {
             return;
         }
         this.showModalWait();
-        SceneManager.login.RequestRegister(regName, 0, 0);
+        SceneManager.login.Register(regName, 0, 0);
     }
     OnLoginBtnClick() {
         let uname = this.contentPane.getChild("name").asTextField.text;
@@ -57,13 +57,13 @@ export class UILogin extends fairygui.Window {
             return;
         }
         this.showModalWait();
-        SceneManager.login.RequestLogin(uname, 0, 0);
+        SceneManager.login.Login(uname, 0, 0);
     }
     OnEnterBtnClick() {
         let item = this._areaList.getChildAt(this._areaList.selectedIndex);
         let data = item.data["data"];
         this.showModalWait();
-        SceneManager.login.RequestLoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
+        SceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
     }
     OnAreaClick() {
     }
@@ -106,8 +106,8 @@ export class UILogin extends fairygui.Window {
                 break;
         }
     }
-    OnConnectToLSError(e, confirmCallback) {
-        UIAlert.Show("无法连接服务器[" + e.toString() + "]", confirmCallback);
+    OnConnectToLSError(e) {
+        UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
     }
     HandleLoginLSSuccess(loginResult) {
         this._areaList.removeChildrenToPool();

@@ -32,7 +32,7 @@ namespace Shared
 		/// <summary>
 		/// 用户名最大长度
 		/// </summary>
-		public const int DEFAULT_UNAME_MAX_LEN = 10;
+		public const int DEFAULT_UNAME_MAX_LEN = 36;
 
 		/// <summary>
 		/// 密码最小长度

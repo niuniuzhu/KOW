@@ -54,8 +54,7 @@ export class MatchingState extends SceneState {
 
 	private OnPlayerJoint(message: any): void {
 		const playerJoin: Protos.CS2GC_PlayerJoin = <Protos.CS2GC_PlayerJoin>message;
-		this._players.push(playerJoin.playerInfos);
-		this._ui.UpdatePlayers(this._players);
+		this._ui.OnPlayerJoin(playerJoin.playerInfos);
 		if (this._players.length == this._maxPlayers) {
 			//满员后切换到加载资源状态
 			this._ui.HandleFullPlayer(() => SceneManager.ChangeState(SceneManager.State.Loading));
@@ -68,7 +67,7 @@ export class MatchingState extends SceneState {
 			const player = this._players[i];
 			if (player.gcNID == playerLeave.gcNID) {
 				this._players.splice(i, 1);
-				this._ui.UpdatePlayers(this._players);
+				this._ui.OnPlayerLeave(player);
 				return;
 			}
 		}
@@ -95,7 +94,6 @@ export class MatchingState extends SceneState {
 						const playerInfo = resp.playerInfos[i];
 						this._players.push(playerInfo);
 					}
-					this._ui.UpdatePlayers(this._players);
 					Logger.Log("begin match");
 					break;
 			}

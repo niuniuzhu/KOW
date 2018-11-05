@@ -79,7 +79,7 @@ namespace Shared.DB
 		/// <param name="command">sql指令</param>
 		/// <param name="rows">影响的行数</param>
 		/// <returns>错误信息</returns>
-		public ErrorCode SqlExecNonQuery( string command, out int rows, out long id )
+		public ErrorCode SqlExecNonQuery( string command, out int rows, out uint id )
 		{
 			rows = 0;
 			id = 0;
@@ -95,7 +95,7 @@ namespace Shared.DB
 				this._db.Open();
 				sqlCmd.CommandText = command;
 				rows = sqlCmd.ExecuteNonQuery();
-				id = sqlCmd.LastInsertedId;
+				id = ( uint ) sqlCmd.LastInsertedId;
 			}
 			catch ( Exception e )
 			{

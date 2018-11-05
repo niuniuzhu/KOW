@@ -65,7 +65,7 @@ namespace DBServer.Net
 				} );
 
 			if ( errorCode == ErrorCode.Success )
-				errorCode = DB.instance.accountDB.SqlExecNonQuery( $"update account_user SET last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out long _ );
+				errorCode = DB.instance.accountDB.SqlExecNonQuery( $"update account_user SET last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out uint _ );
 
 			switch ( errorCode )
 			{
@@ -87,7 +87,7 @@ namespace DBServer.Net
 		{
 			Protos.LS2DB_Exec exec = ( Protos.LS2DB_Exec ) message;
 			Protos.DB2LS_ExecRet execRet = ProtoCreator.R_LS2DB_Exec( exec.Opts.Pid );
-			ErrorCode errorCode = DB.instance.accountDB.SqlExecNonQuery( exec.Cmd, out int row, out long id );
+			ErrorCode errorCode = DB.instance.accountDB.SqlExecNonQuery( exec.Cmd, out int row, out uint id );
 			execRet.Row = row;
 			execRet.Id = id;
 			execRet.Result = errorCode == ErrorCode.Success ? Protos.DB2LS_QueryResult.Success : Protos.DB2LS_QueryResult.Failed;

@@ -32,7 +32,7 @@ namespace Protos {
             "UmVzdWx0EgwKBHVrZXkYAyABKA0icgoNREIyTFNfRXhlY1JldBIdCgRvcHRz",
             "GAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSKQoGcmVzdWx0GAIgASgOMhkuUHJv",
             "dG9zLkRCMkxTX1F1ZXJ5UmVzdWx0EgsKA3JvdxgDIAEoBRIKCgJpZBgEIAEo",
-            "AyphChFEQjJMU19RdWVyeVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVk",
+            "DSphChFEQjJMU19RdWVyeVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVk",
             "EAESEQoNVXNlcm5hbWVFeGlzdBACEhAKDEludmFsaWRVbmFtZRADEg4KCklu",
             "dmFsaWRQd2QQBGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
@@ -484,9 +484,9 @@ namespace Protos {
 
     /// <summary>Field number for the "id" field.</summary>
     public const int IdFieldNumber = 4;
-    private long id_;
+    private uint id_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public long Id {
+    public uint Id {
       get { return id_; }
       set {
         id_ = value;
@@ -519,7 +519,7 @@ namespace Protos {
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
       if (Row != 0) hash ^= Row.GetHashCode();
-      if (Id != 0L) hash ^= Id.GetHashCode();
+      if (Id != 0) hash ^= Id.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -545,9 +545,9 @@ namespace Protos {
         output.WriteRawTag(24);
         output.WriteInt32(Row);
       }
-      if (Id != 0L) {
+      if (Id != 0) {
         output.WriteRawTag(32);
-        output.WriteInt64(Id);
+        output.WriteUInt32(Id);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -566,8 +566,8 @@ namespace Protos {
       if (Row != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Row);
       }
-      if (Id != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Id);
+      if (Id != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Id);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -592,7 +592,7 @@ namespace Protos {
       if (other.Row != 0) {
         Row = other.Row;
       }
-      if (other.Id != 0L) {
+      if (other.Id != 0) {
         Id = other.Id;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -622,7 +622,7 @@ namespace Protos {
             break;
           }
           case 32: {
-            Id = input.ReadInt64();
+            Id = input.ReadUInt32();
             break;
           }
         }

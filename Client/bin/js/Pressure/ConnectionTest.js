@@ -1,16 +1,20 @@
-define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC/Utils/Logger", "../Libs/protos", "../RC/Utils/GUID", "../Net/Connector"], function (require, exports, WSConnector_1, ProtoHelper_1, Logger_1, protos_1, GUID_1, Connector_1) {
+define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC/Utils/Logger", "../Libs/protos", "../RC/Utils/GUID", "../Net/Connector", "../RC/Math/MathUtils"], function (require, exports, WSConnector_1, ProtoHelper_1, Logger_1, protos_1, GUID_1, Connector_1, MathUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ConnectionTest {
         constructor() {
             this._connector = new Connector_1.Connector();
+            this._closeTime = 0;
+            this._time = 0;
             ProtoHelper_1.ProtoCreator.Init();
             this._connector.Init();
             this._connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
-            const name = GUID_1.GUID.Generate().ToString(GUID_1.GuidFormat.DASHES);
+            this._closeTime = MathUtils_1.MathUtils.Random(1000, 3000);
+            const name = GUID_1.GUID.create().toString();
             this.Login(name, 0, 0);
         }
         Update(dt) {
+            this._time += dt;
             this._connector.Update(dt);
         }
         ConnectToLS(connector) {

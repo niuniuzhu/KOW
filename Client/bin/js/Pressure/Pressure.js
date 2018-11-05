@@ -4,11 +4,16 @@ define(["require", "exports", "./ConnectionTest"], function (require, exports, C
     class Pressure {
         constructor() {
             this._tests = [];
-            for (let i = 0; i < 2; ++i) {
-                const test = new ConnectionTest_1.ConnectionTest();
-                this._tests.push(test);
-            }
+            this._numConnections = 0;
             setInterval(() => { this.Update(); }, Pressure.UPDATE_INTERVAL);
+            setInterval(() => { this.DoConnect(); }, Pressure.CONNECT_INTERVAL);
+        }
+        DoConnect() {
+            if (this._numConnections >= Pressure.MAX_CONNECTION)
+                return;
+            ++this._numConnections;
+            const test = new ConnectionTest_1.ConnectionTest();
+            this._tests.push(test);
         }
         Update() {
             for (let i = 0; i < this._tests.length; i++) {
@@ -18,6 +23,8 @@ define(["require", "exports", "./ConnectionTest"], function (require, exports, C
         }
     }
     Pressure.UPDATE_INTERVAL = 20;
+    Pressure.CONNECT_INTERVAL = 20;
+    Pressure.MAX_CONNECTION = 1;
     exports.Pressure = Pressure;
 });
 //# sourceMappingURL=Pressure.js.map

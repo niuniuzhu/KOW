@@ -1030,7 +1030,7 @@ export namespace Protos {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.DB2LS_QueryResult|null);
         row?: (number|null);
-        id?: (Long|null);
+        id?: (number|null);
     }
 
     class DB2LS_ExecRet implements IDB2LS_ExecRet {
@@ -1038,7 +1038,7 @@ export namespace Protos {
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.DB2LS_QueryResult;
         public row: number;
-        public id: Long;
+        public id: number;
         public static create(properties?: Protos.IDB2LS_ExecRet): Protos.DB2LS_ExecRet;
         public static encode(message: Protos.IDB2LS_ExecRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IDB2LS_ExecRet, writer?: $protobuf.Writer): $protobuf.Writer;

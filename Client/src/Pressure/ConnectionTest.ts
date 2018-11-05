@@ -2,11 +2,14 @@ import { WSConnector } from "../Net/WSConnector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Logger } from "../RC/Utils/Logger";
 import { Protos } from "../Libs/protos";
-import { GUID, GuidFormat } from "../RC/Utils/GUID";
+import { GUID } from "../RC/Utils/GUID";
 import { Connector } from "../Net/Connector";
+import { MathUtils } from "../RC/Math/MathUtils";
 
 export class ConnectionTest {
 	private _connector: Connector = new Connector();
+	private _closeTime: number = 0;
+	private _time: number = 0;
 
 	constructor() {
 		ProtoCreator.Init();
@@ -14,11 +17,13 @@ export class ConnectionTest {
 
 		this._connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
 
-		const name = GUID.Generate().ToString(GuidFormat.DASHES);
+		this._closeTime = MathUtils.Random(1000, 3000);
+		const name = GUID.create().toString();
 		this.Login(name, 0, 0);
 	}
 
 	public Update(dt: number): void {
+		this._time += dt;
 		this._connector.Update(dt);
 	}
 

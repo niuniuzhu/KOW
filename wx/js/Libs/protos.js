@@ -5462,7 +5462,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_ExecRet.prototype.opts = null;
         DB2LS_ExecRet.prototype.result = 0;
         DB2LS_ExecRet.prototype.row = 0;
-        DB2LS_ExecRet.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        DB2LS_ExecRet.prototype.id = 0;
 
         DB2LS_ExecRet.create = function create(properties) {
             return new DB2LS_ExecRet(properties);
@@ -5478,7 +5478,7 @@ export const Protos = $root.Protos = (() => {
             if (message.row != null && message.hasOwnProperty("row"))
                 writer.uint32(24).int32(message.row);
             if (message.id != null && message.hasOwnProperty("id"))
-                writer.uint32(32).int64(message.id);
+                writer.uint32(32).uint32(message.id);
             return writer;
         };
 
@@ -5503,7 +5503,7 @@ export const Protos = $root.Protos = (() => {
                     message.row = reader.int32();
                     break;
                 case 4:
-                    message.id = reader.int64();
+                    message.id = reader.uint32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -5542,8 +5542,8 @@ export const Protos = $root.Protos = (() => {
                 if (!$util.isInteger(message.row))
                     return "row: integer expected";
             if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                    return "id: integer|Long expected";
+                if (!$util.isInteger(message.id))
+                    return "id: integer expected";
             return null;
         };
 
@@ -5581,14 +5581,7 @@ export const Protos = $root.Protos = (() => {
             if (object.row != null)
                 message.row = object.row | 0;
             if (object.id != null)
-                if ($util.Long)
-                    (message.id = $util.Long.fromValue(object.id)).unsigned = false;
-                else if (typeof object.id === "string")
-                    message.id = parseInt(object.id, 10);
-                else if (typeof object.id === "number")
-                    message.id = object.id;
-                else if (typeof object.id === "object")
-                    message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                message.id = object.id >>> 0;
             return message;
         };
 
@@ -5600,11 +5593,7 @@ export const Protos = $root.Protos = (() => {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
                 object.row = 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.id = options.longs === String ? "0" : 0;
+                object.id = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -5613,10 +5602,7 @@ export const Protos = $root.Protos = (() => {
             if (message.row != null && message.hasOwnProperty("row"))
                 object.row = message.row;
             if (message.id != null && message.hasOwnProperty("id"))
-                if (typeof message.id === "number")
-                    object.id = options.longs === String ? String(message.id) : message.id;
-                else
-                    object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                object.id = message.id;
             return object;
         };
 

@@ -26,5 +26,5 @@ message DB2LS_ExecRet{
 	MsgOpts opts = 1;
 	DB2LS_QueryResult result = 2;
 	int32 row = 3;
-	int64 id = 4;
+	uint32 id = 4;
 }

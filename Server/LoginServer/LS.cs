@@ -7,7 +7,6 @@ using Shared.DB;
 using Shared.Net;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 
 namespace LoginServer
 {
@@ -21,7 +20,6 @@ namespace LoginServer
 		public readonly RedisWrapper redisWrapper = new RedisWrapper();
 		public readonly LSNetSessionMgr netSessionMgr = new LSNetSessionMgr();
 		public readonly Dictionary<uint, GSInfo> gsInfos = new Dictionary<uint, GSInfo>();
-		public readonly Dictionary<string, ulong> userNameToGcNID = new Dictionary<string, ulong>();
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Scheduler _heartBeater = new Scheduler();

@@ -38,15 +38,6 @@ namespace LoginServer.Net
 
 			regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.Success;
 
-			//在内存中检测用户名是否存在
-			if ( LS.instance.userNameToGcNID.ContainsKey( register.Name ) )
-			{
-				regRet.Result = Protos.LS2GC_AskRegRet.Types.EResult.UnameExists;
-				this.Send( regRet );
-				this.DelayClose( 500, "register finish" );
-				return ErrorCode.Success;
-			}
-
 			//检测用户名的合法性
 			if ( !CheckUsername( register.Name ) )
 			{
@@ -340,13 +331,14 @@ namespace LoginServer.Net
 					//找不到用户名则自动注册
 					this.SmartRegister( login.Sdk, login.Name, login.Platform, ret =>
 					{
-						if ( ret == Protos.DB2LS_QueryResult.Success )
+						ukey = ret.Id;
+						if ( ret.Result == Protos.DB2LS_QueryResult.Success )
 							this.HandlerLoginSuccess( gcLoginRet, login.Name, ukey );
 						else
 						{
 							//这里不应该会失败,以防万一打印一些信息
 							Logger.Error( $"smart register occurs an error:{ret}" );
-							gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) ret;
+							gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult ) ret.Result;
 							this.Send( gcLoginRet );
 							this.DelayClose( 500, "login complete" );
 						}
@@ -358,7 +350,7 @@ namespace LoginServer.Net
 			return ErrorCode.Success;
 		}
 
-		private ErrorCode SmartRegister( int sdk, string uname, uint platform, Action<Protos.DB2LS_QueryResult> callback )
+		private ErrorCode SmartRegister( int sdk, string uname, uint platform, Action<Protos.DB2LS_ExecRet> callback )
 		{
 			//无需检测用户名的合法性和是否存在,进入该方法前已经判定
 			//请求DB服务器注册账号
@@ -381,10 +373,10 @@ namespace LoginServer.Net
 						redisWrapper.HashSet( "unames", uname, string.Empty );
 						redisWrapper.HashSet( "ukeys", uname, sqlExecRet.Id );
 					}
-					callback( sqlExecRet.Result );
+					callback( sqlExecRet );
 				}
 				else
-					callback( sqlExecRet.Result );
+					callback( sqlExecRet );
 			}
 		}
 

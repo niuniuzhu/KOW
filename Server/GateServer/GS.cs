@@ -47,7 +47,7 @@ namespace GateServer
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 
 			WSListener cliListener = ( WSListener ) this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
-			cliListener.Start( "ws", this.config.externalPort );
+			cliListener.Start( this.config.externalPort );
 
 			this.netSessionMgr.CreateConnector<G2CSSession>( SessionType.ServerG2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 65535, 0 );
 			return ErrorCode.Success;

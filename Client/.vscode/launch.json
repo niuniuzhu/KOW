@@ -18,7 +18,7 @@
 			"name": "kow(http)",
 			"type": "chrome",
 			"request": "launch",
-			"url": "http://localhost:8080",
+			"url": "https://localhost/kow/Client/bin/index.html",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
 				"--auto-open-devtools-for-tabs"

@@ -133,13 +133,7 @@ namespace Core.Net
 					break;
 				}
 
-				INetSession session = this.CreateSession( acceptSocket );
-				if ( session == null )
-					break;
-
-				//开始接收数据
-				session.connection.StartReceive();
-
+				this.CreateSession( acceptSocket );
 			} while ( false );
 
 			this.StartAccept( acceptEventArgs );
@@ -156,7 +150,7 @@ namespace Core.Net
 				return null;
 			}
 			session.isPassive = true;
-			TCPConnection tcpConnection = ( TCPConnection )session.connection;
+			TCPConnection tcpConnection = ( TCPConnection ) session.connection;
 			tcpConnection.activeTime = TimeUtils.utcTime;
 			tcpConnection.socket = new SocketWrapper( acceptSocket );
 			tcpConnection.remoteEndPoint = acceptSocket.RemoteEndPoint;
@@ -166,6 +160,9 @@ namespace Core.Net
 			netEvent.type = NetEvent.Type.Establish;
 			netEvent.session = session;
 			NetworkMgr.instance.PushEvent( netEvent );
+
+			//开始接收数据
+			tcpConnection.StartReceive();
 
 			return session;
 		}

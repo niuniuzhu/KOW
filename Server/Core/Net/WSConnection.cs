@@ -1,9 +1,9 @@
-﻿using Core.Misc;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -21,14 +21,28 @@ namespace Core.Net
 			Pong = 10,
 		}
 
-		internal string scheme;
-		internal HashSet<string> subProtocols;
+		public string scheme;
+		public X509Certificate2 certificate;
+		public SslProtocols sslProtocols;
+		public bool isSecure => this.scheme == "wss" && this.certificate != null;
+		public HashSet<string> subProtocols;
 
 		private bool _handshakeComplete;
-		private Stream _stream;
 
 		public WSConnection( INetSession session ) : base( session )
 		{
+		}
+
+		public void Authenticate( Action callback, Action<Exception> errorCallback )
+		{
+			if ( !this.isSecure )
+			{
+				callback();
+				return;
+			}
+			this.socket.Authenticate( this.certificate,
+									  this.sslProtocols == SslProtocols.None ? SslProtocols.Tls : this.sslProtocols,
+									  callback, errorCallback );
 		}
 
 		public override void Close()
@@ -50,6 +64,16 @@ namespace Core.Net
 			return true;
 		}
 
+		public bool SendWithoutHeader( byte[] data, int offset, int size )
+		{
+			if ( this.socket == null || !this.connected )
+				return false;
+			StreamBuffer buffer = this._bufferPool.Pop();
+			buffer.Write( data, offset, size );
+			this._sendQueue.Push( buffer );
+			return true;
+		}
+
 		protected override void ProcessData( StreamBuffer cache )
 		{
 			do
@@ -62,14 +86,14 @@ namespace Core.Net
 					WSHttpRequest request = ProcessHandShakeData( cache.GetBuffer(), 0, cache.length, this.scheme );
 					if ( request == null )
 						break;
-					Logger.Log( request );
+					//Logger.Log( request );
 					string subProtocol = Negotiate( this.subProtocols, request.subProtocols );
 					byte[] responseData = ProcessHybi13Handshake( request, subProtocol );
 					if ( responseData == null )
 						break;
 
 					this._handshakeComplete = true;
-					this.Send( responseData, 0, responseData.Length );
+					this.SendWithoutHeader( responseData, 0, responseData.Length );
 					cache.Clear();
 
 					NetEvent netEvent = NetworkMgr.instance.PopEvent();
@@ -105,7 +129,7 @@ namespace Core.Net
 
 		private static WSHttpRequest ProcessHandShakeData( byte[] data, int offset, int size, string scheme )
 		{
-			string body = Encoding.UTF8.GetString( data, offset, size );
+			string body = Encoding.ASCII.GetString( data, offset, size );
 			Match match = ProtoConfig.REQUEST_REGEX.Match( body );
 
 			if ( !match.Success )
@@ -143,20 +167,21 @@ namespace Core.Net
 		private static byte[] ProcessHybi13Handshake( WSHttpRequest request, string subProtocol )
 		{
 			StringBuilder builder = new StringBuilder();
-			builder.AppendLine( "HTTP/1.1 101 Switching Protocols" );
-			builder.AppendLine( "Upgrade: websocket" );
-			builder.AppendLine( "Connection: Upgrade" );
-			builder.AppendLine( "Sec-WebSocket-Version: 13" );
-			builder.AppendLine( "Server: KOW login server" );
+			builder.Append( "HTTP/1.1 101 Switching Protocols\r\n" );
+			builder.Append( "Upgrade: websocket\r\n" );
+			builder.Append( "Connection: Upgrade\r\n" );
+
+			if ( !string.IsNullOrEmpty( subProtocol ) )
+				builder.Append( $"Sec-WebSocket-Protocol: {subProtocol}\r\n" );
+
 			string responseKey =
 				Convert.ToBase64String(
-					SHA1.Create().ComputeHash( Encoding.UTF8.GetBytes( request["Sec-WebSocket-Key"] + ProtoConfig.WSRespGuid ) ) );
-			builder.AppendLine( $"Sec-WebSocket-Accept: {responseKey}" );
-			if ( !string.IsNullOrEmpty( subProtocol ) )
-				builder.AppendLine( $"Sec-WebSocket-Protocol: {subProtocol}" );
-			builder.AppendLine();
+					SHA1.Create().ComputeHash( Encoding.ASCII.GetBytes( request["Sec-WebSocket-Key"] + ProtoConfig.WSRespGuid ) ) );
+
+			builder.Append( $"Sec-WebSocket-Accept: {responseKey}\r\n" );
+			builder.Append( "\r\n" );
 			// Logger.Info( builder.ToString() );
-			return Encoding.UTF8.GetBytes( builder.ToString() );
+			return Encoding.ASCII.GetBytes( builder.ToString() );
 		}
 
 		/// <summary>

@@ -34,7 +34,7 @@ define(["require", "exports", "./ByteUtils", "./MsgCenter", "../Libs/protos", ".
         Connect(ip, port) {
             if (this.connected)
                 this.Close();
-            this._socket = new WebSocket(`ws://${ip}:${port}`);
+            this._socket = new WebSocket(`wss://${ip}:${port}`);
             this._socket.binaryType = "arraybuffer";
             this._socket.onmessage = this.OnReceived.bind(this);
             this._socket.onerror = this._onerror;

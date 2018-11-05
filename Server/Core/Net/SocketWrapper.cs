@@ -1,15 +1,26 @@
-﻿using System.Net;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace Core.Net
 {
 	public class SocketWrapper
 	{
 		private Socket _socket;
+		private Stream _stream;
 
 		public bool Connected => this._socket?.Connected ?? false;
 
-		public SocketWrapper( Socket socket ) => this._socket = socket;
+		public SocketWrapper( Socket socket )
+		{
+			this._socket = socket;
+			this._stream = new NetworkStream( this._socket );
+		}
 
 		public void SetSocketOption( SocketOptionLevel optionLevel, SocketOptionName optionName, object optionValue ) =>
 			this._socket.SetSocketOption( optionLevel, optionName, optionValue );
@@ -32,5 +43,17 @@ namespace Core.Net
 		public void Close() => this._socket?.Close();
 
 		public void Release() => this._socket = null;
+
+		public void Authenticate( X509Certificate2 certificate, SslProtocols enabledSslProtocols, Action callback,Action<Exception> error )
+		{
+			SslStream ssl = new SslStream( this._stream, false );
+
+			IAsyncResult Begin( AsyncCallback cb, object s ) => ssl.BeginAuthenticateAsServer( certificate, false, enabledSslProtocols, false, cb, s );
+
+			Task task = Task.Factory.FromAsync( Begin, ssl.EndAuthenticateAsServer, null );
+			task.ContinueWith( t => callback(), TaskContinuationOptions.NotOnFaulted )
+			    .ContinueWith( t => error( t.Exception ), TaskContinuationOptions.OnlyOnFaulted );
+			task.ContinueWith( t => error( t.Exception ), TaskContinuationOptions.OnlyOnFaulted );
+		}
 	}
 }

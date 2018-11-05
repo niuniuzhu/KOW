@@ -18,21 +18,21 @@ enum State {
 export class SceneManager {
 	public static readonly State = State;
 
-	public static fsm: FSM;
+	public fsm: FSM;
 
-	public static get main(): MainState { return this._main; }
-	public static get login(): LoginState { return this._login; }
-	public static get matching(): MatchingState { return this._matching; }
-	public static get loading(): LoadingState { return this._loading; }
-	public static get battle(): BattleState { return this._battle; }
+	public get main(): MainState { return this._main; }
+	public get login(): LoginState { return this._login; }
+	public get matching(): MatchingState { return this._matching; }
+	public get loading(): LoadingState { return this._loading; }
+	public get battle(): BattleState { return this._battle; }
 
-	private static _main: MainState;
-	private static _login: LoginState;
-	private static _matching: MatchingState;
-	private static _loading: LoadingState;
-	private static _battle: BattleState;
+	private _main: MainState;
+	private _login: LoginState;
+	private _matching: MatchingState;
+	private _loading: LoadingState;
+	private _battle: BattleState;
 
-	public static Init(): void {
+	public Init(): void {
 		this._main = new MainState(State.Main);
 		this._login = new LoginState(State.Login);
 		this._matching = new MatchingState(State.Matching);
@@ -48,11 +48,11 @@ export class SceneManager {
 		this.fsm.AddState(this._battle);
 	}
 
-	public static ChangeState(state: State, param: any = null, force: boolean = false): void {
+	public ChangeState(state: State, param: any = null, force: boolean = false): void {
 		this.fsm.ChangeState(state, param, force);
 	}
 
-	public static Update(dt: number): void {
+	public Update(dt: number): void {
 		this.fsm.Update(dt);
 	}
 }

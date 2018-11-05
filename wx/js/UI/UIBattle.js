@@ -1,6 +1,6 @@
 import { GestureState } from "./GestureState";
 import { Joystick } from "./Joystick";
-import { Graphic } from "../Graphic";
+import { Global } from "../Global";
 export class UIBattle {
     constructor() {
         this._gestureState = new GestureState();
@@ -9,8 +9,8 @@ export class UIBattle {
         this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
         this._root.getChild("n0").onClick(this, this.OnSkillBtnClick);
         this._root.getChild("n1").onClick(this, this.OnSkill2BtnClick);
-        this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
-        this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
+        this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
+        this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._root.displayObject.on(laya.events.Event.DRAG_START, this, this.OnDragStart);
         this._root.displayObject.on(laya.events.Event.DRAG_END, this, this.OnDragEnd);
         this._root.displayObject.on(laya.events.Event.DRAG_MOVE, this, this.OnDrag);
@@ -22,10 +22,10 @@ export class UIBattle {
         this._root.dispose();
     }
     Enter(param) {
-        Graphic.uiRoot.addChild(this._root);
+        Global.graphic.uiRoot.addChild(this._root);
     }
     Exit() {
-        Graphic.uiRoot.removeChild(this._root);
+        Global.graphic.uiRoot.removeChild(this._root);
     }
     Update(dt) {
         this._gestureState.Update(dt);

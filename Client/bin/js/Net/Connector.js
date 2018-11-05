@@ -7,41 +7,41 @@ define(["require", "exports", "./WSConnector", "./ProtoHelper", "../Libs/protos"
         ConnectorType[ConnectorType["BS"] = 1] = "BS";
     })(ConnectorType || (ConnectorType = {}));
     class Connector {
-        static get gsConnector() { return this._gsConnector; }
-        static get bsConnector() { return this._bsConnector; }
-        static Init() {
+        get gsConnector() { return this._gsConnector; }
+        get bsConnector() { return this._bsConnector; }
+        Init() {
             this._gsConnector = new WSConnector_1.WSConnector();
             this._bsConnector = new WSConnector_1.WSConnector();
             this._connectors = new Map();
             this._connectors.set(ConnectorType.GS, this._gsConnector);
             this._connectors.set(ConnectorType.BS, this._bsConnector);
         }
-        static AddListener(type, msgID, handler) {
+        AddListener(type, msgID, handler) {
             this._connectors.get(type).AddListener(msgID, handler);
         }
-        static RemoveListener(type, msgID, handler) {
+        RemoveListener(type, msgID, handler) {
             return this._connectors.get(type).RemoveListener(msgID, handler);
         }
-        static SendToBS(msgType, message, rpcHandler = null) {
+        SendToBS(msgType, message, rpcHandler = null) {
             this._bsConnector.Send(msgType, message, rpcHandler);
         }
-        static SendToCS(msgType, message, rpcHandler = null) {
+        SendToCS(msgType, message, rpcHandler = null) {
             this._gsConnector.Send(msgType, message, rpcHandler, protos_1.Protos.MsgOpts.TransTarget.CS);
         }
-        static Update(dt) {
+        Update(dt) {
             this._connectors.forEach((v, k, map) => {
                 v.Update(dt);
             });
             if (this.gsConnector.connected) {
                 this.gsConnector.lastPingTime += dt;
-                if (this.gsConnector.lastPingTime >= this.PING_INTERVAL) {
+                if (this.gsConnector.lastPingTime >= Connector.PING_INTERVAL) {
                     this.gsConnector.Send(protos_1.Protos.GC2GS_KeepAlive, ProtoHelper_1.ProtoCreator.Q_GC2GS_KeepAlive());
                     this.gsConnector.lastPingTime = 0;
                 }
             }
             if (this.bsConnector.connected) {
                 this.bsConnector.lastPingTime += dt;
-                if (this.bsConnector.lastPingTime >= this.PING_INTERVAL) {
+                if (this.bsConnector.lastPingTime >= Connector.PING_INTERVAL) {
                     this.bsConnector.Send(protos_1.Protos.GC2BS_KeepAlive, ProtoHelper_1.ProtoCreator.Q_GC2BS_KeepAlive());
                     this.bsConnector.lastPingTime = 0;
                 }

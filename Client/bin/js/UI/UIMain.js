@@ -1,4 +1,4 @@
-define(["require", "exports", "../Scene/SceneManager", "../Graphic"], function (require, exports, SceneManager_1, Graphic_1) {
+define(["require", "exports", "../Scene/SceneManager", "../Global"], function (require, exports, SceneManager_1, Global_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
@@ -6,26 +6,26 @@ define(["require", "exports", "../Scene/SceneManager", "../Graphic"], function (
         constructor() {
             fairygui.UIPackage.addPackage("res/ui/main");
             this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
-            this._root.setSize(Graphic_1.Graphic.uiRoot.width, Graphic_1.Graphic.uiRoot.height);
-            this._root.addRelation(Graphic_1.Graphic.uiRoot, fairygui.RelationType.Size);
+            this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
+            this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
             this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
         }
         Dispose() {
             this._root.dispose();
         }
         Enter(param) {
-            Graphic_1.Graphic.uiRoot.addChild(this._root);
+            Global_1.Global.graphic.uiRoot.addChild(this._root);
             this._root.getTransition("t0").play();
         }
         Exit() {
-            Graphic_1.Graphic.uiRoot.removeChild(this._root);
+            Global_1.Global.graphic.uiRoot.removeChild(this._root);
         }
         Update(dt) {
         }
         OnResize(e) {
         }
         OnAutoMatchBtnClick() {
-            SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching);
+            Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching);
         }
     }
     exports.UIMain = UIMain;

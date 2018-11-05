@@ -2,7 +2,7 @@ import { IUIModule } from "./IUIModule";
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 import { SceneManager } from "../Scene/SceneManager";
-import { Graphic } from "../Graphic";
+import { Global } from "../Global";
 
 export class UIMatching implements IUIModule {
 	private readonly _root: fairygui.GComponent;
@@ -12,19 +12,19 @@ export class UIMatching implements IUIModule {
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/matching");
 		this._root = fairygui.UIPackage.createObject("matching", "Main").asCom;
-		this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
-		this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
+		this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
+		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
 	}
 
 	public Dispose(): void {
 	}
 
 	public Enter(param: any): void {
-		Graphic.uiRoot.addChild(this._root);
+		Global.graphic.uiRoot.addChild(this._root);
 	}
 
 	public Exit(): void {
-		Graphic.uiRoot.removeChild(this._root);
+		Global.graphic.uiRoot.removeChild(this._root);
 	}
 
 	public Update(dt: number): void {
@@ -55,7 +55,7 @@ export class UIMatching implements IUIModule {
 				break;
 		}
 		if (error != "") {
-			UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Login));
+			UIAlert.Show(error, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 		}
 	}
 

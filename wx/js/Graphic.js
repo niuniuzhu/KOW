@@ -1,7 +1,7 @@
 export class Graphic {
-    static get battleRoot() { return this._battleRoot; }
-    static get uiRoot() { return this._uiRoot; }
-    static Init() {
+    get battleRoot() { return this._battleRoot; }
+    get uiRoot() { return this._uiRoot; }
+    Init() {
         this._battleRoot = new fairygui.GComponent();
         this._battleRoot.name = "battle_root";
         this._battleRoot.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);

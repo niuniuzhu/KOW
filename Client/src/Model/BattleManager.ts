@@ -6,26 +6,12 @@ import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { BattleInfo } from "./BattleInfo";
 import { ProtoCreator } from "../Net/ProtoHelper";
+import { Global } from "../Global";
 
 /**
  * 战场管理器
  */
 export class BattleManager {
-	private static _instance: BattleManager;
-	/**
-	 * 获取单例
-	 */
-	public static get instance(): BattleManager {
-		return this._instance;
-	}
-
-	/**
-	 * 初始化单例
-	 */
-	public static Init():void{
-		this._instance = new BattleManager();
-	}
-
 	/**
 	 * 逻辑战场
 	 */
@@ -40,21 +26,21 @@ export class BattleManager {
 	public get vBattle(): VBattle { return this._vBattle; }
 
 	/**
-	 * 构造函数
+	 * 初始化
 	 */
-	constructor() {
-		Connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
-		Connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+	public Init() {
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
 
 		this._lBattle = new Battle();
 		this._vBattle = new VBattle();
 	}
 
 	/**
-	 * 初始化
+	 * 设置战场信息
 	 * @param battleInfo 战场信息
 	 */
-	public Init(battleInfo: BattleInfo, completeHandler: () => void): void {
+	public SetBattleInfo(battleInfo: BattleInfo, completeHandler: () => void): void {
 		this._lBattle.Init(battleInfo);
 		this._vBattle.Init(battleInfo);
 		this._init = true;
@@ -63,7 +49,7 @@ export class BattleManager {
 		const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
 		request.from = this._lBattle.frame;
 		request.to = battleInfo.serverFrame;
-		Connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
+		Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
 			const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
 			this.HandleRequestFrameActionsRet(ret.frames, ret.actions);
 			//追赶服务端帧数
@@ -90,7 +76,7 @@ export class BattleManager {
 		this._lBattle.End();
 		this._init = false;
 		Logger.Log("battle end");
-		SceneManager.ChangeState(SceneManager.State.Main);
+		Global.sceneManager.ChangeState(SceneManager.State.Main);
 	}
 
 	/**

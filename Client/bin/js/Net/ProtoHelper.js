@@ -3,6 +3,10 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
     Object.defineProperty(exports, "__esModule", { value: true });
     class ProtoCreator {
         static Init() {
+            if (this._init) {
+                return;
+            }
+            this._init = true;
             ProtoCreator._TYPE2ID.set(protos_1.Protos.G_AskPing, 10);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.G_AskPingRet, 11);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LS_AskRegister, 1000);
@@ -1285,6 +1289,7 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
         static GetMsgIDByType(type) { return ProtoCreator._TYPE2ID.get(type); }
         static GetMsgID(message) { return ProtoCreator._TYPE2ID.get(message.constructor); }
     }
+    ProtoCreator._init = false;
     ProtoCreator._TYPE2ID = new Map();
     ProtoCreator._ID2TYPE = new Map();
     exports.ProtoCreator = ProtoCreator;

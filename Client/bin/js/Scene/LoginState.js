@@ -1,13 +1,13 @@
-define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../Net/WSConnector", "../UI/UIManager", "./SceneState", "./SceneManager", "../Defs", "../RC/Utils/Logger", "../Env"], function (require, exports, protos_1, Connector_1, ProtoHelper_1, WSConnector_1, UIManager_1, SceneState_1, SceneManager_1, Defs_1, Logger_1, Env_1) {
+define(["require", "exports", "../Libs/protos", "../Net/ProtoHelper", "../Net/WSConnector", "./SceneState", "./SceneManager", "../Defs", "../RC/Utils/Logger", "../Global"], function (require, exports, protos_1, ProtoHelper_1, WSConnector_1, SceneState_1, SceneManager_1, Defs_1, Logger_1, Global_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoginState extends SceneState_1.SceneState {
         constructor(type) {
             super(type);
-            this.__ui = this._ui = UIManager_1.UIManager.login;
+            this.__ui = this._ui = Global_1.Global.uiManager.login;
         }
         ConnectToLS(connector) {
-            if (Env_1.Env.platform == Env_1.Env.Platform.Editor) {
+            if (Global_1.Global.platform == Global_1.Global.Platform.Editor) {
                 connector.Connect("localhost", Defs_1.Defs.config["ls_port"]);
             }
             else {
@@ -48,7 +48,7 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
             this.ConnectToLS(connector);
         }
         LoginGS(ip, port, pwd, gcNID) {
-            const connector = Connector_1.Connector.gsConnector;
+            const connector = Global_1.Global.connector.gsConnector;
             connector.onerror = (e) => this._ui.OnConnectToGSError(e);
             connector.onopen = () => {
                 Logger_1.Logger.Log("GS Connected");
@@ -61,17 +61,17 @@ define(["require", "exports", "../Libs/protos", "../Net/Connector", "../Net/Prot
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
                             if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {
-                                SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading);
-                                SceneManager_1.SceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+                                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading);
+                                Global_1.Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
                             }
                             else {
-                                SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
+                                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
                             }
                             break;
                     }
                 });
             };
-            if (Env_1.Env.platform == Env_1.Env.Platform.Editor) {
+            if (Global_1.Global.platform == Global_1.Global.Platform.Editor) {
                 connector.Connect("localhost", port);
             }
             else {

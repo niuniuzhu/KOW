@@ -1,10 +1,10 @@
-define(["require", "exports", "../../Graphic", "../../Consts"], function (require, exports, Graphic_1, Consts_1) {
+define(["require", "exports", "../../Consts", "../../Global"], function (require, exports, Consts_1, Global_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
         Init(battleInfo) {
             this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
-            Graphic_1.Graphic.battleRoot.addChild(this._root);
+            Global_1.Global.graphic.battleRoot.addChild(this._root);
         }
         Clear() {
         }

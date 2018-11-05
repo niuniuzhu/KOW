@@ -5,10 +5,15 @@
 import { Protos } from "../Libs/protos";
 
 export class ProtoCreator {
+	private static _init:boolean = false;
 	private static readonly _TYPE2ID = new Map<new () => any, Protos.MsgID>();
 	private static readonly _ID2TYPE = new Map<Protos.MsgID, new () => any>();
 
 	public static Init():void {
+		if (this._init) {
+			return;
+		}
+		this._init = true;
 		ProtoCreator._TYPE2ID.set( Protos.G_AskPing, <Protos.MsgID>10 );
 		ProtoCreator._TYPE2ID.set( Protos.G_AskPingRet, <Protos.MsgID>11 );
 		ProtoCreator._TYPE2ID.set( Protos.GC2LS_AskRegister, <Protos.MsgID>1000 );

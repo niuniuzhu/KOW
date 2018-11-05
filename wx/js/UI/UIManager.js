@@ -4,36 +4,36 @@ import { UIMatching } from "./UIMatching";
 import { UILoading } from "./UILoading";
 import { UIBattle } from "./UIBattle";
 export class UIManager {
-    static get login() { return UIManager._login; }
-    static get main() { return UIManager._main; }
-    static get matching() { return UIManager._matching; }
-    static get loading() { return UIManager._loading; }
-    static get battle() { return UIManager._battle; }
-    static Init() {
+    get login() { return this._login; }
+    get main() { return this._main; }
+    get matching() { return this._matching; }
+    get loading() { return this._loading; }
+    get battle() { return this._battle; }
+    Init() {
         fairygui.UIPackage.addPackage("res/ui/global");
         fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
         fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
         fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
-        UIManager._main = new UIMain();
-        UIManager._login = new UILogin();
-        UIManager._matching = new UIMatching();
-        UIManager._loading = new UILoading();
-        UIManager._battle = new UIBattle();
-        UIManager._uis = [];
-        UIManager._uis[0] = UIManager._main;
-        UIManager._uis[1] = UIManager._login;
-        UIManager._uis[2] = UIManager._matching;
-        UIManager._uis[3] = UIManager._loading;
-        UIManager._uis[4] = UIManager._battle;
+        this._main = new UIMain();
+        this._login = new UILogin();
+        this._matching = new UIMatching();
+        this._loading = new UILoading();
+        this._battle = new UIBattle();
+        this._uis = [];
+        this._uis[0] = this._main;
+        this._uis[1] = this._login;
+        this._uis[2] = this._matching;
+        this._uis[3] = this._loading;
+        this._uis[4] = this._battle;
     }
-    static Dispose() {
-        for (let i = 0; i < UIManager._uis.length; i++) {
-            UIManager._uis[i].Dispose();
+    Dispose() {
+        for (let i = 0; i < this._uis.length; i++) {
+            this._uis[i].Dispose();
         }
     }
-    static OnResize(e) {
-        for (let i = 0; i < UIManager._uis.length; i++) {
-            UIManager._uis[i].OnResize(e);
+    OnResize(e) {
+        for (let i = 0; i < this._uis.length; i++) {
+            this._uis[i].OnResize(e);
         }
     }
 }

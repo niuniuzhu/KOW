@@ -1,13 +1,13 @@
 import { SceneState } from "./SceneState";
-import { UIManager } from "../UI/UIManager";
 import { UIBattle } from "../UI/UIBattle";
+import { Global } from "../Global";
 
 export class BattleState extends SceneState {
 	private readonly _ui: UIBattle;
 
 	constructor(type: number) {
 		super(type);
-		this.__ui = this._ui = UIManager.battle;
+		this.__ui = this._ui = Global.uiManager.battle;
 	}
 
 	protected OnEnter(param: any): void {

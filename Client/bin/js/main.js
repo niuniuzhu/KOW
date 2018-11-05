@@ -1,4 +1,4 @@
-define(["require", "exports", "./Consts", "./Env", "./RC/Utils/Hashtable", "./Preloader", "./RC/Utils/Logger", "./Net/ProtoHelper", "./Net/Connector", "./Graphic", "./UI/UIManager", "./Scene/SceneManager", "./Model/BattleManager", "./Libs/protobufjs", "./Libs/long"], function (require, exports, Consts_1, Env_1, Hashtable_1, Preloader_1, Logger_1, ProtoHelper_1, Connector_1, Graphic_1, UIManager_1, SceneManager_1, BattleManager_1, $protobuf, Long) {
+define(["require", "exports", "./Consts", "./Global", "./RC/Utils/Hashtable", "./Preloader", "./RC/Utils/Logger", "./Scene/SceneManager", "./Libs/protobufjs", "./Libs/long"], function (require, exports, Consts_1, Global_1, Hashtable_1, Preloader_1, Logger_1, SceneManager_1, $protobuf, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
@@ -13,7 +13,7 @@ define(["require", "exports", "./Consts", "./Env", "./RC/Utils/Hashtable", "./Pr
             Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
             fairygui.UIConfig.packageFileExtension = "bin";
             const cfgJson = JSON.parse(config);
-            Env_1.Env.platform = Hashtable_1.Hashtable.GetNumber(cfgJson, "platform");
+            Global_1.Global.platform = Hashtable_1.Hashtable.GetNumber(cfgJson, "platform");
             this.ShowLogo();
         }
         ShowLogo() {
@@ -49,27 +49,22 @@ define(["require", "exports", "./Consts", "./Env", "./RC/Utils/Hashtable", "./Pr
         }
         StartGame() {
             Logger_1.Logger.Log("start game...");
-            if (Env_1.Env.platform == Env_1.Env.Platform.WXMini) {
+            if (Global_1.Global.platform == Global_1.Global.Platform.WXMini) {
                 $protobuf.util.Long = Long.default.prototype.constructor;
                 $protobuf.configure();
             }
-            ProtoHelper_1.ProtoCreator.Init();
-            Connector_1.Connector.Init();
-            Graphic_1.Graphic.Init();
-            UIManager_1.UIManager.Init();
-            SceneManager_1.SceneManager.Init();
-            BattleManager_1.BattleManager.Init();
-            SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Login);
+            Global_1.Global.Init();
+            Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login);
             fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
             Laya.timer.frameLoop(1, this, this.Update);
         }
         Update() {
             const dt = Laya.timer.delta;
-            Connector_1.Connector.Update(dt);
-            SceneManager_1.SceneManager.Update(dt);
+            Global_1.Global.connector.Update(dt);
+            Global_1.Global.sceneManager.Update(dt);
         }
         OnResize(e) {
-            UIManager_1.UIManager.OnResize(e);
+            Global_1.Global.uiManager.OnResize(e);
         }
     }
     exports.Main = Main;

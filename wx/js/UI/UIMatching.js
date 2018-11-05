@@ -1,22 +1,22 @@
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 import { SceneManager } from "../Scene/SceneManager";
-import { Graphic } from "../Graphic";
+import { Global } from "../Global";
 export class UIMatching {
     get root() { return this._root; }
     constructor() {
         fairygui.UIPackage.addPackage("res/ui/matching");
         this._root = fairygui.UIPackage.createObject("matching", "Main").asCom;
-        this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
-        this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
+        this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
+        this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
     }
     Dispose() {
     }
     Enter(param) {
-        Graphic.uiRoot.addChild(this._root);
+        Global.graphic.uiRoot.addChild(this._root);
     }
     Exit() {
-        Graphic.uiRoot.removeChild(this._root);
+        Global.graphic.uiRoot.removeChild(this._root);
     }
     Update(dt) {
     }
@@ -44,12 +44,14 @@ export class UIMatching {
                 break;
         }
         if (error != "") {
-            UIAlert.Show(error, () => SceneManager.ChangeState(SceneManager.State.Login));
+            UIAlert.Show(error, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
         }
     }
     UpdateRoomInfo(roomInfo) {
     }
-    UpdatePlayers(_players) {
+    OnPlayerJoin(player) {
+    }
+    OnPlayerLeave(player) {
     }
     HandleFullPlayer(completeHandler) {
         completeHandler();

@@ -18,12 +18,17 @@ namespace ProtoGenerator
 			sb.AppendLine( "export class ProtoCreator {" );
 
 			//type to id
+			sb.AppendLine( $"\tprivate static _init:boolean = false;" );
 			sb.AppendLine( $"\tprivate static readonly _TYPE2ID = new Map<new () => any, {ns}.MsgID>();" );
 			//id to type
 			sb.AppendLine( $"\tprivate static readonly _ID2TYPE = new Map<{ns}.MsgID, new () => any>();" );
 			sb.AppendLine();
 
 			sb.AppendLine( "\tpublic static Init():void {" );
+			sb.AppendLine( "\t\tif (this._init) {" );
+			sb.AppendLine( "\t\t\treturn;" );
+			sb.AppendLine( "\t\t}" );
+			sb.AppendLine( "\t\tthis._init = true;" );
 			foreach ( KeyValuePair<string, int> kv in clsToMsgID )
 				sb.AppendLine( $"\t\tProtoCreator._TYPE2ID.set( {ns}.{kv.Key}, <{ns}.MsgID>{kv.Value} );" );
 			sb.AppendLine();

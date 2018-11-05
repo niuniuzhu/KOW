@@ -1,6 +1,6 @@
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
-import { SceneManager } from "../Scene/SceneManager";
+import { Global } from "../Global";
 export class UILogin extends fairygui.Window {
     constructor() {
         super();
@@ -48,7 +48,7 @@ export class UILogin extends fairygui.Window {
             return;
         }
         this.showModalWait();
-        SceneManager.login.Register(regName, 0, 0);
+        Global.sceneManager.login.Register(regName, 0, 0);
     }
     OnLoginBtnClick() {
         let uname = this.contentPane.getChild("name").asTextField.text;
@@ -57,13 +57,13 @@ export class UILogin extends fairygui.Window {
             return;
         }
         this.showModalWait();
-        SceneManager.login.Login(uname, 0, 0);
+        Global.sceneManager.login.Login(uname, 0, 0);
     }
     OnEnterBtnClick() {
         let item = this._areaList.getChildAt(this._areaList.selectedIndex);
         let data = item.data["data"];
         this.showModalWait();
-        SceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
+        Global.sceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
     }
     OnAreaClick() {
     }
@@ -122,9 +122,9 @@ export class UILogin extends fairygui.Window {
             this._areaList.selectedIndex = 0;
         this.contentPane.getController("c1").selectedIndex = 2;
     }
-    OnConnectToGSError() {
+    OnConnectToGSError(e) {
         this.closeModalWait();
-        UIAlert.Show("无法连接服务器", this.BackToLogin.bind(this));
+        UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
     }
     OnLoginGSResult(resp) {
         this.closeModalWait();

@@ -1,11 +1,11 @@
 export class Graphic {
-	private static _battleRoot: fairygui.GComponent;
-	private static _uiRoot: fairygui.GComponent;
+	private _battleRoot: fairygui.GComponent;
+	private _uiRoot: fairygui.GComponent;
 
-	public static get battleRoot(): fairygui.GComponent { return this._battleRoot; }
-	public static get uiRoot(): fairygui.GComponent { return this._uiRoot; }
+	public get battleRoot(): fairygui.GComponent { return this._battleRoot; }
+	public get uiRoot(): fairygui.GComponent { return this._uiRoot; }
 
-	public static Init(): void {
+	public Init(): void {
 		this._battleRoot = new fairygui.GComponent();
 		this._battleRoot.name = "battle_root";
 		this._battleRoot.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);

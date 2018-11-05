@@ -1,13 +1,13 @@
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
-import { Graphic } from "../Graphic";
+import { Global } from "../Global";
 export class UILoading {
     get root() { return this._root; }
     constructor() {
         fairygui.UIPackage.addPackage("res/ui/loading");
         this._root = fairygui.UIPackage.createObject("loading", "Main").asCom;
-        this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
-        this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
+        this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
+        this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._progressBar = this._root.getChild("n0").asProgress;
         this._progressBar.max = 100;
         this._progressBar.value = 10;
@@ -16,10 +16,10 @@ export class UILoading {
         this._root.dispose();
     }
     Enter(param) {
-        Graphic.uiRoot.addChild(this._root);
+        Global.graphic.uiRoot.addChild(this._root);
     }
     Exit() {
-        Graphic.uiRoot.removeChild(this._root);
+        Global.graphic.uiRoot.removeChild(this._root);
     }
     Update(dt) {
     }

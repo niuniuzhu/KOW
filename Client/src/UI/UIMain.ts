@@ -1,6 +1,6 @@
 import { IUIModule } from "./IUIModule";
 import { SceneManager } from "../Scene/SceneManager";
-import { Graphic } from "../Graphic";
+import { Global } from "../Global";
 
 export class UIMain implements IUIModule {
 	private readonly _root: fairygui.GComponent;
@@ -10,8 +10,8 @@ export class UIMain implements IUIModule {
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/main");
 		this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
-		this._root.setSize(Graphic.uiRoot.width, Graphic.uiRoot.height);
-		this._root.addRelation(Graphic.uiRoot, fairygui.RelationType.Size);
+		this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
+		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
 		this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
 	}
 
@@ -20,12 +20,12 @@ export class UIMain implements IUIModule {
 	}
 
 	public Enter(param: any): void {
-		Graphic.uiRoot.addChild(this._root);
+		Global.graphic.uiRoot.addChild(this._root);
 		this._root.getTransition("t0").play();
 	}
 
 	public Exit(): void {
-		Graphic.uiRoot.removeChild(this._root);
+		Global.graphic.uiRoot.removeChild(this._root);
 	}
 
 	public Update(dt: number): void {
@@ -35,6 +35,6 @@ export class UIMain implements IUIModule {
 	}
 
 	private OnAutoMatchBtnClick(): void {
-		SceneManager.ChangeState(SceneManager.State.Matching);
+		Global.sceneManager.ChangeState(SceneManager.State.Matching);
 	}
 }

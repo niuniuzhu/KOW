@@ -1,9 +1,9 @@
 import { SceneState } from "./SceneState";
-import { UIManager } from "../UI/UIManager";
+import { Global } from "../Global";
 export class BattleState extends SceneState {
     constructor(type) {
         super(type);
-        this.__ui = this._ui = UIManager.battle;
+        this.__ui = this._ui = Global.uiManager.battle;
     }
     OnEnter(param) {
         super.OnEnter(param);

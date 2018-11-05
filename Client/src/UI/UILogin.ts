@@ -1,7 +1,7 @@
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 import { IUIModule } from "./IUIModule";
-import { SceneManager } from "../Scene/SceneManager";
+import { Global } from "../Global";
 
 export class UILogin extends fairygui.Window implements IUIModule {
 	private _areaList: fairygui.GList;
@@ -65,7 +65,7 @@ export class UILogin extends fairygui.Window implements IUIModule {
 			return;
 		}
 		this.showModalWait();
-		SceneManager.login.Register(regName, 0, 0);
+		Global.sceneManager.login.Register(regName, 0, 0);
 	}
 
 	private OnLoginBtnClick(): void {
@@ -75,14 +75,14 @@ export class UILogin extends fairygui.Window implements IUIModule {
 			return;
 		}
 		this.showModalWait();
-		SceneManager.login.Login(uname, 0, 0);
+		Global.sceneManager.login.Login(uname, 0, 0);
 	}
 
 	private OnEnterBtnClick(): void {
 		let item = this._areaList.getChildAt(this._areaList.selectedIndex);
 		let data: Protos.GSInfo = <Protos.GSInfo>item.data["data"];
 		this.showModalWait();
-		SceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
+		Global.sceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
 	}
 
 	private OnAreaClick(): void {

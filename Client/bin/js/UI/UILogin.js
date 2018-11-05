@@ -1,4 +1,4 @@
-define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneManager"], function (require, exports, protos_1, UIAlert_1, SceneManager_1) {
+define(["require", "exports", "../Libs/protos", "./UIAlert", "../Global"], function (require, exports, protos_1, UIAlert_1, Global_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UILogin extends fairygui.Window {
@@ -48,7 +48,7 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                 return;
             }
             this.showModalWait();
-            SceneManager_1.SceneManager.login.Register(regName, 0, 0);
+            Global_1.Global.sceneManager.login.Register(regName, 0, 0);
         }
         OnLoginBtnClick() {
             let uname = this.contentPane.getChild("name").asTextField.text;
@@ -57,13 +57,13 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                 return;
             }
             this.showModalWait();
-            SceneManager_1.SceneManager.login.Login(uname, 0, 0);
+            Global_1.Global.sceneManager.login.Login(uname, 0, 0);
         }
         OnEnterBtnClick() {
             let item = this._areaList.getChildAt(this._areaList.selectedIndex);
             let data = item.data["data"];
             this.showModalWait();
-            SceneManager_1.SceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
+            Global_1.Global.sceneManager.login.LoginGS(data.ip, data.port, data.password, item.data["gcNID"]);
         }
         OnAreaClick() {
         }

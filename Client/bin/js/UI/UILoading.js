@@ -1,4 +1,4 @@
-define(["require", "exports", "../Libs/protos", "./UIAlert", "../Graphic"], function (require, exports, protos_1, UIAlert_1, Graphic_1) {
+define(["require", "exports", "../Libs/protos", "./UIAlert", "../Global"], function (require, exports, protos_1, UIAlert_1, Global_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UILoading {
@@ -6,8 +6,8 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Graphic"], func
         constructor() {
             fairygui.UIPackage.addPackage("res/ui/loading");
             this._root = fairygui.UIPackage.createObject("loading", "Main").asCom;
-            this._root.setSize(Graphic_1.Graphic.uiRoot.width, Graphic_1.Graphic.uiRoot.height);
-            this._root.addRelation(Graphic_1.Graphic.uiRoot, fairygui.RelationType.Size);
+            this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
+            this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
             this._progressBar = this._root.getChild("n0").asProgress;
             this._progressBar.max = 100;
             this._progressBar.value = 10;
@@ -16,10 +16,10 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Graphic"], func
             this._root.dispose();
         }
         Enter(param) {
-            Graphic_1.Graphic.uiRoot.addChild(this._root);
+            Global_1.Global.graphic.uiRoot.addChild(this._root);
         }
         Exit() {
-            Graphic_1.Graphic.uiRoot.removeChild(this._root);
+            Global_1.Global.graphic.uiRoot.removeChild(this._root);
         }
         Update(dt) {
         }

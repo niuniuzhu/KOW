@@ -1,20 +1,18 @@
 import { Protos } from "../Libs/protos";
-import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { WSConnector } from "../Net/WSConnector";
-import { UIManager } from "../UI/UIManager";
 import { SceneState } from "./SceneState";
 import { SceneManager } from "./SceneManager";
 import { Defs } from "../Defs";
 import { Logger } from "../RC/Utils/Logger";
-import { Env } from "../Env";
+import { Global } from "../Global";
 export class LoginState extends SceneState {
     constructor(type) {
         super(type);
-        this.__ui = this._ui = UIManager.login;
+        this.__ui = this._ui = Global.uiManager.login;
     }
     ConnectToLS(connector) {
-        if (Env.platform == Env.Platform.Editor) {
+        if (Global.platform == Global.Platform.Editor) {
             connector.Connect("localhost", Defs.config["ls_port"]);
         }
         else {
@@ -55,8 +53,8 @@ export class LoginState extends SceneState {
         this.ConnectToLS(connector);
     }
     LoginGS(ip, port, pwd, gcNID) {
-        const connector = Connector.gsConnector;
-        connector.onerror = () => this._ui.OnConnectToGSError();
+        const connector = Global.connector.gsConnector;
+        connector.onerror = (e) => this._ui.OnConnectToGSError(e);
         connector.onopen = () => {
             Logger.Log("GS Connected");
             const askLogin = ProtoCreator.Q_GC2GS_AskLogin();
@@ -68,17 +66,17 @@ export class LoginState extends SceneState {
                 switch (resp.result) {
                     case Protos.GS2GC_LoginRet.EResult.Success:
                         if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
-                            SceneManager.ChangeState(SceneManager.State.Loading);
-                            SceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+                            Global.sceneManager.ChangeState(SceneManager.State.Loading);
+                            Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
                         }
                         else {
-                            SceneManager.ChangeState(SceneManager.State.Main);
+                            Global.sceneManager.ChangeState(SceneManager.State.Main);
                         }
                         break;
                 }
             });
         };
-        if (Env.platform == Env.Platform.Editor) {
+        if (Global.platform == Global.Platform.Editor) {
             connector.Connect("localhost", port);
         }
         else {

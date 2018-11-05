@@ -1,13 +1,11 @@
 import { SceneState } from "./SceneState";
 import { UILoading } from "../UI/UILoading";
 import { BattleInfo } from "../Model/BattleInfo";
-import { UIManager } from "../UI/UIManager";
 import { Connector } from "../Net/Connector";
 import { Protos } from "../Libs/protos";
 import { Logger } from "../RC/Utils/Logger";
 import { ProtoCreator } from "../Net/ProtoHelper";
-import { Env } from "../Env";
-import { BattleManager } from "../Model/BattleManager";
+import { Global } from "../Global";
 import { SceneManager } from "./SceneManager";
 
 /**
@@ -23,10 +21,10 @@ export class LoadingState extends SceneState {
 	 */
 	constructor(type: number) {
 		super(type);
-		this.__ui = this._ui = UIManager.loading;
+		this.__ui = this._ui = Global.uiManager.loading;
 		this._battleInfo = new BattleInfo();
 
-		Connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
 	}
 
 	/**
@@ -36,7 +34,7 @@ export class LoadingState extends SceneState {
 	private OnEnterBattle(message: any): void {
 		const enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
 		if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
-			this._ui.OnEnterBattleResult(enterBattle.error, () => SceneManager.ChangeState(SceneManager.State.Login));
+			this._ui.OnEnterBattleResult(enterBattle.error, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 		}
 		else {
 			this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
@@ -50,8 +48,8 @@ export class LoadingState extends SceneState {
 	 * @param port BS port
 	 */
 	public ConnectToBS(gcNID: Long, ip: string, port: number) {
-		const connector = Connector.bsConnector;
-		connector.onerror = (e) => this._ui.OnConnectToBSError(e, () => SceneManager.ChangeState(SceneManager.State.Login));
+		const connector = Global.connector.bsConnector;
+		connector.onerror = (e) => this._ui.OnConnectToBSError(e, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 		connector.onopen = () => {
 			Logger.Log("BS Connected");
 			const askLogin = ProtoCreator.Q_GC2BS_AskLogin();
@@ -59,7 +57,7 @@ export class LoadingState extends SceneState {
 			//请求登陆BS
 			connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
 				const resp: Protos.BS2GC_LoginRet = <Protos.BS2GC_LoginRet>message;
-				this._ui.OnLoginBSResut(resp.result, () => SceneManager.ChangeState(SceneManager.State.Login));
+				this._ui.OnLoginBSResut(resp.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 
 				switch (resp.result) {
 					case Protos.Global.ECommon.Success:
@@ -77,7 +75,7 @@ export class LoadingState extends SceneState {
 			});
 		}
 		//todo 这里最好用kcp连接
-		if (Env.platform == Env.Platform.Editor) {
+		if (Global.platform == Global.Platform.Editor) {
 			connector.Connect("localhost", port);
 		}
 		else {
@@ -91,7 +89,7 @@ export class LoadingState extends SceneState {
 	private RequestSnapshot(): void {
 		const requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
 		requestState.frame = 0;
-		Connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
+		Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
 			const ret = <Protos.BS2GC_RequestSnapshotRet>msg;
 			this._battleInfo.reqFrame = ret.reqFrame;
 			this._battleInfo.serverFrame = ret.curFrame;
@@ -126,8 +124,8 @@ export class LoadingState extends SceneState {
 	 */
 	private InitBattle(): void {
 		//初始化战场,解码快照
-		BattleManager.instance.Init(this._battleInfo, () => {
-			SceneManager.ChangeState(SceneManager.State.Battle);
+		Global.battleManager.SetBattleInfo(this._battleInfo, () => {
+			Global.sceneManager.ChangeState(SceneManager.State.Battle);
 		});
 	}
 }

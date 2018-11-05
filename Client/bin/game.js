@@ -8,12 +8,12 @@ function GetQueryString(name) {
 }
 
 var mode = GetQueryString("mode");
-if (mode == 0) {
+if (mode == undefined || mode == 0) {
 	require(["./js/Main"], function (G) {
 		new G.Main("{\"platform\": 0}");
 	})
 }
-else{
+else {
 	require(["./js/Pressure/Pressure"], function (G) {
 		new G.Pressure();
 	})

@@ -1,18 +1,16 @@
-define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/protos", "../Net/ProtoHelper", "./SceneState", "../RC/Utils/Logger", "./SceneManager"], function (require, exports, UIManager_1, Connector_1, protos_1, ProtoHelper_1, SceneState_1, Logger_1, SceneManager_1) {
+define(["require", "exports", "../Net/Connector", "../Libs/protos", "../Net/ProtoHelper", "./SceneState", "../RC/Utils/Logger", "./SceneManager", "../Global"], function (require, exports, Connector_1, protos_1, ProtoHelper_1, SceneState_1, Logger_1, SceneManager_1, Global_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MatchingState extends SceneState_1.SceneState {
         constructor(type) {
             super(type);
-            this.__ui = this._ui = UIManager_1.UIManager.matching;
-            Connector_1.Connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
-            Connector_1.Connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
-            Connector_1.Connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
+            this.__ui = this._ui = Global_1.Global.uiManager.matching;
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
         }
         OnEnter(param) {
             super.OnEnter(param);
-            this._roomID = 0;
-            this._mapID = 0;
             this._maxPlayers = 0;
             this._players = [];
             this.BeginMatch();
@@ -30,7 +28,7 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
             const playerJoin = message;
             this._ui.OnPlayerJoin(playerJoin.playerInfos);
             if (this._players.length == this._maxPlayers) {
-                this._ui.HandleFullPlayer(() => SceneManager_1.SceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading));
+                this._ui.HandleFullPlayer(() => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading));
             }
         }
         OnPlayerLeave(message) {
@@ -47,13 +45,11 @@ define(["require", "exports", "../UI/UIManager", "../Net/Connector", "../Libs/pr
         BeginMatch() {
             const beginMatch = ProtoHelper_1.ProtoCreator.Q_GC2CS_BeginMatch();
             beginMatch.actorID = 0;
-            Connector_1.Connector.SendToCS(protos_1.Protos.GC2CS_BeginMatch, beginMatch, message => {
+            Global_1.Global.connector.SendToCS(protos_1.Protos.GC2CS_BeginMatch, beginMatch, message => {
                 const resp = message;
                 this._ui.OnBeginMatchResult(resp.result);
                 switch (resp.result) {
                     case protos_1.Protos.CS2GC_BeginMatchRet.EResult.Success:
-                        this._roomID = resp.id;
-                        this._mapID = resp.mapID;
                         this._maxPlayers = resp.maxPlayer;
                         for (let i = 0; i < resp.playerInfos.length; i++) {
                             const playerInfo = resp.playerInfos[i];

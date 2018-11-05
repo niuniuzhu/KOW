@@ -6,48 +6,48 @@ import { UIBattle } from "./UIBattle";
 import { IUIModule } from "./IUIModule";
 
 export class UIManager {
-	private static _login: UILogin;
-	private static _main: UIMain;
-	private static _matching: UIMatching;
-	private static _loading: UILoading;
-	private static _battle: UIBattle;
-	private static _uis: IUIModule[];
+	private _login: UILogin;
+	private _main: UIMain;
+	private _matching: UIMatching;
+	private _loading: UILoading;
+	private _battle: UIBattle;
+	private _uis: IUIModule[];
 
-	public static get login(): UILogin { return UIManager._login; }
-	public static get main(): UIMain { return UIManager._main; }
-	public static get matching(): UIMatching { return UIManager._matching; }
-	public static get loading(): UILoading { return UIManager._loading; }
-	public static get battle(): UIBattle { return UIManager._battle; }
+	public get login(): UILogin { return this._login; }
+	public get main(): UIMain { return this._main; }
+	public get matching(): UIMatching { return this._matching; }
+	public get loading(): UILoading { return this._loading; }
+	public get battle(): UIBattle { return this._battle; }
 
-	public static Init(): void {
+	public Init(): void {
 		fairygui.UIPackage.addPackage("res/ui/global");
 		fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
 		fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
 		fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
 
-		UIManager._main = new UIMain();
-		UIManager._login = new UILogin();
-		UIManager._matching = new UIMatching();
-		UIManager._loading = new UILoading();
-		UIManager._battle = new UIBattle();
+		this._main = new UIMain();
+		this._login = new UILogin();
+		this._matching = new UIMatching();
+		this._loading = new UILoading();
+		this._battle = new UIBattle();
 
-		UIManager._uis = [];
-		UIManager._uis[0] = UIManager._main;
-		UIManager._uis[1] = UIManager._login;
-		UIManager._uis[2] = UIManager._matching;
-		UIManager._uis[3] = UIManager._loading;
-		UIManager._uis[4] = UIManager._battle;
+		this._uis = [];
+		this._uis[0] = this._main;
+		this._uis[1] = this._login;
+		this._uis[2] = this._matching;
+		this._uis[3] = this._loading;
+		this._uis[4] = this._battle;
 	}
 
-	public static Dispose(): void {
-		for (let i = 0; i < UIManager._uis.length; i++) {
-			UIManager._uis[i].Dispose();
+	public Dispose(): void {
+		for (let i = 0; i < this._uis.length; i++) {
+			this._uis[i].Dispose();
 		}
 	}
 
-	public static OnResize(e: laya.events.Event): any {
-		for (let i = 0; i < UIManager._uis.length; i++) {
-			UIManager._uis[i].OnResize(e);
+	public OnResize(e: laya.events.Event): any {
+		for (let i = 0; i < this._uis.length; i++) {
+			this._uis[i].OnResize(e);
 		}
 	}
 }

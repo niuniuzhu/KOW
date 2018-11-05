@@ -1,14 +1,9 @@
 import { Consts } from "./Consts";
-import { Env } from "./Env";
+import { Global } from "./Global";
 import { Hashtable } from "./RC/Utils/Hashtable";
 import { Preloader } from "./Preloader";
 import { Logger } from "./RC/Utils/Logger";
-import { ProtoCreator } from "./Net/ProtoHelper";
-import { Connector } from "./Net/Connector";
-import { Graphic } from "./Graphic";
-import { UIManager } from "./UI/UIManager";
 import { SceneManager } from "./Scene/SceneManager";
-import { BattleManager } from "./Model/BattleManager";
 import * as $protobuf from "./Libs/protobufjs";
 import * as Long from "./Libs/long";
 
@@ -31,7 +26,7 @@ export class Main {
 		fairygui.UIConfig.packageFileExtension = "bin";
 
 		const cfgJson = JSON.parse(config);
-		Env.platform = Hashtable.GetNumber(cfgJson, "platform");
+		Global.platform = Hashtable.GetNumber(cfgJson, "platform");
 
 		this.ShowLogo();
 	}
@@ -74,17 +69,14 @@ export class Main {
 	private StartGame(): void {
 		Logger.Log("start game...");
 
-		if (Env.platform == Env.Platform.WXMini) {
+		if (Global.platform == Global.Platform.WXMini) {
 			$protobuf.util.Long = <$protobuf.Constructor<Long>>(<any>Long).default.prototype.constructor;
 			$protobuf.configure();
 		}
-		ProtoCreator.Init();
-		Connector.Init();
-		Graphic.Init();
-		UIManager.Init();
-		SceneManager.Init();
-		BattleManager.Init();
-		SceneManager.ChangeState(SceneManager.State.Login);
+		//全局环境初始化
+		Global.Init();
+
+		Global.sceneManager.ChangeState(SceneManager.State.Login);
 
 		fairygui.GRoot.inst.on(fairygui.Events.SIZE_CHANGED, this, this.OnResize);
 		Laya.timer.frameLoop(1, this, this.Update);
@@ -92,11 +84,11 @@ export class Main {
 
 	private Update(): void {
 		const dt = Laya.timer.delta;
-		Connector.Update(dt);
-		SceneManager.Update(dt);
+		Global.connector.Update(dt);
+		Global.sceneManager.Update(dt);
 	}
 
 	private OnResize(e: laya.events.Event): void {
-		UIManager.OnResize(e);
+		Global.uiManager.OnResize(e);
 	}
 }

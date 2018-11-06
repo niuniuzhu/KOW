@@ -11,12 +11,13 @@ namespace CentralServer.Match
 {
 	public class Matcher
 	{
-		private static readonly ObjectPool<Room> POOL = new ObjectPool<Room>( 50, 25 );
+		private static readonly ObjectPool<Room> POOL = new ObjectPool<Room>( 50, 20 );
 
 		/// <summary>
-		/// 还在等待玩家进入的房间
+		/// 等待玩家进入的房间
 		/// </summary>
 		private readonly List<Room> _openRooms = new List<Room>();
+
 		/// <summary>
 		/// 房间ID对应的房间实例
 		/// </summary>
@@ -107,7 +108,7 @@ namespace CentralServer.Match
 			return room;
 		}
 
-		private void DestroyRoom( Room room )
+		private void DestroyRoom( Room room, bool removeFromList = true )
 		{
 			//移除房间内所有玩家
 			int count = room.numPlayers;
@@ -123,8 +124,11 @@ namespace CentralServer.Match
 				--count;
 			}
 
-			this._idToRoom.Remove( room.id );
-			this._openRooms.Remove( room );
+			if ( removeFromList )
+			{
+				this._idToRoom.Remove( room.id );
+				this._openRooms.Remove( room );
+			}
 
 			POOL.Push( room );
 			Logger.Log( $"room:{room.id} was destroied" );
@@ -225,6 +229,10 @@ namespace CentralServer.Match
 				return;
 			}
 
+			//从等待房间队列中移除,避免在通信期间有玩家搜索到该房间
+			this._idToRoom.Remove( room.id );
+			this._openRooms.Remove( room );
+
 			Protos.CS2BS_BattleInfo battleInfo = ProtoCreator.Q_CS2BS_BattleInfo();
 			battleInfo.MapID = room.mapID;
 			battleInfo.ConnTimeout = ( int ) Consts.WAITING_ROOM_TIME_OUT;
@@ -278,7 +286,7 @@ namespace CentralServer.Match
 							 } );
 						 }
 					 }
-					 this.DestroyRoom( room );
+					 this.DestroyRoom( room, false );
 				 } );
 		}
 

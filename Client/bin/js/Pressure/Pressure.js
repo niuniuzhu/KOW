@@ -24,7 +24,7 @@ define(["require", "exports", "./ConnectionTest"], function (require, exports, C
     }
     Pressure.UPDATE_INTERVAL = 20;
     Pressure.CONNECT_INTERVAL = 20;
-    Pressure.MAX_CONNECTION = 1;
+    Pressure.MAX_CONNECTION = 5;
     exports.Pressure = Pressure;
 });
 //# sourceMappingURL=Pressure.js.map

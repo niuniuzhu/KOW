@@ -11,7 +11,7 @@ namespace BattleServer.Battle
 {
 	public class BattleManager
 	{
-		private static readonly ObjectPool<Battle> POOL = new ObjectPool<Battle>();
+		private static readonly ObjectPool<Battle> POOL = new ObjectPool<Battle>( 50, 20 );
 
 		/// <summary>
 		/// 战场随机种子产生器

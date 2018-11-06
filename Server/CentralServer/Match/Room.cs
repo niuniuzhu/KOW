@@ -11,7 +11,7 @@ namespace CentralServer.Match
 	{
 		private static uint _gid;
 
-		public uint id { get; }
+		public readonly uint id;
 
 		public int numPlayers => this._players.Count;
 
@@ -45,7 +45,10 @@ namespace CentralServer.Match
 
 		public void Clear()
 		{
+			//必须在回收前主动移除所有玩家
 			System.Diagnostics.Debug.Assert( this._players.Count == 0, "remove all players before destroy room." );
+			this.mapID = 0;
+			this.maxPlayers = 0;
 		}
 
 		public bool CanAddPlayer( RoomPlayer player ) => this._players.Count < this.maxPlayers && !this.HasPlayer( player.gcNID );

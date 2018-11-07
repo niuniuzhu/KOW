@@ -36,7 +36,7 @@ namespace Core.Misc
 
 		public static void Warn( object obj ) => _log.Warn( SimpleInfo( ref obj ) );
 
-		public static void Error( object obj, int startFrame = 2, int count = 1 ) => _log.Error( Stacks( ref obj, startFrame, count ) );
+		public static void Error( object obj, int startFrame = 2, int count = 3 ) => _log.Error( Stacks( ref obj, startFrame, count ) );
 
 		public static void Info( object obj ) => _log.Info( obj );
 
@@ -59,7 +59,7 @@ namespace Core.Misc
 			return $"[{sf.GetFileName()}:{sf.GetFileLineNumber()}] {obj}";
 		}
 
-		private static string Stacks( ref object obj, int startFrame, int count )
+		public static string Stacks( ref object obj, int startFrame, int count )
 		{
 			if ( count == 0 )
 				return obj.ToString();

@@ -84,6 +84,9 @@ namespace CentralServer.Match
 				this.DestroyRoom( room );
 		}
 
+		/// <summary>
+		/// 加入房间
+		/// </summary>
 		private Room JoinRoom()
 		{
 			Room room;
@@ -98,6 +101,9 @@ namespace CentralServer.Match
 			return room;
 		}
 
+		/// <summary>
+		/// 创建房间
+		/// </summary>
 		private Room CreateRoom()
 		{
 			Room room = POOL.Pop();
@@ -112,6 +118,10 @@ namespace CentralServer.Match
 			return room;
 		}
 
+		/// <summary>
+		/// 销毁房间
+		/// </summary>
+		/// <param name="room"></param>
 		private void DestroyRoom( Room room )
 		{
 			//移除房间内所有玩家
@@ -312,15 +322,17 @@ namespace CentralServer.Match
 			}
 		}
 
-		private void Broadcast( Room room, IMessage message )
+		/// <summary>
+		/// 广播消息
+		/// </summary>
+		private void Broadcast( Room room, IMessage msg )
 		{
-			uint[] gsSIDs = new uint[room.numPlayers];
+			//预编码的消息广播不支持转发
 			for ( int i = 0; i < room.numPlayers; ++i )
 			{
 				RoomPlayer player = room.GetPlayerAt( i );
-				gsSIDs[i] = player.user.gsSID;
+				player.user.Send( msg );
 			}
-			CS.instance.netSessionMgr.Broadcast( gsSIDs, message );
 		}
 	}
 }

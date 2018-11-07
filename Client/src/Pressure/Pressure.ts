@@ -1,9 +1,9 @@
 import { ConnectionTest } from "./ConnectionTest";
 
 export class Pressure {
-	private static readonly UPDATE_INTERVAL: number = 20;
+	private static readonly UPDATE_INTERVAL: number = 1;
 	private static readonly CONNECT_INTERVAL: number = 20;
-	private static readonly MAX_CONNECTION: number = 100;
+	private static readonly MAX_CONNECTION: number = 50;
 
 	private _tests: ConnectionTest[] = [];
 	private _numConnections: number = 0;

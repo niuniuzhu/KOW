@@ -118,7 +118,8 @@ namespace Shared.Net
 			session = NetworkMgr.instance.GetSession( sessionId );
 			if ( session != null )
 				return true;
-			Logger.Warn( $"invalid sessionID:{sessionId}" );
+			object str = $"invalid sessionID:{sessionId}";
+			Logger.Warn( Logger.Stacks( ref str, 2, 5 ) );
 			return false;
 		}
 

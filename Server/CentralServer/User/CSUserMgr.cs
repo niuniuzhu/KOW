@@ -56,11 +56,9 @@ namespace CentralServer.User
 			}
 			else
 			{
+				//处理顶号
 				if ( user.isConnected )
-				{
-					//顶号
 					this.KickUser( user, ( int )Protos.CS2GS_KickGC.Types.EReason.DuplicateLogin );
-				}
 			}
 			user.OnCreate( ukey, gcNID, TimeUtils.utcTime );
 			this._gcNIDToUser[gcNID] = user;
@@ -95,7 +93,7 @@ namespace CentralServer.User
 			user.Online( sid, lid );
 			this._authUsers.Remove( user );
 
-			Logger.Info( $"user:{gcNID} online" );
+			Logger.Info( $"user:{gcNID}({lid}) online" );
 			return user;
 		}
 
@@ -104,12 +102,11 @@ namespace CentralServer.User
 		/// </summary>
 		public void Offline( CSUser user )
 		{
+			Logger.Info( $"user:{user.gcNID}({user.gsLID}) offline" );
 			//玩家下线
 			user.Offline();
 			//把玩家从房间中踢掉
 			CS.instance.matcher.OnUserKicked( user );
-
-			Logger.Info( $"user:{user.gcNID} offline" );
 		}
 
 		/// <summary>

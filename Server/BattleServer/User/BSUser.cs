@@ -23,7 +23,7 @@ namespace BattleServer.User
 		/// <summary>
 		/// 是否连线中
 		/// </summary>
-		public bool isConnected { get; private set; }
+		public bool isOnline { get; private set; }
 
 		public BSUser( ulong gcNID, Battle.Battle battle )
 		{
@@ -37,7 +37,7 @@ namespace BattleServer.User
 		/// <param name="msg">消息体</param>
 		public bool Send( IMessage msg )
 		{
-			if ( !this.isConnected )
+			if ( !this.isOnline )
 				return false;
 			return BS.instance.netSessionMgr.Send( this.gcSID, msg, null, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
 		}
@@ -48,7 +48,7 @@ namespace BattleServer.User
 		public void Online( uint gcSID )
 		{
 			this.gcSID = gcSID;
-			this.isConnected = true;
+			this.isOnline = true;
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace BattleServer.User
 		public void Offline()
 		{
 			this.gcSID = 0;
-			this.isConnected = false;
+			this.isOnline = false;
 		}
 	}
 }

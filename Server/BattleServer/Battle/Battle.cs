@@ -353,7 +353,7 @@ namespace BattleServer.Battle
 			{
 				BSUser user = this.GetPlayerAt( i ).user;
 				//未连接的不广播
-				if ( !user.isConnected )
+				if ( !user.isOnline )
 					continue;
 				this._tempSIDs.Add( user.gcSID );
 			}

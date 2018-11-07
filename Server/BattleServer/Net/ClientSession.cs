@@ -32,8 +32,12 @@ namespace BattleServer.Net
 			base.OnClose( reason );
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );
 
-			if ( reason != "offline" )
-				BS.instance.userMgr.OnDisconnect( this._gcNID );
+			//检查玩家是否登陆了
+			if ( BS.instance.userMgr.HasUser( this._gcNID ) )
+			{
+				if ( reason != "offline" )
+					BS.instance.userMgr.OnDisconnect( this._gcNID );
+			}
 
 			this._activeTime = 0;
 			this._gcNID = 0;
@@ -52,6 +56,7 @@ namespace BattleServer.Net
 
 			Protos.BS2GC_LoginRet loginRet = ProtoCreator.R_GC2BS_AskLogin( login.Opts.Pid );
 
+			//验证并登陆
 			BSUser user = BS.instance.userMgr.Online( this._gcNID, this.id );
 			if ( user != null )
 			{

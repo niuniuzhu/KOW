@@ -1,6 +1,5 @@
 ﻿using Core.Misc;
 using System.Collections.Generic;
-using Core.Net;
 
 namespace BattleServer.User
 {
@@ -45,6 +44,10 @@ namespace BattleServer.User
 			return user;
 		}
 
+		/// <summary>
+		/// 销毁玩家
+		/// 主线程调用
+		/// </summary>
 		public void DestroyUser( BSUser user )
 		{
 			this._gcNidToUser.Remove( user.gcNID );
@@ -63,23 +66,37 @@ namespace BattleServer.User
 			BSUser user = this.GetUser( gcNID );
 			if ( user == null )
 				return null;
-
+			//处理顶号
+			if ( user.isOnline )
+				this.KickUser( user, "duplicate login" );
 			user.Online( sid );
-			Logger.Info( $"user:{gcNID} online" );
+			Logger.Info( $"user:{gcNID}({sid}) online" );
 			return user;
 		}
 
 		/// <summary>
 		/// 下线指定玩家,由战场结束时调用
+		/// 这里不验证玩家是否已下线
 		/// </summary>
 		public void Offline( BSUser user )
 		{
+			Logger.Info( $"user:{user.gcNID}({user.gcSID}) offline" );
 			user.Offline();
-			Logger.Info( $"user:{user.gcNID} offline" );
+		}
+
+		/// <summary>
+		/// 踢掉玩家
+		/// 这里不验证玩家是否已下线
+		/// </summary>
+		public void KickUser( BSUser user, string reason )
+		{
+			BS.instance.netSessionMgr.CloseSession( user.gcSID, reason );
+			this.Offline( user );
 		}
 
 		/// <summary>
 		/// 断开指定玩家连接,由Session在连接关闭时调用
+		/// 这里不验证玩家是否已下线
 		/// </summary>
 		internal void OnDisconnect( ulong gcNID )
 		{

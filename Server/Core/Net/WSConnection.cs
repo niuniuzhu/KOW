@@ -106,8 +106,9 @@ namespace Core.Net
 					byte[] data = ProcessClientData( cache.GetBuffer(), 0, cache.length, out OPCode op );
 					if ( data == null )
 					{
-						if ( op == OPCode.Close )
-							this.OnError( $"client close with opcode:{OPCode.Close}" );
+						//父类已经判断断线了
+						//if ( op == OPCode.Close )
+						//	this.OnError( $"client close with opcode:{OPCode.Close}" );
 						break;
 					}
 

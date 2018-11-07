@@ -44,11 +44,10 @@ export class ProtoCreator {
 		ProtoCreator._TYPE2ID.set( Protos.BS2CS_BattleInfoRet, <Protos.MsgID>4001 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2CS_BattleEnd, <Protos.MsgID>4002 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2GC_LoginRet, <Protos.MsgID>4100 );
-		ProtoCreator._TYPE2ID.set( Protos.BS2GC_BattleStart, <Protos.MsgID>4102 );
-		ProtoCreator._TYPE2ID.set( Protos.BS2GC_BattleEnd, <Protos.MsgID>4103 );
-		ProtoCreator._TYPE2ID.set( Protos.BS2GC_RequestSnapshotRet, <Protos.MsgID>4104 );
-		ProtoCreator._TYPE2ID.set( Protos.BS2GC_FrameAction, <Protos.MsgID>4105 );
-		ProtoCreator._TYPE2ID.set( Protos.BS2GC_RequestFrameActionsRet, <Protos.MsgID>4106 );
+		ProtoCreator._TYPE2ID.set( Protos.BS2GC_BattleEnd, <Protos.MsgID>4101 );
+		ProtoCreator._TYPE2ID.set( Protos.BS2GC_RequestSnapshotRet, <Protos.MsgID>4102 );
+		ProtoCreator._TYPE2ID.set( Protos.BS2GC_FrameAction, <Protos.MsgID>4103 );
+		ProtoCreator._TYPE2ID.set( Protos.BS2GC_RequestFrameActionsRet, <Protos.MsgID>4104 );
 		ProtoCreator._TYPE2ID.set( Protos.CS2LS_GSInfos, <Protos.MsgID>5000 );
 		ProtoCreator._TYPE2ID.set( Protos.CS2LS_GSInfo, <Protos.MsgID>5001 );
 		ProtoCreator._TYPE2ID.set( Protos.CS2LS_GSLost, <Protos.MsgID>5002 );
@@ -96,11 +95,10 @@ export class ProtoCreator {
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4001, Protos.BS2CS_BattleInfoRet );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4002, Protos.BS2CS_BattleEnd );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4100, Protos.BS2GC_LoginRet );
-		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4102, Protos.BS2GC_BattleStart );
-		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4103, Protos.BS2GC_BattleEnd );
-		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4104, Protos.BS2GC_RequestSnapshotRet );
-		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4105, Protos.BS2GC_FrameAction );
-		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4106, Protos.BS2GC_RequestFrameActionsRet );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4101, Protos.BS2GC_BattleEnd );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4102, Protos.BS2GC_RequestSnapshotRet );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4103, Protos.BS2GC_FrameAction );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4104, Protos.BS2GC_RequestFrameActionsRet );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>5000, Protos.CS2LS_GSInfos );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>5001, Protos.CS2LS_GSInfo );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>5002, Protos.CS2LS_GSLost );
@@ -314,12 +312,6 @@ export class ProtoCreator {
 
 	public static Q_BS2GC_LoginRet(): Protos.BS2GC_LoginRet {
 		let msg = new Protos.BS2GC_LoginRet();
-		msg.opts = new Protos.MsgOpts();
-		return msg;
-	}
-
-	public static Q_BS2GC_BattleStart(): Protos.BS2GC_BattleStart {
-		let msg = new Protos.BS2GC_BattleStart();
 		msg.opts = new Protos.MsgOpts();
 		return msg;
 	}
@@ -706,23 +698,19 @@ export class ProtoCreator {
 				let msg = Protos.BS2GC_LoginRet.decode(data, size);
 				return msg;
 			}
-			case 4102: {
-				let msg = Protos.BS2GC_BattleStart.decode(data, size);
-				return msg;
-			}
-			case 4103: {
+			case 4101: {
 				let msg = Protos.BS2GC_BattleEnd.decode(data, size);
 				return msg;
 			}
-			case 4104: {
+			case 4102: {
 				let msg = Protos.BS2GC_RequestSnapshotRet.decode(data, size);
 				return msg;
 			}
-			case 4105: {
+			case 4103: {
 				let msg = Protos.BS2GC_FrameAction.decode(data, size);
 				return msg;
 			}
-			case 4106: {
+			case 4104: {
 				let msg = Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
 				return msg;
 			}
@@ -944,11 +932,6 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static D_BS2GC_BattleStart(data: Uint8Array, size: number): Protos.BS2GC_BattleStart {
-		let msg = Protos.BS2GC_BattleStart.decode(data, size);
-		return msg;
-	}
-
 	public static D_BS2GC_BattleEnd(data: Uint8Array, size: number): Protos.BS2GC_BattleEnd {
 		let msg = Protos.BS2GC_BattleEnd.decode(data, size);
 		return msg;
@@ -1142,19 +1125,16 @@ export class ProtoCreator {
 			case 4100: {
 				return new Protos.BS2GC_LoginRet();
 			}
-			case 4102: {
-				return new Protos.BS2GC_BattleStart();
-			}
-			case 4103: {
+			case 4101: {
 				return new Protos.BS2GC_BattleEnd();
 			}
-			case 4104: {
+			case 4102: {
 				return new Protos.BS2GC_RequestSnapshotRet();
 			}
-			case 4105: {
+			case 4103: {
 				return new Protos.BS2GC_FrameAction();
 			}
-			case 4106: {
+			case 4104: {
 				return new Protos.BS2GC_RequestFrameActionsRet();
 			}
 			case 5000: {
@@ -1302,19 +1282,16 @@ export class ProtoCreator {
 			case 4100: {
 				return (<Protos.BS2GC_LoginRet>message).opts;
 			}
-			case 4102: {
-				return (<Protos.BS2GC_BattleStart>message).opts;
-			}
-			case 4103: {
+			case 4101: {
 				return (<Protos.BS2GC_BattleEnd>message).opts;
 			}
-			case 4104: {
+			case 4102: {
 				return (<Protos.BS2GC_RequestSnapshotRet>message).opts;
 			}
-			case 4105: {
+			case 4103: {
 				return (<Protos.BS2GC_FrameAction>message).opts;
 			}
-			case 4106: {
+			case 4104: {
 				return (<Protos.BS2GC_RequestFrameActionsRet>message).opts;
 			}
 			case 5000: {

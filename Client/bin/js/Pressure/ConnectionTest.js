@@ -9,6 +9,8 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
             ProtoHelper_1.ProtoCreator.Init();
             this._connector.Init();
             this._connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
+            this._connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+            this._connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
             this._closeTime = MathUtils_1.MathUtils.Random(1000, 3000);
             const name = GUID_1.GUID.create().toString();
             this.Login(name, 0, 0);
@@ -90,15 +92,6 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
                 }
             });
         }
-        OnEnterBattle(message) {
-            const enterBattle = message;
-            if (enterBattle.result != protos_1.Protos.CS2GC_EnterBattle.Result.Success) {
-                Logger_1.Logger.Error(enterBattle.result);
-            }
-            else {
-                this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
-            }
-        }
         ConnectToBS(gcNID, ip, port) {
             const connector = this._connector.bsConnector;
             connector.onerror = (e) => Logger_1.Logger.Error(e);
@@ -118,6 +111,21 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
                 });
             };
             connector.Connect("localhost", port);
+        }
+        OnEnterBattle(message) {
+            const enterBattle = message;
+            if (enterBattle.result != protos_1.Protos.CS2GC_EnterBattle.Result.Success) {
+                Logger_1.Logger.Error(enterBattle.result);
+            }
+            else {
+                this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+            }
+        }
+        OnBattleEnd(message) {
+            const battleEnd = message;
+        }
+        OnFrameAction(message) {
+            const framAction = message;
         }
     }
     exports.ConnectionTest = ConnectionTest;

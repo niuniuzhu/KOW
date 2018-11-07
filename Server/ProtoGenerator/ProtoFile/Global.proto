@@ -49,11 +49,10 @@ enum MsgID {
 	eBS2CS_BattleEnd = 4002;
 
 	eBS2GC_LoginRet = 4100;
-	eBS2GC_BattleStart = 4102;
-	eBS2GC_BattleEnd = 4103;
-	eBS2GC_RequestSnapshotRet = 4104;
-	eBS2GC_FrameAction = 4105;
-	eBS2GC_RequestFrameActionsRet = 4106;
+	eBS2GC_BattleEnd = 4101;
+	eBS2GC_RequestSnapshotRet = 4102;
+	eBS2GC_FrameAction = 4103;
+	eBS2GC_RequestFrameActionsRet = 4104;
 
 	//cs
 	eCS2LS_GSInfos = 5000;

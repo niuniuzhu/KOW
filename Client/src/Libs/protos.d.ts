@@ -129,11 +129,10 @@ export namespace Protos {
         eBS2CS_BattleInfoRet = 4001,
         eBS2CS_BattleEnd = 4002,
         eBS2GC_LoginRet = 4100,
-        eBS2GC_BattleStart = 4102,
-        eBS2GC_BattleEnd = 4103,
-        eBS2GC_RequestSnapshotRet = 4104,
-        eBS2GC_FrameAction = 4105,
-        eBS2GC_RequestFrameActionsRet = 4106,
+        eBS2GC_BattleEnd = 4101,
+        eBS2GC_RequestSnapshotRet = 4102,
+        eBS2GC_FrameAction = 4103,
+        eBS2GC_RequestFrameActionsRet = 4104,
         eCS2LS_GSInfos = 5000,
         eCS2LS_GSInfo = 5001,
         eCS2LS_GSLost = 5002,
@@ -325,26 +324,6 @@ export namespace Protos {
             InvalidUser = 1,
             InvalidBattle = 2
         }
-    }
-
-    interface IBS2GC_BattleStart {
-        opts?: (Protos.IMsgOpts|null);
-        id?: (number|null);
-    }
-
-    class BS2GC_BattleStart implements IBS2GC_BattleStart {
-        constructor(properties?: Protos.IBS2GC_BattleStart);
-        public opts?: (Protos.IMsgOpts|null);
-        public id: number;
-        public static create(properties?: Protos.IBS2GC_BattleStart): Protos.BS2GC_BattleStart;
-        public static encode(message: Protos.IBS2GC_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS2GC_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_BattleStart;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_BattleStart;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_BattleStart;
-        public static toObject(message: Protos.BS2GC_BattleStart, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
     }
 
     interface IBS2GC_BattleEnd {

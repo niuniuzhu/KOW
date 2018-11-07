@@ -68,12 +68,8 @@ namespace CentralServer.Match
 		{
 			if ( !this._lidToBID.TryGetValue( lid, out List<uint> bids ) )
 				return;
-			int count = bids.Count;
-			for ( int i = 0; i < count; i++ )
-			{
-				uint bid = bids[i];
-				this.Remove( lid, bid );
-			}
+			while ( bids.Count > 0 )
+				this.Remove( lid, bids[0] );
 		}
 	}
 }

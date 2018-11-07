@@ -16,6 +16,8 @@ export class ConnectionTest {
 		this._connector.Init();
 
 		this._connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
+		this._connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+		this._connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
 
 		this._closeTime = MathUtils.Random(1000, 3000);
 		const name = GUID.create().toString();
@@ -110,16 +112,6 @@ export class ConnectionTest {
 		});
 	}
 
-	private OnEnterBattle(message: any): void {
-		const enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
-		if (enterBattle.result != Protos.CS2GC_EnterBattle.Result.Success) {
-			Logger.Error(enterBattle.result);
-		}
-		else {
-			this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
-		}
-	}
-
 	public ConnectToBS(gcNID: Long, ip: string, port: number) {
 		const connector = this._connector.bsConnector;
 		connector.onerror = (e) => Logger.Error(e);
@@ -149,5 +141,23 @@ export class ConnectionTest {
 			});
 		}
 		connector.Connect("localhost", port);
+	}
+
+	private OnEnterBattle(message: any): void {
+		const enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
+		if (enterBattle.result != Protos.CS2GC_EnterBattle.Result.Success) {
+			Logger.Error(enterBattle.result);
+		}
+		else {
+			this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+		}
+	}
+
+	private OnBattleEnd(message: any): void {
+		const battleEnd: Protos.BS2GC_BattleEnd = <Protos.BS2GC_BattleEnd>message;
+	}
+
+	private OnFrameAction(message: any): void {
+		const framAction: Protos.BS2GC_FrameAction = <Protos.BS2GC_FrameAction>message;
 	}
 }

@@ -150,7 +150,7 @@ namespace CentralServer.Match
 				return;
 			}
 
-			if ( CS.instance.battleStaging.ContainsUser( user ) )
+			if ( user.isInBattle )
 			{
 				Logger.Warn( $"user:{gcNID} in battle" );
 				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.UserInBattle;
@@ -282,11 +282,12 @@ namespace CentralServer.Match
 				Protos.CS2GC_EnterBattle enterBattle = ProtoCreator.Q_CS2GC_EnterBattle();
 				enterBattle.Ip = appropriateBSInfo.ip;
 				enterBattle.Port = appropriateBSInfo.port;
-				this.Broadcast( roomCloned, enterBattle, 0, ( m, player ) =>
+				for ( int i = 0; i < roomCloned.numPlayers; ++i )
 				{
-					Protos.CS2GC_EnterBattle m2 = ( Protos.CS2GC_EnterBattle )m;
-					m2.GcNID = player.user.ukey | ( ulong )appropriateBSInfo.lid << 32;
-				} );
+					RoomPlayer player = roomCloned.GetPlayerAt( i );
+					enterBattle.GcNID = player.user.ukey | ( ulong )appropriateBSInfo.lid << 32;
+					player.user.Send( enterBattle );
+				}
 			} );
 		}
 
@@ -311,16 +312,15 @@ namespace CentralServer.Match
 			}
 		}
 
-		private void Broadcast( Room room, IMessage msg, ulong gcNID = 0, Action<IMessage, RoomPlayer> msgModifier = null )
+		private void Broadcast( Room room, IMessage message )
 		{
+			uint[] gsSIDs = new uint[room.numPlayers];
 			for ( int i = 0; i < room.numPlayers; ++i )
 			{
 				RoomPlayer player = room.GetPlayerAt( i );
-				if ( gcNID != 0 && player.user.gcNID == gcNID )
-					continue;
-				msgModifier?.Invoke( msg, player );
-				player.user.Send( msg );
+				gsSIDs[i] = player.user.gsSID;
 			}
+			CS.instance.netSessionMgr.Broadcast( gsSIDs, message );
 		}
 	}
 }

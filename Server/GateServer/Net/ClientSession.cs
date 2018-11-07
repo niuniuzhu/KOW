@@ -32,7 +32,7 @@ namespace GateServer.Net
 			if ( GS.instance.userMgr.RemoveClient( this._gcNID ) )
 			{
 				//CS主动踢掉不用再次通知了
-				if ( "CS Kick" != reason )
+				if ( "CS Kick" != reason || "CS Closed" != reason )
 				{
 					//移除成功,说明向CS请求验证成功,所以在连接关闭时需要通知CS
 					//通知cs客户端丢失
@@ -48,7 +48,7 @@ namespace GateServer.Net
 
 		private ErrorCode OnGc2GsAskLogin( Google.Protobuf.IMessage message )
 		{
-			Protos.GC2GS_AskLogin login = ( Protos.GC2GS_AskLogin ) message;
+			Protos.GC2GS_AskLogin login = ( Protos.GC2GS_AskLogin )message;
 			this._gcNID = login.SessionID;
 
 			Protos.GS2CS_GCAskLogin gcAskLogin = ProtoCreator.Q_GS2CS_GCAskLogin();
@@ -58,7 +58,7 @@ namespace GateServer.Net
 			//向CS请求客户端登陆
 			this.owner.Send( SessionType.ServerG2CS, gcAskLogin, msgRet =>
 			{
-				Protos.CS2GS_GCLoginRet csLoginRet = ( Protos.CS2GS_GCLoginRet ) msgRet;
+				Protos.CS2GS_GCLoginRet csLoginRet = ( Protos.CS2GS_GCLoginRet )msgRet;
 				Protos.GS2GC_LoginRet gsLoginRet = ProtoCreator.R_GC2GS_AskLogin( login.Opts.Pid );
 				switch ( csLoginRet.Result )
 				{
@@ -68,7 +68,7 @@ namespace GateServer.Net
 						GS.instance.userMgr.AddClient( this._gcNID, this.id );
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
 						gsLoginRet.GcNID = csLoginRet.GcNID;
-						gsLoginRet.GcState = ( Protos.GS2GC_LoginRet.Types.EGCCState ) csLoginRet.GcState;
+						gsLoginRet.GcState = ( Protos.GS2GC_LoginRet.Types.EGCCState )csLoginRet.GcState;
 						gsLoginRet.BsIP = csLoginRet.BsIP;
 						gsLoginRet.BsPort = csLoginRet.BsPort;
 						break;

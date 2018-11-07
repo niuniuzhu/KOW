@@ -27,11 +27,11 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Global"], funct
         }
         OnEnterBattleResult(result, onConfirm) {
             switch (result) {
-                case protos_1.Protos.CS2GC_EnterBattle.Error.Success:
+                case protos_1.Protos.CS2GC_EnterBattle.Result.Success:
                     break;
-                case protos_1.Protos.CS2GC_EnterBattle.Error.BSLost:
-                case protos_1.Protos.CS2GC_EnterBattle.Error.BSNotFound:
-                case protos_1.Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
+                case protos_1.Protos.CS2GC_EnterBattle.Result.BSLost:
+                case protos_1.Protos.CS2GC_EnterBattle.Result.BSNotFound:
+                case protos_1.Protos.CS2GC_EnterBattle.Result.BattleCreateFailed:
                     UIAlert_1.UIAlert.Show("登录战场失败", onConfirm);
                     break;
             }
@@ -44,7 +44,7 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Global"], funct
                 case protos_1.Protos.Global.ECommon.Success:
                     break;
                 default:
-                    UIAlert_1.UIAlert.Show("进入战场失败", onConfirm);
+                    UIAlert_1.UIAlert.Show("无法进入战场", onConfirm);
                     break;
             }
         }

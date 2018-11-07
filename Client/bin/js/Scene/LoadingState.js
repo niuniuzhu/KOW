@@ -10,8 +10,8 @@ define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../Net/Con
         }
         OnEnterBattle(message) {
             const enterBattle = message;
-            if (enterBattle.error != protos_1.Protos.CS2GC_EnterBattle.Error.Success) {
-                this._ui.OnEnterBattleResult(enterBattle.error, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
+            if (enterBattle.result != protos_1.Protos.CS2GC_EnterBattle.Result.Success) {
+                this._ui.OnEnterBattleResult(enterBattle.result, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
             }
             else {
                 this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);

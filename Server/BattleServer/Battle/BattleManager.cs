@@ -118,12 +118,12 @@ namespace BattleServer.Battle
 			for ( int i = 0; i < count; i++ )
 			{
 				Player player = battle.GetPlayerAt( i );
+				//断开玩家连接
+				BS.instance.netSessionMgr.DelayCloseSession( player.user.gcSID, 500, "offline" );
 				//玩家下线
 				BS.instance.userMgr.Offline( player.user );
 				//销毁玩家
 				BS.instance.userMgr.DestroyUser( player.user );
-				//断开玩家连接
-				BS.instance.netSessionMgr.DelayCloseSession( player.user.gcSID, 500, "offline" );
 			}
 
 			//处理战场的身后事

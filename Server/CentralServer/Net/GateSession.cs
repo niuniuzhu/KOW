@@ -34,7 +34,7 @@ namespace CentralServer.Net
 			CS.instance.UpdateAppropriateGSInfo();
 
 			//踢出所有连接到该GS的玩家
-			CS.instance.userMgr.KickUsersByGS( this.logicID );
+			CS.instance.userMgr.OnGSDisconnect( this.logicID );
 
 			//通知LS有GS断开连接了
 			Protos.CS2LS_GSLost gsLost = ProtoCreator.Q_CS2LS_GSLost();
@@ -114,11 +114,11 @@ namespace CentralServer.Net
 			else
 			{
 				//检查玩家是否在战场
-				if ( CS.instance.battleStaging.GetBSSID( user, out uint bsSID ) )
+				if ( user.isInBattle )
 				{
 					//检查是否存在BS信息(可能当玩家上线时,BS已丢失)
 					//这里理应不会成功断言,因为BS丢失时会把玩家从战场暂存器里移除
-					System.Diagnostics.Debug.Assert( CS.instance.netSessionMgr.GetSession( bsSID, out INetSession session ), $"can not find BS:{bsSID}" );
+					System.Diagnostics.Debug.Assert( CS.instance.netSessionMgr.GetSession( user.bsSID, out INetSession session ), $"can not find BS:{user.bsSID}" );
 					System.Diagnostics.Debug.Assert( CS.instance.lIDToBSInfos.TryGetValue( ( ( BattleSession )session ).logicID, out BSInfo bsInfo ),
 													$"can not find BS:{( ( BattleSession )session ).logicID}" );
 					gcAskLoginRet.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;
@@ -139,7 +139,12 @@ namespace CentralServer.Net
 		{
 			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost )message;
 			ulong gcNID = gcLost.SessionID;
-			CS.instance.userMgr.Offline( gcNID );
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+			if ( user != null )
+			{
+				CS.instance.userMgr.Offline( user );
+				CS.instance.userMgr.DestroyUser( user );
+			}
 			return ErrorCode.Success;
 		}
 

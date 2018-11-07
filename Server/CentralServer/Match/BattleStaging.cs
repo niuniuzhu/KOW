@@ -19,17 +19,6 @@ namespace CentralServer.Match
 		/// BS逻辑ID对应的所有战场ID
 		/// </summary>
 		private readonly Dictionary<uint, List<uint>> _lidToBID = new Dictionary<uint, List<uint>>();
-		/// <summary>
-		/// 玩家到BS SessionID的映射
-		/// </summary>
-		private readonly Dictionary<CSUser, uint> _userTobsSID = new Dictionary<CSUser, uint>();
-
-		public bool ContainsUser( CSUser user ) => this._userTobsSID.ContainsKey( user );
-
-		/// <summary>
-		/// 根据指定玩家获取BS SessionID
-		/// </summary>
-		public bool GetBSSID( CSUser user, out uint bsSID ) => this._userTobsSID.TryGetValue( user, out bsSID );
 
 		/// <summary>
 		/// 把玩家添加到暂存区
@@ -40,11 +29,11 @@ namespace CentralServer.Match
 		/// <param name="bid">战场ID</param>
 		public void Add( CSUser user, uint lid, uint sid, uint bid )
 		{
-			System.Diagnostics.Debug.Assert( !this._userTobsSID.ContainsKey( user ), $"user:{user.gcNID} already in battle staging" );
+			System.Diagnostics.Debug.Assert( !user.isInBattle, $"user:{user.gcNID} already in battle staging" );
 			//记录BS sessionID
-			this._userTobsSID[user] = sid;
+			user.EnterBattle( sid, lid );
 			this._lidToBID.AddToList( lid, bid );
-			this._lbIDToUser.AddToList( lid | ( ulong ) bid << 32, user );
+			this._lbIDToUser.AddToList( lid | ( ulong )bid << 32, user );
 			Logger.Log( $"user:{user.gcNID} join staging. lid:{lid}, bid:{bid}" );
 		}
 
@@ -55,14 +44,17 @@ namespace CentralServer.Match
 		/// <param name="bid">战场ID</param>
 		public void Remove( uint lid, uint bid )
 		{
-			ulong lbID = lid | ( ulong ) bid << 32;
+			ulong lbID = lid | ( ulong )bid << 32;
 			List<CSUser> users = this._lbIDToUser[lbID];
 			int c2 = users.Count;
 			for ( int j = 0; j < c2; j++ )
 			{
 				CSUser user = users[j];
-				System.Diagnostics.Debug.Assert( this._userTobsSID.ContainsKey( user ), $"user:{user.gcNID} not in battle staging" );
-				this._userTobsSID.Remove( user );
+				System.Diagnostics.Debug.Assert( user.isInBattle, $"user:{user.gcNID} not in battle staging" );
+				user.LeaveBattle();
+				//检查GC是否已断线
+				if ( !user.isConnected )
+					CS.instance.userMgr.DestroyUser( user );
 				Logger.Log( $"user:{user.gcNID} leave staging. lid:{lid}, bid:{bid}" );
 			}
 			this._lbIDToUser.Remove( lbID );

@@ -33,8 +33,8 @@ export class LoadingState extends SceneState {
 	 */
 	private OnEnterBattle(message: any): void {
 		const enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
-		if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
-			this._ui.OnEnterBattleResult(enterBattle.error, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+		if (enterBattle.result != Protos.CS2GC_EnterBattle.Result.Success) {
+			this._ui.OnEnterBattleResult(enterBattle.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 		}
 		else {
 			this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);

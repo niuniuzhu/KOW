@@ -19,14 +19,14 @@ namespace LoginServer.Net
 		protected override void OnEstablish()
 		{
 			base.OnEstablish();
-			Logger.Info( $"CS({this.logicID}) connected." );
+			Logger.Info( $"CS({this.id}) connected." );
 			this._pingTime = 0;
 		}
 
 		protected override void OnClose( string reason )
 		{
 			base.OnClose( reason );
-			Logger.Info( $"CS({this.logicID}) disconnected with msg:{reason}." );
+			Logger.Info( $"CS({this.id}) disconnected with msg:{reason}." );
 		}
 
 		protected override void OnHeartBeat( long dt )

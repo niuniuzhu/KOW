@@ -43,9 +43,7 @@ namespace CentralServer.Net
 		private ErrorCode OnLs2CsGclogin( Google.Protobuf.IMessage message )
 		{
 			Protos.LS2CS_GCLogin gcLogin = ( Protos.LS2CS_GCLogin )message;
-			//todo 这里应立即创建一个玩家
 			CSUser user = CS.instance.userMgr.CreateUser( gcLogin.Ukey, gcLogin.SessionID );
-
 
 			Protos.CS2LS_GCLoginRet gcLoginRet = ProtoCreator.R_LS2CS_GCLogin( gcLogin.Opts.Pid );
 			gcLoginRet.Result = user != null

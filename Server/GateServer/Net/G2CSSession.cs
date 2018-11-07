@@ -19,7 +19,7 @@ namespace GateServer.Net
 		protected override void OnEstablish()
 		{
 			base.OnEstablish();
-			Logger.Info( $"CS({this.logicID}) connected." );
+			Logger.Info( $"CS({this.id}) connected." );
 
 			this._pingTime = 0;
 			this._reportTime = 0;
@@ -29,12 +29,12 @@ namespace GateServer.Net
 		protected override void OnClose( string reason )
 		{
 			base.OnClose( reason );
-			Logger.Info( $"CS({this.logicID}) disconnected with msg:{reason}." );
+			Logger.Info( $"CS({this.id}) disconnected with msg:{reason}." );
 			//断开所有客户端
 			uint[] gcSids = GS.instance.userMgr.GetClients();
 			foreach ( uint sid in gcSids )
 			{
-				GS.instance.netSessionMgr.CloseSession( sid, "CS Closed." );
+				GS.instance.netSessionMgr.CloseSession( sid, "CS Closed" );
 			}
 			GS.instance.userMgr.ClearClients();
 		}

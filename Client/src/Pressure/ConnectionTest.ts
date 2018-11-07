@@ -112,8 +112,8 @@ export class ConnectionTest {
 
 	private OnEnterBattle(message: any): void {
 		const enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
-		if (enterBattle.error != Protos.CS2GC_EnterBattle.Error.Success) {
-			Logger.Error(enterBattle.error);
+		if (enterBattle.result != Protos.CS2GC_EnterBattle.Result.Success) {
+			Logger.Error(enterBattle.result);
 		}
 		else {
 			this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);

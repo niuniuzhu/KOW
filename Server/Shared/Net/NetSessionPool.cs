@@ -1,9 +1,8 @@
-﻿using Core.Net;
+﻿using Core.Misc;
+using Core.Net;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading;
 
 namespace Shared.Net
 {
@@ -11,9 +10,9 @@ namespace Shared.Net
 	{
 		private static NetSessionPool _instance;
 		public static NetSessionPool instance => _instance ?? ( _instance = new NetSessionPool() );
-		private static int _gid;
+		private static uint _gid;
 
-		private readonly ConcurrentDictionary<Type, ConcurrentQueue<INetSession>> _typeToObjects = new ConcurrentDictionary<Type, ConcurrentQueue<INetSession>>();
+		private readonly Dictionary<Type, Queue<INetSession>> _typeToObjects = new Dictionary<Type, Queue<INetSession>>();
 
 		private NetSessionPool()
 		{
@@ -21,44 +20,55 @@ namespace Shared.Net
 
 		public T Pop<T>( ProtoType protoType ) where T : INetSession
 		{
-			Type type = typeof( T );
-			if ( !this._typeToObjects.TryGetValue( type, out ConcurrentQueue<INetSession> objs ) )
+			lock ( this._typeToObjects )
 			{
-				objs = new ConcurrentQueue<INetSession>();
-				this._typeToObjects[type] = objs;
-			}
+				Type type = typeof( T );
+				if ( !this._typeToObjects.TryGetValue( type, out Queue<INetSession> objs ) )
+				{
+					objs = new Queue<INetSession>();
+					this._typeToObjects[type] = objs;
+				}
 
-			if ( objs.Count == 0 )
-			{
-				uint id = ( uint )Interlocked.Increment( ref _gid );
-				if ( id == uint.MaxValue )
-					return default( T );
+				if ( objs.Count == 0 )
+				{
+					if ( _gid == uint.MaxValue )
+					{
+						Logger.Warn( "id reach the limit!!" );
+						_gid = 0;
+					}
+					uint id = ++_gid;
+					return ( T )Activator.CreateInstance( typeof( T ), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, protoType }, null );
+				}
 
-				return ( T )Activator.CreateInstance( typeof( T ), BindingFlags.NonPublic | BindingFlags.Instance,
-													   null,
-													   new object[] { id, protoType }, null );
+				objs.TryDequeue( out INetSession session );
+				return ( T )session;
 			}
-			objs.TryDequeue( out INetSession session );
-			return ( T )session;
 		}
 
 		public void Push( INetSession session )
 		{
-			this._typeToObjects[session.GetType()].Enqueue( session );
+			lock ( this._typeToObjects )
+			{
+				this._typeToObjects[session.GetType()].Enqueue( session );
+			}
 		}
 
 		public void Dispose()
 		{
-			foreach ( KeyValuePair<Type, ConcurrentQueue<INetSession>> kv in this._typeToObjects )
+			lock ( this._typeToObjects )
 			{
-				ConcurrentQueue<INetSession> queue = kv.Value;
-				while ( !queue.IsEmpty )
+				foreach ( var kv in this._typeToObjects )
 				{
-					queue.TryDequeue( out INetSession session );
-					session.Dispose();
+					Queue<INetSession> queue = kv.Value;
+					while ( queue.Count > 0 )
+					{
+						queue.TryDequeue( out INetSession session );
+						session.Dispose();
+					}
 				}
+
+				this._typeToObjects.Clear();
 			}
-			this._typeToObjects.Clear();
 		}
 	}
 }

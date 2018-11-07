@@ -38,13 +38,13 @@ export class UILoading implements IUIModule {
 	public OnResize(e: laya.events.Event): void {
 	}
 
-	public OnEnterBattleResult(result: Protos.CS2GC_EnterBattle.Error, onConfirm: () => void): void {
+	public OnEnterBattleResult(result: Protos.CS2GC_EnterBattle.Result, onConfirm: () => void): void {
 		switch (result) {
-			case Protos.CS2GC_EnterBattle.Error.Success:
+			case Protos.CS2GC_EnterBattle.Result.Success:
 				break;
-			case Protos.CS2GC_EnterBattle.Error.BSLost:
-			case Protos.CS2GC_EnterBattle.Error.BSNotFound:
-			case Protos.CS2GC_EnterBattle.Error.BattleCreateFailed:
+			case Protos.CS2GC_EnterBattle.Result.BSLost:
+			case Protos.CS2GC_EnterBattle.Result.BSNotFound:
+			case Protos.CS2GC_EnterBattle.Result.BattleCreateFailed:
 				UIAlert.Show("登录战场失败", onConfirm);
 				break;
 		}

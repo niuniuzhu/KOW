@@ -92,8 +92,8 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
         }
         OnEnterBattle(message) {
             const enterBattle = message;
-            if (enterBattle.error != protos_1.Protos.CS2GC_EnterBattle.Error.Success) {
-                Logger_1.Logger.Error(enterBattle.error);
+            if (enterBattle.result != protos_1.Protos.CS2GC_EnterBattle.Result.Success) {
+                Logger_1.Logger.Error(enterBattle.result);
             }
             else {
                 this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);

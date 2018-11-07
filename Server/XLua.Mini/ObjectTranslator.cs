@@ -1591,22 +1591,26 @@ namespace XLua
 				throw new InvalidOperationException( "push or get of " + type + " has register!" );
 			}
 			push_func_with_type.Add( type, push );
-			get_func_with_type.Add( type, new Func<RealStatePtr, int, T>( ( L, idx ) => {
+			get_func_with_type.Add( type, new Func<RealStatePtr, int, T>( ( L, idx ) =>
+			{
 				T ret;
 				get( L, idx, out ret );
 				return ret;
 			} ) );
 
 			registerCustomOp( type,
-				( RealStatePtr L, object obj ) => {
+				( RealStatePtr L, object obj ) =>
+				{
 					push( L, ( T )obj );
 				},
-				( RealStatePtr L, int idx ) => {
+				( RealStatePtr L, int idx ) =>
+				{
 					T val;
 					get( L, idx, out val );
 					return val;
 				},
-				( RealStatePtr L, int idx, object obj ) => {
+				( RealStatePtr L, int idx, object obj ) =>
+				{
 					update( L, idx, ( T )obj );
 				}
 			);
@@ -1615,11 +1619,11 @@ namespace XLua
 		public void RegisterCaster<T>( GetFunc<T> get )
 		{
 			objectCasters.AddCaster( typeof( T ), ( L, idx, o ) =>
-			{
-				T obj;
-				get( L, idx, out obj );
-				return obj;
-			} );
+			   {
+				   T obj;
+				   get( L, idx, out obj );
+				   return obj;
+			   } );
 		}
 
 		int decimal_type_id = -1;

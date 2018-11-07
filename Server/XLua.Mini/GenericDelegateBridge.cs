@@ -289,3 +289,4 @@ namespace XLua
 		}
 	}
 }
+

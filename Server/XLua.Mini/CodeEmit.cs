@@ -207,8 +207,9 @@ namespace XLua
 				{
 					var assemblyName = new AssemblyName();
 					assemblyName.Name = "XLuaCodeEmit";
-					codeEmitModule = AppDomain.CurrentDomain.DefineDynamicAssembly( assemblyName, AssemblyBuilderAccess.Run )
-						.DefineDynamicModule( "XLuaCodeEmit" );
+					//codeEmitModule = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run)
+					//    .DefineDynamicModule("XLuaCodeEmit");
+					codeEmitModule = AssemblyBuilder.DefineDynamicAssembly( assemblyName, AssemblyBuilderAccess.Run ).DefineDynamicModule( "XLuaCodeEmit" );
 				}
 				return codeEmitModule;
 			}
@@ -375,12 +376,12 @@ namespace XLua
 		public void SetGenInterfaces( List<Type> gen_interfaces )
 		{
 			gen_interfaces.ForEach( ( item ) =>
-			{
-				if ( !this.gen_interfaces.Contains( item ) )
-				{
-					this.gen_interfaces.Add( item );
-				}
-			} );
+			 {
+				 if ( !this.gen_interfaces.Contains( item ) )
+				 {
+					 this.gen_interfaces.Add( item );
+				 }
+			 } );
 		}
 
 		public Type EmitInterfaceImpl( Type to_be_impl )

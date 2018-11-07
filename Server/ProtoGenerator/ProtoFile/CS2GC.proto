@@ -47,7 +47,7 @@ message CS2GC_RoomInfo {
 
 //所有玩家准备完成,下发BS连接信息
 message CS2GC_EnterBattle {
-	enum Error{
+	enum Result{
 		Success = 0;
 		BSNotFound = 1;//找不到bs
 		BSLost = 2;//bs意外丢失
@@ -57,5 +57,5 @@ message CS2GC_EnterBattle {
 	uint64 gcNID = 2;//登录bs时进行校验的id
 	string ip = 3;//bs ip
 	int32 port = 4;//bs port
-	Error error = 5;
+	Result result = 5;
 }

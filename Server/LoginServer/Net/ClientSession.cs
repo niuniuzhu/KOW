@@ -329,7 +329,7 @@ namespace LoginServer.Net
 				if ( !hasUsername )
 				{
 					//找不到用户名则自动注册
-					this.SmartRegister( login.Sdk, login.Name, login.Platform, ret =>
+					this.SmartRegister( login.Sdk, login.Name, login.Platform, this.connection.remoteEndPoint.ToString(), ret =>
 					{
 						ukey = ret.Id;
 						if ( ret.Result == Protos.DB2LS_QueryResult.Success )
@@ -350,12 +350,13 @@ namespace LoginServer.Net
 			return ErrorCode.Success;
 		}
 
-		private ErrorCode SmartRegister( int sdk, string uname, uint platform, Action<Protos.DB2LS_ExecRet> callback )
+		private ErrorCode SmartRegister( int sdk, string uname, uint platform, string networkAddress, Action<Protos.DB2LS_ExecRet> callback )
 		{
 			//无需检测用户名的合法性和是否存在,进入该方法前已经判定
 			//请求DB服务器注册账号
 			Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
-			sqlExec.Cmd = $"insert account_user( sdk,uname,pwd,last_login_time,last_login_ip ) values({sdk}, \'{uname}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{this.connection.remoteEndPoint.ToString()}\');";
+			sqlExec.Cmd =
+				$"insert account_user( sdk,uname,pwd,last_login_time,last_login_ip ) values({sdk}, \'{uname}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{networkAddress}\');";
 			this.owner.Send( SessionType.ServerL2DB, sqlExec, OnCheckAccount );
 
 			return ErrorCode.Success;

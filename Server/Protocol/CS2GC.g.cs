@@ -39,12 +39,12 @@ namespace Protos {
             "GAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NOSUQYAiABKAQicgoOQ1My",
             "R0NfUm9vbUluZm8SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEi0K",
             "C3BsYXllckluZm9zGAIgAygLMhguUHJvdG9zLkNTMkdDX1BsYXllckluZm8S",
-            "EgoKcHJvZ3Jlc3NlcxgDIAMoBSLVAQoRQ1MyR0NfRW50ZXJCYXR0bGUSHQoE",
+            "EgoKcHJvZ3Jlc3NlcxgDIAMoBSLYAQoRQ1MyR0NfRW50ZXJCYXR0bGUSHQoE",
             "b3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdjTklEGAIgASgEEgoK",
-            "AmlwGAMgASgJEgwKBHBvcnQYBCABKAUSLgoFZXJyb3IYBSABKA4yHy5Qcm90",
-            "b3MuQ1MyR0NfRW50ZXJCYXR0bGUuRXJyb3IiSAoFRXJyb3ISCwoHU3VjY2Vz",
-            "cxAAEg4KCkJTTm90Rm91bmQQARIKCgZCU0xvc3QQAhIWChJCYXR0bGVDcmVh",
-            "dGVGYWlsZWQQA2IGcHJvdG8z"));
+            "AmlwGAMgASgJEgwKBHBvcnQYBCABKAUSMAoGcmVzdWx0GAUgASgOMiAuUHJv",
+            "dG9zLkNTMkdDX0VudGVyQmF0dGxlLlJlc3VsdCJJCgZSZXN1bHQSCwoHU3Vj",
+            "Y2VzcxAAEg4KCkJTTm90Rm91bmQQARIKCgZCU0xvc3QQAhIWChJCYXR0bGVD",
+            "cmVhdGVGYWlsZWQQA2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -53,7 +53,7 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerJoin), global::Protos.CS2GC_PlayerJoin.Parser, new[]{ "Opts", "PlayerInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerLeave), global::Protos.CS2GC_PlayerLeave.Parser, new[]{ "Opts", "GcNID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RoomInfo), global::Protos.CS2GC_RoomInfo.Parser, new[]{ "Opts", "PlayerInfos", "Progresses" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_EnterBattle), global::Protos.CS2GC_EnterBattle.Parser, new[]{ "Opts", "GcNID", "Ip", "Port", "Error" }, null, new[]{ typeof(global::Protos.CS2GC_EnterBattle.Types.Error) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_EnterBattle), global::Protos.CS2GC_EnterBattle.Parser, new[]{ "Opts", "GcNID", "Ip", "Port", "Result" }, null, new[]{ typeof(global::Protos.CS2GC_EnterBattle.Types.Result) }, null)
           }));
     }
     #endregion
@@ -1135,7 +1135,7 @@ namespace Protos {
       gcNID_ = other.gcNID_;
       ip_ = other.ip_;
       port_ = other.port_;
-      error_ = other.error_;
+      result_ = other.result_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1197,14 +1197,14 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "error" field.</summary>
-    public const int ErrorFieldNumber = 5;
-    private global::Protos.CS2GC_EnterBattle.Types.Error error_ = 0;
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 5;
+    private global::Protos.CS2GC_EnterBattle.Types.Result result_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.CS2GC_EnterBattle.Types.Error Error {
-      get { return error_; }
+    public global::Protos.CS2GC_EnterBattle.Types.Result Result {
+      get { return result_; }
       set {
-        error_ = value;
+        result_ = value;
       }
     }
 
@@ -1225,7 +1225,7 @@ namespace Protos {
       if (GcNID != other.GcNID) return false;
       if (Ip != other.Ip) return false;
       if (Port != other.Port) return false;
-      if (Error != other.Error) return false;
+      if (Result != other.Result) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1236,7 +1236,7 @@ namespace Protos {
       if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
       if (Ip.Length != 0) hash ^= Ip.GetHashCode();
       if (Port != 0) hash ^= Port.GetHashCode();
-      if (Error != 0) hash ^= Error.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1266,9 +1266,9 @@ namespace Protos {
         output.WriteRawTag(32);
         output.WriteInt32(Port);
       }
-      if (Error != 0) {
+      if (Result != 0) {
         output.WriteRawTag(40);
-        output.WriteEnum((int) Error);
+        output.WriteEnum((int) Result);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1290,8 +1290,8 @@ namespace Protos {
       if (Port != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
       }
-      if (Error != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Error);
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1319,8 +1319,8 @@ namespace Protos {
       if (other.Port != 0) {
         Port = other.Port;
       }
-      if (other.Error != 0) {
-        Error = other.Error;
+      if (other.Result != 0) {
+        Result = other.Result;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1353,7 +1353,7 @@ namespace Protos {
             break;
           }
           case 40: {
-            error_ = (global::Protos.CS2GC_EnterBattle.Types.Error) input.ReadEnum();
+            result_ = (global::Protos.CS2GC_EnterBattle.Types.Result) input.ReadEnum();
             break;
           }
         }
@@ -1364,7 +1364,7 @@ namespace Protos {
     /// <summary>Container for nested types declared in the CS2GC_EnterBattle message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
-      public enum Error {
+      public enum Result {
         [pbr::OriginalName("Success")] Success = 0,
         /// <summary>
         ///找不到bs

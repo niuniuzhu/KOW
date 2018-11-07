@@ -6,6 +6,9 @@ namespace BattleServer.User
 {
 	public class BSUserMgr
 	{
+		/// <summary>
+		/// 网络ID到玩家实例的映射
+		/// </summary>
 		private readonly Dictionary<ulong, BSUser> _gcNidToUser = new Dictionary<ulong, BSUser>();
 
 		/// <summary>
@@ -31,6 +34,24 @@ namespace BattleServer.User
 		}
 
 		/// <summary>
+		/// 创建玩家
+		/// 在创建战场时调用
+		/// </summary>
+		public BSUser CreateUser( ulong gcNID, Battle.Battle battle )
+		{
+			BSUser user = new BSUser( gcNID, battle );
+			this._gcNidToUser.Add( gcNID, user );
+			Logger.Log( $"create user:{gcNID}" );
+			return user;
+		}
+
+		public void DestroyUser( BSUser user )
+		{
+			this._gcNidToUser.Remove( user.gcNID );
+			Logger.Log( $"destroy user:{user.gcNID}" );
+		}
+
+		/// <summary>
 		/// 玩家上线,客户端请求登录时调用
 		/// </summary>
 		/// <param name="gcNID">网络ID</param>
@@ -39,23 +60,11 @@ namespace BattleServer.User
 		public BSUser Online( ulong gcNID, uint sid )
 		{
 			//检查玩家是否在战场
-			if ( !BS.instance.battleManager.IsInBattle( gcNID ) )
-				return null;
-
-			//检查玩家是否还在内存中
 			BSUser user = this.GetUser( gcNID );
 			if ( user == null )
-			{
-				user = new BSUser( gcNID );
-				this._gcNidToUser.Add( gcNID, user );
-			}
-			//更新sessionID
-			user.gcSID = sid;
-			//更新连接标记
-			user.isConnected = true;
+				return null;
 
-			BS.instance.battleManager.OnUserConnected( user );
-
+			user.Online( sid );
 			Logger.Info( $"user:{gcNID} online" );
 			return user;
 		}
@@ -65,54 +74,18 @@ namespace BattleServer.User
 		/// </summary>
 		public void Offline( BSUser user )
 		{
-			if ( user == null )
-				return;
-			if ( user.isConnected )
-			{
-				BS.instance.netSessionMgr.GetSession( user.gcSID, out INetSession session );
-				session.DelayClose( 500, "offline" );
-			}
-			this.Disconnect( user );
-			this._gcNidToUser.Remove( user.gcNID );
+			user.Offline();
 			Logger.Info( $"user:{user.gcNID} offline" );
 		}
 
 		/// <summary>
-		/// 下线指定玩家,由战场结束时调用
+		/// 断开指定玩家连接,由Session在连接关闭时调用
 		/// </summary>
-		public void Offline( ulong gcNID )
+		internal void OnDisconnect( ulong gcNID )
 		{
 			BSUser user = this.GetUser( gcNID );
-			if ( user == null )
-			{
-				Logger.Warn( $"can not find user:{gcNID}" );
-				return;
-			}
+			System.Diagnostics.Debug.Assert( user != null, $"can not find user:{gcNID}" );
 			this.Offline( user );
-		}
-
-		/// <summary>
-		/// 断开指定玩家连接,由Session在连接关闭时调用
-		/// </summary>
-		public void Disconnect( BSUser user )
-		{
-			BS.instance.battleManager.OnUserDisconnected( user );
-			user.isConnected = false;
-			user.gcSID = 0;
-		}
-
-		/// <summary>
-		/// 断开指定玩家连接,由Session在连接关闭时调用
-		/// </summary>
-		public void Disconnect( ulong gcNID )
-		{
-			BSUser user = this.GetUser( gcNID );
-			if ( user == null )
-			{
-				Logger.Warn( $"can not find user:{gcNID}" );
-				return;
-			}
-			this.Disconnect( user );
 		}
 	}
 }

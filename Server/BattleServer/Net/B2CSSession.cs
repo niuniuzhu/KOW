@@ -29,6 +29,9 @@ namespace BattleServer.Net
 		{
 			base.OnClose( reason );
 			Logger.Info( $"CS({this.logicID}) disconnected with msg:{reason}." );
+
+			//结束所有战场
+			BS.instance.battleManager.StopAllBattles();
 		}
 
 		protected override void OnHeartBeat( long dt )
@@ -54,11 +57,9 @@ namespace BattleServer.Net
 
 		private void OnGSAskPingRet( Google.Protobuf.IMessage message )
 		{
-			if ( message == null )
-				return;
 			long currTime = TimeUtils.utcTime;
-			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet ) message;
-			long lag = ( long ) ( ( currTime - askPingRet.Stime ) * 0.5 );
+			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
+			long lag = ( long )( ( currTime - askPingRet.Stime ) * 0.5 );
 			long timeDiff = askPingRet.Time + lag - currTime;
 			Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
 		}
@@ -72,7 +73,7 @@ namespace BattleServer.Net
 				Id = config.id,
 				Ip = config.externalIP,
 				Port = config.externalPort,
-				State = ( Protos.BSInfo.Types.State ) BS.instance.state
+				State = ( Protos.BSInfo.Types.State )BS.instance.state
 			};
 			this.Send( reportState );
 		}
@@ -82,15 +83,15 @@ namespace BattleServer.Net
 		/// </summary>
 		private ErrorCode OnCs2BsBattleInfo( Google.Protobuf.IMessage message )
 		{
-			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo ) message;
+			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo )message;
 
-			ErrorCode errorCode =  BS.instance.battleManager.CreateBattle( battleInfo, out uint bid );
+			ErrorCode errorCode = BS.instance.battleManager.CreateBattle( battleInfo, out uint bid );
 
 			Protos.BS2CS_BattleInfoRet battleInfoRet = ProtoCreator.R_CS2BS_BattleInfo( battleInfo.Opts.Pid );
 			battleInfoRet.Bid = bid;
 			battleInfoRet.Result = errorCode == ErrorCode.Success
-				                       ? Protos.Global.Types.ECommon.Success
-				                       : Protos.Global.Types.ECommon.Failed;
+									   ? Protos.Global.Types.ECommon.Success
+									   : Protos.Global.Types.ECommon.Failed;
 			this.Send( battleInfoRet );
 			return ErrorCode.Success;
 		}

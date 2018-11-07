@@ -20,17 +20,42 @@ namespace CentralServer
 		public CSConfig config { get; private set; }
 		public DBConfig dbConfig { get; private set; }
 
+		/// <summary>
+		/// Session管理器
+		/// </summary>
 		public readonly CSNetSessionMgr netSessionMgr = new CSNetSessionMgr();
+		/// <summary>
+		/// Redis包装器
+		/// </summary>
 		public readonly RedisWrapper redisWrapper = new RedisWrapper();
+		/// <summary>
+		/// 玩家管理器
+		/// </summary>
 		public readonly CSUserMgr userMgr = new CSUserMgr();
-		public readonly LoginCertificate certificate = new LoginCertificate();
+		/// <summary>
+		/// 匹配器
+		/// </summary>
 		public readonly Matcher matcher = new Matcher();
+		/// <summary>
+		/// 战场暂存区
+		/// </summary>
 		public readonly BattleStaging battleStaging = new BattleStaging();
+		/// <summary>
+		/// GS逻辑ID到GSInfo的映射
+		/// </summary>
 		public readonly Dictionary<uint, GSInfo> lIDToGSInfos = new Dictionary<uint, GSInfo>();
+		/// <summary>
+		/// BS逻辑ID到BSInfo的映射
+		/// </summary>
 		public readonly Dictionary<uint, BSInfo> lIDToBSInfos = new Dictionary<uint, BSInfo>();
-
-		public BSInfo appropriateBSInfo { get; private set; }
+		/// <summary>
+		/// 最优GS
+		/// </summary>
 		public GSInfo appropriateGSInfo { get; private set; }
+		/// <summary>
+		/// 最优BS
+		/// </summary>
+		public BSInfo appropriateBSInfo { get; private set; }
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
 		private readonly Scheduler _heartBeater = new Scheduler();
@@ -102,7 +127,7 @@ namespace CentralServer
 		private void OnHeartBeat( int count )
 		{
 			this.UpdateAppropriateBSInfo();
-			this.certificate.OnHeartBeat();
+			this.userMgr.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			this.redisWrapper.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 		}

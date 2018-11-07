@@ -5,6 +5,7 @@ using Google.Protobuf;
 using Shared;
 using Shared.Net;
 using BSInfo = Shared.BSInfo;
+using GSInfo = Shared.GSInfo;
 
 namespace CentralServer.Net
 {
@@ -33,7 +34,7 @@ namespace CentralServer.Net
 			CS.instance.UpdateAppropriateGSInfo();
 
 			//踢出所有连接到该GS的玩家
-			CS.instance.userMgr.KickUsers( this.id );
+			CS.instance.userMgr.KickUsersByGS( this.logicID );
 
 			//通知LS有GS断开连接了
 			Protos.CS2LS_GSLost gsLost = ProtoCreator.Q_CS2LS_GSLost();
@@ -47,7 +48,7 @@ namespace CentralServer.Net
 
 		private ErrorCode OnGSAskPing( IMessage message )
 		{
-			Protos.G_AskPing askPing = ( Protos.G_AskPing ) message;
+			Protos.G_AskPing askPing = ( Protos.G_AskPing )message;
 			Protos.G_AskPingRet askPingRet = ProtoCreator.R_G_AskPing( askPing.Opts.Pid );
 			askPingRet.Stime = askPing.Time;
 			askPingRet.Time = TimeUtils.utcTime;
@@ -57,7 +58,7 @@ namespace CentralServer.Net
 
 		private ErrorCode OnGs2CsReportState( IMessage message )
 		{
-			Protos.GS2CS_ReportState reportState = ( Protos.GS2CS_ReportState ) message;
+			Protos.GS2CS_ReportState reportState = ( Protos.GS2CS_ReportState )message;
 			return this.GStateReportHandler( reportState.GsInfo, this.id );
 		}
 
@@ -77,7 +78,7 @@ namespace CentralServer.Net
 			gsInfo.ip = GSInfoRecv.Ip;
 			gsInfo.port = GSInfoRecv.Port;
 			gsInfo.password = GSInfoRecv.Password;
-			gsInfo.state = ( GSInfo.State ) GSInfoRecv.State;
+			gsInfo.state = ( GSInfo.State )GSInfoRecv.State;
 			Logger.Log( $"report from GS:{gsInfo}" );
 
 			//转发到LS
@@ -89,7 +90,7 @@ namespace CentralServer.Net
 				Ip = gsInfo.ip,
 				Port = gsInfo.port,
 				Password = gsInfo.password,
-				State = ( Protos.GSInfo.Types.State ) gsInfo.state
+				State = ( Protos.GSInfo.Types.State )gsInfo.state
 			};
 			CS.instance.netSessionMgr.Send( SessionType.ServerLS, nGSInfo );
 			return ErrorCode.Success;
@@ -100,11 +101,11 @@ namespace CentralServer.Net
 		/// </summary>
 		private ErrorCode OnGs2CsGcaskLogin( IMessage message )
 		{
-			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin ) message;
+			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin )message;
 			Protos.CS2GS_GCLoginRet gcAskLoginRet = ProtoCreator.R_GS2CS_GCAskLogin( gcAskLogin.Opts.Pid );
 
 			//创建玩家并上线
-			CSUser user = CS.instance.userMgr.Online( gcAskLogin.SessionID, this );
+			CSUser user = CS.instance.userMgr.Online( gcAskLogin.SessionID, this.id, this.logicID );
 			if ( user == null )
 			{
 				//非法登陆
@@ -112,26 +113,21 @@ namespace CentralServer.Net
 			}
 			else
 			{
-				gcAskLoginRet.Result = Protos.CS2GS_GCLoginRet.Types.EResult.Success;
-				//检查玩家当前状态
-				switch ( user.state )
+				//检查玩家是否在战场
+				if ( CS.instance.battleStaging.GetBSSID( user, out uint bsSID ) )
 				{
-					case CSUser.State.Battle:
-						//处于战场状态
-						//检查是否存在BS信息(可能当玩家上线时,BS已丢失)
-						if ( CS.instance.netSessionMgr.GetSession( user.bsSID, out INetSession session ) &&
-							 CS.instance.lIDToBSInfos.TryGetValue( ( ( BattleSession ) session ).logicID, out BSInfo bsInfo ) )
-						{
-							gcAskLoginRet.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;
-							gcAskLoginRet.GcNID = user.ukey | ( ulong ) bsInfo.lid << 32;
-							gcAskLoginRet.BsIP = bsInfo.ip;
-							gcAskLoginRet.BsPort = bsInfo.port;
-						}
-						//不存在则不用处理,因为BS丢失后玩家就会退出战场,不用触发断线重连
-						break;
+					//检查是否存在BS信息(可能当玩家上线时,BS已丢失)
+					//这里理应不会成功断言,因为BS丢失时会把玩家从战场暂存器里移除
+					System.Diagnostics.Debug.Assert( CS.instance.netSessionMgr.GetSession( bsSID, out INetSession session ), $"can not find BS:{bsSID}" );
+					System.Diagnostics.Debug.Assert( CS.instance.lIDToBSInfos.TryGetValue( ( ( BattleSession )session ).logicID, out BSInfo bsInfo ),
+													$"can not find BS:{( ( BattleSession )session ).logicID}" );
+					gcAskLoginRet.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;
+					gcAskLoginRet.GcNID = user.ukey | ( ulong )bsInfo.lid << 32;
+					gcAskLoginRet.BsIP = bsInfo.ip;
+					gcAskLoginRet.BsPort = bsInfo.port;
 				}
+				gcAskLoginRet.Result = Protos.CS2GS_GCLoginRet.Types.EResult.Success;
 			}
-
 			this.Send( gcAskLoginRet );
 			return ErrorCode.Success;
 		}
@@ -141,7 +137,7 @@ namespace CentralServer.Net
 		/// </summary>
 		private ErrorCode OnGs2CsGclost( IMessage message )
 		{
-			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost ) message;
+			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost )message;
 			ulong gcNID = gcLost.SessionID;
 			CS.instance.userMgr.Offline( gcNID );
 			return ErrorCode.Success;
@@ -149,7 +145,7 @@ namespace CentralServer.Net
 
 		private ErrorCode OnGc2CsBeginMatch( IMessage message )
 		{
-			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch ) message;
+			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch )message;
 			CS.instance.matcher.BeginMatch( this.id, beginMatch );
 			return ErrorCode.Success;
 		}

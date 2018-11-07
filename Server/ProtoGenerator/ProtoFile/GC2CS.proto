@@ -10,6 +10,7 @@ message GC2CS_BeginMatch {
 		Single1V1 = 0;//单人随机匹配
 		Single2V2 = 1;//多人随机匹配
 		Team2V2 = 2;//多人组队匹配
+		All = 3;
 	}
 	MsgOpts opts = 1;
 	EMode mode = 2;//匹配模式

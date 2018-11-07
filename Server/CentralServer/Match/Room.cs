@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using System.Collections.Generic;
+using CentralServer.User;
 
 namespace CentralServer.Match
 {
@@ -11,9 +12,10 @@ namespace CentralServer.Match
 	{
 		private static uint _gid;
 
+		/// <summary>
+		/// 房间ID
+		/// </summary>
 		public readonly uint id;
-
-		public int numPlayers => this._players.Count;
 
 		/// <summary>
 		/// 地图ID
@@ -26,6 +28,11 @@ namespace CentralServer.Match
 		public int maxPlayers;
 
 		/// <summary>
+		/// 玩家数量
+		/// </summary>
+		public int numPlayers => this._players.Count;
+
+		/// <summary>
 		/// 获取房间是否满员
 		/// </summary>
 		public bool isFull => this._players.Count == this.maxPlayers;
@@ -35,12 +42,23 @@ namespace CentralServer.Match
 		/// </summary>
 		public bool isEmpty => this._players.Count == 0;
 
+		/// <summary>
+		/// 玩家列表
+		/// </summary>
 		private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
 
 		public Room()
 		{
 			System.Diagnostics.Debug.Assert( _gid < uint.MaxValue, "maximum id of room!!" );
 			this.id = ++_gid;
+		}
+
+		/// <summary>
+		/// 适用于克隆体的构造函数
+		/// </summary>
+		private Room( uint id )
+		{
+			this.id = id;
 		}
 
 		public void Clear()
@@ -51,7 +69,20 @@ namespace CentralServer.Match
 			this.maxPlayers = 0;
 		}
 
-		public bool CanAddPlayer( RoomPlayer player ) => this._players.Count < this.maxPlayers && !this.HasPlayer( player.gcNID );
+		/// <summary>
+		/// 创建一个克隆体
+		/// </summary>
+		/// <returns></returns>
+		public Room Clone()
+		{
+			Room cloned = new Room( this.id );
+			cloned.mapID = this.mapID;
+			cloned.maxPlayers = this.maxPlayers;
+			cloned._players.AddRange( this._players );
+			return cloned;
+		}
+
+		public bool CanAddUser( ulong gcNID ) => this._players.Count < this.maxPlayers && !this.HasUser( gcNID );
 
 		/// <summary>
 		/// 加入新玩家
@@ -78,12 +109,12 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 获取指定id的玩家
 		/// </summary>
-		public RoomPlayer GetPlayer( ulong gcNID )
+		public RoomPlayer GetPlayer( CSUser user )
 		{
 			int count = this._players.Count;
 			for ( int i = 0; i < count; i++ )
 			{
-				if ( this._players[i].gcNID == gcNID )
+				if ( this._players[i].user == user )
 					return this._players[i];
 			}
 			return null;
@@ -92,12 +123,12 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 检查是否存在指定id的玩家
 		/// </summary>
-		public bool HasPlayer( ulong gcNID )
+		public bool HasUser( ulong gcNID )
 		{
 			int count = this._players.Count;
 			for ( int i = 0; i < count; i++ )
 			{
-				if ( this._players[i].gcNID == gcNID )
+				if ( this._players[i].user.gcNID == gcNID )
 					return true;
 			}
 			return false;

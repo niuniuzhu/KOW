@@ -29,12 +29,6 @@ message BS2CS_BattleInfoRet {
 	uint32 bid = 3;//战场id
 }
 
-//战场开始
-message BS2CS_BattleStart {
-	MsgOpts opts = 1;
-	uint32 bid = 2;//战场id
-}
-
 //战场结束
 message BS2CS_BattleEnd {
 	MsgOpts opts = 1;

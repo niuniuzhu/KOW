@@ -1,24 +1,21 @@
-﻿namespace CentralServer.Match
+﻿using CentralServer.User;
+
+namespace CentralServer.Match
 {
 	public class RoomPlayer
 	{
-		public ulong gcNID { get; }
-		public string uname { get; }
-		public uint ukey { get; }
-
+		public readonly CSUser user;
 		public int actorID;
 		public int team;
 
-		public RoomPlayer( ulong gcNID, uint ukey )
+		public RoomPlayer( CSUser user )
 		{
-			this.gcNID = gcNID;
-			this.ukey = ukey;
-			this.uname = CS.instance.userMgr.GetUser( gcNID ).name;
+			this.user = user;
 		}
 
 		public override string ToString()
 		{
-			return $"[gcNID:{this.gcNID}, name:{this.uname}]";
+			return $"user:{this.user.gcNID}, actorID:{this.actorID}, team:{this.team}";
 		}
 	}
 }

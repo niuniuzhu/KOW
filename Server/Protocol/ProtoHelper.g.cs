@@ -34,8 +34,7 @@ public static class ProtoCreator {
 		{typeof(Protos.GS2GC_Kick), (Protos.MsgID)3101},
 		{typeof(Protos.BS2CS_ReportState), (Protos.MsgID)4000},
 		{typeof(Protos.BS2CS_BattleInfoRet), (Protos.MsgID)4001},
-		{typeof(Protos.BS2CS_BattleStart), (Protos.MsgID)4002},
-		{typeof(Protos.BS2CS_BattleEnd), (Protos.MsgID)4003},
+		{typeof(Protos.BS2CS_BattleEnd), (Protos.MsgID)4002},
 		{typeof(Protos.BS2GC_LoginRet), (Protos.MsgID)4100},
 		{typeof(Protos.BS2GC_BattleStart), (Protos.MsgID)4102},
 		{typeof(Protos.BS2GC_BattleEnd), (Protos.MsgID)4103},
@@ -49,8 +48,7 @@ public static class ProtoCreator {
 		{typeof(Protos.CS2GS_GCLoginRet), (Protos.MsgID)5100},
 		{typeof(Protos.CS2GS_KickGC), (Protos.MsgID)5101},
 		{typeof(Protos.CS2BS_BattleInfo), (Protos.MsgID)5200},
-		{typeof(Protos.CS2BS_BattleStartRet), (Protos.MsgID)5201},
-		{typeof(Protos.CS2BS_BattleEndRet), (Protos.MsgID)5202},
+		{typeof(Protos.CS2BS_BattleEndRet), (Protos.MsgID)5201},
 		{typeof(Protos.CS2GC_BeginMatchRet), (Protos.MsgID)5300},
 		{typeof(Protos.CS2GC_PlayerJoin), (Protos.MsgID)5301},
 		{typeof(Protos.CS2GC_PlayerLeave), (Protos.MsgID)5302},
@@ -90,8 +88,7 @@ public static class ProtoCreator {
 		{(Protos.MsgID)3101, typeof(Protos.GS2GC_Kick)},
 		{(Protos.MsgID)4000, typeof(Protos.BS2CS_ReportState)},
 		{(Protos.MsgID)4001, typeof(Protos.BS2CS_BattleInfoRet)},
-		{(Protos.MsgID)4002, typeof(Protos.BS2CS_BattleStart)},
-		{(Protos.MsgID)4003, typeof(Protos.BS2CS_BattleEnd)},
+		{(Protos.MsgID)4002, typeof(Protos.BS2CS_BattleEnd)},
 		{(Protos.MsgID)4100, typeof(Protos.BS2GC_LoginRet)},
 		{(Protos.MsgID)4102, typeof(Protos.BS2GC_BattleStart)},
 		{(Protos.MsgID)4103, typeof(Protos.BS2GC_BattleEnd)},
@@ -105,8 +102,7 @@ public static class ProtoCreator {
 		{(Protos.MsgID)5100, typeof(Protos.CS2GS_GCLoginRet)},
 		{(Protos.MsgID)5101, typeof(Protos.CS2GS_KickGC)},
 		{(Protos.MsgID)5200, typeof(Protos.CS2BS_BattleInfo)},
-		{(Protos.MsgID)5201, typeof(Protos.CS2BS_BattleStartRet)},
-		{(Protos.MsgID)5202, typeof(Protos.CS2BS_BattleEndRet)},
+		{(Protos.MsgID)5201, typeof(Protos.CS2BS_BattleEndRet)},
 		{(Protos.MsgID)5300, typeof(Protos.CS2GC_BeginMatchRet)},
 		{(Protos.MsgID)5301, typeof(Protos.CS2GC_PlayerJoin)},
 		{(Protos.MsgID)5302, typeof(Protos.CS2GC_PlayerLeave)},
@@ -301,13 +297,6 @@ public static class ProtoCreator {
 		return msg;
 	}
 
-	public static Protos.BS2CS_BattleStart Q_BS2CS_BattleStart() {
-		var msg = new Protos.BS2CS_BattleStart();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Rpc;
-		return msg;
-	}
-
 	public static Protos.BS2CS_BattleEnd Q_BS2CS_BattleEnd() {
 		var msg = new Protos.BS2CS_BattleEnd();
 		msg.Opts = new Protos.MsgOpts();
@@ -392,12 +381,6 @@ public static class ProtoCreator {
 		var msg = new Protos.CS2BS_BattleInfo();
 		msg.Opts = new Protos.MsgOpts();
 		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Rpc;
-		return msg;
-	}
-
-	public static Protos.CS2BS_BattleStartRet Q_CS2BS_BattleStartRet() {
-		var msg = new Protos.CS2BS_BattleStartRet();
-		msg.Opts = new Protos.MsgOpts();
 		return msg;
 	}
 
@@ -506,6 +489,14 @@ public static class ProtoCreator {
 		return msg;
 	}
 
+	public static Protos.GS2CS_KickGCRet R_CS2GS_KickGC( uint pid ) {
+		var msg = new Protos.GS2CS_KickGCRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
 	public static Protos.CS2GS_GCLoginRet R_GS2CS_GCAskLogin( uint pid ) {
 		var msg = new Protos.CS2GS_GCLoginRet();
 		msg.Opts = new Protos.MsgOpts();
@@ -556,22 +547,6 @@ public static class ProtoCreator {
 
 	public static Protos.BS2CS_BattleInfoRet R_CS2BS_BattleInfo( uint pid ) {
 		var msg = new Protos.BS2CS_BattleInfoRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.GS2CS_KickGCRet R_CS2GS_KickGC( uint pid ) {
-		var msg = new Protos.GS2CS_KickGCRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.CS2BS_BattleStartRet R_BS2CS_BattleStart( uint pid ) {
-		var msg = new Protos.CS2BS_BattleStartRet();
 		msg.Opts = new Protos.MsgOpts();
 		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
 		msg.Opts.Rpid = pid;
@@ -748,11 +723,6 @@ public static class ProtoCreator {
 				return msg;
 			}
 			case (Protos.MsgID)4002: {
-				var msg = new Protos.BS2CS_BattleStart();
-				msg.MergeFrom( data, offset, size );
-				return msg;
-			}
-			case (Protos.MsgID)4003: {
 				var msg = new Protos.BS2CS_BattleEnd();
 				msg.MergeFrom( data, offset, size );
 				return msg;
@@ -823,11 +793,6 @@ public static class ProtoCreator {
 				return msg;
 			}
 			case (Protos.MsgID)5201: {
-				var msg = new Protos.CS2BS_BattleStartRet();
-				msg.MergeFrom( data, offset, size );
-				return msg;
-			}
-			case (Protos.MsgID)5202: {
 				var msg = new Protos.CS2BS_BattleEndRet();
 				msg.MergeFrom( data, offset, size );
 				return msg;
@@ -1044,12 +1009,6 @@ public static class ProtoCreator {
 		return msg;
 	}
 
-	public static Protos.BS2CS_BattleStart D_BS2CS_BattleStart( byte[] data, int offset, int size ) {
-		var msg = new Protos.BS2CS_BattleStart();
-		msg.MergeFrom( data, offset, size );
-		return msg;
-	}
-
 	public static Protos.BS2CS_BattleEnd D_BS2CS_BattleEnd( byte[] data, int offset, int size ) {
 		var msg = new Protos.BS2CS_BattleEnd();
 		msg.MergeFrom( data, offset, size );
@@ -1130,12 +1089,6 @@ public static class ProtoCreator {
 
 	public static Protos.CS2BS_BattleInfo D_CS2BS_BattleInfo( byte[] data, int offset, int size ) {
 		var msg = new Protos.CS2BS_BattleInfo();
-		msg.MergeFrom( data, offset, size );
-		return msg;
-	}
-
-	public static Protos.CS2BS_BattleStartRet D_CS2BS_BattleStartRet( byte[] data, int offset, int size ) {
-		var msg = new Protos.CS2BS_BattleStartRet();
 		msg.MergeFrom( data, offset, size );
 		return msg;
 	}
@@ -1284,9 +1237,6 @@ public static class ProtoCreator {
 				return new Protos.BS2CS_BattleInfoRet();
 			}
 			case (Protos.MsgID)4002: {
-				return new Protos.BS2CS_BattleStart();
-			}
-			case (Protos.MsgID)4003: {
 				return new Protos.BS2CS_BattleEnd();
 			}
 			case (Protos.MsgID)4100: {
@@ -1329,9 +1279,6 @@ public static class ProtoCreator {
 				return new Protos.CS2BS_BattleInfo();
 			}
 			case (Protos.MsgID)5201: {
-				return new Protos.CS2BS_BattleStartRet();
-			}
-			case (Protos.MsgID)5202: {
 				return new Protos.CS2BS_BattleEndRet();
 			}
 			case (Protos.MsgID)5300: {
@@ -1452,9 +1399,6 @@ public static class ProtoCreator {
 				return ((Protos.BS2CS_BattleInfoRet)message).Opts;
 			}
 			case (Protos.MsgID)4002: {
-				return ((Protos.BS2CS_BattleStart)message).Opts;
-			}
-			case (Protos.MsgID)4003: {
 				return ((Protos.BS2CS_BattleEnd)message).Opts;
 			}
 			case (Protos.MsgID)4100: {
@@ -1497,9 +1441,6 @@ public static class ProtoCreator {
 				return ((Protos.CS2BS_BattleInfo)message).Opts;
 			}
 			case (Protos.MsgID)5201: {
-				return ((Protos.CS2BS_BattleStartRet)message).Opts;
-			}
-			case (Protos.MsgID)5202: {
 				return ((Protos.CS2BS_BattleEndRet)message).Opts;
 			}
 			case (Protos.MsgID)5300: {

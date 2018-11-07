@@ -1,4 +1,5 @@
-﻿using Core.Misc;
+﻿using CentralServer.User;
+using Core.Misc;
 using Core.Net;
 using Shared;
 using Shared.Net;
@@ -42,10 +43,12 @@ namespace CentralServer.Net
 		private ErrorCode OnLs2CsGclogin( Google.Protobuf.IMessage message )
 		{
 			Protos.LS2CS_GCLogin gcLogin = ( Protos.LS2CS_GCLogin )message;
-			ErrorCode errorCode = CS.instance.certificate.Add( gcLogin.SessionID, gcLogin.Ukey );
+			//todo 这里应立即创建一个玩家
+			CSUser user = CS.instance.userMgr.CreateUser( gcLogin.Ukey, gcLogin.SessionID );
+
 
 			Protos.CS2LS_GCLoginRet gcLoginRet = ProtoCreator.R_LS2CS_GCLogin( gcLogin.Opts.Pid );
-			gcLoginRet.Result = errorCode == ErrorCode.Success
+			gcLoginRet.Result = user != null
 									? Protos.CS2LS_GCLoginRet.Types.EResult.Success
 									: Protos.CS2LS_GCLoginRet.Types.EResult.Failed;
 			this.Send( gcLoginRet );

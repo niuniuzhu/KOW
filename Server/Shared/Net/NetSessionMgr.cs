@@ -122,6 +122,22 @@ namespace Shared.Net
 			return false;
 		}
 
+		public bool CloseSession( uint sessionID, string reason )
+		{
+			if ( !this.GetSession( sessionID, out INetSession session ) )
+				return false;
+			session.Close( reason );
+			return true;
+		}
+
+		public bool DelayCloseSession( uint sessionID, long delay, string reason )
+		{
+			if ( !this.GetSession( sessionID, out INetSession session ) )
+				return false;
+			session.DelayClose( delay, reason );
+			return true;
+		}
+
 		/// <summary>
 		/// 发送消息到指定的session
 		/// </summary>
@@ -130,11 +146,11 @@ namespace Shared.Net
 		/// <param name="rpcHandler">rcp回调函数</param>
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
-		public bool Send( uint sessionId, IMessage msg, System.Action<IMessage> rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
+		public bool Send( uint sessionId, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
 		{
 			if ( !this.GetSession( sessionId, out INetSession session ) )
 				return false;
-			( ( NetSessionBase ) session ).Send( msg, rpcHandler, transTarget, nsid );
+			( ( NetSessionBase )session ).Send( msg, rpcHandler, transTarget, nsid );
 			return true;
 		}
 
@@ -157,7 +173,7 @@ namespace Shared.Net
 				uint sid = enumerator.Current;
 				if ( !this.GetSession( sid, out INetSession session ) )
 					continue;
-				( ( NetSessionBase ) session ).Send( data, 0, length );
+				( ( NetSessionBase )session ).Send( data, 0, length );
 			}
 			enumerator.Dispose();
 
@@ -173,7 +189,7 @@ namespace Shared.Net
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
 		/// <param name="all">是否在查询消息类型时对所有结果生效</param>
-		public bool Send( SessionType sessionType, IMessage msg, System.Action<IMessage> rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u, bool all = true )
+		public bool Send( SessionType sessionType, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u, bool all = true )
 		{
 			if ( !this._typeToSession.TryGetValue( sessionType, out List<NetSessionBase> sessions ) )
 				return false;

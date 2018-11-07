@@ -34,8 +34,7 @@ namespace GateServer.Net
 			uint[] gcSids = GS.instance.userMgr.GetClients();
 			foreach ( uint sid in gcSids )
 			{
-				if ( GS.instance.netSessionMgr.GetSession( sid, out INetSession session ) )
-					session.Close( "CS Closed." );
+				GS.instance.netSessionMgr.CloseSession( sid, "CS Closed." );
 			}
 			GS.instance.userMgr.ClearClients();
 		}
@@ -72,7 +71,7 @@ namespace GateServer.Net
 				Ip = config.externalIP,
 				Port = config.externalPort,
 				Password = config.password,
-				State = ( Protos.GSInfo.Types.State ) GS.instance.state
+				State = ( Protos.GSInfo.Types.State )GS.instance.state
 			};
 			this.Send( reportState );
 		}
@@ -82,8 +81,8 @@ namespace GateServer.Net
 			if ( message == null )
 				return;
 			long currTime = TimeUtils.utcTime;
-			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet ) message;
-			long lag = ( long ) ( ( currTime - askPingRet.Stime ) * 0.5 );
+			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
+			long lag = ( long )( ( currTime - askPingRet.Stime ) * 0.5 );
 			long timeDiff = askPingRet.Time + lag - currTime;
 			Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
 		}
@@ -100,7 +99,7 @@ namespace GateServer.Net
 
 		private ErrorCode OnECs2GsKickGc( IMessage message )
 		{
-			Protos.CS2GS_KickGC kickGC = ( Protos.CS2GS_KickGC ) message;
+			Protos.CS2GS_KickGC kickGC = ( Protos.CS2GS_KickGC )message;
 			Protos.GS2CS_KickGCRet kickGCRet = ProtoCreator.R_CS2GS_KickGC( kickGC.Opts.Pid );
 
 			//可能在收到消息前,客户端就断开了,这里必须容错
@@ -112,8 +111,7 @@ namespace GateServer.Net
 				this.owner.Send( sid, kick );
 
 				//强制断开客户端
-				System.Diagnostics.Debug.Assert( GS.instance.netSessionMgr.GetSession( sid, out INetSession netSession ), $"can not find session:{sid}" );
-				netSession.DelayClose( 500, "CS Kick" );
+				GS.instance.netSessionMgr.DelayCloseSession( sid, 500, "CS Kick" );
 
 				kickGCRet.Result = Protos.Global.Types.ECommon.Success;
 			}

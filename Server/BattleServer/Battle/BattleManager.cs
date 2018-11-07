@@ -18,44 +18,22 @@ namespace BattleServer.Battle
 		/// </summary>
 		private readonly Random _random = new Random();
 		/// <summary>
-		/// 客户端网络ID到战场的映射表
-		/// </summary>
-		private readonly Dictionary<ulong, Battle> _gcNIDToBattle = new Dictionary<ulong, Battle>();
-		/// <summary>
 		/// 运作中的战场列表
 		/// </summary>
 		private readonly List<Battle> _workingBattles = new List<Battle>();
-
-		/// <summary>
-		/// 检查是否存在指定ID的客户端
-		/// </summary>
-		public bool IsInBattle( ulong gcNID ) => this._gcNIDToBattle.ContainsKey( gcNID );
-
-		/// <summary>
-		/// 广播用的临时SID表
-		/// </summary>
-		private readonly List<uint> _tempSIDs = new List<uint>();
-
-		/// <summary>
-		/// 获取指定ID玩家所在的战场
-		/// </summary>
-		public Battle GetBattle( ulong gcNID )
-		{
-			this._gcNIDToBattle.TryGetValue( gcNID, out Battle battle );
-			return battle;
-		}
 
 		/// <summary>
 		/// 检查指定玩家ID所在的战场是否有效(存在?结束?)
 		/// </summary>
 		public Battle GetValidedBattle( ulong gcNID )
 		{
-			Battle battle = this.GetBattle( gcNID );
-			if ( battle == null )
+			BSUser user = BS.instance.userMgr.GetUser( gcNID );
+			if ( user == null )
 			{
-				Logger.Warn( $"can not find battle for gcNID:{gcNID}" );
+				Logger.Warn( $"can not find user:{gcNID}" );
 				return null;
 			}
+			Battle battle = user.battle;
 			if ( battle.finished )
 				return null;
 			return battle;
@@ -94,10 +72,13 @@ namespace BattleServer.Battle
 				return ErrorCode.Failed;
 			}
 
-			//建立玩家ID和战场的映射
+			//创建玩家
 			count = battle.numPlayers;
 			for ( int i = 0; i < count; i++ )
-				this._gcNIDToBattle[battle.GetPlayerAt( i ).id] = battle;
+			{
+				Player player = battle.GetPlayerAt( i );
+				player.user = BS.instance.userMgr.CreateUser( player.id, battle );
+			}
 
 			//把战场加入工作列表
 			this._workingBattles.Add( battle );
@@ -118,6 +99,48 @@ namespace BattleServer.Battle
 			return ErrorCode.Success;
 		}
 
+		private void DestroyBattle( int index )
+		{
+			Battle battle = this._workingBattles[index];
+			this._workingBattles.RemoveAt( index );
+
+			//通知CS战场结束
+			Protos.BS2CS_BattleEnd battleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
+			battleEnd.Bid = battle.id;
+			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd, ret => { } );
+
+			//通知客户端战场结束
+			Protos.BS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_BS2GC_BattleEnd();
+			gcBattleEnd.Id = battle.id;
+			battle.Broadcast( gcBattleEnd );
+
+			int count = battle.numPlayers;
+			for ( int i = 0; i < count; i++ )
+			{
+				Player player = battle.GetPlayerAt( i );
+				//玩家下线
+				BS.instance.userMgr.Offline( player.user );
+				//销毁玩家
+				BS.instance.userMgr.DestroyUser( player.user );
+				//断开玩家连接
+				BS.instance.netSessionMgr.DelayCloseSession( player.user.gcSID, 500, "offline" );
+			}
+
+			//处理战场的身后事
+			battle.End();
+			POOL.Push( battle );
+		}
+
+		public void StopAllBattles()
+		{
+			int count = this._workingBattles.Count;
+			for ( int i = 0; i < count; i++ )
+			{
+				Battle battle = this._workingBattles[i];
+				battle.Interrupt();
+			}
+		}
+
 		public void Update( long dt )
 		{
 			int count = this._workingBattles.Count;
@@ -128,92 +151,11 @@ namespace BattleServer.Battle
 				if ( battle.finished )
 				{
 					//处理战场结束
-					this.OnBattleEnd( battle );
-					this._workingBattles.RemoveAt( i );
-					Logger.Log( $"battle:{battle.id} destroied" );
+					this.DestroyBattle( i );
 					--i;
 					--count;
+					Logger.Log( $"battle:{battle.id} destroied" );
 				}
-			}
-		}
-
-		/// <summary>
-		/// 对战场上所有玩家进行广播
-		/// </summary>
-		private void Broadcast( Battle battle, Google.Protobuf.IMessage message, ulong gcNIDExcept = 0 )
-		{
-			int count = battle.numPlayers;
-			for ( int i = 0; i < count; i++ )
-			{
-				Player player = battle.GetPlayerAt( i );
-				//这个判断防止其他线程修改了player表导致取得空指针
-				BSUser user = player?.user;
-				//未连接的不广播
-				if ( user == null || !user.isConnected || gcNIDExcept != 0 && gcNIDExcept == user.gcNID )
-					continue;
-				this._tempSIDs.Add( user.gcSID );
-			}
-			BS.instance.netSessionMgr.Broadcast( this._tempSIDs, message );
-			this._tempSIDs.Clear();
-		}
-
-		private void OnBattleEnd( Battle battle )
-		{
-			//通知CS战场结束
-			Protos.BS2CS_BattleEnd toCSBattleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
-			toCSBattleEnd.Bid = battle.id;
-			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, toCSBattleEnd, msgRet =>
-			{
-				//通知客户端战场结束
-				Protos.BS2GC_BattleEnd toGCBattleEnd = ProtoCreator.Q_BS2GC_BattleEnd();
-				toGCBattleEnd.Id = battle.id;
-				this.Broadcast( battle, toGCBattleEnd );
-				//所有玩家下线
-				int count = battle.numPlayers;
-				for ( int i = 0; i < count; i++ )
-				{
-					Player player = battle.GetPlayerAt( i );
-					BS.instance.userMgr.Offline( player.user );
-					//解除玩家ID和战场的映射
-					this._gcNIDToBattle.Remove( player.id );
-				}
-				//处理battle的身后事
-				battle.End();
-				POOL.Push( battle );
-			} );
-		}
-
-		/// <summary>
-		/// 玩家建立连接时调用
-		/// </summary>
-		internal void OnUserConnected( BSUser user )
-		{
-			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
-			int count = battle.numPlayers;
-			for ( var i = 0; i < count; i++ )
-			{
-				Player player = battle.GetPlayerAt( i );
-				if ( player.id != user.gcNID )
-					continue;
-				player.user = user;
-				return;
-			}
-		}
-
-		/// <summary>
-		/// 玩家失去连接时调用
-		/// </summary>
-		internal void OnUserDisconnected( BSUser user )
-		{
-			Battle battle = BS.instance.battleManager.GetBattle( user.gcNID );
-			int count = battle.numPlayers;
-			for ( var i = 0; i < count; i++ )
-			{
-				Player player = battle.GetPlayerAt( i );
-				if ( player.user != user )
-					continue;
-				player.user = null;
-				return;
 			}
 		}
 
@@ -222,17 +164,17 @@ namespace BattleServer.Battle
 		/// </summary>
 		internal void HandleRequestSnapshot( ulong gcNID, Protos.GC2BS_RequestSnapshot request, Protos.BS2GC_RequestSnapshotRet ret )
 		{
-			Battle battle = this.GetBattle( gcNID );
-			if ( battle == null )
+			BSUser user = BS.instance.userMgr.GetUser( gcNID );
+			if ( user == null )
 			{
-				Logger.Warn( $"can not find battle for gcNID:{gcNID}" );
-				ret.Result = Protos.BS2GC_RequestSnapshotRet.Types.EResult.InvalidBattle;
+				Logger.Warn( $"can not find user:{gcNID}" );
+				ret.Result = Protos.BS2GC_RequestSnapshotRet.Types.EResult.InvalidUser;
 			}
 			else
 			{
-				FrameSnapshot snapshot = battle.GetSnapshot( request.Frame );
+				FrameSnapshot snapshot = user.battle.GetSnapshot( request.Frame );
 				ret.ReqFrame = request.Frame;
-				ret.CurFrame = battle.frame;
+				ret.CurFrame = user.battle.frame;
 				ret.Snapshot = snapshot.data;
 			}
 		}

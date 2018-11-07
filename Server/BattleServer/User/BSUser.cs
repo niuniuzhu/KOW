@@ -8,21 +8,27 @@ namespace BattleServer.User
 		/// 网络ID
 		/// 对每个账号每个BS服唯一
 		/// </summary>
-		public ulong gcNID;
+		public readonly ulong gcNID;
+
+		/// <summary>
+		/// 玩家所在战场
+		/// </summary>
+		public readonly Battle.Battle battle;
 
 		/// <summary>
 		/// GC连接的sessionID
 		/// </summary>
-		public uint gcSID;
+		public uint gcSID { get; private set; }
 
 		/// <summary>
 		/// 是否连线中
 		/// </summary>
-		public bool isConnected;
+		public bool isConnected { get; private set; }
 
-		public BSUser( ulong gcNID )
+		public BSUser( ulong gcNID, Battle.Battle battle )
 		{
 			this.gcNID = gcNID;
+			this.battle = battle;
 		}
 
 		/// <summary>
@@ -34,6 +40,24 @@ namespace BattleServer.User
 			if ( !this.isConnected )
 				return false;
 			return BS.instance.netSessionMgr.Send( this.gcSID, msg, null, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
+		}
+
+		/// <summary>
+		/// 处理玩家上线
+		/// </summary>
+		public void Online( uint gcSID )
+		{
+			this.gcSID = gcSID;
+			this.isConnected = true;
+		}
+
+		/// <summary>
+		/// 处理玩家下线
+		/// </summary>
+		public void Offline()
+		{
+			this.gcSID = 0;
+			this.isConnected = false;
 		}
 	}
 }

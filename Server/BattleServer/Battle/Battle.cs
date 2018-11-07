@@ -80,6 +80,8 @@ namespace BattleServer.Battle
 		/// </summary>
 		public int numEntities => this._entities.Count;
 
+		public readonly BattleResult battleResult = new BattleResult();
+
 		/// <summary>
 		/// 所有玩家列表
 		/// </summary>
@@ -132,6 +134,8 @@ namespace BattleServer.Battle
 		/// </summary>
 		private readonly Google.Protobuf.CodedOutputStream _snapshotWriter;
 
+		private Task _task;
+
 		public Battle()
 		{
 			Debug.Assert( _gid < uint.MaxValue, "maximum id of waiting room!!" );
@@ -175,7 +179,7 @@ namespace BattleServer.Battle
 		public void Start()
 		{
 			this._sw.Start();
-			Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
+			this._task = Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
 		}
 
 		/// <summary>
@@ -195,21 +199,21 @@ namespace BattleServer.Battle
 				this.keyframeStep = mapDef.GetInt( "keyframe_step" );
 				this.battleTime = mapDef.GetInt( "timeout" );
 
-				ArrayList arr = ( ArrayList ) mapDef["born_pos"];
+				ArrayList arr = ( ArrayList )mapDef["born_pos"];
 				int count = arr.Count;
 				this.bornPoses = new FVec2[count];
 				for ( int i = 0; i < count; i++ )
 				{
-					ArrayList pi = ( ArrayList ) arr[i];
+					ArrayList pi = ( ArrayList )arr[i];
 					this.bornPoses[i] = new FVec2( Convert.ToInt32( pi[0] ), Convert.ToInt32( pi[1] ) );
 				}
 
-				arr = ( ArrayList ) mapDef["born_dir"];
+				arr = ( ArrayList )mapDef["born_dir"];
 				count = arr.Count;
 				this.bornDirs = new FVec2[count];
 				for ( int i = 0; i < count; i++ )
 				{
-					ArrayList pi = ( ArrayList ) arr[i];
+					ArrayList pi = ( ArrayList )arr[i];
 					this.bornDirs[i] = new FVec2( Convert.ToInt32( pi[0] ), Convert.ToInt32( pi[1] ) );
 				}
 			}
@@ -226,7 +230,13 @@ namespace BattleServer.Battle
 		/// </summary>
 		public void End()
 		{
+			if ( this._task != null )
+			{
+				this._task.Wait();
+				this._task = null;
+			}
 			this.finished = false;
+			this.battleResult.Clear();
 			this.frame = 0;
 			int count = this._entities.Count;
 			for ( int i = 0; i < count; i++ )
@@ -242,6 +252,17 @@ namespace BattleServer.Battle
 			this._stepLocker.Clear();
 			this._sw.Stop();
 			this._sw.Reset();
+		}
+
+		/// <summary>
+		/// 中断战场
+		/// </summary>
+		public void Interrupt()
+		{
+			if ( this.finished )
+				return;
+			this.finished = true;
+			this.battleResult.finishState = BattleResult.FinishState.Interrupt;
 		}
 
 		/// <summary>
@@ -305,7 +326,7 @@ namespace BattleServer.Battle
 		/// </summary>
 		private void AsyncLoop()
 		{
-			while ( true )
+			while ( !this.finished )
 			{
 				long now = this._sw.ElapsedMilliseconds;
 				long dt = now - this._lastUpdateTime;
@@ -315,6 +336,7 @@ namespace BattleServer.Battle
 				if ( now >= this.battleTime )
 				{
 					this.finished = true;
+					this.battleResult.finishState = BattleResult.FinishState.Normal;
 					break;
 				}
 			}
@@ -324,16 +346,14 @@ namespace BattleServer.Battle
 		/// 广播消息到所有玩家
 		/// 该函数在战场线程调用,是线程不安全的,但由于几乎没有写操作,暂时不加锁
 		/// </summary>
-		private void Broadcast( Google.Protobuf.IMessage message, ulong gcNIDExcept = 0 )
+		public void Broadcast( Google.Protobuf.IMessage message )
 		{
 			int count = this.numPlayers;
 			for ( int i = 0; i < count; i++ )
 			{
-				Player player = this.GetPlayerAt( i );
-				//这个判断防止其他线程修改了player表导致取得空指针
-				BSUser user = player?.user;
+				BSUser user = this.GetPlayerAt( i ).user;
 				//未连接的不广播
-				if ( user == null || !user.isConnected || gcNIDExcept != 0 && gcNIDExcept == user.gcNID )
+				if ( !user.isConnected )
 					continue;
 				this._tempSIDs.Add( user.gcSID );
 			}
@@ -380,7 +400,7 @@ namespace BattleServer.Battle
 			Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( this._ms );
 			this.EncodeSnapshot( writer );
 			writer.Flush();
-			Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int ) this._ms.Length );
+			Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int )this._ms.Length );
 			this._ms.SetLength( 0 );
 			return data;
 		}

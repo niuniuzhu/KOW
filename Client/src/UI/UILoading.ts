@@ -59,7 +59,7 @@ export class UILoading implements IUIModule {
 			case Protos.Global.ECommon.Success:
 				break;
 			default:
-				UIAlert.Show("进入战场失败", onConfirm);
+				UIAlert.Show("无法进入战场", onConfirm);
 				break;
 		}
 	}

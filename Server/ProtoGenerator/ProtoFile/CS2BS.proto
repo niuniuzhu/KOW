@@ -18,11 +18,6 @@ message CS2BS_BattleInfo {
 	repeated CS2BS_PlayerInfo playerInfo = 4;//玩家信息
 }
 
-//回应战场开始
-message CS2BS_BattleStartRet {
-	MsgOpts opts = 1;
-}
-
 //回应战场结束
 message CS2BS_BattleEndRet {
 	MsgOpts opts = 1;

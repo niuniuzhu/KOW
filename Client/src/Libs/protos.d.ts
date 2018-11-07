@@ -1,24 +1,4 @@
 import * as $protobuf from "protobufjs";
-export interface IAny {
-    typeUrl?: (string|null);
-    value?: (Uint8Array|null);
-}
-
-export class Any implements IAny {
-    constructor(properties?: IAny);
-    public typeUrl: string;
-    public value: Uint8Array;
-    public static create(properties?: IAny): Any;
-    public static encode(message: IAny, writer?: $protobuf.Writer): $protobuf.Writer;
-    public static encodeDelimited(message: IAny, writer?: $protobuf.Writer): $protobuf.Writer;
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Any;
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Any;
-    public static verify(message: { [k: string]: any }): (string|null);
-    public static fromObject(object: { [k: string]: any }): Any;
-    public static toObject(message: Any, options?: $protobuf.IConversionOptions): { [k: string]: any };
-    public toJSON(): { [k: string]: any };
-}
-
 export namespace Protos {
 
     interface IBSInfo {
@@ -97,26 +77,6 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
-    interface IBS2CS_BattleStart {
-        opts?: (Protos.IMsgOpts|null);
-        bid?: (number|null);
-    }
-
-    class BS2CS_BattleStart implements IBS2CS_BattleStart {
-        constructor(properties?: Protos.IBS2CS_BattleStart);
-        public opts?: (Protos.IMsgOpts|null);
-        public bid: number;
-        public static create(properties?: Protos.IBS2CS_BattleStart): Protos.BS2CS_BattleStart;
-        public static encode(message: Protos.IBS2CS_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS2CS_BattleStart, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2CS_BattleStart;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2CS_BattleStart;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS2CS_BattleStart;
-        public static toObject(message: Protos.BS2CS_BattleStart, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
     interface IBS2CS_BattleEnd {
         opts?: (Protos.IMsgOpts|null);
         bid?: (number|null);
@@ -167,8 +127,7 @@ export namespace Protos {
         eGS2GC_Kick = 3101,
         eBS2CS_ReportState = 4000,
         eBS2CS_BattleInfoRet = 4001,
-        eBS2CS_BattleStart = 4002,
-        eBS2CS_BattleEnd = 4003,
+        eBS2CS_BattleEnd = 4002,
         eBS2GC_LoginRet = 4100,
         eBS2GC_BattleStart = 4102,
         eBS2GC_BattleEnd = 4103,
@@ -182,8 +141,7 @@ export namespace Protos {
         eCS2GS_GCLoginRet = 5100,
         eCS2GS_KickGC = 5101,
         eCS2BS_BattleInfo = 5200,
-        eCS2BS_BattleStartRet = 5201,
-        eCS2BS_BattleEndRet = 5202,
+        eCS2BS_BattleEndRet = 5201,
         eCS2GC_BeginMatchRet = 5300,
         eCS2GC_PlayerJoin = 5301,
         eCS2GC_PlayerLeave = 5302,
@@ -501,24 +459,6 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
-    interface ICS2BS_BattleStartRet {
-        opts?: (Protos.IMsgOpts|null);
-    }
-
-    class CS2BS_BattleStartRet implements ICS2BS_BattleStartRet {
-        constructor(properties?: Protos.ICS2BS_BattleStartRet);
-        public opts?: (Protos.IMsgOpts|null);
-        public static create(properties?: Protos.ICS2BS_BattleStartRet): Protos.CS2BS_BattleStartRet;
-        public static encode(message: Protos.ICS2BS_BattleStartRet, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.ICS2BS_BattleStartRet, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2BS_BattleStartRet;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2BS_BattleStartRet;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleStartRet;
-        public static toObject(message: Protos.CS2BS_BattleStartRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
     interface ICS2BS_BattleEndRet {
         opts?: (Protos.IMsgOpts|null);
     }
@@ -668,7 +608,7 @@ export namespace Protos {
         gcNID?: (Long|null);
         ip?: (string|null);
         port?: (number|null);
-        error?: (Protos.CS2GC_EnterBattle.Error|null);
+        result?: (Protos.CS2GC_EnterBattle.Result|null);
     }
 
     class CS2GC_EnterBattle implements ICS2GC_EnterBattle {
@@ -677,7 +617,7 @@ export namespace Protos {
         public gcNID: Long;
         public ip: string;
         public port: number;
-        public error: Protos.CS2GC_EnterBattle.Error;
+        public result: Protos.CS2GC_EnterBattle.Result;
         public static create(properties?: Protos.ICS2GC_EnterBattle): Protos.CS2GC_EnterBattle;
         public static encode(message: Protos.ICS2GC_EnterBattle, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_EnterBattle, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -691,7 +631,7 @@ export namespace Protos {
 
     namespace CS2GC_EnterBattle {
 
-        enum Error {
+        enum Result {
             Success = 0,
             BSNotFound = 1,
             BSLost = 2,
@@ -1181,7 +1121,8 @@ export namespace Protos {
         enum EMode {
             Single1V1 = 0,
             Single2V2 = 1,
-            Team2V2 = 2
+            Team2V2 = 2,
+            All = 3
         }
     }
 

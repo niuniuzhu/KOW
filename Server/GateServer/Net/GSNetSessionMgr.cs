@@ -16,7 +16,7 @@ namespace GateServer.Net
 			return session;
 		}
 
-		public bool SendToGC( ulong gcNID, IMessage msg, System.Action<IMessage> rpcHandler = null )
+		public bool SendToGC( ulong gcNID, IMessage msg, RPCHandler rpcHandler = null )
 		{
 			if ( !GS.instance.userMgr.GetClientSID( gcNID, out uint sid ) )
 			{

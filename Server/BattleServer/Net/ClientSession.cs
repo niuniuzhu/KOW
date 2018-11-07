@@ -33,7 +33,7 @@ namespace BattleServer.Net
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );
 
 			if ( reason != "offline" )
-				BS.instance.userMgr.Disconnect( this._gcNID );
+				BS.instance.userMgr.OnDisconnect( this._gcNID );
 
 			this._activeTime = 0;
 			this._gcNID = 0;
@@ -47,7 +47,7 @@ namespace BattleServer.Net
 
 		private ErrorCode OnGc2BsAskLogin( Google.Protobuf.IMessage message )
 		{
-			Protos.GC2BS_AskLogin login = ( Protos.GC2BS_AskLogin ) message;
+			Protos.GC2BS_AskLogin login = ( Protos.GC2BS_AskLogin )message;
 			this._gcNID = login.SessionID;
 
 			Protos.BS2GC_LoginRet loginRet = ProtoCreator.R_GC2BS_AskLogin( login.Opts.Pid );
@@ -56,12 +56,11 @@ namespace BattleServer.Net
 			if ( user != null )
 			{
 				//把战场的初始状态下发到GC
-				Battle.Battle battle = BS.instance.battleManager.GetBattle( this._gcNID );
-				loginRet.RndSeed = battle.rndSeed;
-				loginRet.FrameRate = battle.frameRate;
-				loginRet.KeyframeStep = battle.keyframeStep;
-				loginRet.BattleTime = battle.battleTime;
-				loginRet.MapID = battle.mapID;
+				loginRet.RndSeed = user.battle.rndSeed;
+				loginRet.FrameRate = user.battle.frameRate;
+				loginRet.KeyframeStep = user.battle.keyframeStep;
+				loginRet.BattleTime = user.battle.battleTime;
+				loginRet.MapID = user.battle.mapID;
 				loginRet.Result = Protos.Global.Types.ECommon.Success;
 			}
 			else
@@ -81,7 +80,7 @@ namespace BattleServer.Net
 
 		private ErrorCode OnGc2BsRequestSnapShot( Google.Protobuf.IMessage message )
 		{
-			Protos.GC2BS_RequestSnapshot request = ( Protos.GC2BS_RequestSnapshot ) message;
+			Protos.GC2BS_RequestSnapshot request = ( Protos.GC2BS_RequestSnapshot )message;
 			Protos.BS2GC_RequestSnapshotRet ret = ProtoCreator.R_GC2BS_RequestSnapshot( request.Opts.Pid );
 			BS.instance.battleManager.HandleRequestSnapshot( this._gcNID, request, ret );
 			this.Send( ret );
@@ -90,13 +89,13 @@ namespace BattleServer.Net
 
 		private ErrorCode OnGc2BsFrameAction( Google.Protobuf.IMessage message )
 		{
-			BS.instance.battleManager.HandleFrameAction( this._gcNID, ( Protos.GC2BS_FrameAction ) message );
+			BS.instance.battleManager.HandleFrameAction( this._gcNID, ( Protos.GC2BS_FrameAction )message );
 			return ErrorCode.Success;
 		}
 
 		private ErrorCode OnGc2BsRequestFrameActions( Google.Protobuf.IMessage message )
 		{
-			Protos.GC2BS_RequestFrameActions request = ( Protos.GC2BS_RequestFrameActions ) message;
+			Protos.GC2BS_RequestFrameActions request = ( Protos.GC2BS_RequestFrameActions )message;
 			Protos.BS2GC_RequestFrameActionsRet ret = ProtoCreator.R_GC2BS_RequestFrameActions( request.Opts.Pid );
 			BS.instance.battleManager.HandleRequestFrameActions( this._gcNID, request.From, request.To, ret );
 			this.Send( ret );

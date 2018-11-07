@@ -24,11 +24,11 @@ namespace Protos {
     static GC2CSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtHQzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ipAEKEEdDMkNT",
+            "CgtHQzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8irQEKEEdDMkNT",
             "X0JlZ2luTWF0Y2gSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiwK",
             "BG1vZGUYAiABKA4yHi5Qcm90b3MuR0MyQ1NfQmVnaW5NYXRjaC5FTW9kZRIP",
-            "CgdhY3RvcklEGAMgASgFIjIKBUVNb2RlEg0KCVNpbmdsZTFWMRAAEg0KCVNp",
-            "bmdsZTJWMhABEgsKB1RlYW0yVjIQAmIGcHJvdG8z"));
+            "CgdhY3RvcklEGAMgASgFIjsKBUVNb2RlEg0KCVNpbmdsZTFWMRAAEg0KCVNp",
+            "bmdsZTJWMhABEgsKB1RlYW0yVjIQAhIHCgNBbGwQA2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -257,6 +257,7 @@ namespace Protos {
         ///多人组队匹配
         /// </summary>
         [pbr::OriginalName("Team2V2")] Team2V2 = 2,
+        [pbr::OriginalName("All")] All = 3,
       }
 
     }

@@ -12,7 +12,6 @@ namespace CentralServer.Net
 		{
 			this._msgCenter.Register( Protos.MsgID.EGAskPing, this.OnBSAskPing );
 			this._msgCenter.Register( Protos.MsgID.EBs2CsReportState, this.OnBs2CsReportState );
-			this._msgCenter.Register( Protos.MsgID.EBs2CsBattleStart, this.OnBs2CsBattleStart );
 			this._msgCenter.Register( Protos.MsgID.EBs2CsBattleEnd, this.OnBs2CsBattleEnd );
 		}
 
@@ -68,17 +67,6 @@ namespace CentralServer.Net
 			gsInfo.port = BSInfoRecv.Port;
 			gsInfo.state = ( BSInfo.State ) BSInfoRecv.State;
 			Logger.Log( $"report from BS:{gsInfo}" );
-			return ErrorCode.Success;
-		}
-
-		/// <summary>
-		/// BS通知战场开始
-		/// </summary>
-		private ErrorCode OnBs2CsBattleStart( IMessage message )
-		{
-			Protos.BS2CS_BattleStart battleStart = ( Protos.BS2CS_BattleStart ) message;
-			Protos.CS2BS_BattleStartRet ret = ProtoCreator.R_BS2CS_BattleStart( battleStart.Opts.Pid );
-			this.Send( ret );
 			return ErrorCode.Success;
 		}
 

@@ -1,10 +1,10 @@
 ﻿using Core.Misc;
 using Core.Net;
 using LoginServer.Net;
-using Newtonsoft.Json;
 using Shared;
 using Shared.DB;
 using Shared.Net;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -26,15 +26,15 @@ namespace LoginServer
 
 		public ErrorCode Initialize( Options opts )
 		{
+			this.config = new LSConfig();
 			if ( string.IsNullOrEmpty( opts.cfg ) )
 			{
-				this.config = new LSConfig();
 				this.config.CopyFromCLIOptions( opts );
 				return ErrorCode.Success;
 			}
 			try
 			{
-				this.config = JsonConvert.DeserializeObject<LSConfig>( File.ReadAllText( opts.cfg ) );
+				this.config.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
 			}
 			catch ( System.Exception e )
 			{

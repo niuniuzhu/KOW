@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Core.Misc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -79,7 +80,7 @@ namespace ProtoGenerator
 					string line = lines[i];
 					line = REGEX_WHITE_SPACE.Replace( line, string.Empty );
 					line = REGEX_SEMICOLONS.Replace( line, string.Empty );
-					if ( string.IsNullOrEmpty( line ) || line.StartsWith( CommentStart ))
+					if ( string.IsNullOrEmpty( line ) || line.StartsWith( CommentStart ) )
 						continue;
 					string[] valueKey = line.Split( '=' );
 					if ( valueKey.Length < 2 )
@@ -94,12 +95,11 @@ namespace ProtoGenerator
 			}
 			{
 				match = REGEX_EXT.Match( content );
-				JObject json = JObject.Parse( match.Groups[1].Value );
-				JToken token = json["RespID"];
-				foreach ( JToken jToken in token )
+				Hashtable json = ( Hashtable )MiniJSON.JsonDecode( match.Groups[1].Value );
+				Hashtable token = json.GetMap( "RespID" );
+				foreach ( DictionaryEntry de in token )
 				{
-					JProperty child = ( JProperty )jToken;
-					responseToMsgID[child.Name] = ( string )child.Value;
+					responseToMsgID[( string )de.Key] = ( string )de.Value;
 				}
 			}
 

@@ -1,4 +1,7 @@
-﻿namespace GateServer
+﻿using System.Collections;
+using Core.Misc;
+
+namespace GateServer
 {
 	public class GSConfig
 	{
@@ -34,6 +37,21 @@
 			this.reportInterval = opts.reportInterval;
 			this.pingInterval = opts.pingInterval;
 			this.gcLive = opts.gcLive;
+		}
+
+		public void CopyFromJson( Hashtable json )
+		{
+			this.gsID = json.GetUInt( "gsID" );
+			this.name = json.GetString( "name" );
+			this.externalIP = json.GetString( "externalIP" );
+			this.externalPort = json.GetInt( "externalPort" );
+			this.password = json.GetString( "password" );
+			this.maxConnection = json.GetInt( "maxConnection" );
+			this.csIP = json.GetString( "csIP" );
+			this.csPort = json.GetInt( "csPort" );
+			this.reportInterval = json.GetLong( "reportInterval" );
+			this.pingInterval = json.GetLong( "pingInterval" );
+			this.gcLive = json.GetLong( "gcLive" );
 		}
 	}
 }

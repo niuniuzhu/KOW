@@ -71,15 +71,14 @@ namespace CentralServer
 				Logger.Error( e );
 				return ErrorCode.DefsLoadFailed;
 			}
+			this.config = new CSConfig();
 			if ( string.IsNullOrEmpty( opts.cfg ) )
 			{
-				this.config = new CSConfig();
 				this.config.CopyFromCLIOptions( opts );
 				return ErrorCode.Success;
 			}
 			try
 			{
-				this.config = new CSConfig();
 				this.config.CopyFromJson( ( Hashtable ) MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
 			}
 			catch ( System.Exception e )

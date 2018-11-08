@@ -1,4 +1,7 @@
-﻿namespace LoginServer
+﻿using Core.Misc;
+using System.Collections;
+
+namespace LoginServer
 {
 	public class LSConfig
 	{
@@ -27,6 +30,21 @@
 			this.pingInterval = opts.pingInterval;
 			this.pwdVerification = System.Convert.ToBoolean( opts.pwdVerification );
 			this.autoRegister = System.Convert.ToBoolean( opts.autoRegister );
+		}
+
+		public void CopyFromJson( Hashtable json )
+		{
+			this.cliPort = json.GetInt( "cliPort" );
+			this.csIP = json.GetString( "csIP" );
+			this.csPort = json.GetInt( "csPort" );
+			this.dbIP = json.GetString( "dbIP" );
+			this.dbPort = json.GetInt( "dbPort" );
+			this.redisIP = json.GetString( "redisIP" );
+			this.redisPort = json.GetInt( "redisPort" );
+			this.redisPwd = json.GetString( "redisPwd" );
+			this.pingInterval = json.GetLong( "pingInterval" );
+			this.pwdVerification = json.GetBoolean( "pwdVerification" );
+			this.autoRegister = json.GetBoolean( "autoRegister" );
 		}
 	}
 }

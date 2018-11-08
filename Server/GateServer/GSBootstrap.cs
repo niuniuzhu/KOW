@@ -57,8 +57,7 @@ namespace GateServer
 		private static void Dispose()
 		{
 			_disposed = true;
-			NetworkMgr.instance.Dispose();
-			NetSessionPool.instance.Dispose();
+			GS.instance.Dispose();
 		}
 
 		private static void MainLoop()
@@ -82,12 +81,17 @@ namespace GateServer
 			{
 				case "exit":
 					Dispose();
+					return;
 
-					break;
 				case "cls":
 					Console.Clear();
-					break;
+					return;
 			}
+			string[] strs = cmd.Split( ' ' );
+			if ( strs[0] == "call" )
+				GS.instance.HandleLuaCall( strs[1] );
+			else if ( strs[0] == "print" )
+				GS.instance.HandleLuaPrint( strs[1] );
 		}
 	}
 }

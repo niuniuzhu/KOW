@@ -20,6 +20,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Google.Protobuf" Version="3.6.1" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\XLua.Mini\XLua.Mini.csproj" />
 	</ItemGroup>
 

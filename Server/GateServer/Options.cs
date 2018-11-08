@@ -5,15 +5,21 @@ namespace GateServer
 	public class Options
 	{
 		[Option( 'l', "log",
-			Default = "Config/GSLogCfg.xml",
+			Default = "./Config/GSLogCfg.xml",
 			HelpText = "Specify configuration file for log." )]
 		public string logCfg { get; set; }
 
 		[Option( 'c', "cfg",
-			Default = "",
+			Default = "./Config/GSCfg.json",
 			SetName = "bycfg",
 			HelpText = "Specify configuration file." )]
 		public string cfg { get; set; }
+
+		[Option( "script_path",
+			Default = "./Scripts",
+			SetName = "bycfg",
+			HelpText = "Specify the path of lua script." )]
+		public string scriptPath { get; set; }
 
 		[Option( "id",
 			Default = ( uint )30001,

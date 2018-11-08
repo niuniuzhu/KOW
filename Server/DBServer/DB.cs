@@ -1,9 +1,9 @@
 ﻿using Core.Misc;
 using Core.Net;
 using DBServer.Net;
-using Newtonsoft.Json;
 using Shared;
 using Shared.DB;
+using System.Collections;
 using System.IO;
 
 namespace DBServer
@@ -25,7 +25,8 @@ namespace DBServer
 		{
 			try
 			{
-				this.config = JsonConvert.DeserializeObject<DBConfig>( File.ReadAllText( opts.cfg ) );
+				this.config = new DBConfig();
+				this.config.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
 			}
 			catch ( System.Exception e )
 			{

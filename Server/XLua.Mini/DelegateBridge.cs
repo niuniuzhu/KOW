@@ -32,6 +32,10 @@ namespace XLua
 
 		protected int errorFuncRef;
 
+		public delegate Delegate getDelegateByTypeHookHandler( DelegateBridgeBase bridge, Type type );
+
+		public static getDelegateByTypeHookHandler getDelegateByTypeHook;
+
 		public DelegateBridgeBase( int reference, LuaEnv luaenv ) : base( reference, luaenv )
 		{
 			errorFuncRef = luaenv.errorFuncRef;
@@ -80,7 +84,7 @@ namespace XLua
 
 		public virtual Delegate GetDelegateByType( Type type )
 		{
-			return null;
+			return getDelegateByTypeHook?.Invoke( this, type );
 		}
 	}
 

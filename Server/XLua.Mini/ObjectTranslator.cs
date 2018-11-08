@@ -1347,7 +1347,7 @@ namespace XLua
 			return getCsObj( L, index, LuaAPI.xlua_tocsobj_safe( L, index ) );
 		}
 
-		internal object FastGetCSObj( RealStatePtr L, int index )
+		public object FastGetCSObj( RealStatePtr L, int index )
 		{
 			return getCsObj( L, index, LuaAPI.xlua_tocsobj_fast( L, index ) );
 		}

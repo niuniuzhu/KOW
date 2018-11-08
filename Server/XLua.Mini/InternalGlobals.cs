@@ -22,14 +22,14 @@ using System.Reflection;
 
 namespace XLua
 {
-	internal partial class InternalGlobals
+	public partial class InternalGlobals
 	{
 		internal static byte[] strBuff = new byte[256];
 
-		internal delegate bool TryArrayGet( Type type, RealStatePtr L, ObjectTranslator translator, object obj, int index );
-		internal delegate bool TryArraySet( Type type, RealStatePtr L, ObjectTranslator translator, object obj, int array_idx, int obj_idx );
-		internal static TryArrayGet genTryArrayGetPtr = null;
-		internal static TryArraySet genTryArraySetPtr = null;
+		public delegate bool TryArrayGet( Type type, RealStatePtr L, ObjectTranslator translator, object obj, int index );
+		public delegate bool TryArraySet( Type type, RealStatePtr L, ObjectTranslator translator, object obj, int array_idx, int obj_idx );
+		public static TryArrayGet genTryArrayGetPtr = null;
+		public static TryArraySet genTryArraySetPtr = null;
 
 		internal static volatile ObjectTranslatorPool objectTranslatorPool = new ObjectTranslatorPool();
 
@@ -54,13 +54,13 @@ namespace XLua
 			{ "op_RightShift", "__shr" },
 		};
 
-		internal static Dictionary<Type, IEnumerable<MethodInfo>> extensionMethodMap = null;
+		public static Dictionary<Type, IEnumerable<MethodInfo>> extensionMethodMap = null;
 
 #if GEN_CODE_MINIMIZE
         internal static LuaDLL.CSharpWrapperCaller CSharpWrapperCallerPtr = new LuaDLL.CSharpWrapperCaller(StaticLuaCallbacks.CSharpWrapperCallerImpl);
 #endif
 
-		internal static LuaCSFunction LazyReflectionWrap = new LuaCSFunction( Utils.LazyReflectionCall );
+		public static LuaCSFunction LazyReflectionWrap = new LuaCSFunction( Utils.LazyReflectionCall );
 	}
 
 }

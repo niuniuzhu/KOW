@@ -1,12 +1,10 @@
-﻿using System;
+﻿using CommandLine;
+using Core.Misc;
+using Shared;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using CommandLine;
-using Core.Misc;
-using Core.Net;
-using Shared;
-using Shared.Net;
 
 namespace DBServer
 {
@@ -58,8 +56,8 @@ namespace DBServer
 		private static void Dispose()
 		{
 			_disposed = true;
-			NetworkMgr.instance.Dispose();
-			NetSessionPool.instance.Dispose();
+			DB.instance.Dispose();
+			Logger.Dispose();
 		}
 
 		private static void MainLoop()

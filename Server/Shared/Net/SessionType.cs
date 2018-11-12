@@ -10,6 +10,10 @@
 		ServerGC,
 		ServerLS,
 		ServerGS,
-		ServerBS
+		ServerBS,
+		Shell,
+		Shell2GS,
+		Shell2CS,
+		Shell2BS
 	};
 }

@@ -9,9 +9,9 @@ namespace DBServer.Net
 	{
 		protected LoginSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.ELs2DbQueryAccount, this.OnLs2DbQueryAccount );
-			this._msgCenter.Register( Protos.MsgID.ELs2DbQueryLogin, this.OnLs2DbQueryLogin );
-			this._msgCenter.Register( Protos.MsgID.ELs2DbExec, this.OnLs2DbExec );
+			this.RegMsgHandler( Protos.MsgID.ELs2DbQueryAccount, this.OnLs2DbQueryAccount );
+			this.RegMsgHandler( Protos.MsgID.ELs2DbQueryLogin, this.OnLs2DbQueryLogin );
+			this.RegMsgHandler( Protos.MsgID.ELs2DbExec, this.OnLs2DbExec );
 		}
 
 		protected override void OnEstablish()

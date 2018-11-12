@@ -16,6 +16,7 @@ namespace GateServer
 		public string name;
 		public string externalIP;
 		public int externalPort;
+		public int shellPort;
 		public string password;
 		public int maxConnection;
 		public string csIP;
@@ -30,6 +31,7 @@ namespace GateServer
 			this.name = opts.name;
 			this.externalIP = opts.externalIP;
 			this.externalPort = opts.externalPort;
+			this.shellPort = opts.shellPort;
 			this.password = opts.password;
 			this.maxConnection = opts.maxConnection;
 			this.csIP = opts.csIP;
@@ -45,6 +47,7 @@ namespace GateServer
 			this.name = json.GetString( "name" );
 			this.externalIP = json.GetString( "externalIP" );
 			this.externalPort = json.GetInt( "externalPort" );
+			this.shellPort = json.GetInt( "shellPort" );
 			this.password = json.GetString( "password" );
 			this.maxConnection = json.GetInt( "maxConnection" );
 			this.csIP = json.GetString( "csIP" );

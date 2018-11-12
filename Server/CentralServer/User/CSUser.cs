@@ -30,7 +30,7 @@ namespace CentralServer.User
 		/// </summary>
 		public long loginTime { get; private set; }
 		/// <summary>
-		/// BS SessionID
+		/// 当前连接的BS SessionID
 		/// </summary>
 		public uint bsSID { get; private set; }
 		/// <summary>
@@ -107,5 +107,7 @@ namespace CentralServer.User
 			this.bsSID = 0;
 			this.bsLID = 0;
 		}
+
+		public override string ToString() => $"ukey:{this.ukey},gcNID:{this.gcNID}";
 	}
 }

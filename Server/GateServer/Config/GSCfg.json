@@ -3,6 +3,7 @@
     "name": "local",
     "externalIP": "192.168.0.108",
     "externalPort": 30001,
+    "shellPort": 50002,
     "password": "123456",
     "maxConnection": 10000,
     "csIP": "127.0.0.1",

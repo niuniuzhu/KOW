@@ -41,7 +41,7 @@ export class ConnectionTest {
 
 		const connector = new WSConnector();
 		connector.onerror = (e) => Logger.Error(e);
-		connector.onclose = () => Logger.Log("connection closed.");
+		connector.onclose = () => Logger.Log("ls connection closed.");
 		connector.onopen = () => {
 			connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
 				const resp: Protos.LS2GC_AskLoginRet = <Protos.LS2GC_AskLoginRet>message;
@@ -66,7 +66,7 @@ export class ConnectionTest {
 
 	private LoginGS(ip: string, port: number, pwd: string, gcNID: Long): void {
 		const connector = this._connector.gsConnector;
-		connector.onerror = (e) => Logger.Error(e);
+		connector.onerror = (e) => Logger.Error("gs:" + e);
 		connector.onopen = () => {
 			Logger.Log("GS Connected");
 			const askLogin = ProtoCreator.Q_GC2GS_AskLogin();

@@ -10,9 +10,9 @@ namespace CentralServer.Net
 	{
 		protected BattleSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.EGAskPing, this.OnBSAskPing );
-			this._msgCenter.Register( Protos.MsgID.EBs2CsReportState, this.OnBs2CsReportState );
-			this._msgCenter.Register( Protos.MsgID.EBs2CsBattleEnd, this.OnBs2CsBattleEnd );
+			this.RegMsgHandler( Protos.MsgID.EGAskPing, this.OnBSAskPing );
+			this.RegMsgHandler( Protos.MsgID.EBs2CsReportState, this.OnBs2CsReportState );
+			this.RegMsgHandler( Protos.MsgID.EBs2CsBattleEnd, this.OnBs2CsBattleEnd );
 		}
 
 		protected override void OnEstablish()

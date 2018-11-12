@@ -4,8 +4,12 @@
 	public delegate int PacketDecodeHandler( byte[] buf, int offset, int size, out byte[] data );
 	public delegate INetSession SessionCreater( ProtoType type );
 
+	public delegate void SessionCreatedHandler( INetSession session );
+
 	public interface IListener
 	{
+		event SessionCreatedHandler OnSessionCreated;
+
 		uint id { get; }
 
 		/// <summary>

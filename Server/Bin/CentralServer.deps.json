@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "8a1e6e8802996ed355cca763d03ef82723636562"
+    "signature": "b8bdb3c5cdcc5bad6c9e0623393430356cca225b"
   },
   "compilationOptions": {},
   "targets": {
@@ -11,7 +11,8 @@
           "CommandLineParser": "2.3.0",
           "Core": "1.0.0",
           "Protocol": "1.0.0",
-          "Shared": "1.0.0"
+          "Shared": "1.0.0",
+          "XLua.Mini": "1.0.0"
         },
         "runtime": {
           "CentralServer.dll": {}
@@ -435,8 +436,8 @@
           "System.Linq": "4.1.0",
           "System.ObjectModel": "4.0.12-rc2-24027",
           "System.Reflection": "4.3.0",
-          "System.Reflection.Emit": "4.0.1-rc2-24027",
-          "System.Reflection.Emit.ILGeneration": "4.0.1-rc2-24027",
+          "System.Reflection.Emit": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
           "System.Reflection.Emit.Lightweight": "4.0.1-rc2-24027",
           "System.Reflection.Extensions": "4.0.1",
           "System.Reflection.Primitives": "4.3.0",
@@ -577,16 +578,16 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Reflection.Emit/4.0.1-rc2-24027": {
+      "System.Reflection.Emit/4.3.0": {
         "dependencies": {
           "System.IO": "4.3.0",
           "System.Reflection": "4.3.0",
-          "System.Reflection.Emit.ILGeneration": "4.0.1-rc2-24027",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
           "System.Reflection.Primitives": "4.3.0",
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Reflection.Emit.ILGeneration/4.0.1-rc2-24027": {
+      "System.Reflection.Emit.ILGeneration/4.3.0": {
         "dependencies": {
           "System.Reflection": "4.3.0",
           "System.Reflection.Primitives": "4.3.0",
@@ -596,7 +597,7 @@
       "System.Reflection.Emit.Lightweight/4.0.1-rc2-24027": {
         "dependencies": {
           "System.Reflection": "4.3.0",
-          "System.Reflection.Emit.ILGeneration": "4.0.1-rc2-24027",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
           "System.Reflection.Primitives": "4.3.0",
           "System.Runtime": "4.3.0"
         }
@@ -1085,6 +1086,14 @@
         "runtime": {
           "Shared.dll": {}
         }
+      },
+      "XLua.Mini/1.0.0": {
+        "dependencies": {
+          "System.Reflection.Emit": "4.3.0"
+        },
+        "runtime": {
+          "XLua.Mini.dll": {}
+        }
       }
     }
   },
@@ -1402,19 +1411,19 @@
       "path": "system.reflection/4.3.0",
       "hashPath": "system.reflection.4.3.0.nupkg.sha512"
     },
-    "System.Reflection.Emit/4.0.1-rc2-24027": {
+    "System.Reflection.Emit/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-IAZGocZV5gUnPMr+z9yVrZurI/XPWBSJMr6TGpV7wSLRZxzasvW2heoipCx5nEOTOhT9oW0HvExli/IrbVD1nw==",
-      "path": "system.reflection.emit/4.0.1-rc2-24027",
-      "hashPath": "system.reflection.emit.4.0.1-rc2-24027.nupkg.sha512"
+      "sha512": "sha512-228FG0jLcIwTVJyz8CLFKueVqQK36ANazUManGaJHkO0icjiIypKW7YLWLIWahyIkdh5M7mV2dJepllLyA1SKg==",
+      "path": "system.reflection.emit/4.3.0",
+      "hashPath": "system.reflection.emit.4.3.0.nupkg.sha512"
     },
-    "System.Reflection.Emit.ILGeneration/4.0.1-rc2-24027": {
+    "System.Reflection.Emit.ILGeneration/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-zF7z+QrdFui+osVJwlYer0M7PbPhAD3v0UDeaM8ernSF8/CuioZFxuIxxu9VqDMzGN/sthZgYxBBZsxXsqauPg==",
-      "path": "system.reflection.emit.ilgeneration/4.0.1-rc2-24027",
-      "hashPath": "system.reflection.emit.ilgeneration.4.0.1-rc2-24027.nupkg.sha512"
+      "sha512": "sha512-59tBslAk9733NXLrUJrwNZEzbMAcu8k344OYo+wfSVygcgZ9lgBdGIzH/nrg3LYhXceynyvTc8t5/GD4Ri0/ng==",
+      "path": "system.reflection.emit.ilgeneration/4.3.0",
+      "hashPath": "system.reflection.emit.ilgeneration.4.3.0.nupkg.sha512"
     },
     "System.Reflection.Emit.Lightweight/4.0.1-rc2-24027": {
       "type": "package",
@@ -1700,6 +1709,11 @@
       "sha512": ""
     },
     "Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "XLua.Mini/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

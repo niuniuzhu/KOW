@@ -12,7 +12,7 @@ namespace BattleServer.Net
 
 		private B2CSSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.ECs2BsBattleInfo, this.OnCs2BsBattleInfo );
+			this.RegMsgHandler( Protos.MsgID.ECs2BsBattleInfo, this.OnCs2BsBattleInfo );
 		}
 
 		protected override void OnEstablish()

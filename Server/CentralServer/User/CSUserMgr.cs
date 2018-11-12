@@ -19,6 +19,10 @@ namespace CentralServer.User
 		/// 由LS提交的登陆凭证,用于验证客户端登陆CS
 		/// </summary>
 		private readonly List<CSUser> _authUsers = new List<CSUser>();
+		/// <summary>
+		/// 玩家数量
+		/// </summary>
+		public int count => this._ukeyToUser.Count;
 
 		public bool HasUser( ulong gcNID ) => this._gcNIDToUser.ContainsKey( gcNID );
 
@@ -41,6 +45,16 @@ namespace CentralServer.User
 			this._ukeyToUser.TryGetValue( ukey, out CSUser user );
 			return user;
 		}
+
+		/// <summary>
+		/// 获取指定ukey的玩家
+		/// </summary>
+		public CSUser GetUserByUKey( uint ukey ) => this.GetUser( ukey );
+
+		/// <summary>
+		/// 获取指定网络ID的玩家
+		/// </summary>
+		public CSUser GetUserByGcNID( ulong gcNID ) => this.GetUser( gcNID );
 
 		/// <summary>
 		/// 创建玩家登陆凭证

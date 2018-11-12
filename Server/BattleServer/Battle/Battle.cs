@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -129,18 +130,12 @@ namespace BattleServer.Battle
 		/// </summary>
 		private readonly MemoryStream _ms = new MemoryStream();
 
-		/// <summary>
-		/// snapshot writer
-		/// </summary>
-		private readonly Google.Protobuf.CodedOutputStream _snapshotWriter;
-
 		private Task _task;
 
 		public Battle()
 		{
 			Debug.Assert( _gid < uint.MaxValue, "maximum id of waiting room!!" );
-			this.id = _gid++;
-			this._snapshotWriter = new Google.Protobuf.CodedOutputStream( this._ms );
+			this.id = ++_gid;
 		}
 
 		public void Clear()
@@ -151,7 +146,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 初始化
 		/// </summary>
-		public bool Init( BattleEntry battleEntry )
+		internal bool Init( BattleEntry battleEntry )
 		{
 			this.rndSeed = battleEntry.rndSeed;
 			this.mapID = battleEntry.mapID;
@@ -176,7 +171,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 战场开始
 		/// </summary>
-		public void Start()
+		internal void Start()
 		{
 			this._sw.Start();
 			this._task = Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
@@ -228,7 +223,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 清理战场
 		/// </summary>
-		public void End()
+		internal void End()
 		{
 			if ( this._task != null )
 			{
@@ -257,7 +252,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 中断战场
 		/// </summary>
-		public void Interrupt()
+		internal void Interrupt()
 		{
 			if ( this.finished )
 				return;
@@ -321,6 +316,17 @@ namespace BattleServer.Battle
 		}
 
 		/// <summary>
+		/// 以字符串形式列出所有实体信息
+		/// </summary>
+		public string ListEntities()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( Entity entity in this._entities )
+				sb.AppendLine( entity.ToString() );
+			return sb.ToString();
+		}
+
+		/// <summary>
 		/// 战场主循环
 		/// 此函数为异步调用函数
 		/// </summary>
@@ -346,7 +352,7 @@ namespace BattleServer.Battle
 		/// 广播消息到所有玩家
 		/// 该函数在战场线程调用,是线程不安全的,但由于几乎没有写操作,暂时不加锁
 		/// </summary>
-		public void Broadcast( Google.Protobuf.IMessage message )
+		internal void Broadcast( Google.Protobuf.IMessage message )
 		{
 			int count = this.numPlayers;
 			for ( int i = 0; i < count; i++ )
@@ -390,7 +396,7 @@ namespace BattleServer.Battle
 		/// 获取指定帧数下的战场快照
 		/// </summary>
 		/// <param name="frame">指定帧数下的快速,-1表示最近的快照</param>
-		public FrameSnapshot GetSnapshot( int frame = -1 ) => this._snapshotMgr.Get( frame );
+		internal FrameSnapshot GetSnapshot( int frame = -1 ) => this._snapshotMgr.Get( frame );
 
 		/// <summary>
 		/// 制作初始化快照
@@ -420,7 +426,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 处理玩家提交的帧行为
 		/// </summary>
-		public void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message ) => this._frameActionMgr.MergeFromProto( gcNID, message );
+		internal void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message ) => this._frameActionMgr.MergeFromProto( gcNID, message );
 
 		/// <summary>
 		/// 处理玩家请求帧行为的历史数据
@@ -428,7 +434,7 @@ namespace BattleServer.Battle
 		/// <param name="from">起始帧</param>
 		/// <param name="to">结束帧</param>
 		/// <param name="ret">需要填充的消息</param>
-		public void HandleRequestFrameActions( int from, int to, Protos.BS2GC_RequestFrameActionsRet ret ) =>
+		internal void HandleRequestFrameActions( int from, int to, Protos.BS2GC_RequestFrameActionsRet ret ) =>
 			this._frameActionMgr.FillHistoryToMessage( from, to, ret );
 	}
 }

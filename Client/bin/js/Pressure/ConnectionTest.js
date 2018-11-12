@@ -29,7 +29,7 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
             login.sdk = sdk;
             const connector = new WSConnector_1.WSConnector();
             connector.onerror = (e) => Logger_1.Logger.Error(e);
-            connector.onclose = () => Logger_1.Logger.Log("connection closed.");
+            connector.onclose = () => Logger_1.Logger.Log("ls connection closed.");
             connector.onopen = () => {
                 connector.Send(protos_1.Protos.GC2LS_AskSmartLogin, login, message => {
                     const resp = message;
@@ -52,7 +52,7 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
         }
         LoginGS(ip, port, pwd, gcNID) {
             const connector = this._connector.gsConnector;
-            connector.onerror = (e) => Logger_1.Logger.Error(e);
+            connector.onerror = (e) => Logger_1.Logger.Error("gs:" + e);
             connector.onopen = () => {
                 Logger_1.Logger.Log("GS Connected");
                 const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using CentralServer.User;
 using Core.Misc;
 
@@ -11,7 +12,7 @@ namespace CentralServer.Match
 	public class BattleStaging
 	{
 		/// <summary>
-		/// BS逻辑ID和战场ID的组合对应的玩家网络ID
+		/// BS逻辑ID和战场ID的组合对应的玩家
 		/// BS逻辑ID和战场ID可组合成唯一ID
 		/// </summary>
 		private readonly Dictionary<ulong, List<CSUser>> _lbIDToUser = new Dictionary<ulong, List<CSUser>>();
@@ -70,6 +71,86 @@ namespace CentralServer.Match
 				return;
 			while ( bids.Count > 0 )
 				this.Remove( lid, bids[0] );
+		}
+
+		/// <summary>
+		/// 以字符串形式返回所有BS逻辑ID和战场ID的组合对应玩家的关系
+		/// </summary>
+		public string ListALLLBIDToUser()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( var kv in this._lbIDToUser )
+			{
+				sb.AppendLine( kv.Key.ToString() );
+				List<CSUser> users = kv.Value;
+				foreach ( CSUser user in users )
+					sb.AppendLine( $"\t{user}" );
+			}
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// 以字符串形式返回BS逻辑ID和战场ID的组合对应玩家的关系
+		/// </summary>
+		public string ListLBIDToUser( uint lid, uint bid )
+		{
+			ulong lbID = lid | ( ulong )bid << 32;
+			if ( !this._lbIDToUser.TryGetValue( lbID, out List<CSUser> users ) )
+				return string.Empty;
+			StringBuilder sb = new StringBuilder();
+			foreach ( CSUser user in users )
+				sb.AppendLine( user.ToString() );
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// 返回BS逻辑ID和战场ID的组合对应的玩家数量
+		/// </summary>
+		public int GetNumUsersByLBID( uint lid, uint bid )
+		{
+			ulong lbID = lid | ( ulong )bid << 32;
+			if ( !this._lbIDToUser.TryGetValue( lbID, out List<CSUser> users ) )
+				return -1;
+			return users.Count;
+		}
+
+		/// <summary>
+		/// 以字符串格式返回所有BS逻辑ID和战场ID的对应关系
+		/// </summary>
+		public string ListALLLIDToBID()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( var kv in this._lidToBID )
+			{
+				sb.AppendLine( kv.Key.ToString() );
+				List<uint> bids = kv.Value;
+				foreach ( uint bid in bids )
+					sb.AppendLine( $"\t{bid}" );
+			}
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// 以字符串的形式返回指定lid下的战场ID
+		/// </summary>
+		public string ListLIDToBID( uint lid )
+		{
+			if ( !this._lidToBID.TryGetValue( lid, out List<uint> bids ) )
+				return string.Empty;
+			StringBuilder sb = new StringBuilder();
+			foreach ( uint bid in bids )
+				sb.AppendLine( bid.ToString() );
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// 获取指定逻辑ID的BS对应的战场数量
+		/// </summary>
+		public int GetNumBattlesByLID( uint lid )
+		{
+			if ( !this._lidToBID.TryGetValue( lid, out List<uint> bids ) )
+				return -1;
+			return bids.Count;
 		}
 	}
 }

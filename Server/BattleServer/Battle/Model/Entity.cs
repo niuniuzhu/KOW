@@ -13,8 +13,8 @@ namespace BattleServer.Battle.Model
 	{
 		public ulong id { get; protected set; }
 		public int actorID { get; protected set; }
-		public int team { get; protected set; }
 		public string name { get; protected set; }
+		public int team { get; protected set; }
 
 		/// <summary>
 		/// 属性管理器
@@ -30,10 +30,10 @@ namespace BattleServer.Battle.Model
 
 		public Entity()
 		{
-			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Idle, this ) );
-			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Move, this ) );
-			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Attack, this ) );
-			this.fsm.AddState( new EntityState( ( int ) EntityState.Type.Die, this ) );
+			this.fsm.AddState( new EntityState( ( int )EntityState.Type.Idle, this ) );
+			this.fsm.AddState( new EntityState( ( int )EntityState.Type.Move, this ) );
+			this.fsm.AddState( new EntityState( ( int )EntityState.Type.Attack, this ) );
+			this.fsm.AddState( new EntityState( ( int )EntityState.Type.Die, this ) );
 		}
 
 		public bool Init( BattleEntry.Player entry )
@@ -44,7 +44,7 @@ namespace BattleServer.Battle.Model
 			this.name = entry.name;
 			if ( !this.LoadDef() )
 				return false;
-			this.fsm.ChangeState( ( int ) EntityState.Type.Idle );
+			this.fsm.ChangeState( ( int )EntityState.Type.Idle );
 			return true;
 		}
 
@@ -58,12 +58,12 @@ namespace BattleServer.Battle.Model
 			}
 			try
 			{
-				this.attribute.Set( Attr.MHP, ( Fix64 ) mapDef.GetFloat( "mhp" ) );
+				this.attribute.Set( Attr.MHP, ( Fix64 )mapDef.GetFloat( "mhp" ) );
 				this.attribute.Set( Attr.HP, this.attribute.Get( Attr.MHP ) );
-				this.attribute.Set( Attr.MMP, ( Fix64 ) mapDef.GetFloat( "mmp" ) );
+				this.attribute.Set( Attr.MMP, ( Fix64 )mapDef.GetFloat( "mmp" ) );
 				this.attribute.Set( Attr.MP, this.attribute.Get( Attr.MMP ) );
-				this.attribute.Set( Attr.MOVE_SPEED, ( Fix64 ) mapDef.GetFloat( "move_speed" ) );
-				this.attribute.Set( Attr.TURN_SPEED, ( Fix64 ) mapDef.GetFloat( "turn_speed" ) );
+				this.attribute.Set( Attr.MOVE_SPEED, ( Fix64 )mapDef.GetFloat( "move_speed" ) );
+				this.attribute.Set( Attr.TURN_SPEED, ( Fix64 )mapDef.GetFloat( "turn_speed" ) );
 				//todo more....
 			}
 			catch ( Exception e )
@@ -88,18 +88,20 @@ namespace BattleServer.Battle.Model
 			writer.WriteInt32( this.actorID );
 			writer.WriteInt32( this.team );
 			writer.WriteString( this.name );
-			writer.WriteFloat( ( float ) this.position.x );
-			writer.WriteFloat( ( float ) this.position.y );
-			writer.WriteFloat( ( float ) this.direction.x );
-			writer.WriteFloat( ( float ) this.direction.y );
+			writer.WriteFloat( ( float )this.position.x );
+			writer.WriteFloat( ( float )this.position.y );
+			writer.WriteFloat( ( float )this.direction.x );
+			writer.WriteFloat( ( float )this.direction.y );
 			writer.WriteInt32( this.fsm.currentState.type );
-			writer.WriteInt32( ( ( EntityState ) this.fsm.currentState ).time );
+			writer.WriteInt32( ( ( EntityState )this.fsm.currentState ).time );
 			writer.WriteInt32( this.attribute.count );
 			this.attribute.Foreach( ( attr, value ) =>
 			{
-				writer.WriteInt32( ( int ) attr );
-				writer.WriteFloat( ( float ) value );
+				writer.WriteInt32( ( int )attr );
+				writer.WriteFloat( ( float )value );
 			} );
 		}
+
+		public override string ToString() => $"id:{this.id}, aid:{this.actorID}, n:{this.name}m, t:{this.team}, s:{this.fsm.currentState?.type}";
 	}
 }

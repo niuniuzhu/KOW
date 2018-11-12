@@ -1,12 +1,10 @@
 ﻿using CommandLine;
-using Core.Misc;
-using Core.Net;
 using Shared;
-using Shared.Net;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using Logger = Core.Misc.Logger;
 
 namespace BattleServer
 {
@@ -57,8 +55,8 @@ namespace BattleServer
 		private static void Dispose()
 		{
 			_disposed = true;
-			NetworkMgr.instance.Dispose();
-			NetSessionPool.instance.Dispose();
+			BS.instance.Dispose();
+			Logger.Dispose();
 		}
 
 		private static void MainLoop()

@@ -14,9 +14,9 @@ namespace LoginServer.Net
 	{
 		protected ClientSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.EGc2LsAskRegister, this.OnGCtoLSAskRegister );
-			this._msgCenter.Register( Protos.MsgID.EGc2LsAskLogin, this.OnGCtoLSAskLogin );
-			this._msgCenter.Register( Protos.MsgID.EGc2LsAskSmartLogin, this.OnGc2LsAskSmartLogin );
+			this.RegMsgHandler( Protos.MsgID.EGc2LsAskRegister, this.OnGCtoLSAskRegister );
+			this.RegMsgHandler( Protos.MsgID.EGc2LsAskLogin, this.OnGCtoLSAskLogin );
+			this.RegMsgHandler( Protos.MsgID.EGc2LsAskSmartLogin, this.OnGc2LsAskSmartLogin );
 		}
 
 		protected override void OnEstablish()

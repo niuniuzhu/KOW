@@ -366,7 +366,7 @@ namespace XLua
 #endif
 		}
 
-		internal override void push( RealStatePtr L )
+		public override void push( RealStatePtr L )
 		{
 			LuaAPI.lua_getref( L, luaReference );
 		}

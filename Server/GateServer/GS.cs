@@ -3,6 +3,7 @@ using Core.Net;
 using GateServer.Net;
 using Shared;
 using Shared.Net;
+using System;
 using System.Collections;
 using System.IO;
 
@@ -32,6 +33,7 @@ namespace GateServer
 			XLua.XLuaGenIniterRegister.Init();
 			XLua.WrapPusher.Init();
 			XLua.DelegatesGensBridge.Init();
+
 			this._luaEnv = new XLua.LuaEnv();
 			this._luaEnv.AddLoader( ( ref string filepath ) => File.ReadAllBytes( Path.Combine( opts.scriptPath, filepath + ".lua" ) ) );
 			this._luaEnv.DoString( "require \"gs\"" );
@@ -46,7 +48,7 @@ namespace GateServer
 			{
 				this.config.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
 			}
-			catch ( System.Exception e )
+			catch ( Exception e )
 			{
 				Logger.Error( e );
 				return ErrorCode.CfgLoadFailed;
@@ -61,7 +63,29 @@ namespace GateServer
 			WSListener cliListener = ( WSListener )this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
 			cliListener.Start( this.config.externalPort );
 
+			IListener shellListener = this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, this.netSessionMgr.CreateShellSession );
+			shellListener.Start( this.config.shellPort );
+			ShellSession.key = "88F77D88-8C5A-4FE7-B099-68088A27C8DE";
+			shellListener.OnSessionCreated += session =>
+			{
+				ShellSession ss = ( ShellSession )session;
+				ss.shellCommandHandler = cmd =>
+				{
+					string s = string.Empty;
+#if !DISABLE_LUA
+					object[] result = this._luaEnv.DoString( $"return {cmd}" );
+					if ( result != null )
+					{
+						for ( int i = 0; i < result.Length; i++ )
+							s += result[i] == null ? "nil" : result[i].ToString();
+					}
+#endif
+					return s;
+				};
+			};
+
 			this.netSessionMgr.CreateConnector<G2CSSession>( SessionType.ServerG2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 65535, 0 );
+
 			return ErrorCode.Success;
 		}
 
@@ -91,39 +115,6 @@ namespace GateServer
 #endif
 			NetworkMgr.instance.Dispose();
 			NetSessionPool.instance.Dispose();
-		}
-
-		public void HandleLuaCall( string cmd )
-		{
-#if !DISABLE_LUA
-			try
-			{
-				this._luaEnv.DoString( cmd );
-			}
-			catch ( System.Exception e )
-			{
-				Logger.Log( e );
-			}
-#else
-			Logger.Warn( "lua not supported" );
-#endif
-
-		}
-
-		public void HandleLuaPrint( string cmd )
-		{
-#if !DISABLE_LUA
-			try
-			{
-				this._luaEnv.DoString( $"print({cmd})" );
-			}
-			catch ( System.Exception e )
-			{
-				Logger.Log( e );
-			}
-#else
-			Logger.Warn( "lua not supported" );
-#endif
 		}
 	}
 }

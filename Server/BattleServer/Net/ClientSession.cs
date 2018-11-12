@@ -6,18 +6,20 @@ using Shared.Net;
 
 namespace BattleServer.Net
 {
-	public class ClientSession : SrvCliSession
+	public class ClientSession : SecureSession
 	{
 		private long _activeTime;
 		private ulong _gcNID;
 
 		protected ClientSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.EGc2BsAskLogin, this.OnGc2BsAskLogin );
-			this._msgCenter.Register( Protos.MsgID.EGc2BsKeepAlive, this.OnGc2BsKeepAlive );
-			this._msgCenter.Register( Protos.MsgID.EGc2BsRequestSnapshot, this.OnGc2BsRequestSnapShot );
-			this._msgCenter.Register( Protos.MsgID.EGc2BsFrameAction, this.OnGc2BsFrameAction );
-			this._msgCenter.Register( Protos.MsgID.EGc2BsRequestFrameActions, this.OnGc2BsRequestFrameActions );
+			this._accreditedMsgID = Protos.MsgID.EGc2BsAskLogin;
+
+			this.RegMsgHandler( Protos.MsgID.EGc2BsAskLogin, this.OnGc2BsAskLogin );
+			this.RegMsgHandler( Protos.MsgID.EGc2BsKeepAlive, this.OnGc2BsKeepAlive );
+			this.RegMsgHandler( Protos.MsgID.EGc2BsRequestSnapshot, this.OnGc2BsRequestSnapShot );
+			this.RegMsgHandler( Protos.MsgID.EGc2BsFrameAction, this.OnGc2BsFrameAction );
+			this.RegMsgHandler( Protos.MsgID.EGc2BsRequestFrameActions, this.OnGc2BsRequestFrameActions );
 		}
 
 		protected override void OnEstablish()
@@ -60,6 +62,8 @@ namespace BattleServer.Net
 			BSUser user = BS.instance.userMgr.Online( this._gcNID, this.id );
 			if ( user != null )
 			{
+				//设置该Session为受信任的连接
+				this._accredited = true;
 				//把战场的初始状态下发到GC
 				loginRet.RndSeed = user.battle.rndSeed;
 				loginRet.FrameRate = user.battle.frameRate;

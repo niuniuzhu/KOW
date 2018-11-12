@@ -18,6 +18,7 @@ namespace Core.Net
 
 	public class KCPListener : IListener
 	{
+		public event SessionCreatedHandler OnSessionCreated;
 		public uint id { get; }
 		public SessionCreater sessionCreater { get; set; }
 
@@ -39,7 +40,7 @@ namespace Core.Net
 			this._running = true;
 			Task.Run( action: this.ConsumeAsync );
 
-			Logger.Log( $"Start Listen {port}" );
+			Logger.Log( $"listen port: {port}" );
 			try
 			{
 				this._socket = new Socket( AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp );
@@ -191,6 +192,8 @@ namespace Core.Net
 
 					kcpConnection.SendHandShakeAck();
 					kcpConnection.StartPing();
+
+					this.OnSessionCreated?.Invoke( session );
 				}
 			}
 			else

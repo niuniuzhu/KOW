@@ -26,6 +26,8 @@ namespace CentralServer.Match
 		/// </summary>
 		private readonly Dictionary<CSUser, Room> _userToRoom = new Dictionary<CSUser, Room>();
 
+		public int numOpenRooms => this._openRooms.Count;
+
 		/// <summary>
 		/// 检查玩家是否在房间
 		/// </summary>

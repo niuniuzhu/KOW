@@ -1,12 +1,10 @@
-﻿using Core.Misc;
-using Core.Net;
+﻿using CommandLine;
+using Core.Misc;
 using Shared;
-using Shared.Net;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using CommandLine;
 
 namespace GateServer
 {
@@ -58,6 +56,7 @@ namespace GateServer
 		{
 			_disposed = true;
 			GS.instance.Dispose();
+			Logger.Dispose();
 		}
 
 		private static void MainLoop()
@@ -87,11 +86,6 @@ namespace GateServer
 					Console.Clear();
 					return;
 			}
-			string[] strs = cmd.Split( ' ' );
-			if ( strs[0] == "call" )
-				GS.instance.HandleLuaCall( strs[1] );
-			else if ( strs[0] == "print" )
-				GS.instance.HandleLuaPrint( strs[1] );
 		}
 	}
 }

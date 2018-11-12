@@ -3,6 +3,7 @@ using Core.Net;
 using DBServer.Net;
 using Shared;
 using Shared.DB;
+using Shared.Net;
 using System.Collections;
 using System.IO;
 
@@ -61,6 +62,12 @@ namespace DBServer
 		private void OnHeartBeat( int count )
 		{
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+		}
+
+		public void Dispose()
+		{
+			NetworkMgr.instance.Dispose();
+			NetSessionPool.instance.Dispose();
 		}
 	}
 }

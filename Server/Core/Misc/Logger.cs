@@ -15,7 +15,7 @@ namespace Core.Misc
 	/// </summary>
 	public static class Logger
 	{
-		private static ILog _log;
+		public static ILog log;
 
 		public static void Init( string config, string domain )
 		{
@@ -25,22 +25,51 @@ namespace Core.Misc
 				using ( var stream = GenerateStreamFromString( config ) )
 					XmlConfigurator.Configure( repository, stream );
 			}
-			_log = LogManager.GetLogger( repository.Name, domain );
+			log = LogManager.GetLogger( repository.Name, domain );
+		}
+
+		public static void Init()
+		{
+			log = LogManager.GetLogger( typeof( Logger ) );
+			var l = ( log4net.Repository.Hierarchy.Logger )log.Logger;
+			l.Level = Level.All;
+			AddConsoleAppender();
+		}
+
+		private static void AddConsoleAppender()
+		{
+			log4net.Layout.PatternLayout layout = new log4net.Layout.PatternLayout
+			{
+				ConversionPattern = "%date{mm:ss,fff} [%thread] %-5level - %message%newline"
+			};
+			layout.ActivateOptions();
+
+			var appender = new log4net.Appender.ManagedColoredConsoleAppender()
+			{
+				Threshold = Level.All
+			};
+			appender.Name = "Console";
+			appender.Layout = layout;
+			appender.ActivateOptions();
+
+			var l = ( log4net.Repository.Hierarchy.Logger )log.Logger;
+			l.AddAppender( appender );
+			l.Repository.Configured = true;
 		}
 
 		public static void Dispose() => LogManager.Shutdown();
 
-		public static void Debug( object obj, int startFrame = 2, int count = 100 ) => _log.Debug( Stacks( ref obj, startFrame, count ) );
+		public static void Debug( object obj, int startFrame = 2, int count = 100 ) => log.Debug( Stacks( ref obj, startFrame, count ) );
 
-		public static void Log( object obj ) => _log.Log( obj );
+		public static void Log( object obj ) => log.Log( obj );
 
-		public static void Warn( object obj ) => _log.Warn( SimpleInfo( ref obj ) );
+		public static void Warn( object obj ) => log.Warn( SimpleInfo( ref obj ) );
 
-		public static void Error( object obj, int startFrame = 2, int count = 3 ) => _log.Error( Stacks( ref obj, startFrame, count ) );
+		public static void Error( object obj, int startFrame = 2, int count = 3 ) => log.Error( Stacks( ref obj, startFrame, count ) );
 
-		public static void Info( object obj ) => _log.Info( obj );
+		public static void Info( object obj ) => log.Info( obj );
 
-		public static void Fatal( object obj, int startFrame = 2, int count = 100 ) => _log.Fatal( Stacks( ref obj, startFrame, count ) );
+		public static void Fatal( object obj, int startFrame = 2, int count = 100 ) => log.Fatal( Stacks( ref obj, startFrame, count ) );
 
 		private static Stream GenerateStreamFromString( string s )
 		{

@@ -26,6 +26,12 @@ namespace CentralServer
 			HelpText = "Specify definition file." )]
 		public string defs { get; set; }
 
+		[Option( "script_path",
+			Default = "./Scripts",
+			SetName = "bycfg",
+			HelpText = "Specify the path of lua script." )]
+		public string scriptPath { get; set; }
+
 		[Option( "id",
 			Default = ( uint )1,
 			SetName = "bysetting",
@@ -49,6 +55,12 @@ namespace CentralServer
 			SetName = "bysetting",
 			HelpText = "Battle server port." )]
 		public int bsPort { get; set; }
+
+		[Option( "shell_port",
+			Default = 50001,
+			SetName = "bysetting",
+			HelpText = "sehll port." )]
+		public int shellPort { get; set; }
 
 		[Option( "max_gs_num",
 			Default = 10,

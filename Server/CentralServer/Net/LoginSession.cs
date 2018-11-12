@@ -10,21 +10,41 @@ namespace CentralServer.Net
 	{
 		protected LoginSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.EGAskPing, this.OnLSAskPing );
-			this._msgCenter.Register( Protos.MsgID.ELs2CsGclogin, this.OnLs2CsGclogin );
+			this.RegMsgHandler( Protos.MsgID.EGAskPing, this.OnLSAskPing );
+			this.RegMsgHandler( Protos.MsgID.ELs2CsGclogin, this.OnLs2CsGclogin );
 		}
 
 		protected override void OnEstablish()
 		{
 			base.OnEstablish();
 			Logger.Info( $"LS({this.id}) connected" );
-			CS.instance.NotifyGSInfosToLS( this.id );
+			this.NotifyGSInfosToLS( this.id );
 		}
 
 		protected override void OnClose( string reason )
 		{
 			base.OnClose( reason );
 			Logger.Info( $"LS({this.id}) disconnected with msg:{reason}" );
+		}
+
+		private void NotifyGSInfosToLS( uint sessionID )
+		{
+			Protos.CS2LS_GSInfos gsInfos = ProtoCreator.Q_CS2LS_GSInfos();
+			foreach ( var kv in CS.instance.lIDToGSInfos )
+			{
+				GSInfo mGSInfo = kv.Value;
+				Protos.GSInfo gsInfo = new Protos.GSInfo
+				{
+					Id = mGSInfo.lid,
+					Name = mGSInfo.name,
+					Ip = mGSInfo.ip,
+					Port = mGSInfo.port,
+					Password = mGSInfo.password,
+					State = ( Protos.GSInfo.Types.State )mGSInfo.state
+				};
+				gsInfos.GsInfo.Add( gsInfo );
+			}
+			this.owner.Send( sessionID, gsInfos );
 		}
 
 		private ErrorCode OnLSAskPing( Google.Protobuf.IMessage message )

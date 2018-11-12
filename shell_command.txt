@@ -1,0 +1,20 @@
+cs b:ListALLLBIDToUser() //以字符串形式返回所有BS逻辑ID和战场ID的组合对应玩家的关系
+cs b:ListLBIDToUser(lid, bid) //以字符串形式返回BS逻辑ID和战场ID的组合对应玩家的关系
+cs b:GetNumUsersByLBID(lid, bid) //返回BS逻辑ID和战场ID的组合对应的玩家数量
+cs b:ListALLLIDToBID() //以字符串格式返回所有BS逻辑ID和战场ID的对应关系
+cs b:ListLIDToBID(lid) //以字符串的形式返回指定lid下的战场ID
+cs b:GetNumBattlesByLID(lid) //获取指定逻辑ID的BS对应的战场数量
+
+cs u:GetUserByUKey() //获取指定ukey的玩家
+cs u:GetUserByGcNID() //获取指定网络ID的玩家
+
+user.isConnected //玩家是否已连线
+user.loginTime //登陆时间
+user.gsSID //当前连接的GS sessionID
+user.bsSID //当前连接的BS SessionID
+user.isInBattle //是否在战场
+user.name //玩家名字
+
+bs bm.numBattles //获取战场数量
+bs bm:GetBattleAt() //获取指定索引的战场
+bs bm:ListBids() //以字符串的形式返回所有战场ID

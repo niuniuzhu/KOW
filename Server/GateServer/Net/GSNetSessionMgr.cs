@@ -16,6 +16,14 @@ namespace GateServer.Net
 			return session;
 		}
 
+		public INetSession CreateShellSession( ProtoType type )
+		{
+			ShellSession session = NetSessionPool.instance.Pop<ShellSession>( type );
+			session.owner = this;
+			session.type = SessionType.Shell;
+			return session;
+		}
+
 		public bool SendToGC( ulong gcNID, IMessage msg, RPCHandler rpcHandler = null )
 		{
 			if ( !GS.instance.userMgr.GetClientSID( gcNID, out uint sid ) )

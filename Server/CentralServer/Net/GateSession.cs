@@ -13,12 +13,12 @@ namespace CentralServer.Net
 	{
 		protected GateSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.EGAskPing, this.OnGSAskPing );
-			this._msgCenter.Register( Protos.MsgID.EGs2CsReportState, this.OnGs2CsReportState );
-			this._msgCenter.Register( Protos.MsgID.EGs2CsGcaskLogin, this.OnGs2CsGcaskLogin );
-			this._msgCenter.Register( Protos.MsgID.EGs2CsGclost, this.OnGs2CsGclost );
+			this.RegMsgHandler( Protos.MsgID.EGAskPing, this.OnGSAskPing );
+			this.RegMsgHandler( Protos.MsgID.EGs2CsReportState, this.OnGs2CsReportState );
+			this.RegMsgHandler( Protos.MsgID.EGs2CsGcaskLogin, this.OnGs2CsGcaskLogin );
+			this.RegMsgHandler( Protos.MsgID.EGs2CsGclost, this.OnGs2CsGclost );
 
-			this._msgCenter.Register( Protos.MsgID.EGc2CsBeginMatch, this.OnGc2CsBeginMatch );
+			this.RegMsgHandler( Protos.MsgID.EGc2CsBeginMatch, this.OnGc2CsBeginMatch );
 		}
 
 		protected override void OnEstablish()
@@ -118,7 +118,8 @@ namespace CentralServer.Net
 				{
 					//检查是否存在BS信息(可能当玩家上线时,BS已丢失)
 					//这里理应不会成功断言,因为BS丢失时会把玩家从战场暂存器里移除
-					System.Diagnostics.Debug.Assert( CS.instance.netSessionMgr.GetSession( user.bsSID, out INetSession session ), $"can not find BS:{user.bsSID}" );
+					INetSession session = CS.instance.netSessionMgr.GetSession( user.bsSID );
+					System.Diagnostics.Debug.Assert( session != null, $"can not find BS:{user.bsSID}" );
 					System.Diagnostics.Debug.Assert( CS.instance.lIDToBSInfos.TryGetValue( ( ( BattleSession )session ).logicID, out BSInfo bsInfo ),
 													$"can not find BS:{( ( BattleSession )session ).logicID}" );
 					gcAskLoginRet.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;

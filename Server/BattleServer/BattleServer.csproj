@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Protocol\Protocol.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\XLua.Mini\XLua.Mini.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,13 @@
     <None Update="Config\BSLogCfg.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Scripts\bs.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="LGen\" />
   </ItemGroup>
 
 </Project>

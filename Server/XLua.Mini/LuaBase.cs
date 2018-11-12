@@ -110,7 +110,7 @@ namespace XLua
 			return pointer.ToInt32();
 		}
 
-		internal virtual void push( RealStatePtr L )
+		public virtual void push( RealStatePtr L )
 		{
 			LuaAPI.lua_getref( L, luaReference );
 		}

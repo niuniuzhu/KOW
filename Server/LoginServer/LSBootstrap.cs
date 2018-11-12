@@ -1,8 +1,6 @@
 ﻿using CommandLine;
 using Core.Misc;
-using Core.Net;
 using Shared;
-using Shared.Net;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -58,8 +56,8 @@ namespace LoginServer
 		private static void Dispose()
 		{
 			_disposed = true;
-			NetworkMgr.instance.Dispose();
-			NetSessionPool.instance.Dispose();
+			LS.instance.Dispose();
+			Logger.Dispose();
 		}
 
 		private static void MainLoop()

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Shared.Net
 {
-	public abstract class NetSessionMgr
+	public class NetSessionMgr
 	{
 		private readonly Dictionary<SessionType, List<NetSessionBase>> _typeToSession = new Dictionary<SessionType, List<NetSessionBase>>();
 		private readonly List<NetSessionBase> _sessionsToRemove = new List<NetSessionBase>();
@@ -57,16 +57,21 @@ namespace Shared.Net
 		/// <param name="recvsize">接受缓冲区大小</param>
 		/// <param name="logicId">逻辑id</param>
 		/// <returns></returns>
-		public bool CreateConnector<T>( SessionType sessionType, string ip, int port, ProtoType protoType, int recvsize, uint logicId ) where T : CliSession
+		public T CreateConnector<T>( SessionType sessionType, string ip, int port, ProtoType protoType, int recvsize, uint logicId ) where T : CliSession
 		{
-			CliSession session = NetSessionPool.instance.Pop<T>( protoType );
+			T session = NetSessionPool.instance.Pop<T>( protoType );
 			session.owner = this;
 			session.type = sessionType;
 			session.logicID = logicId;
 			session.connector.recvBufSize = recvsize;
+			if ( !session.Connect( ip, port ) )
+			{
+				NetSessionPool.instance.Push( session );
+				return null;
+			}
 			NetworkMgr.instance.AddSession( session );
 			this.AddSession( session );
-			return session.Connect( ip, port );
+			return session;
 		}
 
 		/// <summary>
@@ -91,7 +96,7 @@ namespace Shared.Net
 				this._sessionsToRemove.Add( session );
 		}
 
-		public abstract bool IsTransTarget( Protos.MsgOpts.Types.TransTarget transTarget );
+		public virtual bool IsTransTarget( Protos.MsgOpts.Types.TransTarget transTarget ) => false;
 
 		public void Update( UpdateContext updateContext )
 		{
@@ -113,28 +118,47 @@ namespace Shared.Net
 		/// </summary>
 		public void StopListener( uint id ) => NetworkMgr.instance.GetListener( id )?.Stop();
 
-		public bool GetSession( uint sessionId, out INetSession session )
+		public INetSession GetSession( SessionType type )
 		{
-			session = NetworkMgr.instance.GetSession( sessionId );
-			if ( session != null )
-				return true;
-			object str = $"invalid sessionID:{sessionId}";
-			Logger.Warn( Logger.Stacks( ref str, 2, 5 ) );
-			return false;
+			if ( !this._typeToSession.TryGetValue( type, out List<NetSessionBase> sessions ) )
+				return null;
+			return sessions[0];
+		}
+
+		public INetSession GetSession( uint sessionID )
+		{
+			INetSession session = NetworkMgr.instance.GetSession( sessionID );
+			if ( session == null )
+			{
+				object str = $"invalid sessionID:{sessionID}";
+				Logger.Warn( Logger.Stacks( ref str, 2, 5 ) );
+				return null;
+			}
+			return session;
 		}
 
 		public bool CloseSession( uint sessionID, string reason )
 		{
-			if ( !this.GetSession( sessionID, out INetSession session ) )
+			INetSession session = this.GetSession( sessionID );
+			if ( session == null )
+			{
+				object str = $"invalid sessionID:{sessionID}";
+				Logger.Warn( Logger.Stacks( ref str, 2, 5 ) );
 				return false;
+			}
 			session.Close( reason );
 			return true;
 		}
 
 		public bool DelayCloseSession( uint sessionID, long delay, string reason )
 		{
-			if ( !this.GetSession( sessionID, out INetSession session ) )
+			INetSession session = this.GetSession( sessionID );
+			if ( session == null )
+			{
+				object str = $"invalid sessionID:{sessionID}";
+				Logger.Warn( Logger.Stacks( ref str, 2, 5 ) );
 				return false;
+			}
 			session.DelayClose( delay, reason );
 			return true;
 		}
@@ -142,14 +166,15 @@ namespace Shared.Net
 		/// <summary>
 		/// 发送消息到指定的session
 		/// </summary>
-		/// <param name="sessionId">session id</param>
+		/// <param name="sessionID">session id</param>
 		/// <param name="msg">消息</param>
 		/// <param name="rpcHandler">rcp回调函数</param>
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
-		public bool Send( uint sessionId, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
+		public bool Send( uint sessionID, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
 		{
-			if ( !this.GetSession( sessionId, out INetSession session ) )
+			INetSession session = this.GetSession( sessionID );
+			if ( session == null )
 				return false;
 			( ( NetSessionBase )session ).Send( msg, rpcHandler, transTarget, nsid );
 			return true;
@@ -172,9 +197,8 @@ namespace Shared.Net
 			while ( enumerator.MoveNext() )
 			{
 				uint sid = enumerator.Current;
-				if ( !this.GetSession( sid, out INetSession session ) )
-					continue;
-				( ( NetSessionBase )session ).Send( data, 0, length );
+				INetSession session = this.GetSession( sid );
+				( ( NetSessionBase )session )?.Send( data, 0, length );
 			}
 			enumerator.Dispose();
 
@@ -190,7 +214,8 @@ namespace Shared.Net
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
 		/// <param name="all">是否在查询消息类型时对所有结果生效</param>
-		public bool Send( SessionType sessionType, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u, bool all = true )
+		public bool Send( SessionType sessionType, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine,
+		                  ulong nsid = 0u, bool all = true )
 		{
 			if ( !this._typeToSession.TryGetValue( sessionType, out List<NetSessionBase> sessions ) )
 				return false;
@@ -205,13 +230,14 @@ namespace Shared.Net
 		/// <summary>
 		/// 发送数据到指定sesion
 		/// </summary>
-		/// <param name="sessionId">session id</param>
+		/// <param name="sessionID">session id</param>
 		/// <param name="data">数据</param>
 		/// <param name="offset">数据偏移量</param>
 		/// <param name="size">数据长度</param>
-		public bool Send( uint sessionId, byte[] data, int offset, int size )
+		public bool Send( uint sessionID, byte[] data, int offset, int size )
 		{
-			if ( !this.GetSession( sessionId, out INetSession session ) )
+			INetSession session = this.GetSession( sessionID );
+			if ( session == null )
 				return false;
 			session.Send( data, offset, size );
 			return true;

@@ -4,6 +4,7 @@
     "externalPort": 40001,
     "csIP": "127.0.0.1",
     "csPort": 10003,
+    "shellPort": 50003,
     "reportInterval": 10000,
     "pingInterval": 10000,
     "gcLive": 15000

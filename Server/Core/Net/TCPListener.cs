@@ -7,6 +7,7 @@ namespace Core.Net
 {
 	public class TCPListener : IListener
 	{
+		public event SessionCreatedHandler OnSessionCreated;
 		public uint id { get; }
 		public SessionCreater sessionCreater { get; set; }
 
@@ -28,7 +29,7 @@ namespace Core.Net
 
 		public bool Start( int port )
 		{
-			Logger.Log( $"Start Listen {port}" );
+			Logger.Log( $"listen port: {port}" );
 			try
 			{
 				this._socket = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
@@ -133,7 +134,8 @@ namespace Core.Net
 					break;
 				}
 
-				this.CreateSession( acceptSocket );
+				INetSession session = this.CreateSession( acceptSocket );
+				this.OnSessionCreated?.Invoke( session );
 			} while ( false );
 
 			this.StartAccept( acceptEventArgs );
@@ -150,7 +152,7 @@ namespace Core.Net
 				return null;
 			}
 			session.isPassive = true;
-			TCPConnection tcpConnection = ( TCPConnection ) session.connection;
+			TCPConnection tcpConnection = ( TCPConnection )session.connection;
 			tcpConnection.activeTime = TimeUtils.utcTime;
 			tcpConnection.socket = new SocketWrapper( acceptSocket );
 			tcpConnection.remoteEndPoint = acceptSocket.RemoteEndPoint;

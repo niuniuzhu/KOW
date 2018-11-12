@@ -5,15 +5,18 @@ using Shared.Net;
 
 namespace GateServer.Net
 {
-	public class ClientSession : SrvCliSession
+	public class ClientSession : SecureSession
 	{
 		private long _activeTime;
 		private ulong _gcNID;
+		private uint _csSID;
 
 		protected ClientSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.EGc2GsAskLogin, this.OnGc2GsAskLogin );
-			this._msgCenter.Register( Protos.MsgID.EGc2GsKeepAlive, this.OnGc2GsKeepAlive );
+			this._accreditedMsgID = Protos.MsgID.EGc2GsAskLogin;
+
+			this.RegMsgHandler( Protos.MsgID.EGc2GsAskLogin, this.OnGc2GsAskLogin );
+			this.RegMsgHandler( Protos.MsgID.EGc2GsKeepAlive, this.OnGc2GsKeepAlive );
 		}
 
 		protected override void OnEstablish()
@@ -21,6 +24,7 @@ namespace GateServer.Net
 			base.OnEstablish();
 			Logger.Info( $"client({this.id}) connected" );
 			this._activeTime = TimeUtils.utcTime;
+			this._csSID = this.owner.GetSession( SessionType.ServerG2CS ).id;
 		}
 
 		protected override void OnClose( string reason )
@@ -63,6 +67,8 @@ namespace GateServer.Net
 				switch ( csLoginRet.Result )
 				{
 					case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
+						//设置该Session为受信任的连接
+						this._accredited = true;
 						//只有成功才会添加到列表
 						//在客户端丢失时,以此表为判断连接成功的基准
 						GS.instance.userMgr.AddClient( this._gcNID, this.id );
@@ -101,7 +107,7 @@ namespace GateServer.Net
 			switch ( transTarget )
 			{
 				case Protos.MsgOpts.Types.TransTarget.Cs:
-					this.owner.Send( SessionType.ServerG2CS, message, null, Protos.MsgOpts.Types.TransTarget.Undefine, this._gcNID );
+					this.owner.Send( this._csSID, message, null, Protos.MsgOpts.Types.TransTarget.Undefine, this._gcNID );
 					break;
 			}
 		}

@@ -39,11 +39,15 @@ namespace Shared.Net
 		/// <summary>
 		/// 消息处理中心
 		/// </summary>
-		protected readonly MsgCenter _msgCenter = new MsgCenter();
+		private readonly MessageMgr _messageMgr = new MessageMgr();
 
 		protected NetSessionBase( uint id, ProtoType type ) : base( id, type )
 		{
 		}
+
+		protected void RegMsgHandler( Protos.MsgID msgID, MessageHandler handler ) => this._messageMgr.Register( msgID, handler );
+
+		protected MessageHandler GetMsgHandler( Protos.MsgID msgID ) => this._messageMgr.GetHandler( msgID );
 
 		/// <summary>
 		/// 把消息体编码到缓冲区
@@ -177,6 +181,9 @@ namespace Shared.Net
 			}
 			//剥离消息ID
 			Protos.MsgID msgID = ( Protos.MsgID )ByteUtils.Decode32i( data, offset );
+			//判断是否需要阻断该消息
+			if ( this.ShouldBlockMsg( msgID ) )
+				return;
 			offset += sizeof( int );
 			size -= offset;
 
@@ -199,7 +206,6 @@ namespace Shared.Net
 					return;
 				}
 			}
-
 			if ( ( opts.Flag & ( 1 << ( int )Protos.MsgOpts.Types.Flag.Resp ) ) > 0 )//这是一条rpc消息
 			{
 				if ( this._pidToRPCEntries.TryGetValue( opts.Rpid, out RPCEntry rpcEntry ) )
@@ -213,15 +219,30 @@ namespace Shared.Net
 			}
 			else
 			{
-				if ( this._msgCenter.TryGetHandler( msgID, out MsgCenter.GeneralHandler msgHandler ) )
-				{
-					ErrorCode errorCode = msgHandler.Invoke( message );
-					if ( errorCode != ErrorCode.Success )
-						Logger.Warn( errorCode );
-				}
-				else
-					Logger.Warn( $"unhandle msg:{msgID}." );
+				this.DispatchMessage( msgID, message );
 			}
+		}
+
+		/// <summary>
+		/// 是否需要阻断该消息
+		/// 子类可重写该方法以判断该消息是否合法
+		/// </summary>
+		protected virtual bool ShouldBlockMsg( Protos.MsgID msgID ) => false;
+
+		/// <summary>
+		/// 从消息中心获取消息的回调函数
+		/// </summary>
+		protected virtual void DispatchMessage( Protos.MsgID msgID, IMessage message )
+		{
+			MessageHandler handler = this._messageMgr.GetHandler( msgID );
+			if ( handler != null )
+			{
+				ErrorCode errorCode = handler.Invoke( message );
+				if ( errorCode != ErrorCode.Success )
+					Logger.Warn( errorCode );
+			}
+			else
+				Logger.Warn( $"unhandle msg:{msgID}." );
 		}
 
 		/// <summary>

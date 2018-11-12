@@ -11,9 +11,9 @@ namespace LoginServer.Net
 
 		private L2CSSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.ECs2LsGsinfos, this.OnCs2LsGsinfos );
-			this._msgCenter.Register( Protos.MsgID.ECs2LsGsinfo, this.OnCs2LsGsinfo );
-			this._msgCenter.Register( Protos.MsgID.ECs2LsGslost, this.OnCs2LsGslost );
+			this.RegMsgHandler( Protos.MsgID.ECs2LsGsinfos, this.OnCs2LsGsinfos );
+			this.RegMsgHandler( Protos.MsgID.ECs2LsGsinfo, this.OnCs2LsGsinfo );
+			this.RegMsgHandler( Protos.MsgID.ECs2LsGslost, this.OnCs2LsGslost );
 		}
 
 		protected override void OnEstablish()

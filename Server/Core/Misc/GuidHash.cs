@@ -6,7 +6,7 @@ namespace Core.Misc
 	{
 		public static string GetString()
 		{
-			return Convert.ToBase64String( GetBytes() );
+			return Guid.NewGuid().ToString();
 		}
 
 		public static byte[] GetBytes()

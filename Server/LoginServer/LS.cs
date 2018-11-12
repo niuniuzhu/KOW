@@ -69,5 +69,11 @@ namespace LoginServer
 		}
 
 		private void OnHeartBeat( int count ) => NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+
+		public void Dispose()
+		{
+			NetworkMgr.instance.Dispose();
+			NetSessionPool.instance.Dispose();
+		}
 	}
 }

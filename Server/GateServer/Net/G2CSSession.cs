@@ -13,7 +13,7 @@ namespace GateServer.Net
 
 		private G2CSSession( uint id, ProtoType type ) : base( id, type )
 		{
-			this._msgCenter.Register( Protos.MsgID.ECs2GsKickGc, this.OnECs2GsKickGc );
+			this.RegMsgHandler( Protos.MsgID.ECs2GsKickGc, this.OnECs2GsKickGc );
 		}
 
 		protected override void OnEstablish()

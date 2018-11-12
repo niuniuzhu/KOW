@@ -6,6 +6,7 @@ using Shared;
 using Shared.Net;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BattleServer.Battle
 {
@@ -21,6 +22,11 @@ namespace BattleServer.Battle
 		/// 运作中的战场列表
 		/// </summary>
 		private readonly List<Battle> _workingBattles = new List<Battle>();
+
+		/// <summary>
+		/// 获取战场数量
+		/// </summary>
+		public int numBattles => this._workingBattles.Count;
 
 		/// <summary>
 		/// 检查指定玩家ID所在的战场是否有效(存在?结束?)
@@ -148,7 +154,7 @@ namespace BattleServer.Battle
 			}
 		}
 
-		public void Update( long dt )
+		internal void Update( long dt )
 		{
 			int count = this._workingBattles.Count;
 			for ( int i = 0; i < count; i++ )
@@ -189,7 +195,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 处理玩家提交的帧行为
 		/// </summary>
-		public void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message )
+		internal void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message )
 		{
 			Battle battle = this.GetValidedBattle( gcNID );
 			battle?.HandleFrameAction( gcNID, message );
@@ -201,10 +207,31 @@ namespace BattleServer.Battle
 		/// <param name="from">起始帧</param>
 		/// <param name="to">结束帧</param>
 		/// <param name="ret">需要填充的消息</param>
-		public void HandleRequestFrameActions( ulong gcNID, int from, int to, Protos.BS2GC_RequestFrameActionsRet ret )
+		internal void HandleRequestFrameActions( ulong gcNID, int from, int to, Protos.BS2GC_RequestFrameActionsRet ret )
 		{
 			Battle battle = this.GetValidedBattle( gcNID );
 			battle?.HandleRequestFrameActions( from, to, ret );
+		}
+
+		/// <summary>
+		/// 获取指定索引的战场
+		/// </summary>
+		public Battle GetBattleAt( int index )
+		{
+			if ( index < 0 || index >= this._workingBattles.Count )
+				return null;
+			return this._workingBattles[index];
+		}
+
+		/// <summary>
+		/// 以字符串的形式返回所有战场ID
+		/// </summary>
+		public string ListBids()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( Battle battle in this._workingBattles )
+				sb.AppendLine( battle.id.ToString() );
+			return sb.ToString();
 		}
 	}
 }

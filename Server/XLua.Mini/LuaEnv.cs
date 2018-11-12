@@ -29,7 +29,7 @@ namespace XLua
 
 		internal RealStatePtr rawL;
 
-		internal RealStatePtr L
+		public RealStatePtr L
 		{
 			get
 			{

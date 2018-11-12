@@ -11,6 +11,11 @@ namespace BattleServer.User
 		private readonly Dictionary<ulong, BSUser> _gcNidToUser = new Dictionary<ulong, BSUser>();
 
 		/// <summary>
+		/// 玩家数量
+		/// </summary>
+		public int count => this._gcNidToUser.Count;
+
+		/// <summary>
 		/// 检查是否存在指定网络ID的玩家
 		/// </summary>
 		public bool HasUser( ulong gcNID ) => this._gcNidToUser.ContainsKey( gcNID );

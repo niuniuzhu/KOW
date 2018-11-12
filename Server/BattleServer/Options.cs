@@ -21,6 +21,12 @@ namespace BattleServer
 			HelpText = "Specify definition file." )]
 		public string defs { get; set; }
 
+		[Option( "script_path",
+			Default = "./Scripts",
+			SetName = "bycfg",
+			HelpText = "Specify the path of lua script." )]
+		public string scriptPath { get; set; }
+
 		[Option( "id",
 			Default = ( uint )30001,
 			SetName = "bysetting",
@@ -50,6 +56,12 @@ namespace BattleServer
 			SetName = "bysetting",
 			HelpText = "central server port." )]
 		public int csPort { get; set; }
+
+		[Option( "shell_port",
+			Default = 50003,
+			SetName = "bysetting",
+			HelpText = "sehll port." )]
+		public int shellPort { get; set; }
 
 		[Option( "report_interval",
 			Default = 10000,

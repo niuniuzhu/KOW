@@ -45,6 +45,12 @@ namespace GateServer
 			HelpText = "Exposed gate server port." )]
 		public int externalPort { get; set; }
 
+		[Option( "shell_port",
+			Default = 50002,
+			SetName = "bysetting",
+			HelpText = "sehll port." )]
+		public int shellPort { get; set; }
+
 		[Option( 'p', "password",
 			Default = "123456",
 			SetName = "bysetting",

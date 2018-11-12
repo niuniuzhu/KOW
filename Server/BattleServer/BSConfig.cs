@@ -17,6 +17,7 @@ namespace BattleServer
 		public int externalPort;
 		public string csIP;
 		public int csPort;
+		public int shellPort;
 		public long reportInterval;
 		public long pingInterval;
 		public long gcLive;
@@ -28,6 +29,7 @@ namespace BattleServer
 			this.externalPort = json.GetInt( "externalPort" );
 			this.csIP = json.GetString( "csIP" );
 			this.csPort = json.GetInt( "csPort" );
+			this.shellPort = json.GetInt( "shellPort" );
 			this.reportInterval = json.GetLong( "reportInterval" );
 			this.pingInterval = json.GetLong( "pingInterval" );
 			this.gcLive = json.GetLong( "gcLive" );
@@ -40,6 +42,7 @@ namespace BattleServer
 			this.externalPort = opts.externalPort;
 			this.csIP = opts.csIP;
 			this.csPort = opts.csPort;
+			this.shellPort = opts.shellPort;
 			this.reportInterval = opts.reportInterval;
 			this.pingInterval = opts.pingInterval;
 			this.gcLive = opts.gcLive;

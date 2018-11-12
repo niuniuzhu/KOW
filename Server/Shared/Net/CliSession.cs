@@ -10,8 +10,7 @@ namespace Shared.Net
 	{
 		public IConnector connector { get; }
 
-		protected bool _reconnectTag;
-
+		private bool _reconnectTag;
 		private long _reconnTime;
 
 		protected CliSession( uint id, ProtoType type ) : base( id, type )

@@ -21,7 +21,7 @@ namespace CentralServer.Net
 
 		protected override void OnClose( string reason )
 		{
-			CS.instance.bizProcessor.OnBSSessionClosed( this.id );
+			CS.instance.bizProcessor.OnBSSessionClosed( this );
 
 			base.OnClose( reason );
 			Logger.Info( $"BS({this.id}) disconnected with msg:{reason}" );

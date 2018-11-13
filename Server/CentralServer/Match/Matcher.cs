@@ -5,6 +5,7 @@ using Shared;
 using Shared.Battle;
 using System;
 using System.Collections.Generic;
+using Shared.Net;
 using BSInfo = Shared.BSInfo;
 
 namespace CentralServer.Match
@@ -148,7 +149,7 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 处理玩家开始匹配
 		/// </summary>
-		public void BeginMatch( uint sid, Protos.GC2CS_BeginMatch beginMatch )
+		public void BeginMatch( NetSessionBase session, Protos.GC2CS_BeginMatch beginMatch )
 		{
 			Protos.CS2GC_BeginMatchRet ret = ProtoCreator.R_GC2CS_BeginMatch( beginMatch.Opts.Pid );
 
@@ -158,7 +159,7 @@ namespace CentralServer.Match
 			{
 				Logger.Warn( $"invalid user:{gcNID}" );
 				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.IllegalId;
-				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				session.Send( ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 				return;
 			}
 
@@ -166,7 +167,7 @@ namespace CentralServer.Match
 			{
 				Logger.Warn( $"user:{gcNID} in battle" );
 				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.UserInBattle;
-				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				session.Send( ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 				return;
 			}
 
@@ -174,7 +175,7 @@ namespace CentralServer.Match
 			{
 				Logger.Warn( $"user:{gcNID} in room" );
 				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.UserInRoom;
-				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				session.Send( ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 				return;
 			}
 
@@ -183,7 +184,7 @@ namespace CentralServer.Match
 			if ( room == null )
 			{
 				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.NoRoom;
-				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				session.Send( ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 				return;
 			}
 
@@ -194,7 +195,7 @@ namespace CentralServer.Match
 				if ( room.isEmpty )
 					this.DestroyRoom( room );
 				ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.Failed;
-				CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+				session.Send( ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 				return;
 			}
 
@@ -207,7 +208,7 @@ namespace CentralServer.Match
 					break;
 				default:
 					ret.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.Failed;
-					CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+					session.Send( ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 					return;
 			}
 
@@ -218,7 +219,7 @@ namespace CentralServer.Match
 			//注意在AddPlayer前填充消息,否则会把自己的信息也下发到客户端
 			this.FillProtoPlayerInfo( room, ret.PlayerInfos );
 			//发送回应
-			CS.instance.netSessionMgr.Send( sid, ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
+			session.Send( ret, null, Protos.MsgOpts.Types.TransTarget.Gc, gcNID );
 
 			RoomPlayer player = new RoomPlayer( user );
 			player.actorID = beginMatch.ActorID;
@@ -250,6 +251,11 @@ namespace CentralServer.Match
 				return;
 			}
 
+			string bsIP = appropriateBSInfo.ip;
+			int bsPort = appropriateBSInfo.port;
+			uint bsSID = appropriateBSInfo.sessionID;
+			uint bsLID = appropriateBSInfo.lid;
+
 			//从等待房间队列中移除,避免在通信期间有玩家搜索到该房间
 			Room roomCloned = room.Clone();
 			this.DestroyRoom( room );
@@ -262,15 +268,16 @@ namespace CentralServer.Match
 				RoomPlayer player = roomCloned.GetPlayerAt( i );
 				Protos.CS2BS_PlayerInfo pi = new Protos.CS2BS_PlayerInfo
 				{
-					GcNID = player.user.ukey | ( ulong )appropriateBSInfo.lid << 32,
+					GcNID = player.user.ukey | ( ulong )bsLID << 32,
 					Name = player.user.name,
 					ActorID = player.actorID,
 					Team = player.team
 				};
 				battleInfo.PlayerInfo.Add( pi );
 			}
+
 			//通知BS创建战场
-			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, ( sid, ret ) =>
+			CS.instance.netSessionMgr.Send( bsSID, battleInfo, ( session_, ret ) =>
 			{
 				Protos.BS2CS_BattleInfoRet battleInfoRet = ( Protos.BS2CS_BattleInfoRet )ret;
 				//检查是否成功创建战场
@@ -279,23 +286,23 @@ namespace CentralServer.Match
 					this.NotifyGCEnterBattleFailed( roomCloned, Protos.CS2GC_EnterBattle.Types.Result.BattleCreateFailed );
 					return;
 				}
+				Logger.Log( $"battle:{battleInfoRet.Bid} created" );
 
 				//把所有玩家移动到战场暂存器里
-				int count = roomCloned.numPlayers;
-				for ( int i = 0; i < count; i++ )
+				for ( int i = 0; i < roomCloned.numPlayers; ++i )
 				{
 					RoomPlayer player = roomCloned.GetPlayerAt( i );
-					CS.instance.battleStaging.Add( player.user, appropriateBSInfo.lid, appropriateBSInfo.sessionID, battleInfoRet.Bid );
+					CS.instance.battleStaging.Add( player.user, bsLID, bsSID, battleInfoRet.Bid );
 				}
 
 				//广播给玩家
 				Protos.CS2GC_EnterBattle enterBattle = ProtoCreator.Q_CS2GC_EnterBattle();
-				enterBattle.Ip = appropriateBSInfo.ip;
-				enterBattle.Port = appropriateBSInfo.port;
+				enterBattle.Ip = bsIP;
+				enterBattle.Port = bsPort;
 				for ( int i = 0; i < roomCloned.numPlayers; ++i )
 				{
 					RoomPlayer player = roomCloned.GetPlayerAt( i );
-					enterBattle.GcNID = player.user.ukey | ( ulong )appropriateBSInfo.lid << 32;
+					enterBattle.GcNID = player.user.ukey | ( ulong )bsLID << 32;
 					player.user.Send( enterBattle );
 				}
 			} );

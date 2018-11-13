@@ -40,7 +40,7 @@ namespace Core.Misc
 		{
 			log4net.Layout.PatternLayout layout = new log4net.Layout.PatternLayout
 			{
-				ConversionPattern = "%date{mm:ss,fff} [%thread] %-5level - %message%newline"
+				ConversionPattern = "%message%newline"
 			};
 			layout.ActivateOptions();
 

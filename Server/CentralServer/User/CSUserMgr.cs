@@ -1,6 +1,7 @@
 ﻿using Core.Misc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace CentralServer.User
 {
@@ -160,7 +161,7 @@ namespace CentralServer.User
 			kickGc.GcNID = user.gcNID;
 			kickGc.Reason = ( Protos.CS2GS_KickGC.Types.EReason )reason;
 			//通知GS踢掉GC
-			CS.instance.netSessionMgr.Send( user.gsSID, kickGc, ( sid, ret ) => { } );
+			CS.instance.netSessionMgr.Send( user.gsSID, kickGc, ( session_, ret ) => { } );
 			this.Offline( user );
 		}
 
@@ -205,6 +206,18 @@ namespace CentralServer.User
 				--count;
 				Logger.Log( $"user:{user.gcNID} expired" );
 			}
+		}
+
+		/// <summary>
+		/// 以字符串的形式返回玩家信息
+		/// </summary>
+		/// <returns></returns>
+		public string LS()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( KeyValuePair<uint, CSUser> kv in this._ukeyToUser )
+				sb.AppendLine( kv.Value.ToString() );
+			return sb.ToString();
 		}
 	}
 }

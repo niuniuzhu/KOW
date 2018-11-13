@@ -22,12 +22,12 @@ namespace GateServer.Net
 
 			this._pingTime = 0;
 			this._reportTime = 0;
-			GS.instance.bizProcessor.ReportStateToCS( this.id );
+			GS.instance.bizProcessor.ReportStateToCS( this );
 		}
 
 		protected override void OnClose( string reason )
 		{
-			GS.instance.bizProcessor.OnCSSessionClosed( this.id );
+			GS.instance.bizProcessor.OnCSSessionClosed( this );
 
 			base.OnClose( reason );
 			Logger.Info( $"CS({this.id}) disconnected with msg:{reason}." );
@@ -50,7 +50,7 @@ namespace GateServer.Net
 			if ( this._state == State.Connected && this._reportTime >= GS.instance.config.reportInterval )
 			{
 				this._reportTime = 0;
-				GS.instance.bizProcessor.ReportStateToCS( this.id );
+				GS.instance.bizProcessor.ReportStateToCS( this );
 			}
 		}
 

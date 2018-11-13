@@ -52,7 +52,7 @@ namespace Core.Net
 		public INetSession GetSession( uint sessionID )
 		{
 			this._idToSession.TryGetValue( sessionID, out INetSession session );
-			return session;
+			return this._sessionsToRemove.Contains( session ) ? null : session;
 		}
 
 		/// <summary>

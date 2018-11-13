@@ -1,10 +1,11 @@
 ﻿using Shared;
+using Shared.Net;
 
 namespace DBServer.Biz
 {
 	public partial class BizProcessor
 	{
-		public ErrorCode OnLs2DbQueryAccount( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnLs2DbQueryAccount( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.LS2DB_QueryAccount queryUser = ( Protos.LS2DB_QueryAccount )message;
 			Protos.DB2LS_QueryAccountRet queryUserRet = ProtoCreator.R_LS2DB_QueryAccount( queryUser.Opts.Pid );
@@ -16,11 +17,11 @@ namespace DBServer.Biz
 																 return ErrorCode.Success;
 															 } );
 			queryUserRet.Result = errorCode == ErrorCode.Success ? Protos.DB2LS_QueryResult.Success : Protos.DB2LS_QueryResult.Failed;
-			DB.instance.netSessionMgr.Send( sid, queryUserRet );
+			session.Send( queryUserRet );
 			return ErrorCode.Success;
 		}
 
-		public ErrorCode OnLs2DbQueryLogin( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnLs2DbQueryLogin( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.LS2DB_QueryLogin queryLogin = ( Protos.LS2DB_QueryLogin )message;
 
@@ -57,11 +58,11 @@ namespace DBServer.Biz
 					queryLoginRet.Result = Protos.DB2LS_QueryResult.InvalidUname;
 					break;
 			}
-			DB.instance.netSessionMgr.Send( sid, queryLoginRet );
+			session.Send( queryLoginRet );
 			return ErrorCode.Success;
 		}
 
-		public ErrorCode OnLs2DbExec( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnLs2DbExec( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.LS2DB_Exec exec = ( Protos.LS2DB_Exec )message;
 			Protos.DB2LS_ExecRet execRet = ProtoCreator.R_LS2DB_Exec( exec.Opts.Pid );
@@ -69,7 +70,7 @@ namespace DBServer.Biz
 			execRet.Row = row;
 			execRet.Id = id;
 			execRet.Result = errorCode == ErrorCode.Success ? Protos.DB2LS_QueryResult.Success : Protos.DB2LS_QueryResult.Failed;
-			DB.instance.netSessionMgr.Send( sid, execRet );
+			session.Send( execRet );
 			return ErrorCode.Success;
 		}
 	}

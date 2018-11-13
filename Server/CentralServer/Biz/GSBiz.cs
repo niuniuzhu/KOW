@@ -10,10 +10,8 @@ namespace CentralServer.Biz
 {
 	public partial class BizProcessor
 	{
-		public void OnGSSessionClosed( uint sid )
+		public void OnGSSessionClosed( NetSessionBase session )
 		{
-			GateSession session = ( GateSession )CS.instance.netSessionMgr.GetSession( sid );
-
 			//更新GS列表
 			CS.instance.lIDToGSInfos.Remove( session.logicID );
 			CS.instance.UpdateAppropriateGSInfo();
@@ -29,25 +27,24 @@ namespace CentralServer.Biz
 			session.logicID = 0;
 		}
 
-		public ErrorCode OnGSAskPing( uint sid, IMessage message )
+		public ErrorCode OnGSAskPing( NetSessionBase session, IMessage message )
 		{
 			Protos.G_AskPing askPing = ( Protos.G_AskPing )message;
 			Protos.G_AskPingRet askPingRet = ProtoCreator.R_G_AskPing( askPing.Opts.Pid );
 			askPingRet.Stime = askPing.Time;
 			askPingRet.Time = TimeUtils.utcTime;
-			CS.instance.netSessionMgr.Send( sid, askPingRet );
+			session.Send( askPingRet );
 			return ErrorCode.Success;
 		}
 
-		public ErrorCode OnGs2CsReportState( uint sid, IMessage message )
+		public ErrorCode OnGs2CsReportState( NetSessionBase session, IMessage message )
 		{
 			Protos.GS2CS_ReportState reportState = ( Protos.GS2CS_ReportState )message;
-			return this.GStateReportHandler( reportState.GsInfo, sid );
+			return this.GStateReportHandler( session, reportState.GsInfo );
 		}
 
-		private ErrorCode GStateReportHandler( Protos.GSInfo GSInfoRecv, uint sid )
+		private ErrorCode GStateReportHandler( NetSessionBase session, Protos.GSInfo GSInfoRecv )
 		{
-			GateSession session = ( GateSession )CS.instance.netSessionMgr.GetSession( sid );
 			session.logicID = GSInfoRecv.Id;
 			bool hasRecord = CS.instance.lIDToGSInfos.TryGetValue( session.logicID, out GSInfo gsInfo );
 			if ( !hasRecord )
@@ -57,7 +54,7 @@ namespace CentralServer.Biz
 			}
 			//更新GS信息
 			gsInfo.lid = session.logicID;
-			gsInfo.sessionID = sid;
+			gsInfo.sessionID = session.id;
 			gsInfo.name = GSInfoRecv.Name;
 			gsInfo.ip = GSInfoRecv.Ip;
 			gsInfo.port = GSInfoRecv.Port;
@@ -83,14 +80,13 @@ namespace CentralServer.Biz
 		/// <summary>
 		/// GS请求CS,验证GC登陆的合法性
 		/// </summary>
-		public ErrorCode OnGs2CsGcaskLogin( uint sid, IMessage message )
+		public ErrorCode OnGs2CsGcaskLogin( NetSessionBase session, IMessage message )
 		{
 			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin )message;
 			Protos.CS2GS_GCLoginRet gcAskLoginRet = ProtoCreator.R_GS2CS_GCAskLogin( gcAskLogin.Opts.Pid );
 
-			GateSession session = ( GateSession )CS.instance.netSessionMgr.GetSession( sid );
 			//创建玩家并上线
-			CSUser user = CS.instance.userMgr.Online( gcAskLogin.SessionID, sid, session.logicID );
+			CSUser user = CS.instance.userMgr.Online( gcAskLogin.SessionID, session.id, session.logicID );
 			if ( user == null )
 			{
 				//非法登陆
@@ -114,14 +110,14 @@ namespace CentralServer.Biz
 				}
 				gcAskLoginRet.Result = Protos.CS2GS_GCLoginRet.Types.EResult.Success;
 			}
-			CS.instance.netSessionMgr.Send( sid, gcAskLoginRet );
+			session.Send( gcAskLoginRet );
 			return ErrorCode.Success;
 		}
 
 		/// <summary>
 		/// 客户端与GS断开连接
 		/// </summary>
-		public ErrorCode OnGs2CsGclost( uint sid, IMessage message )
+		public ErrorCode OnGs2CsGclost( NetSessionBase session, IMessage message )
 		{
 			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost )message;
 			ulong gcNID = gcLost.SessionID;
@@ -134,10 +130,10 @@ namespace CentralServer.Biz
 			return ErrorCode.Success;
 		}
 
-		public ErrorCode OnGc2CsBeginMatch( uint sid, IMessage message )
+		public ErrorCode OnGc2CsBeginMatch( NetSessionBase session, IMessage message )
 		{
 			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch )message;
-			CS.instance.matcher.BeginMatch( sid, beginMatch );
+			CS.instance.matcher.BeginMatch( session, beginMatch );
 			return ErrorCode.Success;
 		}
 	}

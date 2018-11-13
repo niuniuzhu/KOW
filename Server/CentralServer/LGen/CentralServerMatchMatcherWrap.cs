@@ -145,10 +145,10 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    uint sid = LuaAPI.xlua_touint(L, 2);
+                    Shared.Net.NetSessionBase session = (Shared.Net.NetSessionBase)translator.GetObject(L, 2, typeof(Shared.Net.NetSessionBase));
                     Protos.GC2CS_BeginMatch beginMatch = (Protos.GC2CS_BeginMatch)translator.GetObject(L, 3, typeof(Protos.GC2CS_BeginMatch));
                     
-                    __cl_gen_to_be_invoked.BeginMatch( sid, beginMatch );
+                    __cl_gen_to_be_invoked.BeginMatch( session, beginMatch );
                     
                     
                     

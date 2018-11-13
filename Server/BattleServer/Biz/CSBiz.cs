@@ -1,11 +1,12 @@
 ﻿using Core.Misc;
 using Shared;
+using Shared.Net;
 
 namespace BattleServer.Biz
 {
 	public partial class BizProcessor
 	{
-		public void OnCSSessionClosed( uint sid )
+		public void OnCSSessionClosed( NetSessionBase session )
 		{
 			//结束所有战场
 			BS.instance.battleManager.StopAllBattles();
@@ -14,7 +15,7 @@ namespace BattleServer.Biz
 		/// <summary>
 		/// 处理cs通知开始战斗
 		/// </summary>
-		public ErrorCode OnCs2BsBattleInfo( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnCs2BsBattleInfo( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo )message;
 
@@ -25,11 +26,11 @@ namespace BattleServer.Biz
 			battleInfoRet.Result = errorCode == ErrorCode.Success
 									   ? Protos.Global.Types.ECommon.Success
 									   : Protos.Global.Types.ECommon.Failed;
-			BS.instance.netSessionMgr.Send( sid, battleInfoRet );
+			session.Send( battleInfoRet );
 			return ErrorCode.Success;
 		}
 
-		public void OnGSAskPingRet( uint sid, Google.Protobuf.IMessage message )
+		public void OnGSAskPingRet( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			long currTime = TimeUtils.utcTime;
 			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
@@ -38,7 +39,7 @@ namespace BattleServer.Biz
 			Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
 		}
 
-		public void ReportStateToCS( uint sid )
+		public void ReportStateToCS( NetSessionBase session )
 		{
 			Protos.BS2CS_ReportState reportState = ProtoCreator.Q_BS2CS_ReportState();
 			BSConfig config = BS.instance.config;
@@ -49,7 +50,7 @@ namespace BattleServer.Biz
 				Port = config.externalPort,
 				State = ( Protos.BSInfo.Types.State )BS.instance.state
 			};
-			BS.instance.netSessionMgr.Send( sid, reportState );
+			session.Send( reportState );
 		}
 	}
 }

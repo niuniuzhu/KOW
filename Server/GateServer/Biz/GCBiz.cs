@@ -7,17 +7,17 @@ namespace GateServer.Biz
 {
 	public partial class BizProcessor
 	{
-		public void OnGCSessionClosed( uint sid, string reason )
+		public void OnGCSessionClosed( NetSessionBase session, string reason )
 		{
-			ClientSession session = ( ClientSession ) GS.instance.netSessionMgr.GetSession( sid );
-			session.activeTime = 0;
+			ClientSession gcSession = ( ClientSession )session;
+			gcSession.activeTime = 0;
 
 			//先验证客户端是否合法登陆了
-			if ( !GS.instance.userMgr.GetGcNID( sid, out ulong gcNID ) )
+			if ( !GS.instance.userMgr.GetGcNID( gcSession.id, out ulong gcNID ) )
 				return;
 
 			//移除客户端信息
-			GS.instance.userMgr.RemoveClient( sid );
+			GS.instance.userMgr.RemoveClient( gcNID );
 
 			//CS主动踢掉不用再次通知了
 			if ( "CS Kick" != reason || "CS Closed" != reason )
@@ -29,8 +29,10 @@ namespace GateServer.Biz
 			}
 		}
 
-		public ErrorCode OnGc2GsAskLogin( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnGc2GsAskLogin( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
+			uint sid = session.id;
+
 			Protos.GC2GS_AskLogin login = ( Protos.GC2GS_AskLogin )message;
 
 			Protos.GS2CS_GCAskLogin gcAskLogin = ProtoCreator.Q_GS2CS_GCAskLogin();
@@ -38,11 +40,11 @@ namespace GateServer.Biz
 			Logger.Log( $"client:{gcAskLogin.SessionID} ask login" );
 
 			//向CS请求客户端登陆
-			GS.instance.netSessionMgr.Send( SessionType.ServerG2CS, gcAskLogin, ( sid_, ret ) =>
+			GS.instance.netSessionMgr.Send( SessionType.ServerG2CS, gcAskLogin, ( session_, ret ) =>
 			{
 				//检测客户端是否断线了
-				ClientSession session = GS.instance.netSessionMgr.GetSession( sid ) as ClientSession;
-				if ( session == null )
+				ClientSession gcSession = GS.instance.netSessionMgr.GetSession( sid ) as ClientSession;
+				if ( gcSession == null )
 				{
 					//通知CS客户端断开了
 					Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
@@ -60,7 +62,7 @@ namespace GateServer.Biz
 						GS.instance.userMgr.AddClient( login.SessionID, sid );
 
 						//设置该Session为受信任的连接
-						session.accredited = true;
+						gcSession.accredited = true;
 
 						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
 						gsLoginRet.GcNID = csLoginRet.GcNID;
@@ -78,11 +80,11 @@ namespace GateServer.Biz
 			return ErrorCode.Success;
 		}
 
-		public ErrorCode OnGc2GsKeepAlive( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnGc2GsKeepAlive( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
-			ClientSession session = GS.instance.netSessionMgr.GetSession( sid ) as ClientSession;
-			if ( session != null )
-				session.activeTime = TimeUtils.utcTime;
+			ClientSession gcSession = session as ClientSession;
+			if ( gcSession != null )
+				gcSession.activeTime = TimeUtils.utcTime;
 			return ErrorCode.Success;
 		}
 	}

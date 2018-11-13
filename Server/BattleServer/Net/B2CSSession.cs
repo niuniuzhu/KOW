@@ -21,12 +21,12 @@ namespace BattleServer.Net
 
 			this._pingTime = 0;
 			this._reportTime = 0;
-			BS.instance.bizProcessor.ReportStateToCS( this.id );
+			BS.instance.bizProcessor.ReportStateToCS( this );
 		}
 
 		protected override void OnClose( string reason )
 		{
-			BS.instance.bizProcessor.OnCSSessionClosed( this.id );
+			BS.instance.bizProcessor.OnCSSessionClosed( this );
 
 			base.OnClose( reason );
 			Logger.Info( $"CS({this.id}) disconnected with msg:{reason}." );
@@ -49,7 +49,7 @@ namespace BattleServer.Net
 			if ( this._state == State.Connected && this._reportTime >= BS.instance.config.reportInterval )
 			{
 				this._reportTime = 0;
-				BS.instance.bizProcessor.ReportStateToCS( this.id );
+				BS.instance.bizProcessor.ReportStateToCS( this );
 			}
 		}
 	}

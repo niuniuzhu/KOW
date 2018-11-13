@@ -35,7 +35,7 @@ namespace Shared.Net
 			MessageHandler handler = this.GetMsgHandler( msgID );
 			if ( handler != null )
 			{
-				ErrorCode errorCode = handler.Invoke( this.id, message );
+				ErrorCode errorCode = handler.Invoke( this, message );
 				if ( errorCode != ErrorCode.Success )
 					Logger.Warn( errorCode );
 			}

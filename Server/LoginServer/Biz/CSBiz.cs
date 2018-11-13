@@ -1,11 +1,12 @@
 ﻿using Core.Misc;
 using Shared;
+using Shared.Net;
 
 namespace LoginServer.Biz
 {
 	public partial class BizProcessor
 	{
-		public void OnCSAskPingRet( uint sid, Google.Protobuf.IMessage message )
+		public void OnCSAskPingRet( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			long currTime = TimeUtils.utcTime;
 			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
@@ -14,7 +15,7 @@ namespace LoginServer.Biz
 			Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
 		}
 
-		public ErrorCode OnCs2LsGsinfos( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnCs2LsGsinfos( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.CS2LS_GSInfos gsInfos = ( Protos.CS2LS_GSInfos )message;
 			foreach ( Protos.GSInfo gsInfo in gsInfos.GsInfo )
@@ -22,13 +23,13 @@ namespace LoginServer.Biz
 			return ErrorCode.Success;
 		}
 
-		public ErrorCode OnCs2LsGsinfo( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnCs2LsGsinfo( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.CS2LS_GSInfo gsInfo = ( Protos.CS2LS_GSInfo )message;
 			return this.GCStateReportHandler( gsInfo.GsInfo );
 		}
 
-		public ErrorCode OnCs2LsGslost( uint sid, Google.Protobuf.IMessage message )
+		public ErrorCode OnCs2LsGslost( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.CS2LS_GSLost gsLost = ( Protos.CS2LS_GSLost )message;
 			LS.instance.gsInfos.Remove( gsLost.Gsid );

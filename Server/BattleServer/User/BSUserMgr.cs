@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BattleServer.User
 {
@@ -121,5 +122,16 @@ namespace BattleServer.User
 		/// 这里不验证玩家是否已下线
 		/// </summary>
 		internal void OnDisconnect( BSUser user ) => this.Offline( user );
+
+		/// <summary>
+		/// 以字符串的形式返回玩家信息
+		/// </summary>
+		public string LS()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( KeyValuePair<ulong, BSUser> kv in this._gcNIDToUser )
+				sb.AppendLine( kv.Value.ToString() );
+			return sb.ToString();
+		}
 	}
 }

@@ -128,12 +128,6 @@ namespace Shared.Net
 		public INetSession GetSession( uint sessionID )
 		{
 			INetSession session = NetworkMgr.instance.GetSession( sessionID );
-			if ( session == null )
-			{
-				object str = $"invalid sessionID:{sessionID}";
-				Logger.Warn( Logger.Stacks( ref str, 2, 5 ) );
-				return null;
-			}
 			return session;
 		}
 
@@ -141,11 +135,7 @@ namespace Shared.Net
 		{
 			INetSession session = this.GetSession( sessionID );
 			if ( session == null )
-			{
-				object str = $"invalid sessionID:{sessionID}";
-				Logger.Warn( Logger.Stacks( ref str, 2, 5 ) );
 				return false;
-			}
 			session.Close( true, reason );
 			return true;
 		}
@@ -154,11 +144,7 @@ namespace Shared.Net
 		{
 			INetSession session = this.GetSession( sessionID );
 			if ( session == null )
-			{
-				object str = $"invalid sessionID:{sessionID}";
-				Logger.Warn( Logger.Stacks( ref str, 2, 5 ) );
 				return false;
-			}
 			session.DelayClose( delay, reason );
 			return true;
 		}
@@ -215,7 +201,7 @@ namespace Shared.Net
 		/// <param name="nsid">转发的网络id</param>
 		/// <param name="all">是否在查询消息类型时对所有结果生效</param>
 		public bool Send( SessionType sessionType, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine,
-		                  ulong nsid = 0u, bool all = true )
+						  ulong nsid = 0u, bool all = true )
 		{
 			if ( !this._typeToSession.TryGetValue( sessionType, out List<NetSessionBase> sessions ) )
 				return false;

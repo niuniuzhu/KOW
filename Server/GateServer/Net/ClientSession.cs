@@ -29,7 +29,7 @@ namespace GateServer.Net
 
 		protected override void OnClose( string reason )
 		{
-			GS.instance.bizProcessor.OnGCSessionClosed( this.id, reason );
+			GS.instance.bizProcessor.OnGCSessionClosed( this, reason );
 
 			base.OnClose( reason );
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );

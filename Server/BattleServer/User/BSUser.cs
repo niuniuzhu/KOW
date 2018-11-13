@@ -59,5 +59,7 @@ namespace BattleServer.User
 			this.gcSID = 0;
 			this.isOnline = false;
 		}
+
+		public override string ToString() => $"gsNID:{this.gcNID}";
 	}
 }

@@ -29,7 +29,7 @@ namespace BattleServer.Net
 
 		protected override void OnClose( string reason )
 		{
-			BS.instance.bizProcessor.OnGCSessionClosed( this.id, reason );
+			BS.instance.bizProcessor.OnGCSessionClosed( this, reason );
 
 			base.OnClose( reason );
 			Logger.Info( $"client({this.id}) disconnected with msg:{reason}" );

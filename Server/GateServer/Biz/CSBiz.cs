@@ -1,12 +1,13 @@
 ﻿using Core.Misc;
 using Google.Protobuf;
 using Shared;
+using Shared.Net;
 
 namespace GateServer.Biz
 {
 	public partial class BizProcessor
 	{
-		public void OnCSSessionClosed( uint sid )
+		public void OnCSSessionClosed( NetSessionBase session )
 		{
 			//断开所有客户端
 			uint[] gcSids = GS.instance.userMgr.GetClients();
@@ -15,7 +16,7 @@ namespace GateServer.Biz
 			GS.instance.userMgr.ClearClients();
 		}
 
-		public ErrorCode OnECs2GsKickGc( uint sid, IMessage message )
+		public ErrorCode OnECs2GsKickGc( NetSessionBase session, IMessage message )
 		{
 			Protos.CS2GS_KickGC kickGC = ( Protos.CS2GS_KickGC )message;
 			Protos.GS2CS_KickGCRet kickGCRet = ProtoCreator.R_CS2GS_KickGC( kickGC.Opts.Pid );
@@ -37,12 +38,12 @@ namespace GateServer.Biz
 				kickGCRet.Result = Protos.Global.Types.ECommon.Failed;
 
 			//通知cs操作结果
-			GS.instance.netSessionMgr.Send( sid, kickGCRet );
+			session.Send( kickGCRet );
 
 			return ErrorCode.Success;
 		}
 
-		public void OnGSAskPingRet( uint sid, IMessage message )
+		public void OnGSAskPingRet( NetSessionBase session, IMessage message )
 		{
 			if ( message == null )
 				return;
@@ -53,7 +54,7 @@ namespace GateServer.Biz
 			Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
 		}
 
-		public void ReportStateToCS( uint sid )
+		public void ReportStateToCS( NetSessionBase session )
 		{
 			Protos.GS2CS_ReportState reportState = ProtoCreator.Q_GS2CS_ReportState();
 			GSConfig config = GS.instance.config;
@@ -66,7 +67,7 @@ namespace GateServer.Biz
 				Password = config.password,
 				State = ( Protos.GSInfo.Types.State )GS.instance.state
 			};
-			GS.instance.netSessionMgr.Send( sid, reportState );
+			session.Send( reportState );
 		}
 	}
 }

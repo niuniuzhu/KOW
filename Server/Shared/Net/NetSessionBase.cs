@@ -77,6 +77,7 @@ namespace Shared.Net
 
 		/// <summary>
 		/// 发送数据
+		/// 线程不安全,不建议异步调用
 		/// </summary>
 		/// <param name="message">消息体</param>
 		/// <param name="rpcHandler">RPC回调函数</param>
@@ -104,7 +105,7 @@ namespace Shared.Net
 			{
 				//只有rpc才写入序号
 				if ( nsid == 0 )
-					opts.Pid = this._pid++;
+					opts.Pid = this._pid++;//注意这里线程不安全
 
 				if ( rpcHandler != null )
 				{
@@ -206,13 +207,14 @@ namespace Shared.Net
 					return;
 				}
 			}
-			if ( ( opts.Flag & ( 1 << ( int )Protos.MsgOpts.Types.Flag.Resp ) ) > 0 )//这是一条rpc消息
+			//是否RPC消息
+			if ( ( opts.Flag & ( 1 << ( int )Protos.MsgOpts.Types.Flag.Resp ) ) > 0 )
 			{
 				if ( this._pidToRPCEntries.TryGetValue( opts.Rpid, out RPCEntry rpcEntry ) )
 				{
 					this._pidToRPCEntries.Remove( opts.Rpid );
 					this._rpcEntries.Remove( rpcEntry );
-					rpcEntry.handler( this.id, message );//调用回调函数
+					rpcEntry.handler( this, message );//调用回调函数
 				}
 				else
 					Logger.Warn( $"RPC handler not found with message:{msgID}" );
@@ -237,7 +239,7 @@ namespace Shared.Net
 			MessageHandler handler = this._messageCenter.GetHandler( msgID );
 			if ( handler != null )
 			{
-				ErrorCode errorCode = handler.Invoke( this.id, message );
+				ErrorCode errorCode = handler.Invoke( this, message );
 				if ( errorCode != ErrorCode.Success )
 					Logger.Warn( errorCode );
 			}

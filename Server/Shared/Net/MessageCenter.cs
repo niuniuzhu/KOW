@@ -2,7 +2,7 @@
 
 namespace Shared.Net
 {
-	public delegate ErrorCode MessageHandler( uint sid, Google.Protobuf.IMessage message );
+	public delegate ErrorCode MessageHandler( NetSessionBase session, Google.Protobuf.IMessage message );
 
 	/// <summary>
 	/// 消息处理中心

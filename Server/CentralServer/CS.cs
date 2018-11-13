@@ -10,6 +10,7 @@ using Shared.Net;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using CentralServer.Biz;
 
 namespace CentralServer
 {
@@ -29,6 +30,10 @@ namespace CentralServer
 		/// Redis包装器
 		/// </summary>
 		public readonly RedisWrapper redisWrapper = new RedisWrapper();
+		/// <summary>
+		/// 业务处理器
+		/// </summary>
+		public readonly BizProcessor bizProcessor = new BizProcessor();
 		/// <summary>
 		/// 玩家管理器
 		/// </summary>

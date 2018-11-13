@@ -37,7 +37,7 @@
 		/// <summary>
 		/// 关闭Session
 		/// </summary>
-		void Close( string reason );
+		void Close( bool initiative, string reason );
 
 		/// <summary>
 		/// 连接失败后调用

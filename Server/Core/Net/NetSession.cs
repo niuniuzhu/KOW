@@ -55,7 +55,12 @@ namespace Core.Net
 			this._delayCloseReason = reason;
 		}
 
-		public void Close( string reason )
+		/// <summary>
+		/// 关闭连接
+		/// </summary>
+		/// <param name="initiative">是否主动</param>
+		/// <param name="reason">原因</param>
+		public void Close( bool initiative, string reason )
 		{
 			if ( this._state == State.Close )
 				return;
@@ -90,7 +95,7 @@ namespace Core.Net
 		public void _OnError( string error )
 		{
 			this.OnError( error );
-			this.Close( error );
+			this.Close( false, error );
 		}
 
 		public virtual void Update( UpdateContext updateContext )
@@ -100,7 +105,7 @@ namespace Core.Net
 
 			if ( this._delayClose && TimeUtils.utcTime >= this._timeToClose )
 			{
-				this.Close( this._delayCloseReason );
+				this.Close( true, this._delayCloseReason );
 				this._delayCloseReason = string.Empty;
 			}
 		}

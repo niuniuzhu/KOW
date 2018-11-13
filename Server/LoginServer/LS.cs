@@ -7,6 +7,7 @@ using Shared.Net;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using LoginServer.Biz;
 
 namespace LoginServer
 {
@@ -19,6 +20,7 @@ namespace LoginServer
 
 		public readonly RedisWrapper redisWrapper = new RedisWrapper();
 		public readonly LSNetSessionMgr netSessionMgr = new LSNetSessionMgr();
+		public readonly BizProcessor bizProcessor = new BizProcessor();
 		public readonly Dictionary<uint, GSInfo> gsInfos = new Dictionary<uint, GSInfo>();
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
@@ -47,7 +49,7 @@ namespace LoginServer
 		public ErrorCode Start()
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
-			( ( WSListener ) this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket,
+			( ( WSListener )this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket,
 																this.netSessionMgr.CreateClientSession ) )
 				.Start( this.config.cliPort/*, true, new X509Certificate2( "Config/server.pfx", "159753" )*/ );
 			this.netSessionMgr.CreateConnector<L2CSSession>( SessionType.ServerL2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 65535, 0 );

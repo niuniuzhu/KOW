@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using Core.Net;
+using GateServer.Biz;
 using GateServer.Net;
 using Shared;
 using Shared.Net;
@@ -16,6 +17,7 @@ namespace GateServer
 		public GSConfig config { get; private set; }
 
 		public readonly GSNetSessionMgr netSessionMgr = new GSNetSessionMgr();
+		public readonly BizProcessor bizProcessor = new BizProcessor();
 		public readonly GSUserMgr userMgr = new GSUserMgr();
 
 		private readonly UpdateContext _updateContext = new UpdateContext();

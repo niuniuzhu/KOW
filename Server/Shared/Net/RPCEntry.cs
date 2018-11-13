@@ -6,7 +6,7 @@ namespace Shared.Net
 	/// RPC委托
 	/// </summary>
 	/// <param name="message">消息体</param>
-	public delegate void RPCHandler( IMessage message );
+	public delegate void RPCHandler( uint sid, IMessage message );
 
 	/// <summary>
 	/// RPC发生回调时的状态

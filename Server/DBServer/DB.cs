@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using Core.Net;
+using DBServer.Biz;
 using DBServer.Net;
 using Shared;
 using Shared.DB;
@@ -9,7 +10,7 @@ using System.IO;
 
 namespace DBServer
 {
-	public partial class DB
+	public class DB
 	{
 		private static DB _instance;
 		public static DB instance => _instance ?? ( _instance = new DB() );
@@ -17,6 +18,7 @@ namespace DBServer
 		public DBConfig config { get; private set; }
 
 		public readonly DBNetSessionMgr netSessionMgr = new DBNetSessionMgr();
+		public readonly BizProcessor bizProcessor = new BizProcessor();
 		public readonly DBWrapper accountDB = new DBWrapper();
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
@@ -42,7 +44,7 @@ namespace DBServer
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 			this.netSessionMgr.CreateListener( 0, 65535, ProtoType.TCP, this.netSessionMgr.CreateLSSession ).Start( this.config.lsPort );
 			this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, this.netSessionMgr.CreateGSSession ).Start( this.config.csPort );
-			DBConfig.DBEntry accountDBCfg = this.config.dbs[( int ) DBConfig.DBType.Account];
+			DBConfig.DBEntry accountDBCfg = this.config.dbs[( int )DBConfig.DBType.Account];
 			this.accountDB.Start( accountDBCfg.ip, accountDBCfg.port, accountDBCfg.pwd, accountDBCfg.user, accountDBCfg.dbname );
 
 			return ErrorCode.Success;

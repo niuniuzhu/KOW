@@ -8,6 +8,7 @@ using Shared.Battle;
 using Shared.Net;
 using System.Collections;
 using System.IO;
+using BattleServer.Biz;
 
 namespace BattleServer
 {
@@ -19,6 +20,7 @@ namespace BattleServer
 		public BSConfig config { get; private set; }
 
 		public readonly BSNetSessionMgr netSessionMgr = new BSNetSessionMgr();
+		public readonly BizProcessor bizProcessor = new BizProcessor();
 		public readonly BattleManager battleManager = new BattleManager();
 		public readonly BSUserMgr userMgr = new BSUserMgr();
 
@@ -43,7 +45,7 @@ namespace BattleServer
 #endif
 			try
 			{
-				Defs.Init( ( Hashtable ) MiniJSON.JsonDecode( File.ReadAllText( opts.defs ) ) );
+				Defs.Init( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.defs ) ) );
 			}
 			catch ( System.Exception e )
 			{
@@ -59,7 +61,7 @@ namespace BattleServer
 			try
 			{
 				this.config = new BSConfig();
-				this.config.CopyFromJson( ( Hashtable ) MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
+				this.config.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
 			}
 			catch ( System.Exception e )
 			{
@@ -73,7 +75,7 @@ namespace BattleServer
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 
-			WSListener cliListener = ( WSListener ) this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
+			WSListener cliListener = ( WSListener )this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
 			cliListener.Start( this.config.externalPort );
 
 			IListener shellListener = this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, this.netSessionMgr.CreateShellSession );

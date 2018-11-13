@@ -19,7 +19,7 @@ namespace Shell
 			byte flag = data[0];
 			if ( !this.CheckFlag( flag ) )
 			{
-				this.Close( "invalid flag" );
+				this.Close( true, "invalid flag" );
 				return;
 			}
 			byte[] cmdData = new byte[data.Length - 1];

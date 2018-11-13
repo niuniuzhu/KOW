@@ -39,15 +39,15 @@ namespace Shared.Net
 		/// <summary>
 		/// 消息处理中心
 		/// </summary>
-		private readonly MessageMgr _messageMgr = new MessageMgr();
+		private readonly MessageCenter _messageCenter = new MessageCenter();
 
 		protected NetSessionBase( uint id, ProtoType type ) : base( id, type )
 		{
 		}
 
-		protected void RegMsgHandler( Protos.MsgID msgID, MessageHandler handler ) => this._messageMgr.Register( msgID, handler );
+		protected void RegMsgHandler( Protos.MsgID msgID, MessageHandler handler ) => this._messageCenter.Register( msgID, handler );
 
-		protected MessageHandler GetMsgHandler( Protos.MsgID msgID ) => this._messageMgr.GetHandler( msgID );
+		protected MessageHandler GetMsgHandler( Protos.MsgID msgID ) => this._messageCenter.GetHandler( msgID );
 
 		/// <summary>
 		/// 把消息体编码到缓冲区
@@ -212,7 +212,7 @@ namespace Shared.Net
 				{
 					this._pidToRPCEntries.Remove( opts.Rpid );
 					this._rpcEntries.Remove( rpcEntry );
-					rpcEntry.handler( message );//调用回调函数
+					rpcEntry.handler( this.id, message );//调用回调函数
 				}
 				else
 					Logger.Warn( $"RPC handler not found with message:{msgID}" );
@@ -234,10 +234,10 @@ namespace Shared.Net
 		/// </summary>
 		protected virtual void DispatchMessage( Protos.MsgID msgID, IMessage message )
 		{
-			MessageHandler handler = this._messageMgr.GetHandler( msgID );
+			MessageHandler handler = this._messageCenter.GetHandler( msgID );
 			if ( handler != null )
 			{
-				ErrorCode errorCode = handler.Invoke( message );
+				ErrorCode errorCode = handler.Invoke( this.id, message );
 				if ( errorCode != ErrorCode.Success )
 					Logger.Warn( errorCode );
 			}

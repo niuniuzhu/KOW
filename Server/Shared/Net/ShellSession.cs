@@ -34,7 +34,7 @@ namespace Shared.Net
 			byte flag = data[0];
 			if ( !this.CheckFlag( flag ) )
 			{
-				this.Close( "invalid flag" );
+				this.Close( true, "invalid flag" );
 				return;
 			}
 			byte[] cmdData = new byte[data.Length - 1];
@@ -50,7 +50,7 @@ namespace Shared.Net
 		private void HandleShellHandShake( byte[] data )
 		{
 			if ( Encoding.UTF8.GetString( data ) != key )
-				this.Close( "invalid key" );
+				this.Close( true, "invalid key" );
 		}
 
 		private void HandleShellCommand( byte[] data )

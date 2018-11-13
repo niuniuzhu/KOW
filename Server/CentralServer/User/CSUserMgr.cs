@@ -160,7 +160,7 @@ namespace CentralServer.User
 			kickGc.GcNID = user.gcNID;
 			kickGc.Reason = ( Protos.CS2GS_KickGC.Types.EReason )reason;
 			//通知GS踢掉GC
-			CS.instance.netSessionMgr.Send( user.gsSID, kickGc, ret => { } );
+			CS.instance.netSessionMgr.Send( user.gsSID, kickGc, ( sid, ret ) => { } );
 			this.Offline( user );
 		}
 

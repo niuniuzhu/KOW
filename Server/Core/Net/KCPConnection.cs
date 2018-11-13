@@ -122,7 +122,7 @@ namespace Core.Net
 				return false;
 			StreamBuffer buffer = this._bufferPool.Pop();
 			buffer.data = DataTransType.KCP;
-			buffer.Write( ( byte ) 0 );//非内部协议 0<<7
+			buffer.Write( ( byte )0 );//非内部协议 0<<7
 			buffer.Write( data, offset, size );
 			this._sendQueue.Push( buffer );
 			return true;
@@ -294,7 +294,7 @@ namespace Core.Net
 				return;
 			StreamBuffer buffer = this._bufferPool.Pop();
 			buffer.data = DataTransType.KCP;
-			buffer.Write( ( byte ) 0x80 );//是内部协议 1<<7
+			buffer.Write( ( byte )0x80 );//是内部协议 1<<7
 			buffer.Write( ProtoConfig.PING_SIGNATURE );
 			this._sendQueue.Push( buffer );
 		}
@@ -305,7 +305,7 @@ namespace Core.Net
 				return;
 			StreamBuffer buffer = this._bufferPool.Pop();
 			buffer.data = DataTransType.KCP;
-			buffer.Write( ( byte ) 0x80 );//是内部协议 1<<7
+			buffer.Write( ( byte )0x80 );//是内部协议 1<<7
 			buffer.Write( ProtoConfig.PONG_SIGNATURE );
 			this._sendQueue.Push( buffer );
 		}
@@ -319,9 +319,9 @@ namespace Core.Net
 				return;
 			StreamBuffer buffer = this._bufferPool.Pop();
 			buffer.data = DataTransType.Direct;
-			buffer.Write( ( uint ) 0 );//connID
-			buffer.Write( ( byte ) 0 );//非kcp传输
-			buffer.Write( ( byte ) 0x80 );//是内部协议 1<<7
+			buffer.Write( ( uint )0 );//connID
+			buffer.Write( ( byte )0 );//非kcp传输
+			buffer.Write( ( byte )0x80 );//是内部协议 1<<7
 			buffer.Write( ProtoConfig.HANDSHAKE_SIGNATURE );
 			this._sendQueue.Push( buffer );
 		}
@@ -335,9 +335,9 @@ namespace Core.Net
 				return;
 			StreamBuffer buffer = this._bufferPool.Pop();
 			buffer.data = DataTransType.Direct;
-			buffer.Write( ( uint ) 0 );//connID
-			buffer.Write( ( byte ) 0 );//非kcp传输
-			buffer.Write( ( byte ) 0x80 );//是内部协议 1<<7
+			buffer.Write( ( uint )0 );//connID
+			buffer.Write( ( byte )0 );//非kcp传输
+			buffer.Write( ( byte )0x80 );//是内部协议 1<<7
 			buffer.Write( ProtoConfig.HANDSHAKE_ACK_SIGNATURE );
 			buffer.Write( this.session.id );
 			this._sendQueue.Push( buffer );
@@ -347,9 +347,9 @@ namespace Core.Net
 		{
 			StreamBuffer buffer = this._bufferPool.Pop();
 			buffer.data = DataTransType.Direct;
-			buffer.Write( ( uint ) 0 );//connID
-			buffer.Write( ( byte ) 0 );//非kcp传输
-			buffer.Write( ( byte ) 0x80 );//是内部协议 1<<7
+			buffer.Write( ( uint )0 );//connID
+			buffer.Write( ( byte )0 );//非kcp传输
+			buffer.Write( ( byte )0x80 );//是内部协议 1<<7
 			buffer.Write( ProtoConfig.TIMEOUT_SIGNATURE );
 			this.SendDirect( buffer.GetBuffer(), 0, buffer.length );
 			this._bufferPool.Push( buffer );
@@ -426,7 +426,7 @@ namespace Core.Net
 			{
 				StreamBuffer buffer = this._sendQueue.Pop();
 
-				DataTransType dataTransType = ( DataTransType ) buffer.data;
+				DataTransType dataTransType = ( DataTransType )buffer.data;
 				switch ( dataTransType )
 				{
 					case DataTransType.Direct:
@@ -478,7 +478,7 @@ namespace Core.Net
 			if ( TimeUtils.utcTime < this.activeTime + ProtoConfig.PING_TIMEOUT )
 				return;
 			this.NotifyClose();
-			this.session.Close( "ping timeout" );
+			this.session.Close( true, "ping timeout" );
 		}
 
 		public void OnHeartBeat( long dt )

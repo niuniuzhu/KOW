@@ -53,10 +53,10 @@ namespace CentralServer.Match
 				CSUser user = users[j];
 				System.Diagnostics.Debug.Assert( user.isInBattle, $"user:{user.gcNID} not in battle staging" );
 				user.LeaveBattle();
+				Logger.Log( $"user:{user.gcNID} leave staging. lid:{lid}, bid:{bid}" );
 				//检查GC是否已断线
 				if ( !user.isConnected )
 					CS.instance.userMgr.DestroyUser( user );
-				Logger.Log( $"user:{user.gcNID} leave staging. lid:{lid}, bid:{bid}" );
 			}
 			this._lbIDToUser.Remove( lbID );
 			this._lidToBID.RemoveFromList( lid, bid );

@@ -10,7 +10,7 @@ namespace Shared.Net
 		/// <summary>
 		/// 标记该Session是否已受信任
 		/// </summary>
-		protected bool _accredited;
+		public bool accredited;
 
 		/// <summary>
 		/// 认证消息的ID
@@ -24,9 +24,9 @@ namespace Shared.Net
 
 		protected override bool ShouldBlockMsg( MsgID msgID )
 		{
-			bool shouldBlock = this._accreditedMsgID != msgID && !this._accredited;
+			bool shouldBlock = this._accreditedMsgID != msgID && !this.accredited;
 			if ( shouldBlock )
-				this.Close( "illegal session" );
+				this.Close( true, "illegal session" );
 			return shouldBlock;
 		}
 
@@ -35,12 +35,12 @@ namespace Shared.Net
 			MessageHandler handler = this.GetMsgHandler( msgID );
 			if ( handler != null )
 			{
-				ErrorCode errorCode = handler.Invoke( message );
+				ErrorCode errorCode = handler.Invoke( this.id, message );
 				if ( errorCode != ErrorCode.Success )
 					Logger.Warn( errorCode );
 			}
 			else
-				this.Close( $"unhandle msg:{msgID}." );
+				this.Close( true, $"unhandle msg:{msgID}." );
 		}
 	}
 }

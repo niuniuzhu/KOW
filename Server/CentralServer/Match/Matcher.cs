@@ -270,10 +270,8 @@ namespace CentralServer.Match
 				battleInfo.PlayerInfo.Add( pi );
 			}
 			//通知BS创建战场
-			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, ret =>
+			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, ( sid, ret ) =>
 			{
-				//todo 如果消息到达不了BS, 客户端就会卡主不动
-
 				Protos.BS2CS_BattleInfoRet battleInfoRet = ( Protos.BS2CS_BattleInfoRet )ret;
 				//检查是否成功创建战场
 				if ( battleInfoRet.Result != Protos.Global.Types.ECommon.Success )

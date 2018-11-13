@@ -117,7 +117,7 @@ namespace BattleServer.Battle
 			//通知CS战场结束
 			Protos.BS2CS_BattleEnd battleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
 			battleEnd.Bid = battle.id;
-			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd, ret => { } );
+			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd, ( sid, ret ) => { } );
 
 			//通知客户端战场结束
 			Protos.BS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_BS2GC_BattleEnd();
@@ -175,43 +175,33 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 玩家请求获取当前战场快照
 		/// </summary>
-		internal void HandleRequestSnapshot( ulong gcNID, Protos.GC2BS_RequestSnapshot request, Protos.BS2GC_RequestSnapshotRet ret )
+		internal void HandleRequestSnapshot( Battle battle, Protos.GC2BS_RequestSnapshot request, Protos.BS2GC_RequestSnapshotRet ret )
 		{
-			BSUser user = BS.instance.userMgr.GetUser( gcNID );
-			if ( user == null )
-			{
-				Logger.Warn( $"can not find user:{gcNID}" );
-				ret.Result = Protos.BS2GC_RequestSnapshotRet.Types.EResult.InvalidUser;
-			}
-			else
-			{
-				FrameSnapshot snapshot = user.battle.GetSnapshot( request.Frame );
-				ret.ReqFrame = request.Frame;
-				ret.CurFrame = user.battle.frame;
-				ret.Snapshot = snapshot.data;
-			}
+			FrameSnapshot snapshot = battle.GetSnapshot( request.Frame );
+			ret.ReqFrame = request.Frame;
+			ret.CurFrame = battle.frame;
+			ret.Snapshot = snapshot.data;
 		}
 
 		/// <summary>
 		/// 处理玩家提交的帧行为
 		/// </summary>
-		internal void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message )
+		internal void HandleFrameAction( ulong gcNID, Battle battle, Protos.GC2BS_FrameAction message )
 		{
-			Battle battle = this.GetValidedBattle( gcNID );
-			battle?.HandleFrameAction( gcNID, message );
+			if ( battle.finished )
+				return;
+			battle.HandleFrameAction( gcNID, message );
 		}
 
 		/// <summary>
 		/// 处理玩家请求帧行为的历史数据
 		/// </summary>
+		/// <param name="battle">战场</param>
 		/// <param name="from">起始帧</param>
 		/// <param name="to">结束帧</param>
 		/// <param name="ret">需要填充的消息</param>
-		internal void HandleRequestFrameActions( ulong gcNID, int from, int to, Protos.BS2GC_RequestFrameActionsRet ret )
-		{
-			Battle battle = this.GetValidedBattle( gcNID );
-			battle?.HandleRequestFrameActions( from, to, ret );
-		}
+		internal void HandleRequestFrameActions( Battle battle, int from, int to, Protos.BS2GC_RequestFrameActionsRet ret ) =>
+			battle.HandleRequestFrameActions( @from, to, ret );
 
 		/// <summary>
 		/// 获取指定索引的战场

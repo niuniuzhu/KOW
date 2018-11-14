@@ -29,7 +29,7 @@ define(["require", "exports", "./ConnectionTest", "../RC/Math/MathUtils"], funct
     }
     Pressure.UPDATE_INTERVAL = 20;
     Pressure.CONNECT_INTERVAL = 50;
-    Pressure.MAX_CONNECTION = 50;
+    Pressure.MAX_CONNECTION = 280;
     exports.Pressure = Pressure;
 });
 //# sourceMappingURL=Pressure.js.map

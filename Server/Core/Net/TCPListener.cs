@@ -51,7 +51,7 @@ namespace Core.Net
 			}
 			try
 			{
-				this._socket.Listen( 64 );
+				this._socket.Listen( 32 );
 			}
 			catch ( SocketException e )
 			{

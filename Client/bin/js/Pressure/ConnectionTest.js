@@ -29,7 +29,7 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
             login.sdk = sdk;
             const connector = new WSConnector_1.WSConnector();
             connector.onerror = (e) => Logger_1.Logger.Error(e);
-            connector.onclose = () => Logger_1.Logger.Log("ls connection closed.");
+            connector.onclose = () => { };
             connector.onopen = () => {
                 connector.Send(protos_1.Protos.GC2LS_AskSmartLogin, login, message => {
                     const resp = message;
@@ -46,13 +46,13 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
             this.ConnectToLS(connector);
         }
         HandleLoginLSSuccess(loginResult) {
-            Logger_1.Logger.Log("gcNID:" + loginResult.sessionID + "login success");
             let gsInfo = loginResult.gsInfos[0];
             this.LoginGS(gsInfo.ip, gsInfo.port, gsInfo.password, loginResult.sessionID);
         }
         LoginGS(ip, port, pwd, gcNID) {
             const connector = this._connector.gsConnector;
             connector.onerror = (e) => Logger_1.Logger.Error("gs:" + e);
+            connector.Close = () => Logger_1.Logger.Log("gs closed");
             connector.onopen = () => {
                 Logger_1.Logger.Log("GS Connected");
                 const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();
@@ -62,12 +62,6 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
                     const resp = message;
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
-                            if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {
-                                this.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
-                            }
-                            else {
-                                this.BeginMatch();
-                            }
                             break;
                         default:
                             Logger_1.Logger.Warn("failed:" + resp.result);

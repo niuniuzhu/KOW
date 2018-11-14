@@ -23,7 +23,14 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家数量
 		/// </summary>
-		public int count => this._ukeyToUser.Count;
+		public int count
+		{
+			get
+			{
+				System.Diagnostics.Debug.Assert( this._ukeyToUser.Count == this._gcNIDToUser.Count );
+				return this._ukeyToUser.Count;
+			}
+		}
 
 		public bool HasUser( ulong gcNID ) => this._gcNIDToUser.ContainsKey( gcNID );
 
@@ -161,7 +168,7 @@ namespace CentralServer.User
 			kickGc.GcNID = user.gcNID;
 			kickGc.Reason = ( Protos.CS2GS_KickGC.Types.EReason )reason;
 			//通知GS踢掉GC
-			CS.instance.netSessionMgr.Send( user.gsSID, kickGc, ( session_, ret ) => { } );
+			CS.instance.netSessionMgr.Send( user.gsSID, kickGc );
 			this.Offline( user );
 		}
 
@@ -211,12 +218,13 @@ namespace CentralServer.User
 		/// <summary>
 		/// 以字符串的形式返回玩家信息
 		/// </summary>
-		/// <returns></returns>
 		public string LS()
 		{
+			SortedDictionary<ulong, CSUser> map = new SortedDictionary<ulong, CSUser>( this._gcNIDToUser );
 			StringBuilder sb = new StringBuilder();
-			foreach ( KeyValuePair<uint, CSUser> kv in this._ukeyToUser )
-				sb.AppendLine( kv.Value.ToString() );
+			foreach ( KeyValuePair<ulong, CSUser> kv in map )
+				sb.AppendLine( kv.Key.ToString() );
+			sb.AppendLine( $"count:{this.count}" );
 			return sb.ToString();
 		}
 	}

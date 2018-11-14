@@ -41,9 +41,7 @@ namespace GateServer.Net
 			if ( this._pingTime >= GS.instance.config.pingInterval )
 			{
 				this._pingTime = 0;
-				Protos.G_AskPing msg = ProtoCreator.Q_G_AskPing();
-				msg.Time = TimeUtils.utcTime;
-				this.Send( msg, GS.instance.bizProcessor.OnGSAskPingRet );
+				GS.instance.bizProcessor.PingCS( this );
 			}
 
 			this._reportTime += dt;

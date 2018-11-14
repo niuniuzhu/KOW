@@ -14,7 +14,7 @@ namespace GateServer.Net
 		{
 			this._accreditedMsgID = Protos.MsgID.EGc2GsAskLogin;
 
-			this.RegMsgHandler( Protos.MsgID.EGc2GsAskLogin, GS.instance.bizProcessor.OnGc2GsAskLogin );
+			this.RegMsgHandler( Protos.MsgID.EGc2GsAskLogin, GS.instance.bizProcessor.OnGC2GSAskLogin );
 			this.RegMsgHandler( Protos.MsgID.EGc2GsKeepAlive, GS.instance.bizProcessor.OnGc2GsKeepAlive );
 		}
 

@@ -40,9 +40,7 @@ namespace BattleServer.Net
 			if ( this._pingTime >= BS.instance.config.pingInterval )
 			{
 				this._pingTime = 0;
-				Protos.G_AskPing msg = ProtoCreator.Q_G_AskPing();
-				msg.Time = TimeUtils.utcTime;
-				this.Send( msg, BS.instance.bizProcessor.OnGSAskPingRet );
+				BS.instance.bizProcessor.PingCS( this );
 			}
 
 			this._reportTime += dt;

@@ -46,7 +46,7 @@ namespace BattleServer.Battle
 		}
 
 		/// <summary>
-		/// 开始战斗
+		/// 创建战场
 		/// </summary>
 		public ErrorCode CreateBattle( Protos.CS2BS_BattleInfo battleInfo, out uint bid )
 		{
@@ -93,15 +93,6 @@ namespace BattleServer.Battle
 
 			Logger.Log( $"battle:{battle.id} created" );
 
-			//Protos.BS2CS_BattleStart toCSBattleStart = ProtoCreator.Q_BS2CS_BattleStart();
-			//toCSBattleStart.Bid = battle.id;
-			//BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, toCSBattleStart, msgRet =>
-			//{
-			//	//通知GC战场开始
-			//	Protos.BS2GC_BattleStart toGCBattleStart = ProtoCreator.Q_BS2GC_BattleStart();
-			//	toGCBattleStart.Id = battle.id;
-			//	battle.Broadcast( toGCBattleStart );
-			//} );
 			return ErrorCode.Success;
 		}
 
@@ -117,7 +108,7 @@ namespace BattleServer.Battle
 			//通知CS战场结束
 			Protos.BS2CS_BattleEnd battleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
 			battleEnd.Bid = battle.id;
-			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd, ( sid, ret ) => { } );
+			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd );
 
 			//通知客户端战场结束
 			Protos.BS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_BS2GC_BattleEnd();

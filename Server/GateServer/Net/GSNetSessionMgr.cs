@@ -24,14 +24,14 @@ namespace GateServer.Net
 			return session;
 		}
 
-		public bool SendToGC( ulong gcNID, IMessage msg, RPCHandler rpcHandler = null )
+		public bool SendToGC( ulong gcNID, IMessage msg, RPCEntry rpcEntry = null )
 		{
 			if ( !GS.instance.userMgr.GetSID( gcNID, out uint sid ) )
 			{
 				Logger.Warn( $"invalid gcNID:{gcNID}" );
 				return false;
 			}
-			this.Send( sid, msg, rpcHandler );
+			this.Send( sid, msg, rpcEntry );
 			return true;
 		}
 

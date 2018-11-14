@@ -6,7 +6,14 @@ namespace LoginServer.Biz
 {
 	public partial class BizProcessor
 	{
-		public void OnCSAskPingRet( NetSessionBase session, Google.Protobuf.IMessage message )
+		public void PingCS( NetSessionBase session )
+		{
+			Protos.G_AskPing msg = ProtoCreator.Q_G_AskPing();
+			msg.Time = TimeUtils.utcTime;
+			session.Send( msg, RPCEntry.Pop( OnCSAskPingRet ) );
+		}
+
+		private static void OnCSAskPingRet( NetSessionBase session, Google.Protobuf.IMessage message, object[] args )
 		{
 			long currTime = TimeUtils.utcTime;
 			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;

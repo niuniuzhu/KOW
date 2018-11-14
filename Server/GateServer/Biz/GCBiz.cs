@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using GateServer.Net;
+using Google.Protobuf;
 using Shared;
 using Shared.Net;
 
@@ -29,10 +30,8 @@ namespace GateServer.Biz
 			}
 		}
 
-		public ErrorCode OnGc2GsAskLogin( NetSessionBase session, Google.Protobuf.IMessage message )
+		public ErrorCode OnGC2GSAskLogin( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
-			uint sid = session.id;
-
 			Protos.GC2GS_AskLogin login = ( Protos.GC2GS_AskLogin )message;
 
 			Protos.GS2CS_GCAskLogin gcAskLogin = ProtoCreator.Q_GS2CS_GCAskLogin();
@@ -40,44 +39,50 @@ namespace GateServer.Biz
 			Logger.Log( $"client:{gcAskLogin.SessionID} ask login" );
 
 			//向CS请求客户端登陆
-			GS.instance.netSessionMgr.Send( SessionType.ServerG2CS, gcAskLogin, ( session_, ret ) =>
-			{
-				//检测客户端是否断线了
-				ClientSession gcSession = GS.instance.netSessionMgr.GetSession( sid ) as ClientSession;
-				if ( gcSession == null )
-				{
-					//通知CS客户端断开了
-					Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
-					gcLost.SessionID = login.SessionID;
-					GS.instance.netSessionMgr.Send( SessionType.ServerG2CS, gcLost );
-					return;
-				}
-
-				Protos.CS2GS_GCLoginRet csLoginRet = ( Protos.CS2GS_GCLoginRet )ret;
-				Protos.GS2GC_LoginRet gsLoginRet = ProtoCreator.R_GC2GS_AskLogin( login.Opts.Pid );
-				switch ( csLoginRet.Result )
-				{
-					case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
-						//添加到管理器
-						GS.instance.userMgr.AddClient( login.SessionID, sid );
-
-						//设置该Session为受信任的连接
-						gcSession.accredited = true;
-
-						gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
-						gsLoginRet.GcNID = csLoginRet.GcNID;
-						gsLoginRet.GcState = ( Protos.GS2GC_LoginRet.Types.EGCCState )csLoginRet.GcState;
-						gsLoginRet.BsIP = csLoginRet.BsIP;
-						gsLoginRet.BsPort = csLoginRet.BsPort;
-						GS.instance.netSessionMgr.Send( sid, gsLoginRet );
-						break;
-
-					case Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin:
-						GS.instance.netSessionMgr.CloseSession( sid, "client login failed" );
-						break;
-				}
-			} );
+			GS.instance.netSessionMgr.Send( SessionType.ServerG2CS, gcAskLogin,
+											RPCEntry.Pop( OnCS2GSAskLoginRet, session.id, login ) );
 			return ErrorCode.Success;
+		}
+
+		private static void OnCS2GSAskLoginRet( NetSessionBase session, IMessage message, object[] args )
+		{
+			uint sid = ( uint )args[0];
+			Protos.GC2GS_AskLogin login = ( Protos.GC2GS_AskLogin )args[1];
+
+			//检测客户端是否断线了
+			ClientSession gcSession = GS.instance.netSessionMgr.GetSession( sid ) as ClientSession;
+			if ( gcSession == null )
+			{
+				//通知CS客户端断开了
+				Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
+				gcLost.SessionID = login.SessionID;
+				GS.instance.netSessionMgr.Send( SessionType.ServerG2CS, gcLost );
+				return;
+			}
+
+			Protos.CS2GS_GCLoginRet csLoginRet = ( Protos.CS2GS_GCLoginRet )message;
+			Protos.GS2GC_LoginRet gsLoginRet = ProtoCreator.R_GC2GS_AskLogin( login.Opts.Pid );
+			switch ( csLoginRet.Result )
+			{
+				case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
+					//添加到管理器
+					GS.instance.userMgr.AddClient( login.SessionID, sid );
+
+					//设置该Session为受信任的连接
+					gcSession.accredited = true;
+
+					gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
+					gsLoginRet.GcNID = csLoginRet.GcNID;
+					gsLoginRet.GcState = ( Protos.GS2GC_LoginRet.Types.EGCCState )csLoginRet.GcState;
+					gsLoginRet.BsIP = csLoginRet.BsIP;
+					gsLoginRet.BsPort = csLoginRet.BsPort;
+					GS.instance.netSessionMgr.Send( sid, gsLoginRet );
+					break;
+
+				case Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin:
+					GS.instance.netSessionMgr.CloseSession( sid, "client login failed" );
+					break;
+			}
 		}
 
 		public ErrorCode OnGc2GsKeepAlive( NetSessionBase session, Google.Protobuf.IMessage message )

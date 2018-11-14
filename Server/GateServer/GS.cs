@@ -86,7 +86,7 @@ namespace GateServer
 				};
 			};
 
-			this.netSessionMgr.CreateConnector<G2CSSession>( SessionType.ServerG2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 65535, 0 );
+			this.netSessionMgr.CreateConnector<G2CSSession>( SessionType.ServerG2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 1024 * 1024, 0 );
 
 			return ErrorCode.Success;
 		}

@@ -9,5 +9,3 @@ end
 bs = CS.BattleServer.BS.instance
 u = bs.userMgr
 bm = bs.battleManager
-
-print("init lua")

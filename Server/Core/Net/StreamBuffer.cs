@@ -15,7 +15,7 @@ namespace Core.Net
 		/// </summary>
 		public int position
 		{
-			get => ( int ) this.ms.Position;
+			get => ( int )this.ms.Position;
 			set => this.ms.Position = value;
 		}
 
@@ -24,7 +24,7 @@ namespace Core.Net
 		/// </summary>
 		public int length
 		{
-			get => ( int ) this.ms.Length;
+			get => ( int )this.ms.Length;
 			set => this.ms.SetLength( value );
 		}
 
@@ -43,6 +43,13 @@ namespace Core.Net
 		public StreamBuffer()
 		{
 			this.ms = new MemoryStream();
+			this.bw = new BinaryWriter( this.ms, Encoding.UTF8 );
+			this.br = new BinaryReader( this.ms, Encoding.UTF8 );
+		}
+
+		public StreamBuffer( int capacity )
+		{
+			this.ms = new MemoryStream( capacity );
 			this.bw = new BinaryWriter( this.ms, Encoding.UTF8 );
 			this.br = new BinaryReader( this.ms, Encoding.UTF8 );
 		}
@@ -216,7 +223,7 @@ namespace Core.Net
 		{
 			if ( this.bytesAvailable <= 0 )
 				return string.Empty;
-			byte[] bytes = this.ReadBytes( ( int ) this.bytesAvailable );
+			byte[] bytes = this.ReadBytes( ( int )this.bytesAvailable );
 			return Encoding.UTF8.GetString( bytes );
 		}
 

@@ -3,9 +3,9 @@ using Core.Misc;
 using Google.Protobuf;
 using Shared;
 using Shared.Battle;
+using Shared.Net;
 using System;
 using System.Collections.Generic;
-using Shared.Net;
 using BSInfo = Shared.BSInfo;
 
 namespace CentralServer.Match
@@ -65,7 +65,7 @@ namespace CentralServer.Match
 				ActorID = player.actorID,
 				Team = player.team
 			};
-			this.Broadcast( room, playerJoin );
+			Broadcast( room, playerJoin );
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace CentralServer.Match
 			//通知gc有玩家离开房间
 			Protos.CS2GC_PlayerLeave playerLeave = ProtoCreator.Q_CS2GC_PlayerLeave();
 			playerLeave.GcNID = player.user.gcNID;
-			this.Broadcast( room, playerLeave );
+			Broadcast( room, playerLeave );
 
 			if ( room.isEmpty )
 				this.DestroyRoom( room );
@@ -246,15 +246,11 @@ namespace CentralServer.Match
 			//没有找到合适的bs,通知客户端匹配失败
 			if ( appropriateBSInfo == null )
 			{
-				this.NotifyGCEnterBattleFailed( room, Protos.CS2GC_EnterBattle.Types.Result.BsnotFound );
+				NotifyGCEnterBattleFailed( room, Protos.CS2GC_EnterBattle.Types.Result.BsnotFound );
 				this.DestroyRoom( room );
 				return;
 			}
 
-			string bsIP = appropriateBSInfo.ip;
-			int bsPort = appropriateBSInfo.port;
-			uint bsSID = appropriateBSInfo.sessionID;
-			uint bsLID = appropriateBSInfo.lid;
 
 			//从等待房间队列中移除,避免在通信期间有玩家搜索到该房间
 			Room roomCloned = room.Clone();
@@ -268,51 +264,63 @@ namespace CentralServer.Match
 				RoomPlayer player = roomCloned.GetPlayerAt( i );
 				Protos.CS2BS_PlayerInfo pi = new Protos.CS2BS_PlayerInfo
 				{
-					GcNID = player.user.ukey | ( ulong )bsLID << 32,
+					GcNID = player.user.ukey | ( ulong )appropriateBSInfo.lid << 32,
 					Name = player.user.name,
 					ActorID = player.actorID,
 					Team = player.team
 				};
 				battleInfo.PlayerInfo.Add( pi );
 			}
-
-			//通知BS创建战场
-			CS.instance.netSessionMgr.Send( bsSID, battleInfo, ( session_, ret ) =>
-			{
-				Protos.BS2CS_BattleInfoRet battleInfoRet = ( Protos.BS2CS_BattleInfoRet )ret;
-				//检查是否成功创建战场
-				if ( battleInfoRet.Result != Protos.Global.Types.ECommon.Success )
-				{
-					this.NotifyGCEnterBattleFailed( roomCloned, Protos.CS2GC_EnterBattle.Types.Result.BattleCreateFailed );
-					return;
-				}
-				Logger.Log( $"battle:{battleInfoRet.Bid} created" );
-
-				//把所有玩家移动到战场暂存器里
-				for ( int i = 0; i < roomCloned.numPlayers; ++i )
-				{
-					RoomPlayer player = roomCloned.GetPlayerAt( i );
-					CS.instance.battleStaging.Add( player.user, bsLID, bsSID, battleInfoRet.Bid );
-				}
-
-				//广播给玩家
-				Protos.CS2GC_EnterBattle enterBattle = ProtoCreator.Q_CS2GC_EnterBattle();
-				enterBattle.Ip = bsIP;
-				enterBattle.Port = bsPort;
-				for ( int i = 0; i < roomCloned.numPlayers; ++i )
-				{
-					RoomPlayer player = roomCloned.GetPlayerAt( i );
-					enterBattle.GcNID = player.user.ukey | ( ulong )bsLID << 32;
-					player.user.Send( enterBattle );
-				}
-			} );
+			CS.instance.netSessionMgr.Send( appropriateBSInfo.lid, battleInfo, RPCEntry.Pop( OnBattleInfoRet, roomCloned,
+																			 appropriateBSInfo.ip, appropriateBSInfo.port,
+																			 appropriateBSInfo.sessionID, appropriateBSInfo.lid ) );
 		}
 
-		private void NotifyGCEnterBattleFailed( Room room, Protos.CS2GC_EnterBattle.Types.Result result )
+		/// <summary>
+		/// 通知BS创建战场
+		/// </summary>
+		private static void OnBattleInfoRet( NetSessionBase session_, IMessage ret, object[] args )
+		{
+			Room roomCloned = ( Room )args[0];
+			string bsIP = ( string )args[1];
+			int bsPort = ( int )args[2];
+			uint bsSID = ( uint )args[3];
+			uint bsLID = ( uint )args[4];
+
+			Protos.BS2CS_BattleInfoRet battleInfoRet = ( Protos.BS2CS_BattleInfoRet )ret;
+			//检查是否成功创建战场
+			if ( battleInfoRet.Result != Protos.Global.Types.ECommon.Success )
+			{
+				NotifyGCEnterBattleFailed( roomCloned, Protos.CS2GC_EnterBattle.Types.Result.BattleCreateFailed );
+				return;
+			}
+
+			Logger.Log( $"battle:{battleInfoRet.Bid} created" );
+
+			//把所有玩家移动到战场暂存器里
+			for ( int i = 0; i < roomCloned.numPlayers; ++i )
+			{
+				RoomPlayer player = roomCloned.GetPlayerAt( i );
+				CS.instance.battleStaging.Add( player.user, bsLID, bsSID, battleInfoRet.Bid );
+			}
+
+			//广播给玩家
+			Protos.CS2GC_EnterBattle enterBattle = ProtoCreator.Q_CS2GC_EnterBattle();
+			enterBattle.Ip = bsIP;
+			enterBattle.Port = bsPort;
+			for ( int i = 0; i < roomCloned.numPlayers; ++i )
+			{
+				RoomPlayer player = roomCloned.GetPlayerAt( i );
+				enterBattle.GcNID = player.user.ukey | ( ulong )bsLID << 32;
+				player.user.Send( enterBattle );
+			}
+		}
+
+		private static void NotifyGCEnterBattleFailed( Room room, Protos.CS2GC_EnterBattle.Types.Result result )
 		{
 			Protos.CS2GC_EnterBattle bsInfo = ProtoCreator.Q_CS2GC_EnterBattle();
 			bsInfo.Result = result;
-			this.Broadcast( room, bsInfo );
+			Broadcast( room, bsInfo );
 		}
 
 		private void FillProtoPlayerInfo( Room room, Google.Protobuf.Collections.RepeatedField<Protos.CS2GC_PlayerInfo> repeatedField )
@@ -332,7 +340,7 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 广播消息
 		/// </summary>
-		private void Broadcast( Room room, IMessage msg )
+		private static void Broadcast( Room room, IMessage msg )
 		{
 			//预编码的消息广播不支持转发
 			for ( int i = 0; i < room.numPlayers; ++i )

@@ -41,7 +41,7 @@ export class ConnectionTest {
 
 		const connector = new WSConnector();
 		connector.onerror = (e) => Logger.Error(e);
-		connector.onclose = () => Logger.Log("ls connection closed.");
+		connector.onclose = () => { };
 		connector.onopen = () => {
 			connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
 				const resp: Protos.LS2GC_AskLoginRet = <Protos.LS2GC_AskLoginRet>message;
@@ -59,7 +59,7 @@ export class ConnectionTest {
 	}
 
 	private HandleLoginLSSuccess(loginResult: Protos.LS2GC_AskLoginRet): void {
-		Logger.Log("gcNID:" + loginResult.sessionID + "login success");
+		// Logger.Log("gcNID:" + loginResult.sessionID + "login success");
 		let gsInfo = loginResult.gsInfos[0];
 		this.LoginGS(gsInfo.ip, gsInfo.port, gsInfo.password, loginResult.sessionID);
 	}
@@ -67,6 +67,7 @@ export class ConnectionTest {
 	private LoginGS(ip: string, port: number, pwd: string, gcNID: Long): void {
 		const connector = this._connector.gsConnector;
 		connector.onerror = (e) => Logger.Error("gs:" + e);
+		connector.Close = () => Logger.Log("gs closed");
 		connector.onopen = () => {
 			Logger.Log("GS Connected");
 			const askLogin = ProtoCreator.Q_GC2GS_AskLogin();
@@ -76,13 +77,13 @@ export class ConnectionTest {
 				const resp: Protos.GS2GC_LoginRet = <Protos.GS2GC_LoginRet>message;
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
-						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
-							//玩家处于战场,重新连接到BS
-							this.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
-						}
-						else {
-							this.BeginMatch();
-						}
+						// if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
+						// 	//玩家处于战场,重新连接到BS
+						// 	this.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+						// }
+						// else {
+						// 	this.BeginMatch();
+						// }
 						break;
 					default:
 						Logger.Warn("failed:" + resp.result);

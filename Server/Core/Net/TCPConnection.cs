@@ -10,21 +10,33 @@ namespace Core.Net
 		public SocketWrapper socket { get; set; }
 		public EndPoint remoteEndPoint { get; set; }
 		public INetSession session { get; }
-		public int recvBufSize { set => this._recvEventArgs.SetBuffer( new byte[value], 0, value ); }
+		public int recvBufSize
+		{
+			set
+			{
+				if ( value == this._receBufSize )
+					return;
+				this._receBufSize = value;
+				this._recvEventArgs.SetBuffer( new byte[value], 0, value );
+			}
+			get => this._receBufSize;
+		}
 		public bool connected => this.socket != null && this.socket.Connected;
 		public long activeTime { get; set; }
 
+		private int _receBufSize;
 		private readonly SocketAsyncEventArgs _sendEventArgs;
 		private readonly SocketAsyncEventArgs _recvEventArgs;
-		private readonly StreamBuffer _cache = new StreamBuffer();
+		private readonly StreamBuffer _cache;
+
 		protected readonly SwitchQueue<StreamBuffer> _sendQueue = new SwitchQueue<StreamBuffer>();
 		protected readonly ThreadSafeObjectPool<StreamBuffer> _bufferPool = new ThreadSafeObjectPool<StreamBuffer>( 10, 5 );
 		protected bool _reading;
-		protected readonly object _lockObj = new object();
 
 		public TCPConnection( INetSession session )
 		{
 			this.session = session;
+			this._cache = new StreamBuffer( this.recvBufSize );
 			this._sendEventArgs = new SocketAsyncEventArgs { UserToken = this };
 			this._recvEventArgs = new SocketAsyncEventArgs { UserToken = this };
 			this._sendEventArgs.Completed += this.OnIOComplete;
@@ -41,30 +53,27 @@ namespace Core.Net
 
 		public virtual void Close()
 		{
-			lock ( this._lockObj )
+			if ( this.socket == null )
+				return;
+			if ( this.connected )
 			{
-				if ( this.socket == null )
-					return;
-				if ( this.connected )
+				this.Flush();
+				try
 				{
-					this.Flush();
-					try
-					{
-						this.socket.Shutdown( SocketShutdown.Both );
-					}
-					catch ( SocketException e )
-					{
-						Logger.Log( e.ToString() );
-					}
+					this.socket.Shutdown( SocketShutdown.Both );
 				}
-				this.socket.Close();
-				this.socket = null;
-				this.remoteEndPoint = null;
-				this._cache.Clear();
-				this._sendQueue.Clear();
-				this.activeTime = 0;
-				this._reading = false;
+				catch ( SocketException e )
+				{
+					Logger.Error( e.ToString() );
+				}
 			}
+			this.socket.Close();
+			this.socket = null;
+			this.remoteEndPoint = null;
+			this.activeTime = 0;
+			this._cache.Clear();
+			this._sendQueue.Clear();
+			this._reading = false;
 		}
 
 		public void StartReceive()
@@ -91,7 +100,7 @@ namespace Core.Net
 				return false;
 			StreamBuffer buffer = this._bufferPool.Pop();
 			//写入数据长度
-			buffer.Write( ( ushort ) ( size + TCPMsgEncoder.LENGTH_SIZE ) );
+			buffer.Write( ( ushort )( size + TCPMsgEncoder.LENGTH_SIZE ) );
 			buffer.Write( data, offset, size );
 			this._sendQueue.Push( buffer );
 			return true;
@@ -99,19 +108,18 @@ namespace Core.Net
 
 		private void OnIOComplete( object sender, SocketAsyncEventArgs asyncEventArgs )
 		{
-			//这是一个异步调用,过程中可能在其他线程关闭了连接,必须加锁
-			lock ( this._lockObj )
-			{
-				switch ( asyncEventArgs.LastOperation )
-				{
-					case SocketAsyncOperation.Receive:
-						this.ProcessReceive( asyncEventArgs );
-						break;
+			if ( this.socket == null )
+				return;
 
-					case SocketAsyncOperation.Send:
-						this.ProcessSend( asyncEventArgs );
-						break;
-				}
+			switch ( asyncEventArgs.LastOperation )
+			{
+				case SocketAsyncOperation.Receive:
+					this.ProcessReceive( asyncEventArgs );
+					break;
+
+				case SocketAsyncOperation.Send:
+					this.ProcessSend( asyncEventArgs );
+					break;
 			}
 		}
 
@@ -185,7 +193,7 @@ namespace Core.Net
 			this._reading = false;
 		}
 
-		protected void OnError( string error )
+		private void OnError( string error )
 		{
 			NetEvent netEvent = NetworkMgr.instance.PopEvent();
 			netEvent.type = NetEvent.Type.Error;

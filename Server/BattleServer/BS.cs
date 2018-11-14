@@ -99,7 +99,7 @@ namespace BattleServer
 				};
 			};
 
-			this.netSessionMgr.CreateConnector<B2CSSession>( SessionType.ServerB2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 65535, 0 );
+			this.netSessionMgr.CreateConnector<B2CSSession>( SessionType.ServerB2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 1024 * 1024, 0 );
 			return ErrorCode.Success;
 		}
 

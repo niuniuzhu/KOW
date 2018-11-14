@@ -80,10 +80,10 @@ namespace Shared.Net
 		/// 线程不安全,不建议异步调用
 		/// </summary>
 		/// <param name="message">消息体</param>
-		/// <param name="rpcHandler">RPC回调函数</param>
+		/// <param name="rpcEntry">RPC回调函数</param>
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络ID</param>
-		public void Send( IMessage message, RPCHandler rpcHandler = null,
+		public void Send( IMessage message, RPCEntry rpcEntry = null,
 						  Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine,
 						  ulong nsid = 0 )
 		{
@@ -105,20 +105,18 @@ namespace Shared.Net
 			{
 				//只有rpc才写入序号
 				if ( nsid == 0 )
-					opts.Pid = this._pid++;//注意这里线程不安全
+				{
+					opts.Pid = this._pid++; //注意这里线程不安全
+					Logger.Log( $"send pid:{opts.Pid},msg:{message.GetMsgID()}" );
+				}
 
-				if ( rpcHandler != null )
+				if ( rpcEntry != null )
 				{
 					if ( this._pidToRPCEntries.ContainsKey( opts.Pid ) )
 						Logger.Warn( "message id collision!!" );
 					else
 					{
-						RPCEntry rpcEntry = new RPCEntry
-						{
-							pid = opts.Pid,
-							handler = rpcHandler,
-							time = 0
-						};
+						//rpcEntry.time = 0;
 						//记录回调函数
 						this._pidToRPCEntries[opts.Pid] = rpcEntry;
 						this._rpcEntries.Add( rpcEntry );
@@ -198,6 +196,7 @@ namespace Shared.Net
 			{
 				//去掉转发标记
 				//opts.Flag &= ~( uint ) Protos.MsgOpts.Types.Flag.Trans;
+
 				//后2位为转发目标
 				Protos.MsgOpts.Types.TransTarget transTarget = ( Protos.MsgOpts.Types.TransTarget )( ( opts.Flag >> 4 ) & 0xf );
 				//如果不是转发的目标
@@ -210,11 +209,13 @@ namespace Shared.Net
 			//是否RPC消息
 			if ( ( opts.Flag & ( 1 << ( int )Protos.MsgOpts.Types.Flag.Resp ) ) > 0 )
 			{
+				Logger.Log( $"recv pid:{opts.Rpid}, msg:{msgID}" );
 				if ( this._pidToRPCEntries.TryGetValue( opts.Rpid, out RPCEntry rpcEntry ) )
 				{
 					this._pidToRPCEntries.Remove( opts.Rpid );
 					this._rpcEntries.Remove( rpcEntry );
-					rpcEntry.handler( this, message );//调用回调函数
+					rpcEntry.handler( this, message, rpcEntry.args );//调用回调函数
+					RPCEntry.Push( rpcEntry );
 				}
 				else
 					Logger.Warn( $"RPC handler not found with message:{msgID}" );

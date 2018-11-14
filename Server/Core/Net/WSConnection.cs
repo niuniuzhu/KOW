@@ -47,11 +47,8 @@ namespace Core.Net
 
 		public override void Close()
 		{
-			lock ( this._lockObj )
-			{
-				this._handshakeComplete = false;
-				base.Close();
-			}
+			this._handshakeComplete = false;
+			base.Close();
 		}
 
 		public override bool Send( byte[] data, int offset, int size )
@@ -198,7 +195,7 @@ namespace Core.Net
 			// 判断是否为结束针
 			byte value = data[offset];
 			int isEof = value >> 7;
-			op = ( OPCode ) ( value & 0xf );
+			op = ( OPCode )( value & 0xf );
 			if ( op == OPCode.Close || op == OPCode.Ping || op == OPCode.Pong )
 				return null;
 			offset++;
@@ -207,7 +204,7 @@ namespace Core.Net
 			// 是否包含掩码
 			bool hasMask = value >> 7 > 0;
 			// 获取数据长度
-			ulong packageLength = ( ulong ) value & 0x7F;
+			ulong packageLength = ( ulong )value & 0x7F;
 			offset++;
 			// 存储数据
 			if ( packageLength == 126 )
@@ -234,14 +231,14 @@ namespace Core.Net
 			byte[] outData = new byte[packageLength];
 			if ( packageLength > int.MaxValue )
 				for ( ulong i = 0; i < packageLength; i++ )
-					outData[i] = data[i + ( ulong ) offset];
+					outData[i] = data[i + ( ulong )offset];
 			else
-				Buffer.BlockCopy( data, offset, outData, 0, ( int ) packageLength );
+				Buffer.BlockCopy( data, offset, outData, 0, ( int )packageLength );
 
 			if ( maskingKey != null )
 			{
 				for ( ulong i = 0; i < packageLength; i++ )
-					outData[i] = ( byte ) ( outData[i] ^ maskingKey[i % 4] );
+					outData[i] = ( byte )( outData[i] ^ maskingKey[i % 4] );
 			}
 			return outData;
 		}
@@ -249,25 +246,25 @@ namespace Core.Net
 		private static void MakeHeader( StreamBuffer inBuffer, byte[] data, int offset, int size, OPCode opCode )
 		{
 			const int fin = 1, rsv1 = 0, rsv2 = 0, rsv3 = 0;
-			int op = ( int ) opCode;
+			int op = ( int )opCode;
 			int ctrlFrame = op | rsv3 << 4 | rsv2 << 5 | rsv1 << 6 | fin << 7;
-			inBuffer.Write( ( byte ) ctrlFrame );
+			inBuffer.Write( ( byte )ctrlFrame );
 
 			//服务端不需要mask
 			if ( size > ushort.MaxValue )
 			{
-				inBuffer.Write( ( byte ) 127 );
-				byte[] lengthBytes = ( ( ulong ) size ).ToBigEndianBytes();
+				inBuffer.Write( ( byte )127 );
+				byte[] lengthBytes = ( ( ulong )size ).ToBigEndianBytes();
 				inBuffer.Write( lengthBytes, 0, lengthBytes.Length );
 			}
 			else if ( size > 125 )
 			{
-				inBuffer.Write( ( byte ) 126 );
-				byte[] lengthBytes = ( ( ushort ) size ).ToBigEndianBytes();
+				inBuffer.Write( ( byte )126 );
+				byte[] lengthBytes = ( ( ushort )size ).ToBigEndianBytes();
 				inBuffer.Write( lengthBytes, 0, lengthBytes.Length );
 			}
 			else
-				inBuffer.Write( ( byte ) size );
+				inBuffer.Write( ( byte )size );
 
 			inBuffer.Write( data, offset, size );
 		}

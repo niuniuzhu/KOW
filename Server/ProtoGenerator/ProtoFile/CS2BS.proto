@@ -17,8 +17,3 @@ message CS2BS_BattleInfo {
 	int32 connTimeout = 3;//连接超时时间
 	repeated CS2BS_PlayerInfo playerInfo = 4;//玩家信息
 }
-
-//回应战场结束
-message CS2BS_BattleEndRet {
-	MsgOpts opts = 1;
-}

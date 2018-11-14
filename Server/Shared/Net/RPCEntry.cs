@@ -1,4 +1,5 @@
-﻿using Google.Protobuf;
+﻿using Core.Misc;
+using Google.Protobuf;
 
 namespace Shared.Net
 {
@@ -6,7 +7,7 @@ namespace Shared.Net
 	/// RPC委托
 	/// </summary>
 	/// <param name="message">消息体</param>
-	public delegate void RPCHandler( NetSessionBase session, IMessage message );
+	public delegate void RPCHandler( NetSessionBase session, IMessage message, object[] args );
 
 	/// <summary>
 	/// RPC发生回调时的状态
@@ -17,19 +18,33 @@ namespace Shared.Net
 		Close,//连接断开
 	}
 
-	public class RPCEntry
+	public class RPCEntry : IPoolObject
 	{
-		/// <summary>
-		/// 消息ID
-		/// </summary>
-		public uint pid;
+		private static readonly ObjectPool<RPCEntry> POOL = new ObjectPool<RPCEntry>();
+
 		/// <summary>
 		/// 回调函数
 		/// </summary>
 		public RPCHandler handler;
 		/// <summary>
-		/// 生存时间
+		/// 携带参数
 		/// </summary>
-		public long time;
+		public object[] args;
+
+		public static RPCEntry Pop( RPCHandler handler, params object[] args )
+		{
+			RPCEntry rpcEntry = POOL.Pop();
+			rpcEntry.handler = handler;
+			rpcEntry.args = args;
+			return rpcEntry;
+		}
+
+		public static void Push( RPCEntry rpcEntry ) => POOL.Push( rpcEntry );
+
+		public void Clear()
+		{
+			this.handler = null;
+			this.args = null;
+		}
 	}
 }

@@ -35,9 +35,7 @@ namespace LoginServer.Net
 			if ( this._pingTime >= LS.instance.config.pingInterval )
 			{
 				this._pingTime = 0;
-				Protos.G_AskPing msg = ProtoCreator.Q_G_AskPing();
-				msg.Time = TimeUtils.utcTime;
-				this.Send( msg, LS.instance.bizProcessor.OnCSAskPingRet );
+				LS.instance.bizProcessor.PingCS( this );
 			}
 		}
 	}

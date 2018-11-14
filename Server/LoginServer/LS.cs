@@ -52,8 +52,8 @@ namespace LoginServer
 			( ( WSListener )this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket,
 																this.netSessionMgr.CreateClientSession ) )
 				.Start( this.config.cliPort/*, true, new X509Certificate2( "Config/server.pfx", "159753" )*/ );
-			this.netSessionMgr.CreateConnector<L2CSSession>( SessionType.ServerL2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 65535, 0 );
-			this.netSessionMgr.CreateConnector<L2DBSession>( SessionType.ServerL2DB, this.config.dbIP, this.config.dbPort, ProtoType.TCP, 65535, 0 );
+			this.netSessionMgr.CreateConnector<L2CSSession>( SessionType.ServerL2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 1024 * 1024, 0 );
+			this.netSessionMgr.CreateConnector<L2DBSession>( SessionType.ServerL2DB, this.config.dbIP, this.config.dbPort, ProtoType.TCP, 1024 * 1024, 0 );
 			this.redisWrapper.Connect( this.config.redisIP, this.config.redisPort, this.config.redisPwd );
 
 			return ErrorCode.Success;

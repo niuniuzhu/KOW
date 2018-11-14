@@ -30,7 +30,14 @@ namespace BattleServer.Biz
 			return ErrorCode.Success;
 		}
 
-		public void OnGSAskPingRet( NetSessionBase session, Google.Protobuf.IMessage message )
+		public void PingCS( NetSessionBase session )
+		{
+			Protos.G_AskPing msg = ProtoCreator.Q_G_AskPing();
+			msg.Time = TimeUtils.utcTime;
+			session.Send( msg, RPCEntry.Pop( OnGSAskPingRet ) );
+		}
+
+		private static void OnGSAskPingRet( NetSessionBase session, Google.Protobuf.IMessage message, object[] args )
 		{
 			long currTime = TimeUtils.utcTime;
 			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;

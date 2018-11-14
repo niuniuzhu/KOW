@@ -51,7 +51,7 @@ namespace Core.Net
 			}
 			try
 			{
-				this._socket.Listen( 32 );
+				this._socket.Listen( 64 );
 			}
 			catch ( SocketException e )
 			{
@@ -88,7 +88,7 @@ namespace Core.Net
 
 			if ( acceptEventArgs == null )
 			{
-				acceptEventArgs = new SocketAsyncEventArgs { RemoteEndPoint = new IPEndPoint( IPAddress.Any, 0 ) };
+				acceptEventArgs = new SocketAsyncEventArgs();
 				acceptEventArgs.Completed += this.OnAcceptComplete;
 			}
 			else

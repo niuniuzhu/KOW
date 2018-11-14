@@ -55,7 +55,7 @@
 
 		<root>
 			<level value="ALL" />
-			<appender-ref ref="ManagedColoredConsoleAppender" />
+			<!--<appender-ref ref="ManagedColoredConsoleAppender" />-->
 			<appender-ref ref="FileAppender" />
 			<appender-ref ref="RollingLogFileAppender" />
 		</root>

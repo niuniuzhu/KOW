@@ -154,15 +154,15 @@ namespace Shared.Net
 		/// </summary>
 		/// <param name="sessionID">session id</param>
 		/// <param name="msg">消息</param>
-		/// <param name="rpcHandler">rcp回调函数</param>
+		/// <param name="rpcEntry">RPC描述</param>
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
-		public bool Send( uint sessionID, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
+		public bool Send( uint sessionID, IMessage msg, RPCEntry rpcEntry = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine, ulong nsid = 0u )
 		{
 			INetSession session = this.GetSession( sessionID );
 			if ( session == null )
 				return false;
-			( ( NetSessionBase )session ).Send( msg, rpcHandler, transTarget, nsid );
+			( ( NetSessionBase )session ).Send( msg, rpcEntry, transTarget, nsid );
 			return true;
 		}
 
@@ -196,20 +196,21 @@ namespace Shared.Net
 		/// </summary>
 		/// <param name="sessionType">session类型</param>
 		/// <param name="msg">消息</param>
-		/// <param name="rpcHandler">rcp回调函数</param>
+		/// <param name="rpcEntry">RPC描述</param>
 		/// <param name="transTarget">转发目标</param>
 		/// <param name="nsid">转发的网络id</param>
 		/// <param name="all">是否在查询消息类型时对所有结果生效</param>
-		public bool Send( SessionType sessionType, IMessage msg, RPCHandler rpcHandler = null, Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine,
+		public bool Send( SessionType sessionType, IMessage msg, RPCEntry rpcEntry = null,
+						  Protos.MsgOpts.Types.TransTarget transTarget = Protos.MsgOpts.Types.TransTarget.Undefine,
 						  ulong nsid = 0u, bool all = true )
 		{
 			if ( !this._typeToSession.TryGetValue( sessionType, out List<NetSessionBase> sessions ) )
 				return false;
 			if ( !all )
-				sessions[0].Send( msg, rpcHandler, transTarget, nsid );
+				sessions[0].Send( msg, rpcEntry, transTarget, nsid );
 			else
 				foreach ( NetSessionBase session in sessions )
-					session.Send( msg, rpcHandler, transTarget, nsid );
+					session.Send( msg, rpcEntry, transTarget, nsid );
 			return true;
 		}
 

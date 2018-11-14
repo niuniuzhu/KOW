@@ -77,9 +77,11 @@ namespace GateServer
 		/// </summary>
 		public string LS()
 		{
+			SortedDictionary<ulong, uint> map = new SortedDictionary<ulong, uint>( this._gcNIDToSID );
 			StringBuilder sb = new StringBuilder();
 			foreach ( var kv in this._gcNIDToSID )
-				sb.AppendLine( $"{kv.Key}:{kv.Value}" );
+				sb.AppendLine( kv.Key.ToString() );
+			sb.AppendLine( $"count:{this.count}" );
 			return sb.ToString();
 		}
 	}

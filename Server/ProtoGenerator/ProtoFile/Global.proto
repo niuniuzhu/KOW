@@ -129,7 +129,6 @@ message Global{
 		"GC2LS_AskLogin": "LS2GC_AskLoginRet",
 		"GC2LS_AskSmartLogin": "LS2GC_AskLoginRet",
 		"GC2GS_AskLogin": "GS2GC_LoginRet",
-		"CS2GS_KickGC":"GS2CS_KickGCRet",
 		"GS2CS_GCAskLogin": "CS2GS_GCLoginRet",
 		"GC2BS_AskLogin": "BS2GC_LoginRet",
 		"LS2DB_QueryAccount":"DB2LS_QueryAccountRet",
@@ -137,7 +136,6 @@ message Global{
 		"LS2DB_Exec":"DB2LS_ExecRet",
 		"GC2CS_BeginMatch":"CS2GC_BeginMatchRet",
 		"CS2BS_BattleInfo":"BS2CS_BattleInfoRet",
-		"BS2CS_BattleEnd":"CS2BS_BattleEndRet",
 		"GC2BS_RequestSnapshot":"BS2GC_RequestSnapshotRet",
 		"GC2BS_RequestFrameActions":"BS2GC_RequestFrameActionsRet"
 	}

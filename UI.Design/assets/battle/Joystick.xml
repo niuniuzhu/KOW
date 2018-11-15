@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="201,200">
-  <displayList>
-    <image id="n0_p7qk" name="n0" src="v43z18" fileName="assets/yaogan01.png" xy="0,0"/>
-    <component id="n1_p7qk" name="n1" src="p7qk1h" fileName="Core.xml" xy="49,49" touchable="false"/>
-  </displayList>
-</component>

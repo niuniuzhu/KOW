@@ -1,5 +1,5 @@
 import { BaseEvent } from "./BaseEvent";
-import { Stack } from "../RC/Collections/Index";
+import { Stack } from "../../RC/Collections/Index";
 
 export class UIEvent extends BaseEvent {
 

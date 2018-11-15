@@ -1,19 +1,15 @@
-import { ISnapshotable } from "../ISnapshotable";
 import Queue from "../../RC/Collections/Queue";
-import { FrameAction } from "../FrameAction";
-import { Entity } from "./Entity";
-import { BattleInfo } from "../BattleInfo";
-import { Champion } from "./Champion";
 import * as $protobuf from "../../Libs/protobufjs";
-import { Logger } from "../../RC/Utils/Logger";
+import { ISnapshotable } from "../ISnapshotable";
+import { BattleInfo } from "../BattleInfo";
+import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
+import { SyncEvent } from "../Events/SyncEvent";
+import { EntityType } from "../EntityType";
+import { Entity } from "./Entity";
+import { Champion } from "./Champion";
 
 export class Battle implements ISnapshotable {
-	/**
-	 * 每帧追帧上限
-	 */
-	private static readonly MAX_FRAME_CHASE: number = 10;
-
 	private _frameRate: number = 0;
 	private _keyframeStep: number = 0;
 	private _timeout: number = 0;
@@ -46,8 +42,15 @@ export class Battle implements ISnapshotable {
 		this._mapID = battleInfo.mapID
 		this._msPerFrame = 1000 / this._frameRate;
 
+		//解码快照
 		const reader = $protobuf.Reader.create(battleInfo.snapshot);
 		this.DecodeSnapshot(reader);
+
+		//把初始状态同步到表现层
+		const writer = $protobuf.Writer.create();
+		this.EncodeSnapshot(writer);
+		const data = writer.finish();
+		SyncEvent.BattleInit(data);
 	}
 
 	/**
@@ -65,15 +68,30 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 反编码快照
+	 * 编码快照
+	 */
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		//设置当前战场的帧数为快照的帧数
+		writer.int32(this._frame);
+		const count = this._entities.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			entity.EncodeSnapshot(writer);
+		}
+	}
+
+	/**
+	 * 解码快照
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		//设置当前战场的帧数为快照的帧数
 		this._frame = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
+			const type = <EntityType>reader.int32();
 			const id = <Long>reader.uint64();
-			const entity = this.CreateChampion(id);
+			const entity = this.CreateEntity(type, id);
 			entity.DecodeSnapshot(reader);
 		}
 	}
@@ -81,18 +99,20 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 追赶服务端帧数
 	 */
-	public Chase(): void {
+	public Chase(updateView: boolean): void {
 		while (!this._frameActionGroups.isEmpty()) {
 			const frameActionGroup = this._frameActionGroups.dequeue();
 			let length = frameActionGroup.frame - this.frame;
 			while (length >= 0) {
 				if (length == 0) {
 					for (let i = 0; i < frameActionGroup.numActions; ++i) {
-						this.ApplyFrameAction(frameActionGroup[i]);
+						this.ApplyFrameAction();
 					}
 				}
 				else {
-					this.UpdateLogic(0, this._msPerFrame);
+					this.UpdateLogic(this._msPerFrame);
+					if (updateView)
+						this.SyncToView();
 				}
 				--length;
 			}
@@ -100,10 +120,13 @@ export class Battle implements ISnapshotable {
 		}
 	}
 
+	/**
+	 * 心跳更新
+	 * @param dt 上次更新到当前流逝的时间
+	 */
 	public Update(dt: number): void {
 		//追帧
-		this.Chase();
-
+		this.Chase(true);
 		this._realElapsed += dt;
 		if (this.frame < this._nextKeyFrame) {
 			this._logicElapsed += dt;
@@ -112,7 +135,8 @@ export class Battle implements ISnapshotable {
 				if (this.frame >= this._nextKeyFrame)
 					break;
 
-				this.UpdateLogic(this._realElapsed, this._msPerFrame);
+				this.UpdateLogic(this._msPerFrame);
+				this.SyncToView();
 
 				if (this.frame == this._nextKeyFrame) {
 					//todo send action
@@ -123,9 +147,12 @@ export class Battle implements ISnapshotable {
 		}
 	}
 
-	private UpdateLogic(rdt: number, dt: number): void {
+	/**
+	 * 更新逻辑帧
+	 * @param dt 上一帧到当前帧流逝的时间
+	 */
+	private UpdateLogic(dt: number): void {
 		++this._frame;
-		Logger.Log("f" + this._frame);
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
@@ -134,10 +161,20 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 把战场状态同步到表现层
+	 */
+	public SyncToView(): void {
+		const writer = $protobuf.Writer.create();
+		this.EncodeSnapshot(writer);
+		const data = writer.finish();
+		SyncEvent.Snapshot(data);
+	}
+
+	/**
 	 * 应用帧行为
 	 * @param frameAction 帧行为
 	 */
-	private ApplyFrameAction(frameAction: FrameAction): void {
+	private ApplyFrameAction(): void {
 	}
 
 	/**
@@ -159,10 +196,15 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 创建英雄
+	 * 创建实体
 	 */
-	public CreateChampion(id: Long): Champion {
-		const entity = new Champion();
+	public CreateEntity(type: EntityType, id: Long): Entity {
+		let entity: Entity;
+		switch (type) {
+			case EntityType.Champion:
+				entity = new Champion();
+				break;
+		}
 		entity.Init(id, this);
 		this._entities.push(entity);
 		this._idToEntity.set(entity.id, entity);

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Math/Vec2", "../../RC/FSM/FSM", "../FSM/EntityState", "../Attribute"], function (require, exports, Vec2_1, FSM_1, EntityState_1, Attribute_1) {
+define(["require", "exports", "../../RC/Math/Vec2", "../../RC/FSM/FSM", "../FSM/EntityState", "../Attribute", "../EntityType"], function (require, exports, Vec2_1, FSM_1, EntityState_1, Attribute_1, EntityType_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Entity {
@@ -12,6 +12,7 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/FSM/FSM", "../FSM/
             this._fsm.AddState(new EntityState_1.EntityState(EntityState_1.EntityState.Type.Attack, this));
             this._fsm.AddState(new EntityState_1.EntityState(EntityState_1.EntityState.Type.Die, this));
         }
+        get type() { return EntityType_1.EntityType.Undefined; }
         get id() { return this._id; }
         get battle() { return this._battle; }
         get actorID() { return this._actorID; }
@@ -23,6 +24,21 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/FSM/FSM", "../FSM/
             this._fsm.ChangeState(EntityState_1.EntityState.Type.Idle);
         }
         Dispose() {
+        }
+        EncodeSnapshot(writer) {
+            writer.int32(this.type);
+            writer.uint64(this._id);
+            writer.int32(this._actorID);
+            writer.string(this._name);
+            writer.float(this.position.x).float(this.position.y);
+            writer.float(this.direction.x).float(this.direction.y);
+            writer.int32(this._fsm.currentState.type);
+            writer.int32(this._fsm.currentState.time);
+            const count = this.attribute.count;
+            writer.int32(count);
+            this.attribute.Foreach((v, k, map) => {
+                writer.int32(k).float(v);
+            });
         }
         DecodeSnapshot(reader) {
             this._actorID = reader.int32();

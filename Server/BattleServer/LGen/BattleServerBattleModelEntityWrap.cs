@@ -65,8 +65,6 @@ namespace XLua.CSObjectWrap
 				if(LuaAPI.lua_gettop(L) == 1)
 				{
 					
-					BattleServer.Battle.Model.Entity __cl_gen_ret = new BattleServer.Battle.Model.Entity();
-					translator.Push(L, __cl_gen_ret);
                     
 					return 1;
 				}

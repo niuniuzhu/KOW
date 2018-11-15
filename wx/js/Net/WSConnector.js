@@ -60,10 +60,10 @@ export class WSConnector {
             opts.transid = nsid;
         if ((opts.flag & (1 << Protos.MsgOpts.Flag.RPC)) > 0) {
             if (nsid.eq(0))
-                opts.transid = nsid;
+                opts.pid = this._pid++;
             if (rpcHandler != null) {
                 if (this._rpcHandlers.has(opts.pid))
-                    Logger.Warn("packet id collision!!");
+                    Logger.Error("packet id collision!!");
                 this._rpcHandlers.set(opts.pid, rpcHandler);
             }
         }

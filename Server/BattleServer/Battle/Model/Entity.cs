@@ -9,8 +9,16 @@ using System.Collections;
 
 namespace BattleServer.Battle.Model
 {
-	public class Entity : ISnapshotable
+	public abstract class Entity : ISnapshotable
 	{
+		public enum Type
+		{
+			Undefined,
+			Champion,
+			Monster
+		}
+
+		public abstract Type type { get; }
 		public ulong id { get; protected set; }
 		public int actorID { get; protected set; }
 		public string name { get; protected set; }
@@ -84,6 +92,7 @@ namespace BattleServer.Battle.Model
 		/// </summary>
 		public virtual void EncodeSnapshot( Google.Protobuf.CodedOutputStream writer )
 		{
+			writer.WriteInt32( ( int )this.type );
 			writer.WriteUInt64( this.id );
 			writer.WriteInt32( this.actorID );
 			writer.WriteInt32( this.team );

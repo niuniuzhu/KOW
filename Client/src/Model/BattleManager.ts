@@ -51,10 +51,13 @@ export class BattleManager {
 		request.to = battleInfo.serverFrame;
 		Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
 			const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
+			//处理历史记录
 			this.HandleRequestFrameActionsRet(ret.frames, ret.actions);
-			//追赶服务端帧数
-			this._lBattle.Chase();
 			Logger.Log("battle start");
+			//追赶服务端帧数
+			this._lBattle.Chase(false);
+			//同步到表现层
+			this._lBattle.SyncToView();
 			//回调函数
 			completeHandler();
 		});
@@ -74,6 +77,7 @@ export class BattleManager {
 	private OnBattleEnd(message: any): void {
 		const battleEnd = <Protos.BS2GC_BattleEnd>message;
 		this._lBattle.End();
+		this._vBattle.End();
 		this._init = false;
 		Logger.Log("battle end");
 		Global.sceneManager.ChangeState(SceneManager.State.Main);

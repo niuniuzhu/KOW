@@ -20,8 +20,9 @@ define(["require", "exports", "./View/VBattle", "./Logic/Battle", "../Libs/proto
             Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestFrameActions, request, msg => {
                 const ret = msg;
                 this.HandleRequestFrameActionsRet(ret.frames, ret.actions);
-                this._lBattle.Chase();
                 Logger_1.Logger.Log("battle start");
+                this._lBattle.Chase(false);
+                this._lBattle.SyncToView();
                 completeHandler();
             });
         }
@@ -34,6 +35,7 @@ define(["require", "exports", "./View/VBattle", "./Logic/Battle", "../Libs/proto
         OnBattleEnd(message) {
             const battleEnd = message;
             this._lBattle.End();
+            this._vBattle.End();
             this._init = false;
             Logger_1.Logger.Log("battle end");
             Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);

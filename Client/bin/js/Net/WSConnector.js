@@ -60,7 +60,7 @@ define(["require", "exports", "./ByteUtils", "./MsgCenter", "../Libs/protos", ".
                     opts.pid = this._pid++;
                 if (rpcHandler != null) {
                     if (this._rpcHandlers.has(opts.pid))
-                        Logger_1.Logger.Warn("packet id collision!!");
+                        Logger_1.Logger.Error("packet id collision!!");
                     this._rpcHandlers.set(opts.pid, rpcHandler);
                 }
             }

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", "./Champion", "../../Libs/protobufjs", "../../RC/Utils/Logger", "../FrameActionGroup"], function (require, exports, Queue_1, FrameAction_1, Champion_1, $protobuf, Logger_1, FrameActionGroup_1) {
+define(["require", "exports", "../../RC/Collections/Queue", "../../Libs/protobufjs", "../FrameAction", "../FrameActionGroup", "../Events/SyncEvent", "../EntityType", "./Champion"], function (require, exports, Queue_1, $protobuf, FrameAction_1, FrameActionGroup_1, SyncEvent_1, EntityType_1, Champion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -29,6 +29,10 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             this._msPerFrame = 1000 / this._frameRate;
             const reader = $protobuf.Reader.create(battleInfo.snapshot);
             this.DecodeSnapshot(reader);
+            const writer = $protobuf.Writer.create();
+            this.EncodeSnapshot(writer);
+            const data = writer.finish();
+            SyncEvent_1.SyncEvent.BattleInit(data);
         }
         End() {
             const count = this._entities.length;
@@ -40,27 +44,39 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             this._realElapsed = 0;
             this._frameActionGroups.clear();
         }
+        EncodeSnapshot(writer) {
+            writer.int32(this._frame);
+            const count = this._entities.length;
+            writer.int32(count);
+            for (let i = 0; i < count; i++) {
+                const entity = this._entities[i];
+                entity.EncodeSnapshot(writer);
+            }
+        }
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
+                const type = reader.int32();
                 const id = reader.uint64();
-                const entity = this.CreateChampion(id);
+                const entity = this.CreateEntity(type, id);
                 entity.DecodeSnapshot(reader);
             }
         }
-        Chase() {
+        Chase(updateView) {
             while (!this._frameActionGroups.isEmpty()) {
                 const frameActionGroup = this._frameActionGroups.dequeue();
                 let length = frameActionGroup.frame - this.frame;
                 while (length >= 0) {
                     if (length == 0) {
                         for (let i = 0; i < frameActionGroup.numActions; ++i) {
-                            this.ApplyFrameAction(frameActionGroup[i]);
+                            this.ApplyFrameAction();
                         }
                     }
                     else {
-                        this.UpdateLogic(0, this._msPerFrame);
+                        this.UpdateLogic(this._msPerFrame);
+                        if (updateView)
+                            this.SyncToView();
                     }
                     --length;
                 }
@@ -68,14 +84,15 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             }
         }
         Update(dt) {
-            this.Chase();
+            this.Chase(true);
             this._realElapsed += dt;
             if (this.frame < this._nextKeyFrame) {
                 this._logicElapsed += dt;
                 while (this._logicElapsed >= this._msPerFrame) {
                     if (this.frame >= this._nextKeyFrame)
                         break;
-                    this.UpdateLogic(this._realElapsed, this._msPerFrame);
+                    this.UpdateLogic(this._msPerFrame);
+                    this.SyncToView();
                     if (this.frame == this._nextKeyFrame) {
                     }
                     this._realElapsed = 0;
@@ -83,16 +100,21 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
                 }
             }
         }
-        UpdateLogic(rdt, dt) {
+        UpdateLogic(dt) {
             ++this._frame;
-            Logger_1.Logger.Log("f" + this._frame);
             const count = this._entities.length;
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
                 entity.Update(dt);
             }
         }
-        ApplyFrameAction(frameAction) {
+        SyncToView() {
+            const writer = $protobuf.Writer.create();
+            this.EncodeSnapshot(writer);
+            const data = writer.finish();
+            SyncEvent_1.SyncEvent.Snapshot(data);
+        }
+        ApplyFrameAction() {
         }
         OnFrameAction(frame, data) {
             const fag = new FrameActionGroup_1.FrameActionGroup(frame);
@@ -106,15 +128,19 @@ define(["require", "exports", "../../RC/Collections/Queue", "../FrameAction", ".
             }
             this._frameActionGroups.enqueue(fag);
         }
-        CreateChampion(id) {
-            const entity = new Champion_1.Champion();
+        CreateEntity(type, id) {
+            let entity;
+            switch (type) {
+                case EntityType_1.EntityType.Champion:
+                    entity = new Champion_1.Champion();
+                    break;
+            }
             entity.Init(id, this);
             this._entities.push(entity);
             this._idToEntity.set(entity.id, entity);
             return entity;
         }
     }
-    Battle.MAX_FRAME_CHASE = 10;
     exports.Battle = Battle;
 });
 //# sourceMappingURL=Battle.js.map

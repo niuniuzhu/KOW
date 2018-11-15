@@ -44,7 +44,7 @@ export class Battle implements ISnapshotable {
 
 		//解码快照
 		const reader = $protobuf.Reader.create(battleInfo.snapshot);
-		this.DecodeSnapshot(reader);
+		this.InitSnapshot(reader);
 
 		//把初始状态同步到表现层
 		const writer = $protobuf.Writer.create();
@@ -65,59 +65,6 @@ export class Battle implements ISnapshotable {
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
 		this._frameActionGroups.clear();
-	}
-
-	/**
-	 * 编码快照
-	 */
-	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
-		//设置当前战场的帧数为快照的帧数
-		writer.int32(this._frame);
-		const count = this._entities.length;
-		writer.int32(count);
-		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			entity.EncodeSnapshot(writer);
-		}
-	}
-
-	/**
-	 * 解码快照
-	 */
-	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		//设置当前战场的帧数为快照的帧数
-		this._frame = reader.int32();
-		const count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			const type = <EntityType>reader.int32();
-			const id = <Long>reader.uint64();
-			const entity = this.CreateEntity(type, id);
-			entity.DecodeSnapshot(reader);
-		}
-	}
-
-	/**
-	 * 追赶服务端帧数
-	 */
-	public Chase(updateView: boolean): void {
-		while (!this._frameActionGroups.isEmpty()) {
-			const frameActionGroup = this._frameActionGroups.dequeue();
-			let length = frameActionGroup.frame - this.frame;
-			while (length >= 0) {
-				if (length == 0) {
-					for (let i = 0; i < frameActionGroup.numActions; ++i) {
-						this.ApplyFrameAction();
-					}
-				}
-				else {
-					this.UpdateLogic(this._msPerFrame);
-					if (updateView)
-						this.SyncToView();
-				}
-				--length;
-			}
-			this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
-		}
 	}
 
 	/**
@@ -161,6 +108,74 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 解码初始化快照
+	 */
+	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._frame = reader.int32();
+		const count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const type = <EntityType>reader.int32();
+			const id = <Long>reader.uint64();
+			const entity = this.CreateEntity(type, id);
+			entity.DecodeSnapshot(reader);
+		}
+	}
+
+	/**
+	 * 编码快照
+	 */
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		//设置当前战场的帧数为快照的帧数
+		writer.int32(this._frame);
+		const count = this._entities.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			entity.EncodeSnapshot(writer);
+		}
+	}
+
+	/**
+	 * 解码快照
+	 */
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._frame = reader.int32();
+		const count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const type = <EntityType>reader.int32();
+			const id = <Long>reader.uint64();
+			const entity = this.GetEntity(id);
+			if (entity == null)
+				continue;
+			entity.DecodeSnapshot(reader);
+		}
+	}
+
+	/**
+	 * 追赶服务端帧数
+	 */
+	public Chase(updateView: boolean): void {
+		while (!this._frameActionGroups.isEmpty()) {
+			const frameActionGroup = this._frameActionGroups.dequeue();
+			let length = frameActionGroup.frame - this.frame;
+			while (length >= 0) {
+				if (length == 0) {
+					for (let i = 0; i < frameActionGroup.numActions; ++i) {
+						this.ApplyFrameAction();
+					}
+				}
+				else {
+					this.UpdateLogic(this._msPerFrame);
+					if (updateView)
+						this.SyncToView();
+				}
+				--length;
+			}
+			this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
+		}
+	}
+
+	/**
 	 * 把战场状态同步到表现层
 	 */
 	public SyncToView(): void {
@@ -168,6 +183,28 @@ export class Battle implements ISnapshotable {
 		this.EncodeSnapshot(writer);
 		const data = writer.finish();
 		SyncEvent.Snapshot(data);
+	}
+
+	/**
+	 * 创建实体
+	 */
+	public CreateEntity(type: EntityType, id: Long): Entity {
+		let entity: Entity;
+		switch (type) {
+			case EntityType.Champion:
+				entity = new Champion();
+				break;
+			default:
+				throw new Error("not supported entity type:" + type);
+		}
+		entity.Init(id, this);
+		this._entities.push(entity);
+		this._idToEntity.set(entity.id, entity);
+		return entity;
+	}
+
+	public GetEntity(id: Long): Entity {
+		return this._idToEntity.get(id);
 	}
 
 	/**
@@ -193,21 +230,5 @@ export class Battle implements ISnapshotable {
 			fag.Add(frameAction);
 		}
 		this._frameActionGroups.enqueue(fag);
-	}
-
-	/**
-	 * 创建实体
-	 */
-	public CreateEntity(type: EntityType, id: Long): Entity {
-		let entity: Entity;
-		switch (type) {
-			case EntityType.Champion:
-				entity = new Champion();
-				break;
-		}
-		entity.Init(id, this);
-		this._entities.push(entity);
-		this._idToEntity.set(entity.id, entity);
-		return entity;
 	}
 }

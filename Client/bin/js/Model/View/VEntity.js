@@ -10,12 +10,19 @@ define(["require", "exports", "../../RC/FSM/FSM", "../FSM/VEntityState"], functi
             this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Die, this));
         }
         get id() { return this._id; }
+        get actorID() { return this._actorID; }
+        get team() { return this._team; }
+        get name() { return this._name; }
         Init(id, battle) {
             this._id = id;
             this._battle = battle;
             this._fsm.ChangeState(VEntityState_1.VEntityState.Type.Idle);
         }
         Dispose() {
+        }
+        InitSnapshot(reader) {
+        }
+        DecodeSnapshot(reader) {
         }
     }
     exports.VEntity = VEntity;

@@ -38,18 +38,34 @@ export class VBattle {
 	public Update(dt: number): void {
 	}
 
-	private OnBattleInit(baseEvent: BaseEvent): void {
-		const e = <SyncEvent>baseEvent;
-		const reader = $protobuf.Reader.create(e.data);
+	/**
+	 * 解码初始化快照
+	 */
+	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._logicFrame = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
+			const type = <EntityType>reader.int32();
 			const id = <Long>reader.uint64();
-
+			const entity = this.CreateEntity(type, id);
+			entity.InitSnapshot(reader);
 		}
 	}
 
-	private OnSnapshot(baseEvent: BaseEvent): void {
+	/**
+	 * 解码快照
+	 */
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._logicFrame = reader.int32();
+		const count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const type = <EntityType>reader.int32();
+			const id = <Long>reader.uint64();
+			const entity = this.GetEntity(id);
+			if (entity == null)
+				continue;
+			entity.DecodeSnapshot(reader);
+		}
 	}
 
 	/**
@@ -61,10 +77,32 @@ export class VBattle {
 			case EntityType.Champion:
 				entity = new VChampion();
 				break;
+			default:
+				throw new Error("not supported entity type:" + type);
 		}
 		entity.Init(id, this);
 		this._entities.push(entity);
 		this._idToEntity.set(entity.id, entity);
 		return entity;
+	}
+
+	/**
+	 * 获取指定ID的实体
+	 * @param id 实体ID
+	 */
+	public GetEntity(id: Long): VEntity {
+		return this._idToEntity.get(id);
+	}
+
+	private OnBattleInit(baseEvent: BaseEvent): void {
+		const e = <SyncEvent>baseEvent;
+		const reader = $protobuf.Reader.create(e.data);
+		this.InitSnapshot(reader);
+	}
+
+	private OnSnapshot(baseEvent: BaseEvent): void {
+		const e = <SyncEvent>baseEvent;
+		const reader = $protobuf.Reader.create(e.data);
+		//todo
 	}
 }

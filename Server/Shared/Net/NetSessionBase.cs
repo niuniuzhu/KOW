@@ -105,10 +105,7 @@ namespace Shared.Net
 			{
 				//只有rpc才写入序号
 				if ( nsid == 0 )
-				{
 					opts.Pid = this._pid++; //注意这里线程不安全
-					Logger.Log( $"send pid:{opts.Pid},msg:{message.GetMsgID()}" );
-				}
 
 				if ( rpcEntry != null )
 				{
@@ -191,7 +188,6 @@ namespace Shared.Net
 			//检查第一个字段是否Protos.MsgOpts类型
 			Protos.MsgOpts opts = message.GetMsgOpts();
 			System.Diagnostics.Debug.Assert( opts != null, "invalid msg options" );
-			Logger.Log( $"recv pid:{opts.Rpid}, msg:{msgID}" );
 
 			if ( ( opts.Flag & ( 1 << ( int )Protos.MsgOpts.Types.Flag.Trans ) ) > 0 ) //这是一条转发消息
 			{

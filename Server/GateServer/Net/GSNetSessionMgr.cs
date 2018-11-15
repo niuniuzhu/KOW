@@ -1,5 +1,4 @@
-﻿using Core.Misc;
-using Core.Net;
+﻿using Core.Net;
 using Google.Protobuf;
 using Protos;
 using Shared.Net;
@@ -27,10 +26,7 @@ namespace GateServer.Net
 		public bool SendToGC( ulong gcNID, IMessage msg, RPCEntry rpcEntry = null )
 		{
 			if ( !GS.instance.userMgr.GetSID( gcNID, out uint sid ) )
-			{
-				Logger.Warn( $"invalid gcNID:{gcNID}" );
 				return false;
-			}
 			this.Send( sid, msg, rpcEntry );
 			return true;
 		}

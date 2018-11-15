@@ -85,7 +85,7 @@ export class WSConnector {
 
 			if (rpcHandler != null) {
 				if (this._rpcHandlers.has(opts.pid))
-					Logger.Warn("packet id collision!!");
+					Logger.Error("packet id collision!!");
 				this._rpcHandlers.set(opts.pid, rpcHandler);
 			}
 		}

@@ -219,18 +219,6 @@ namespace LoginServer.Biz
 			}
 		}
 
-		private static void HandleLoginSuccess( Protos.LS2GC_AskLoginRet gcLoginRet, uint ukey, uint sid )
-		{
-			ulong gcNID = GuidHash.GetUInt64();
-			//通知cs,客户端登陆成功
-			Protos.LS2CS_GCLogin csLogin = ProtoCreator.Q_LS2CS_GCLogin();
-			csLogin.SessionID = gcNID;
-			csLogin.Ukey = ukey;
-
-			LS.instance.netSessionMgr.Send( SessionType.ServerL2CS, csLogin,
-											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, sid, gcNID ) );
-		}
-
 		private static void OnGCLoginCSRet( NetSessionBase session, Google.Protobuf.IMessage message, object[] args )
 		{
 			Protos.LS2GC_AskLoginRet gcLoginRet = ( Protos.LS2GC_AskLoginRet )args[0];
@@ -311,6 +299,9 @@ namespace LoginServer.Biz
 			return ErrorCode.Success;
 		}
 
+		/// <summary>
+		/// DB返回查询登陆结果
+		/// </summary>
 		private static void OnSmartQueryLoginRet( NetSessionBase session, Google.Protobuf.IMessage message, object[] args )
 		{
 			Protos.LS2GC_AskLoginRet gcLoginRet = ( Protos.LS2GC_AskLoginRet )args[0];
@@ -320,6 +311,7 @@ namespace LoginServer.Biz
 
 			Protos.DB2LS_QueryLoginRet queryLoginRet = ( Protos.DB2LS_QueryLoginRet )message;
 			gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult )queryLoginRet.Result;
+			//如果查询成功,写入redis缓存
 			if ( gcLoginRet.Result == Protos.LS2GC_AskLoginRet.Types.EResult.Success )
 			{
 				//从数据库取回ukey
@@ -330,9 +322,9 @@ namespace LoginServer.Biz
 					LS.instance.redisWrapper.HashSet( "unames", login.Name, string.Empty );
 					LS.instance.redisWrapper.HashSet( "ukeys", login.Name, ukey );
 				}
-				HandleLoginSuccess( gcLoginRet, sid, ukey );
+				HandleLoginSuccess( gcLoginRet, ukey, sid );
 			}
-			//数据库也查询失败
+			//数据库也查询失败,自动注册
 			else
 			{
 				//无需检测用户名的合法性和是否存在,进入该方法前已经判定
@@ -340,16 +332,20 @@ namespace LoginServer.Biz
 				Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
 				sqlExec.Cmd =
 					$"insert account_user( sdk,uname,pwd,last_login_time,last_login_ip ) values({login.Sdk}, \'{login.Name}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{remote}\');";
-				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, sqlExec, RPCEntry.Pop( OnSmartCheckAccount, gcLoginRet, sid, login.Name ) );
+				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, sqlExec, RPCEntry.Pop( OnSmartRegisterAccount, gcLoginRet, sid, login.Name ) );
 			}
 		}
 
-		private static void OnSmartCheckAccount( INetSession session, Google.Protobuf.IMessage message, object[] args )
+		/// <summary>
+		/// DB返回注册结果
+		/// </summary>
+		private static void OnSmartRegisterAccount( INetSession session, Google.Protobuf.IMessage message, object[] args )
 		{
 			Protos.LS2GC_AskLoginRet gcLoginRet = ( Protos.LS2GC_AskLoginRet )args[0];
 			uint sid = ( uint )args[1];
 			string uname = ( string )args[2];
 
+			//返回的消息
 			Protos.DB2LS_ExecRet sqlExecRet = ( Protos.DB2LS_ExecRet )message;
 			if ( sqlExecRet.Result == Protos.DB2LS_QueryResult.Success )
 			{
@@ -360,27 +356,33 @@ namespace LoginServer.Biz
 					redisWrapper.HashSet( "unames", uname, string.Empty );
 					redisWrapper.HashSet( "ukeys", uname, sqlExecRet.Id );
 				}
-				CheckAccountCallback( sqlExecRet, gcLoginRet, sid );
 			}
-			else
-				CheckAccountCallback( sqlExecRet, gcLoginRet, sid );
-		}
 
-		private static void CheckAccountCallback( Protos.DB2LS_ExecRet message, Protos.LS2GC_AskLoginRet gcLoginRet, uint sid )
-		{
-			uint ukey = message.Id;
-			if ( message.Result == Protos.DB2LS_QueryResult.Success )
+			uint ukey = sqlExecRet.Id;
+			if ( sqlExecRet.Result == Protos.DB2LS_QueryResult.Success )
 				HandleLoginSuccess( gcLoginRet, ukey, sid );
 			else
 			{
 				//这里不应该会失败,以防万一打印一些信息
-				Logger.Error( $"smart register occurs an error:{message}" );
-				gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult )message.Result;
+				Logger.Error( $"smart register occurs an error:{sqlExecRet}" );
+				gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult )sqlExecRet.Result;
 
 				//通知客户端登陆结果
 				LS.instance.netSessionMgr.Send( sid, gcLoginRet );
 				LS.instance.netSessionMgr.DelayCloseSession( sid, 500, "login complete" );
 			}
+		}
+
+		private static void HandleLoginSuccess( Protos.LS2GC_AskLoginRet gcLoginRet, uint ukey, uint sid )
+		{
+			ulong gcNID = GuidHash.GetUInt64();
+			//通知cs,客户端登陆成功
+			Protos.LS2CS_GCLogin csLogin = ProtoCreator.Q_LS2CS_GCLogin();
+			csLogin.SessionID = gcNID;
+			csLogin.Ukey = ukey;
+
+			LS.instance.netSessionMgr.Send( SessionType.ServerL2CS, csLogin,
+											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, sid, gcNID ) );
 		}
 
 		private bool CheckUsername( string uname )

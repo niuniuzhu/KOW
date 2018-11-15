@@ -77,13 +77,13 @@ export class ConnectionTest {
 				const resp: Protos.GS2GC_LoginRet = <Protos.GS2GC_LoginRet>message;
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
-						// if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
-						// 	//玩家处于战场,重新连接到BS
-						// 	this.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
-						// }
-						// else {
-						// 	this.BeginMatch();
-						// }
+						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
+							//玩家处于战场,重新连接到BS
+							this.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+						}
+						else {
+							this.BeginMatch();
+						}
 						break;
 					default:
 						Logger.Warn("failed:" + resp.result);
@@ -104,7 +104,7 @@ export class ConnectionTest {
 				case Protos.CS2GC_BeginMatchRet.EResult.Success:
 					//开始匹配成功
 					//这里不用判断是否满员,下发的房间玩家里不包含自己,会在PlayerJoin消息里通知
-					Logger.Log("begin match");
+					// Logger.Log("begin match");
 					break;
 				default:
 					Logger.Warn("failed:" + resp.result);

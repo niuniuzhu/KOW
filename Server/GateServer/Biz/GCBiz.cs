@@ -1,6 +1,5 @@
 ﻿using Core.Misc;
 using GateServer.Net;
-using Google.Protobuf;
 using Shared;
 using Shared.Net;
 
@@ -44,27 +43,27 @@ namespace GateServer.Biz
 			return ErrorCode.Success;
 		}
 
-		private static void OnCS2GSAskLoginRet( NetSessionBase session, IMessage message, object[] args )
+		private static void OnCS2GSAskLoginRet( NetSessionBase session, Google.Protobuf.IMessage message, object[] args )
 		{
 			uint sid = ( uint )args[0];
 			Protos.GC2GS_AskLogin login = ( Protos.GC2GS_AskLogin )args[1];
-
-			//检测客户端是否断线了
-			ClientSession gcSession = GS.instance.netSessionMgr.GetSession( sid ) as ClientSession;
-			if ( gcSession == null )
-			{
-				//通知CS客户端断开了
-				Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
-				gcLost.SessionID = login.SessionID;
-				GS.instance.netSessionMgr.Send( SessionType.ServerG2CS, gcLost );
-				return;
-			}
 
 			Protos.CS2GS_GCLoginRet csLoginRet = ( Protos.CS2GS_GCLoginRet )message;
 			Protos.GS2GC_LoginRet gsLoginRet = ProtoCreator.R_GC2GS_AskLogin( login.Opts.Pid );
 			switch ( csLoginRet.Result )
 			{
 				case Protos.CS2GS_GCLoginRet.Types.EResult.Success:
+					//检测客户端是否断线了
+					ClientSession gcSession = GS.instance.netSessionMgr.GetSession( sid ) as ClientSession;
+					if ( gcSession == null )
+					{
+						//通知CS客户端断开了
+						Protos.GS2CS_GCLost gcLost = ProtoCreator.Q_GS2CS_GCLost();
+						gcLost.SessionID = login.SessionID;
+						GS.instance.netSessionMgr.Send( SessionType.ServerG2CS, gcLost );
+						return;
+					}
+
 					//添加到管理器
 					GS.instance.userMgr.AddClient( login.SessionID, sid );
 

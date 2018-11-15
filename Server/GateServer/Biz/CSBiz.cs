@@ -19,7 +19,6 @@ namespace GateServer.Biz
 		public ErrorCode OnECs2GsKickGc( NetSessionBase session, IMessage message )
 		{
 			Protos.CS2GS_KickGC kickGC = ( Protos.CS2GS_KickGC )message;
-			Protos.GS2CS_KickGCRet kickGCRet = ProtoCreator.R_CS2GS_KickGC( kickGC.Opts.Pid );
 
 			//可能在收到消息前,客户端就断开了,这里必须容错
 			if ( GS.instance.userMgr.GetSID( kickGC.GcNID, out uint sid_ ) )
@@ -30,16 +29,9 @@ namespace GateServer.Biz
 				GS.instance.netSessionMgr.Send( sid_, kick );
 
 				//强制断开客户端
-				GS.instance.netSessionMgr.DelayCloseSession( sid_, 500, "CS Kick" );
+				GS.instance.netSessionMgr.CloseSession( sid_, "CS Kick" );
 
-				kickGCRet.Result = Protos.Global.Types.ECommon.Success;
 			}
-			else
-				kickGCRet.Result = Protos.Global.Types.ECommon.Failed;
-
-			//通知cs操作结果
-			session.Send( kickGCRet );
-
 			return ErrorCode.Success;
 		}
 

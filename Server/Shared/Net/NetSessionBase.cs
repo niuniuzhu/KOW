@@ -191,6 +191,7 @@ namespace Shared.Net
 			//检查第一个字段是否Protos.MsgOpts类型
 			Protos.MsgOpts opts = message.GetMsgOpts();
 			System.Diagnostics.Debug.Assert( opts != null, "invalid msg options" );
+			Logger.Log( $"recv pid:{opts.Rpid}, msg:{msgID}" );
 
 			if ( ( opts.Flag & ( 1 << ( int )Protos.MsgOpts.Types.Flag.Trans ) ) > 0 ) //这是一条转发消息
 			{
@@ -209,7 +210,6 @@ namespace Shared.Net
 			//是否RPC消息
 			if ( ( opts.Flag & ( 1 << ( int )Protos.MsgOpts.Types.Flag.Resp ) ) > 0 )
 			{
-				Logger.Log( $"recv pid:{opts.Rpid}, msg:{msgID}" );
 				if ( this._pidToRPCEntries.TryGetValue( opts.Rpid, out RPCEntry rpcEntry ) )
 				{
 					this._pidToRPCEntries.Remove( opts.Rpid );

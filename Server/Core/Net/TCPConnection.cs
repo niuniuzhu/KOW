@@ -31,7 +31,6 @@ namespace Core.Net
 
 		protected readonly SwitchQueue<StreamBuffer> _sendQueue = new SwitchQueue<StreamBuffer>();
 		protected readonly ThreadSafeObjectPool<StreamBuffer> _bufferPool = new ThreadSafeObjectPool<StreamBuffer>( 10, 5 );
-		protected bool _reading;
 
 		public TCPConnection( INetSession session )
 		{
@@ -57,7 +56,6 @@ namespace Core.Net
 				return;
 			if ( this.connected )
 			{
-				this.Flush();
 				try
 				{
 					this.socket.Shutdown( SocketShutdown.Both );
@@ -73,7 +71,18 @@ namespace Core.Net
 			this.activeTime = 0;
 			this._cache.Clear();
 			this._sendQueue.Clear();
-			this._reading = false;
+		}
+
+		public virtual bool Send( byte[] data, int offset, int size )
+		{
+			if ( this.socket == null || !this.connected )
+				return false;
+			StreamBuffer buffer = this._bufferPool.Pop();
+			//写入数据长度
+			buffer.Write( ( ushort )( size + TCPMsgEncoder.LENGTH_SIZE ) );
+			buffer.Write( data, offset, size );
+			this._sendQueue.Push( buffer );
+			return true;
 		}
 
 		public void StartReceive()
@@ -94,23 +103,8 @@ namespace Core.Net
 				this.ProcessReceive( this._recvEventArgs );
 		}
 
-		public virtual bool Send( byte[] data, int offset, int size )
-		{
-			if ( this.socket == null || !this.connected )
-				return false;
-			StreamBuffer buffer = this._bufferPool.Pop();
-			//写入数据长度
-			buffer.Write( ( ushort )( size + TCPMsgEncoder.LENGTH_SIZE ) );
-			buffer.Write( data, offset, size );
-			this._sendQueue.Push( buffer );
-			return true;
-		}
-
 		private void OnIOComplete( object sender, SocketAsyncEventArgs asyncEventArgs )
 		{
-			if ( this.socket == null )
-				return;
-
 			switch ( asyncEventArgs.LastOperation )
 			{
 				case SocketAsyncOperation.Receive:
@@ -156,25 +150,21 @@ namespace Core.Net
 			//写入缓冲区
 			this._cache.Write( recvEventArgs.Buffer, recvEventArgs.Offset, recvEventArgs.BytesTransferred );
 			//处理数据
-			if ( !this._reading )
-			{
-				this._reading = true;
-				this.ProcessData( this._cache );
-			}
+			this.ProcessData( this._cache );
 			//重新开始接收
 			this.StartReceive();
 		}
 
 		protected virtual void ProcessData( StreamBuffer cache )
 		{
-			do
+			while ( true )
 			{
 				if ( cache.length == 0 )
 					break;
 
 				//解码数据,返回解码后的数据长度
 				//完成解码后数据的包头(整个数据的长度)已经被剥离
-				int len = TCPMsgEncoder.Decode( cache.GetBuffer(), 0, cache.position, out byte[] data );
+				int len = TCPMsgEncoder.Decode( cache.GetBuffer(), 0, cache.length, out byte[] data );
 				if ( data == null )
 					break;
 
@@ -186,11 +176,7 @@ namespace Core.Net
 				netEvent.session = this.session;
 				netEvent.data = data;
 				NetworkMgr.instance.PushEvent( netEvent );
-
-				//缓冲区里可能还有未处理的数据,递归处理
-				this.ProcessData( cache );
-			} while ( false );
-			this._reading = false;
+			}
 		}
 
 		private void OnError( string error )
@@ -204,10 +190,10 @@ namespace Core.Net
 
 		public void Update( UpdateContext updateContext )
 		{
-			this.Flush();
+			this.ProcessSendQueue();
 		}
 
-		private void Flush()
+		private void ProcessSendQueue()
 		{
 			this._sendQueue.Switch();
 			while ( !this._sendQueue.isEmpty )

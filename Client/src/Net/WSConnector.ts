@@ -81,7 +81,7 @@ export class WSConnector {
 		{
 			//只有rpc才写入序号
 			if (nsid.eq(0))
-				opts.transid = nsid;
+				opts.pid = this._pid++;
 
 			if (rpcHandler != null) {
 				if (this._rpcHandlers.has(opts.pid))

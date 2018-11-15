@@ -62,6 +62,12 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
                     const resp = message;
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
+                            if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {
+                                this.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+                            }
+                            else {
+                                this.BeginMatch();
+                            }
                             break;
                         default:
                             Logger_1.Logger.Warn("failed:" + resp.result);
@@ -78,7 +84,6 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
                 const resp = message;
                 switch (resp.result) {
                     case protos_1.Protos.CS2GC_BeginMatchRet.EResult.Success:
-                        Logger_1.Logger.Log("begin match");
                         break;
                     default:
                         Logger_1.Logger.Warn("failed:" + resp.result);

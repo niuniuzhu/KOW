@@ -122,7 +122,6 @@ export namespace Protos {
         eGS2CS_ReportState = 3000,
         eGS2CS_GCAskLogin = 3001,
         eGS2CS_GCLost = 3002,
-        eGS2CS_KickGCRet = 3003,
         eGS2GC_LoginRet = 3100,
         eGS2GC_Kick = 3101,
         eBS2CS_ReportState = 4000,
@@ -140,7 +139,6 @@ export namespace Protos {
         eCS2GS_GCLoginRet = 5100,
         eCS2GS_KickGC = 5101,
         eCS2BS_BattleInfo = 5200,
-        eCS2BS_BattleEndRet = 5201,
         eCS2GC_BeginMatchRet = 5300,
         eCS2GC_PlayerJoin = 5301,
         eCS2GC_PlayerLeave = 5302,
@@ -435,24 +433,6 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleInfo;
         public static toObject(message: Protos.CS2BS_BattleInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
-    interface ICS2BS_BattleEndRet {
-        opts?: (Protos.IMsgOpts|null);
-    }
-
-    class CS2BS_BattleEndRet implements ICS2BS_BattleEndRet {
-        constructor(properties?: Protos.ICS2BS_BattleEndRet);
-        public opts?: (Protos.IMsgOpts|null);
-        public static create(properties?: Protos.ICS2BS_BattleEndRet): Protos.CS2BS_BattleEndRet;
-        public static encode(message: Protos.ICS2BS_BattleEndRet, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.ICS2BS_BattleEndRet, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2BS_BattleEndRet;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2BS_BattleEndRet;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleEndRet;
-        public static toObject(message: Protos.CS2BS_BattleEndRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
@@ -872,26 +852,6 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GS2CS_GCLost;
         public static toObject(message: Protos.GS2CS_GCLost, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
-    interface IGS2CS_KickGCRet {
-        opts?: (Protos.IMsgOpts|null);
-        result?: (Protos.Global.ECommon|null);
-    }
-
-    class GS2CS_KickGCRet implements IGS2CS_KickGCRet {
-        constructor(properties?: Protos.IGS2CS_KickGCRet);
-        public opts?: (Protos.IMsgOpts|null);
-        public result: Protos.Global.ECommon;
-        public static create(properties?: Protos.IGS2CS_KickGCRet): Protos.GS2CS_KickGCRet;
-        public static encode(message: Protos.IGS2CS_KickGCRet, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IGS2CS_KickGCRet, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GS2CS_KickGCRet;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GS2CS_KickGCRet;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.GS2CS_KickGCRet;
-        public static toObject(message: Protos.GS2CS_KickGCRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

@@ -251,7 +251,6 @@ namespace CentralServer.Match
 				return;
 			}
 
-
 			//从等待房间队列中移除,避免在通信期间有玩家搜索到该房间
 			Room roomCloned = room.Clone();
 			this.DestroyRoom( room );
@@ -271,7 +270,7 @@ namespace CentralServer.Match
 				};
 				battleInfo.PlayerInfo.Add( pi );
 			}
-			CS.instance.netSessionMgr.Send( appropriateBSInfo.lid, battleInfo, RPCEntry.Pop( OnBattleInfoRet, roomCloned,
+			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, RPCEntry.Pop( OnBattleInfoRet, roomCloned,
 																			 appropriateBSInfo.ip, appropriateBSInfo.port,
 																			 appropriateBSInfo.sessionID, appropriateBSInfo.lid ) );
 		}

@@ -73,7 +73,7 @@ namespace Core.Net
 
 		protected override void ProcessData( StreamBuffer cache )
 		{
-			do
+			while ( true )
 			{
 				if ( cache.length == 0 )
 					break;
@@ -83,6 +83,7 @@ namespace Core.Net
 					WSHttpRequest request = ProcessHandShakeData( cache.GetBuffer(), 0, cache.length, this.scheme );
 					if ( request == null )
 						break;
+
 					//Logger.Log( request );
 					string subProtocol = Negotiate( this.subProtocols, request.subProtocols );
 					byte[] responseData = ProcessHybi13Handshake( request, subProtocol );
@@ -91,14 +92,16 @@ namespace Core.Net
 
 					this._handshakeComplete = true;
 					this.SendWithoutHeader( responseData, 0, responseData.Length );
+
 					cache.Clear();
 
 					NetEvent netEvent = NetworkMgr.instance.PopEvent();
 					netEvent.type = NetEvent.Type.Establish;
 					netEvent.session = this.session;
 					NetworkMgr.instance.PushEvent( netEvent );
+
+					break;
 				}
-				else
 				{
 					byte[] data = ProcessClientData( cache.GetBuffer(), 0, cache.length, out OPCode op );
 					if ( data == null )
@@ -117,12 +120,8 @@ namespace Core.Net
 					netEvent.session = this.session;
 					netEvent.data = data;
 					NetworkMgr.instance.PushEvent( netEvent );
-
-					//缓冲区里可能还有未处理的数据,递归处理
-					this.ProcessData( cache );
 				}
-			} while ( false );
-			this._reading = false;
+			}
 		}
 
 		private static WSHttpRequest ProcessHandShakeData( byte[] data, int offset, int size, string scheme )
@@ -219,6 +218,9 @@ namespace Core.Net
 				packageLength = BitConverter.ToUInt64( data, offset );
 				offset += 8;
 			}
+			//判断数据长度是否满足
+			if ( ( ulong )size < packageLength )
+				return null;
 			// 存储4位掩码值
 			byte[] maskingKey = null;
 			if ( hasMask )

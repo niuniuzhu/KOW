@@ -57,7 +57,7 @@ define(["require", "exports", "./ByteUtils", "./MsgCenter", "../Libs/protos", ".
                 opts.transid = nsid;
             if ((opts.flag & (1 << protos_1.Protos.MsgOpts.Flag.RPC)) > 0) {
                 if (nsid.eq(0))
-                    opts.transid = nsid;
+                    opts.pid = this._pid++;
                 if (rpcHandler != null) {
                     if (this._rpcHandlers.has(opts.pid))
                         Logger_1.Logger.Warn("packet id collision!!");

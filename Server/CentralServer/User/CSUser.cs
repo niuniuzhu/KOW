@@ -108,6 +108,6 @@ namespace CentralServer.User
 			this.bsLID = 0;
 		}
 
-		public override string ToString() => $"ukey:{this.ukey},gcNID:{this.gcNID}";
+		public override string ToString() => $"ukey:{this.ukey},gcNID:{this.gcNID},online:{this.isConnected}";
 	}
 }

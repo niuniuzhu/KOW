@@ -550,7 +550,6 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[3000] = "eGS2CS_ReportState"] = 3000;
         values[valuesById[3001] = "eGS2CS_GCAskLogin"] = 3001;
         values[valuesById[3002] = "eGS2CS_GCLost"] = 3002;
-        values[valuesById[3003] = "eGS2CS_KickGCRet"] = 3003;
         values[valuesById[3100] = "eGS2GC_LoginRet"] = 3100;
         values[valuesById[3101] = "eGS2GC_Kick"] = 3101;
         values[valuesById[4000] = "eBS2CS_ReportState"] = 4000;
@@ -568,7 +567,6 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[5100] = "eCS2GS_GCLoginRet"] = 5100;
         values[valuesById[5101] = "eCS2GS_KickGC"] = 5101;
         values[valuesById[5200] = "eCS2BS_BattleInfo"] = 5200;
-        values[valuesById[5201] = "eCS2BS_BattleEndRet"] = 5201;
         values[valuesById[5300] = "eCS2GC_BeginMatchRet"] = 5300;
         values[valuesById[5301] = "eCS2GC_PlayerJoin"] = 5301;
         values[valuesById[5302] = "eCS2GC_PlayerLeave"] = 5302;
@@ -2164,98 +2162,6 @@ export const Protos = $root.Protos = (() => {
         };
 
         return CS2BS_BattleInfo;
-    })();
-
-    Protos.CS2BS_BattleEndRet = (function() {
-
-        function CS2BS_BattleEndRet(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        CS2BS_BattleEndRet.prototype.opts = null;
-
-        CS2BS_BattleEndRet.create = function create(properties) {
-            return new CS2BS_BattleEndRet(properties);
-        };
-
-        CS2BS_BattleEndRet.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            return writer;
-        };
-
-        CS2BS_BattleEndRet.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        CS2BS_BattleEndRet.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_BattleEndRet();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        CS2BS_BattleEndRet.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        CS2BS_BattleEndRet.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
-                if (error)
-                    return "opts." + error;
-            }
-            return null;
-        };
-
-        CS2BS_BattleEndRet.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.CS2BS_BattleEndRet)
-                return object;
-            let message = new $root.Protos.CS2BS_BattleEndRet();
-            if (object.opts != null) {
-                if (typeof object.opts !== "object")
-                    throw TypeError(".Protos.CS2BS_BattleEndRet.opts: object expected");
-                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-            }
-            return message;
-        };
-
-        CS2BS_BattleEndRet.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.opts = null;
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            return object;
-        };
-
-        CS2BS_BattleEndRet.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return CS2BS_BattleEndRet;
     })();
 
     Protos.CS2GC_BeginMatchRet = (function() {
@@ -4614,126 +4520,6 @@ export const Protos = $root.Protos = (() => {
         };
 
         return GS2CS_GCLost;
-    })();
-
-    Protos.GS2CS_KickGCRet = (function() {
-
-        function GS2CS_KickGCRet(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        GS2CS_KickGCRet.prototype.opts = null;
-        GS2CS_KickGCRet.prototype.result = 0;
-
-        GS2CS_KickGCRet.create = function create(properties) {
-            return new GS2CS_KickGCRet(properties);
-        };
-
-        GS2CS_KickGCRet.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.result != null && message.hasOwnProperty("result"))
-                writer.uint32(16).int32(message.result);
-            return writer;
-        };
-
-        GS2CS_KickGCRet.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        GS2CS_KickGCRet.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2CS_KickGCRet();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                    break;
-                case 2:
-                    message.result = reader.int32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        GS2CS_KickGCRet.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        GS2CS_KickGCRet.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
-                if (error)
-                    return "opts." + error;
-            }
-            if (message.result != null && message.hasOwnProperty("result"))
-                switch (message.result) {
-                default:
-                    return "result: enum value expected";
-                case 0:
-                case 1:
-                    break;
-                }
-            return null;
-        };
-
-        GS2CS_KickGCRet.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.GS2CS_KickGCRet)
-                return object;
-            let message = new $root.Protos.GS2CS_KickGCRet();
-            if (object.opts != null) {
-                if (typeof object.opts !== "object")
-                    throw TypeError(".Protos.GS2CS_KickGCRet.opts: object expected");
-                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-            }
-            switch (object.result) {
-            case "Success":
-            case 0:
-                message.result = 0;
-                break;
-            case "Failed":
-            case 1:
-                message.result = 1;
-                break;
-            }
-            return message;
-        };
-
-        GS2CS_KickGCRet.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.opts = null;
-                object.result = options.enums === String ? "Success" : 0;
-            }
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.result != null && message.hasOwnProperty("result"))
-                object.result = options.enums === String ? $root.Protos.Global.ECommon[message.result] : message.result;
-            return object;
-        };
-
-        GS2CS_KickGCRet.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return GS2CS_KickGCRet;
     })();
 
     Protos.DB2LS_QueryResult = (function() {

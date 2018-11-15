@@ -38,7 +38,6 @@ enum MsgID {
 	eGS2CS_ReportState = 3000;
 	eGS2CS_GCAskLogin = 3001;
 	eGS2CS_GCLost = 3002;
-	eGS2CS_KickGCRet = 3003;
 
 	eGS2GC_LoginRet = 3100;
 	eGS2GC_Kick = 3101;
@@ -64,7 +63,6 @@ enum MsgID {
 	eCS2GS_KickGC = 5101;
 
 	eCS2BS_BattleInfo = 5200;
-	eCS2BS_BattleEndRet = 5201;
 
 	eCS2GC_BeginMatchRet = 5300;
 	eCS2GC_PlayerJoin = 5301;

@@ -63,8 +63,6 @@ namespace CentralServer.Biz
 			//移除指定BS里指定战场里的所有玩家
 			CS.instance.battleStaging.Remove( session.logicID, battleEnd.Bid );
 			//todo 战斗结算
-			Protos.CS2BS_BattleEndRet ret = ProtoCreator.R_BS2CS_BattleEnd( battleEnd.Opts.Pid );
-			session.Send( ret );
 			return ErrorCode.Success;
 		}
 	}

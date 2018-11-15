@@ -26,7 +26,7 @@ namespace Shared.Net
 		{
 			bool shouldBlock = this._accreditedMsgID != msgID && !this.accredited;
 			if ( shouldBlock )
-				this.Close( true, "illegal session" );
+				this.Close( true, $"illegal session, msgID:{msgID}" );
 			return shouldBlock;
 		}
 

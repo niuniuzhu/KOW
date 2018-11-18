@@ -1,4 +1,3 @@
-import { UIBattle } from "./UIBattle";
 import { Joystick } from "./Joystick";
 import { Vec2 } from "../RC/Math/Vec2";
 
@@ -17,12 +16,17 @@ export class GestureState {
 		if (this._joystick != null) {
 			this._joystick.touchable = false;
 			this._joystick.radius = this._joystick.width * 0.5;
-			this._joystick.resetDuration = 0.2;
-			this._joystick.onChanged = this.onChanged;
 		}
 	}
 
-	public onChanged: (vec: Vec2) => void;
+	public set onChanged(value: (vev: Vec2) => void) {
+		if (this._joystick != null) {
+			this._joystick.onChanged = value;
+		}
+	}
+
+	public showDuration: number = 20;
+	public hideDuration: number = 50;
 
 	private _joystick: Joystick;
 	private _active: boolean;
@@ -35,7 +39,7 @@ export class GestureState {
 	}
 
 	public Dispose(): void {
-		this._joystick.dispose
+		this._joystick.dispose();
 		this._joystick = null;
 	}
 
@@ -53,23 +57,23 @@ export class GestureState {
 	public OnDrag(px: number, py: number): void {
 		this._active = true;
 		this.ShowJoystick(this._touchPosition);
-		let point: laya.maths.Point;
+		let point = new laya.maths.Point();
 		this._joystick.globalToLocal(px, py, point);
 		this._joystick.touchPosition = new Vec2(point.x, point.y);
 	}
 
 	private ShowJoystick(point: Vec2): void {
 		this._joystick.visible = true;
-		let point2: laya.maths.Point;
+		let point2 = new laya.maths.Point();
 		this._joystick.parent.globalToLocal(point.x, point.y, point2);
 		this._joystick.x = point2.x - this._joystick.width * 0.5;
 		this._joystick.y = point2.y - this._joystick.height * 0.5;
-		this._tween.to(this._joystick.sprite, { alpha: 1 }, 0.2, laya.utils.Ease.quadOut);
+		this._tween.to(this._joystick.sprite, { alpha: 1 }, this.showDuration);
 	}
 
 	private HideJoystick(): void {
-		this._joystick.Reset(true);
-		this._tween.to(this._joystick.sprite, { alpha: 0 }, 0.2, laya.utils.Ease.quadOut, Laya.Handler.create(this, this.OnJoystickHideComplete));
+		this._joystick.Reset();
+		this._tween.to(this._joystick.sprite, { alpha: 0 }, this.hideDuration, laya.utils.Ease.linearInOut, Laya.Handler.create(this, this.OnJoystickHideComplete));
 	}
 
 	private OnJoystickHideComplete(): void {

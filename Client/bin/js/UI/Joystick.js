@@ -6,30 +6,32 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
             super();
             this.radius = 100;
             this.cen = Vec2_1.Vec2.zero;
-            this.resetDuration = 1;
+            this.resetDuration = 60;
             this._axis = Vec2_1.Vec2.zero;
             this.draggable = true;
             this._tween = new laya.utils.Tween();
         }
-        set touchPosition(value) { this.axis = value.Sub(this.cen); }
+        set touchPosition(value) { this.axis = Vec2_1.Vec2.Sub(value, this.cen); }
         get axis() { return this._axis; }
         set axis(value) {
             const length = value.Magnitude();
-            const normalAxis = length < 0.0001 ? Vec2_1.Vec2.zero : value.DivN(length);
-            if (this._core != null) {
+            const normalAxis = length < 0.0001 ? Vec2_1.Vec2.zero : Vec2_1.Vec2.DivN(value, length);
+            if (this.core != null) {
                 let touchAxis = value;
                 if (touchAxis.SqrMagnitude() >= this.radius * this.radius)
-                    touchAxis = normalAxis.MulN(this.radius);
-                this._core.x = touchAxis.x + this.cen.x;
-                this._core.y = touchAxis.y + this.cen.y;
+                    touchAxis = Vec2_1.Vec2.MulN(normalAxis, this.radius);
+                this.core.x = touchAxis.x + this.cen.x;
+                this.core.y = touchAxis.y + this.cen.y;
             }
             if (this._axis == normalAxis)
                 return;
             this._axis = normalAxis;
-            this.onChanged(this._axis);
+            if (this.onChanged != null)
+                this.onChanged(this._axis);
         }
         get worldAxis() {
-            let point;
+            let point = new laya.maths.Point();
+            ;
             this.localToGlobal(this._axis.x, this._axis.y, point);
             return new Vec2_1.Vec2(point.x, point.y);
         }
@@ -37,7 +39,6 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
         constructFromXML(xml) {
             super.constructFromXML(xml);
             this.cen = new Vec2_1.Vec2(this.width * 0.5, this.height * 0.5);
-            this.displayObject.on(laya.events.Event.MOUSE_DOWN, this, this.OnPointerDown);
         }
         dispose() {
             this._tween.clear();
@@ -52,18 +53,9 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
             }
         }
         SetAxis(position) {
-            let point;
+            let point = new laya.maths.Point();
             this.globalToLocal(position.x, position.y, point);
             this.touchPosition = new Vec2_1.Vec2(point.x, point.y);
-        }
-        OnPointerDown(e) {
-            this.SetAxis(new Vec2_1.Vec2(e.stageX, e.stageY));
-        }
-        OnDrag(e) {
-            this.SetAxis(new Vec2_1.Vec2(e.stageX, e.stageY));
-        }
-        OnPointerUp(e) {
-            this.Reset(true);
         }
     }
     exports.Joystick = Joystick;

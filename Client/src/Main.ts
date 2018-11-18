@@ -86,6 +86,7 @@ export class Main {
 		const dt = Laya.timer.delta;
 		Global.connector.Update(dt);
 		Global.sceneManager.Update(dt);
+		Global.battleManager.Update(dt);
 	}
 
 	private OnResize(e: laya.events.Event): void {

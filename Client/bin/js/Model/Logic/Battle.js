@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Collections/Queue", "../../Libs/protobufjs", "../FrameAction", "../FrameActionGroup", "../Events/SyncEvent", "../EntityType", "./Champion"], function (require, exports, Queue_1, $protobuf, FrameAction_1, FrameActionGroup_1, SyncEvent_1, EntityType_1, Champion_1) {
+define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Queue", "../../RC/Utils/Logger", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, $protobuf, Queue_1, Logger_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -21,7 +21,7 @@ define(["require", "exports", "../../RC/Collections/Queue", "../../Libs/protobuf
         get timeout() { return this._timeout; }
         get mapID() { return this._mapID; }
         get frame() { return this._frame; }
-        Init(battleInfo) {
+        SetBattleInfo(battleInfo) {
             this._frameRate = battleInfo.frameRate;
             this._keyframeStep = battleInfo.keyframeStep;
             this._timeout = battleInfo.battleTime;
@@ -106,9 +106,7 @@ define(["require", "exports", "../../RC/Collections/Queue", "../../Libs/protobuf
                 let length = frameActionGroup.frame - this.frame;
                 while (length >= 0) {
                     if (length == 0) {
-                        for (let i = 0; i < frameActionGroup.numActions; ++i) {
-                            this.ApplyFrameAction();
-                        }
+                        this.ApplyFrameActionGroup(frameActionGroup);
                     }
                     else {
                         this.UpdateLogic(this._msPerFrame);
@@ -143,7 +141,13 @@ define(["require", "exports", "../../RC/Collections/Queue", "../../Libs/protobuf
         GetEntity(id) {
             return this._idToEntity.get(id);
         }
-        ApplyFrameAction() {
+        ApplyFrameActionGroup(frameActionGroup) {
+            for (let i = 0; i < frameActionGroup.numActions; i++) {
+                this.ApplyFrameAction(frameActionGroup.Get(i));
+            }
+        }
+        ApplyFrameAction(frameAction) {
+            Logger_1.Logger.Log(frameAction.dx + ":" + frameAction.dy);
         }
         OnFrameAction(frame, data) {
             const fag = new FrameActionGroup_1.FrameActionGroup(frame);

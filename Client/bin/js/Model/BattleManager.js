@@ -1,4 +1,4 @@
-define(["require", "exports", "./View/VBattle", "./Logic/Battle", "../Libs/protos", "../Net/Connector", "../RC/Utils/Logger", "../Scene/SceneManager", "../Net/ProtoHelper", "../Global"], function (require, exports, VBattle_1, Battle_1, protos_1, Connector_1, Logger_1, SceneManager_1, ProtoHelper_1, Global_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Utils/Logger", "../Scene/SceneManager", "./Logic/Battle", "./View/VBattle"], function (require, exports, Global_1, protos_1, Connector_1, ProtoHelper_1, Logger_1, SceneManager_1, Battle_1, VBattle_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleManager {
@@ -11,8 +11,8 @@ define(["require", "exports", "./View/VBattle", "./Logic/Battle", "../Libs/proto
             this._vBattle = new VBattle_1.VBattle();
         }
         SetBattleInfo(battleInfo, completeHandler) {
-            this._lBattle.Init(battleInfo);
-            this._vBattle.Init(battleInfo);
+            this._lBattle.SetBattleInfo(battleInfo);
+            this._vBattle.SetBattleInfo(battleInfo);
             this._init = true;
             const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestFrameActions();
             request.from = this._lBattle.frame;

@@ -1,11 +1,11 @@
-import { ISnapshotable } from "../ISnapshotable";
-import { Battle } from "./Battle";
-import { Vec2 } from "../../RC/Math/Vec2";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
-import { EntityState } from "../FSM/EntityState";
+import { Vec2 } from "../../RC/Math/Vec2";
 import { Attribute } from "../Attribute";
 import { EntityType } from "../EntityType";
+import { EntityState } from "../FSM/EntityState";
+import { ISnapshotable } from "../ISnapshotable";
+import { Battle } from "./Battle";
 
 export class Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Undefined; }
@@ -25,7 +25,7 @@ export class Entity implements ISnapshotable {
 	private _team: number;
 	private _name: string;
 
-	private _fsm: FSM = new FSM();
+	private readonly _fsm: FSM = new FSM();
 
 	constructor() {
 		this._fsm.AddState(new EntityState(EntityState.Type.Idle, this));
@@ -51,16 +51,17 @@ export class Entity implements ISnapshotable {
 		writer.int32(this.type);
 		writer.uint64(this._id);
 		writer.int32(this._actorID);
+		writer.int32(this._team);
 		writer.string(this._name);
-		writer.float(this.position.x).float(this.position.y)
-		writer.float(this.direction.x).float(this.direction.y)
+		writer.float(this.position.x).float(this.position.y);
+		writer.float(this.direction.x).float(this.direction.y);
 		writer.int32(this._fsm.currentState.type);
 		writer.int32((<EntityState>this._fsm.currentState).time);
 		const count = this.attribute.count;
 		writer.int32(count);
 		this.attribute.Foreach((v, k, map) => {
 			writer.int32(k).float(v);
-		})
+		});
 	}
 
 	/**

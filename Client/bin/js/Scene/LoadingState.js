@@ -1,4 +1,4 @@
-define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../Net/Connector", "../Libs/protos", "../RC/Utils/Logger", "../Net/ProtoHelper", "../Global", "./SceneManager"], function (require, exports, SceneState_1, BattleInfo_1, Connector_1, protos_1, Logger_1, ProtoHelper_1, Global_1, SceneManager_1) {
+define(["require", "exports", "../Libs/protobufjs", "./SceneState", "../Model/BattleInfo", "../Net/Connector", "../Libs/protos", "../RC/Utils/Logger", "../Net/ProtoHelper", "../Global", "./SceneManager", "../Consts"], function (require, exports, $protobuf, SceneState_1, BattleInfo_1, Connector_1, protos_1, Logger_1, ProtoHelper_1, Global_1, SceneManager_1, Consts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoadingState extends SceneState_1.SceneState {
@@ -54,15 +54,25 @@ define(["require", "exports", "./SceneState", "../Model/BattleInfo", "../Net/Con
                 this._battleInfo.reqFrame = ret.reqFrame;
                 this._battleInfo.serverFrame = ret.curFrame;
                 this._battleInfo.snapshot = ret.snapshot;
-                this.LoadAssets();
+                this.LoadAssets(this._battleInfo);
             });
         }
-        LoadAssets() {
+        LoadAssets(battleInfo) {
             if (this._assetsLoadComplete) {
                 this.InitBattle();
             }
             else {
                 const urls = [];
+                const reader = $protobuf.Reader.create(battleInfo.snapshot);
+                reader.int32();
+                const count = reader.int32();
+                for (let i = 0; i < count; i++) {
+                    reader.int32();
+                    reader.uint64();
+                    const actorID = reader.uint32();
+                    urls.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_ENTITY_PREFIX + actorID + ".config.json", type: Laya.Loader.JSON });
+                    urls.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_ENTITY_PREFIX + actorID + ".atlas", type: Laya.Loader.ATLAS });
+                }
                 urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
                 urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
                 Laya.loader.load(urls, Laya.Handler.create(this, () => {

@@ -1,12 +1,12 @@
-import { VBattle } from "./View/VBattle";
-import { Battle } from "./Logic/Battle";
+import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
+import { ProtoCreator } from "../Net/ProtoHelper";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { BattleInfo } from "./BattleInfo";
-import { ProtoCreator } from "../Net/ProtoHelper";
-import { Global } from "../Global";
+import { Battle } from "./Logic/Battle";
+import { VBattle } from "./View/VBattle";
 
 /**
  * 战场管理器
@@ -41,8 +41,8 @@ export class BattleManager {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo, completeHandler: () => void): void {
-		this._lBattle.Init(battleInfo);
-		this._vBattle.Init(battleInfo);
+		this._lBattle.SetBattleInfo(battleInfo);
+		this._vBattle.SetBattleInfo(battleInfo);
 		this._init = true;
 
 		//请求帧行为历史记录

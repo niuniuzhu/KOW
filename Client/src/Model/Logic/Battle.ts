@@ -1,13 +1,14 @@
-import Queue from "../../RC/Collections/Queue";
 import * as $protobuf from "../../Libs/protobufjs";
-import { ISnapshotable } from "../ISnapshotable";
+import Queue from "../../RC/Collections/Queue";
+import { Logger } from "../../RC/Utils/Logger";
 import { BattleInfo } from "../BattleInfo";
+import { EntityType } from "../EntityType";
+import { SyncEvent } from "../Events/SyncEvent";
 import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
-import { SyncEvent } from "../Events/SyncEvent";
-import { EntityType } from "../EntityType";
-import { Entity } from "./Entity";
+import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
+import { Entity } from "./Entity";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -32,10 +33,10 @@ export class Battle implements ISnapshotable {
 	private readonly _idToEntity: Map<Long, Entity> = new Map<Long, Entity>();
 
 	/**
-	 * 初始化
+	 * 设置战场信息
 	 * @param battleInfo 战场信息
 	 */
-	public Init(battleInfo: BattleInfo): void {
+	public SetBattleInfo(battleInfo: BattleInfo): void {
 		this._frameRate = battleInfo.frameRate;
 		this._keyframeStep = battleInfo.keyframeStep;
 		this._timeout = battleInfo.battleTime;
@@ -160,9 +161,7 @@ export class Battle implements ISnapshotable {
 			let length = frameActionGroup.frame - this.frame;
 			while (length >= 0) {
 				if (length == 0) {
-					for (let i = 0; i < frameActionGroup.numActions; ++i) {
-						this.ApplyFrameAction();
-					}
+					this.ApplyFrameActionGroup(frameActionGroup);
 				}
 				else {
 					this.UpdateLogic(this._msPerFrame);
@@ -211,7 +210,14 @@ export class Battle implements ISnapshotable {
 	 * 应用帧行为
 	 * @param frameAction 帧行为
 	 */
-	private ApplyFrameAction(): void {
+	private ApplyFrameActionGroup(frameActionGroup: FrameActionGroup): void {
+		for (let i = 0; i < frameActionGroup.numActions; i++) {
+			this.ApplyFrameAction(frameActionGroup.Get(i));
+		}
+	}
+
+	private ApplyFrameAction(frameAction: FrameAction): void {
+		Logger.Log(frameAction.dx + ":" + frameAction.dy);
 	}
 
 	/**

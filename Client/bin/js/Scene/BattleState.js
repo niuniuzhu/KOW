@@ -13,6 +13,7 @@ define(["require", "exports", "./SceneState", "../Global"], function (require, e
             super.OnExit();
         }
         OnUpdate(dt) {
+            super.OnUpdate(dt);
         }
     }
     exports.BattleState = BattleState;

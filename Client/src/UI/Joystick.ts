@@ -3,20 +3,19 @@ import { Vec2 } from "../RC/Math/Vec2";
 export class Joystick extends fairygui.GComponent {
 	public radius: number = 100;
 	public cen: Vec2 = Vec2.zero;
-	public resetDuration: number = 1;
-	public set touchPosition(value: Vec2) { this.axis = value.Sub(this.cen); }
+	public resetDuration: number = 60;
+	public set touchPosition(value: Vec2) { this.axis = Vec2.Sub(value, this.cen); }
 	public get axis(): Vec2 { return this._axis; }
 	public set axis(value: Vec2) {
 		const length = value.Magnitude();
-		const normalAxis = length < 0.0001 ? Vec2.zero : value.DivN(length);
-
-		if (this._core != null) {
+		const normalAxis = length < 0.0001 ? Vec2.zero : Vec2.DivN(value, length);
+		if (this.core != null) {
 			let touchAxis = value;
 			if (touchAxis.SqrMagnitude() >= this.radius * this.radius)
-				touchAxis = normalAxis.MulN(this.radius);
+				touchAxis = Vec2.MulN(normalAxis, this.radius);
 
-			this._core.x = touchAxis.x + this.cen.x;
-			this._core.y = touchAxis.y + this.cen.y;
+			this.core.x = touchAxis.x + this.cen.x;
+			this.core.y = touchAxis.y + this.cen.y;
 		}
 
 		if (this._axis == normalAxis)
@@ -24,11 +23,12 @@ export class Joystick extends fairygui.GComponent {
 
 		this._axis = normalAxis;
 
-		this.onChanged(this._axis);
+		if (this.onChanged != null)
+			this.onChanged(this._axis);
 	}
 
 	public get worldAxis(): Vec2 {
-		let point: laya.maths.Point;
+		let point = new laya.maths.Point();;
 		this.localToGlobal(this._axis.x, this._axis.y, point);
 		return new Vec2(point.x, point.y);
 	}
@@ -37,7 +37,8 @@ export class Joystick extends fairygui.GComponent {
 
 	public onChanged: (vec: Vec2) => void;
 
-	private _core: fairygui.GComponent;
+	public core: fairygui.GComponent;
+
 	private _axis: Vec2 = Vec2.zero;
 	private readonly _tween: laya.utils.Tween;
 
@@ -50,7 +51,6 @@ export class Joystick extends fairygui.GComponent {
 	public constructFromXML(xml: Object): void {
 		super.constructFromXML(xml)
 		this.cen = new Vec2(this.width * 0.5, this.height * 0.5);
-		this.displayObject.on(laya.events.Event.MOUSE_DOWN, this, this.OnPointerDown);
 	}
 
 	public dispose(): void {
@@ -68,20 +68,8 @@ export class Joystick extends fairygui.GComponent {
 	}
 
 	public SetAxis(position: Vec2): void {
-		let point: laya.maths.Point;
+		let point = new laya.maths.Point();
 		this.globalToLocal(position.x, position.y, point);
 		this.touchPosition = new Vec2(point.x, point.y);
-	}
-
-	private OnPointerDown(e: laya.events.Event): void {
-		this.SetAxis(new Vec2(e.stageX, e.stageY));
-	}
-
-	protected OnDrag(e: laya.events.Event): void {
-		this.SetAxis(new Vec2(e.stageX, e.stageY));
-	}
-
-	protected OnPointerUp(e: laya.events.Event): void {
-		this.Reset(true);
 	}
 }

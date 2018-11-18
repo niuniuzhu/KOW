@@ -19,5 +19,6 @@ export class BattleState extends SceneState {
 	}
 
 	protected OnUpdate(dt: number): void {
+		super.OnUpdate(dt);
 	}
 }

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Math/Vec2", "../../RC/FSM/FSM", "../FSM/EntityState", "../Attribute", "../EntityType"], function (require, exports, Vec2_1, FSM_1, EntityState_1, Attribute_1, EntityType_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attribute", "../EntityType", "../FSM/EntityState"], function (require, exports, FSM_1, Vec2_1, Attribute_1, EntityType_1, EntityState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Entity {
@@ -29,6 +29,7 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/FSM/FSM", "../FSM/
             writer.int32(this.type);
             writer.uint64(this._id);
             writer.int32(this._actorID);
+            writer.int32(this._team);
             writer.string(this._name);
             writer.float(this.position.x).float(this.position.y);
             writer.float(this.direction.x).float(this.direction.y);

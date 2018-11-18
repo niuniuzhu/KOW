@@ -1,27 +1,33 @@
 import { Consts } from "../../Consts";
-import { BattleInfo } from "../BattleInfo";
 import { Global } from "../../Global";
+import * as $protobuf from "../../Libs/protobufjs";
+import { BattleInfo } from "../BattleInfo";
+import { EntityType } from "../EntityType";
+import { BaseEvent } from "../Events/BaseEvent";
 import { EventManager } from "../Events/EventManager";
 import { SyncEvent } from "../Events/SyncEvent";
-import { BaseEvent } from "../Events/BaseEvent";
-import * as $protobuf from "../../Libs/protobufjs";
-import { EntityType } from "../EntityType";
-import { VEntity } from "./VEntity";
 import { VChampion } from "./VChampion";
+import { VEntity } from "./VEntity";
 
 export class VBattle {
 	private _root: fairygui.GComponent;
 
-	private _logicFrame: number;
 	private readonly _entities: VEntity[] = [];
 	private readonly _idToEntity: Map<Long, VEntity> = new Map<Long, VEntity>();
+	
+	private _logicFrame: number;
 
-	public Init(battleInfo: BattleInfo): void {
+	/**
+	 * 设置战场信息
+	 * @param battleInfo 战场信息
+	 */
+	public SetBattleInfo(battleInfo: BattleInfo): void {
 		EventManager.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
 		EventManager.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
 
 		this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
-		Global.graphic.battleRoot.addChild(this._root);
+		this._root.touchable = false;
+		Global.graphic.mapRoot.addChild(this._root);
 	}
 
 	/**

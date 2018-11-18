@@ -62,6 +62,7 @@ define(["require", "exports", "./Consts", "./Global", "./RC/Utils/Hashtable", ".
             const dt = Laya.timer.delta;
             Global_1.Global.connector.Update(dt);
             Global_1.Global.sceneManager.Update(dt);
+            Global_1.Global.battleManager.Update(dt);
         }
         OnResize(e) {
             Global_1.Global.uiManager.OnResize(e);

@@ -1,3 +1,4 @@
+import * as $protobuf from "../Libs/protobufjs";
 import { SceneState } from "./SceneState";
 import { UILoading } from "../UI/UILoading";
 import { BattleInfo } from "../Model/BattleInfo";
@@ -7,6 +8,7 @@ import { Logger } from "../RC/Utils/Logger";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Global } from "../Global";
 import { SceneManager } from "./SceneManager";
+import { Consts } from "../Consts";
 
 /**
  * 加载资源状态
@@ -94,19 +96,35 @@ export class LoadingState extends SceneState {
 			this._battleInfo.reqFrame = ret.reqFrame;
 			this._battleInfo.serverFrame = ret.curFrame;
 			this._battleInfo.snapshot = ret.snapshot;
-			this.LoadAssets();
+			this.LoadAssets(this._battleInfo);
 		});
 	}
 
 	/**
 	 * 读取资源载入内存
 	 */
-	private LoadAssets(): void {
+	private LoadAssets(battleInfo: BattleInfo): void {
 		if (this._assetsLoadComplete) {
 			this.InitBattle();
 		}
 		else {
 			const urls = [];
+
+			//解码快照数据获取需要加载的实体资源
+			//这里解码逻辑和Battle.InitSnapshot一致
+			const reader = $protobuf.Reader.create(battleInfo.snapshot);
+			reader.int32();
+			const count = reader.int32();
+			for (let i = 0; i < count; i++) {
+				reader.int32();//type
+				reader.uint64();//id
+				const actorID = reader.uint32();
+				//压入角色ID
+				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + actorID + ".config.json", type: Laya.Loader.JSON });
+				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + actorID + ".atlas", type: Laya.Loader.ATLAS });
+			}
+
+			//压入地图资源
 			urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
 			urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
 			Laya.loader.load(urls, Laya.Handler.create(this, () => {

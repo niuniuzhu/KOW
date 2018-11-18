@@ -1,0 +1,19 @@
+{
+	"animations": {
+		"attack": {
+			"length": 7
+		},
+		"b": {
+			"length": 5
+		},
+		"die": {
+			"length": 1
+		},
+		"run": {
+			"length": 7
+		},
+		"stand": {
+			"length": 6
+		}
+	}
+}

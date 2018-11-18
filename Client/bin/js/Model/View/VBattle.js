@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../Events/EventManager", "../Events/SyncEvent", "../../Libs/protobufjs", "../EntityType", "./VChampion"], function (require, exports, Consts_1, Global_1, EventManager_1, SyncEvent_1, $protobuf, EntityType_1, VChampion_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../EntityType", "../Events/EventManager", "../Events/SyncEvent", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, EntityType_1, EventManager_1, SyncEvent_1, VChampion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -6,11 +6,12 @@ define(["require", "exports", "../../Consts", "../../Global", "../Events/EventMa
             this._entities = [];
             this._idToEntity = new Map();
         }
-        Init(battleInfo) {
+        SetBattleInfo(battleInfo) {
             EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
             EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
             this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
-            Global_1.Global.graphic.battleRoot.addChild(this._root);
+            this._root.touchable = false;
+            Global_1.Global.graphic.mapRoot.addChild(this._root);
         }
         End() {
             EventManager_1.EventManager.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);

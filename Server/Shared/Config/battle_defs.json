@@ -31,7 +31,7 @@
         "e0": {
             "mhp": 150,
             "mmp": 100,
-            "move_speed": 100,
+            "move_speed": 200,
             "turn_speed": 1
         }
     }

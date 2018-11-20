@@ -61,6 +61,10 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attr
         }
         BeginMove(dx, dy) {
             this._moveDirection = new Vec2_1.Vec2(dx, dy);
+            if (this._moveDirection.SqrMagnitude() < 0.01)
+                this._fsm.ChangeState(EntityState_1.EntityState.Type.Idle);
+            else
+                this._fsm.ChangeState(EntityState_1.EntityState.Type.Move);
         }
         MoveStep(direction, dt) {
             if (direction.SqrMagnitude() < 0.01)

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./FSM/VEntityState", "./FSM/VIdle", "../../RC/Math/MathUtils"], function (require, exports, Consts_1, Global_1, FSM_1, Vec2_1, Hashtable_1, Attribute_1, VEntityState_1, VIdle_1, MathUtils_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./FSM/VEntityState", "./FSM/VIdle", "./FSM/VMove", "./AniHolder"], function (require, exports, Consts_1, Global_1, FSM_1, MathUtils_1, Vec2_1, Hashtable_1, Attribute_1, VEntityState_1, VIdle_1, VMove_1, AniHolder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -11,13 +11,12 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
             this._playingName = "";
             this._fsm = new FSM_1.FSM();
             this._root = new fairygui.GComponent();
-            this._holder = new fairygui.GGraph();
             this._animations = new Map();
+            this._root.setSize(0, 0);
             this._root.setPivot(0.5, 0.5, true);
-            this._root.addChild(this._holder);
             Global_1.Global.graphic.entityRoot.addChild(this._root);
             this._fsm.AddState(new VIdle_1.VIdle(VEntityState_1.VEntityState.Type.Idle, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Move, this));
+            this._fsm.AddState(new VMove_1.VMove(VEntityState_1.VEntityState.Type.Move, this));
             this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Attack, this));
             this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Die, this));
         }
@@ -47,14 +46,14 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
         }
         Dispose() {
             this._animations.forEach((v, k, map) => {
-                v.destroy();
+                v.dispose();
             });
             this._animations.clear();
             this._root.dispose();
         }
         Update(dt) {
             this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, dt * 0.012);
-            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.2);
+            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.018);
         }
         OnPositionChanged(delta) {
             this._root.setXY(this._position.x, this._position.y);
@@ -73,11 +72,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
                 for (let i = 0; i < length; ++i) {
                     urls.push((Consts_1.Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + key + i + ".png");
                 }
-                const roleAni = new Laya.Animation();
-                roleAni.autoSize = true;
-                roleAni.interval = 100;
-                roleAni.loadImages(urls);
-                this._animations.set(key, roleAni);
+                this._animations.set(key, new AniHolder_1.AniHolder(urls));
             }
             this._team = reader.int32();
             this._name = reader.string();
@@ -113,10 +108,10 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
             if (!force && this._playingName == name)
                 return;
             this._playingName = name;
-            const animation = this._animations.get(name);
-            this._holder.setNativeObject(animation);
-            this._root.setSize(animation.width, animation.height);
-            animation.play();
+            const aniHilder = this._animations.get(name);
+            this._root.removeChildren();
+            this._root.addChild(aniHilder);
+            aniHilder.Play();
         }
     }
     exports.VEntity = VEntity;

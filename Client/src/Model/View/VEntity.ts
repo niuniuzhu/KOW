@@ -2,14 +2,15 @@ import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
+import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute } from "../Attribute";
 import { VEntityState } from "./FSM/VEntityState";
 import { VIdle } from "./FSM/VIdle";
+import { VMove } from "./FSM/VMove";
 import { VBattle } from "./VBattle";
-import { MathUtils } from "../../RC/Math/MathUtils";
-import { Logger } from "../../RC/Utils/Logger";
+import { AniHolder } from "./AniHolder";
 
 export class VEntity {
 	public get id(): Long { return this._id; }
@@ -52,15 +53,14 @@ export class VEntity {
 
 	private readonly _fsm: FSM = new FSM();
 	private readonly _root = new fairygui.GComponent();
-	private readonly _holder = new fairygui.GGraph();
-	private readonly _animations: Map<string, Laya.Animation> = new Map<string, Laya.Animation>();
+	private readonly _animations: Map<string, AniHolder> = new Map<string, AniHolder>();
 
 	constructor() {
+		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
-		this._root.addChild(this._holder);
 		Global.graphic.entityRoot.addChild(this._root);
 		this._fsm.AddState(new VIdle(VEntityState.Type.Idle, this));
-		this._fsm.AddState(new VEntityState(VEntityState.Type.Move, this));
+		this._fsm.AddState(new VMove(VEntityState.Type.Move, this));
 		this._fsm.AddState(new VEntityState(VEntityState.Type.Attack, this));
 		this._fsm.AddState(new VEntityState(VEntityState.Type.Die, this));
 	}
@@ -72,7 +72,7 @@ export class VEntity {
 
 	public Dispose(): void {
 		this._animations.forEach((v, k, map) => {
-			v.destroy();
+			v.dispose();
 		});
 		this._animations.clear();
 		this._root.dispose();
@@ -80,7 +80,7 @@ export class VEntity {
 
 	public Update(dt: number): void {
 		this.position = Vec2.Lerp(this._position, this._logicPos, dt * 0.012);
-		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.2);
+		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.018);
 	}
 
 	private OnPositionChanged(delta: Vec2): void {
@@ -105,11 +105,7 @@ export class VEntity {
 			for (let i = 0; i < length; ++i) {
 				urls.push((Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + key + i + ".png");
 			}
-			const roleAni = new Laya.Animation();
-			roleAni.autoSize = true;
-			roleAni.interval = 100;
-			roleAni.loadImages(urls);
-			this._animations.set(key, roleAni);
+			this._animations.set(key, new AniHolder(urls));
 		}
 
 		this._team = reader.int32();
@@ -149,9 +145,9 @@ export class VEntity {
 		if (!force && this._playingName == name)
 			return;
 		this._playingName = name;
-		const animation = this._animations.get(name);
-		this._holder.setNativeObject(animation);
-		this._root.setSize(animation.width, animation.height);
-		animation.play();
+		const aniHilder = this._animations.get(name);
+		this._root.removeChildren();
+		this._root.addChild(aniHilder);
+		aniHilder.Play();
 	}
 }

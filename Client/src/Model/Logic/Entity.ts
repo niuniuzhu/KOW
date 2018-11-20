@@ -91,6 +91,10 @@ export class Entity implements ISnapshotable {
 
 	public BeginMove(dx: number, dy: number): void {
 		this._moveDirection = new Vec2(dx, dy);
+		if (this._moveDirection.SqrMagnitude() < 0.01)
+			this._fsm.ChangeState(EntityState.Type.Idle)
+		else
+			this._fsm.ChangeState(EntityState.Type.Move);
 	}
 
 	protected MoveStep(direction: Vec2, dt: number): void {

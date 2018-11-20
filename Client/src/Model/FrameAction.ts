@@ -1,4 +1,3 @@
-import * as $protobuf from "../Libs/protobufjs";
 import * as Long from "../Libs/long";
 
 enum InputFlag {
@@ -27,12 +26,12 @@ export class FrameAction {
 		this._frame = frame;
 	}
 
-	public DeSerialize(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._gcNID = <Long>reader.uint64();
-		this._inputFlag = <InputFlag>reader.int32();
+	public DeSerialize(buffer: ByteBuffer): void {
+		this._gcNID = buffer.readUint64();
+		this._inputFlag = buffer.readByte();
 		if ((this.inputFlag & InputFlag.Move) > 0) {
-			this._dx = reader.float();
-			this._dy = reader.float();
+			this._dx = buffer.readFloat();
+			this._dy = buffer.readFloat();
 		}
 	}
 }

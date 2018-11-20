@@ -1,4 +1,5 @@
 ﻿using BattleServer.Battle;
+using BattleServer.Biz;
 using BattleServer.Net;
 using BattleServer.User;
 using Core.Misc;
@@ -8,7 +9,6 @@ using Shared.Battle;
 using Shared.Net;
 using System.Collections;
 using System.IO;
-using BattleServer.Biz;
 
 namespace BattleServer
 {
@@ -43,31 +43,13 @@ namespace BattleServer
 			this._luaEnv.AddLoader( ( ref string filepath ) => File.ReadAllBytes( Path.Combine( opts.scriptPath, filepath + ".lua" ) ) );
 			this._luaEnv.DoString( "require \"bs\"" );
 #endif
-			try
-			{
-				Defs.Init( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.defs ) ) );
-			}
-			catch ( System.Exception e )
-			{
-				Logger.Error( e );
-				return ErrorCode.DefsLoadFailed;
-			}
+			this.config = new BSConfig();
+			this.config.defPath = opts.defs;
 			if ( string.IsNullOrEmpty( opts.cfg ) )
-			{
-				this.config = new BSConfig();
 				this.config.CopyFromCLIOptions( opts );
-				return ErrorCode.Success;
-			}
-			try
-			{
-				this.config = new BSConfig();
+			else
 				this.config.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
-			}
-			catch ( System.Exception e )
-			{
-				Logger.Error( e );
-				return ErrorCode.CfgLoadFailed;
-			}
+			this.ReloadDefs();
 			return ErrorCode.Success;
 		}
 
@@ -135,5 +117,7 @@ namespace BattleServer
 			NetworkMgr.instance.Dispose();
 			NetSessionPool.instance.Dispose();
 		}
+
+		public void ReloadDefs() => Defs.Load( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( this.config.defPath ) ) );
 	}
 }

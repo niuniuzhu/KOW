@@ -13,8 +13,8 @@ export class VBattle {
 	private _root: fairygui.GComponent;
 
 	private readonly _entities: VEntity[] = [];
-	private readonly _idToEntity: Map<Long, VEntity> = new Map<Long, VEntity>();
-	
+	private readonly _idToEntity: Map<string, VEntity> = new Map<string, VEntity>();
+
 	private _logicFrame: number;
 
 	/**
@@ -34,11 +34,15 @@ export class VBattle {
 	 * 战场结束
 	 */
 	public End(): void {
+		EventManager.RemoveListener(SyncEvent.E_BATTLE_INIT);
 		EventManager.RemoveListener(SyncEvent.E_SNAPSHOT);
-	}
 
-	public Clear(): void {
-
+		const count = this._entities.length;
+		for (let i = 0; i < count; ++i) {
+			this._entities[i].Dispose();
+		}
+		this._entities.splice(0);
+		this._idToEntity.clear();
 	}
 
 	public Update(dt: number): void {
@@ -67,7 +71,7 @@ export class VBattle {
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();
 			const id = <Long>reader.uint64();
-			const entity = this.GetEntity(id);
+			const entity = this.GetEntity(id.toString());
 			if (entity == null)
 				continue;
 			entity.DecodeSnapshot(reader);
@@ -88,7 +92,7 @@ export class VBattle {
 		}
 		entity.Init(id, this);
 		this._entities.push(entity);
-		this._idToEntity.set(entity.id, entity);
+		this._idToEntity.set(entity.id.toString(), entity);
 		return entity;
 	}
 
@@ -96,7 +100,7 @@ export class VBattle {
 	 * 获取指定ID的实体
 	 * @param id 实体ID
 	 */
-	public GetEntity(id: Long): VEntity {
+	public GetEntity(id: string): VEntity {
 		return this._idToEntity.get(id);
 	}
 
@@ -109,6 +113,6 @@ export class VBattle {
 	private OnSnapshot(baseEvent: BaseEvent): void {
 		const e = <SyncEvent>baseEvent;
 		const reader = $protobuf.Reader.create(e.data);
-		//todo
+		this.DecodeSnapshot(reader);
 	}
 }

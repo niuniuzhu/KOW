@@ -1,4 +1,5 @@
 ﻿using Core.FMath;
+using Core.Net;
 using System;
 
 namespace BattleServer.Battle
@@ -66,16 +67,15 @@ namespace BattleServer.Battle
 			}
 		}
 
-		public void Serialize( Google.Protobuf.CodedOutputStream writer )
+		public void Serialize( StreamBuffer buffer )
 		{
-			writer.WriteUInt64( this.gcNID );
-			writer.WriteInt32( ( int ) this.inputFlag );
+			buffer.Write( this.gcNID );
+			buffer.Write( ( byte ) this.inputFlag );
 			if ( ( this.inputFlag & InputFlag.Move ) > 0 )
 			{
-				writer.WriteFloat( ( float ) this.dx );
-				writer.WriteFloat( ( float ) this.dy );
+				buffer.Write( ( float ) this.dx );
+				buffer.Write( ( float ) this.dy );
 			}
-			writer.Flush();
 		}
 	}
 }

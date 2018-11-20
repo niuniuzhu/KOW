@@ -28,10 +28,8 @@ namespace CentralServer
 
 		private readonly Dictionary<DBType, DBCfg> _dbCfgMap = new Dictionary<DBType, DBCfg>();
 
-		public void Load( string dbCfgFile )
+		public void CopyFromJson( Hashtable json )
 		{
-			string content = System.IO.File.ReadAllText( dbCfgFile );
-			Hashtable json = ( Hashtable )MiniJSON.JsonDecode( content );
 			Hashtable[] dbs = json.GetMapArray( "DB" );
 			foreach ( Hashtable db in dbs )
 			{

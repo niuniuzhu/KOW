@@ -15,6 +15,7 @@ namespace CentralServer
 		public int redisPort;
 		public string redisPwd;
 		public long sessionExpTime;
+		public string defPath;
 
 		public void CopyFromJson( Hashtable json )
 		{

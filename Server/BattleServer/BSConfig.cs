@@ -21,6 +21,7 @@ namespace BattleServer
 		public long reportInterval;
 		public long pingInterval;
 		public long gcLive;
+		public string defPath;
 
 		public void CopyFromJson( Hashtable json )
 		{

@@ -1,5 +1,5 @@
-import { FSMState } from "../../RC/FSM/FSMState";
-import { VEntity } from "../View/VEntity";
+import { FSMState } from "../../../RC/FSM/FSMState";
+import { VEntity } from "../VEntity";
 
 enum Type {
 	Idle,

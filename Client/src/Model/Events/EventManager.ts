@@ -12,9 +12,9 @@ export class EventManager {
 	}
 
 	public static Invoke(e: BaseEvent): void {
-		this.HANDLERS.forEach((v, k, map) => {
-			v(e);
-		})
+		if (!this.HANDLERS.has(e.type))
+			return;
+		this.HANDLERS.get(e.type)(e);
 		e.Release();
 	}
 }

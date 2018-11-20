@@ -3,9 +3,10 @@ import { FSM } from "../../RC/FSM/FSM";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Attribute } from "../Attribute";
 import { EntityType } from "../EntityType";
-import { EntityState } from "../FSM/EntityState";
 import { ISnapshotable } from "../ISnapshotable";
 import { Battle } from "./Battle";
+import { EntityState } from "./FSM/EntityState";
+import { Logger } from "../../RC/Utils/Logger";
 
 export class Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Undefined; }
@@ -24,6 +25,8 @@ export class Entity implements ISnapshotable {
 	private _actorID: number;
 	private _team: number;
 	private _name: string;
+
+	private _moveDirection: Vec2 = Vec2.zero;
 
 	private readonly _fsm: FSM = new FSM();
 
@@ -83,5 +86,19 @@ export class Entity implements ISnapshotable {
 
 	public Update(dt: number): void {
 		this._fsm.Update(dt);
+		this.MoveStep(this._moveDirection, dt);
+	}
+
+	public BeginMove(dx: number, dy: number): void {
+		this._moveDirection = new Vec2(dx, dy);
+	}
+
+	protected MoveStep(direction: Vec2, dt: number): void {
+		if (direction.SqrMagnitude() < 0.01)
+			return;
+		const speed = this.attribute.Get(Attribute.Attr.MOVE_SPEED);
+		const moveDelta = Vec2.MulN(Vec2.MulN(direction, speed), dt * 0.001);
+		this.position = Vec2.Add(this.position, moveDelta);
+		this.direction = direction;
 	}
 }

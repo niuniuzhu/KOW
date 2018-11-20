@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using Core.Net;
+using System.Collections.Generic;
 
 namespace BattleServer.Battle
 {
@@ -19,18 +19,12 @@ namespace BattleServer.Battle
 		private readonly SortedList<int, Google.Protobuf.ByteString> _histroy = new SortedList<int, Google.Protobuf.ByteString>();
 
 		private Battle _battle;
-		private readonly MemoryStream _ms = new MemoryStream();
-		private readonly Google.Protobuf.CodedOutputStream _writer;
+		private readonly StreamBuffer _frameBuffer = new StreamBuffer();
 
 		/// <summary>
 		/// 获取最新的帧行为历史记录
 		/// </summary>
 		public Google.Protobuf.ByteString latestHistory => this._histroy.Values[this._histroy.Count - 1];
-
-		public FrameActionMgr()
-		{
-			this._writer = new Google.Protobuf.CodedOutputStream( this._ms );
-		}
 
 		/// <summary>
 		/// 初始化
@@ -66,7 +60,7 @@ namespace BattleServer.Battle
 		/// </summary>
 		internal void Save( int frame )
 		{
-			this._writer.WriteRawTag( 0 );
+			this._frameBuffer.Write( ( byte )0 );
 			byte count = 0;
 			lock ( this._gcNIDToAction )
 			{
@@ -75,14 +69,13 @@ namespace BattleServer.Battle
 					FrameAction frameAction = kv.Value;
 					if ( !frameAction.isValid )
 						continue;
-					frameAction.Serialize( this._writer );
+					frameAction.Serialize( this._frameBuffer );
 					++count;
 				}
 			}
-			this._ms.Position = 0;
-			this._ms.WriteByte( count );
-			Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int ) this._ms.Length );
-			this._ms.SetLength( 0 );
+			this._frameBuffer.Write( 0, count );
+			Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( this._frameBuffer.GetBuffer(), 0, this._frameBuffer.length );
+			this._frameBuffer.Clear();
 			this._histroy[frame] = data;
 		}
 

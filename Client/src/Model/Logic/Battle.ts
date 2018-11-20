@@ -1,6 +1,5 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import Queue from "../../RC/Collections/Queue";
-import { Logger } from "../../RC/Utils/Logger";
 import { BattleInfo } from "../BattleInfo";
 import { EntityType } from "../EntityType";
 import { SyncEvent } from "../Events/SyncEvent";
@@ -9,6 +8,8 @@ import { FrameActionGroup } from "../FrameActionGroup";
 import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity } from "./Entity";
+import ByteBuffer = require("../../Libs/ByteBuffer");
+import { Logger } from "../../RC/Utils/Logger";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -30,7 +31,7 @@ export class Battle implements ISnapshotable {
 
 	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
 	private readonly _entities: Entity[] = [];
-	private readonly _idToEntity: Map<Long, Entity> = new Map<Long, Entity>();
+	private readonly _idToEntity: Map<string, Entity> = new Map<string, Entity>();
 
 	/**
 	 * 设置战场信息
@@ -61,11 +62,57 @@ export class Battle implements ISnapshotable {
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++)
 			this._entities[i].Dispose();
+		this._entities.splice(0);
+		this._idToEntity.clear();
 		this._frame = 0;
 		this._nextKeyFrame = 0;
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
 		this._frameActionGroups.clear();
+	}
+
+	/**
+	 * 解码初始化快照
+	 */
+	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._frame = reader.int32();
+		const count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const type = <EntityType>reader.int32();
+			const id = <Long>reader.uint64();
+			const entity = this.CreateEntity(type, id);
+			entity.DecodeSnapshot(reader);
+		}
+	}
+
+	/**
+	 * 编码快照
+	 */
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		//设置当前战场的帧数为快照的帧数
+		writer.int32(this._frame);
+		const count = this._entities.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			entity.EncodeSnapshot(writer);
+		}
+	}
+
+	/**
+	 * 解码快照
+	 */
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._frame = reader.int32();
+		const count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const type = <EntityType>reader.int32();
+			const id = <Long>reader.uint64();
+			const entity = this.GetEntity(id.toString());
+			if (entity == null)
+				continue;
+			entity.DecodeSnapshot(reader);
+		}
 	}
 
 	/**
@@ -109,47 +156,13 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 解码初始化快照
+	 * 把战场状态同步到表现层
 	 */
-	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._frame = reader.int32();
-		const count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			const type = <EntityType>reader.int32();
-			const id = <Long>reader.uint64();
-			const entity = this.CreateEntity(type, id);
-			entity.DecodeSnapshot(reader);
-		}
-	}
-
-	/**
-	 * 编码快照
-	 */
-	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
-		//设置当前战场的帧数为快照的帧数
-		writer.int32(this._frame);
-		const count = this._entities.length;
-		writer.int32(count);
-		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			entity.EncodeSnapshot(writer);
-		}
-	}
-
-	/**
-	 * 解码快照
-	 */
-	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._frame = reader.int32();
-		const count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			const type = <EntityType>reader.int32();
-			const id = <Long>reader.uint64();
-			const entity = this.GetEntity(id);
-			if (entity == null)
-				continue;
-			entity.DecodeSnapshot(reader);
-		}
+	public SyncToView(): void {
+		const writer = $protobuf.Writer.create();
+		this.EncodeSnapshot(writer);
+		const data = writer.finish();
+		SyncEvent.Snapshot(data);
 	}
 
 	/**
@@ -175,16 +188,6 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 把战场状态同步到表现层
-	 */
-	public SyncToView(): void {
-		const writer = $protobuf.Writer.create();
-		this.EncodeSnapshot(writer);
-		const data = writer.finish();
-		SyncEvent.Snapshot(data);
-	}
-
-	/**
 	 * 创建实体
 	 */
 	public CreateEntity(type: EntityType, id: Long): Entity {
@@ -198,11 +201,11 @@ export class Battle implements ISnapshotable {
 		}
 		entity.Init(id, this);
 		this._entities.push(entity);
-		this._idToEntity.set(entity.id, entity);
+		this._idToEntity.set(entity.id.toString(), entity);
 		return entity;
 	}
 
-	public GetEntity(id: Long): Entity {
+	public GetEntity(id: string): Entity {
 		return this._idToEntity.get(id);
 	}
 
@@ -217,7 +220,10 @@ export class Battle implements ISnapshotable {
 	}
 
 	private ApplyFrameAction(frameAction: FrameAction): void {
-		Logger.Log(frameAction.dx + ":" + frameAction.dy);
+		const entity = this.GetEntity(frameAction.gcNID.toString());
+		if ((frameAction.inputFlag & FrameAction.InputFlag.Move) > 0) {
+			entity.BeginMove(frameAction.dx, frameAction.dy);
+		}
 	}
 
 	/**
@@ -226,13 +232,14 @@ export class Battle implements ISnapshotable {
 	 */
 	public OnFrameAction(frame: number, data: Uint8Array): void {
 		const fag = new FrameActionGroup(frame);
-		const count = data[0];
-		// data = data.subarray(1, data.length - 1);
-		const reader = $protobuf.Reader.create(data);
-		reader.pos = 1;
+		const buffer = new ByteBuffer();
+		buffer.littleEndian = true;
+		buffer.append(data);
+		buffer.offset = 0;
+		const count = buffer.readByte();
 		for (let i = 0; i < count; ++i) {
 			const frameAction = new FrameAction(frame);
-			frameAction.DeSerialize(reader);
+			frameAction.DeSerialize(buffer);
 			fag.Add(frameAction);
 		}
 		this._frameActionGroups.enqueue(fag);

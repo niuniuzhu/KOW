@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(CentralServer.CS);
-			Utils.BeginObjectRegister(type, L, translator, 0, 6, 12, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 7, 12, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Initialize", _m_Initialize);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Start", _m_Start);
@@ -29,6 +29,7 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Dispose", _m_Dispose);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "UpdateAppropriateGSInfo", _m_UpdateAppropriateGSInfo);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "UpdateAppropriateBSInfo", _m_UpdateAppropriateBSInfo);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ReloadDefs", _m_ReloadDefs);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "config", _g_get_config);
@@ -245,6 +246,33 @@ namespace XLua.CSObjectWrap
                 {
                     
                     __cl_gen_to_be_invoked.UpdateAppropriateBSInfo(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_ReloadDefs(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                CentralServer.CS __cl_gen_to_be_invoked = (CentralServer.CS)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    __cl_gen_to_be_invoked.ReloadDefs(  );
                     
                     
                     

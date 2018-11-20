@@ -41,8 +41,8 @@ export class BattleManager {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo, completeHandler: () => void): void {
-		this._lBattle.SetBattleInfo(battleInfo);
 		this._vBattle.SetBattleInfo(battleInfo);
+		this._lBattle.SetBattleInfo(battleInfo);
 		this._init = true;
 
 		//请求帧行为历史记录

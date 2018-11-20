@@ -42,6 +42,7 @@ export class UIBattle implements IUIModule {
 	}
 
 	public Exit(): void {
+		this._gestureState.OnTouchEnd();
 		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
 		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
 		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);

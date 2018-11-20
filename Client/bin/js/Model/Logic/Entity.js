@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attribute", "../EntityType", "../FSM/EntityState"], function (require, exports, FSM_1, Vec2_1, Attribute_1, EntityType_1, EntityState_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attribute", "../EntityType", "./FSM/EntityState"], function (require, exports, FSM_1, Vec2_1, Attribute_1, EntityType_1, EntityState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Entity {
@@ -6,6 +6,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attr
             this.attribute = new Attribute_1.Attribute();
             this.position = Vec2_1.Vec2.zero;
             this.direction = Vec2_1.Vec2.zero;
+            this._moveDirection = Vec2_1.Vec2.zero;
             this._fsm = new FSM_1.FSM();
             this._fsm.AddState(new EntityState_1.EntityState(EntityState_1.EntityState.Type.Idle, this));
             this._fsm.AddState(new EntityState_1.EntityState(EntityState_1.EntityState.Type.Move, this));
@@ -56,6 +57,18 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attr
         }
         Update(dt) {
             this._fsm.Update(dt);
+            this.MoveStep(this._moveDirection, dt);
+        }
+        BeginMove(dx, dy) {
+            this._moveDirection = new Vec2_1.Vec2(dx, dy);
+        }
+        MoveStep(direction, dt) {
+            if (direction.SqrMagnitude() < 0.01)
+                return;
+            const speed = this.attribute.Get(Attribute_1.Attribute.Attr.MOVE_SPEED);
+            const moveDelta = Vec2_1.Vec2.MulN(Vec2_1.Vec2.MulN(direction, speed), dt * 0.001);
+            this.position = Vec2_1.Vec2.Add(this.position, moveDelta);
+            this.direction = direction;
         }
     }
     exports.Entity = Entity;

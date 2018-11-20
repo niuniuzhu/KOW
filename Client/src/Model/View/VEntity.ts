@@ -5,7 +5,8 @@ import { FSM } from "../../RC/FSM/FSM";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute } from "../Attribute";
-import { VEntityState } from "../FSM/VEntityState";
+import { VEntityState } from "./FSM/VEntityState";
+import { VIdle } from "./FSM/VIdle";
 import { VBattle } from "./VBattle";
 
 export class VEntity {
@@ -45,18 +46,18 @@ export class VEntity {
 	private _direction: Vec2 = Vec2.zero;
 	private _logicPos: Vec2 = Vec2.zero;
 	private _logicDir: Vec2 = Vec2.zero;
+	private _playingName: string = "";
 
 	private readonly _fsm: FSM = new FSM();
 	private readonly _root = new fairygui.GComponent();
-	private readonly _roleAni = new Laya.Animation();
+	private readonly _holder = new fairygui.GGraph();
+	private readonly _animations: Map<string, Laya.Animation> = new Map<string, Laya.Animation>();
 
 	constructor() {
-		this._roleAni.autoSize = true;
-		this._roleAni.autoPlay = true;
-		this._roleAni.interval = 100;
 		this._root.setPivot(0.5, 0.5, true);
+		this._root.addChild(this._holder);
 		Global.graphic.entityRoot.addChild(this._root);
-		this._fsm.AddState(new VEntityState(VEntityState.Type.Idle, this));
+		this._fsm.AddState(new VIdle(VEntityState.Type.Idle, this));
 		this._fsm.AddState(new VEntityState(VEntityState.Type.Move, this));
 		this._fsm.AddState(new VEntityState(VEntityState.Type.Attack, this));
 		this._fsm.AddState(new VEntityState(VEntityState.Type.Die, this));
@@ -65,11 +66,13 @@ export class VEntity {
 	public Init(id: Long, battle: VBattle): void {
 		this._id = id;
 		this._battle = battle;
-		this._fsm.ChangeState(VEntityState.Type.Idle);
 	}
 
 	public Dispose(): void {
-		this._roleAni.destroy();
+		this._animations.forEach((v, k, map) => {
+			v.destroy();
+		});
+		this._animations.clear();
 		this._root.dispose();
 	}
 
@@ -82,41 +85,59 @@ export class VEntity {
 
 	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._actorID = reader.int32();
+
+		//加载配置
+		this._def = <JSON>Laya.loader.getRes("res/roles/" + Consts.ASSETS_ENTITY_PREFIX + this._actorID + ".config.json");
+		const aniDef = Hashtable.GetMap(this._def, "animations");
+		for (let key in aniDef) {
+			const group = Hashtable.GetMap(aniDef, key);
+			const length = Hashtable.GetNumber(group, "length");
+			//创建图形
+			const urls: string[] = [];
+			for (let i = 0; i < length; ++i) {
+				urls.push((Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + key + i + ".png");
+			}
+			const roleAni = new Laya.Animation();
+			roleAni.autoSize = true;
+			roleAni.interval = 100;
+			roleAni.loadImages(urls);
+			this._animations.set(key, roleAni);
+		}
+
 		this._team = reader.int32();
 		this._name = reader.string();
 		this.position = new Vec2(reader.float(), reader.float());
 		this.direction = new Vec2(reader.float(), reader.float());
-		this._fsm.ChangeState(reader.int32(), null, true);
+		this._fsm.ChangeState(reader.int32(), null);
 		(<VEntityState>this._fsm.currentState).time = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), reader.float());
 		}
 
-		//加载配置
-		this._def = <JSON>Laya.loader.getRes("res/roles/" + Consts.ASSETS_ENTITY_PREFIX + this._actorID + ".config.json");
-
-		//播放动画
-		this.PlayAnim("stand");
-
-		const holder = new fairygui.GGraph();
-		holder.setNativeObject(this._roleAni);
-		this._root.addChild(holder);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._actorID = reader.int32();
+		this._team = reader.int32();
+		this._name = reader.string();
+		this.position = new Vec2(reader.float(), reader.float());
+		this.direction = new Vec2(reader.float(), reader.float());
+		this._fsm.ChangeState(reader.int32(), null);
+		(<VEntityState>this._fsm.currentState).time = reader.int32();
+		const count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			this.attribute.Set(reader.int32(), reader.float());
+		}
 	}
 
-	public PlayAnim(name: string): void {
-		const aniDef = Hashtable.GetMap(this._def, "animations");
-		const group = Hashtable.GetMap(aniDef, name);
-		const length = Hashtable.GetNumber(group, "length");
-		//创建图形
-		const urls: string[] = [];
-		for (let i = 0; i < length; ++i) {
-			urls.push((Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + name + i + ".png");
-		}
-		this._roleAni.loadImages(urls);
-		this._root.setSize(this._roleAni.width, this._roleAni.height);
+	public PlayAnim(name: string, force: boolean = false): void {
+		if (!force && this._playingName == name)
+			return;
+		this._playingName = name;
+		const animation = this._animations.get(name);
+		this._holder.setNativeObject(animation);
+		this._root.setSize(animation.width, animation.height);
+		animation.play();
 	}
 }

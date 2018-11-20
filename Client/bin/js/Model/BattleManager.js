@@ -11,8 +11,8 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             this._vBattle = new VBattle_1.VBattle();
         }
         SetBattleInfo(battleInfo, completeHandler) {
-            this._lBattle.SetBattleInfo(battleInfo);
             this._vBattle.SetBattleInfo(battleInfo);
+            this._lBattle.SetBattleInfo(battleInfo);
             this._init = true;
             const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestFrameActions();
             request.from = this._lBattle.frame;

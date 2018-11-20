@@ -29,9 +29,9 @@
     },
     "entity": {
         "e0": {
-            "mhp": 100,
+            "mhp": 150,
             "mmp": 100,
-            "move_speed": 1.5,
+            "move_speed": 100,
             "turn_speed": 1
         }
     }

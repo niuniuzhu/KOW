@@ -1,5 +1,5 @@
-import { Entity } from "../Logic/Entity";
-import { FSMState } from "../../RC/FSM/FSMState";
+import { FSMState } from "../../../RC/FSM/FSMState";
+import { Entity } from "../Entity";
 
 enum Type {
 	Idle,

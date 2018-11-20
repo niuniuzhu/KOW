@@ -14,9 +14,14 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             Global_1.Global.graphic.mapRoot.addChild(this._root);
         }
         End() {
+            EventManager_1.EventManager.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
             EventManager_1.EventManager.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
-        }
-        Clear() {
+            const count = this._entities.length;
+            for (let i = 0; i < count; ++i) {
+                this._entities[i].Dispose();
+            }
+            this._entities.splice(0);
+            this._idToEntity.clear();
         }
         Update(dt) {
         }
@@ -36,7 +41,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
                 const id = reader.uint64();
-                const entity = this.GetEntity(id);
+                const entity = this.GetEntity(id.toString());
                 if (entity == null)
                     continue;
                 entity.DecodeSnapshot(reader);
@@ -53,7 +58,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             }
             entity.Init(id, this);
             this._entities.push(entity);
-            this._idToEntity.set(entity.id, entity);
+            this._idToEntity.set(entity.id.toString(), entity);
             return entity;
         }
         GetEntity(id) {
@@ -67,6 +72,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         OnSnapshot(baseEvent) {
             const e = baseEvent;
             const reader = $protobuf.Reader.create(e.data);
+            this.DecodeSnapshot(reader);
         }
     }
     exports.VBattle = VBattle;

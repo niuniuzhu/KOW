@@ -1,4 +1,5 @@
-﻿using CentralServer.Match;
+﻿using CentralServer.Biz;
+using CentralServer.Match;
 using CentralServer.Net;
 using CentralServer.User;
 using Core.Misc;
@@ -10,7 +11,6 @@ using Shared.Net;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using CentralServer.Biz;
 
 namespace CentralServer
 {
@@ -81,42 +81,17 @@ namespace CentralServer
 			this._luaEnv.AddLoader( ( ref string filepath ) => File.ReadAllBytes( Path.Combine( opts.scriptPath, filepath + ".lua" ) ) );
 			this._luaEnv.DoString( "require \"cs\"" );
 #endif
-			try
-			{
-				Defs.Init( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.defs ) ) );
-			}
-			catch ( System.Exception e )
-			{
-				Logger.Error( e );
-				return ErrorCode.DefsLoadFailed;
-			}
 			this.config = new CSConfig();
+			this.config.defPath = opts.defs;
 			if ( string.IsNullOrEmpty( opts.cfg ) )
-			{
 				this.config.CopyFromCLIOptions( opts );
-				return ErrorCode.Success;
-			}
-			try
-			{
+			else
 				this.config.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
-			}
-			catch ( System.Exception e )
-			{
-				Logger.Error( e );
-				return ErrorCode.CfgLoadFailed;
-			}
 			if ( string.IsNullOrEmpty( opts.dbCfg ) )
 				return ErrorCode.DBCfgLoadFailed;
-			try
-			{
-				this.dbConfig = new DBConfig();
-				this.dbConfig.Load( opts.dbCfg );
-			}
-			catch ( System.Exception e )
-			{
-				Logger.Error( e );
-				return ErrorCode.DBCfgLoadFailed;
-			}
+			this.dbConfig = new DBConfig();
+			this.dbConfig.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.dbCfg ) ) );
+			this.ReloadDefs();
 			return ErrorCode.Success;
 		}
 
@@ -220,5 +195,7 @@ namespace CentralServer
 					this.appropriateBSInfo = kv.Value;
 			}
 		}
+
+		public void ReloadDefs() => Defs.Load( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( this.config.defPath ) ) );
 	}
 }

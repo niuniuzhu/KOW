@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Queue", "../../RC/Utils/Logger", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, $protobuf, Queue_1, Logger_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
+define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Queue", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/ByteBuffer"], function (require, exports, $protobuf, Queue_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1, ByteBuffer) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -38,36 +38,13 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
             const count = this._entities.length;
             for (let i = 0; i < count; i++)
                 this._entities[i].Dispose();
+            this._entities.splice(0);
+            this._idToEntity.clear();
             this._frame = 0;
             this._nextKeyFrame = 0;
             this._logicElapsed = 0;
             this._realElapsed = 0;
             this._frameActionGroups.clear();
-        }
-        Update(dt) {
-            this.Chase(true);
-            this._realElapsed += dt;
-            if (this.frame < this._nextKeyFrame) {
-                this._logicElapsed += dt;
-                while (this._logicElapsed >= this._msPerFrame) {
-                    if (this.frame >= this._nextKeyFrame)
-                        break;
-                    this.UpdateLogic(this._msPerFrame);
-                    this.SyncToView();
-                    if (this.frame == this._nextKeyFrame) {
-                    }
-                    this._realElapsed = 0;
-                    this._logicElapsed -= this._msPerFrame;
-                }
-            }
-        }
-        UpdateLogic(dt) {
-            ++this._frame;
-            const count = this._entities.length;
-            for (let i = 0; i < count; i++) {
-                const entity = this._entities[i];
-                entity.Update(dt);
-            }
         }
         InitSnapshot(reader) {
             this._frame = reader.int32();
@@ -94,11 +71,42 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
                 const id = reader.uint64();
-                const entity = this.GetEntity(id);
+                const entity = this.GetEntity(id.toString());
                 if (entity == null)
                     continue;
                 entity.DecodeSnapshot(reader);
             }
+        }
+        Update(dt) {
+            this.Chase(true);
+            this._realElapsed += dt;
+            if (this.frame < this._nextKeyFrame) {
+                this._logicElapsed += dt;
+                while (this._logicElapsed >= this._msPerFrame) {
+                    if (this.frame >= this._nextKeyFrame)
+                        break;
+                    this.UpdateLogic(this._msPerFrame);
+                    this.SyncToView();
+                    if (this.frame == this._nextKeyFrame) {
+                    }
+                    this._realElapsed = 0;
+                    this._logicElapsed -= this._msPerFrame;
+                }
+            }
+        }
+        UpdateLogic(dt) {
+            ++this._frame;
+            const count = this._entities.length;
+            for (let i = 0; i < count; i++) {
+                const entity = this._entities[i];
+                entity.Update(dt);
+            }
+        }
+        SyncToView() {
+            const writer = $protobuf.Writer.create();
+            this.EncodeSnapshot(writer);
+            const data = writer.finish();
+            SyncEvent_1.SyncEvent.Snapshot(data);
         }
         Chase(updateView) {
             while (!this._frameActionGroups.isEmpty()) {
@@ -118,12 +126,6 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
                 this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
             }
         }
-        SyncToView() {
-            const writer = $protobuf.Writer.create();
-            this.EncodeSnapshot(writer);
-            const data = writer.finish();
-            SyncEvent_1.SyncEvent.Snapshot(data);
-        }
         CreateEntity(type, id) {
             let entity;
             switch (type) {
@@ -135,7 +137,7 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
             }
             entity.Init(id, this);
             this._entities.push(entity);
-            this._idToEntity.set(entity.id, entity);
+            this._idToEntity.set(entity.id.toString(), entity);
             return entity;
         }
         GetEntity(id) {
@@ -147,16 +149,21 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
             }
         }
         ApplyFrameAction(frameAction) {
-            Logger_1.Logger.Log(frameAction.dx + ":" + frameAction.dy);
+            const entity = this.GetEntity(frameAction.gcNID.toString());
+            if ((frameAction.inputFlag & FrameAction_1.FrameAction.InputFlag.Move) > 0) {
+                entity.BeginMove(frameAction.dx, frameAction.dy);
+            }
         }
         OnFrameAction(frame, data) {
             const fag = new FrameActionGroup_1.FrameActionGroup(frame);
-            const count = data[0];
-            const reader = $protobuf.Reader.create(data);
-            reader.pos = 1;
+            const buffer = new ByteBuffer();
+            buffer.littleEndian = true;
+            buffer.append(data);
+            buffer.offset = 0;
+            const count = buffer.readByte();
             for (let i = 0; i < count; ++i) {
                 const frameAction = new FrameAction_1.FrameAction(frame);
-                frameAction.DeSerialize(reader);
+                frameAction.DeSerialize(buffer);
                 fag.Add(frameAction);
             }
             this._frameActionGroups.enqueue(fag);

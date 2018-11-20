@@ -124,12 +124,6 @@ namespace BattleServer.Battle
 		private readonly List<uint> _tempSIDs = new List<uint>();
 
 		private long _lastUpdateTime;
-
-		/// <summary>
-		/// stream for building the snapshot
-		/// </summary>
-		private readonly MemoryStream _ms = new MemoryStream();
-
 		private Task _task;
 
 		public Battle()
@@ -239,7 +233,6 @@ namespace BattleServer.Battle
 			this._players = null;
 			this._entities.Clear();
 			this._idToEntity.Clear();
-			this._ms.SetLength( 0 );
 			this._frameActionMgr.Clear();
 			this._snapshotMgr.Clear();
 			this._tempSIDs.Clear();
@@ -403,12 +396,14 @@ namespace BattleServer.Battle
 		/// </summary>
 		private Google.Protobuf.ByteString MakeInitSnapshot()
 		{
-			Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( this._ms );
-			this.EncodeSnapshot( writer );
-			writer.Flush();
-			Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( this._ms.GetBuffer(), 0, ( int )this._ms.Length );
-			this._ms.SetLength( 0 );
-			return data;
+			using ( MemoryStream ms = new MemoryStream() )
+			{
+				Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( ms );
+				this.EncodeSnapshot( writer );
+				writer.Flush();
+				Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( ms.GetBuffer(), 0, ( int )ms.Length );
+				return data;
+			}
 		}
 
 		/// <summary>

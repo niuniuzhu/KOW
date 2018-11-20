@@ -8,6 +8,8 @@ import { Attribute } from "../Attribute";
 import { VEntityState } from "./FSM/VEntityState";
 import { VIdle } from "./FSM/VIdle";
 import { VBattle } from "./VBattle";
+import { MathUtils } from "../../RC/Math/MathUtils";
+import { Logger } from "../../RC/Utils/Logger";
 
 export class VEntity {
 	public get id(): Long { return this._id; }
@@ -81,6 +83,8 @@ export class VEntity {
 	}
 
 	private OnDirectionChanged(delta: Vec2): void {
+		this._root.rotation = MathUtils.RadToDeg(this._direction.Dot(Vec2.up));
+		Logger.Log(this._direction.Dot(Vec2.up));
 	}
 
 	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {

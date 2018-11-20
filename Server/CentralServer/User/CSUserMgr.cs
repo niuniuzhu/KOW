@@ -27,7 +27,7 @@ namespace CentralServer.User
 		{
 			get
 			{
-				System.Diagnostics.Debug.Assert( this._ukeyToUser.Count == this._gcNIDToUser.Count );
+				System.Diagnostics.Debug.Assert( this._ukeyToUser.Count == this._gcNIDToUser.Count, $"k:{this._ukeyToUser.Count}, g:{this._gcNIDToUser.Count}" );
 				return this._ukeyToUser.Count;
 			}
 		}
@@ -81,6 +81,7 @@ namespace CentralServer.User
 				//处理顶号
 				if ( user.isConnected )
 					this.KickUser( user, ( int )Protos.CS2GS_KickGC.Types.EReason.DuplicateLogin );
+				this._gcNIDToUser.Remove( user.gcNID );
 			}
 			user.OnCreate( ukey, gcNID, TimeUtils.utcTime );
 			this._gcNIDToUser[gcNID] = user;
@@ -167,7 +168,6 @@ namespace CentralServer.User
 			Protos.CS2GS_KickGC kickGc = ProtoCreator.Q_CS2GS_KickGC();
 			kickGc.GcNID = user.gcNID;
 			kickGc.Reason = ( Protos.CS2GS_KickGC.Types.EReason )reason;
-			//通知GS踢掉GC
 			CS.instance.netSessionMgr.Send( user.gsSID, kickGc );
 			this.Offline( user );
 		}

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./FSM/VEntityState", "./FSM/VIdle"], function (require, exports, Consts_1, Global_1, FSM_1, Vec2_1, Hashtable_1, Attribute_1, VEntityState_1, VIdle_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./FSM/VEntityState", "./FSM/VIdle", "../../RC/Math/MathUtils", "../../RC/Utils/Logger"], function (require, exports, Consts_1, Global_1, FSM_1, Vec2_1, Hashtable_1, Attribute_1, VEntityState_1, VIdle_1, MathUtils_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -56,6 +56,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
             this._root.setXY(this._position.x, this._position.y);
         }
         OnDirectionChanged(delta) {
+            this._root.rotation = MathUtils_1.MathUtils.RadToDeg(this._direction.Dot(Vec2_1.Vec2.up));
+            Logger_1.Logger.Log(this._direction.Dot(Vec2_1.Vec2.up));
         }
         InitSnapshot(reader) {
             this._actorID = reader.int32();

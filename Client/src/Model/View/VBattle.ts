@@ -46,6 +46,11 @@ export class VBattle {
 	}
 
 	public Update(dt: number): void {
+		const count = this._entities.length;
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			entity.Update(dt);
+		}
 	}
 
 	/**

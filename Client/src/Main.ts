@@ -1,11 +1,11 @@
 import { Consts } from "./Consts";
 import { Global } from "./Global";
-import { Hashtable } from "./RC/Utils/Hashtable";
+import * as Long from "./Libs/long";
+import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
+import { Hashtable } from "./RC/Utils/Hashtable";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
-import * as $protobuf from "./Libs/protobufjs";
-import * as Long from "./Libs/long";
 
 export class Main {
 	private static _instance: Main;

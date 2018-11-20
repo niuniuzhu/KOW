@@ -117,8 +117,8 @@ define(["require", "exports", "./MathUtils"], function (require, exports, MathUt
             this.x *= scale.x;
             this.y *= scale.y;
         }
-        Dot(vector) {
-            return this.x * vector.x + this.y * vector.y;
+        Dot(v) {
+            return this.x * v.x + this.y * v.y;
         }
         Normalize() {
             let f = 1 / this.Magnitude();

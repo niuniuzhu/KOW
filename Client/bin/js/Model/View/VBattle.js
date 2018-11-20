@@ -24,6 +24,11 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._idToEntity.clear();
         }
         Update(dt) {
+            const count = this._entities.length;
+            for (let i = 0; i < count; i++) {
+                const entity = this._entities[i];
+                entity.Update(dt);
+            }
         }
         InitSnapshot(reader) {
             this._logicFrame = reader.int32();

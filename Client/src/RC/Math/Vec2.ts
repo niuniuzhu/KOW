@@ -131,8 +131,8 @@ export class Vec2 {
 		this.y *= scale.y;
 	}
 
-	public Dot(vector: Vec2): number {
-		return this.x * vector.x + this.y * vector.y;
+	public Dot(v: Vec2): number {
+		return this.x * v.x + this.y * v.y;
 	}
 
 	public Normalize(): void {

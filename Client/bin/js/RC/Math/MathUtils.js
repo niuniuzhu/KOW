@@ -125,6 +125,13 @@ define(["require", "exports", "./Quat", "./Vec2"], function (require, exports, Q
             }
             return a + num * MathUtils.Clamp01(t);
         }
+        static LerpAngleUnclamped(a, b, t) {
+            let num = MathUtils.Repeat(b - a, 360);
+            if (num > 180) {
+                num -= 360;
+            }
+            return a + num * t;
+        }
         static MoveTowards(current, target, maxDelta) {
             let result;
             if (MathUtils.Abs(target - current) <= maxDelta) {

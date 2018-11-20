@@ -1,13 +1,13 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./FSM/VEntityState", "./FSM/VIdle", "../../RC/Math/MathUtils", "../../RC/Utils/Logger"], function (require, exports, Consts_1, Global_1, FSM_1, Vec2_1, Hashtable_1, Attribute_1, VEntityState_1, VIdle_1, MathUtils_1, Logger_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./FSM/VEntityState", "./FSM/VIdle", "../../RC/Math/MathUtils"], function (require, exports, Consts_1, Global_1, FSM_1, Vec2_1, Hashtable_1, Attribute_1, VEntityState_1, VIdle_1, MathUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
         constructor() {
             this.attribute = new Attribute_1.Attribute();
             this._position = Vec2_1.Vec2.zero;
-            this._direction = Vec2_1.Vec2.zero;
+            this._rotation = 0;
             this._logicPos = Vec2_1.Vec2.zero;
-            this._logicDir = Vec2_1.Vec2.zero;
+            this._logicRot = 0;
             this._playingName = "";
             this._fsm = new FSM_1.FSM();
             this._root = new fairygui.GComponent();
@@ -33,13 +33,13 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
             this._position = value;
             this.OnPositionChanged(delta);
         }
-        get direction() { return this._direction; }
-        set direction(value) {
-            if (this._direction.EqualsTo(value))
+        get rotation() { return this._rotation; }
+        set rotation(value) {
+            if (this._rotation == value)
                 return;
-            const delta = Vec2_1.Vec2.Sub(value, this._direction);
-            this._direction = value;
-            this.OnDirectionChanged(delta);
+            const delta = value - this._rotation;
+            this._rotation = value;
+            this.OnRatationChanged(delta);
         }
         Init(id, battle) {
             this._id = id;
@@ -52,12 +52,15 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
             this._animations.clear();
             this._root.dispose();
         }
+        Update(dt) {
+            this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, dt * 0.012);
+            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.2);
+        }
         OnPositionChanged(delta) {
             this._root.setXY(this._position.x, this._position.y);
         }
-        OnDirectionChanged(delta) {
-            this._root.rotation = MathUtils_1.MathUtils.RadToDeg(this._direction.Dot(Vec2_1.Vec2.up));
-            Logger_1.Logger.Log(this._direction.Dot(Vec2_1.Vec2.up));
+        OnRatationChanged(delta) {
+            this._root.rotation = this._rotation;
         }
         InitSnapshot(reader) {
             this._actorID = reader.int32();
@@ -79,7 +82,10 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
             this._team = reader.int32();
             this._name = reader.string();
             this.position = new Vec2_1.Vec2(reader.float(), reader.float());
-            this.direction = new Vec2_1.Vec2(reader.float(), reader.float());
+            const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
+            this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
+            if (logicDir.x < 0)
+                this._logicRot = 360 - this._logicRot;
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.int32();
             const count = reader.int32();
@@ -91,8 +97,11 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
             this._actorID = reader.int32();
             this._team = reader.int32();
             this._name = reader.string();
-            this.position = new Vec2_1.Vec2(reader.float(), reader.float());
-            this.direction = new Vec2_1.Vec2(reader.float(), reader.float());
+            this._logicPos = new Vec2_1.Vec2(reader.float(), reader.float());
+            const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
+            this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
+            if (logicDir.x < 0)
+                this._logicRot = 360 - this._logicRot;
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.int32();
             const count = reader.int32();

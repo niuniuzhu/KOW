@@ -28,13 +28,13 @@ export class VEntity {
 		this.OnPositionChanged(delta);
 	}
 
-	public get direction(): Vec2 { return this._direction; }
-	public set direction(value: Vec2) {
-		if (this._direction.EqualsTo(value))
+	public get rotation(): number { return this._rotation; }
+	public set rotation(value: number) {
+		if (this._rotation == value)
 			return;
-		const delta = Vec2.Sub(value, this._direction);
-		this._direction = value;
-		this.OnDirectionChanged(delta);
+		const delta = value - this._rotation;
+		this._rotation = value;
+		this.OnRatationChanged(delta);
 	}
 
 	private _battle: VBattle;
@@ -45,9 +45,9 @@ export class VEntity {
 	private _def: JSON;
 
 	private _position: Vec2 = Vec2.zero;
-	private _direction: Vec2 = Vec2.zero;
+	private _rotation: number = 0;
 	private _logicPos: Vec2 = Vec2.zero;
-	private _logicDir: Vec2 = Vec2.zero;
+	private _logicRot: number = 0;
 	private _playingName: string = "";
 
 	private readonly _fsm: FSM = new FSM();
@@ -78,13 +78,17 @@ export class VEntity {
 		this._root.dispose();
 	}
 
+	public Update(dt: number): void {
+		this.position = Vec2.Lerp(this._position, this._logicPos, dt * 0.012);
+		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.2);
+	}
+
 	private OnPositionChanged(delta: Vec2): void {
 		this._root.setXY(this._position.x, this._position.y);
 	}
 
-	private OnDirectionChanged(delta: Vec2): void {
-		this._root.rotation = MathUtils.RadToDeg(this._direction.Dot(Vec2.up));
-		Logger.Log(this._direction.Dot(Vec2.up));
+	private OnRatationChanged(delta: number): void {
+		this._root.rotation = this._rotation;
 	}
 
 	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -111,7 +115,10 @@ export class VEntity {
 		this._team = reader.int32();
 		this._name = reader.string();
 		this.position = new Vec2(reader.float(), reader.float());
-		this.direction = new Vec2(reader.float(), reader.float());
+		const logicDir = new Vec2(reader.float(), reader.float());
+		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
+		if (logicDir.x < 0)
+			this._logicRot = 360 - this._logicRot;
 		this._fsm.ChangeState(reader.int32(), null);
 		(<VEntityState>this._fsm.currentState).time = reader.int32();
 		const count = reader.int32();
@@ -125,8 +132,11 @@ export class VEntity {
 		this._actorID = reader.int32();
 		this._team = reader.int32();
 		this._name = reader.string();
-		this.position = new Vec2(reader.float(), reader.float());
-		this.direction = new Vec2(reader.float(), reader.float());
+		this._logicPos = new Vec2(reader.float(), reader.float());
+		const logicDir = new Vec2(reader.float(), reader.float());
+		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
+		if (logicDir.x < 0)
+			this._logicRot = 360 - this._logicRot;
 		this._fsm.ChangeState(reader.int32(), null);
 		(<VEntityState>this._fsm.currentState).time = reader.int32();
 		const count = reader.int32();

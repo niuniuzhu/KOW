@@ -1,4 +1,4 @@
-define(["require", "exports", "./Consts", "./Global", "./RC/Utils/Hashtable", "./Preloader", "./RC/Utils/Logger", "./Scene/SceneManager", "./Libs/protobufjs", "./Libs/long"], function (require, exports, Consts_1, Global_1, Hashtable_1, Preloader_1, Logger_1, SceneManager_1, $protobuf, Long) {
+define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Hashtable", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, Consts_1, Global_1, Long, $protobuf, Preloader_1, Hashtable_1, Logger_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {

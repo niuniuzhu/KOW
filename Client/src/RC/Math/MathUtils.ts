@@ -340,6 +340,20 @@ export class MathUtils {
 	}
 
 	/// <summary>
+	///   <para>Same as Lerp but makes sure the values numbererpolate correctly when they wrap around 360 degrees.</para>
+	/// </summary>
+	/// <param name="a"></param>
+	/// <param name="b"></param>
+	/// <param name="t"></param>
+	public static LerpAngleUnclamped(a: number, b: number, t: number): number {
+		let num = MathUtils.Repeat(b - a, 360);
+		if (num > 180) {
+			num -= 360;
+		}
+		return a + num * t;
+	}
+
+	/// <summary>
 	///   <para>Moves a value current towards target.</para>
 	/// </summary>
 	/// <param name="current">The current value.</param>

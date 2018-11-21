@@ -1090,6 +1090,7 @@ export const Protos = $root.Protos = (() => {
     Protos.BS2GC_LoginRet = (function() {
 
         function BS2GC_LoginRet(properties) {
+            this.playerInfos = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -1104,6 +1105,8 @@ export const Protos = $root.Protos = (() => {
         BS2GC_LoginRet.prototype.keyframeStep = 0;
         BS2GC_LoginRet.prototype.battleTime = 0;
         BS2GC_LoginRet.prototype.mapID = 0;
+        BS2GC_LoginRet.prototype.curFrame = 0;
+        BS2GC_LoginRet.prototype.playerInfos = $util.emptyArray;
 
         BS2GC_LoginRet.create = function create(properties) {
             return new BS2GC_LoginRet(properties);
@@ -1128,6 +1131,11 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(56).int32(message.battleTime);
             if (message.mapID != null && message.hasOwnProperty("mapID"))
                 writer.uint32(64).int32(message.mapID);
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                writer.uint32(72).int32(message.curFrame);
+            if (message.playerInfos != null && message.playerInfos.length)
+                for (let i = 0; i < message.playerInfos.length; ++i)
+                    $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(82).fork()).ldelim();
             return writer;
         };
 
@@ -1165,6 +1173,14 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 8:
                     message.mapID = reader.int32();
+                    break;
+                case 9:
+                    message.curFrame = reader.int32();
+                    break;
+                case 10:
+                    if (!(message.playerInfos && message.playerInfos.length))
+                        message.playerInfos = [];
+                    message.playerInfos.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1214,6 +1230,18 @@ export const Protos = $root.Protos = (() => {
             if (message.mapID != null && message.hasOwnProperty("mapID"))
                 if (!$util.isInteger(message.mapID))
                     return "mapID: integer expected";
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                if (!$util.isInteger(message.curFrame))
+                    return "curFrame: integer expected";
+            if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
+                if (!Array.isArray(message.playerInfos))
+                    return "playerInfos: array expected";
+                for (let i = 0; i < message.playerInfos.length; ++i) {
+                    let error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
+                    if (error)
+                        return "playerInfos." + error;
+                }
+            }
             return null;
         };
 
@@ -1255,6 +1283,18 @@ export const Protos = $root.Protos = (() => {
                 message.battleTime = object.battleTime | 0;
             if (object.mapID != null)
                 message.mapID = object.mapID | 0;
+            if (object.curFrame != null)
+                message.curFrame = object.curFrame | 0;
+            if (object.playerInfos) {
+                if (!Array.isArray(object.playerInfos))
+                    throw TypeError(".Protos.BS2GC_LoginRet.playerInfos: array expected");
+                message.playerInfos = [];
+                for (let i = 0; i < object.playerInfos.length; ++i) {
+                    if (typeof object.playerInfos[i] !== "object")
+                        throw TypeError(".Protos.BS2GC_LoginRet.playerInfos: object expected");
+                    message.playerInfos[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfos[i]);
+                }
+            }
             return message;
         };
 
@@ -1262,6 +1302,8 @@ export const Protos = $root.Protos = (() => {
             if (!options)
                 options = {};
             let object = {};
+            if (options.arrays || options.defaults)
+                object.playerInfos = [];
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -1275,6 +1317,7 @@ export const Protos = $root.Protos = (() => {
                 object.keyframeStep = 0;
                 object.battleTime = 0;
                 object.mapID = 0;
+                object.curFrame = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -1295,6 +1338,13 @@ export const Protos = $root.Protos = (() => {
                 object.battleTime = message.battleTime;
             if (message.mapID != null && message.hasOwnProperty("mapID"))
                 object.mapID = message.mapID;
+            if (message.curFrame != null && message.hasOwnProperty("curFrame"))
+                object.curFrame = message.curFrame;
+            if (message.playerInfos && message.playerInfos.length) {
+                object.playerInfos = [];
+                for (let j = 0; j < message.playerInfos.length; ++j)
+                    object.playerInfos[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfos[j], options);
+            }
             return object;
         };
 
@@ -2038,7 +2088,7 @@ export const Protos = $root.Protos = (() => {
     Protos.CS2BS_BattleInfo = (function() {
 
         function CS2BS_BattleInfo(properties) {
-            this.playerInfo = [];
+            this.playerInfos = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -2048,7 +2098,7 @@ export const Protos = $root.Protos = (() => {
         CS2BS_BattleInfo.prototype.opts = null;
         CS2BS_BattleInfo.prototype.mapID = 0;
         CS2BS_BattleInfo.prototype.connTimeout = 0;
-        CS2BS_BattleInfo.prototype.playerInfo = $util.emptyArray;
+        CS2BS_BattleInfo.prototype.playerInfos = $util.emptyArray;
 
         CS2BS_BattleInfo.create = function create(properties) {
             return new CS2BS_BattleInfo(properties);
@@ -2063,9 +2113,9 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(16).int32(message.mapID);
             if (message.connTimeout != null && message.hasOwnProperty("connTimeout"))
                 writer.uint32(24).int32(message.connTimeout);
-            if (message.playerInfo != null && message.playerInfo.length)
-                for (let i = 0; i < message.playerInfo.length; ++i)
-                    $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfo[i], writer.uint32(34).fork()).ldelim();
+            if (message.playerInfos != null && message.playerInfos.length)
+                for (let i = 0; i < message.playerInfos.length; ++i)
+                    $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(34).fork()).ldelim();
             return writer;
         };
 
@@ -2090,9 +2140,9 @@ export const Protos = $root.Protos = (() => {
                     message.connTimeout = reader.int32();
                     break;
                 case 4:
-                    if (!(message.playerInfo && message.playerInfo.length))
-                        message.playerInfo = [];
-                    message.playerInfo.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
+                    if (!(message.playerInfos && message.playerInfos.length))
+                        message.playerInfos = [];
+                    message.playerInfos.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2122,13 +2172,13 @@ export const Protos = $root.Protos = (() => {
             if (message.connTimeout != null && message.hasOwnProperty("connTimeout"))
                 if (!$util.isInteger(message.connTimeout))
                     return "connTimeout: integer expected";
-            if (message.playerInfo != null && message.hasOwnProperty("playerInfo")) {
-                if (!Array.isArray(message.playerInfo))
-                    return "playerInfo: array expected";
-                for (let i = 0; i < message.playerInfo.length; ++i) {
-                    let error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfo[i]);
+            if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
+                if (!Array.isArray(message.playerInfos))
+                    return "playerInfos: array expected";
+                for (let i = 0; i < message.playerInfos.length; ++i) {
+                    let error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
                     if (error)
-                        return "playerInfo." + error;
+                        return "playerInfos." + error;
                 }
             }
             return null;
@@ -2147,14 +2197,14 @@ export const Protos = $root.Protos = (() => {
                 message.mapID = object.mapID | 0;
             if (object.connTimeout != null)
                 message.connTimeout = object.connTimeout | 0;
-            if (object.playerInfo) {
-                if (!Array.isArray(object.playerInfo))
-                    throw TypeError(".Protos.CS2BS_BattleInfo.playerInfo: array expected");
-                message.playerInfo = [];
-                for (let i = 0; i < object.playerInfo.length; ++i) {
-                    if (typeof object.playerInfo[i] !== "object")
-                        throw TypeError(".Protos.CS2BS_BattleInfo.playerInfo: object expected");
-                    message.playerInfo[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfo[i]);
+            if (object.playerInfos) {
+                if (!Array.isArray(object.playerInfos))
+                    throw TypeError(".Protos.CS2BS_BattleInfo.playerInfos: array expected");
+                message.playerInfos = [];
+                for (let i = 0; i < object.playerInfos.length; ++i) {
+                    if (typeof object.playerInfos[i] !== "object")
+                        throw TypeError(".Protos.CS2BS_BattleInfo.playerInfos: object expected");
+                    message.playerInfos[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfos[i]);
                 }
             }
             return message;
@@ -2165,7 +2215,7 @@ export const Protos = $root.Protos = (() => {
                 options = {};
             let object = {};
             if (options.arrays || options.defaults)
-                object.playerInfo = [];
+                object.playerInfos = [];
             if (options.defaults) {
                 object.opts = null;
                 object.mapID = 0;
@@ -2177,10 +2227,10 @@ export const Protos = $root.Protos = (() => {
                 object.mapID = message.mapID;
             if (message.connTimeout != null && message.hasOwnProperty("connTimeout"))
                 object.connTimeout = message.connTimeout;
-            if (message.playerInfo && message.playerInfo.length) {
-                object.playerInfo = [];
-                for (let j = 0; j < message.playerInfo.length; ++j)
-                    object.playerInfo[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfo[j], options);
+            if (message.playerInfos && message.playerInfos.length) {
+                object.playerInfos = [];
+                for (let j = 0; j < message.playerInfos.length; ++j)
+                    object.playerInfos[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfos[j], options);
             }
             return object;
         };
@@ -6383,6 +6433,7 @@ export const Protos = $root.Protos = (() => {
         GS2GC_LoginRet.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
         GS2GC_LoginRet.prototype.bsIP = "";
         GS2GC_LoginRet.prototype.bsPort = 0;
+        GS2GC_LoginRet.prototype.defs = $util.newBuffer([]);
 
         GS2GC_LoginRet.create = function create(properties) {
             return new GS2GC_LoginRet(properties);
@@ -6403,6 +6454,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(42).string(message.bsIP);
             if (message.bsPort != null && message.hasOwnProperty("bsPort"))
                 writer.uint32(48).int32(message.bsPort);
+            if (message.defs != null && message.hasOwnProperty("defs"))
+                writer.uint32(58).bytes(message.defs);
             return writer;
         };
 
@@ -6434,6 +6487,9 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 6:
                     message.bsPort = reader.int32();
+                    break;
+                case 7:
+                    message.defs = reader.bytes();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -6482,6 +6538,9 @@ export const Protos = $root.Protos = (() => {
             if (message.bsPort != null && message.hasOwnProperty("bsPort"))
                 if (!$util.isInteger(message.bsPort))
                     return "bsPort: integer expected";
+            if (message.defs != null && message.hasOwnProperty("defs"))
+                if (!(message.defs && typeof message.defs.length === "number" || $util.isString(message.defs)))
+                    return "defs: buffer expected";
             return null;
         };
 
@@ -6527,6 +6586,11 @@ export const Protos = $root.Protos = (() => {
                 message.bsIP = String(object.bsIP);
             if (object.bsPort != null)
                 message.bsPort = object.bsPort | 0;
+            if (object.defs != null)
+                if (typeof object.defs === "string")
+                    $util.base64.decode(object.defs, message.defs = $util.newBuffer($util.base64.length(object.defs)), 0);
+                else if (object.defs.length)
+                    message.defs = object.defs;
             return message;
         };
 
@@ -6545,6 +6609,13 @@ export const Protos = $root.Protos = (() => {
                     object.gcNID = options.longs === String ? "0" : 0;
                 object.bsIP = "";
                 object.bsPort = 0;
+                if (options.bytes === String)
+                    object.defs = "";
+                else {
+                    object.defs = [];
+                    if (options.bytes !== Array)
+                        object.defs = $util.newBuffer(object.defs);
+                }
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -6561,6 +6632,8 @@ export const Protos = $root.Protos = (() => {
                 object.bsIP = message.bsIP;
             if (message.bsPort != null && message.hasOwnProperty("bsPort"))
                 object.bsPort = message.bsPort;
+            if (message.defs != null && message.hasOwnProperty("defs"))
+                object.defs = options.bytes === String ? $util.base64.encode(message.defs, 0, message.defs.length) : options.bytes === Array ? Array.prototype.slice.call(message.defs) : message.defs;
             return object;
         };
 

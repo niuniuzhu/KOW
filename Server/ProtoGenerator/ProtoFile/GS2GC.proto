@@ -22,6 +22,7 @@ message GS2GC_LoginRet {
 	uint64 gcNID = 4;//登录bs时进行校验的id
 	string bsIP = 5;//bs ip
 	int32 bsPort = 6;//bs port
+	bytes defs = 7;
 }
 
 message GS2GC_Kick {

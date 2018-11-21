@@ -1,5 +1,5 @@
 import { Consts } from "../../Consts";
-import { Defs } from "../../Defs";
+import { CDefs } from "../CDefs";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
@@ -107,7 +107,7 @@ export class VEntity {
 		this._actorID = reader.int32();
 
 		//加载配置
-		this._def = Defs.GetEntity(Consts.ASSETS_ENTITY_PREFIX + this._actorID);
+		this._def = CDefs.GetEntity(Consts.ASSETS_ENTITY_PREFIX + this._actorID);
 		const aniDefs = Hashtable.GetMapArray(this._def, "animations");
 		for (let i = 0; i < aniDefs.length; ++i) {
 			const aniDef = aniDefs[i];
@@ -124,10 +124,12 @@ export class VEntity {
 		this._team = reader.int32();
 		this._name = reader.string();
 		this.position = new Vec2(reader.float(), reader.float());
+		this._logicPos.CopyFrom(this.position);
 		const logicDir = new Vec2(reader.float(), reader.float());
-		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
+		this.rotation = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
 		if (logicDir.x < 0)
-			this._logicRot = 360 - this._logicRot;
+			this.rotation = 360 - this.rotation;
+		this._logicRot = this.rotation;
 		this._fsm.ChangeState(reader.int32(), null);
 		(<VEntityState>this._fsm.currentState).time = reader.int32();
 		const count = reader.int32();

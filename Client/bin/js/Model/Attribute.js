@@ -10,7 +10,7 @@ define(["require", "exports", "../RC/Math/MathUtils"], function (require, export
         Attr[Attr["ATK"] = 4] = "ATK";
         Attr[Attr["DEF"] = 5] = "DEF";
         Attr[Attr["MOVE_SPEED"] = 6] = "MOVE_SPEED";
-        Attr[Attr["TURN_SPEED"] = 7] = "TURN_SPEED";
+        Attr[Attr["RADIUS"] = 7] = "RADIUS";
     })(Attr || (Attr = {}));
     class Attribute {
         constructor() {

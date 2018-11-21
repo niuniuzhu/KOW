@@ -24,6 +24,7 @@ namespace GateServer
 		public long reportInterval;
 		public long pingInterval;
 		public long gcLive;
+		public string defPath;
 
 		public void CopyFromCLIOptions( Options opts )
 		{

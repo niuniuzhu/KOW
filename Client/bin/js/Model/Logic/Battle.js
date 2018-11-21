@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Queue", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/ByteBuffer"], function (require, exports, $protobuf, Queue_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1, ByteBuffer) {
+define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Queue", "../../RC/Utils/Hashtable", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/ByteBuffer", "../Defs", "../../RC/Math/Vec2"], function (require, exports, $protobuf, Queue_1, Hashtable_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1, ByteBuffer, Defs_1, Vec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -27,12 +27,8 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
             this._timeout = battleInfo.battleTime;
             this._mapID = battleInfo.mapID;
             this._msPerFrame = 1000 / this._frameRate;
-            const reader = $protobuf.Reader.create(battleInfo.snapshot);
-            this.InitSnapshot(reader);
-            const writer = $protobuf.Writer.create();
-            this.EncodeSnapshot(writer);
-            const data = writer.finish();
-            SyncEvent_1.SyncEvent.BattleInit(data);
+            this._def = Defs_1.Defs.GetMap(this._mapID);
+            this.CreatePlayers(battleInfo.playerInfos);
         }
         End() {
             const count = this._entities.length;
@@ -45,16 +41,6 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
             this._logicElapsed = 0;
             this._realElapsed = 0;
             this._frameActionGroups.clear();
-        }
-        InitSnapshot(reader) {
-            this._frame = reader.int32();
-            const count = reader.int32();
-            for (let i = 0; i < count; i++) {
-                const type = reader.int32();
-                const id = reader.uint64();
-                const entity = this.CreateEntity(type, id);
-                entity.DecodeSnapshot(reader);
-            }
         }
         EncodeSnapshot(writer) {
             writer.int32(this._frame);
@@ -102,6 +88,12 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
                 entity.Update(dt);
             }
         }
+        InitSyncToView() {
+            const writer = $protobuf.Writer.create();
+            this.EncodeSnapshot(writer);
+            const data = writer.finish();
+            SyncEvent_1.SyncEvent.BattleInit(data);
+        }
         SyncToView() {
             const writer = $protobuf.Writer.create();
             this.EncodeSnapshot(writer);
@@ -126,7 +118,34 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
                 this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
             }
         }
-        CreateEntity(type, id) {
+        CreatePlayers(playerInfos) {
+            let arr = Hashtable_1.Hashtable.GetArray(this._def, "born_pos");
+            let count = arr.length;
+            const bornPoses = [];
+            for (let i = 0; i < count; i++) {
+                const pi = arr[i];
+                bornPoses.push(new Vec2_1.Vec2(pi[0], pi[1]));
+            }
+            arr = Hashtable_1.Hashtable.GetArray(this._def, "born_dir");
+            count = arr.length;
+            const bornDirs = [];
+            for (let i = 0; i < count; i++) {
+                const pi = arr[i];
+                bornDirs.push(new Vec2_1.Vec2(pi[0], pi[1]));
+            }
+            count = playerInfos.length;
+            for (let i = 0; i < count; ++i) {
+                const playerInfo = playerInfos[i];
+                const player = this.CreateEntity(EntityType_1.EntityType.Champion, playerInfo.gcNID, playerInfo.actorID, playerInfo.team, playerInfo.name);
+                if (player.team >= bornPoses.length ||
+                    player.team >= bornDirs.length) {
+                    throw new Error("invalid team:" + player.team + ", player:" + player.id);
+                }
+                player.position = bornPoses[player.team];
+                player.direction = bornDirs[player.team];
+            }
+        }
+        CreateEntity(type, id, actorID, team, name) {
             let entity;
             switch (type) {
                 case EntityType_1.EntityType.Champion:
@@ -135,7 +154,7 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
                 default:
                     throw new Error("not supported entity type:" + type);
             }
-            entity.Init(id, this);
+            entity.Init(this, id, actorID, team, name);
             this._entities.push(entity);
             this._idToEntity.set(entity.id.toString(), entity);
             return entity;
@@ -154,7 +173,13 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
                 entity.BeginMove(frameAction.dx, frameAction.dy);
             }
         }
-        OnFrameAction(frame, data) {
+        HandleSnapShot(ret) {
+            if (ret.snapshot.length == 0)
+                return;
+            const reader = $protobuf.Reader.create(ret.snapshot);
+            this.DecodeSnapshot(reader);
+        }
+        HandleFrameAction(frame, data) {
             const fag = new FrameActionGroup_1.FrameActionGroup(frame);
             const buffer = new ByteBuffer();
             buffer.littleEndian = true;

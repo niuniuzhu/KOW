@@ -1,20 +1,20 @@
-import { Hashtable } from "./RC/Utils/Hashtable";
+import { Hashtable } from "../RC/Utils/Hashtable";
 
 type pair = { [k: string]: any };
 
-export class Defs {
+export class CDefs {
 	private static _defs: pair;
-	private static _config: pair;
 	private static _mapMap: Hashtable;
 	private static _entityMap: Hashtable;
 
-	public static get config(): pair { return this._config; }
-
 	public static Init(json: JSON) {
 		this._defs = json;
-		this._config = Hashtable.GetMap(this._defs, "config");
 		this._mapMap = Hashtable.GetMap(this._defs, "map");
 		this._entityMap = Hashtable.GetMap(this._defs, "entity");
+	}
+
+	public static GetConfig(): pair {
+		return Hashtable.GetMap(this._defs, "config");
 	}
 
 	public static GetPreloads(): string[] {

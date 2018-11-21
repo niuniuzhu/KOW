@@ -3,6 +3,7 @@ using Core.Net;
 using GateServer.Biz;
 using GateServer.Net;
 using Shared;
+using Shared.Battle;
 using Shared.Net;
 using System;
 using System.Collections;
@@ -41,6 +42,7 @@ namespace GateServer
 			this._luaEnv.DoString( "require \"gs\"" );
 #endif
 			this.config = new GSConfig();
+			this.config.defPath = opts.defs;
 			if ( string.IsNullOrEmpty( opts.cfg ) )
 			{
 				this.config.CopyFromCLIOptions( opts );
@@ -55,6 +57,7 @@ namespace GateServer
 				Logger.Error( e );
 				return ErrorCode.CfgLoadFailed;
 			}
+			this.ReloadDefs();
 			return ErrorCode.Success;
 		}
 
@@ -118,5 +121,7 @@ namespace GateServer
 			NetworkMgr.instance.Dispose();
 			NetSessionPool.instance.Dispose();
 		}
+
+		public void ReloadDefs() => Defs.Load(  File.ReadAllText( this.config.defPath ) );
 	}
 }

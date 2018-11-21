@@ -1,14 +1,13 @@
-import * as $protobuf from "../Libs/protobufjs";
-import { SceneState } from "./SceneState";
-import { UILoading } from "../UI/UILoading";
+import { Consts } from "../Consts";
+import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
 import { BattleInfo } from "../Model/BattleInfo";
 import { Connector } from "../Net/Connector";
-import { Protos } from "../Libs/protos";
-import { Logger } from "../RC/Utils/Logger";
 import { ProtoCreator } from "../Net/ProtoHelper";
-import { Global } from "../Global";
+import { Logger } from "../RC/Utils/Logger";
+import { UILoading } from "../UI/UILoading";
 import { SceneManager } from "./SceneManager";
-import { Consts } from "../Consts";
+import { SceneState } from "./SceneState";
 
 /**
  * 加载资源状态
@@ -70,8 +69,10 @@ export class LoadingState extends SceneState {
 						this._battleInfo.keyframeStep = resp.keyframeStep;
 						this._battleInfo.battleTime = resp.battleTime;
 						this._battleInfo.mapID = resp.mapID;
-						//请求快照
-						this.RequestSnapshot();
+						this._battleInfo.playerInfos = resp.playerInfos;
+						this._battleInfo.serverFrame = resp.curFrame;
+						//预加载资源
+						this.LoadAssets(this._battleInfo);
 						break;
 				}
 			});
@@ -86,21 +87,6 @@ export class LoadingState extends SceneState {
 	}
 
 	/**
-	 * 请求快照
-	 */
-	private RequestSnapshot(): void {
-		const requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
-		requestState.frame = 0;
-		Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
-			const ret = <Protos.BS2GC_RequestSnapshotRet>msg;
-			this._battleInfo.reqFrame = ret.reqFrame;
-			this._battleInfo.serverFrame = ret.curFrame;
-			this._battleInfo.snapshot = ret.snapshot;
-			this.LoadAssets(this._battleInfo);
-		});
-	}
-
-	/**
 	 * 读取资源载入内存
 	 */
 	private LoadAssets(battleInfo: BattleInfo): void {
@@ -109,18 +95,11 @@ export class LoadingState extends SceneState {
 		}
 		else {
 			const urls = [];
-
-			//解码快照数据获取需要加载的实体资源
-			//这里解码逻辑和Battle.InitSnapshot一致
-			const reader = $protobuf.Reader.create(battleInfo.snapshot);
-			reader.int32();
-			const count = reader.int32();
-			for (let i = 0; i < count; i++) {
-				reader.int32();//type
-				reader.uint64();//id
-				const actorID = reader.uint32();
+			const count = battleInfo.playerInfos.length;
+			for (let i = 0; i < count; ++i) {
+				const playerInfo = battleInfo.playerInfos[i];
 				//压入角色资源
-				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + actorID + ".atlas", type: Laya.Loader.ATLAS });
+				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: Laya.Loader.ATLAS });
 			}
 
 			//压入地图资源
@@ -142,6 +121,7 @@ export class LoadingState extends SceneState {
 	private InitBattle(): void {
 		//初始化战场,解码快照
 		Global.battleManager.SetBattleInfo(this._battleInfo, () => {
+			Logger.Log("battle start");
 			Global.sceneManager.ChangeState(SceneManager.State.Battle);
 		});
 	}

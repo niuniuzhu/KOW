@@ -2,6 +2,7 @@
 package Protos;
 
 import "Global.proto";
+import "CS2BS.proto";
 
 //登录结果
 message BS2GC_LoginRet {
@@ -13,6 +14,8 @@ message BS2GC_LoginRet {
 	int32 keyframeStep = 6;//关键帧步长
 	int32 battleTime = 7;//战场限时
 	int32 mapID = 8;//地图id
+	int32 curFrame = 9;//当前帧数
+	repeated CS2BS_PlayerInfo playerInfos = 10;//玩家信息
 }
 
 //回应战场快照

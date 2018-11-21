@@ -54,11 +54,11 @@ namespace BattleServer.Battle
 			BattleEntry battleEntry;
 			battleEntry.rndSeed = this._random.Next();
 			battleEntry.mapID = battleInfo.MapID;
-			int count = battleInfo.PlayerInfo.Count;
+			int count = battleInfo.PlayerInfos.Count;
 			battleEntry.players = new BattleEntry.Player[count];
 			for ( int i = 0; i < count; i++ )
 			{
-				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfo[i];
+				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfos[i];
 				BattleEntry.Player player = new BattleEntry.Player
 				{
 					gcNID = playerInfo.GcNID,
@@ -171,7 +171,8 @@ namespace BattleServer.Battle
 			FrameSnapshot snapshot = battle.GetSnapshot( request.Frame );
 			ret.ReqFrame = request.Frame;
 			ret.CurFrame = battle.frame;
-			ret.Snapshot = snapshot.data;
+			if ( snapshot != null )
+				ret.Snapshot = snapshot.data;
 		}
 
 		/// <summary>

@@ -1,11 +1,9 @@
-define(["require", "exports", "../../Global", "../../RC/Math/Rect", "../../RC/Math/MathUtils"], function (require, exports, Global_1, Rect_1, MathUtils_1) {
+define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Rect"], function (require, exports, Global_1, MathUtils_1, Rect_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Camera {
         get width() { return fairygui.GRoot.inst.width; }
         get height() { return fairygui.GRoot.inst.height; }
-        constructor() {
-        }
         Update(dt) {
             if (this.lookAt == null)
                 return;

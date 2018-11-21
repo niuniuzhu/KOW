@@ -7,6 +7,8 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Battle } from "./Battle";
 import { EntityState } from "./FSM/EntityState";
 import { Logger } from "../../RC/Utils/Logger";
+import { Defs } from "../Defs";
+import { Hashtable } from "../../RC/Utils/Hashtable";
 
 export class Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Undefined; }
@@ -25,6 +27,7 @@ export class Entity implements ISnapshotable {
 	private _actorID: number;
 	private _team: number;
 	private _name: string;
+	private _def: Hashtable;
 
 	private _moveDirection: Vec2 = Vec2.zero;
 
@@ -37,14 +40,27 @@ export class Entity implements ISnapshotable {
 		this._fsm.AddState(new EntityState(EntityState.Type.Die, this));
 	}
 
-	public Init(id: Long, battle: Battle): void {
-		this._id = id;
+	public Init(battle: Battle, id: Long, actorID: number, team: number, name: string): void {
 		this._battle = battle;
+		this._id = id;
+		this._actorID = actorID;
+		this._team = team;
+		this._name = name;
+		this.LoadDef();
 		this._fsm.ChangeState(EntityState.Type.Idle);
 	}
 
 	public Dispose(): void {
 
+	}
+
+	private LoadDef(): void {
+		this._def = Defs.GetEntity(this.actorID);
+		this.attribute.Set(Attribute.Attr.MHP, Hashtable.GetNumber(this._def, "mhp"));
+		this.attribute.Set(Attribute.Attr.HP, this.attribute.Get(Attribute.Attr.MHP));
+		this.attribute.Set(Attribute.Attr.MMP, Hashtable.GetNumber(this._def, "mmp"));
+		this.attribute.Set(Attribute.Attr.MP, this.attribute.Get(Attribute.Attr.MMP));
+		this.attribute.Set(Attribute.Attr.MOVE_SPEED, Hashtable.GetNumber(this._def, "move_speed"));
 	}
 
 	/**

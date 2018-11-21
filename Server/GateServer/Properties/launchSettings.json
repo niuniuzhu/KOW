@@ -2,7 +2,7 @@
   "profiles": {
     "GateServer": {
       "commandName": "Project",
-      "commandLineArgs": "-c Config/GSCfg.json"
+      "commandLineArgs": "-c Config/GSCfg.json -f Config/battle_defs.json"
     }
   }
 }

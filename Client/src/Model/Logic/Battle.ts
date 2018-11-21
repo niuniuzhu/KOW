@@ -1,5 +1,7 @@
 import * as $protobuf from "../../Libs/protobufjs";
+import { Protos } from "../../Libs/protos";
 import Queue from "../../RC/Collections/Queue";
+import { Hashtable } from "../../RC/Utils/Hashtable";
 import { BattleInfo } from "../BattleInfo";
 import { EntityType } from "../EntityType";
 import { SyncEvent } from "../Events/SyncEvent";
@@ -9,6 +11,8 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity } from "./Entity";
 import ByteBuffer = require("../../Libs/ByteBuffer");
+import { Defs } from "../Defs";
+import { Vec2 } from "../../RC/Math/Vec2";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -27,6 +31,7 @@ export class Battle implements ISnapshotable {
 	private _nextKeyFrame: number = 0;
 	private _logicElapsed: number = 0;
 	private _realElapsed: number = 0;
+	private _def: Hashtable;
 
 	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
 	private readonly _entities: Entity[] = [];
@@ -43,15 +48,10 @@ export class Battle implements ISnapshotable {
 		this._mapID = battleInfo.mapID
 		this._msPerFrame = 1000 / this._frameRate;
 
-		//解码快照
-		const reader = $protobuf.Reader.create(battleInfo.snapshot);
-		this.InitSnapshot(reader);
+		this._def = Defs.GetMap(this._mapID);
 
-		//把初始状态同步到表现层
-		const writer = $protobuf.Writer.create();
-		this.EncodeSnapshot(writer);
-		const data = writer.finish();
-		SyncEvent.BattleInit(data);
+		//创建玩家
+		this.CreatePlayers(battleInfo.playerInfos);
 	}
 
 	/**
@@ -68,20 +68,6 @@ export class Battle implements ISnapshotable {
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
 		this._frameActionGroups.clear();
-	}
-
-	/**
-	 * 解码初始化快照
-	 */
-	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._frame = reader.int32();
-		const count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			const type = <EntityType>reader.int32();
-			const id = <Long>reader.uint64();
-			const entity = this.CreateEntity(type, id);
-			entity.DecodeSnapshot(reader);
-		}
 	}
 
 	/**
@@ -154,6 +140,16 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 把初始状态同步到表现层
+	 */
+	public InitSyncToView(): void {
+		const writer = $protobuf.Writer.create();
+		this.EncodeSnapshot(writer);
+		const data = writer.finish();
+		SyncEvent.BattleInit(data);
+	}
+
+	/**
 	 * 把战场状态同步到表现层
 	 */
 	public SyncToView(): void {
@@ -186,9 +182,44 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 创建玩家
+	 * @param playerInfos 玩家信息
+	 */
+	private CreatePlayers(playerInfos: Protos.ICS2BS_PlayerInfo[]): void {
+		let arr = Hashtable.GetArray(this._def, "born_pos");
+		let count = arr.length;
+		const bornPoses: Vec2[] = [];
+		for (let i = 0; i < count; i++) {
+			const pi = <number[]>arr[i];
+			bornPoses.push(new Vec2(pi[0], pi[1]));
+		}
+
+		arr = Hashtable.GetArray(this._def, "born_dir");
+		count = arr.length;
+		const bornDirs: Vec2[] = [];
+		for (let i = 0; i < count; i++) {
+			const pi = <number[]>arr[i];
+			bornDirs.push(new Vec2(pi[0], pi[1]));
+		}
+
+		count = playerInfos.length;
+		for (let i = 0; i < count; ++i) {
+			const playerInfo = playerInfos[i];
+			const player = this.CreateEntity(EntityType.Champion, playerInfo.gcNID, playerInfo.actorID, playerInfo.team, playerInfo.name);
+			if (player.team >= bornPoses.length ||
+				player.team >= bornDirs.length) {
+				throw new Error("invalid team:" + player.team + ", player:" + player.id);
+			}
+
+			player.position = bornPoses[player.team];
+			player.direction = bornDirs[player.team];
+		}
+	}
+
+	/**
 	 * 创建实体
 	 */
-	public CreateEntity(type: EntityType, id: Long): Entity {
+	public CreateEntity(type: EntityType, id: Long, actorID: number, team: number, name: string): Entity {
 		let entity: Entity;
 		switch (type) {
 			case EntityType.Champion:
@@ -197,7 +228,7 @@ export class Battle implements ISnapshotable {
 			default:
 				throw new Error("not supported entity type:" + type);
 		}
-		entity.Init(id, this);
+		entity.Init(this, id, actorID, team, name);
 		this._entities.push(entity);
 		this._idToEntity.set(entity.id.toString(), entity);
 		return entity;
@@ -225,10 +256,22 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 处理服务器下发的快照信息
+	 * @param ret 协议
+	 */
+	public HandleSnapShot(ret: Protos.BS2GC_RequestSnapshotRet): void {
+		if (ret.snapshot.length == 0)
+			return;
+		//解码快照
+		const reader = $protobuf.Reader.create(ret.snapshot);
+		this.DecodeSnapshot(reader);
+	}
+
+	/**
 	 * 处理服务端下发的帧行为
 	 * @param msg 协议
 	 */
-	public OnFrameAction(frame: number, data: Uint8Array): void {
+	public HandleFrameAction(frame: number, data: Uint8Array): void {
 		const fag = new FrameActionGroup(frame);
 		const buffer = new ByteBuffer();
 		buffer.littleEndian = true;

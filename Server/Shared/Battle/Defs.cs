@@ -1,5 +1,7 @@
 ﻿using Core.Misc;
+using Google.Protobuf;
 using System.Collections;
+using System.Text;
 
 namespace Shared.Battle
 {
@@ -10,11 +12,15 @@ namespace Shared.Battle
 
 		private static readonly Hashtable _defs = new Hashtable();
 
-		public static void Load( Hashtable defs )
+		public static ByteString binary { get; private set; }
+
+		public static void Load( string json )
 		{
+			Hashtable defs = ( Hashtable )MiniJSON.JsonDecode( json );
 			_defs.Clear();
 			foreach ( DictionaryEntry de in defs )
 				_defs[de.Key] = de.Value;
+			binary = ByteString.CopyFrom( json, Encoding.UTF8 );
 		}
 
 		public static Hashtable GetMap( int id ) => _defs.GetMap( "map" ).GetMap( DEFS_MAP_PREFIX + id );

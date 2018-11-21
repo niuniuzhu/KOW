@@ -15,5 +15,5 @@ message CS2BS_BattleInfo {
 	MsgOpts opts = 1;
 	int32 mapID = 2;//地图id
 	int32 connTimeout = 3;//连接超时时间
-	repeated CS2BS_PlayerInfo playerInfo = 4;//玩家信息
+	repeated CS2BS_PlayerInfo playerInfos = 4;//玩家信息
 }

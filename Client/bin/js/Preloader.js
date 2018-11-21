@@ -1,4 +1,4 @@
-define(["require", "exports", "./RC/Utils/Logger", "./Defs"], function (require, exports, Logger_1, Defs_1) {
+define(["require", "exports", "./Model/CDefs", "./RC/Utils/Logger"], function (require, exports, CDefs_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Preloader {
@@ -7,13 +7,13 @@ define(["require", "exports", "./RC/Utils/Logger", "./Defs"], function (require,
             Logger_1.Logger.Log("loading defs...");
             Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, () => {
                 const json = Laya.loader.getRes("res/defs/b_defs.json");
-                Defs_1.Defs.Init(json);
+                CDefs_1.CDefs.Init(json);
                 this.LoadUIRes(completeHandler);
             }), undefined, Laya.Loader.JSON);
         }
         static LoadUIRes(completeHandler) {
             Logger_1.Logger.Log("loading res...");
-            const preloads = Defs_1.Defs.GetPreloads();
+            const preloads = CDefs_1.CDefs.GetPreloads();
             const urls = [];
             for (const u of preloads) {
                 const ss = u.split(",");

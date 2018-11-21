@@ -21,6 +21,12 @@ namespace GateServer
 			HelpText = "Specify the path of lua script." )]
 		public string scriptPath { get; set; }
 
+		[Option( 'f', "defs",
+			Default = "",
+			SetName = "bycfg",
+			HelpText = "Specify definition file." )]
+		public string defs { get; set; }
+
 		[Option( "id",
 			Default = ( uint )30001,
 			SetName = "bysetting",

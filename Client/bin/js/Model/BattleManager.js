@@ -5,25 +5,27 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         get lBattle() { return this._lBattle; }
         get vBattle() { return this._vBattle; }
         Init() {
-            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
-            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
             this._lBattle = new Battle_1.Battle();
             this._vBattle = new VBattle_1.VBattle();
         }
         SetBattleInfo(battleInfo, completeHandler) {
+            this._init = true;
             this._vBattle.SetBattleInfo(battleInfo);
             this._lBattle.SetBattleInfo(battleInfo);
-            this._init = true;
-            const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestFrameActions();
-            request.from = this._lBattle.frame;
-            request.to = battleInfo.serverFrame;
-            Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestFrameActions, request, msg => {
-                const ret = msg;
-                this.HandleRequestFrameActionsRet(ret.frames, ret.actions);
-                Logger_1.Logger.Log("battle start");
-                this._lBattle.Chase(false);
-                this._lBattle.SyncToView();
-                completeHandler();
+            const curFrame = battleInfo.serverFrame;
+            this.RequestSnapshot(() => {
+                const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestFrameActions();
+                request.from = this._lBattle.frame;
+                request.to = curFrame;
+                Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestFrameActions, request, msg => {
+                    const ret = msg;
+                    this.HandleRequestFrameActions(ret.frames, ret.actions);
+                    this._lBattle.Chase(false);
+                    this._lBattle.InitSyncToView();
+                    completeHandler();
+                });
             });
         }
         Update(dt) {
@@ -32,7 +34,16 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             this._lBattle.Update(dt);
             this._vBattle.Update(dt);
         }
-        OnBattleEnd(message) {
+        RequestSnapshot(callback) {
+            const requestState = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestSnapshot();
+            requestState.frame = 0;
+            Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestSnapshot, requestState, msg => {
+                const ret = msg;
+                this._lBattle.HandleSnapShot(ret);
+                callback();
+            });
+        }
+        HandleBattleEnd(message) {
             const battleEnd = message;
             this._lBattle.End();
             this._vBattle.End();
@@ -40,14 +51,14 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             Logger_1.Logger.Log("battle end");
             Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
         }
-        OnFrameAction(message) {
+        HandleFrameAction(message) {
             const frameAction = message;
-            this._lBattle.OnFrameAction(frameAction.frame, frameAction.action);
+            this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
         }
-        HandleRequestFrameActionsRet(frames, actions) {
+        HandleRequestFrameActions(frames, actions) {
             const count = frames.length;
             for (let i = 0; i < count; ++i) {
-                this._lBattle.OnFrameAction(frames[i], actions[i]);
+                this._lBattle.HandleFrameAction(frames[i], actions[i]);
             }
         }
     }

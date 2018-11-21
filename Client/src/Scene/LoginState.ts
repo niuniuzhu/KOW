@@ -1,12 +1,13 @@
+import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
+import { CDefs } from "../Model/CDefs";
+import { Defs } from "../Model/Defs";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { WSConnector } from "../Net/WSConnector";
-import { UILogin } from "../UI/UILogin";
-import { SceneState } from "./SceneState";
-import { SceneManager } from "./SceneManager";
-import { Defs } from "../Defs";
 import { Logger } from "../RC/Utils/Logger";
-import { Global } from "../Global";
+import { UILogin } from "../UI/UILogin";
+import { SceneManager } from "./SceneManager";
+import { SceneState } from "./SceneState";
 
 /**
  * 登陆状态
@@ -23,11 +24,12 @@ export class LoginState extends SceneState {
 	}
 
 	private ConnectToLS(connector: WSConnector): void {
+		const config = CDefs.GetConfig();
 		if (Global.platform == Global.Platform.Editor) {
-			connector.Connect("localhost", Defs.config["ls_port"]);
+			connector.Connect("localhost", config["ls_port"]);
 		}
 		else {
-			connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]);
+			connector.Connect(config["ls_ip"], config["ls_port"]);
 		}
 	}
 
@@ -94,6 +96,9 @@ export class LoginState extends SceneState {
 				this._ui.OnLoginGSResult(resp);
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
+						//处理定义文件
+						const json = JSON.parse(new TextDecoder("utf-8").decode(resp.defs));
+						Defs.Init(json);
 						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
 							//玩家处于战场,重新连接到BS
 							Global.sceneManager.ChangeState(SceneManager.State.Loading);

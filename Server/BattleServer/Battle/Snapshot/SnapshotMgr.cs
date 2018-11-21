@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using System.Collections.Generic;
 
 namespace BattleServer.Battle.Snapshot
@@ -41,19 +40,6 @@ namespace BattleServer.Battle.Snapshot
 		public void Set( FrameSnapshot snapshot )
 		{
 			this._frameToSnapshot[snapshot.frame] = snapshot;
-		}
-
-		/// <summary>
-		/// 创建快照
-		/// </summary>
-		public void Create( int frame, ByteString data )
-		{
-			FrameSnapshot snapshot = new FrameSnapshot
-			{
-				frame = frame,
-				data = data
-			};
-			this.Set( snapshot );
 		}
 	}
 }

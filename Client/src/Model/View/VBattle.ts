@@ -1,5 +1,5 @@
 import { Consts } from "../../Consts";
-import { Defs } from "../../Defs";
+import { CDefs } from "../CDefs";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Hashtable } from "../../RC/Utils/Hashtable";
@@ -37,7 +37,7 @@ export class VBattle {
 
 		this._mapID = battleInfo.mapID
 		//加载配置
-		this._def = Defs.GetMap(Consts.ASSETS_MAP_PREFIX + this._mapID);
+		this._def = CDefs.GetMap(Consts.ASSETS_MAP_PREFIX + this._mapID);
 
 		this._camera.SetBounds(Hashtable.GetNumber(this._def, "width"), Hashtable.GetNumber(this._def, "height"));
 

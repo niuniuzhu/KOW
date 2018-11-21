@@ -1,6 +1,7 @@
 ﻿using Core.Misc;
 using GateServer.Net;
 using Shared;
+using Shared.Battle;
 using Shared.Net;
 
 namespace GateServer.Biz
@@ -75,7 +76,8 @@ namespace GateServer.Biz
 					gsLoginRet.GcState = ( Protos.GS2GC_LoginRet.Types.EGCCState )csLoginRet.GcState;
 					gsLoginRet.BsIP = csLoginRet.BsIP;
 					gsLoginRet.BsPort = csLoginRet.BsPort;
-					GS.instance.netSessionMgr.Send( sid, gsLoginRet );
+					gsLoginRet.Defs = Defs.binary;
+;					GS.instance.netSessionMgr.Send( sid, gsLoginRet );
 					break;
 
 				case Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin:

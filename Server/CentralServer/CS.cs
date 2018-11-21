@@ -196,6 +196,6 @@ namespace CentralServer
 			}
 		}
 
-		public void ReloadDefs() => Defs.Load( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( this.config.defPath ) ) );
+		public void ReloadDefs() => Defs.Load( File.ReadAllText( this.config.defPath ) );
 	}
 }

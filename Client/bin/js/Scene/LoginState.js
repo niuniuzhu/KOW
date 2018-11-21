@@ -1,4 +1,4 @@
-define(["require", "exports", "../Libs/protos", "../Net/ProtoHelper", "../Net/WSConnector", "./SceneState", "./SceneManager", "../Defs", "../RC/Utils/Logger", "../Global"], function (require, exports, protos_1, ProtoHelper_1, WSConnector_1, SceneState_1, SceneManager_1, Defs_1, Logger_1, Global_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "../Model/Defs", "../Net/ProtoHelper", "../Net/WSConnector", "../RC/Utils/Logger", "./SceneManager", "./SceneState"], function (require, exports, Global_1, protos_1, CDefs_1, Defs_1, ProtoHelper_1, WSConnector_1, Logger_1, SceneManager_1, SceneState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoginState extends SceneState_1.SceneState {
@@ -7,11 +7,12 @@ define(["require", "exports", "../Libs/protos", "../Net/ProtoHelper", "../Net/WS
             this.__ui = this._ui = Global_1.Global.uiManager.login;
         }
         ConnectToLS(connector) {
+            const config = CDefs_1.CDefs.GetConfig();
             if (Global_1.Global.platform == Global_1.Global.Platform.Editor) {
-                connector.Connect("localhost", Defs_1.Defs.config["ls_port"]);
+                connector.Connect("localhost", config["ls_port"]);
             }
             else {
-                connector.Connect(Defs_1.Defs.config["ls_ip"], Defs_1.Defs.config["ls_port"]);
+                connector.Connect(config["ls_ip"], config["ls_port"]);
             }
         }
         Register(uname, platform, sdk) {
@@ -60,6 +61,8 @@ define(["require", "exports", "../Libs/protos", "../Net/ProtoHelper", "../Net/WS
                     this._ui.OnLoginGSResult(resp);
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
+                            const json = JSON.parse(new TextDecoder("utf-8").decode(resp.defs));
+                            Defs_1.Defs.Init(json);
                             if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {
                                 Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading);
                                 Global_1.Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);

@@ -25,19 +25,19 @@ namespace Protos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgtHUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8aC0NTMkdTLnBy",
-            "b3RvIo0CCg5HUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
+            "b3RvIpsCCg5HUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
             "Lk1zZ09wdHMSLgoGcmVzdWx0GAIgASgOMh4uUHJvdG9zLkdTMkdDX0xvZ2lu",
             "UmV0LkVSZXN1bHQSMQoHZ2NTdGF0ZRgDIAEoDjIgLlByb3Rvcy5HUzJHQ19M",
             "b2dpblJldC5FR0NDU3RhdGUSDQoFZ2NOSUQYBCABKAQSDAoEYnNJUBgFIAEo",
-            "CRIOCgZic1BvcnQYBiABKAUiKQoHRVJlc3VsdBILCgdTdWNjZXNzEAASEQoN",
-            "U2Vzc2lvbkV4cGlyZRABIiEKCUVHQ0NTdGF0ZRIICgRJZGxlEAASCgoGQmF0",
-            "dGxlEAEiWQoKR1MyR0NfS2ljaxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1z",
-            "Z09wdHMSLAoGcmVhc29uGAIgASgOMhwuUHJvdG9zLkNTMkdTX0tpY2tHQy5F",
-            "UmVhc29uYgZwcm90bzM="));
+            "CRIOCgZic1BvcnQYBiABKAUSDAoEZGVmcxgHIAEoDCIpCgdFUmVzdWx0EgsK",
+            "B1N1Y2Nlc3MQABIRCg1TZXNzaW9uRXhwaXJlEAEiIQoJRUdDQ1N0YXRlEggK",
+            "BElkbGUQABIKCgZCYXR0bGUQASJZCgpHUzJHQ19LaWNrEh0KBG9wdHMYASAB",
+            "KAsyDy5Qcm90b3MuTXNnT3B0cxIsCgZyZWFzb24YAiABKA4yHC5Qcm90b3Mu",
+            "Q1MyR1NfS2lja0dDLkVSZWFzb25iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2GSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_LoginRet), global::Protos.GS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "GcState", "GcNID", "BsIP", "BsPort" }, null, new[]{ typeof(global::Protos.GS2GC_LoginRet.Types.EResult), typeof(global::Protos.GS2GC_LoginRet.Types.EGCCState) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_LoginRet), global::Protos.GS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "GcState", "GcNID", "BsIP", "BsPort", "Defs" }, null, new[]{ typeof(global::Protos.GS2GC_LoginRet.Types.EResult), typeof(global::Protos.GS2GC_LoginRet.Types.EGCCState) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_Kick), global::Protos.GS2GC_Kick.Parser, new[]{ "Opts", "Reason" }, null, null, null)
           }));
     }
@@ -80,6 +80,7 @@ namespace Protos {
       gcNID_ = other.gcNID_;
       bsIP_ = other.bsIP_;
       bsPort_ = other.bsPort_;
+      defs_ = other.defs_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -163,6 +164,17 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "defs" field.</summary>
+    public const int DefsFieldNumber = 7;
+    private pb::ByteString defs_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pb::ByteString Defs {
+      get { return defs_; }
+      set {
+        defs_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GS2GC_LoginRet);
@@ -182,6 +194,7 @@ namespace Protos {
       if (GcNID != other.GcNID) return false;
       if (BsIP != other.BsIP) return false;
       if (BsPort != other.BsPort) return false;
+      if (Defs != other.Defs) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -194,6 +207,7 @@ namespace Protos {
       if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
       if (BsIP.Length != 0) hash ^= BsIP.GetHashCode();
       if (BsPort != 0) hash ^= BsPort.GetHashCode();
+      if (Defs.Length != 0) hash ^= Defs.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -231,6 +245,10 @@ namespace Protos {
         output.WriteRawTag(48);
         output.WriteInt32(BsPort);
       }
+      if (Defs.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteBytes(Defs);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -256,6 +274,9 @@ namespace Protos {
       }
       if (BsPort != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(BsPort);
+      }
+      if (Defs.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Defs);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -288,6 +309,9 @@ namespace Protos {
       }
       if (other.BsPort != 0) {
         BsPort = other.BsPort;
+      }
+      if (other.Defs.Length != 0) {
+        Defs = other.Defs;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -325,6 +349,10 @@ namespace Protos {
           }
           case 48: {
             BsPort = input.ReadInt32();
+            break;
+          }
+          case 58: {
+            Defs = input.ReadBytes();
             break;
           }
         }

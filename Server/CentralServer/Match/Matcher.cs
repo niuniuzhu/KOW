@@ -268,7 +268,7 @@ namespace CentralServer.Match
 					ActorID = player.actorID,
 					Team = player.team
 				};
-				battleInfo.PlayerInfo.Add( pi );
+				battleInfo.PlayerInfos.Add( pi );
 			}
 			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, RPCEntry.Pop( OnBattleInfoRet, roomCloned,
 																			 appropriateBSInfo.ip, appropriateBSInfo.port,

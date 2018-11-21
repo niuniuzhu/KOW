@@ -29,8 +29,8 @@ export class BattleManager {
 	 * 初始化
 	 */
 	public Init() {
-		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 
 		this._lBattle = new Battle();
 		this._vBattle = new VBattle();
@@ -41,25 +41,29 @@ export class BattleManager {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo, completeHandler: () => void): void {
-		this._vBattle.SetBattleInfo(battleInfo);
-		this._lBattle.SetBattleInfo(battleInfo);
 		this._init = true;
 
-		//请求帧行为历史记录
-		const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
-		request.from = this._lBattle.frame;
-		request.to = battleInfo.serverFrame;
-		Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
-			const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
-			//处理历史记录
-			this.HandleRequestFrameActionsRet(ret.frames, ret.actions);
-			Logger.Log("battle start");
-			//追赶服务端帧数
-			this._lBattle.Chase(false);
-			//同步到表现层
-			this._lBattle.SyncToView();
-			//回调函数
-			completeHandler();
+		this._vBattle.SetBattleInfo(battleInfo);
+		this._lBattle.SetBattleInfo(battleInfo);
+
+		const curFrame = battleInfo.serverFrame;
+		//请求最新战场快照
+		this.RequestSnapshot(()=>{
+			//请求帧行为历史记录
+			const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
+			request.from = this._lBattle.frame;
+			request.to = curFrame;
+			Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
+				const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
+				//处理历史记录
+				this.HandleRequestFrameActions(ret.frames, ret.actions);
+				//追赶服务端帧数
+				this._lBattle.Chase(false);
+				//同步到表现层
+				this._lBattle.InitSyncToView();
+				//回调函数
+				completeHandler();
+			});
 		});
 	}
 
@@ -71,10 +75,23 @@ export class BattleManager {
 	}
 
 	/**
+	 * 请求快照
+	 */
+	private RequestSnapshot(callback: () => void): void {
+		const requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
+		requestState.frame = 0;
+		Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
+			const ret = <Protos.BS2GC_RequestSnapshotRet>msg;
+			this._lBattle.HandleSnapShot(ret);
+			callback();
+		});
+	}
+
+	/**
 	 * 战场结束回调
 	 * @param message 协议
 	 */
-	private OnBattleEnd(message: any): void {
+	private HandleBattleEnd(message: any): void {
 		const battleEnd = <Protos.BS2GC_BattleEnd>message;
 		this._lBattle.End();
 		this._vBattle.End();
@@ -87,9 +104,9 @@ export class BattleManager {
 	 * 处理服务端下发的帧行为
 	 * @param message 协议
 	 */
-	private OnFrameAction(message: any): void {
+	private HandleFrameAction(message: any): void {
 		const frameAction = <Protos.BS2GC_FrameAction>message;
-		this._lBattle.OnFrameAction(frameAction.frame, frameAction.action);
+		this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
 	}
 
 	/**
@@ -97,10 +114,10 @@ export class BattleManager {
 	 * @param frames 帧数列表
 	 * @param actions 帧行为列表
 	 */
-	private HandleRequestFrameActionsRet(frames: number[], actions: Uint8Array[]): any {
+	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): any {
 		const count = frames.length;
 		for (let i = 0; i < count; ++i) {
-			this._lBattle.OnFrameAction(frames[i], actions[i]);
+			this._lBattle.HandleFrameAction(frames[i], actions[i]);
 		}
 	}
 }

@@ -1,3 +1,5 @@
+import { Protos } from "../Libs/protos";
+
 export class BattleInfo {
 	/**
 	 * 玩家ID
@@ -23,7 +25,6 @@ export class BattleInfo {
 	 * 地图ID
 	 */
 	public mapID: number;
-
 	/**
 	 * 客户端发起请求时的帧数
 	 */
@@ -36,4 +37,8 @@ export class BattleInfo {
 	 * 快照
 	 */
 	public snapshot: Uint8Array;
+	/**
+	 * 玩家信息
+	 */
+	public playerInfos: Protos.ICS2BS_PlayerInfo[];
 }

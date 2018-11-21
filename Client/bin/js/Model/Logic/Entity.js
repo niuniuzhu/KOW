@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attribute", "../EntityType", "./FSM/EntityState"], function (require, exports, FSM_1, Vec2_1, Attribute_1, EntityType_1, EntityState_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attribute", "../EntityType", "./FSM/EntityState", "../Defs", "../../RC/Utils/Hashtable"], function (require, exports, FSM_1, Vec2_1, Attribute_1, EntityType_1, EntityState_1, Defs_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Entity {
@@ -19,12 +19,24 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../Attr
         get actorID() { return this._actorID; }
         get team() { return this._team; }
         get name() { return this._name; }
-        Init(id, battle) {
-            this._id = id;
+        Init(battle, id, actorID, team, name) {
             this._battle = battle;
+            this._id = id;
+            this._actorID = actorID;
+            this._team = team;
+            this._name = name;
+            this.LoadDef();
             this._fsm.ChangeState(EntityState_1.EntityState.Type.Idle);
         }
         Dispose() {
+        }
+        LoadDef() {
+            this._def = Defs_1.Defs.GetEntity(this.actorID);
+            this.attribute.Set(Attribute_1.Attribute.Attr.MHP, Hashtable_1.Hashtable.GetNumber(this._def, "mhp"));
+            this.attribute.Set(Attribute_1.Attribute.Attr.HP, this.attribute.Get(Attribute_1.Attribute.Attr.MHP));
+            this.attribute.Set(Attribute_1.Attribute.Attr.MMP, Hashtable_1.Hashtable.GetNumber(this._def, "mmp"));
+            this.attribute.Set(Attribute_1.Attribute.Attr.MP, this.attribute.Get(Attribute_1.Attribute.Attr.MMP));
+            this.attribute.Set(Attribute_1.Attribute.Attr.MOVE_SPEED, Hashtable_1.Hashtable.GetNumber(this._def, "move_speed"));
         }
         EncodeSnapshot(writer) {
             writer.int32(this.type);

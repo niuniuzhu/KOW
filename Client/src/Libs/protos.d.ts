@@ -268,6 +268,8 @@ export namespace Protos {
         keyframeStep?: (number|null);
         battleTime?: (number|null);
         mapID?: (number|null);
+        curFrame?: (number|null);
+        playerInfos?: (Protos.ICS2BS_PlayerInfo[]|null);
     }
 
     class BS2GC_LoginRet implements IBS2GC_LoginRet {
@@ -280,6 +282,8 @@ export namespace Protos {
         public keyframeStep: number;
         public battleTime: number;
         public mapID: number;
+        public curFrame: number;
+        public playerInfos: Protos.ICS2BS_PlayerInfo[];
         public static create(properties?: Protos.IBS2GC_LoginRet): Protos.BS2GC_LoginRet;
         public static encode(message: Protos.IBS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -418,7 +422,7 @@ export namespace Protos {
         opts?: (Protos.IMsgOpts|null);
         mapID?: (number|null);
         connTimeout?: (number|null);
-        playerInfo?: (Protos.ICS2BS_PlayerInfo[]|null);
+        playerInfos?: (Protos.ICS2BS_PlayerInfo[]|null);
     }
 
     class CS2BS_BattleInfo implements ICS2BS_BattleInfo {
@@ -426,7 +430,7 @@ export namespace Protos {
         public opts?: (Protos.IMsgOpts|null);
         public mapID: number;
         public connTimeout: number;
-        public playerInfo: Protos.ICS2BS_PlayerInfo[];
+        public playerInfos: Protos.ICS2BS_PlayerInfo[];
         public static create(properties?: Protos.ICS2BS_BattleInfo): Protos.CS2BS_BattleInfo;
         public static encode(message: Protos.ICS2BS_BattleInfo, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2BS_BattleInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1186,6 +1190,7 @@ export namespace Protos {
         gcNID?: (Long|null);
         bsIP?: (string|null);
         bsPort?: (number|null);
+        defs?: (Uint8Array|null);
     }
 
     class GS2GC_LoginRet implements IGS2GC_LoginRet {
@@ -1196,6 +1201,7 @@ export namespace Protos {
         public gcNID: Long;
         public bsIP: string;
         public bsPort: number;
+        public defs: Uint8Array;
         public static create(properties?: Protos.IGS2GC_LoginRet): Protos.GS2GC_LoginRet;
         public static encode(message: Protos.IGS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGS2GC_LoginRet, writer?: $protobuf.Writer): $protobuf.Writer;

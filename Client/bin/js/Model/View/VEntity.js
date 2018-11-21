@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./FSM/VEntityState", "./FSM/VIdle", "./FSM/VMove", "./AniHolder", "../../Defs"], function (require, exports, Consts_1, Global_1, FSM_1, MathUtils_1, Vec2_1, Hashtable_1, Attribute_1, VEntityState_1, VIdle_1, VMove_1, AniHolder_1, Defs_1) {
+define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./AniHolder", "./FSM/VEntityState", "./FSM/VIdle", "./FSM/VMove"], function (require, exports, Consts_1, CDefs_1, Global_1, FSM_1, MathUtils_1, Vec2_1, Hashtable_1, Attribute_1, AniHolder_1, VEntityState_1, VIdle_1, VMove_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -70,7 +70,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
         }
         InitSnapshot(reader) {
             this._actorID = reader.int32();
-            this._def = Defs_1.Defs.GetEntity(Consts_1.Consts.ASSETS_ENTITY_PREFIX + this._actorID);
+            this._def = CDefs_1.CDefs.GetEntity(Consts_1.Consts.ASSETS_ENTITY_PREFIX + this._actorID);
             const aniDefs = Hashtable_1.Hashtable.GetMapArray(this._def, "animations");
             for (let i = 0; i < aniDefs.length; ++i) {
                 const aniDef = aniDefs[i];
@@ -85,10 +85,12 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/FSM/FSM"
             this._team = reader.int32();
             this._name = reader.string();
             this.position = new Vec2_1.Vec2(reader.float(), reader.float());
+            this._logicPos.CopyFrom(this.position);
             const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
-            this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
+            this.rotation = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
             if (logicDir.x < 0)
-                this._logicRot = 360 - this._logicRot;
+                this.rotation = 360 - this.rotation;
+            this._logicRot = this.rotation;
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.int32();
             const count = reader.int32();

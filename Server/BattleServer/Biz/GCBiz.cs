@@ -41,6 +41,18 @@ namespace BattleServer.Biz
 				loginRet.KeyframeStep = user.battle.keyframeStep;
 				loginRet.BattleTime = user.battle.battleTime;
 				loginRet.MapID = user.battle.mapID;
+				loginRet.CurFrame = user.battle.frame;
+				foreach ( var player in user.battle.battleEntry.players )
+				{
+					Protos.CS2BS_PlayerInfo playerInfo = new Protos.CS2BS_PlayerInfo
+					{
+						GcNID = player.gcNID,
+						ActorID = player.actorID,
+						Name = player.name,
+						Team = player.team
+					};
+					loginRet.PlayerInfos.Add( playerInfo );
+				}
 				loginRet.Result = Protos.Global.Types.ECommon.Success;
 				session.Send( loginRet );
 			}

@@ -81,6 +81,8 @@ namespace BattleServer.Battle
 		/// </summary>
 		public int numEntities => this._entities.Count;
 
+		public BattleEntry battleEntry { get; private set; }
+
 		public readonly BattleResult battleResult = new BattleResult();
 
 		/// <summary>
@@ -142,6 +144,7 @@ namespace BattleServer.Battle
 		/// </summary>
 		internal bool Init( BattleEntry battleEntry )
 		{
+			this.battleEntry = battleEntry;
 			this.rndSeed = battleEntry.rndSeed;
 			this.mapID = battleEntry.mapID;
 
@@ -154,7 +157,7 @@ namespace BattleServer.Battle
 				return false;
 
 			//创建初始化快照
-			this._snapshotMgr.Create( this.frame, this.MakeInitSnapshot() );
+			//this.MakeInitSnapshot();
 			//初始化帧行为管理器
 			this._frameActionMgr.Init( this );
 			//初始化锁步器
@@ -394,7 +397,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 制作初始化快照
 		/// </summary>
-		private Google.Protobuf.ByteString MakeInitSnapshot()
+		private void MakeInitSnapshot()
 		{
 			using ( MemoryStream ms = new MemoryStream() )
 			{
@@ -402,7 +405,12 @@ namespace BattleServer.Battle
 				this.EncodeSnapshot( writer );
 				writer.Flush();
 				Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( ms.GetBuffer(), 0, ( int )ms.Length );
-				return data;
+				FrameSnapshot snapshot = new FrameSnapshot
+				{
+					frame = this.frame,
+					data = data
+				};
+				this._snapshotMgr.Set( snapshot );
 			}
 		}
 

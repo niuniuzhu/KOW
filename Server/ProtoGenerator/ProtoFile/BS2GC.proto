@@ -7,11 +7,12 @@ import "Global.proto";
 message BS2GC_LoginRet {
 	MsgOpts opts = 1;
 	Global.ECommon result = 2;
-	int32 rndSeed = 3;//随机种子
-	int32 frameRate = 4;//逻辑帧速
-	int32 keyframeStep = 5;//关键帧步长
-	int32 battleTime = 6;//战场限时
-	int32 mapID = 7;//地图id
+	uint64 playerID = 3;//玩家ID
+	int32 rndSeed = 4;//随机种子
+	int32 frameRate = 5;//逻辑帧速
+	int32 keyframeStep = 6;//关键帧步长
+	int32 battleTime = 7;//战场限时
+	int32 mapID = 8;//地图id
 }
 
 //回应战场快照

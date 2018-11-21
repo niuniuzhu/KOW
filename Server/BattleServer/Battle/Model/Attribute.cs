@@ -13,7 +13,6 @@ namespace BattleServer.Battle.Model
 		ATK,
 		DEF,
 		MOVE_SPEED,
-		TURN_SPEED
 	}
 
 	/// <summary>

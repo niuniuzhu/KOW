@@ -1,14 +1,20 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../EntityType", "../Events/EventManager", "../Events/SyncEvent", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, EntityType_1, EventManager_1, SyncEvent_1, VChampion_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../EntityType", "../Events/EventManager", "../Events/SyncEvent", "./Camera", "./VChampion", "../../Defs"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, EntityType_1, EventManager_1, SyncEvent_1, Camera_1, VChampion_1, Defs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
         constructor() {
+            this._mapID = 0;
             this._entities = [];
             this._idToEntity = new Map();
+            this._camera = new Camera_1.Camera();
         }
         SetBattleInfo(battleInfo) {
             EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
             EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+            this._mapID = battleInfo.mapID;
+            this._def = Defs_1.Defs.GetMap(Consts_1.Consts.ASSETS_MAP_PREFIX + this._mapID);
+            this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(this._def, "width"), Hashtable_1.Hashtable.GetNumber(this._def, "height"));
+            this._playerID = battleInfo.playerID;
             this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
             this._root.touchable = false;
             Global_1.Global.graphic.mapRoot.addChild(this._root);
@@ -24,6 +30,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._idToEntity.clear();
         }
         Update(dt) {
+            this._camera.Update(dt);
             const count = this._entities.length;
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
@@ -38,6 +45,9 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 const id = reader.uint64();
                 const entity = this.CreateEntity(type, id);
                 entity.InitSnapshot(reader);
+                if (entity.id.equals(this._playerID)) {
+                    this._camera.lookAt = entity;
+                }
             }
         }
         DecodeSnapshot(reader) {

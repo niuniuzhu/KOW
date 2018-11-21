@@ -7,13 +7,16 @@ define(["require", "exports"], function (require, exports) {
         get entityRoot() { return this._entityRoot; }
         get uiRoot() { return this._uiRoot; }
         Init() {
+            const pivot = new fairygui.GComponent();
+            fairygui.GRoot.inst.addChild(pivot);
+            pivot.setSize(0, 0);
+            pivot.center();
+            pivot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Center_Center);
+            pivot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Middle_Middle);
             this._battleRoot = new fairygui.GComponent();
             this._battleRoot.name = "battle_root";
             this._battleRoot.setSize(0, 0);
-            this._battleRoot.center();
-            this._battleRoot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Center_Center);
-            this._battleRoot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Middle_Middle);
-            fairygui.GRoot.inst.addChild(this._battleRoot);
+            pivot.addChild(this._battleRoot);
             this._mapRoot = new fairygui.GComponent();
             this._mapRoot.name = "map_root";
             this._mapRoot.setSize(0, 0);

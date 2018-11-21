@@ -35,6 +35,7 @@ namespace BattleServer.Biz
 				//设置该Session为受信任的连接
 				gcSession.accredited = true;
 				//把战场的初始状态下发到GC
+				loginRet.PlayerID = user.gcNID;
 				loginRet.RndSeed = user.battle.rndSeed;
 				loginRet.FrameRate = user.battle.frameRate;
 				loginRet.KeyframeStep = user.battle.keyframeStep;

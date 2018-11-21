@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Net/ProtoHelper", "../RC/Math/Vec2", "../RC/Utils/Logger", "../RC/Utils/Timer"], function (require, exports, Consts_1, Global_1, protos_1, ProtoHelper_1, Vec2_1, Logger_1, Timer_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Net/ProtoHelper", "../RC/Math/Vec2", "../RC/Utils/Timer"], function (require, exports, Consts_1, Global_1, protos_1, ProtoHelper_1, Vec2_1, Timer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var InputFlag;
@@ -44,7 +44,6 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Ne
                 frameAction.dy = this.direction.y;
                 frameAction.inputFlag = this.inputFlag;
                 Global_1.Global.connector.bsConnector.Send(protos_1.Protos.GC2BS_FrameAction, frameAction);
-                Logger_1.Logger.Log("send");
             }
         }
     }

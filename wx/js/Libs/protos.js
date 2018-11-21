@@ -1098,6 +1098,7 @@ export const Protos = $root.Protos = (() => {
 
         BS2GC_LoginRet.prototype.opts = null;
         BS2GC_LoginRet.prototype.result = 0;
+        BS2GC_LoginRet.prototype.playerID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
         BS2GC_LoginRet.prototype.rndSeed = 0;
         BS2GC_LoginRet.prototype.frameRate = 0;
         BS2GC_LoginRet.prototype.keyframeStep = 0;
@@ -1115,16 +1116,18 @@ export const Protos = $root.Protos = (() => {
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.result != null && message.hasOwnProperty("result"))
                 writer.uint32(16).int32(message.result);
+            if (message.playerID != null && message.hasOwnProperty("playerID"))
+                writer.uint32(24).uint64(message.playerID);
             if (message.rndSeed != null && message.hasOwnProperty("rndSeed"))
-                writer.uint32(24).int32(message.rndSeed);
+                writer.uint32(32).int32(message.rndSeed);
             if (message.frameRate != null && message.hasOwnProperty("frameRate"))
-                writer.uint32(32).int32(message.frameRate);
+                writer.uint32(40).int32(message.frameRate);
             if (message.keyframeStep != null && message.hasOwnProperty("keyframeStep"))
-                writer.uint32(40).int32(message.keyframeStep);
+                writer.uint32(48).int32(message.keyframeStep);
             if (message.battleTime != null && message.hasOwnProperty("battleTime"))
-                writer.uint32(48).int32(message.battleTime);
+                writer.uint32(56).int32(message.battleTime);
             if (message.mapID != null && message.hasOwnProperty("mapID"))
-                writer.uint32(56).int32(message.mapID);
+                writer.uint32(64).int32(message.mapID);
             return writer;
         };
 
@@ -1146,18 +1149,21 @@ export const Protos = $root.Protos = (() => {
                     message.result = reader.int32();
                     break;
                 case 3:
-                    message.rndSeed = reader.int32();
+                    message.playerID = reader.uint64();
                     break;
                 case 4:
-                    message.frameRate = reader.int32();
+                    message.rndSeed = reader.int32();
                     break;
                 case 5:
-                    message.keyframeStep = reader.int32();
+                    message.frameRate = reader.int32();
                     break;
                 case 6:
-                    message.battleTime = reader.int32();
+                    message.keyframeStep = reader.int32();
                     break;
                 case 7:
+                    message.battleTime = reader.int32();
+                    break;
+                case 8:
                     message.mapID = reader.int32();
                     break;
                 default:
@@ -1190,6 +1196,9 @@ export const Protos = $root.Protos = (() => {
                 case 1:
                     break;
                 }
+            if (message.playerID != null && message.hasOwnProperty("playerID"))
+                if (!$util.isInteger(message.playerID) && !(message.playerID && $util.isInteger(message.playerID.low) && $util.isInteger(message.playerID.high)))
+                    return "playerID: integer|Long expected";
             if (message.rndSeed != null && message.hasOwnProperty("rndSeed"))
                 if (!$util.isInteger(message.rndSeed))
                     return "rndSeed: integer expected";
@@ -1227,6 +1236,15 @@ export const Protos = $root.Protos = (() => {
                 message.result = 1;
                 break;
             }
+            if (object.playerID != null)
+                if ($util.Long)
+                    (message.playerID = $util.Long.fromValue(object.playerID)).unsigned = true;
+                else if (typeof object.playerID === "string")
+                    message.playerID = parseInt(object.playerID, 10);
+                else if (typeof object.playerID === "number")
+                    message.playerID = object.playerID;
+                else if (typeof object.playerID === "object")
+                    message.playerID = new $util.LongBits(object.playerID.low >>> 0, object.playerID.high >>> 0).toNumber(true);
             if (object.rndSeed != null)
                 message.rndSeed = object.rndSeed | 0;
             if (object.frameRate != null)
@@ -1247,6 +1265,11 @@ export const Protos = $root.Protos = (() => {
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, true);
+                    object.playerID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.playerID = options.longs === String ? "0" : 0;
                 object.rndSeed = 0;
                 object.frameRate = 0;
                 object.keyframeStep = 0;
@@ -1257,6 +1280,11 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.result != null && message.hasOwnProperty("result"))
                 object.result = options.enums === String ? $root.Protos.Global.ECommon[message.result] : message.result;
+            if (message.playerID != null && message.hasOwnProperty("playerID"))
+                if (typeof message.playerID === "number")
+                    object.playerID = options.longs === String ? String(message.playerID) : message.playerID;
+                else
+                    object.playerID = options.longs === String ? $util.Long.prototype.toString.call(message.playerID) : options.longs === Number ? new $util.LongBits(message.playerID.low >>> 0, message.playerID.high >>> 0).toNumber(true) : message.playerID;
             if (message.rndSeed != null && message.hasOwnProperty("rndSeed"))
                 object.rndSeed = message.rndSeed;
             if (message.frameRate != null && message.hasOwnProperty("frameRate"))

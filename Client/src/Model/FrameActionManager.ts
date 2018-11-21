@@ -58,7 +58,6 @@ export class FrameAciontManager {
 			frameAction.dy = this.direction.y;
 			frameAction.inputFlag = this.inputFlag;
 			Global.connector.bsConnector.Send(Protos.GC2BS_FrameAction, frameAction);
-			Logger.Log("send");
 		}
 	}
 }

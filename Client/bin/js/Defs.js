@@ -2,14 +2,21 @@ define(["require", "exports", "./RC/Utils/Hashtable"], function (require, export
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Defs {
-        static get config() { return Defs._config; }
+        static get config() { return this._config; }
         static Init(json) {
-            Defs._defs = json;
-            Defs._config = Hashtable_1.Hashtable.GetMap(Defs._defs, "config");
+            this._defs = json;
+            this._config = Hashtable_1.Hashtable.GetMap(this._defs, "config");
+            this._mapMap = Hashtable_1.Hashtable.GetMap(this._defs, "map");
+            this._entityMap = Hashtable_1.Hashtable.GetMap(this._defs, "entity");
         }
         static GetPreloads() {
-            let arr = Hashtable_1.Hashtable.GetArray(Defs._defs, "preloads");
-            return arr;
+            return Hashtable_1.Hashtable.GetArray(this._defs, "preloads");
+        }
+        static GetMap(id) {
+            return Hashtable_1.Hashtable.GetMap(this._mapMap, id);
+        }
+        static GetEntity(id) {
+            return Hashtable_1.Hashtable.GetMap(this._entityMap, id);
         }
     }
     exports.Defs = Defs;

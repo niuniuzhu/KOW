@@ -29,10 +29,22 @@
     },
     "entity": {
         "e0": {
-            "mhp": 150,
+            "mhp": 1000,
             "mmp": 100,
             "move_speed": 200,
-            "turn_speed": 1
+            "radius": 110,
+            "states": [
+                {
+                    "type": 0,
+                    "attrs": [],
+                    "events": [
+                        {
+                            "time": 0
+                        }
+                    ],
+                    "animation": "idle" 
+                }
+            ]
         }
     }
 }

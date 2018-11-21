@@ -1,21 +1,31 @@
 import { Consts } from "../../Consts";
+import { Defs } from "../../Defs";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
+import { Hashtable } from "../../RC/Utils/Hashtable";
 import { BattleInfo } from "../BattleInfo";
 import { EntityType } from "../EntityType";
 import { BaseEvent } from "../Events/BaseEvent";
 import { EventManager } from "../Events/EventManager";
 import { SyncEvent } from "../Events/SyncEvent";
+import { Camera } from "./Camera";
 import { VChampion } from "./VChampion";
 import { VEntity } from "./VEntity";
 
 export class VBattle {
-	private _root: fairygui.GComponent;
-
+	private _mapID: number = 0;
+	private _playerID: Long;
+	private readonly _camera: Camera;
 	private readonly _entities: VEntity[] = [];
 	private readonly _idToEntity: Map<string, VEntity> = new Map<string, VEntity>();
 
+	private _root: fairygui.GComponent;
 	private _logicFrame: number;
+	private _def: Hashtable;
+
+	constructor() {
+		this._camera = new Camera();
+	}
 
 	/**
 	 * 设置战场信息
@@ -25,6 +35,13 @@ export class VBattle {
 		EventManager.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
 		EventManager.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
 
+		this._mapID = battleInfo.mapID
+		//加载配置
+		this._def = Defs.GetMap(Consts.ASSETS_MAP_PREFIX + this._mapID);
+
+		this._camera.SetBounds(Hashtable.GetNumber(this._def, "width"), Hashtable.GetNumber(this._def, "height"));
+
+		this._playerID = battleInfo.playerID;
 		this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
 		this._root.touchable = false;
 		Global.graphic.mapRoot.addChild(this._root);
@@ -46,6 +63,9 @@ export class VBattle {
 	}
 
 	public Update(dt: number): void {
+		//更新摄像机
+		this._camera.Update(dt);
+
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
@@ -64,6 +84,10 @@ export class VBattle {
 			const id = <Long>reader.uint64();
 			const entity = this.CreateEntity(type, id);
 			entity.InitSnapshot(reader);
+
+			if (entity.id.equals(this._playerID)) {
+				this._camera.lookAt = entity;
+			}
 		}
 	}
 

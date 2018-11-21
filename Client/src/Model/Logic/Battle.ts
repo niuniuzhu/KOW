@@ -9,7 +9,6 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity } from "./Entity";
 import ByteBuffer = require("../../Libs/ByteBuffer");
-import { Logger } from "../../RC/Utils/Logger";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -89,7 +88,6 @@ export class Battle implements ISnapshotable {
 	 * 编码快照
 	 */
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
-		//设置当前战场的帧数为快照的帧数
 		writer.int32(this._frame);
 		const count = this._entities.length;
 		writer.int32(count);

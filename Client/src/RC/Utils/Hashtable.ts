@@ -1,11 +1,11 @@
 import { Vec2 } from "../Math/Vec2";
-
 import { Vec3 } from "../Math/Vec3";
-
 import { Vec4 } from "../Math/Vec4";
 
+type pair = { [k: string]: any };
+
 export class Hashtable {
-	public static Concat(map: { [k: string]: any }, map2: { [k: string]: any }) {
+	public static Concat(map: pair, map2: pair) {
 		for (let k in map2) {
 			if (map[k] == undefined) {
 				map[k] = map2[k]
@@ -13,39 +13,43 @@ export class Hashtable {
 		}
 	}
 
-	public static GetArray(map: { [k: string]: any }, key: string): any[] {
+	public static GetArray(map: pair, key: string): any[] {
 		return <any[]>map[key];
 	}
 
-	public static GetMap(map: { [k: string]: any }, key: string): { [k: string]: any } {
+	public static GetMap(map: pair, key: string): pair {
 		return map[key];
 	}
 
-	public static GetString(map: { [k: string]: any }, key: string): string {
+	public static GetString(map: pair, key: string): string {
 		return <string>map[key];
 	}
 
-	public static GetNumber(map: { [k: string]: any }, key: string): number {
+	public static GetNumber(map: pair, key: string): number {
 		return <number>map[key];
 	}
 
-	public static GetBool(map: { [k: string]: any }, key: string): boolean {
+	public static GetBool(map: pair, key: string): boolean {
 		return <boolean>map[key];
 	}
 
-	public static GetStringArray(map: { [k: string]: any }, key: string): string[] {
+	public static GetStringArray(map: pair, key: string): string[] {
 		return <string[]>this.GetArray(map, key);
 	}
 
-	public static GetNumberArray(map: { [k: string]: any }, key: string): number[] {
+	public static GetNumberArray(map: pair, key: string): number[] {
 		return <number[]>this.GetArray(map, key);
 	}
 
-	public static GetBoolArray(map: { [k: string]: any }, key: string): boolean[] {
+	public static GetBoolArray(map: pair, key: string): boolean[] {
 		return this.GetArray(map, key) as boolean[];
 	}
 
-	public static GetVec2Array(map: { [k: string]: any }, key: string): Vec2[] | null {
+	public static GetMapArray(map: pair, key: string): pair[] {
+		return <pair[]>this.GetArray(map, key);
+	}
+
+	public static GetVec2Array(map: pair, key: string): Vec2[] | null {
 		let arrs: number[][] = this.GetArray(map, key);
 		if (arrs == null)
 			return null;
@@ -56,7 +60,7 @@ export class Hashtable {
 		return result;
 	}
 
-	public static GetVec3Array(map: { [k: string]: any }, key: string): Vec3[] | null {
+	public static GetVec3Array(map: pair, key: string): Vec3[] | null {
 		let arrs: number[][] = this.GetArray(map, key);
 		if (arrs == null)
 			return null;
@@ -67,7 +71,7 @@ export class Hashtable {
 		return result;
 	}
 
-	public static GetVec4Array(map: { [k: string]: any }, key: string): Vec4[] | null {
+	public static GetVec4Array(map: pair, key: string): Vec4[] | null {
 		let arrs: number[][] = this.GetArray(map, key);
 		if (arrs == null)
 			return null;
@@ -78,21 +82,21 @@ export class Hashtable {
 		return result;
 	}
 
-	public static GetVec2(map: { [k: string]: any }, key: string): Vec2 | null {
+	public static GetVec2(map: pair, key: string): Vec2 | null {
 		let arr: any[] = this.GetArray(map, key);
 		if (arr == null)
 			return null;
 		return new Vec2(arr[0], arr[1]);
 	}
 
-	public static GetVec3(map: { [k: string]: any }, key: string): Vec3 | null {
+	public static GetVec3(map: pair, key: string): Vec3 | null {
 		let arr: any[] = this.GetArray(map, key);
 		if (arr == null)
 			return null;
 		return new Vec3(arr[0], arr[1], arr[2]);
 	}
 
-	public static GetVec4(map: { [k: string]: any }, key: string): Vec4 | null {
+	public static GetVec4(map: pair, key: string): Vec4 | null {
 		let arr: any[] = this.GetArray(map, key);
 		if (arr == null)
 			return null;

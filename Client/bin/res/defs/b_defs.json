@@ -17,5 +17,37 @@
 		"loading_atlas0.png,1",
 		"battle.bin,0",
 		"battle_atlas0.png,1"
-	]
+	],
+	"map": {
+		"m0": {
+			"width": 2000,
+			"height": 2000
+		}
+	},
+	"entity": {
+		"e0": {
+			"animations": [
+				{
+					"name": "attack",
+					"length": 7
+				},
+				{
+					"name": "b",
+					"length": 5
+				},
+				{
+					"name": "die",
+					"length": 1
+				},
+				{
+					"name": "run",
+					"length": 7
+				},
+				{
+					"name": "stand",
+					"length": 6
+				}
+			]
+		}
+	}
 }

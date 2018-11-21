@@ -262,6 +262,7 @@ export namespace Protos {
     interface IBS2GC_LoginRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.Global.ECommon|null);
+        playerID?: (Long|null);
         rndSeed?: (number|null);
         frameRate?: (number|null);
         keyframeStep?: (number|null);
@@ -273,6 +274,7 @@ export namespace Protos {
         constructor(properties?: Protos.IBS2GC_LoginRet);
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.Global.ECommon;
+        public playerID: Long;
         public rndSeed: number;
         public frameRate: number;
         public keyframeStep: number;

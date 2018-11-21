@@ -58,20 +58,19 @@ namespace BattleServer.Battle.Model
 
 		public bool LoadDef()
 		{
-			Hashtable mapDef = Defs.GetEntity( this.actorID );
-			if ( mapDef == null )
+			Hashtable def = Defs.GetEntity( this.actorID );
+			if ( def == null )
 			{
 				Logger.Error( $"invalid actorID:{this.actorID}" );
 				return false;
 			}
 			try
 			{
-				this.attribute.Set( Attr.MHP, ( Fix64 )mapDef.GetFloat( "mhp" ) );
+				this.attribute.Set( Attr.MHP, ( Fix64 )def.GetFloat( "mhp" ) );
 				this.attribute.Set( Attr.HP, this.attribute.Get( Attr.MHP ) );
-				this.attribute.Set( Attr.MMP, ( Fix64 )mapDef.GetFloat( "mmp" ) );
+				this.attribute.Set( Attr.MMP, ( Fix64 )def.GetFloat( "mmp" ) );
 				this.attribute.Set( Attr.MP, this.attribute.Get( Attr.MMP ) );
-				this.attribute.Set( Attr.MOVE_SPEED, ( Fix64 )mapDef.GetFloat( "move_speed" ) );
-				this.attribute.Set( Attr.TURN_SPEED, ( Fix64 )mapDef.GetFloat( "turn_speed" ) );
+				this.attribute.Set( Attr.MOVE_SPEED, ( Fix64 )def.GetFloat( "move_speed" ) );
 				//todo more....
 			}
 			catch ( Exception e )

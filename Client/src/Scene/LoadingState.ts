@@ -64,12 +64,12 @@ export class LoadingState extends SceneState {
 				switch (resp.result) {
 					case Protos.Global.ECommon.Success:
 						//把数据保存,加载资源后用于创建战场
+						this._battleInfo.playerID = resp.playerID;
 						this._battleInfo.rndSeed = resp.rndSeed;
 						this._battleInfo.frameRate = resp.frameRate;
 						this._battleInfo.keyframeStep = resp.keyframeStep;
 						this._battleInfo.battleTime = resp.battleTime;
 						this._battleInfo.mapID = resp.mapID;
-
 						//请求快照
 						this.RequestSnapshot();
 						break;
@@ -119,8 +119,7 @@ export class LoadingState extends SceneState {
 				reader.int32();//type
 				reader.uint64();//id
 				const actorID = reader.uint32();
-				//压入角色ID
-				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + actorID + ".config.json", type: Laya.Loader.JSON });
+				//压入角色资源
 				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + actorID + ".atlas", type: Laya.Loader.ATLAS });
 			}
 

@@ -8,7 +8,7 @@ enum Attr {
 	ATK,
 	DEF,
 	MOVE_SPEED,
-	TURN_SPEED
+	RADIUS
 }
 
 /**

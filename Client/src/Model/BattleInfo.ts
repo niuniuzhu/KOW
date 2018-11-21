@@ -1,5 +1,9 @@
 export class BattleInfo {
 	/**
+	 * 玩家ID
+	 */
+	public playerID: Long;
+	/**
 	 * 随机种子
 	 */
 	public rndSeed: number;

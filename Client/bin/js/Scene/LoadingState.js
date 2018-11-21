@@ -29,6 +29,7 @@ define(["require", "exports", "../Libs/protobufjs", "./SceneState", "../Model/Ba
                     this._ui.OnLoginBSResut(resp.result, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
                     switch (resp.result) {
                         case protos_1.Protos.Global.ECommon.Success:
+                            this._battleInfo.playerID = resp.playerID;
                             this._battleInfo.rndSeed = resp.rndSeed;
                             this._battleInfo.frameRate = resp.frameRate;
                             this._battleInfo.keyframeStep = resp.keyframeStep;
@@ -70,7 +71,6 @@ define(["require", "exports", "../Libs/protobufjs", "./SceneState", "../Model/Ba
                     reader.int32();
                     reader.uint64();
                     const actorID = reader.uint32();
-                    urls.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_ENTITY_PREFIX + actorID + ".config.json", type: Laya.Loader.JSON });
                     urls.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_ENTITY_PREFIX + actorID + ".atlas", type: Laya.Loader.ATLAS });
                 }
                 urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });

@@ -33,6 +33,9 @@ define(["require", "exports", "../Math/Vec2", "../Math/Vec3", "../Math/Vec4"], f
         static GetBoolArray(map, key) {
             return this.GetArray(map, key);
         }
+        static GetMapArray(map, key) {
+            return this.GetArray(map, key);
+        }
         static GetVec2Array(map, key) {
             let arrs = this.GetArray(map, key);
             if (arrs == null)

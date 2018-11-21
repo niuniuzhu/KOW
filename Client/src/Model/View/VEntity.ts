@@ -1,4 +1,5 @@
 import { Consts } from "../../Consts";
+import { Defs } from "../../Defs";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
@@ -6,17 +7,18 @@ import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute } from "../Attribute";
+import { AniHolder } from "./AniHolder";
 import { VEntityState } from "./FSM/VEntityState";
 import { VIdle } from "./FSM/VIdle";
 import { VMove } from "./FSM/VMove";
 import { VBattle } from "./VBattle";
-import { AniHolder } from "./AniHolder";
 
 export class VEntity {
 	public get id(): Long { return this._id; }
 	public get actorID(): number { return this._actorID; }
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
+	public get root(): fairygui.GComponent { return this._root; }
 
 	public readonly attribute: Attribute = new Attribute();
 
@@ -38,15 +40,18 @@ export class VEntity {
 		this.OnRatationChanged(delta);
 	}
 
+	public get worldPosition(): Vec2 { return this._worldPosition; }
+
 	private _battle: VBattle;
 	private _id: Long;
 	private _actorID: number;
 	private _team: number;
 	private _name: string;
-	private _def: JSON;
+	private _def: Hashtable;
 
 	private _position: Vec2 = Vec2.zero;
 	private _rotation: number = 0;
+	private _worldPosition: Vec2 = Vec2.zero;
 	private _logicPos: Vec2 = Vec2.zero;
 	private _logicRot: number = 0;
 	private _playingName: string = "";
@@ -85,27 +90,35 @@ export class VEntity {
 
 	private OnPositionChanged(delta: Vec2): void {
 		this._root.setXY(this._position.x, this._position.y);
+		let point = new Laya.Point();
+		this._root.localToGlobal(0, 0, point);
+		this._worldPosition.x = point.x;
+		this._worldPosition.y = point.y;
 	}
 
 	private OnRatationChanged(delta: number): void {
 		this._root.rotation = this._rotation;
 	}
 
+	/**
+	 * 初始化快照
+	 */
 	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._actorID = reader.int32();
 
 		//加载配置
-		this._def = <JSON>Laya.loader.getRes("res/roles/" + Consts.ASSETS_ENTITY_PREFIX + this._actorID + ".config.json");
-		const aniDef = Hashtable.GetMap(this._def, "animations");
-		for (let key in aniDef) {
-			const group = Hashtable.GetMap(aniDef, key);
-			const length = Hashtable.GetNumber(group, "length");
+		this._def = Defs.GetEntity(Consts.ASSETS_ENTITY_PREFIX + this._actorID);
+		const aniDefs = Hashtable.GetMapArray(this._def, "animations");
+		for (let i = 0; i < aniDefs.length; ++i) {
+			const aniDef = aniDefs[i];
+			const aniName = Hashtable.GetString(aniDef, "name");
+			const length = Hashtable.GetNumber(aniDef, "length");
 			//创建图形
 			const urls: string[] = [];
 			for (let i = 0; i < length; ++i) {
-				urls.push((Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + key + i + ".png");
+				urls.push((Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + aniName + i + ".png");
 			}
-			this._animations.set(key, new AniHolder(urls));
+			this._animations.set(aniName, new AniHolder(urls));
 		}
 
 		this._team = reader.int32();
@@ -121,9 +134,11 @@ export class VEntity {
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), reader.float());
 		}
-
 	}
 
+	/**
+	 * 解码快照
+	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._actorID = reader.int32();
 		this._team = reader.int32();
@@ -141,6 +156,11 @@ export class VEntity {
 		}
 	}
 
+	/**
+	 * 播放动画
+	 * @param name 动画名称
+	 * @param force 是否强制重新播放
+	 */
 	public PlayAnim(name: string, force: boolean = false): void {
 		if (!force && this._playingName == name)
 			return;

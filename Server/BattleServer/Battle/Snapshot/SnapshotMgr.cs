@@ -1,5 +1,8 @@
-﻿using Google.Protobuf;
+﻿using Core.Crypto;
+using Core.Misc;
+using Google.Protobuf;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BattleServer.Battle.Snapshot
 {
@@ -9,9 +12,21 @@ namespace BattleServer.Battle.Snapshot
 	public class SnapshotMgr
 	{
 		/// <summary>
-		/// 帧数到快照的映射表
+		/// 帧数到快照的映射表,作为快照的历史记录
 		/// </summary>
 		private readonly SortedList<int, FrameSnapshot> _frameToSnapshot = new SortedList<int, FrameSnapshot>();
+
+		/// <summary>
+		/// 记录相同帧数下每个玩家提交的快照数据
+		/// </summary>
+		private readonly Dictionary<int, List<PlayerSnapshot>> _frameAndUserToSnapshot = new Dictionary<int, List<PlayerSnapshot>>();
+
+		private int _numPlayers;
+
+		public void Init( int numPlayers )
+		{
+			this._numPlayers = numPlayers;
+		}
 
 		public void Clear()
 		{
@@ -35,11 +50,82 @@ namespace BattleServer.Battle.Snapshot
 		}
 
 		/// <summary>
-		/// 保存快照
+		/// 保存快照到历史记录
 		/// </summary>
 		public void Set( FrameSnapshot snapshot )
 		{
 			this._frameToSnapshot[snapshot.frame] = snapshot;
 		}
+
+		/// <summary>
+		/// 处理玩家提交的快照数据
+		/// </summary>
+		public void Commit( ulong gcNID, int frame, ByteString data )
+		{
+			if ( !this._frameAndUserToSnapshot.TryGetValue( frame, out List<PlayerSnapshot> playerSnapshots ) )
+			{
+				playerSnapshots = new List<PlayerSnapshot>();
+				this._frameAndUserToSnapshot[frame] = playerSnapshots;
+			}
+			PlayerSnapshot playerSnapshot = new PlayerSnapshot();
+			playerSnapshot.gcNID = gcNID;
+			playerSnapshot.data = data;
+			playerSnapshot.crc = CRC32.Compute( data.ToByteArray() );
+			playerSnapshots.Add( playerSnapshot );
+			this.CheckPlayerSnapshots( frame, playerSnapshots );
+		}
+
+		private void CheckPlayerSnapshots( int frame, List<PlayerSnapshot> playerSnapshots )
+		{
+			//判断是否所有玩家都提交了快照
+			if ( playerSnapshots.Count < this._numPlayers )
+				return;
+			//检查crc是否一致
+			ByteString data;
+			//先找出crc多数一致的组
+			var group = playerSnapshots.GroupBy( s => s.crc );
+			//如果只有一个分组,则代表全部玩家的crc值一致
+			if ( group.Count() == 1 )
+			{
+				data = playerSnapshots[0].data;
+				//把快照数据保存到历史记录里
+				FrameSnapshot frameSnapshot = new FrameSnapshot { data = data, frame = frame };
+				this.Set( frameSnapshot );
+				//该帧的检查已经完成,可以不保留在内存了
+				this._frameAndUserToSnapshot.Remove( frame );
+			}
+			else
+			{
+				IGrouping<uint, PlayerSnapshot> maxGroup = null;
+				int max = 0;
+				foreach ( var e in group )
+				{
+					int c = e.Count();
+					if ( c <= max )
+						continue;
+					maxGroup = e;
+					max = c;
+				}
+				System.Diagnostics.Debug.Assert( maxGroup != null );
+				//这是正确的crc值
+				uint crc = maxGroup.Key;
+				int count = playerSnapshots.Count;
+				for ( int i = 0; i < count; i++ )
+				{
+					PlayerSnapshot playerSnapshot = playerSnapshots[i];
+					if ( playerSnapshot.crc == crc )
+						continue;
+					//todo 处理crc错误的玩家
+					Logger.Warn( $"{playerSnapshot.gcNID} different snapshot crc32 value, expect:{crc} but:{playerSnapshot.crc}" );
+				}
+			}
+		}
+	}
+
+	class PlayerSnapshot
+	{
+		public ulong gcNID;
+		public ByteString data;
+		public uint crc;
 	}
 }

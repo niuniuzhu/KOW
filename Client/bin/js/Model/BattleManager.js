@@ -22,7 +22,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                 Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestFrameActions, request, msg => {
                     const ret = msg;
                     this.HandleRequestFrameActions(ret.frames, ret.actions);
-                    this._lBattle.Chase(false);
+                    this._lBattle.Chase(false, false);
                     this._lBattle.InitSyncToView();
                     completeHandler();
                 });

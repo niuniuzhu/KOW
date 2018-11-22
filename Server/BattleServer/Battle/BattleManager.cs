@@ -196,6 +196,16 @@ namespace BattleServer.Battle
 			battle.HandleRequestFrameActions( @from, to, ret );
 
 		/// <summary>
+		/// 处理玩家提交的快照数据
+		/// </summary>
+		/// <param name="battle">战场</param>
+		/// <param name="gcNID">玩家ID</param>
+		/// <param name="frame">快照所在的帧数</param>
+		/// <param name="data">快照数据</param>
+		internal void HandleCommitSnapshot( Battle battle, ulong gcNID, int frame, Google.Protobuf.ByteString data ) =>
+			battle.HandleCommitSnapshot( gcNID, frame, data );
+
+		/// <summary>
 		/// 获取指定索引的战场
 		/// </summary>
 		public Battle GetBattleAt( int index )

@@ -13,7 +13,6 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 #endregion
 
 namespace BattleServer.Battle
@@ -26,46 +25,42 @@ namespace BattleServer.Battle
 		/// 战场ID
 		/// </summary>
 		public uint id { get; }
-
 		/// <summary>
 		/// 标志战场是否结束
 		/// </summary>
 		public bool finished { get; private set; }
-
 		/// <summary>
 		/// 帧率
 		/// </summary>
 		public int frameRate { get; private set; }
-
 		/// <summary>
 		/// 关键帧步长
 		/// </summary>
 		public int keyframeStep { get; private set; }
 		/// <summary>
+		/// 快照步长
+		/// </summary>
+		public int snapshotStep { get; private set; }
+		/// <summary>
 		/// 地图ID
 		/// </summary>
 		public int mapID { get; private set; }
-
 		/// <summary>
 		/// 随机种子
 		/// </summary>
 		public int rndSeed { get; private set; }
-
 		/// <summary>
 		/// 当前已运行帧数
 		/// </summary>
 		public int frame { get; private set; }
-
 		/// <summary>
 		/// 战场限时
 		/// </summary>
 		public int battleTime { get; private set; }
-
 		/// <summary>
 		/// 队伍的出生点
 		/// </summary>
 		public FVec2[] bornPoses { get; private set; }
-
 		/// <summary>
 		/// 队伍的出生朝向
 		/// </summary>
@@ -156,6 +151,7 @@ namespace BattleServer.Battle
 			if ( !this.CreatePlayers( battleEntry.players ) )
 				return false;
 
+			this._snapshotMgr.Init( battleEntry.players.Length );
 			//创建初始化快照
 			//this.MakeInitSnapshot();
 			//初始化帧行为管理器
@@ -189,6 +185,7 @@ namespace BattleServer.Battle
 			{
 				this.frameRate = mapDef.GetInt( "frame_rate" );
 				this.keyframeStep = mapDef.GetInt( "keyframe_step" );
+				this.snapshotStep = mapDef.GetInt( "snapshot_step" );
 				this.battleTime = mapDef.GetInt( "timeout" );
 
 				ArrayList arr = ( ArrayList )mapDef["born_pos"];
@@ -439,5 +436,14 @@ namespace BattleServer.Battle
 		/// <param name="ret">需要填充的消息</param>
 		internal void HandleRequestFrameActions( int from, int to, Protos.BS2GC_RequestFrameActionsRet ret ) =>
 			this._frameActionMgr.FillHistoryToMessage( from, to, ret );
+
+		/// <summary>
+		/// 处理玩家提交快照数据
+		/// </summary>
+		/// <param name="gcNID">玩家ID</param>
+		/// <param name="frame">快照的所在的帧数</param>
+		/// <param name="data">快照数据</param>
+		internal void HandleCommitSnapshot( ulong gcNID, int frame, Google.Protobuf.ByteString data ) =>
+			this._snapshotMgr.Commit( gcNID, frame, data );
 	}
 }

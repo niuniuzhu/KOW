@@ -13,16 +13,21 @@ import { Entity } from "./Entity";
 import ByteBuffer = require("../../Libs/ByteBuffer");
 import { Defs } from "../Defs";
 import { Vec2 } from "../../RC/Math/Vec2";
+import { ProtoCreator } from "../../Net/ProtoHelper";
+import { Global } from "../../Global";
+import { Logger } from "../../RC/Utils/Logger";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
 	private _keyframeStep: number = 0;
+	private _snapshotStep: number = 0;
 	private _timeout: number = 0;
 	private _mapID: number = 0;
 	private _frame: number = 0;
 
 	public get frameRate(): number { return this._frameRate; }
 	public get keyframeStep(): number { return this._keyframeStep; }
+	public get snapshotStep(): number { return this._snapshotStep; }
 	public get timeout(): number { return this._timeout; }
 	public get mapID(): number { return this._mapID; }
 	public get frame(): number { return this._frame; }
@@ -44,6 +49,7 @@ export class Battle implements ISnapshotable {
 	public SetBattleInfo(battleInfo: BattleInfo): void {
 		this._frameRate = battleInfo.frameRate;
 		this._keyframeStep = battleInfo.keyframeStep;
+		this._snapshotStep = battleInfo.snapshotStep;
 		this._timeout = battleInfo.battleTime;
 		this._mapID = battleInfo.mapID
 		this._msPerFrame = 1000 / this._frameRate;
@@ -68,6 +74,60 @@ export class Battle implements ISnapshotable {
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
 		this._frameActionGroups.clear();
+	}
+
+	/**
+	 * 心跳更新
+	 * @param dt 上次更新到当前流逝的时间
+	 */
+	public Update(dt: number): void {
+		//追帧
+		this.Chase(true, true);
+
+		this._realElapsed += dt;
+		if (this.frame < this._nextKeyFrame) {
+			this._logicElapsed += dt;
+
+			while (this._logicElapsed >= this._msPerFrame) {
+				if (this.frame >= this._nextKeyFrame)
+					break;
+
+				this.UpdateLogic(this._msPerFrame, true, true);
+				this._realElapsed = 0;
+				this._logicElapsed -= this._msPerFrame;
+			}
+		}
+	}
+
+	/**
+	 * 更新逻辑帧
+	 * @param dt 上一帧到当前帧流逝的时间
+	 */
+	private UpdateLogic(dt: number, updateView: boolean, commitSnapshot: boolean): void {
+		++this._frame;
+		const count = this._entities.length;
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			entity.Update(dt);
+		}
+
+		if (updateView) {
+			//同步到表现层
+			this.SyncToView();
+		}
+
+		//判断是否需要提交快照数据
+		if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
+			const writer = $protobuf.Writer.create();
+			this.EncodeSnapshot(writer);
+			const data = writer.finish();
+			//提交快照
+			Logger.Log(this._frame);
+			const request = ProtoCreator.Q_GC2BS_CommitSnapshot();
+			request.frame = this._frame;
+			request.data = data;
+			Global.connector.SendToBS(Protos.GC2BS_CommitSnapshot, request);
+		}
 	}
 
 	/**
@@ -100,46 +160,6 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 心跳更新
-	 * @param dt 上次更新到当前流逝的时间
-	 */
-	public Update(dt: number): void {
-		//追帧
-		this.Chase(true);
-		this._realElapsed += dt;
-		if (this.frame < this._nextKeyFrame) {
-			this._logicElapsed += dt;
-
-			while (this._logicElapsed >= this._msPerFrame) {
-				if (this.frame >= this._nextKeyFrame)
-					break;
-
-				this.UpdateLogic(this._msPerFrame);
-				this.SyncToView();
-
-				if (this.frame == this._nextKeyFrame) {
-					//todo send action
-				}
-				this._realElapsed = 0;
-				this._logicElapsed -= this._msPerFrame;
-			}
-		}
-	}
-
-	/**
-	 * 更新逻辑帧
-	 * @param dt 上一帧到当前帧流逝的时间
-	 */
-	private UpdateLogic(dt: number): void {
-		++this._frame;
-		const count = this._entities.length;
-		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			entity.Update(dt);
-		}
-	}
-
-	/**
 	 * 把初始状态同步到表现层
 	 */
 	public InitSyncToView(): void {
@@ -162,7 +182,7 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 追赶服务端帧数
 	 */
-	public Chase(updateView: boolean): void {
+	public Chase(updateView: boolean, commitSnapshot: boolean): void {
 		while (!this._frameActionGroups.isEmpty()) {
 			const frameActionGroup = this._frameActionGroups.dequeue();
 			let length = frameActionGroup.frame - this.frame;
@@ -171,9 +191,7 @@ export class Battle implements ISnapshotable {
 					this.ApplyFrameActionGroup(frameActionGroup);
 				}
 				else {
-					this.UpdateLogic(this._msPerFrame);
-					if (updateView)
-						this.SyncToView();
+					this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
 				}
 				--length;
 			}

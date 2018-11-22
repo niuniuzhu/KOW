@@ -12,10 +12,11 @@ message BS2GC_LoginRet {
 	int32 rndSeed = 4;//随机种子
 	int32 frameRate = 5;//逻辑帧速
 	int32 keyframeStep = 6;//关键帧步长
-	int32 battleTime = 7;//战场限时
-	int32 mapID = 8;//地图id
-	int32 curFrame = 9;//当前帧数
-	repeated CS2BS_PlayerInfo playerInfos = 10;//玩家信息
+	int32 snapshotStep = 7;//快照步长
+	int32 battleTime = 8;//战场限时
+	int32 mapID = 9;//地图id
+	int32 curFrame = 10;//当前帧数
+	repeated CS2BS_PlayerInfo playerInfos = 11;//玩家信息
 }
 
 //回应战场快照

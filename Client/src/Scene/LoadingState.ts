@@ -67,6 +67,7 @@ export class LoadingState extends SceneState {
 						this._battleInfo.rndSeed = resp.rndSeed;
 						this._battleInfo.frameRate = resp.frameRate;
 						this._battleInfo.keyframeStep = resp.keyframeStep;
+						this._battleInfo.snapshotStep = resp.snapshotStep;
 						this._battleInfo.battleTime = resp.battleTime;
 						this._battleInfo.mapID = resp.mapID;
 						this._battleInfo.playerInfos = resp.playerInfos;

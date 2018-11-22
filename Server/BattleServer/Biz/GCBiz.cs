@@ -39,6 +39,7 @@ namespace BattleServer.Biz
 				loginRet.RndSeed = user.battle.rndSeed;
 				loginRet.FrameRate = user.battle.frameRate;
 				loginRet.KeyframeStep = user.battle.keyframeStep;
+				loginRet.SnapshotStep = user.battle.snapshotStep;
 				loginRet.BattleTime = user.battle.battleTime;
 				loginRet.MapID = user.battle.mapID;
 				loginRet.CurFrame = user.battle.frame;
@@ -104,6 +105,17 @@ namespace BattleServer.Biz
 				Protos.BS2GC_RequestFrameActionsRet ret = ProtoCreator.R_GC2BS_RequestFrameActions( request.Opts.Pid );
 				BS.instance.battleManager.HandleRequestFrameActions( user.battle, request.From, request.To, ret );
 				BS.instance.netSessionMgr.Send( user.gcSID, ret );
+			}
+			return ErrorCode.Success;
+		}
+
+		public ErrorCode OnGc2BsCommitSnapshot( NetSessionBase session, Google.Protobuf.IMessage message )
+		{
+			BSUser user = BS.instance.userMgr.GetUser( session.id );
+			if ( user != null )
+			{
+				Protos.GC2BS_CommitSnapshot request = ( Protos.GC2BS_CommitSnapshot )message;
+				BS.instance.battleManager.HandleCommitSnapshot( user.battle, user.gcNID, request.Frame, request.Data );
 			}
 			return ErrorCode.Success;
 		}

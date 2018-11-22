@@ -111,6 +111,7 @@ export namespace Protos {
         eGC2BS_RequestSnapshot = 1202,
         eGC2BS_FrameAction = 1203,
         eGC2BS_RequestFrameActions = 1204,
+        eGC2BS_CommitSnapshot = 1205,
         eGC2CS_BeginMatch = 1300,
         eLS2GC_GSInfo = 2000,
         eLS2GC_AskRegRet = 2001,
@@ -266,6 +267,7 @@ export namespace Protos {
         rndSeed?: (number|null);
         frameRate?: (number|null);
         keyframeStep?: (number|null);
+        snapshotStep?: (number|null);
         battleTime?: (number|null);
         mapID?: (number|null);
         curFrame?: (number|null);
@@ -280,6 +282,7 @@ export namespace Protos {
         public rndSeed: number;
         public frameRate: number;
         public keyframeStep: number;
+        public snapshotStep: number;
         public battleTime: number;
         public mapID: number;
         public curFrame: number;
@@ -1036,6 +1039,28 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GC2BS_RequestFrameActions;
         public static toObject(message: Protos.GC2BS_RequestFrameActions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2BS_CommitSnapshot {
+        opts?: (Protos.IMsgOpts|null);
+        frame?: (number|null);
+        data?: (Uint8Array|null);
+    }
+
+    class GC2BS_CommitSnapshot implements IGC2BS_CommitSnapshot {
+        constructor(properties?: Protos.IGC2BS_CommitSnapshot);
+        public opts?: (Protos.IMsgOpts|null);
+        public frame: number;
+        public data: Uint8Array;
+        public static create(properties?: Protos.IGC2BS_CommitSnapshot): Protos.GC2BS_CommitSnapshot;
+        public static encode(message: Protos.IGC2BS_CommitSnapshot, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2BS_CommitSnapshot, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2BS_CommitSnapshot;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2BS_CommitSnapshot;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2BS_CommitSnapshot;
+        public static toObject(message: Protos.GC2BS_CommitSnapshot, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

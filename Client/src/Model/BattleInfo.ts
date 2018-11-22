@@ -18,6 +18,10 @@ export class BattleInfo {
 	 */
 	public keyframeStep: number;
 	/**
+	 * 快照步长
+	 */
+	public snapshotStep:number;
+	/**
 	 * 战场限时
 	 */
 	public battleTime: number;

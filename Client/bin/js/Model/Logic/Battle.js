@@ -1,10 +1,11 @@
-define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Queue", "../../RC/Utils/Hashtable", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/ByteBuffer", "../Defs", "../../RC/Math/Vec2"], function (require, exports, $protobuf, Queue_1, Hashtable_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1, ByteBuffer, Defs_1, Vec2_1) {
+define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../../RC/Collections/Queue", "../../RC/Utils/Hashtable", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/ByteBuffer", "../Defs", "../../RC/Math/Vec2", "../../Net/ProtoHelper", "../../Global", "../../RC/Utils/Logger"], function (require, exports, $protobuf, protos_1, Queue_1, Hashtable_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1, ByteBuffer, Defs_1, Vec2_1, ProtoHelper_1, Global_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
         constructor() {
             this._frameRate = 0;
             this._keyframeStep = 0;
+            this._snapshotStep = 0;
             this._timeout = 0;
             this._mapID = 0;
             this._frame = 0;
@@ -18,12 +19,14 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
         }
         get frameRate() { return this._frameRate; }
         get keyframeStep() { return this._keyframeStep; }
+        get snapshotStep() { return this._snapshotStep; }
         get timeout() { return this._timeout; }
         get mapID() { return this._mapID; }
         get frame() { return this._frame; }
         SetBattleInfo(battleInfo) {
             this._frameRate = battleInfo.frameRate;
             this._keyframeStep = battleInfo.keyframeStep;
+            this._snapshotStep = battleInfo.snapshotStep;
             this._timeout = battleInfo.battleTime;
             this._mapID = battleInfo.mapID;
             this._msPerFrame = 1000 / this._frameRate;
@@ -41,6 +44,41 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
             this._logicElapsed = 0;
             this._realElapsed = 0;
             this._frameActionGroups.clear();
+        }
+        Update(dt) {
+            this.Chase(true, true);
+            this._realElapsed += dt;
+            if (this.frame < this._nextKeyFrame) {
+                this._logicElapsed += dt;
+                while (this._logicElapsed >= this._msPerFrame) {
+                    if (this.frame >= this._nextKeyFrame)
+                        break;
+                    this.UpdateLogic(this._msPerFrame, true, true);
+                    this._realElapsed = 0;
+                    this._logicElapsed -= this._msPerFrame;
+                }
+            }
+        }
+        UpdateLogic(dt, updateView, commitSnapshot) {
+            ++this._frame;
+            const count = this._entities.length;
+            for (let i = 0; i < count; i++) {
+                const entity = this._entities[i];
+                entity.Update(dt);
+            }
+            if (updateView) {
+                this.SyncToView();
+            }
+            if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
+                const writer = $protobuf.Writer.create();
+                this.EncodeSnapshot(writer);
+                const data = writer.finish();
+                Logger_1.Logger.Log(this._frame);
+                const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_CommitSnapshot();
+                request.frame = this._frame;
+                request.data = data;
+                Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_CommitSnapshot, request);
+            }
         }
         EncodeSnapshot(writer) {
             writer.int32(this._frame);
@@ -63,31 +101,6 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
                 entity.DecodeSnapshot(reader);
             }
         }
-        Update(dt) {
-            this.Chase(true);
-            this._realElapsed += dt;
-            if (this.frame < this._nextKeyFrame) {
-                this._logicElapsed += dt;
-                while (this._logicElapsed >= this._msPerFrame) {
-                    if (this.frame >= this._nextKeyFrame)
-                        break;
-                    this.UpdateLogic(this._msPerFrame);
-                    this.SyncToView();
-                    if (this.frame == this._nextKeyFrame) {
-                    }
-                    this._realElapsed = 0;
-                    this._logicElapsed -= this._msPerFrame;
-                }
-            }
-        }
-        UpdateLogic(dt) {
-            ++this._frame;
-            const count = this._entities.length;
-            for (let i = 0; i < count; i++) {
-                const entity = this._entities[i];
-                entity.Update(dt);
-            }
-        }
         InitSyncToView() {
             const writer = $protobuf.Writer.create();
             this.EncodeSnapshot(writer);
@@ -100,7 +113,7 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
             const data = writer.finish();
             SyncEvent_1.SyncEvent.Snapshot(data);
         }
-        Chase(updateView) {
+        Chase(updateView, commitSnapshot) {
             while (!this._frameActionGroups.isEmpty()) {
                 const frameActionGroup = this._frameActionGroups.dequeue();
                 let length = frameActionGroup.frame - this.frame;
@@ -109,9 +122,7 @@ define(["require", "exports", "../../Libs/protobufjs", "../../RC/Collections/Que
                         this.ApplyFrameActionGroup(frameActionGroup);
                     }
                     else {
-                        this.UpdateLogic(this._msPerFrame);
-                        if (updateView)
-                            this.SyncToView();
+                        this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
                     }
                     --length;
                 }

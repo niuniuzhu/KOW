@@ -32,3 +32,10 @@ message GC2BS_RequestFrameActions {
 	int32 from = 2;//开始帧数
 	int32 to = 3;//结束帧数
 }
+
+//提交快照数据
+message GC2BS_CommitSnapshot {
+	MsgOpts opts = 1;
+	int32 frame = 2;
+	bytes data = 3;
+}

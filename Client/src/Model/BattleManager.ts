@@ -58,7 +58,7 @@ export class BattleManager {
 				//处理历史记录
 				this.HandleRequestFrameActions(ret.frames, ret.actions);
 				//追赶服务端帧数
-				this._lBattle.Chase(false);
+				this._lBattle.Chase(false, false);
 				//同步到表现层
 				this._lBattle.InitSyncToView();
 				//回调函数

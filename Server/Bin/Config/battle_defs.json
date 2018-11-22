@@ -3,6 +3,7 @@
         "m0": {
             "frame_rate": 20,
             "keyframe_step": 4,
+            "snapshot_step": 20,
             "timeout": 180000,
             "max_players": 1,
             "born_pos": [
@@ -42,7 +43,7 @@
                             "time": 0
                         }
                     ],
-                    "animation": "idle" 
+                    "animation": "idle"
                 }
             ]
         }

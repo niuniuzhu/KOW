@@ -17,6 +17,7 @@ namespace BattleServer.Net
 			this.RegMsgHandler( Protos.MsgID.EGc2BsRequestSnapshot, BS.instance.bizProcessor.OnGc2BsRequestSnapShot );
 			this.RegMsgHandler( Protos.MsgID.EGc2BsFrameAction, BS.instance.bizProcessor.OnGc2BsFrameAction );
 			this.RegMsgHandler( Protos.MsgID.EGc2BsRequestFrameActions, BS.instance.bizProcessor.OnGc2BsRequestFrameActions );
+			this.RegMsgHandler( Protos.MsgID.EGc2BsCommitSnapshot, BS.instance.bizProcessor.OnGc2BsCommitSnapshot );
 		}
 
 		protected override void OnEstablish()

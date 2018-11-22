@@ -539,6 +539,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[1202] = "eGC2BS_RequestSnapshot"] = 1202;
         values[valuesById[1203] = "eGC2BS_FrameAction"] = 1203;
         values[valuesById[1204] = "eGC2BS_RequestFrameActions"] = 1204;
+        values[valuesById[1205] = "eGC2BS_CommitSnapshot"] = 1205;
         values[valuesById[1300] = "eGC2CS_BeginMatch"] = 1300;
         values[valuesById[2000] = "eLS2GC_GSInfo"] = 2000;
         values[valuesById[2001] = "eLS2GC_AskRegRet"] = 2001;
@@ -1103,6 +1104,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_LoginRet.prototype.rndSeed = 0;
         BS2GC_LoginRet.prototype.frameRate = 0;
         BS2GC_LoginRet.prototype.keyframeStep = 0;
+        BS2GC_LoginRet.prototype.snapshotStep = 0;
         BS2GC_LoginRet.prototype.battleTime = 0;
         BS2GC_LoginRet.prototype.mapID = 0;
         BS2GC_LoginRet.prototype.curFrame = 0;
@@ -1127,15 +1129,17 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(40).int32(message.frameRate);
             if (message.keyframeStep != null && message.hasOwnProperty("keyframeStep"))
                 writer.uint32(48).int32(message.keyframeStep);
+            if (message.snapshotStep != null && message.hasOwnProperty("snapshotStep"))
+                writer.uint32(56).int32(message.snapshotStep);
             if (message.battleTime != null && message.hasOwnProperty("battleTime"))
-                writer.uint32(56).int32(message.battleTime);
+                writer.uint32(64).int32(message.battleTime);
             if (message.mapID != null && message.hasOwnProperty("mapID"))
-                writer.uint32(64).int32(message.mapID);
+                writer.uint32(72).int32(message.mapID);
             if (message.curFrame != null && message.hasOwnProperty("curFrame"))
-                writer.uint32(72).int32(message.curFrame);
+                writer.uint32(80).int32(message.curFrame);
             if (message.playerInfos != null && message.playerInfos.length)
                 for (let i = 0; i < message.playerInfos.length; ++i)
-                    $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(82).fork()).ldelim();
+                    $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(90).fork()).ldelim();
             return writer;
         };
 
@@ -1169,15 +1173,18 @@ export const Protos = $root.Protos = (() => {
                     message.keyframeStep = reader.int32();
                     break;
                 case 7:
-                    message.battleTime = reader.int32();
+                    message.snapshotStep = reader.int32();
                     break;
                 case 8:
-                    message.mapID = reader.int32();
+                    message.battleTime = reader.int32();
                     break;
                 case 9:
-                    message.curFrame = reader.int32();
+                    message.mapID = reader.int32();
                     break;
                 case 10:
+                    message.curFrame = reader.int32();
+                    break;
+                case 11:
                     if (!(message.playerInfos && message.playerInfos.length))
                         message.playerInfos = [];
                     message.playerInfos.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
@@ -1224,6 +1231,9 @@ export const Protos = $root.Protos = (() => {
             if (message.keyframeStep != null && message.hasOwnProperty("keyframeStep"))
                 if (!$util.isInteger(message.keyframeStep))
                     return "keyframeStep: integer expected";
+            if (message.snapshotStep != null && message.hasOwnProperty("snapshotStep"))
+                if (!$util.isInteger(message.snapshotStep))
+                    return "snapshotStep: integer expected";
             if (message.battleTime != null && message.hasOwnProperty("battleTime"))
                 if (!$util.isInteger(message.battleTime))
                     return "battleTime: integer expected";
@@ -1279,6 +1289,8 @@ export const Protos = $root.Protos = (() => {
                 message.frameRate = object.frameRate | 0;
             if (object.keyframeStep != null)
                 message.keyframeStep = object.keyframeStep | 0;
+            if (object.snapshotStep != null)
+                message.snapshotStep = object.snapshotStep | 0;
             if (object.battleTime != null)
                 message.battleTime = object.battleTime | 0;
             if (object.mapID != null)
@@ -1315,6 +1327,7 @@ export const Protos = $root.Protos = (() => {
                 object.rndSeed = 0;
                 object.frameRate = 0;
                 object.keyframeStep = 0;
+                object.snapshotStep = 0;
                 object.battleTime = 0;
                 object.mapID = 0;
                 object.curFrame = 0;
@@ -1334,6 +1347,8 @@ export const Protos = $root.Protos = (() => {
                 object.frameRate = message.frameRate;
             if (message.keyframeStep != null && message.hasOwnProperty("keyframeStep"))
                 object.keyframeStep = message.keyframeStep;
+            if (message.snapshotStep != null && message.hasOwnProperty("snapshotStep"))
+                object.snapshotStep = message.snapshotStep;
             if (message.battleTime != null && message.hasOwnProperty("battleTime"))
                 object.battleTime = message.battleTime;
             if (message.mapID != null && message.hasOwnProperty("mapID"))
@@ -5631,6 +5646,136 @@ export const Protos = $root.Protos = (() => {
         };
 
         return GC2BS_RequestFrameActions;
+    })();
+
+    Protos.GC2BS_CommitSnapshot = (function() {
+
+        function GC2BS_CommitSnapshot(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2BS_CommitSnapshot.prototype.opts = null;
+        GC2BS_CommitSnapshot.prototype.frame = 0;
+        GC2BS_CommitSnapshot.prototype.data = $util.newBuffer([]);
+
+        GC2BS_CommitSnapshot.create = function create(properties) {
+            return new GC2BS_CommitSnapshot(properties);
+        };
+
+        GC2BS_CommitSnapshot.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                writer.uint32(16).int32(message.frame);
+            if (message.data != null && message.hasOwnProperty("data"))
+                writer.uint32(26).bytes(message.data);
+            return writer;
+        };
+
+        GC2BS_CommitSnapshot.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2BS_CommitSnapshot.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_CommitSnapshot();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.frame = reader.int32();
+                    break;
+                case 3:
+                    message.data = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2BS_CommitSnapshot.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2BS_CommitSnapshot.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                if (!$util.isInteger(message.frame))
+                    return "frame: integer expected";
+            if (message.data != null && message.hasOwnProperty("data"))
+                if (!(message.data && typeof message.data.length === "number" || $util.isString(message.data)))
+                    return "data: buffer expected";
+            return null;
+        };
+
+        GC2BS_CommitSnapshot.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2BS_CommitSnapshot)
+                return object;
+            let message = new $root.Protos.GC2BS_CommitSnapshot();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.GC2BS_CommitSnapshot.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.frame != null)
+                message.frame = object.frame | 0;
+            if (object.data != null)
+                if (typeof object.data === "string")
+                    $util.base64.decode(object.data, message.data = $util.newBuffer($util.base64.length(object.data)), 0);
+                else if (object.data.length)
+                    message.data = object.data;
+            return message;
+        };
+
+        GC2BS_CommitSnapshot.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.frame = 0;
+                if (options.bytes === String)
+                    object.data = "";
+                else {
+                    object.data = [];
+                    if (options.bytes !== Array)
+                        object.data = $util.newBuffer(object.data);
+                }
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                object.frame = message.frame;
+            if (message.data != null && message.hasOwnProperty("data"))
+                object.data = options.bytes === String ? $util.base64.encode(message.data, 0, message.data.length) : options.bytes === Array ? Array.prototype.slice.call(message.data) : message.data;
+            return object;
+        };
+
+        GC2BS_CommitSnapshot.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GC2BS_CommitSnapshot;
     })();
 
     Protos.GC2CS_BeginMatch = (function() {

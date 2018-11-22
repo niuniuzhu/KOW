@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.Battle.Battle);
-			Utils.BeginObjectRegister(type, L, translator, 0, 7, 14, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 7, 15, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Clear", _m_Clear);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "LoadDefs", _m_LoadDefs);
@@ -36,6 +36,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "finished", _g_get_finished);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "frameRate", _g_get_frameRate);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "keyframeStep", _g_get_keyframeStep);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "snapshotStep", _g_get_snapshotStep);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "mapID", _g_get_mapID);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "rndSeed", _g_get_rndSeed);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "frame", _g_get_frame);
@@ -343,6 +344,20 @@ namespace XLua.CSObjectWrap
 			
                 BattleServer.Battle.Battle __cl_gen_to_be_invoked = (BattleServer.Battle.Battle)translator.FastGetCSObj(L, 1);
                 LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.keyframeStep);
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_snapshotStep(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                BattleServer.Battle.Battle __cl_gen_to_be_invoked = (BattleServer.Battle.Battle)translator.FastGetCSObj(L, 1);
+                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.snapshotStep);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }

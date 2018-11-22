@@ -31,12 +31,13 @@ namespace BattleServer.Battle.Snapshot
 		public void Clear()
 		{
 			this._frameToSnapshot.Clear();
+			this._frameAndUserToSnapshot.Clear();
 		}
 
 		/// <summary>
 		/// 获取指定帧数下的快照实例
 		/// </summary>
-		/// <param name="frame">指定帧数下的快速,-1表示最近的快照</param>
+		/// <param name="frame">指定帧数下的快照,-1表示最近的快照</param>
 		public FrameSnapshot Get( int frame = -1 )
 		{
 			if ( frame < 0 )
@@ -81,18 +82,18 @@ namespace BattleServer.Battle.Snapshot
 			if ( playerSnapshots.Count < this._numPlayers )
 				return;
 			//检查crc是否一致
-			ByteString data;
 			//先找出crc多数一致的组
 			var group = playerSnapshots.GroupBy( s => s.crc );
 			//如果只有一个分组,则代表全部玩家的crc值一致
 			if ( group.Count() == 1 )
 			{
-				data = playerSnapshots[0].data;
+				ByteString data = playerSnapshots[0].data;
 				//把快照数据保存到历史记录里
 				FrameSnapshot frameSnapshot = new FrameSnapshot { data = data, frame = frame };
 				this.Set( frameSnapshot );
 				//该帧的检查已经完成,可以不保留在内存了
 				this._frameAndUserToSnapshot.Remove( frame );
+				Logger.Log( $"success,f{frame},snap count:{this._frameToSnapshot.Count},wcount:{this._frameAndUserToSnapshot.Count}" );
 			}
 			else
 			{
@@ -116,7 +117,7 @@ namespace BattleServer.Battle.Snapshot
 					if ( playerSnapshot.crc == crc )
 						continue;
 					//todo 处理crc错误的玩家
-					Logger.Warn( $"{playerSnapshot.gcNID} different snapshot crc32 value, expect:{crc} but:{playerSnapshot.crc}" );
+					Logger.Warn( $"{playerSnapshot.gcNID} different snapshot crc32 value, expect:{crc} but:{playerSnapshot.crc} at frame:{frame}" );
 				}
 			}
 		}

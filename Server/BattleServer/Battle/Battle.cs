@@ -389,7 +389,7 @@ namespace BattleServer.Battle
 		/// 获取指定帧数下的战场快照
 		/// </summary>
 		/// <param name="frame">指定帧数下的快速,-1表示最近的快照</param>
-		internal FrameSnapshot GetSnapshot( int frame = -1 ) => this._snapshotMgr.Get( frame );
+		internal FrameSnapshot GetSnapshot( int frame ) => this._snapshotMgr.Get( frame );
 
 		/// <summary>
 		/// 制作初始化快照

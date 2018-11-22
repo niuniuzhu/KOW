@@ -122,7 +122,6 @@ export class LoadingState extends SceneState {
 	private InitBattle(): void {
 		//初始化战场,解码快照
 		Global.battleManager.SetBattleInfo(this._battleInfo, () => {
-			Logger.Log("battle start");
 			Global.sceneManager.ChangeState(SceneManager.State.Battle);
 		});
 	}

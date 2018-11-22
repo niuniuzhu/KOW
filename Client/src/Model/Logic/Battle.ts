@@ -105,6 +105,7 @@ export class Battle implements ISnapshotable {
 	 */
 	private UpdateLogic(dt: number, updateView: boolean, commitSnapshot: boolean): void {
 		++this._frame;
+		Logger.Log("f:" + this._frame);
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
@@ -148,6 +149,7 @@ export class Battle implements ISnapshotable {
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._frame = reader.int32();
+		Logger.Log("recv snapshot, frame:" + this._frame);
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();

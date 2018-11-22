@@ -11,7 +11,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             this._vBattle = new VBattle_1.VBattle();
         }
         SetBattleInfo(battleInfo, completeHandler) {
-            this._init = true;
             this._vBattle.SetBattleInfo(battleInfo);
             this._lBattle.SetBattleInfo(battleInfo);
             const curFrame = battleInfo.serverFrame;
@@ -24,6 +23,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                     this.HandleRequestFrameActions(ret.frames, ret.actions);
                     this._lBattle.Chase(false, false);
                     this._lBattle.InitSyncToView();
+                    this._init = true;
                     completeHandler();
                 });
             });
@@ -36,7 +36,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         }
         RequestSnapshot(callback) {
             const requestState = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestSnapshot();
-            requestState.frame = 0;
+            requestState.frame = -1;
             Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestSnapshot, requestState, msg => {
                 const ret = msg;
                 this._lBattle.HandleSnapShot(ret);
@@ -58,6 +58,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         HandleRequestFrameActions(frames, actions) {
             const count = frames.length;
             for (let i = 0; i < count; ++i) {
+                Logger_1.Logger.Log("frameaction, frame:" + frames[i]);
                 this._lBattle.HandleFrameAction(frames[i], actions[i]);
             }
         }

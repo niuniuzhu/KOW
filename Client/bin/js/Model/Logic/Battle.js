@@ -61,6 +61,7 @@ define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../
         }
         UpdateLogic(dt, updateView, commitSnapshot) {
             ++this._frame;
+            Logger_1.Logger.Log("f:" + this._frame);
             const count = this._entities.length;
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
@@ -91,6 +92,7 @@ define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../
         }
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
+            Logger_1.Logger.Log("recv snapshot, frame:" + this._frame);
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();

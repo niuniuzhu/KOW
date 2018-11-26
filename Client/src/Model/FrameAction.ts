@@ -10,21 +10,15 @@ enum InputFlag {
 export class FrameAction {
 	public static readonly InputFlag = InputFlag;
 
-	public _frame: number;
 	public _gcNID: Long;
 	public _inputFlag: InputFlag;
 	public _dx: number;
 	public _dy: number;
 
-	public get frame(): number { return this._frame; }
 	public get gcNID(): Long { return this._gcNID; }
 	public get inputFlag(): InputFlag { return this._inputFlag; }
 	public get dx(): number { return this._dx; }
 	public get dy(): number { return this._dy; }
-
-	constructor(frame: number) {
-		this._frame = frame;
-	}
 
 	public DeSerialize(buffer: ByteBuffer): void {
 		this._gcNID = buffer.readUint64();

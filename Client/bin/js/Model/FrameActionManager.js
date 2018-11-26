@@ -37,13 +37,14 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Ne
         }
         Update(dt) {
             if (this._changed && Timer_1.Timer.utcTime >= this._nextFrameActionSendTime) {
-                this._changed = false;
                 this._nextFrameActionSendTime = Timer_1.Timer.utcTime + Consts_1.Consts.FRAME_ACTION_SEND_INTERVAL;
                 const frameAction = ProtoHelper_1.ProtoCreator.Q_GC2BS_FrameAction();
+                frameAction.inputFlag = this.inputFlag;
                 frameAction.dx = this.direction.x;
                 frameAction.dy = this.direction.y;
-                frameAction.inputFlag = this.inputFlag;
                 Global_1.Global.connector.bsConnector.Send(protos_1.Protos.GC2BS_FrameAction, frameAction);
+                this._inputFlag = 0;
+                this._changed = false;
             }
         }
     }

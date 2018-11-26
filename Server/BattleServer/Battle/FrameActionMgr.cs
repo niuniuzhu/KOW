@@ -29,7 +29,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 初始化
 		/// </summary>
-		public void Init( Battle battle )
+		internal void Init( Battle battle )
 		{
 			this._battle = battle;
 			int count = battle.numPlayers;
@@ -44,7 +44,7 @@ namespace BattleServer.Battle
 		/// 战场结束后清理
 		/// 多线程调用
 		/// </summary>
-		public void Clear()
+		internal void Clear()
 		{
 			lock ( this._gcNIDToAction )
 			{
@@ -69,7 +69,8 @@ namespace BattleServer.Battle
 					FrameAction frameAction = kv.Value;
 					if ( !frameAction.isValid )
 						continue;
-					frameAction.Serialize( this._frameBuffer );
+					frameAction.SerializeTo( this._frameBuffer );
+					frameAction.Clear();
 					++count;
 				}
 			}
@@ -83,7 +84,7 @@ namespace BattleServer.Battle
 		/// 从收到的玩家数据合并到帧行为
 		/// 主线程调用
 		/// </summary>
-		public void MergeFromProto( ulong gcNID, Protos.GC2BS_FrameAction action )
+		internal void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction action )
 		{
 			lock ( this._gcNIDToAction )
 			{
@@ -98,7 +99,7 @@ namespace BattleServer.Battle
 		/// <param name="from">开始帧数</param>
 		/// <param name="to">结束帧数, -1表示最新帧数</param>
 		/// <param name="ret">需要填充的消息</param>
-		public void FillHistoryToMessage( int from, int to, Protos.BS2GC_RequestFrameActionsRet ret )
+		internal void FillHistoryToMessage( int from, int to, Protos.BS2GC_RequestFrameActionsRet ret )
 		{
 			from = from < 0 ? 0 : from;
 			to = to < 0 ? this._battle.frame : ( to > this._battle.frame ? this._battle.frame : to );

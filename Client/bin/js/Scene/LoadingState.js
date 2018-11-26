@@ -74,7 +74,6 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Mo
         }
         InitBattle() {
             Global_1.Global.battleManager.SetBattleInfo(this._battleInfo, () => {
-                Logger_1.Logger.Log("battle start");
                 Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Battle);
             });
         }

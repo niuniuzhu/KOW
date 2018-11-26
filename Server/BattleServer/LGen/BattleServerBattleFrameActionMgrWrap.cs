@@ -21,12 +21,8 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.Battle.FrameActionMgr);
-			Utils.BeginObjectRegister(type, L, translator, 0, 4, 1, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 0, 1, 0);
 			
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Init", _m_Init);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Clear", _m_Clear);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "MergeFromProto", _m_MergeFromProto);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "FillHistoryToMessage", _m_FillHistoryToMessage);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "latestHistory", _g_get_latestHistory);
@@ -75,120 +71,6 @@ namespace XLua.CSObjectWrap
         
         
         
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_Init(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                BattleServer.Battle.FrameActionMgr __cl_gen_to_be_invoked = (BattleServer.Battle.FrameActionMgr)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    BattleServer.Battle.Battle battle = (BattleServer.Battle.Battle)translator.GetObject(L, 2, typeof(BattleServer.Battle.Battle));
-                    
-                    __cl_gen_to_be_invoked.Init( battle );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_Clear(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                BattleServer.Battle.FrameActionMgr __cl_gen_to_be_invoked = (BattleServer.Battle.FrameActionMgr)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    
-                    __cl_gen_to_be_invoked.Clear(  );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_MergeFromProto(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                BattleServer.Battle.FrameActionMgr __cl_gen_to_be_invoked = (BattleServer.Battle.FrameActionMgr)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    ulong gcNID = LuaAPI.lua_touint64(L, 2);
-                    Protos.GC2BS_FrameAction action = (Protos.GC2BS_FrameAction)translator.GetObject(L, 3, typeof(Protos.GC2BS_FrameAction));
-                    
-                    __cl_gen_to_be_invoked.MergeFromProto( gcNID, action );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FillHistoryToMessage(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                BattleServer.Battle.FrameActionMgr __cl_gen_to_be_invoked = (BattleServer.Battle.FrameActionMgr)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    int from = LuaAPI.xlua_tointeger(L, 2);
-                    int to = LuaAPI.xlua_tointeger(L, 3);
-                    Protos.BS2GC_RequestFrameActionsRet ret = (Protos.BS2GC_RequestFrameActionsRet)translator.GetObject(L, 4, typeof(Protos.BS2GC_RequestFrameActionsRet));
-                    
-                    __cl_gen_to_be_invoked.FillHistoryToMessage( from, to, ret );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-        }
         
         
         

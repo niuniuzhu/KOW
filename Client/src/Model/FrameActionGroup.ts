@@ -1,4 +1,5 @@
 import { FrameAction } from "./FrameAction";
+import ByteBuffer = require("../Libs/ByteBuffer");
 
 export class FrameActionGroup {
 	private readonly _frame;
@@ -9,6 +10,19 @@ export class FrameActionGroup {
 
 	constructor(frame: Number) {
 		this._frame = frame;
+	}
+
+	public DeSerialize(data: Uint8Array): void {
+		const buffer = new ByteBuffer();
+		buffer.littleEndian = true;
+		buffer.append(data);
+		buffer.offset = 0;
+		const count = buffer.readByte();
+		for (let i = 0; i < count; ++i) {
+			const frameAction = new FrameAction();
+			frameAction.DeSerialize(buffer);
+			this.Add(frameAction);
+		}
 	}
 
 	public Add(frameAction: FrameAction): void {

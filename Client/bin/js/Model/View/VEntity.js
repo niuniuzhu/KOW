@@ -1,13 +1,13 @@
-define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../Attribute", "./AniHolder", "./FSM/VEntityState", "./FSM/VIdle", "./FSM/VMove"], function (require, exports, Consts_1, CDefs_1, Global_1, FSM_1, MathUtils_1, Vec2_1, Hashtable_1, Attribute_1, AniHolder_1, VEntityState_1, VIdle_1, VMove_1) {
+define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "./AniHolder", "./FSM/VEntityState", "./FSM/VIdle", "./FSM/VMove", "../../RC/FVec2", "../../Libs/decimal"], function (require, exports, Consts_1, CDefs_1, Global_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, AniHolder_1, VEntityState_1, VIdle_1, VMove_1, FVec2_1, decimal_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
         constructor() {
             this.attribute = new Attribute_1.Attribute();
-            this._position = Vec2_1.Vec2.zero;
+            this._position = FVec2_1.FVec2.zero;
+            this._worldPosition = FVec2_1.FVec2.zero;
             this._rotation = 0;
-            this._worldPosition = Vec2_1.Vec2.zero;
-            this._logicPos = Vec2_1.Vec2.zero;
+            this._logicPos = FVec2_1.FVec2.zero;
             this._logicRot = 0;
             this._playingName = "";
             this._fsm = new FSM_1.FSM();
@@ -30,7 +30,7 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
         set position(value) {
             if (this._position.EqualsTo(value))
                 return;
-            const delta = Vec2_1.Vec2.Sub(value, this._position);
+            const delta = FVec2_1.FVec2.Sub(value, this._position);
             this._position = value;
             this.OnPositionChanged(delta);
         }
@@ -55,15 +55,15 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             this._root.dispose();
         }
         Update(dt) {
-            this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, dt * 0.012);
+            this.position = FVec2_1.FVec2.Lerp(this._position, this._logicPos, VEntity.D_SMALL0.mul(dt));
             this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.018);
         }
         OnPositionChanged(delta) {
-            this._root.setXY(this._position.x, this._position.y);
+            this._root.setXY(this._position.x.toNumber(), this._position.y.toNumber());
             let point = new Laya.Point();
             this._root.localToGlobal(0, 0, point);
-            this._worldPosition.x = point.x;
-            this._worldPosition.y = point.y;
+            this._worldPosition.x = new decimal_1.default(point.x);
+            this._worldPosition.y = new decimal_1.default(point.y);
         }
         OnRatationChanged(delta) {
             this._root.rotation = this._rotation;
@@ -84,34 +84,36 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             }
             this._team = reader.int32();
             this._name = reader.string();
-            this.position = new Vec2_1.Vec2(reader.float(), reader.float());
+            this.position = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             this._logicPos.CopyFrom(this.position);
-            const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
-            this.rotation = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
-            if (logicDir.x < 0)
+            const logicDir = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            this.rotation = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(FVec2_1.FVec2.down).toNumber()));
+            if (logicDir.x.lessThan(MathUtils_1.MathUtils.D_ZERO))
                 this.rotation = 360 - this.rotation;
             this._logicRot = this.rotation;
+            const moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.int32();
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
-                this.attribute.Set(reader.int32(), reader.float());
+                this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
             }
         }
         DecodeSnapshot(reader) {
             this._actorID = reader.int32();
             this._team = reader.int32();
             this._name = reader.string();
-            this._logicPos = new Vec2_1.Vec2(reader.float(), reader.float());
-            const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
-            this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
-            if (logicDir.x < 0)
+            this._logicPos = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            const logicDir = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(FVec2_1.FVec2.down).toNumber()));
+            if (logicDir.x.lessThan(MathUtils_1.MathUtils.D_ZERO))
                 this._logicRot = 360 - this._logicRot;
+            const moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.int32();
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
-                this.attribute.Set(reader.int32(), reader.float());
+                this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
             }
         }
         PlayAnim(name, force = false) {
@@ -124,6 +126,7 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             aniHilder.Play();
         }
     }
+    VEntity.D_SMALL0 = new decimal_1.default(0.012);
     exports.VEntity = VEntity;
 });
 //# sourceMappingURL=VEntity.js.map

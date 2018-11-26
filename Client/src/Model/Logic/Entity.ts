@@ -1,14 +1,15 @@
+import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
-import { Vec2 } from "../../RC/Math/Vec2";
+import { FVec2 } from "../../RC/FVec2";
+import { MathUtils } from "../../RC/Math/MathUtils";
+import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute } from "../Attribute";
+import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
 import { ISnapshotable } from "../ISnapshotable";
 import { Battle } from "./Battle";
 import { EntityState } from "./FSM/EntityState";
-import { Logger } from "../../RC/Utils/Logger";
-import { Defs } from "../Defs";
-import { Hashtable } from "../../RC/Utils/Hashtable";
 
 export class Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Undefined; }
@@ -19,8 +20,8 @@ export class Entity implements ISnapshotable {
 	public get name(): string { return this._name; }
 
 	public readonly attribute: Attribute = new Attribute();
-	public position: Vec2 = Vec2.zero;
-	public direction: Vec2 = Vec2.zero;
+	public position: FVec2 = FVec2.zero;
+	public direction: FVec2 = FVec2.zero;
 
 	private _battle: Battle;
 	private _id: Long;
@@ -29,7 +30,7 @@ export class Entity implements ISnapshotable {
 	private _name: string;
 	private _def: Hashtable;
 
-	private _moveDirection: Vec2 = Vec2.zero;
+	private _moveDirection: FVec2 = FVec2.zero;
 
 	private readonly _fsm: FSM = new FSM();
 
@@ -56,11 +57,11 @@ export class Entity implements ISnapshotable {
 
 	private LoadDef(): void {
 		this._def = Defs.GetEntity(this.actorID);
-		this.attribute.Set(Attribute.Attr.MHP, Hashtable.GetNumber(this._def, "mhp"));
+		this.attribute.Set(Attribute.Attr.MHP, new Decimal(Hashtable.GetNumber(this._def, "mhp")));
 		this.attribute.Set(Attribute.Attr.HP, this.attribute.Get(Attribute.Attr.MHP));
-		this.attribute.Set(Attribute.Attr.MMP, Hashtable.GetNumber(this._def, "mmp"));
+		this.attribute.Set(Attribute.Attr.MMP, new Decimal(Hashtable.GetNumber(this._def, "mmp")));
 		this.attribute.Set(Attribute.Attr.MP, this.attribute.Get(Attribute.Attr.MMP));
-		this.attribute.Set(Attribute.Attr.MOVE_SPEED, Hashtable.GetNumber(this._def, "move_speed"));
+		this.attribute.Set(Attribute.Attr.MOVE_SPEED, new Decimal(Hashtable.GetNumber(this._def, "move_speed")));
 	}
 
 	/**
@@ -72,14 +73,15 @@ export class Entity implements ISnapshotable {
 		writer.int32(this._actorID);
 		writer.int32(this._team);
 		writer.string(this._name);
-		writer.float(this.position.x).float(this.position.y);
-		writer.float(this.direction.x).float(this.direction.y);
+		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
+		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
+		writer.float(this._moveDirection.x.toNumber()).float(this._moveDirection.y.toNumber());
 		writer.int32(this._fsm.currentState.type);
 		writer.int32((<EntityState>this._fsm.currentState).time);
 		const count = this.attribute.count;
 		writer.int32(count);
 		this.attribute.Foreach((v, k, map) => {
-			writer.int32(k).float(v);
+			writer.int32(k).float(v.toNumber());
 		});
 	}
 
@@ -90,13 +92,14 @@ export class Entity implements ISnapshotable {
 		this._actorID = reader.int32();
 		this._team = reader.int32();
 		this._name = reader.string();
-		this.position = new Vec2(reader.float(), reader.float());
-		this.direction = new Vec2(reader.float(), reader.float());
+		this.position = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
+		this.direction = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
+		this._moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this._fsm.ChangeState(reader.int32(), null, true);
 		(<EntityState>this._fsm.currentState).time = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), reader.float());
+			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
 		}
 	}
 
@@ -106,19 +109,19 @@ export class Entity implements ISnapshotable {
 	}
 
 	public BeginMove(dx: number, dy: number): void {
-		this._moveDirection = new Vec2(dx, dy);
-		if (this._moveDirection.SqrMagnitude() < 0.01)
+		this._moveDirection = new FVec2(new Decimal(dx), new Decimal(dy));
+		if (this._moveDirection.SqrMagnitude().lessThan(MathUtils.D_SMALL))
 			this._fsm.ChangeState(EntityState.Type.Idle)
 		else
 			this._fsm.ChangeState(EntityState.Type.Move);
 	}
 
-	protected MoveStep(direction: Vec2, dt: number): void {
-		if (direction.SqrMagnitude() < 0.01)
+	protected MoveStep(direction: FVec2, dt: number): void {
+		if (direction.SqrMagnitude().lessThan(MathUtils.D_SMALL))
 			return;
 		const speed = this.attribute.Get(Attribute.Attr.MOVE_SPEED);
-		const moveDelta = Vec2.MulN(Vec2.MulN(direction, speed), dt * 0.001);
-		this.position = Vec2.Add(this.position, moveDelta);
+		const moveDelta = FVec2.MulN(FVec2.MulN(direction, speed), MathUtils.D_SMALL1.mul(dt));
+		this.position = FVec2.Add(this.position, moveDelta);
 		this.direction = direction;
 	}
 }

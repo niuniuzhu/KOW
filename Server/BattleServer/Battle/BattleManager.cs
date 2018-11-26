@@ -122,7 +122,7 @@ namespace BattleServer.Battle
 				if ( player.user.isOnline )
 				{
 					//断开玩家连接
-					BS.instance.netSessionMgr.DelayCloseSession( player.user.gcSID, 500, "offline" );
+					BS.instance.netSessionMgr.DelayCloseSession( player.user.gcSID, 500, "battle_end" );
 					//玩家下线
 					BS.instance.userMgr.Offline( player.user );
 				}

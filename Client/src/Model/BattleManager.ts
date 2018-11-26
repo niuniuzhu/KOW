@@ -7,6 +7,8 @@ import { SceneManager } from "../Scene/SceneManager";
 import { BattleInfo } from "./BattleInfo";
 import { Battle } from "./Logic/Battle";
 import { VBattle } from "./View/VBattle";
+import { FrameActionGroup } from "./FrameActionGroup";
+import Queue from "../RC/Collections/Queue";
 
 /**
  * 战场管理器
@@ -54,9 +56,9 @@ export class BattleManager {
 			Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
 				const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
 				//处理历史记录
-				this.HandleRequestFrameActions(ret.frames, ret.actions);
+				const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
 				//追赶服务端帧数
-				this._lBattle.Chase(false, false);
+				this._lBattle.Chase(frameActionGroups, false, false);
 				//同步到表现层
 				this._lBattle.InitSyncToView();
 
@@ -107,6 +109,7 @@ export class BattleManager {
 	 */
 	private HandleFrameAction(message: any): void {
 		const frameAction = <Protos.BS2GC_FrameAction>message;
+		Logger.Log("recv frame action" + frameAction.frame);
 		this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
 	}
 
@@ -115,11 +118,14 @@ export class BattleManager {
 	 * @param frames 帧数列表
 	 * @param actions 帧行为列表
 	 */
-	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): any {
+	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): Queue<FrameActionGroup> {
+		const frameActionGroups = new Queue<FrameActionGroup>();
 		const count = frames.length;
 		for (let i = 0; i < count; ++i) {
-			Logger.Log("frameaction, frame:" + frames[i]);
-			this._lBattle.HandleFrameAction(frames[i], actions[i]);
+			const frameActionGroup = new FrameActionGroup(frames[i]);
+			frameActionGroup.DeSerialize(actions[i]);
+			frameActionGroups.enqueue(frameActionGroup);
 		}
+		return frameActionGroups;
 	}
 }

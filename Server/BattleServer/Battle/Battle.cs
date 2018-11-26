@@ -13,6 +13,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 #endregion
 
 namespace BattleServer.Battle
@@ -426,7 +427,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 处理玩家提交的帧行为
 		/// </summary>
-		internal void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message ) => this._frameActionMgr.MergeFromProto( gcNID, message );
+		internal void HandleFrameAction( ulong gcNID, Protos.GC2BS_FrameAction message ) => this._frameActionMgr.HandleFrameAction( gcNID, message );
 
 		/// <summary>
 		/// 处理玩家请求帧行为的历史数据

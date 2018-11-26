@@ -51,13 +51,14 @@ export class FrameAciontManager {
 
 	public Update(dt: number): void {
 		if (this._changed && Timer.utcTime >= this._nextFrameActionSendTime) {
-			this._changed = false;
 			this._nextFrameActionSendTime = Timer.utcTime + Consts.FRAME_ACTION_SEND_INTERVAL;
 			const frameAction = ProtoCreator.Q_GC2BS_FrameAction();
+			frameAction.inputFlag = this.inputFlag;
 			frameAction.dx = this.direction.x;
 			frameAction.dy = this.direction.y;
-			frameAction.inputFlag = this.inputFlag;
 			Global.connector.bsConnector.Send(Protos.GC2BS_FrameAction, frameAction);
+			this._inputFlag = 0;
+			this._changed = false;
 		}
 	}
 }

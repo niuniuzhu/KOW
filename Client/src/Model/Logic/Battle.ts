@@ -1,8 +1,14 @@
+import { Global } from "../../Global";
+import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
+import { ProtoCreator } from "../../Net/ProtoHelper";
 import Queue from "../../RC/Collections/Queue";
+import { FVec2 } from "../../RC/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { Logger } from "../../RC/Utils/Logger";
 import { BattleInfo } from "../BattleInfo";
+import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
 import { SyncEvent } from "../Events/SyncEvent";
 import { FrameAction } from "../FrameAction";
@@ -11,11 +17,6 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity } from "./Entity";
 import ByteBuffer = require("../../Libs/ByteBuffer");
-import { Defs } from "../Defs";
-import { Vec2 } from "../../RC/Math/Vec2";
-import { ProtoCreator } from "../../Net/ProtoHelper";
-import { Global } from "../../Global";
-import { Logger } from "../../RC/Utils/Logger";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -82,7 +83,7 @@ export class Battle implements ISnapshotable {
 	 */
 	public Update(dt: number): void {
 		//追帧
-		this.Chase(true, true);
+		this.Chase(this._frameActionGroups, true, true);
 
 		this._realElapsed += dt;
 		if (this.frame < this._nextKeyFrame) {
@@ -105,7 +106,6 @@ export class Battle implements ISnapshotable {
 	 */
 	private UpdateLogic(dt: number, updateView: boolean, commitSnapshot: boolean): void {
 		++this._frame;
-		Logger.Log("f:" + this._frame);
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
@@ -123,7 +123,7 @@ export class Battle implements ISnapshotable {
 			this.EncodeSnapshot(writer);
 			const data = writer.finish();
 			//提交快照
-			Logger.Log(this._frame);
+			Logger.Log(`commit snapshot:${this._frame}, length:${data.length}`);
 			const request = ProtoCreator.Q_GC2BS_CommitSnapshot();
 			request.frame = this._frame;
 			request.data = data;
@@ -184,19 +184,16 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 追赶服务端帧数
 	 */
-	public Chase(updateView: boolean, commitSnapshot: boolean): void {
-		while (!this._frameActionGroups.isEmpty()) {
-			const frameActionGroup = this._frameActionGroups.dequeue();
+	public Chase(frameActionGroups: Queue<FrameActionGroup>, updateView: boolean, commitSnapshot: boolean): void {
+		while (!frameActionGroups.isEmpty()) {
+			const frameActionGroup = frameActionGroups.dequeue();
 			let length = frameActionGroup.frame - this.frame;
-			while (length >= 0) {
-				if (length == 0) {
-					this.ApplyFrameActionGroup(frameActionGroup);
-				}
-				else {
-					this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
-				}
+			while (length > 0) {
+				this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
+				Logger.Log("f:" + this._frame + ",L:" + length + ",S:" + frameActionGroup.frame);
 				--length;
 			}
+			this.ApplyFrameActionGroup(frameActionGroup);
 			this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
 		}
 	}
@@ -208,18 +205,18 @@ export class Battle implements ISnapshotable {
 	private CreatePlayers(playerInfos: Protos.ICS2BS_PlayerInfo[]): void {
 		let arr = Hashtable.GetArray(this._def, "born_pos");
 		let count = arr.length;
-		const bornPoses: Vec2[] = [];
+		const bornPoses: FVec2[] = [];
 		for (let i = 0; i < count; i++) {
 			const pi = <number[]>arr[i];
-			bornPoses.push(new Vec2(pi[0], pi[1]));
+			bornPoses.push(new FVec2(new Decimal(pi[0]), new Decimal(pi[1])));
 		}
 
 		arr = Hashtable.GetArray(this._def, "born_dir");
 		count = arr.length;
-		const bornDirs: Vec2[] = [];
+		const bornDirs: FVec2[] = [];
 		for (let i = 0; i < count; i++) {
 			const pi = <number[]>arr[i];
-			bornDirs.push(new Vec2(pi[0], pi[1]));
+			bornDirs.push(new FVec2(new Decimal(pi[0]), new Decimal(pi[1])));
 		}
 
 		count = playerInfos.length;
@@ -292,17 +289,8 @@ export class Battle implements ISnapshotable {
 	 * @param msg 协议
 	 */
 	public HandleFrameAction(frame: number, data: Uint8Array): void {
-		const fag = new FrameActionGroup(frame);
-		const buffer = new ByteBuffer();
-		buffer.littleEndian = true;
-		buffer.append(data);
-		buffer.offset = 0;
-		const count = buffer.readByte();
-		for (let i = 0; i < count; ++i) {
-			const frameAction = new FrameAction(frame);
-			frameAction.DeSerialize(buffer);
-			fag.Add(frameAction);
-		}
-		this._frameActionGroups.enqueue(fag);
+		const frameActionGroup = new FrameActionGroup(frame);
+		frameActionGroup.DeSerialize(data);
+		this._frameActionGroups.enqueue(frameActionGroup);
 	}
 }

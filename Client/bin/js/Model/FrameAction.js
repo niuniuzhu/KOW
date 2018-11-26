@@ -9,10 +9,6 @@ define(["require", "exports"], function (require, exports) {
         InputFlag[InputFlag["Skill2"] = 4] = "Skill2";
     })(InputFlag || (InputFlag = {}));
     class FrameAction {
-        constructor(frame) {
-            this._frame = frame;
-        }
-        get frame() { return this._frame; }
         get gcNID() { return this._gcNID; }
         get inputFlag() { return this._inputFlag; }
         get dx() { return this._dx; }

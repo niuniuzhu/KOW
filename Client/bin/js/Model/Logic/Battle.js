@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../../RC/Collections/Queue", "../../RC/Utils/Hashtable", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/ByteBuffer", "../Defs", "../../RC/Math/Vec2", "../../Net/ProtoHelper", "../../Global", "../../RC/Utils/Logger"], function (require, exports, $protobuf, protos_1, Queue_1, Hashtable_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1, ByteBuffer, Defs_1, Vec2_1, ProtoHelper_1, Global_1, Logger_1) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../Defs", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FVec2_1, Hashtable_1, Logger_1, Defs_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -46,7 +46,7 @@ define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../
             this._frameActionGroups.clear();
         }
         Update(dt) {
-            this.Chase(true, true);
+            this.Chase(this._frameActionGroups, true, true);
             this._realElapsed += dt;
             if (this.frame < this._nextKeyFrame) {
                 this._logicElapsed += dt;
@@ -61,7 +61,6 @@ define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../
         }
         UpdateLogic(dt, updateView, commitSnapshot) {
             ++this._frame;
-            Logger_1.Logger.Log("f:" + this._frame);
             const count = this._entities.length;
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
@@ -74,7 +73,7 @@ define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../
                 const writer = $protobuf.Writer.create();
                 this.EncodeSnapshot(writer);
                 const data = writer.finish();
-                Logger_1.Logger.Log(this._frame);
+                Logger_1.Logger.Log(`commit snapshot:${this._frame}, length:${data.length}`);
                 const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_CommitSnapshot();
                 request.frame = this._frame;
                 request.data = data;
@@ -115,19 +114,16 @@ define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../
             const data = writer.finish();
             SyncEvent_1.SyncEvent.Snapshot(data);
         }
-        Chase(updateView, commitSnapshot) {
-            while (!this._frameActionGroups.isEmpty()) {
-                const frameActionGroup = this._frameActionGroups.dequeue();
+        Chase(frameActionGroups, updateView, commitSnapshot) {
+            while (!frameActionGroups.isEmpty()) {
+                const frameActionGroup = frameActionGroups.dequeue();
                 let length = frameActionGroup.frame - this.frame;
-                while (length >= 0) {
-                    if (length == 0) {
-                        this.ApplyFrameActionGroup(frameActionGroup);
-                    }
-                    else {
-                        this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
-                    }
+                while (length > 0) {
+                    this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
+                    Logger_1.Logger.Log("f:" + this._frame + ",L:" + length + ",S:" + frameActionGroup.frame);
                     --length;
                 }
+                this.ApplyFrameActionGroup(frameActionGroup);
                 this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
             }
         }
@@ -137,14 +133,14 @@ define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../
             const bornPoses = [];
             for (let i = 0; i < count; i++) {
                 const pi = arr[i];
-                bornPoses.push(new Vec2_1.Vec2(pi[0], pi[1]));
+                bornPoses.push(new FVec2_1.FVec2(new decimal_1.default(pi[0]), new decimal_1.default(pi[1])));
             }
             arr = Hashtable_1.Hashtable.GetArray(this._def, "born_dir");
             count = arr.length;
             const bornDirs = [];
             for (let i = 0; i < count; i++) {
                 const pi = arr[i];
-                bornDirs.push(new Vec2_1.Vec2(pi[0], pi[1]));
+                bornDirs.push(new FVec2_1.FVec2(new decimal_1.default(pi[0]), new decimal_1.default(pi[1])));
             }
             count = playerInfos.length;
             for (let i = 0; i < count; ++i) {
@@ -193,18 +189,9 @@ define(["require", "exports", "../../Libs/protobufjs", "../../Libs/protos", "../
             this.DecodeSnapshot(reader);
         }
         HandleFrameAction(frame, data) {
-            const fag = new FrameActionGroup_1.FrameActionGroup(frame);
-            const buffer = new ByteBuffer();
-            buffer.littleEndian = true;
-            buffer.append(data);
-            buffer.offset = 0;
-            const count = buffer.readByte();
-            for (let i = 0; i < count; ++i) {
-                const frameAction = new FrameAction_1.FrameAction(frame);
-                frameAction.DeSerialize(buffer);
-                fag.Add(frameAction);
-            }
-            this._frameActionGroups.enqueue(fag);
+            const frameActionGroup = new FrameActionGroup_1.FrameActionGroup(frame);
+            frameActionGroup.DeSerialize(data);
+            this._frameActionGroups.enqueue(frameActionGroup);
         }
     }
     exports.Battle = Battle;

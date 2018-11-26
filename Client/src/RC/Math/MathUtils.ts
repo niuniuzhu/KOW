@@ -1,8 +1,9 @@
+import Decimal from "../../Libs/decimal";
+import { Quat } from "./Quat";
+import { Vec2 } from "./Vec2";
 import { Vec3 } from "./Vec3";
 
-import { Quat } from "./Quat";
 
-import { Vec2 } from "./Vec2";
 
 export class MathUtils {
 	/// <summary>
@@ -567,4 +568,10 @@ export class MathUtils {
 	public static RubberDelta(overStretching: number, viewSize: number): number {
 		return (1 - (1 / ((MathUtils.Abs(overStretching) * 0.55 / viewSize) + 1))) * viewSize * MathUtils.Sign(overStretching);
 	}
+
+	public static readonly D_ZERO: Decimal = new Decimal(0);
+	public static readonly D_ONE: Decimal = new Decimal(1);
+	public static readonly D_N_ONE: Decimal = new Decimal(-1);
+	public static readonly D_SMALL: Decimal = new Decimal(0.01);
+	public static readonly D_SMALL1: Decimal = new Decimal(0.001);
 }

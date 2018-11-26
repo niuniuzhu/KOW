@@ -17,8 +17,10 @@ namespace BattleServer.Biz
 			BSUser user = BS.instance.userMgr.GetUser( gcSession.id );
 			if ( user != null )
 			{
-				if ( reason != "offline" )
+				if ( reason != "battle_end" )
+				{
 					BS.instance.userMgr.OnDisconnect( user );
+				}
 			}
 		}
 

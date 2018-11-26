@@ -1,4 +1,4 @@
-define(["require", "exports", "./Quat", "./Vec2"], function (require, exports, Quat_1, Vec2_1) {
+define(["require", "exports", "../../Libs/decimal", "./Quat", "./Vec2"], function (require, exports, decimal_1, Quat_1, Vec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MathUtils {
@@ -300,6 +300,11 @@ define(["require", "exports", "./Quat", "./Vec2"], function (require, exports, Q
     MathUtils.RAD_TO_DEG = 180 / MathUtils.PI;
     MathUtils.INFINITY = Number.POSITIVE_INFINITY;
     MathUtils.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
+    MathUtils.D_ZERO = new decimal_1.default(0);
+    MathUtils.D_ONE = new decimal_1.default(1);
+    MathUtils.D_N_ONE = new decimal_1.default(-1);
+    MathUtils.D_SMALL = new decimal_1.default(0.01);
+    MathUtils.D_SMALL1 = new decimal_1.default(0.001);
     exports.MathUtils = MathUtils;
 });
 //# sourceMappingURL=MathUtils.js.map

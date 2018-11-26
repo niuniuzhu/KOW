@@ -1,4 +1,4 @@
-define(["require", "exports", "../RC/Math/MathUtils"], function (require, exports, MathUtils_1) {
+define(["require", "exports", "../Libs/decimal"], function (require, exports, decimal_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Attr;
@@ -31,35 +31,35 @@ define(["require", "exports", "../RC/Math/MathUtils"], function (require, export
         }
         Add(attr, delta) {
             const value = this._map.get(attr);
-            this._map.set(attr, value + delta);
+            this._map.set(attr, value.add(delta));
         }
         Sub(attr, delta) {
             const value = this._map.get(attr);
-            this._map.set(attr, value - delta);
+            this._map.set(attr, value.sub(delta));
         }
         Mul(attr, factor) {
             const value = this._map.get(attr);
-            this._map.set(attr, value * factor);
+            this._map.set(attr, value.mul(factor));
         }
         Div(attr, factor) {
             const value = this._map.get(attr);
-            this._map.set(attr, value / factor);
+            this._map.set(attr, value.div(factor));
         }
         Mod(attr, mod) {
             const value = this._map.get(attr);
-            this._map.set(attr, value % mod);
+            this._map.set(attr, value.mod(mod));
         }
         Pow(attr, exp) {
             const value = this._map.get(attr);
-            this._map.set(attr, MathUtils_1.MathUtils.Pow(value, exp));
+            this._map.set(attr, decimal_1.default.pow(value, exp));
         }
         Abs(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, MathUtils_1.MathUtils.Abs(value));
+            this._map.set(attr, decimal_1.default.abs(value));
         }
         Sin(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, MathUtils_1.MathUtils.Sin(value));
+            this._map.set(attr, decimal_1.default.sin(value));
         }
     }
     Attribute.Attr = Attr;

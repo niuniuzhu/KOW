@@ -12,7 +12,7 @@ namespace BattleServer.Battle
 			None = 0,
 			Move = 1 << 0,
 			Skill1 = 1 << 1,
-			Skill2 = 1 << 2
+			Skill2 = 1 << 2,
 		}
 
 		public ulong gcNID { get; }
@@ -50,32 +50,30 @@ namespace BattleServer.Battle
 		/// </summary>
 		public void MergeFromProto( Protos.GC2BS_FrameAction action )
 		{
-			InputFlag f = ( InputFlag ) action.InputFlag;
-			if ( ( f & InputFlag.Move ) > 0 )
+			this.inputFlag = ( InputFlag )action.InputFlag;
+			if ( ( this.inputFlag & InputFlag.Move ) > 0 )
 			{
 				this.inputFlag |= InputFlag.Move;
-				this.dx = ( Fix64 ) action.Dx;
-				this.dy = ( Fix64 ) action.Dy;
-			}
-			if ( ( f & InputFlag.Skill1 ) > 0 )
-			{
-				this.inputFlag |= InputFlag.Skill1;
-			}
-			if ( ( f & InputFlag.Skill2 ) > 0 )
-			{
-				this.inputFlag |= InputFlag.Skill2;
+				this.dx = ( Fix64 )action.Dx;
+				this.dy = ( Fix64 )action.Dy;
 			}
 		}
 
-		public void Serialize( StreamBuffer buffer )
+		public void SerializeTo( StreamBuffer buffer )
 		{
 			buffer.Write( this.gcNID );
-			buffer.Write( ( byte ) this.inputFlag );
+			buffer.Write( ( byte )this.inputFlag );
 			if ( ( this.inputFlag & InputFlag.Move ) > 0 )
 			{
-				buffer.Write( ( float ) this.dx );
-				buffer.Write( ( float ) this.dy );
+				buffer.Write( ( float )this.dx );
+				buffer.Write( ( float )this.dy );
 			}
+		}
+
+		public void Clear()
+		{
+			this.inputFlag = 0;
+			this.dx = this.dy = Fix64.Zero;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Utils/Logger", "../Scene/SceneManager", "./Logic/Battle", "./View/VBattle"], function (require, exports, Global_1, protos_1, Connector_1, ProtoHelper_1, Logger_1, SceneManager_1, Battle_1, VBattle_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Utils/Logger", "../Scene/SceneManager", "./Logic/Battle", "./View/VBattle", "./FrameActionGroup", "../RC/Collections/Queue"], function (require, exports, Global_1, protos_1, Connector_1, ProtoHelper_1, Logger_1, SceneManager_1, Battle_1, VBattle_1, FrameActionGroup_1, Queue_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleManager {
@@ -20,10 +20,11 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                 request.to = curFrame;
                 Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestFrameActions, request, msg => {
                     const ret = msg;
-                    this.HandleRequestFrameActions(ret.frames, ret.actions);
-                    this._lBattle.Chase(false, false);
+                    const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
+                    this._lBattle.Chase(frameActionGroups, false, false);
                     this._lBattle.InitSyncToView();
                     this._init = true;
+                    Logger_1.Logger.Log("battle inited");
                     completeHandler();
                 });
             });
@@ -53,14 +54,18 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         }
         HandleFrameAction(message) {
             const frameAction = message;
+            Logger_1.Logger.Log("recv frame action" + frameAction.frame);
             this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
         }
         HandleRequestFrameActions(frames, actions) {
+            const frameActionGroups = new Queue_1.default();
             const count = frames.length;
             for (let i = 0; i < count; ++i) {
-                Logger_1.Logger.Log("frameaction, frame:" + frames[i]);
-                this._lBattle.HandleFrameAction(frames[i], actions[i]);
+                const frameActionGroup = new FrameActionGroup_1.FrameActionGroup(frames[i]);
+                frameActionGroup.DeSerialize(actions[i]);
+                frameActionGroups.enqueue(frameActionGroup);
             }
+            return frameActionGroups;
         }
     }
     exports.BattleManager = BattleManager;

@@ -27,10 +27,12 @@ namespace Core.Net
 		public bool isSecure => this.scheme == "wss" && this.certificate != null;
 		public HashSet<string> subProtocols;
 
+		private readonly StreamBuffer _readState;
 		private bool _handshakeComplete;
 
 		public WSConnection( INetSession session ) : base( session )
 		{
+			this._readState = new StreamBuffer( this.recvBufSize );
 		}
 
 		public void Authenticate( Action callback, Action<Exception> errorCallback )
@@ -103,8 +105,13 @@ namespace Core.Net
 					break;
 				}
 				{
-					byte[] data = ProcessClientData( cache.GetBuffer(), 0, cache.length, out OPCode op );
-					if ( data == null )
+					bool isEof = ProcessClientData( cache.GetBuffer(), 0, cache.length, this._readState, out int len );
+					if ( len > 0 )
+					{
+						//截断当前缓冲区
+						cache.Strip( len, cache.length - len );
+					}
+					if ( !isEof )
 					{
 						//父类已经判断断线了
 						//if ( op == OPCode.Close )
@@ -112,8 +119,8 @@ namespace Core.Net
 						break;
 					}
 
-					//截断当前缓冲区
-					cache.Strip();
+					byte[] data = this._readState.ToArray();
+					this._readState.Clear();
 
 					NetEvent netEvent = NetworkMgr.instance.PopEvent();
 					netEvent.type = NetEvent.Type.Recv;
@@ -185,64 +192,74 @@ namespace Core.Net
 		/// 处理接收的数据
 		/// 参考 http://www.cnblogs.com/smark/archive/2012/11/26/2789812.html
 		/// </summary>
-		private static byte[] ProcessClientData( byte[] data, int offset, int size, out OPCode op )
+		private static bool ProcessClientData( byte[] data, int offset, int size, StreamBuffer readState, out int len )
 		{
-			op = OPCode.Binary;
+			len = -1;
 			// 如果有数据则至少包括3位
 			if ( size < 2 )
-				return null;
-			// 判断是否为结束针
+				return false;
+			// 判断是否为结束帧
 			byte value = data[offset];
-			int isEof = value >> 7;
-			op = ( OPCode )( value & 0xf );
-			if ( op == OPCode.Close || op == OPCode.Ping || op == OPCode.Pong )
-				return null;
+			//如果是1,表示这是消息的最后一个分片,如果是0,表示不是是消息的最后一个分片
+			bool isEof = ( value & 128 ) != 0;
+			//OPCode op = ( OPCode )( value & 15 );
+			//if ( op == OPCode.Close || op == OPCode.Ping || op == OPCode.Pong )
+			//	return false;
 			offset++;
 
 			value = data[offset];
 			// 是否包含掩码
-			bool hasMask = value >> 7 > 0;
+			bool hasMask = ( value & 128 ) != 0;
 			// 获取数据长度
-			ulong packageLength = ( ulong )value & 0x7F;
+			int packageLength = value & 127;
 			offset++;
 			// 存储数据
 			if ( packageLength == 126 )
 			{
+				if ( size < offset + 2 )
+					return false;
 				// 等于126 随后的两个字节16位表示数据长度
+				// 调换字节序
+				Array.Reverse( data, offset, 2 );
 				packageLength = BitConverter.ToUInt16( data, offset );
 				offset += 2;
 			}
-			if ( packageLength == 127 )
+			else if ( packageLength == 127 )
 			{
+				if ( size < offset + 8 )
+					return false;
 				// 等于127 随后的八个字节64位表示数据长度
-				packageLength = BitConverter.ToUInt64( data, offset );
+				// 调换字节序
+				Array.Reverse( data, offset, 8 );
+				packageLength = ( int )BitConverter.ToUInt64( data, offset );
 				offset += 8;
 			}
-			//判断数据长度是否满足
-			if ( ( ulong )size < packageLength )
-				return null;
 			// 存储4位掩码值
 			byte[] maskingKey = null;
 			if ( hasMask )
 			{
+				if ( size < offset + 4 )
+					return false;
 				maskingKey = new byte[4];
 				Buffer.BlockCopy( data, offset, maskingKey, 0, 4 );
 				offset += 4;
 			}
+			//判断数据长度是否满足
+			if ( size < offset + packageLength )
+				return false;
 
-			byte[] outData = new byte[packageLength];
-			if ( packageLength > int.MaxValue )
-				for ( ulong i = 0; i < packageLength; i++ )
-					outData[i] = data[i + ( ulong )offset];
-			else
-				Buffer.BlockCopy( data, offset, outData, 0, ( int )packageLength );
-
+			//处理掩码
 			if ( maskingKey != null )
 			{
-				for ( ulong i = 0; i < packageLength; i++ )
-					outData[i] = ( byte )( outData[i] ^ maskingKey[i % 4] );
+				for ( int i = 0; i < packageLength; i++ )
+					data[i + offset] = ( byte )( data[i + offset] ^ maskingKey[i % 4] );
 			}
-			return outData;
+
+			readState.Write( data, offset, packageLength );
+
+			len = offset + packageLength;
+
+			return isEof;
 		}
 
 		private static void MakeHeader( StreamBuffer inBuffer, byte[] data, int offset, int size, OPCode opCode )

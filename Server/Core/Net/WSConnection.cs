@@ -105,19 +105,21 @@ namespace Core.Net
 					break;
 				}
 				{
-					bool isEof = ProcessClientData( cache.GetBuffer(), 0, cache.length, this._readState, out int len );
+					bool isEof = ProcessClientData( cache.GetBuffer(), 0, cache.length, this._readState, out int len, out OPCode op );
 					if ( len > 0 )
 					{
 						//截断当前缓冲区
 						cache.Strip( len, cache.length - len );
+						//判断操作码是否二进制或是数据分片
+						if ( op != OPCode.Binary && op != OPCode.Continuation )
+						{
+							this._readState.Clear();
+							break;
+						}
 					}
+					//判断是否最后一个分片
 					if ( !isEof )
-					{
-						//父类已经判断断线了
-						//if ( op == OPCode.Close )
-						//	this.OnError( $"client close with opcode:{OPCode.Close}" );
 						break;
-					}
 
 					byte[] data = this._readState.ToArray();
 					this._readState.Clear();
@@ -192,9 +194,10 @@ namespace Core.Net
 		/// 处理接收的数据
 		/// 参考 http://www.cnblogs.com/smark/archive/2012/11/26/2789812.html
 		/// </summary>
-		private static bool ProcessClientData( byte[] data, int offset, int size, StreamBuffer readState, out int len )
+		private static bool ProcessClientData( byte[] data, int offset, int size, StreamBuffer readState, out int len, out OPCode op )
 		{
 			len = -1;
+			op = OPCode.Binary;
 			// 如果有数据则至少包括3位
 			if ( size < 2 )
 				return false;
@@ -202,7 +205,7 @@ namespace Core.Net
 			byte value = data[offset];
 			//如果是1,表示这是消息的最后一个分片,如果是0,表示不是是消息的最后一个分片
 			bool isEof = ( value & 128 ) != 0;
-			//OPCode op = ( OPCode )( value & 15 );
+			op = ( OPCode )( value & 15 );
 			//if ( op == OPCode.Close || op == OPCode.Ping || op == OPCode.Pong )
 			//	return false;
 			offset++;

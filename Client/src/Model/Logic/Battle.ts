@@ -6,7 +6,6 @@ import { ProtoCreator } from "../../Net/ProtoHelper";
 import Queue from "../../RC/Collections/Queue";
 import { FVec2 } from "../../RC/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Logger } from "../../RC/Utils/Logger";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
@@ -38,6 +37,7 @@ export class Battle implements ISnapshotable {
 	private _logicElapsed: number = 0;
 	private _realElapsed: number = 0;
 	private _def: Hashtable;
+	private _destroied: boolean = false;
 
 	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
 	private readonly _entities: Entity[] = [];
@@ -48,6 +48,7 @@ export class Battle implements ISnapshotable {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo): void {
+		this._destroied = false;
 		this._frameRate = battleInfo.frameRate;
 		this._keyframeStep = battleInfo.keyframeStep;
 		this._snapshotStep = battleInfo.snapshotStep;
@@ -64,7 +65,10 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 战场结束
 	 */
-	public End(): void {
+	public Destroy(): void {
+		if (this._destroied)
+			return;
+		this._destroied = true;
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++)
 			this._entities[i].Dispose();
@@ -123,7 +127,6 @@ export class Battle implements ISnapshotable {
 			this.EncodeSnapshot(writer);
 			const data = writer.finish();
 			//提交快照
-			Logger.Log(`commit snapshot:${this._frame}, length:${data.length}`);
 			const request = ProtoCreator.Q_GC2BS_CommitSnapshot();
 			request.frame = this._frame;
 			request.data = data;
@@ -149,7 +152,6 @@ export class Battle implements ISnapshotable {
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._frame = reader.int32();
-		Logger.Log("recv snapshot, frame:" + this._frame);
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();
@@ -190,7 +192,6 @@ export class Battle implements ISnapshotable {
 			let length = frameActionGroup.frame - this.frame;
 			while (length > 0) {
 				this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
-				Logger.Log("f:" + this._frame + ",L:" + length + ",S:" + frameActionGroup.frame);
 				--length;
 			}
 			this.ApplyFrameActionGroup(frameActionGroup);

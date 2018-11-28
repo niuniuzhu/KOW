@@ -90,8 +90,9 @@ namespace XLua.CSObjectWrap
                 
                 {
                     int numPlayers = LuaAPI.xlua_tointeger(L, 2);
+                    BattleServer.Battle.Snapshot.SnapshotMgr.OutOfSyncHandler outOfSyncHandler = translator.GetDelegate<BattleServer.Battle.Snapshot.SnapshotMgr.OutOfSyncHandler>(L, 3);
                     
-                    __cl_gen_to_be_invoked.Init( numPlayers );
+                    __cl_gen_to_be_invoked.Init( numPlayers, outOfSyncHandler );
                     
                     
                     

@@ -97,6 +97,35 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
+    interface IBS2CS_KickUser {
+        opts?: (Protos.IMsgOpts|null);
+        gcNID?: (Long|null);
+        reason?: (Protos.BS2CS_KickUser.Reason|null);
+    }
+
+    class BS2CS_KickUser implements IBS2CS_KickUser {
+        constructor(properties?: Protos.IBS2CS_KickUser);
+        public opts?: (Protos.IMsgOpts|null);
+        public gcNID: Long;
+        public reason: Protos.BS2CS_KickUser.Reason;
+        public static create(properties?: Protos.IBS2CS_KickUser): Protos.BS2CS_KickUser;
+        public static encode(message: Protos.IBS2CS_KickUser, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IBS2CS_KickUser, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2CS_KickUser;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2CS_KickUser;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.BS2CS_KickUser;
+        public static toObject(message: Protos.BS2CS_KickUser, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace BS2CS_KickUser {
+
+        enum Reason {
+            OutOfSync = 0
+        }
+    }
+
     enum MsgID {
         Undefine = 0,
         eG_AskPing = 10,
@@ -128,6 +157,7 @@ export namespace Protos {
         eBS2CS_ReportState = 4000,
         eBS2CS_BattleInfoRet = 4001,
         eBS2CS_BattleEnd = 4002,
+        eBS2CS_KickUser = 4003,
         eBS2GC_LoginRet = 4100,
         eBS2GC_BattleEnd = 4101,
         eBS2GC_RequestSnapshotRet = 4102,
@@ -674,7 +704,8 @@ export namespace Protos {
 
         enum EReason {
             DuplicateLogin = 0,
-            Other = 1
+            OutOfSync = 1,
+            Other = 2
         }
     }
 

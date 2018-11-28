@@ -43,6 +43,7 @@ export class ProtoCreator {
 		ProtoCreator._TYPE2ID.set( Protos.BS2CS_ReportState, <Protos.MsgID>4000 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2CS_BattleInfoRet, <Protos.MsgID>4001 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2CS_BattleEnd, <Protos.MsgID>4002 );
+		ProtoCreator._TYPE2ID.set( Protos.BS2CS_KickUser, <Protos.MsgID>4003 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2GC_LoginRet, <Protos.MsgID>4100 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2GC_BattleEnd, <Protos.MsgID>4101 );
 		ProtoCreator._TYPE2ID.set( Protos.BS2GC_RequestSnapshotRet, <Protos.MsgID>4102 );
@@ -93,6 +94,7 @@ export class ProtoCreator {
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4000, Protos.BS2CS_ReportState );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4001, Protos.BS2CS_BattleInfoRet );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4002, Protos.BS2CS_BattleEnd );
+		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4003, Protos.BS2CS_KickUser );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4100, Protos.BS2GC_LoginRet );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4101, Protos.BS2GC_BattleEnd );
 		ProtoCreator._ID2TYPE.set( <Protos.MsgID>4102, Protos.BS2GC_RequestSnapshotRet );
@@ -307,6 +309,12 @@ export class ProtoCreator {
 		return msg;
 	}
 
+	public static Q_BS2CS_KickUser(): Protos.BS2CS_KickUser {
+		let msg = new Protos.BS2CS_KickUser();
+		msg.opts = new Protos.MsgOpts();
+		return msg;
+	}
+
 	public static Q_BS2GC_LoginRet(): Protos.BS2GC_LoginRet {
 		let msg = new Protos.BS2GC_LoginRet();
 		msg.opts = new Protos.MsgOpts();
@@ -429,88 +437,8 @@ export class ProtoCreator {
 	}
 
 
-	public static R_GC2CS_BeginMatch(pid: number): Protos.CS2GC_BeginMatchRet {
-		let msg = new Protos.CS2GC_BeginMatchRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_CS2BS_BattleInfo(pid: number): Protos.BS2CS_BattleInfoRet {
-		let msg = new Protos.BS2CS_BattleInfoRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_GC2LS_AskSmartLogin(pid: number): Protos.LS2GC_AskLoginRet {
-		let msg = new Protos.LS2GC_AskLoginRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_GC2BS_AskLogin(pid: number): Protos.BS2GC_LoginRet {
-		let msg = new Protos.BS2GC_LoginRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_LS2DB_QueryAccount(pid: number): Protos.DB2LS_QueryAccountRet {
-		let msg = new Protos.DB2LS_QueryAccountRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_GS2CS_GCAskLogin(pid: number): Protos.CS2GS_GCLoginRet {
-		let msg = new Protos.CS2GS_GCLoginRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_GC2BS_RequestFrameActions(pid: number): Protos.BS2GC_RequestFrameActionsRet {
-		let msg = new Protos.BS2GC_RequestFrameActionsRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_LS2CS_GCLogin(pid: number): Protos.CS2LS_GCLoginRet {
-		let msg = new Protos.CS2LS_GCLoginRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
 	public static R_GC2LS_AskLogin(pid: number): Protos.LS2GC_AskLoginRet {
 		let msg = new Protos.LS2GC_AskLoginRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_LS2DB_QueryLogin(pid: number): Protos.DB2LS_QueryLoginRet {
-		let msg = new Protos.DB2LS_QueryLoginRet();
-		msg.opts = new Protos.MsgOpts();
-		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-		msg.opts.rpid = pid;
-		return msg;
-	}
-
-	public static R_GC2BS_RequestSnapshot(pid: number): Protos.BS2GC_RequestSnapshotRet {
-		let msg = new Protos.BS2GC_RequestSnapshotRet();
 		msg.opts = new Protos.MsgOpts();
 		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
@@ -525,8 +453,88 @@ export class ProtoCreator {
 		return msg;
 	}
 
+	public static R_GC2BS_AskLogin(pid: number): Protos.BS2GC_LoginRet {
+		let msg = new Protos.BS2GC_LoginRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
 	public static R_G_AskPing(pid: number): Protos.G_AskPingRet {
 		let msg = new Protos.G_AskPingRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_LS2DB_QueryAccount(pid: number): Protos.DB2LS_QueryAccountRet {
+		let msg = new Protos.DB2LS_QueryAccountRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_GC2LS_AskRegister(pid: number): Protos.LS2GC_AskRegRet {
+		let msg = new Protos.LS2GC_AskRegRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_GC2LS_AskSmartLogin(pid: number): Protos.LS2GC_AskLoginRet {
+		let msg = new Protos.LS2GC_AskLoginRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_CS2BS_BattleInfo(pid: number): Protos.BS2CS_BattleInfoRet {
+		let msg = new Protos.BS2CS_BattleInfoRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_GC2BS_RequestFrameActions(pid: number): Protos.BS2GC_RequestFrameActionsRet {
+		let msg = new Protos.BS2GC_RequestFrameActionsRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_GS2CS_GCAskLogin(pid: number): Protos.CS2GS_GCLoginRet {
+		let msg = new Protos.CS2GS_GCLoginRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_GC2CS_BeginMatch(pid: number): Protos.CS2GC_BeginMatchRet {
+		let msg = new Protos.CS2GC_BeginMatchRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_LS2CS_GCLogin(pid: number): Protos.CS2LS_GCLoginRet {
+		let msg = new Protos.CS2LS_GCLoginRet();
+		msg.opts = new Protos.MsgOpts();
+		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+		msg.opts.rpid = pid;
+		return msg;
+	}
+
+	public static R_GC2BS_RequestSnapshot(pid: number): Protos.BS2GC_RequestSnapshotRet {
+		let msg = new Protos.BS2GC_RequestSnapshotRet();
 		msg.opts = new Protos.MsgOpts();
 		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
@@ -541,8 +549,8 @@ export class ProtoCreator {
 		return msg;
 	}
 
-	public static R_GC2LS_AskRegister(pid: number): Protos.LS2GC_AskRegRet {
-		let msg = new Protos.LS2GC_AskRegRet();
+	public static R_LS2DB_QueryLogin(pid: number): Protos.DB2LS_QueryLoginRet {
+		let msg = new Protos.DB2LS_QueryLoginRet();
 		msg.opts = new Protos.MsgOpts();
 		msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
 		msg.opts.rpid = pid;
@@ -666,6 +674,10 @@ export class ProtoCreator {
 			}
 			case 4002: {
 				let msg = Protos.BS2CS_BattleEnd.decode(data, size);
+				return msg;
+			}
+			case 4003: {
+				let msg = Protos.BS2CS_KickUser.decode(data, size);
 				return msg;
 			}
 			case 4100: {
@@ -897,6 +909,11 @@ export class ProtoCreator {
 		return msg;
 	}
 
+	public static D_BS2CS_KickUser(data: Uint8Array, size: number): Protos.BS2CS_KickUser {
+		let msg = Protos.BS2CS_KickUser.decode(data, size);
+		return msg;
+	}
+
 	public static D_BS2GC_LoginRet(data: Uint8Array, size: number): Protos.BS2GC_LoginRet {
 		let msg = Protos.BS2GC_LoginRet.decode(data, size);
 		return msg;
@@ -1087,6 +1104,9 @@ export class ProtoCreator {
 			case 4002: {
 				return new Protos.BS2CS_BattleEnd();
 			}
+			case 4003: {
+				return new Protos.BS2CS_KickUser();
+			}
 			case 4100: {
 				return new Protos.BS2GC_LoginRet();
 			}
@@ -1240,6 +1260,9 @@ export class ProtoCreator {
 			}
 			case 4002: {
 				return (<Protos.BS2CS_BattleEnd>message).opts;
+			}
+			case 4003: {
+				return (<Protos.BS2CS_KickUser>message).opts;
 			}
 			case 4100: {
 				return (<Protos.BS2GC_LoginRet>message).opts;

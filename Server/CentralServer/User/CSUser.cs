@@ -38,6 +38,10 @@ namespace CentralServer.User
 		/// </summary>
 		public uint bsLID { get; private set; }
 		/// <summary>
+		/// 玩家所在的战场ID
+		/// </summary>
+		public uint bid { get; private set; }
+		/// <summary>
 		/// 是否在战场
 		/// </summary>
 		public bool isInBattle { get; private set; }
@@ -91,10 +95,11 @@ namespace CentralServer.User
 		/// <summary>
 		/// 设置玩家进入战场
 		/// </summary>
-		public void EnterBattle( uint bsSID, uint bsLID )
+		public void EnterBattle( uint bsSID, uint bsLID, uint bid )
 		{
 			this.bsSID = bsSID;
 			this.bsLID = bsLID;
+			this.bid = bid;
 			this.isInBattle = true;
 		}
 
@@ -106,6 +111,7 @@ namespace CentralServer.User
 			this.isInBattle = false;
 			this.bsSID = 0;
 			this.bsLID = 0;
+			this.bid = 0;
 		}
 
 		public override string ToString() => $"ukey:{this.ukey},gcNID:{this.gcNID},online:{this.isConnected}";

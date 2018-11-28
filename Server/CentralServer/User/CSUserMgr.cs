@@ -150,7 +150,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 断开指定玩家连接,由Session在连接关闭时调用
 		/// </summary>
-		public bool KickUser( ulong gcNID, int reason )
+		public bool KickUser( ulong gcNID, Protos.CS2GS_KickGC.Types.EReason reason )
 		{
 			CSUser user = this.GetUser( gcNID );
 			if ( user == null )
@@ -162,12 +162,12 @@ namespace CentralServer.User
 			return true;
 		}
 
-		public void KickUser( CSUser user, int reason )
+		public void KickUser( CSUser user, Protos.CS2GS_KickGC.Types.EReason reason )
 		{
 			//通知gs玩家被踢下线
 			Protos.CS2GS_KickGC kickGc = ProtoCreator.Q_CS2GS_KickGC();
 			kickGc.GcNID = user.gcNID;
-			kickGc.Reason = ( Protos.CS2GS_KickGC.Types.EReason )reason;
+			kickGc.Reason = reason;
 			CS.instance.netSessionMgr.Send( user.gsSID, kickGc );
 			this.Offline( user );
 		}

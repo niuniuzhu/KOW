@@ -38,6 +38,12 @@ export class BattleManager {
 		this._vBattle = new VBattle();
 	}
 
+	public Destroy() {
+		this._lBattle.Destroy();
+		this._vBattle.Destroy();
+		this._init = false;
+	}
+
 	/**
 	 * 设置战场信息
 	 * @param battleInfo 战场信息
@@ -95,11 +101,9 @@ export class BattleManager {
 	 * @param message 协议
 	 */
 	private HandleBattleEnd(message: any): void {
-		const battleEnd = <Protos.BS2GC_BattleEnd>message;
-		this._lBattle.End();
-		this._vBattle.End();
-		this._init = false;
 		Logger.Log("battle end");
+		const battleEnd = <Protos.BS2GC_BattleEnd>message;
+		this.Destroy();
 		Global.sceneManager.ChangeState(SceneManager.State.Main);
 	}
 
@@ -109,7 +113,6 @@ export class BattleManager {
 	 */
 	private HandleFrameAction(message: any): void {
 		const frameAction = <Protos.BS2GC_FrameAction>message;
-		Logger.Log("recv frame action" + frameAction.frame);
 		this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
 	}
 

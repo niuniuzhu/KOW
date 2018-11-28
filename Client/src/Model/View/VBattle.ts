@@ -22,6 +22,7 @@ export class VBattle {
 	private _root: fairygui.GComponent;
 	private _logicFrame: number;
 	private _def: Hashtable;
+	private _destroied: boolean = false;
 
 	constructor() {
 		this._camera = new Camera();
@@ -35,6 +36,7 @@ export class VBattle {
 		EventManager.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
 		EventManager.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
 
+		this._destroied = false;
 		this._mapID = battleInfo.mapID
 		//加载配置
 		this._def = CDefs.GetMap(Consts.ASSETS_MAP_PREFIX + this._mapID);
@@ -50,7 +52,11 @@ export class VBattle {
 	/**
 	 * 战场结束
 	 */
-	public End(): void {
+	public Destroy(): void {
+		if (this._destroied)
+			return;
+		this._destroied = true;
+		
 		EventManager.RemoveListener(SyncEvent.E_BATTLE_INIT);
 		EventManager.RemoveListener(SyncEvent.E_SNAPSHOT);
 
@@ -60,6 +66,10 @@ export class VBattle {
 		}
 		this._entities.splice(0);
 		this._idToEntity.clear();
+		this._root.dispose();
+		this._root = null;
+		this._def = null;
+		this._logicFrame = 0;
 	}
 
 	public Update(dt: number): void {

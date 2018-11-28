@@ -47,6 +47,7 @@ enum MsgID {
 	eBS2CS_ReportState = 4000;
 	eBS2CS_BattleInfoRet = 4001;
 	eBS2CS_BattleEnd = 4002;
+	eBS2CS_KickUser = 4003;
 
 	eBS2GC_LoginRet = 4100;
 	eBS2GC_BattleEnd = 4101;

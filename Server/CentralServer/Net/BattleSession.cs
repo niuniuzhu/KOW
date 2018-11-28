@@ -11,6 +11,7 @@ namespace CentralServer.Net
 			this.RegMsgHandler( Protos.MsgID.EGAskPing, CS.instance.bizProcessor.OnBSAskPing );
 			this.RegMsgHandler( Protos.MsgID.EBs2CsReportState, CS.instance.bizProcessor.OnBs2CsReportState );
 			this.RegMsgHandler( Protos.MsgID.EBs2CsBattleEnd, CS.instance.bizProcessor.OnBs2CsBattleEnd );
+			this.RegMsgHandler( Protos.MsgID.EBs2CsKickUser, CS.instance.bizProcessor.OnBs2CsKickUser );
 		}
 
 		protected override void OnEstablish()

@@ -244,7 +244,7 @@ namespace LoginServer.Biz
 
 			//通知客户端登陆结果
 			LS.instance.netSessionMgr.Send( sid, gcLoginRet );
-			LS.instance.netSessionMgr.DelayCloseSession( sid, 500, "login complete" );
+			LS.instance.netSessionMgr.DelayCloseSession( sid, 100, "login complete" );
 		}
 
 		public ErrorCode OnGc2LsAskSmartLogin( NetSessionBase session, Google.Protobuf.IMessage message )
@@ -369,7 +369,7 @@ namespace LoginServer.Biz
 
 				//通知客户端登陆结果
 				LS.instance.netSessionMgr.Send( sid, gcLoginRet );
-				LS.instance.netSessionMgr.DelayCloseSession( sid, 500, "login complete" );
+				LS.instance.netSessionMgr.DelayCloseSession( sid, 100, "login complete" );
 			}
 		}
 

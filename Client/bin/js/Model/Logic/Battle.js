@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../Defs", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FVec2_1, Hashtable_1, Logger_1, Defs_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FVec2_1, Hashtable_1, Defs_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -13,6 +13,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._nextKeyFrame = 0;
             this._logicElapsed = 0;
             this._realElapsed = 0;
+            this._destroied = false;
             this._frameActionGroups = new Queue_1.default();
             this._entities = [];
             this._idToEntity = new Map();
@@ -24,6 +25,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         get mapID() { return this._mapID; }
         get frame() { return this._frame; }
         SetBattleInfo(battleInfo) {
+            this._destroied = false;
             this._frameRate = battleInfo.frameRate;
             this._keyframeStep = battleInfo.keyframeStep;
             this._snapshotStep = battleInfo.snapshotStep;
@@ -33,7 +35,10 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._def = Defs_1.Defs.GetMap(this._mapID);
             this.CreatePlayers(battleInfo.playerInfos);
         }
-        End() {
+        Destroy() {
+            if (this._destroied)
+                return;
+            this._destroied = true;
             const count = this._entities.length;
             for (let i = 0; i < count; i++)
                 this._entities[i].Dispose();
@@ -73,7 +78,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                 const writer = $protobuf.Writer.create();
                 this.EncodeSnapshot(writer);
                 const data = writer.finish();
-                Logger_1.Logger.Log(`commit snapshot:${this._frame}, length:${data.length}`);
                 const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_CommitSnapshot();
                 request.frame = this._frame;
                 request.data = data;
@@ -91,7 +95,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         }
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
-            Logger_1.Logger.Log("recv snapshot, frame:" + this._frame);
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
@@ -120,7 +123,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                 let length = frameActionGroup.frame - this.frame;
                 while (length > 0) {
                     this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
-                    Logger_1.Logger.Log("f:" + this._frame + ",L:" + length + ",S:" + frameActionGroup.frame);
                     --length;
                 }
                 this.ApplyFrameActionGroup(frameActionGroup);

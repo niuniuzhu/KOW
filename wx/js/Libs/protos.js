@@ -524,6 +524,155 @@ export const Protos = $root.Protos = (() => {
         return BS2CS_BattleEnd;
     })();
 
+    Protos.BS2CS_KickUser = (function() {
+
+        function BS2CS_KickUser(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        BS2CS_KickUser.prototype.opts = null;
+        BS2CS_KickUser.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+        BS2CS_KickUser.prototype.reason = 0;
+
+        BS2CS_KickUser.create = function create(properties) {
+            return new BS2CS_KickUser(properties);
+        };
+
+        BS2CS_KickUser.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                writer.uint32(16).uint64(message.gcNID);
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                writer.uint32(24).int32(message.reason);
+            return writer;
+        };
+
+        BS2CS_KickUser.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        BS2CS_KickUser.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_KickUser();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.gcNID = reader.uint64();
+                    break;
+                case 3:
+                    message.reason = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        BS2CS_KickUser.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        BS2CS_KickUser.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                    return "gcNID: integer|Long expected";
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                switch (message.reason) {
+                default:
+                    return "reason: enum value expected";
+                case 0:
+                    break;
+                }
+            return null;
+        };
+
+        BS2CS_KickUser.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.BS2CS_KickUser)
+                return object;
+            let message = new $root.Protos.BS2CS_KickUser();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.BS2CS_KickUser.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.gcNID != null)
+                if ($util.Long)
+                    (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                else if (typeof object.gcNID === "string")
+                    message.gcNID = parseInt(object.gcNID, 10);
+                else if (typeof object.gcNID === "number")
+                    message.gcNID = object.gcNID;
+                else if (typeof object.gcNID === "object")
+                    message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+            switch (object.reason) {
+            case "OutOfSync":
+            case 0:
+                message.reason = 0;
+                break;
+            }
+            return message;
+        };
+
+        BS2CS_KickUser.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, true);
+                    object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.gcNID = options.longs === String ? "0" : 0;
+                object.reason = options.enums === String ? "OutOfSync" : 0;
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                if (typeof message.gcNID === "number")
+                    object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                else
+                    object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                object.reason = options.enums === String ? $root.Protos.BS2CS_KickUser.Reason[message.reason] : message.reason;
+            return object;
+        };
+
+        BS2CS_KickUser.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        BS2CS_KickUser.Reason = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "OutOfSync"] = 0;
+            return values;
+        })();
+
+        return BS2CS_KickUser;
+    })();
+
     Protos.MsgID = (function() {
         const valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "Undefine"] = 0;
@@ -556,6 +705,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[4000] = "eBS2CS_ReportState"] = 4000;
         values[valuesById[4001] = "eBS2CS_BattleInfoRet"] = 4001;
         values[valuesById[4002] = "eBS2CS_BattleEnd"] = 4002;
+        values[valuesById[4003] = "eBS2CS_KickUser"] = 4003;
         values[valuesById[4100] = "eBS2GC_LoginRet"] = 4100;
         values[valuesById[4101] = "eBS2GC_BattleEnd"] = 4101;
         values[valuesById[4102] = "eBS2GC_RequestSnapshotRet"] = 4102;
@@ -3522,6 +3672,7 @@ export const Protos = $root.Protos = (() => {
                     return "reason: enum value expected";
                 case 0:
                 case 1:
+                case 2:
                     break;
                 }
             return null;
@@ -3550,9 +3701,13 @@ export const Protos = $root.Protos = (() => {
             case 0:
                 message.reason = 0;
                 break;
-            case "Other":
+            case "OutOfSync":
             case 1:
                 message.reason = 1;
+                break;
+            case "Other":
+            case 2:
+                message.reason = 2;
                 break;
             }
             return message;
@@ -3590,7 +3745,8 @@ export const Protos = $root.Protos = (() => {
         CS2GS_KickGC.EReason = (function() {
             const valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "DuplicateLogin"] = 0;
-            values[valuesById[1] = "Other"] = 1;
+            values[valuesById[1] = "OutOfSync"] = 1;
+            values[valuesById[2] = "Other"] = 2;
             return values;
         })();
 
@@ -6874,6 +7030,7 @@ export const Protos = $root.Protos = (() => {
                     return "reason: enum value expected";
                 case 0:
                 case 1:
+                case 2:
                     break;
                 }
             return null;
@@ -6893,9 +7050,13 @@ export const Protos = $root.Protos = (() => {
             case 0:
                 message.reason = 0;
                 break;
-            case "Other":
+            case "OutOfSync":
             case 1:
                 message.reason = 1;
+                break;
+            case "Other":
+            case 2:
+                message.reason = 2;
                 break;
             }
             return message;

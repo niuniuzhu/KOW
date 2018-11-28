@@ -24,7 +24,8 @@ message CS2GS_GCLoginRet{
 message CS2GS_KickGC {
 	enum EReason {
 		DuplicateLogin = 0;
-		Other = 1;
+		OutOfSync = 1;
+		Other = 2;
 		// ...more reason
 	}
 	MsgOpts opts = 1;

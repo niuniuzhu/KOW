@@ -50,6 +50,7 @@ namespace BattleServer.Battle
 		/// </summary>
 		public ErrorCode CreateBattle( Protos.CS2BS_BattleInfo battleInfo, out uint bid )
 		{
+			bid = 0;
 			//初始化战场描述
 			BattleEntry battleEntry;
 			battleEntry.rndSeed = this._random.Next();
@@ -59,6 +60,10 @@ namespace BattleServer.Battle
 			for ( int i = 0; i < count; i++ )
 			{
 				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfos[i];
+
+				if ( BS.instance.userMgr.HasUser( playerInfo.GcNID ) )
+					return ErrorCode.Failed;
+
 				BattleEntry.Player player = new BattleEntry.Player
 				{
 					gcNID = playerInfo.GcNID,
@@ -122,7 +127,7 @@ namespace BattleServer.Battle
 				if ( player.user.isOnline )
 				{
 					//断开玩家连接
-					BS.instance.netSessionMgr.DelayCloseSession( player.user.gcSID, 500, "battle_end" );
+					BS.instance.netSessionMgr.DelayCloseSession( player.user.gcSID, 100, "battle_end" );
 					//玩家下线
 					BS.instance.userMgr.Offline( player.user );
 				}

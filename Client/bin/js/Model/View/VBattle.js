@@ -6,11 +6,13 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             this._mapID = 0;
             this._entities = [];
             this._idToEntity = new Map();
+            this._destroied = false;
             this._camera = new Camera_1.Camera();
         }
         SetBattleInfo(battleInfo) {
             EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
             EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+            this._destroied = false;
             this._mapID = battleInfo.mapID;
             this._def = CDefs_1.CDefs.GetMap(Consts_1.Consts.ASSETS_MAP_PREFIX + this._mapID);
             this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(this._def, "width"), Hashtable_1.Hashtable.GetNumber(this._def, "height"));
@@ -19,7 +21,10 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             this._root.touchable = false;
             Global_1.Global.graphic.mapRoot.addChild(this._root);
         }
-        End() {
+        Destroy() {
+            if (this._destroied)
+                return;
+            this._destroied = true;
             EventManager_1.EventManager.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
             EventManager_1.EventManager.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
             const count = this._entities.length;
@@ -28,6 +33,10 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             }
             this._entities.splice(0);
             this._idToEntity.clear();
+            this._root.dispose();
+            this._root = null;
+            this._def = null;
+            this._logicFrame = 0;
         }
         Update(dt) {
             this._camera.Update(dt);

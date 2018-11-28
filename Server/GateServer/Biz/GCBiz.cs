@@ -77,19 +77,20 @@ namespace GateServer.Biz
 					gsLoginRet.BsIP = csLoginRet.BsIP;
 					gsLoginRet.BsPort = csLoginRet.BsPort;
 					gsLoginRet.Defs = Defs.binary;
-;					GS.instance.netSessionMgr.Send( sid, gsLoginRet );
+					; GS.instance.netSessionMgr.Send( sid, gsLoginRet );
 					break;
 
 				case Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin:
-					GS.instance.netSessionMgr.CloseSession( sid, "client login failed" );
+					gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.SessionExpire;
+					GS.instance.netSessionMgr.Send( sid, gsLoginRet );
+					GS.instance.netSessionMgr.DelayCloseSession( sid, 100, "client login failed" );
 					break;
 			}
 		}
 
 		public ErrorCode OnGc2GsKeepAlive( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
-			ClientSession gcSession = session as ClientSession;
-			if ( gcSession != null )
+			if ( session is ClientSession gcSession )
 				gcSession.activeTime = TimeUtils.utcTime;
 			return ErrorCode.Success;
 		}

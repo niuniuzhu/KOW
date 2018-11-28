@@ -1,1 +1,1 @@
-dotnet build .\server
+dotnet .\server pubilsh

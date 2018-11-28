@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(CentralServer.User.CSUser);
-			Utils.BeginObjectRegister(type, L, translator, 0, 8, 10, 1);
+			Utils.BeginObjectRegister(type, L, translator, 0, 8, 11, 1);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Send", _m_Send);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "CanOffline", _m_CanOffline);
@@ -41,6 +41,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "loginTime", _g_get_loginTime);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "bsSID", _g_get_bsSID);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "bsLID", _g_get_bsLID);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "bid", _g_get_bid);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "isInBattle", _g_get_isInBattle);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "name", _g_get_name);
             
@@ -247,8 +248,9 @@ namespace XLua.CSObjectWrap
                 {
                     uint bsSID = LuaAPI.xlua_touint(L, 2);
                     uint bsLID = LuaAPI.xlua_touint(L, 3);
+                    uint bid = LuaAPI.xlua_touint(L, 4);
                     
-                    __cl_gen_to_be_invoked.EnterBattle( bsSID, bsLID );
+                    __cl_gen_to_be_invoked.EnterBattle( bsSID, bsLID, bid );
                     
                     
                     
@@ -425,6 +427,20 @@ namespace XLua.CSObjectWrap
 			
                 CentralServer.User.CSUser __cl_gen_to_be_invoked = (CentralServer.User.CSUser)translator.FastGetCSObj(L, 1);
                 LuaAPI.xlua_pushuint(L, __cl_gen_to_be_invoked.bsLID);
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_bid(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                CentralServer.User.CSUser __cl_gen_to_be_invoked = (CentralServer.User.CSUser)translator.FastGetCSObj(L, 1);
+                LuaAPI.xlua_pushuint(L, __cl_gen_to_be_invoked.bid);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }

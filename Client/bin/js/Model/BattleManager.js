@@ -10,6 +10,11 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             this._lBattle = new Battle_1.Battle();
             this._vBattle = new VBattle_1.VBattle();
         }
+        Destroy() {
+            this._lBattle.Destroy();
+            this._vBattle.Destroy();
+            this._init = false;
+        }
         SetBattleInfo(battleInfo, completeHandler) {
             this._vBattle.SetBattleInfo(battleInfo);
             this._lBattle.SetBattleInfo(battleInfo);
@@ -45,16 +50,13 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             });
         }
         HandleBattleEnd(message) {
-            const battleEnd = message;
-            this._lBattle.End();
-            this._vBattle.End();
-            this._init = false;
             Logger_1.Logger.Log("battle end");
+            const battleEnd = message;
+            this.Destroy();
             Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
         }
         HandleFrameAction(message) {
             const frameAction = message;
-            Logger_1.Logger.Log("recv frame action" + frameAction.frame);
             this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
         }
         HandleRequestFrameActions(frames, actions) {

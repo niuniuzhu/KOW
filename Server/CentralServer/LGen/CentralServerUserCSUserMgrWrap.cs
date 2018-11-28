@@ -374,10 +374,10 @@ namespace XLua.CSObjectWrap
             
 			    int __gen_param_count = LuaAPI.lua_gettop(L);
             
-                if(__gen_param_count == 3&& (LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2) || LuaAPI.lua_isuint64(L, 2))&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
+                if(__gen_param_count == 3&& (LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2) || LuaAPI.lua_isuint64(L, 2))&& translator.Assignable<Protos.CS2GS_KickGC.Types.EReason>(L, 3)) 
                 {
                     ulong gcNID = LuaAPI.lua_touint64(L, 2);
-                    int reason = LuaAPI.xlua_tointeger(L, 3);
+                    Protos.CS2GS_KickGC.Types.EReason reason;translator.Get(L, 3, out reason);
                     
                         bool __cl_gen_ret = __cl_gen_to_be_invoked.KickUser( gcNID, reason );
                         LuaAPI.lua_pushboolean(L, __cl_gen_ret);
@@ -386,10 +386,10 @@ namespace XLua.CSObjectWrap
                     
                     return 1;
                 }
-                if(__gen_param_count == 3&& translator.Assignable<CentralServer.User.CSUser>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
+                if(__gen_param_count == 3&& translator.Assignable<CentralServer.User.CSUser>(L, 2)&& translator.Assignable<Protos.CS2GS_KickGC.Types.EReason>(L, 3)) 
                 {
                     CentralServer.User.CSUser user = (CentralServer.User.CSUser)translator.GetObject(L, 2, typeof(CentralServer.User.CSUser));
-                    int reason = LuaAPI.xlua_tointeger(L, 3);
+                    Protos.CS2GS_KickGC.Types.EReason reason;translator.Get(L, 3, out reason);
                     
                     __cl_gen_to_be_invoked.KickUser( user, reason );
                     

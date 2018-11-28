@@ -21,10 +21,8 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(CentralServer.Match.BattleStaging);
-			Utils.BeginObjectRegister(type, L, translator, 0, 8, 0, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 6, 0, 0);
 			
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Add", _m_Add);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Remove", _m_Remove);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListALLLBIDToUser", _m_ListALLLBIDToUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListLBIDToUser", _m_ListLBIDToUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetNumUsersByLBID", _m_GetNumUsersByLBID);
@@ -78,80 +76,6 @@ namespace XLua.CSObjectWrap
         
         
         
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_Add(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                CentralServer.Match.BattleStaging __cl_gen_to_be_invoked = (CentralServer.Match.BattleStaging)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    CentralServer.User.CSUser user = (CentralServer.User.CSUser)translator.GetObject(L, 2, typeof(CentralServer.User.CSUser));
-                    uint lid = LuaAPI.xlua_touint(L, 3);
-                    uint sid = LuaAPI.xlua_touint(L, 4);
-                    uint bid = LuaAPI.xlua_touint(L, 5);
-                    
-                    __cl_gen_to_be_invoked.Add( user, lid, sid, bid );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_Remove(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                CentralServer.Match.BattleStaging __cl_gen_to_be_invoked = (CentralServer.Match.BattleStaging)translator.FastGetCSObj(L, 1);
-            
-            
-			    int __gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(__gen_param_count == 2&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)) 
-                {
-                    uint lid = LuaAPI.xlua_touint(L, 2);
-                    
-                    __cl_gen_to_be_invoked.Remove( lid );
-                    
-                    
-                    
-                    return 0;
-                }
-                if(__gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
-                {
-                    uint lid = LuaAPI.xlua_touint(L, 2);
-                    uint bid = LuaAPI.xlua_touint(L, 3);
-                    
-                    __cl_gen_to_be_invoked.Remove( lid, bid );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to CentralServer.Match.BattleStaging.Remove!");
-            
-        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_ListALLLBIDToUser(RealStatePtr L)

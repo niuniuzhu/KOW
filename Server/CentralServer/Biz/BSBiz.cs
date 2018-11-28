@@ -1,7 +1,9 @@
-﻿using Core.Misc;
+﻿using CentralServer.User;
+using Core.Misc;
 using Google.Protobuf;
 using Shared;
 using Shared.Net;
+using BSInfo = Shared.BSInfo;
 
 namespace CentralServer.Biz
 {
@@ -63,6 +65,26 @@ namespace CentralServer.Biz
 			//移除指定BS里指定战场里的所有玩家
 			CS.instance.battleStaging.Remove( session.logicID, battleEnd.Bid );
 			//todo 战斗结算
+			return ErrorCode.Success;
+		}
+
+		/// <summary>
+		/// BS通知玩家离开战场
+		/// </summary>
+		public ErrorCode OnBs2CsKickUser( NetSessionBase session, IMessage message )
+		{
+			Protos.BS2CS_KickUser kickUser = ( Protos.BS2CS_KickUser )message;
+			//把玩家下线
+			uint ukey = ( uint )( kickUser.GcNID & uint.MaxValue );
+			CSUser user = CS.instance.userMgr.GetUser( ukey );
+			Protos.CS2GS_KickGC.Types.EReason reason = Protos.CS2GS_KickGC.Types.EReason.OutOfSync;
+			switch ( kickUser.Reason )
+			{
+				case Protos.BS2CS_KickUser.Types.Reason.OutOfSync:
+					reason = Protos.CS2GS_KickGC.Types.EReason.OutOfSync;
+					break;
+			}
+			CS.instance.userMgr.KickUser( user, reason );
 			return ErrorCode.Success;
 		}
 	}

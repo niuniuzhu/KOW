@@ -1,10 +1,10 @@
-﻿using Core.Crypto;
-using Core.Misc;
+﻿using Core.Misc;
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Core.Crypto;
 
 namespace BattleServer.Battle.Snapshot
 {
@@ -13,6 +13,10 @@ namespace BattleServer.Battle.Snapshot
 	/// </summary>
 	public class SnapshotMgr
 	{
+		public delegate void OutOfSyncHandler( ulong gcNID, int frame, ByteString data1, ByteString data2 );
+
+		private OutOfSyncHandler _onOutOfSync;
+
 		/// <summary>
 		/// 帧数到快照的映射表,作为快照的历史记录
 		/// </summary>
@@ -25,9 +29,10 @@ namespace BattleServer.Battle.Snapshot
 
 		private int _numPlayers;
 
-		public void Init( int numPlayers )
+		public void Init( int numPlayers, OutOfSyncHandler outOfSyncHandler )
 		{
 			this._numPlayers = numPlayers;
+			this._onOutOfSync = outOfSyncHandler;
 		}
 
 		public void Clear()
@@ -118,10 +123,13 @@ namespace BattleServer.Battle.Snapshot
 					PlayerSnapshot playerSnapshot = playerSnapshots[i];
 					if ( playerSnapshot.crc == crc )
 						continue;
-					//todo 处理crc错误的玩家
+
 					Logger.Log( PrintSnapshot( maxGroup.First().data ) );
 					Logger.Log( PrintSnapshot( playerSnapshot.data ) );
 					Logger.Warn( $"{playerSnapshot.gcNID} different snapshot crc32 value, expect:{crc} but:{playerSnapshot.crc} at frame:{frame}" );
+
+					//发生不同步,触发回调函数
+					this._onOutOfSync?.Invoke( playerSnapshot.gcNID, frame, maxGroup.First().data, playerSnapshot.data );
 				}
 			}
 		}

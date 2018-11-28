@@ -29,7 +29,7 @@ namespace GateServer.Biz
 				GS.instance.netSessionMgr.Send( sid_, kick );
 
 				//强制断开客户端
-				GS.instance.netSessionMgr.CloseSession( sid_, "CS Kick" );
+				GS.instance.netSessionMgr.DelayCloseSession( sid_, 100, "CS Kick" );
 
 			}
 			return ErrorCode.Success;

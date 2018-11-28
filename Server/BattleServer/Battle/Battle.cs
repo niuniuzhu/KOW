@@ -5,6 +5,7 @@ using BattleServer.User;
 using Core.FMath;
 using Core.Misc;
 using Shared.Battle;
+using Shared.Net;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -152,7 +153,7 @@ namespace BattleServer.Battle
 			if ( !this.CreatePlayers( battleEntry.players ) )
 				return false;
 
-			this._snapshotMgr.Init( battleEntry.players.Length );
+			this._snapshotMgr.Init( battleEntry.players.Length, this.OnOutOfSync );
 			//创建初始化快照
 			//this.MakeInitSnapshot();
 			//初始化帧行为管理器
@@ -422,6 +423,26 @@ namespace BattleServer.Battle
 			writer.WriteInt32( count );
 			foreach ( KeyValuePair<ulong, Entity> kv in this._idToEntity )
 				kv.Value.EncodeSnapshot( writer );
+		}
+
+		/// <summary>
+		/// 数据不同步的回调函数
+		/// </summary>
+		/// <param name="gcNID">玩家ID</param>
+		/// <param name="frame">不同步的帧</param>
+		/// <param name="data1">正常数据</param>
+		/// <param name="data2">异常数据</param>
+		private void OnOutOfSync( ulong gcNID, int frame, Google.Protobuf.ByteString data1, Google.Protobuf.ByteString data2 )
+		{
+			//通知CS玩家离开战场
+			Protos.BS2CS_KickUser kickUser = ProtoCreator.Q_BS2CS_KickUser();
+			kickUser.GcNID = gcNID;
+			kickUser.Reason = Protos.BS2CS_KickUser.Types.Reason.OutOfSync;
+			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, kickUser );
+
+			//断开玩家连接
+			BSUser user = BS.instance.userMgr.GetUser( gcNID );
+			BS.instance.netSessionMgr.CloseSession( user.gcSID, "different snapshot crc32 value" );
 		}
 
 		/// <summary>

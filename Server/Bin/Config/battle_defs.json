@@ -34,18 +34,63 @@
             "mmp": 100,
             "move_speed": 200,
             "radius": 110,
-            "states": [
-                {
-                    "type": 0,
+            "states": {
+                "0": {
                     "attrs": [],
+                    "ops": [],
+                    "values": [],
                     "events": [
                         {
                             "time": 0
                         }
                     ],
-                    "animation": "idle"
+                    "animation": "stand"
+                },
+                "1": {
+                    "attrs": [],
+                    "ops": [],
+                    "values": [],
+                    "events": [
+                        {
+                            "time": 0
+                        }
+                    ],
+                    "animation": "run"
+                },
+                "2": {
+                    "attrs": [],
+                    "ops": [],
+                    "values": [],
+                    "events": [
+                        {
+                            "time": 0
+                        }
+                    ],
+                    "animation": "attack"
+                },
+                "3": {
+                    "attrs": [],
+                    "ops": [],
+                    "values": [],
+                    "events": [
+                        {
+                            "time": 0
+                        }
+                    ],
+                    "animation": "die"
+                },
+                "4": {
+                    "attrs": [],
+                    "ops": [],
+                    "values": [],
+                    "events": [
+                        {
+                            "time": 0
+                        }
+                    ],
+                    "animation": "b"
                 }
-            ]
+            }
         }
     }
 }

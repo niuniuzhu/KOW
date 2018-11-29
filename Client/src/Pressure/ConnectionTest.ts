@@ -16,7 +16,7 @@ export class ConnectionTest {
 		this._connector.Init();
 
 		this._connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
-		this._connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+		this._connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.OnBattleEnd.bind(this));
 		this._connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
 
 		this._closeTime = MathUtils.Random(1000, 3000);
@@ -155,7 +155,7 @@ export class ConnectionTest {
 	}
 
 	private OnBattleEnd(message: any): void {
-		const battleEnd: Protos.BS2GC_BattleEnd = <Protos.BS2GC_BattleEnd>message;
+		const battleEnd: Protos.CS2GC_BattleEnd = <Protos.CS2GC_BattleEnd>message;
 	}
 
 	private OnFrameAction(message: any): void {

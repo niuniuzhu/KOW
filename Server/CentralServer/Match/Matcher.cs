@@ -296,6 +296,8 @@ namespace CentralServer.Match
 
 			Logger.Log( $"battle:{battleInfoRet.Bid} created" );
 
+			CS.instance.battleStaging.OnBattleCreated( bsLID, battleInfoRet.Bid );
+
 			//把所有玩家移动到战场暂存器里
 			for ( int i = 0; i < roomCloned.numPlayers; ++i )
 			{

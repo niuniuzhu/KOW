@@ -33,16 +33,15 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2CS_GCLost, 3002);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2GC_LoginRet, 3100);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2GC_Kick, 3101);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2GC_CSLost, 3102);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_ReportState, 4000);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_BattleInfoRet, 4001);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_BattleEnd, 4002);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_KickUser, 4003);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_LoginRet, 4100);
-            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_BattleEnd, 4101);
-            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_RequestSnapshotRet, 4102);
-            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_FrameAction, 4103);
-            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_RequestFrameActionsRet, 4104);
-            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_OutOfSync, 4105);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_RequestSnapshotRet, 4101);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_FrameAction, 4102);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_RequestFrameActionsRet, 4103);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSInfos, 5000);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSInfo, 5001);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSLost, 5002);
@@ -55,6 +54,7 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_PlayerLeave, 5302);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_RoomInfo, 5303);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_EnterBattle, 5304);
+            ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_BattleEnd, 5305);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_QueryAccountRet, 8000);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_QueryLoginRet, 8001);
             ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_ExecRet, 8002);
@@ -84,16 +84,15 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             ProtoCreator._ID2TYPE.set(3002, protos_1.Protos.GS2CS_GCLost);
             ProtoCreator._ID2TYPE.set(3100, protos_1.Protos.GS2GC_LoginRet);
             ProtoCreator._ID2TYPE.set(3101, protos_1.Protos.GS2GC_Kick);
+            ProtoCreator._ID2TYPE.set(3102, protos_1.Protos.GS2GC_CSLost);
             ProtoCreator._ID2TYPE.set(4000, protos_1.Protos.BS2CS_ReportState);
             ProtoCreator._ID2TYPE.set(4001, protos_1.Protos.BS2CS_BattleInfoRet);
             ProtoCreator._ID2TYPE.set(4002, protos_1.Protos.BS2CS_BattleEnd);
             ProtoCreator._ID2TYPE.set(4003, protos_1.Protos.BS2CS_KickUser);
             ProtoCreator._ID2TYPE.set(4100, protos_1.Protos.BS2GC_LoginRet);
-            ProtoCreator._ID2TYPE.set(4101, protos_1.Protos.BS2GC_BattleEnd);
-            ProtoCreator._ID2TYPE.set(4102, protos_1.Protos.BS2GC_RequestSnapshotRet);
-            ProtoCreator._ID2TYPE.set(4103, protos_1.Protos.BS2GC_FrameAction);
-            ProtoCreator._ID2TYPE.set(4104, protos_1.Protos.BS2GC_RequestFrameActionsRet);
-            ProtoCreator._ID2TYPE.set(4105, protos_1.Protos.BS2GC_OutOfSync);
+            ProtoCreator._ID2TYPE.set(4101, protos_1.Protos.BS2GC_RequestSnapshotRet);
+            ProtoCreator._ID2TYPE.set(4102, protos_1.Protos.BS2GC_FrameAction);
+            ProtoCreator._ID2TYPE.set(4103, protos_1.Protos.BS2GC_RequestFrameActionsRet);
             ProtoCreator._ID2TYPE.set(5000, protos_1.Protos.CS2LS_GSInfos);
             ProtoCreator._ID2TYPE.set(5001, protos_1.Protos.CS2LS_GSInfo);
             ProtoCreator._ID2TYPE.set(5002, protos_1.Protos.CS2LS_GSLost);
@@ -106,6 +105,7 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             ProtoCreator._ID2TYPE.set(5302, protos_1.Protos.CS2GC_PlayerLeave);
             ProtoCreator._ID2TYPE.set(5303, protos_1.Protos.CS2GC_RoomInfo);
             ProtoCreator._ID2TYPE.set(5304, protos_1.Protos.CS2GC_EnterBattle);
+            ProtoCreator._ID2TYPE.set(5305, protos_1.Protos.CS2GC_BattleEnd);
             ProtoCreator._ID2TYPE.set(8000, protos_1.Protos.DB2LS_QueryAccountRet);
             ProtoCreator._ID2TYPE.set(8001, protos_1.Protos.DB2LS_QueryLoginRet);
             ProtoCreator._ID2TYPE.set(8002, protos_1.Protos.DB2LS_ExecRet);
@@ -259,6 +259,11 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
+        static Q_GS2GC_CSLost() {
+            let msg = new protos_1.Protos.GS2GC_CSLost();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
         static Q_BS2CS_ReportState() {
             let msg = new protos_1.Protos.BS2CS_ReportState();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -284,11 +289,6 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
-        static Q_BS2GC_BattleEnd() {
-            let msg = new protos_1.Protos.BS2GC_BattleEnd();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            return msg;
-        }
         static Q_BS2GC_RequestSnapshotRet() {
             let msg = new protos_1.Protos.BS2GC_RequestSnapshotRet();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -301,11 +301,6 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
         }
         static Q_BS2GC_RequestFrameActionsRet() {
             let msg = new protos_1.Protos.BS2GC_RequestFrameActionsRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            return msg;
-        }
-        static Q_BS2GC_OutOfSync() {
-            let msg = new protos_1.Protos.BS2GC_OutOfSync();
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
@@ -370,6 +365,11 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
+        static Q_CS2GC_BattleEnd() {
+            let msg = new protos_1.Protos.CS2GC_BattleEnd();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            return msg;
+        }
         static Q_DB2LS_QueryAccountRet() {
             let msg = new protos_1.Protos.DB2LS_QueryAccountRet();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -385,50 +385,8 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
-        static R_GC2LS_AskLogin(pid) {
-            let msg = new protos_1.Protos.LS2GC_AskLoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
         static R_GC2BS_AskLogin(pid) {
             let msg = new protos_1.Protos.BS2GC_LoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_LS2CS_GCLogin(pid) {
-            let msg = new protos_1.Protos.CS2LS_GCLoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2GS_AskLogin(pid) {
-            let msg = new protos_1.Protos.GS2GC_LoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2CS_BeginMatch(pid) {
-            let msg = new protos_1.Protos.CS2GC_BeginMatchRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_CS2BS_BattleInfo(pid) {
-            let msg = new protos_1.Protos.BS2CS_BattleInfoRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_LS2DB_QueryAccount(pid) {
-            let msg = new protos_1.Protos.DB2LS_QueryAccountRet();
             msg.opts = new protos_1.Protos.MsgOpts();
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
@@ -441,29 +399,15 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts.rpid = pid;
             return msg;
         }
+        static R_LS2DB_QueryAccount(pid) {
+            let msg = new protos_1.Protos.DB2LS_QueryAccountRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
         static R_GC2BS_RequestFrameActions(pid) {
             let msg = new protos_1.Protos.BS2GC_RequestFrameActionsRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2LS_AskRegister(pid) {
-            let msg = new protos_1.Protos.LS2GC_AskRegRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2BS_RequestSnapshot(pid) {
-            let msg = new protos_1.Protos.BS2GC_RequestSnapshotRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_LS2DB_QueryLogin(pid) {
-            let msg = new protos_1.Protos.DB2LS_QueryLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
@@ -476,6 +420,13 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts.rpid = pid;
             return msg;
         }
+        static R_GC2LS_AskRegister(pid) {
+            let msg = new protos_1.Protos.LS2GC_AskRegRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
         static R_GS2CS_GCAskLogin(pid) {
             let msg = new protos_1.Protos.CS2GS_GCLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
@@ -483,8 +434,57 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts.rpid = pid;
             return msg;
         }
+        static R_GC2LS_AskLogin(pid) {
+            let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_CS2BS_BattleInfo(pid) {
+            let msg = new protos_1.Protos.BS2CS_BattleInfoRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_LS2DB_QueryLogin(pid) {
+            let msg = new protos_1.Protos.DB2LS_QueryLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_LS2CS_GCLogin(pid) {
+            let msg = new protos_1.Protos.CS2LS_GCLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2BS_RequestSnapshot(pid) {
+            let msg = new protos_1.Protos.BS2GC_RequestSnapshotRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
         static R_GC2LS_AskSmartLogin(pid) {
             let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2CS_BeginMatch(pid) {
+            let msg = new protos_1.Protos.CS2GC_BeginMatchRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2GS_AskLogin(pid) {
+            let msg = new protos_1.Protos.GS2GC_LoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
@@ -596,6 +596,10 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     let msg = protos_1.Protos.GS2GC_Kick.decode(data, size);
                     return msg;
                 }
+                case 3102: {
+                    let msg = protos_1.Protos.GS2GC_CSLost.decode(data, size);
+                    return msg;
+                }
                 case 4000: {
                     let msg = protos_1.Protos.BS2CS_ReportState.decode(data, size);
                     return msg;
@@ -617,23 +621,15 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return msg;
                 }
                 case 4101: {
-                    let msg = protos_1.Protos.BS2GC_BattleEnd.decode(data, size);
-                    return msg;
-                }
-                case 4102: {
                     let msg = protos_1.Protos.BS2GC_RequestSnapshotRet.decode(data, size);
                     return msg;
                 }
-                case 4103: {
+                case 4102: {
                     let msg = protos_1.Protos.BS2GC_FrameAction.decode(data, size);
                     return msg;
                 }
-                case 4104: {
+                case 4103: {
                     let msg = protos_1.Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
-                    return msg;
-                }
-                case 4105: {
-                    let msg = protos_1.Protos.BS2GC_OutOfSync.decode(data, size);
                     return msg;
                 }
                 case 5000: {
@@ -682,6 +678,10 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                 }
                 case 5304: {
                     let msg = protos_1.Protos.CS2GC_EnterBattle.decode(data, size);
+                    return msg;
+                }
+                case 5305: {
+                    let msg = protos_1.Protos.CS2GC_BattleEnd.decode(data, size);
                     return msg;
                 }
                 case 8000: {
@@ -803,6 +803,10 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             let msg = protos_1.Protos.GS2GC_Kick.decode(data, size);
             return msg;
         }
+        static D_GS2GC_CSLost(data, size) {
+            let msg = protos_1.Protos.GS2GC_CSLost.decode(data, size);
+            return msg;
+        }
         static D_BS2CS_ReportState(data, size) {
             let msg = protos_1.Protos.BS2CS_ReportState.decode(data, size);
             return msg;
@@ -823,10 +827,6 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             let msg = protos_1.Protos.BS2GC_LoginRet.decode(data, size);
             return msg;
         }
-        static D_BS2GC_BattleEnd(data, size) {
-            let msg = protos_1.Protos.BS2GC_BattleEnd.decode(data, size);
-            return msg;
-        }
         static D_BS2GC_RequestSnapshotRet(data, size) {
             let msg = protos_1.Protos.BS2GC_RequestSnapshotRet.decode(data, size);
             return msg;
@@ -837,10 +837,6 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
         }
         static D_BS2GC_RequestFrameActionsRet(data, size) {
             let msg = protos_1.Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
-            return msg;
-        }
-        static D_BS2GC_OutOfSync(data, size) {
-            let msg = protos_1.Protos.BS2GC_OutOfSync.decode(data, size);
             return msg;
         }
         static D_CS2LS_GSInfos(data, size) {
@@ -889,6 +885,10 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
         }
         static D_CS2GC_EnterBattle(data, size) {
             let msg = protos_1.Protos.CS2GC_EnterBattle.decode(data, size);
+            return msg;
+        }
+        static D_CS2GC_BattleEnd(data, size) {
+            let msg = protos_1.Protos.CS2GC_BattleEnd.decode(data, size);
             return msg;
         }
         static D_DB2LS_QueryAccountRet(data, size) {
@@ -983,6 +983,9 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                 case 3101: {
                     return new protos_1.Protos.GS2GC_Kick();
                 }
+                case 3102: {
+                    return new protos_1.Protos.GS2GC_CSLost();
+                }
                 case 4000: {
                     return new protos_1.Protos.BS2CS_ReportState();
                 }
@@ -999,19 +1002,13 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return new protos_1.Protos.BS2GC_LoginRet();
                 }
                 case 4101: {
-                    return new protos_1.Protos.BS2GC_BattleEnd();
-                }
-                case 4102: {
                     return new protos_1.Protos.BS2GC_RequestSnapshotRet();
                 }
-                case 4103: {
+                case 4102: {
                     return new protos_1.Protos.BS2GC_FrameAction();
                 }
-                case 4104: {
+                case 4103: {
                     return new protos_1.Protos.BS2GC_RequestFrameActionsRet();
-                }
-                case 4105: {
-                    return new protos_1.Protos.BS2GC_OutOfSync();
                 }
                 case 5000: {
                     return new protos_1.Protos.CS2LS_GSInfos();
@@ -1048,6 +1045,9 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                 }
                 case 5304: {
                     return new protos_1.Protos.CS2GC_EnterBattle();
+                }
+                case 5305: {
+                    return new protos_1.Protos.CS2GC_BattleEnd();
                 }
                 case 8000: {
                     return new protos_1.Protos.DB2LS_QueryAccountRet();
@@ -1142,6 +1142,9 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                 case 3101: {
                     return message.opts;
                 }
+                case 3102: {
+                    return message.opts;
+                }
                 case 4000: {
                     return message.opts;
                 }
@@ -1164,12 +1167,6 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return message.opts;
                 }
                 case 4103: {
-                    return message.opts;
-                }
-                case 4104: {
-                    return message.opts;
-                }
-                case 4105: {
                     return message.opts;
                 }
                 case 5000: {
@@ -1206,6 +1203,9 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
                     return message.opts;
                 }
                 case 5304: {
+                    return message.opts;
+                }
+                case 5305: {
                     return message.opts;
                 }
                 case 8000: {

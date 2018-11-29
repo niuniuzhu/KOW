@@ -13,16 +13,17 @@ export class GlobalState extends SceneState {
 		Global.connector.gsConnector.onclose = this.HandleGSDisconnect;
 		Global.connector.bsConnector.onclose = this.HandleBSDisconnect;
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick);
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost);
 	}
 
 	private HandleGSDisconnect(e: Event): void {
 		Logger.Error("gs connection closed.");
-		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login), true);
+		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 	}
 
 	private HandleBSDisconnect(e: Event): void {
 		Logger.Error("bs connection closed.");
-		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login), true);
+		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 	}
 
 	/**
@@ -48,5 +49,14 @@ export class GlobalState extends SceneState {
 				UIAlert.Show("已被服务器强制下线", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 				break;
 		}
+	}
+
+	/**
+	 * 处理CS丢失连接
+	 * @param message 协议
+	 */
+	private HandleCSLost(message: any): void {
+		Logger.Error("cs lost");
+		UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 	}
 }

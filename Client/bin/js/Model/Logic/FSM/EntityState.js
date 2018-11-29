@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/FSM/FSMState"], function (require, exports, FSMState_1) {
+define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState", "../../../RC/Utils/Hashtable"], function (require, exports, decimal_1, FSMState_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Type;
@@ -8,14 +8,55 @@ define(["require", "exports", "../../../RC/FSM/FSMState"], function (require, ex
         Type[Type["Attack"] = 2] = "Attack";
         Type[Type["Die"] = 3] = "Die";
     })(Type || (Type = {}));
+    var Op;
+    (function (Op) {
+        Op[Op["Add"] = 0] = "Add";
+        Op[Op["Mul"] = 1] = "Mul";
+        Op[Op["Mod"] = 2] = "Mod";
+        Op[Op["Pow"] = 3] = "Pow";
+        Op[Op["Exp"] = 4] = "Exp";
+    })(Op || (Op = {}));
     class EntityState extends FSMState_1.FSMState {
         constructor(type, owner) {
             super(type);
             this._owner = owner;
         }
         get owner() { return this._owner; }
+        OnEnter(param) {
+            const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this.owner.def, "states"), this.type.toString());
+            const attrs = Hashtable_1.Hashtable.GetArray(def, "attrs");
+            const ops = Hashtable_1.Hashtable.GetArray(def, "ops");
+            const values = Hashtable_1.Hashtable.GetArray(def, "values");
+            const count = attrs.length;
+            for (let i = 0; i < count; ++i) {
+                this.ActiveAttr(attrs[i], ops[i], new decimal_1.default(values[i]));
+            }
+            const events = Hashtable_1.Hashtable.GetArray(def, "events");
+        }
+        ActiveAttr(attr, op, value) {
+            switch (op) {
+                case Op.Add:
+                    this.owner.attribute.Add(attr, value);
+                    break;
+                case Op.Mul:
+                    this.owner.attribute.Mul(attr, value);
+                    break;
+                case Op.Mod:
+                    this.owner.attribute.Mod(attr, value);
+                    break;
+                case Op.Pow:
+                    this.owner.attribute.Pow(attr, value);
+                    break;
+                case Op.Exp:
+                    this.owner.attribute.Exp(attr);
+                    break;
+            }
+        }
+        DeactiveAttr(attr, op, value) {
+        }
     }
     EntityState.Type = Type;
+    EntityState.Op = Op;
     exports.EntityState = EntityState;
 });
 //# sourceMappingURL=EntityState.js.map

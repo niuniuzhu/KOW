@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using Google.Protobuf;
+using Protos;
 using Shared;
 using Shared.Net;
 
@@ -9,10 +10,14 @@ namespace GateServer.Biz
 	{
 		public void OnCSSessionClosed( NetSessionBase session )
 		{
+			uint[] gcSIDs = GS.instance.userMgr.GetClients();
+			//广播到客户端CS丢失
+			GS2GC_CSLost csLost = ProtoCreator.Q_GS2GC_CSLost();
+			GS.instance.netSessionMgr.Broadcast( gcSIDs, csLost );
 			//断开所有客户端
-			uint[] gcSids = GS.instance.userMgr.GetClients();
-			foreach ( uint gcSID in gcSids )
-				GS.instance.netSessionMgr.CloseSession( gcSID, "CS Closed" );
+			foreach ( uint gcSID in gcSIDs )
+				GS.instance.netSessionMgr.DelayCloseSession( gcSID, 100, "CS Closed" );
+			//清空客户端信息
 			GS.instance.userMgr.ClearClients();
 		}
 

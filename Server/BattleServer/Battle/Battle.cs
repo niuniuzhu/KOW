@@ -345,7 +345,7 @@ namespace BattleServer.Battle
 
 		/// <summary>
 		/// 广播消息到所有玩家
-		/// 该函数在战场线程调用,是线程不安全的,但由于几乎没有写操作,暂时不加锁
+		/// 该函数在战场线程调用,线程不安全,但由于没有写操作,暂时不加锁
 		/// </summary>
 		internal void Broadcast( Google.Protobuf.IMessage message )
 		{

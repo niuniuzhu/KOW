@@ -1,17 +1,17 @@
 define(["require", "exports", "../Libs/decimal"], function (require, exports, decimal_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Attr;
-    (function (Attr) {
-        Attr[Attr["MHP"] = 0] = "MHP";
-        Attr[Attr["HP"] = 1] = "HP";
-        Attr[Attr["MMP"] = 2] = "MMP";
-        Attr[Attr["MP"] = 3] = "MP";
-        Attr[Attr["ATK"] = 4] = "ATK";
-        Attr[Attr["DEF"] = 5] = "DEF";
-        Attr[Attr["MOVE_SPEED"] = 6] = "MOVE_SPEED";
-        Attr[Attr["RADIUS"] = 7] = "RADIUS";
-    })(Attr || (Attr = {}));
+    var EAttr;
+    (function (EAttr) {
+        EAttr[EAttr["MHP"] = 0] = "MHP";
+        EAttr[EAttr["HP"] = 1] = "HP";
+        EAttr[EAttr["MMP"] = 2] = "MMP";
+        EAttr[EAttr["MP"] = 3] = "MP";
+        EAttr[EAttr["ATK"] = 4] = "ATK";
+        EAttr[EAttr["DEF"] = 5] = "DEF";
+        EAttr[EAttr["MOVE_SPEED"] = 6] = "MOVE_SPEED";
+        EAttr[EAttr["RADIUS"] = 7] = "RADIUS";
+    })(EAttr = exports.EAttr || (exports.EAttr = {}));
     class Attribute {
         constructor() {
             this._map = new Map();
@@ -53,6 +53,10 @@ define(["require", "exports", "../Libs/decimal"], function (require, exports, de
             const value = this._map.get(attr);
             this._map.set(attr, decimal_1.default.pow(value, exp));
         }
+        Exp(attr) {
+            const value = this._map.get(attr);
+            this._map.set(attr, decimal_1.default.exp(value));
+        }
         Abs(attr) {
             const value = this._map.get(attr);
             this._map.set(attr, decimal_1.default.abs(value));
@@ -62,7 +66,6 @@ define(["require", "exports", "../Libs/decimal"], function (require, exports, de
             this._map.set(attr, decimal_1.default.sin(value));
         }
     }
-    Attribute.Attr = Attr;
     exports.Attribute = Attribute;
 });
 //# sourceMappingURL=Attribute.js.map

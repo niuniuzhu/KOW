@@ -33,6 +33,7 @@ message BS2CS_BattleInfoRet {
 message BS2CS_BattleEnd {
 	MsgOpts opts = 1;
 	uint32 bid = 2;//战场id
+	//todo result
 }
 
 //通知CS玩家离开战场

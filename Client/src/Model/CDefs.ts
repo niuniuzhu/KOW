@@ -1,3 +1,4 @@
+import { Consts } from "../Consts";
 import { Hashtable } from "../RC/Utils/Hashtable";
 
 type pair = { [k: string]: any };
@@ -21,11 +22,11 @@ export class CDefs {
 		return Hashtable.GetArray(this._defs, "preloads");
 	}
 
-	public static GetMap(id: string): Hashtable {
-		return Hashtable.GetMap(this._mapMap, id);
+	public static GetMap(id: number): Hashtable {
+		return Hashtable.GetMap(this._mapMap, Consts.ASSETS_MAP_PREFIX + id);
 	}
 
-	public static GetEntity(id: string): Hashtable {
-		return Hashtable.GetMap(this._entityMap, id);
+	public static GetEntity(id: number): Hashtable {
+		return Hashtable.GetMap(this._entityMap, Consts.ASSETS_ENTITY_PREFIX + id);
 	}
 }

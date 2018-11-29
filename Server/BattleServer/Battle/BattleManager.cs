@@ -115,11 +115,6 @@ namespace BattleServer.Battle
 			battleEnd.Bid = battle.id;
 			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd );
 
-			//通知客户端战场结束
-			Protos.BS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_BS2GC_BattleEnd();
-			gcBattleEnd.Id = battle.id;
-			battle.Broadcast( gcBattleEnd );
-
 			int count = battle.numPlayers;
 			for ( int i = 0; i < count; i++ )
 			{

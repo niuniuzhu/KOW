@@ -49,16 +49,16 @@ namespace Protos {
             "R1MyR0NfTG9naW5SZXQQnBgSEAoLZUdTMkdDX0tpY2sQnRgSFwoSZUJTMkNT",
             "X1JlcG9ydFN0YXRlEKAfEhkKFGVCUzJDU19CYXR0bGVJbmZvUmV0EKEfEhUK",
             "EGVCUzJDU19CYXR0bGVFbmQQoh8SFAoPZUJTMkNTX0tpY2tVc2VyEKMfEhQK",
-            "D2VCUzJHQ19Mb2dpblJldBCEIBIVChBlQlMyR0NfQmF0dGxlRW5kEIUgEh4K",
-            "GWVCUzJHQ19SZXF1ZXN0U25hcHNob3RSZXQQhiASFwoSZUJTMkdDX0ZyYW1l",
-            "QWN0aW9uEIcgEiIKHWVCUzJHQ19SZXF1ZXN0RnJhbWVBY3Rpb25zUmV0EIgg",
-            "EhMKDmVDUzJMU19HU0luZm9zEIgnEhIKDWVDUzJMU19HU0luZm8QiScSEgoN",
-            "ZUNTMkxTX0dTTG9zdBCKJxIWChFlQ1MyTFNfR0NMb2dpblJldBCLJxIWChFl",
-            "Q1MyR1NfR0NMb2dpblJldBDsJxISCg1lQ1MyR1NfS2lja0dDEO0nEhYKEWVD",
-            "UzJCU19CYXR0bGVJbmZvENAoEhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQp",
-            "EhYKEWVDUzJHQ19QbGF5ZXJKb2luELUpEhcKEmVDUzJHQ19QbGF5ZXJMZWF2",
-            "ZRC2KRIUCg9lQ1MyR0NfUm9vbUluZm8QtykSFwoSZUNTMkdDX0VudGVyQmF0",
-            "dGxlELgpEhsKFmVEQjJMU19RdWVyeUFjY291bnRSZXQQwD4SGQoUZURCMkxT",
+            "D2VCUzJHQ19Mb2dpblJldBCEIBIeChllQlMyR0NfUmVxdWVzdFNuYXBzaG90",
+            "UmV0EIUgEhcKEmVCUzJHQ19GcmFtZUFjdGlvbhCGIBIiCh1lQlMyR0NfUmVx",
+            "dWVzdEZyYW1lQWN0aW9uc1JldBCHIBITCg5lQ1MyTFNfR1NJbmZvcxCIJxIS",
+            "Cg1lQ1MyTFNfR1NJbmZvEIknEhIKDWVDUzJMU19HU0xvc3QQiicSFgoRZUNT",
+            "MkxTX0dDTG9naW5SZXQQiycSFgoRZUNTMkdTX0dDTG9naW5SZXQQ7CcSEgoN",
+            "ZUNTMkdTX0tpY2tHQxDtJxIWChFlQ1MyQlNfQmF0dGxlSW5mbxDQKBIZChRl",
+            "Q1MyR0NfQmVnaW5NYXRjaFJldBC0KRIWChFlQ1MyR0NfUGxheWVySm9pbhC1",
+            "KRIXChJlQ1MyR0NfUGxheWVyTGVhdmUQtikSFAoPZUNTMkdDX1Jvb21JbmZv",
+            "ELcpEhcKEmVDUzJHQ19FbnRlckJhdHRsZRC4KRIVChBlQ1MyR0NfQmF0dGxl",
+            "RW5kELkpEhsKFmVEQjJMU19RdWVyeUFjY291bnRSZXQQwD4SGQoUZURCMkxT",
             "X1F1ZXJ5TG9naW5SZXQQwT4SEwoOZURCMkxTX0V4ZWNSZXQQwj5iBnByb3Rv",
             "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
@@ -119,10 +119,9 @@ namespace Protos {
     [pbr::OriginalName("eBS2CS_BattleEnd")] EBs2CsBattleEnd = 4002,
     [pbr::OriginalName("eBS2CS_KickUser")] EBs2CsKickUser = 4003,
     [pbr::OriginalName("eBS2GC_LoginRet")] EBs2GcLoginRet = 4100,
-    [pbr::OriginalName("eBS2GC_BattleEnd")] EBs2GcBattleEnd = 4101,
-    [pbr::OriginalName("eBS2GC_RequestSnapshotRet")] EBs2GcRequestSnapshotRet = 4102,
-    [pbr::OriginalName("eBS2GC_FrameAction")] EBs2GcFrameAction = 4103,
-    [pbr::OriginalName("eBS2GC_RequestFrameActionsRet")] EBs2GcRequestFrameActionsRet = 4104,
+    [pbr::OriginalName("eBS2GC_RequestSnapshotRet")] EBs2GcRequestSnapshotRet = 4101,
+    [pbr::OriginalName("eBS2GC_FrameAction")] EBs2GcFrameAction = 4102,
+    [pbr::OriginalName("eBS2GC_RequestFrameActionsRet")] EBs2GcRequestFrameActionsRet = 4103,
     /// <summary>
     ///cs
     /// </summary>
@@ -138,6 +137,7 @@ namespace Protos {
     [pbr::OriginalName("eCS2GC_PlayerLeave")] ECs2GcPlayerLeave = 5302,
     [pbr::OriginalName("eCS2GC_RoomInfo")] ECs2GcRoomInfo = 5303,
     [pbr::OriginalName("eCS2GC_EnterBattle")] ECs2GcEnterBattle = 5304,
+    [pbr::OriginalName("eCS2GC_BattleEnd")] ECs2GcBattleEnd = 5305,
     /// <summary>
     ///db
     /// </summary>

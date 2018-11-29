@@ -33,12 +33,14 @@ namespace Protos {
             "B1N1Y2Nlc3MQABIRCg1TZXNzaW9uRXhwaXJlEAEiIQoJRUdDQ1N0YXRlEggK",
             "BElkbGUQABIKCgZCYXR0bGUQASJZCgpHUzJHQ19LaWNrEh0KBG9wdHMYASAB",
             "KAsyDy5Qcm90b3MuTXNnT3B0cxIsCgZyZWFzb24YAiABKA4yHC5Qcm90b3Mu",
-            "Q1MyR1NfS2lja0dDLkVSZWFzb25iBnByb3RvMw=="));
+            "Q1MyR1NfS2lja0dDLkVSZWFzb24iLQoMR1MyR0NfQ1NMb3N0Eh0KBG9wdHMY",
+            "ASABKAsyDy5Qcm90b3MuTXNnT3B0c2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2GSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_LoginRet), global::Protos.GS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "GcState", "GcNID", "BsIP", "BsPort", "Defs" }, null, new[]{ typeof(global::Protos.GS2GC_LoginRet.Types.EResult), typeof(global::Protos.GS2GC_LoginRet.Types.EGCCState) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_Kick), global::Protos.GS2GC_Kick.Parser, new[]{ "Opts", "Reason" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_Kick), global::Protos.GS2GC_Kick.Parser, new[]{ "Opts", "Reason" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_CSLost), global::Protos.GS2GC_CSLost.Parser, new[]{ "Opts" }, null, null, null)
           }));
     }
     #endregion
@@ -539,6 +541,141 @@ namespace Protos {
           }
           case 16: {
             reason_ = (global::Protos.CS2GS_KickGC.Types.EReason) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class GS2GC_CSLost : pb::IMessage<GS2GC_CSLost> {
+    private static readonly pb::MessageParser<GS2GC_CSLost> _parser = new pb::MessageParser<GS2GC_CSLost>(() => new GS2GC_CSLost());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GS2GC_CSLost> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.GS2GCReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GS2GC_CSLost() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GS2GC_CSLost(GS2GC_CSLost other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GS2GC_CSLost Clone() {
+      return new GS2GC_CSLost(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GS2GC_CSLost);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GS2GC_CSLost other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GS2GC_CSLost other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
             break;
           }
         }

@@ -7,6 +7,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             Global_1.Global.connector.gsConnector.onclose = this.HandleGSDisconnect;
             Global_1.Global.connector.bsConnector.onclose = this.HandleBSDisconnect;
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_Kick, this.HandleKick);
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost);
         }
         HandleGSDisconnect(e) {
             Logger_1.Logger.Error("gs connection closed.");
@@ -31,6 +32,10 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                     UIAlert_1.UIAlert.Show("已被服务器强制下线", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
                     break;
             }
+        }
+        HandleCSLost(message) {
+            Logger_1.Logger.Error("cs lost");
+            UIAlert_1.UIAlert.Show("与服务器断开连接", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
         }
     }
     exports.GlobalState = GlobalState;

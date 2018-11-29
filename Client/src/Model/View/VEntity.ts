@@ -8,17 +8,17 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute } from "../Attribute";
 import { AniHolder } from "./AniHolder";
 import { VEntityState } from "./FSM/VEntityState";
-import { VIdle } from "./FSM/VIdle";
-import { VMove } from "./FSM/VMove";
 import { VBattle } from "./VBattle";
 import { FVec2 } from "../../RC/FVec2";
 import Decimal from "../../Libs/decimal";
+import { Defs } from "../Defs";
 
 export class VEntity {
 	public get id(): Long { return this._id; }
 	public get actorID(): number { return this._actorID; }
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
+	public get def(): Hashtable { return this._def; }
 	public get root(): fairygui.GComponent { return this._root; }
 
 	public readonly attribute: Attribute = new Attribute();
@@ -67,8 +67,8 @@ export class VEntity {
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
 		Global.graphic.entityRoot.addChild(this._root);
-		this._fsm.AddState(new VIdle(VEntityState.Type.Idle, this));
-		this._fsm.AddState(new VMove(VEntityState.Type.Move, this));
+		this._fsm.AddState(new VEntityState(VEntityState.Type.Idle, this));
+		this._fsm.AddState(new VEntityState(VEntityState.Type.Move, this));
 		this._fsm.AddState(new VEntityState(VEntityState.Type.Attack, this));
 		this._fsm.AddState(new VEntityState(VEntityState.Type.Die, this));
 	}
@@ -110,8 +110,8 @@ export class VEntity {
 		this._actorID = reader.int32();
 
 		//加载配置
-		this._def = CDefs.GetEntity(Consts.ASSETS_ENTITY_PREFIX + this._actorID);
-		const aniDefs = Hashtable.GetMapArray(this._def, "animations");
+		this._def = Defs.GetEntity(this._actorID);
+		const aniDefs = Hashtable.GetMapArray(CDefs.GetEntity(this._actorID), "animations");
 		for (let i = 0; i < aniDefs.length; ++i) {
 			const aniDef = aniDefs[i];
 			const aniName = Hashtable.GetString(aniDef, "name");

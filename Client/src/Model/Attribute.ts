@@ -1,6 +1,6 @@
 import Decimal from "../Libs/decimal";
 
-enum Attr {
+export enum EAttr {
 	MHP,
 	HP,
 	MMP,
@@ -15,9 +15,7 @@ enum Attr {
  * 属性管理器
  */
 export class Attribute {
-	public static readonly Attr = Attr;
-
-	private readonly _map: Map<Attr, Decimal> = new Map<Attr, Decimal>();
+	private readonly _map: Map<EAttr, Decimal> = new Map<EAttr, Decimal>();
 
 	public get count(): number { return this._map.size; }
 
@@ -25,7 +23,7 @@ export class Attribute {
 	 * 遍历属性
 	 * @param handler 回调函数
 	 */
-	public Foreach(handler: (v: Decimal, k: Attr, map: Map<Attr, Decimal>) => void) {
+	public Foreach(handler: (v: Decimal, k: EAttr, map: Map<EAttr, Decimal>) => void) {
 		this._map.forEach(handler);
 	}
 
@@ -34,7 +32,7 @@ export class Attribute {
 	 * @param attr 属性
 	 * @param value 值
 	 */
-	public Set(attr: Attr, value: Decimal) {
+	public Set(attr: EAttr, value: Decimal) {
 		this._map.set(attr, value);
 	}
 
@@ -42,7 +40,7 @@ export class Attribute {
 	 * 获取属性
 	 * @param attr 属性
 	 */
-	public Get(attr: Attr): Decimal {
+	public Get(attr: EAttr): Decimal {
 		return this._map.get(attr);
 	}
 
@@ -50,46 +48,51 @@ export class Attribute {
 	 * 是否存在属性
 	 * @param attr 属性
 	 */
-	public Contains(attr: Attr): boolean {
+	public Contains(attr: EAttr): boolean {
 		return this._map.has(attr);
 	}
 
-	public Add(attr: Attr, delta: Decimal): void {
+	public Add(attr: EAttr, delta: Decimal): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, value.add(delta));
 	}
 
-	public Sub(attr: Attr, delta: Decimal): void {
+	public Sub(attr: EAttr, delta: Decimal): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, value.sub(delta));
 	}
 
-	public Mul(attr: Attr, factor: Decimal): void {
+	public Mul(attr: EAttr, factor: Decimal): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, value.mul(factor));
 	}
 
-	public Div(attr: Attr, factor: Decimal): void {
+	public Div(attr: EAttr, factor: Decimal): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, value.div(factor));
 	}
 
-	public Mod(attr: Attr, mod: Decimal): void {
+	public Mod(attr: EAttr, mod: Decimal): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, value.mod(mod));
 	}
 
-	public Pow(attr: Attr, exp: Decimal): void {
+	public Pow(attr: EAttr, exp: Decimal): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, Decimal.pow(value, exp));
 	}
 
-	public Abs(attr: Attr): void {
+	public Exp(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.exp(value));
+	}
+
+	public Abs(attr: EAttr): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, Decimal.abs(value));
 	}
 
-	public Sin(attr: Attr): void {
+	public Sin(attr: EAttr): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, Decimal.sin(value));
 	}

@@ -32,7 +32,7 @@ export class BattleManager {
 	 */
 	public Init() {
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 
 		this._lBattle = new Battle();
 		this._vBattle = new VBattle();
@@ -102,7 +102,7 @@ export class BattleManager {
 	 */
 	private HandleBattleEnd(message: any): void {
 		Logger.Log("battle end");
-		const battleEnd = <Protos.BS2GC_BattleEnd>message;
+		const battleEnd = <Protos.CS2GC_BattleEnd>message;
 		this.Destroy();
 		Global.sceneManager.ChangeState(SceneManager.State.Main);
 	}

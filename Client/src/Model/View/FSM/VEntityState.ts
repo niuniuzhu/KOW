@@ -1,4 +1,5 @@
 import { FSMState } from "../../../RC/FSM/FSMState";
+import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { VEntity } from "../VEntity";
 
 enum Type {
@@ -25,5 +26,12 @@ export class VEntityState extends FSMState {
 	constructor(type: number, owner: VEntity) {
 		super(type);
 		this._owner = owner;
+	}
+
+	protected OnEnter(param: any): void {
+		const def = Hashtable.GetMap(Hashtable.GetMap(this.owner.def, "states"), this.type.toString());
+		//播放动画
+		const aniName = Hashtable.GetString(def, "animation");
+		this.owner.PlayAnim(aniName);
 	}
 }

@@ -42,6 +42,7 @@ enum MsgID {
 
 	eGS2GC_LoginRet = 3100;
 	eGS2GC_Kick = 3101;
+	eGS2GC_CSLost = 3102;
 
 	//bs
 	eBS2CS_ReportState = 4000;
@@ -50,10 +51,9 @@ enum MsgID {
 	eBS2CS_KickUser = 4003;
 
 	eBS2GC_LoginRet = 4100;
-	eBS2GC_BattleEnd = 4101;
-	eBS2GC_RequestSnapshotRet = 4102;
-	eBS2GC_FrameAction = 4103;
-	eBS2GC_RequestFrameActionsRet = 4104;
+	eBS2GC_RequestSnapshotRet = 4101;
+	eBS2GC_FrameAction = 4102;
+	eBS2GC_RequestFrameActionsRet = 4103;
 
 	//cs
 	eCS2LS_GSInfos = 5000;
@@ -71,6 +71,7 @@ enum MsgID {
 	eCS2GC_PlayerLeave = 5302;
 	eCS2GC_RoomInfo = 5303;
 	eCS2GC_EnterBattle = 5304;
+	eCS2GC_BattleEnd = 5305;
 
 	//db
 	eDB2LS_QueryAccountRet = 8000;

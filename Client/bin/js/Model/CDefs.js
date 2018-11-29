@@ -1,4 +1,4 @@
-define(["require", "exports", "../RC/Utils/Hashtable"], function (require, exports, Hashtable_1) {
+define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (require, exports, Consts_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class CDefs {
@@ -14,10 +14,10 @@ define(["require", "exports", "../RC/Utils/Hashtable"], function (require, expor
             return Hashtable_1.Hashtable.GetArray(this._defs, "preloads");
         }
         static GetMap(id) {
-            return Hashtable_1.Hashtable.GetMap(this._mapMap, id);
+            return Hashtable_1.Hashtable.GetMap(this._mapMap, Consts_1.Consts.ASSETS_MAP_PREFIX + id);
         }
         static GetEntity(id) {
-            return Hashtable_1.Hashtable.GetMap(this._entityMap, id);
+            return Hashtable_1.Hashtable.GetMap(this._entityMap, Consts_1.Consts.ASSETS_ENTITY_PREFIX + id);
         }
     }
     exports.CDefs = CDefs;

@@ -154,15 +154,15 @@ export namespace Protos {
         eGS2CS_GCLost = 3002,
         eGS2GC_LoginRet = 3100,
         eGS2GC_Kick = 3101,
+        eGS2GC_CSLost = 3102,
         eBS2CS_ReportState = 4000,
         eBS2CS_BattleInfoRet = 4001,
         eBS2CS_BattleEnd = 4002,
         eBS2CS_KickUser = 4003,
         eBS2GC_LoginRet = 4100,
-        eBS2GC_BattleEnd = 4101,
-        eBS2GC_RequestSnapshotRet = 4102,
-        eBS2GC_FrameAction = 4103,
-        eBS2GC_RequestFrameActionsRet = 4104,
+        eBS2GC_RequestSnapshotRet = 4101,
+        eBS2GC_FrameAction = 4102,
+        eBS2GC_RequestFrameActionsRet = 4103,
         eCS2LS_GSInfos = 5000,
         eCS2LS_GSInfo = 5001,
         eCS2LS_GSLost = 5002,
@@ -175,6 +175,7 @@ export namespace Protos {
         eCS2GC_PlayerLeave = 5302,
         eCS2GC_RoomInfo = 5303,
         eCS2GC_EnterBattle = 5304,
+        eCS2GC_BattleEnd = 5305,
         eDB2LS_QueryAccountRet = 8000,
         eDB2LS_QueryLoginRet = 8001,
         eDB2LS_ExecRet = 8002
@@ -361,26 +362,6 @@ export namespace Protos {
             InvalidUser = 1,
             InvalidBattle = 2
         }
-    }
-
-    interface IBS2GC_BattleEnd {
-        opts?: (Protos.IMsgOpts|null);
-        id?: (number|null);
-    }
-
-    class BS2GC_BattleEnd implements IBS2GC_BattleEnd {
-        constructor(properties?: Protos.IBS2GC_BattleEnd);
-        public opts?: (Protos.IMsgOpts|null);
-        public id: number;
-        public static create(properties?: Protos.IBS2GC_BattleEnd): Protos.BS2GC_BattleEnd;
-        public static encode(message: Protos.IBS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.IBS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_BattleEnd;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_BattleEnd;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_BattleEnd;
-        public static toObject(message: Protos.BS2GC_BattleEnd, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
     }
 
     interface IBS2GC_FrameAction {
@@ -635,6 +616,24 @@ export namespace Protos {
             BSLost = 2,
             BattleCreateFailed = 3
         }
+    }
+
+    interface ICS2GC_BattleEnd {
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    class CS2GC_BattleEnd implements ICS2GC_BattleEnd {
+        constructor(properties?: Protos.ICS2GC_BattleEnd);
+        public opts?: (Protos.IMsgOpts|null);
+        public static create(properties?: Protos.ICS2GC_BattleEnd): Protos.CS2GC_BattleEnd;
+        public static encode(message: Protos.ICS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_BattleEnd;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_BattleEnd;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_BattleEnd;
+        public static toObject(message: Protos.CS2GC_BattleEnd, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
     }
 
     interface ICS2GS_GCLoginRet {
@@ -1299,6 +1298,24 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GS2GC_Kick;
         public static toObject(message: Protos.GS2GC_Kick, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGS2GC_CSLost {
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    class GS2GC_CSLost implements IGS2GC_CSLost {
+        constructor(properties?: Protos.IGS2GC_CSLost);
+        public opts?: (Protos.IMsgOpts|null);
+        public static create(properties?: Protos.IGS2GC_CSLost): Protos.GS2GC_CSLost;
+        public static encode(message: Protos.IGS2GC_CSLost, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGS2GC_CSLost, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GS2GC_CSLost;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GS2GC_CSLost;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GS2GC_CSLost;
+        public static toObject(message: Protos.GS2GC_CSLost, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

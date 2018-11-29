@@ -14,7 +14,7 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
             this._destroied = false;
             this._mapID = battleInfo.mapID;
-            this._def = CDefs_1.CDefs.GetMap(Consts_1.Consts.ASSETS_MAP_PREFIX + this._mapID);
+            this._def = CDefs_1.CDefs.GetMap(this._mapID);
             this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(this._def, "width"), Hashtable_1.Hashtable.GetNumber(this._def, "height"));
             this._playerID = battleInfo.playerID;
             this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;

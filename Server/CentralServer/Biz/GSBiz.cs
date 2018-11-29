@@ -101,8 +101,9 @@ namespace CentralServer.Biz
 					//这里理应不会成功断言,因为BS丢失时会把玩家从战场暂存器里移除
 					INetSession bsSession = CS.instance.netSessionMgr.GetSession( user.bsSID );
 					System.Diagnostics.Debug.Assert( bsSession != null, $"can not find BS:{user.bsSID}" );
-					System.Diagnostics.Debug.Assert( CS.instance.lIDToBSInfos.TryGetValue( ( ( BattleSession )bsSession ).logicID, out BSInfo bsInfo ),
-													$"can not find BS:{( ( BattleSession )bsSession ).logicID}" );
+
+					CS.instance.lIDToBSInfos.TryGetValue( ( ( BattleSession )bsSession ).logicID, out BSInfo bsInfo );
+					System.Diagnostics.Debug.Assert( bsInfo != null, $"can not find BS:{( ( BattleSession )bsSession ).logicID}" );
 					gcAskLoginRet.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;
 					gcAskLoginRet.GcNID = user.ukey | ( ulong )bsInfo.lid << 32;
 					gcAskLoginRet.BsIP = bsInfo.ip;

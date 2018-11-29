@@ -9,7 +9,7 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
             ProtoHelper_1.ProtoCreator.Init();
             this._connector.Init();
             this._connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
-            this._connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_BattleEnd, this.OnBattleEnd.bind(this));
+            this._connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.OnBattleEnd.bind(this));
             this._connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
             this._closeTime = MathUtils_1.MathUtils.Random(1000, 3000);
             const name = GUID_1.GUID.create().toString();

@@ -59,3 +59,9 @@ message CS2GC_EnterBattle {
 	int32 port = 4;//bs port
 	Result result = 5;
 }
+
+//战场结束
+message CS2GC_BattleEnd {
+	MsgOpts opts = 1;
+	//todo result
+}

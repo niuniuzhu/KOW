@@ -36,19 +36,16 @@ namespace Protos {
             "dBgCIAEoDjIoLlByb3Rvcy5CUzJHQ19SZXF1ZXN0U25hcHNob3RSZXQuRVJl",
             "c3VsdBIQCghyZXFGcmFtZRgDIAEoBRIQCghjdXJGcmFtZRgEIAEoBRIQCghz",
             "bmFwc2hvdBgFIAEoDCI6CgdFUmVzdWx0EgsKB1N1Y2Nlc3MQABIPCgtJbnZh",
-            "bGlkVXNlchABEhEKDUludmFsaWRCYXR0bGUQAiI8Cg9CUzJHQ19CYXR0bGVF",
-            "bmQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgoKAmlkGAIgASgN",
-            "IlEKEUJTMkdDX0ZyYW1lQWN0aW9uEh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
-            "TXNnT3B0cxINCgVmcmFtZRgCIAEoBRIOCgZhY3Rpb24YAyABKAwiXgocQlMy",
-            "R0NfUmVxdWVzdEZyYW1lQWN0aW9uc1JldBIdCgRvcHRzGAEgASgLMg8uUHJv",
-            "dG9zLk1zZ09wdHMSDgoGZnJhbWVzGAIgAygFEg8KB2FjdGlvbnMYAyADKAxi",
-            "BnByb3RvMw=="));
+            "bGlkVXNlchABEhEKDUludmFsaWRCYXR0bGUQAiJRChFCUzJHQ19GcmFtZUFj",
+            "dGlvbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUY",
+            "AiABKAUSDgoGYWN0aW9uGAMgASgMIl4KHEJTMkdDX1JlcXVlc3RGcmFtZUFj",
+            "dGlvbnNSZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg4KBmZy",
+            "YW1lcxgCIAMoBRIPCgdhY3Rpb25zGAMgAygMYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2BSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_LoginRet), global::Protos.BS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "PlayerID", "RndSeed", "FrameRate", "KeyframeStep", "SnapshotStep", "BattleTime", "MapID", "CurFrame", "PlayerInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestSnapshotRet), global::Protos.BS2GC_RequestSnapshotRet.Parser, new[]{ "Opts", "Result", "ReqFrame", "CurFrame", "Snapshot" }, null, new[]{ typeof(global::Protos.BS2GC_RequestSnapshotRet.Types.EResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_BattleEnd), global::Protos.BS2GC_BattleEnd.Parser, new[]{ "Opts", "Id" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_FrameAction), global::Protos.BS2GC_FrameAction.Parser, new[]{ "Opts", "Frame", "Action" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestFrameActionsRet), global::Protos.BS2GC_RequestFrameActionsRet.Parser, new[]{ "Opts", "Frames", "Actions" }, null, null, null)
           }));
@@ -767,175 +764,6 @@ namespace Protos {
   }
 
   /// <summary>
-  ///战场结束
-  /// </summary>
-  public sealed partial class BS2GC_BattleEnd : pb::IMessage<BS2GC_BattleEnd> {
-    private static readonly pb::MessageParser<BS2GC_BattleEnd> _parser = new pb::MessageParser<BS2GC_BattleEnd>(() => new BS2GC_BattleEnd());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<BS2GC_BattleEnd> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[2]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_BattleEnd() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_BattleEnd(BS2GC_BattleEnd other) : this() {
-      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      id_ = other.id_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BS2GC_BattleEnd Clone() {
-      return new BS2GC_BattleEnd(this);
-    }
-
-    /// <summary>Field number for the "opts" field.</summary>
-    public const int OptsFieldNumber = 1;
-    private global::Protos.MsgOpts opts_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.MsgOpts Opts {
-      get { return opts_; }
-      set {
-        opts_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 2;
-    private uint id_;
-    /// <summary>
-    ///战场id
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Id {
-      get { return id_; }
-      set {
-        id_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as BS2GC_BattleEnd);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(BS2GC_BattleEnd other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(Opts, other.Opts)) return false;
-      if (Id != other.Id) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (Id != 0) hash ^= Id.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (opts_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Opts);
-      }
-      if (Id != 0) {
-        output.WriteRawTag(16);
-        output.WriteUInt32(Id);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (opts_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
-      }
-      if (Id != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Id);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(BS2GC_BattleEnd other) {
-      if (other == null) {
-        return;
-      }
-      if (other.opts_ != null) {
-        if (opts_ == null) {
-          opts_ = new global::Protos.MsgOpts();
-        }
-        Opts.MergeFrom(other.Opts);
-      }
-      if (other.Id != 0) {
-        Id = other.Id;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            if (opts_ == null) {
-              opts_ = new global::Protos.MsgOpts();
-            }
-            input.ReadMessage(opts_);
-            break;
-          }
-          case 16: {
-            Id = input.ReadUInt32();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  /// <summary>
   ///广播帧行为
   /// </summary>
   public sealed partial class BS2GC_FrameAction : pb::IMessage<BS2GC_FrameAction> {
@@ -946,7 +774,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1143,7 +971,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

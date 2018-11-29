@@ -19,6 +19,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../R
         get actorID() { return this._actorID; }
         get team() { return this._team; }
         get name() { return this._name; }
+        get def() { return this._def; }
         Init(battle, id, actorID, team, name) {
             this._battle = battle;
             this._id = id;
@@ -32,11 +33,11 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../R
         }
         LoadDef() {
             this._def = Defs_1.Defs.GetEntity(this.actorID);
-            this.attribute.Set(Attribute_1.Attribute.Attr.MHP, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "mhp")));
-            this.attribute.Set(Attribute_1.Attribute.Attr.HP, this.attribute.Get(Attribute_1.Attribute.Attr.MHP));
-            this.attribute.Set(Attribute_1.Attribute.Attr.MMP, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "mmp")));
-            this.attribute.Set(Attribute_1.Attribute.Attr.MP, this.attribute.Get(Attribute_1.Attribute.Attr.MMP));
-            this.attribute.Set(Attribute_1.Attribute.Attr.MOVE_SPEED, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "move_speed")));
+            this.attribute.Set(Attribute_1.EAttr.MHP, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "mhp")));
+            this.attribute.Set(Attribute_1.EAttr.HP, this.attribute.Get(Attribute_1.EAttr.MHP));
+            this.attribute.Set(Attribute_1.EAttr.MMP, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "mmp")));
+            this.attribute.Set(Attribute_1.EAttr.MP, this.attribute.Get(Attribute_1.EAttr.MMP));
+            this.attribute.Set(Attribute_1.EAttr.MOVE_SPEED, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "move_speed")));
         }
         EncodeSnapshot(writer) {
             writer.int32(this.type);
@@ -83,7 +84,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../R
         MoveStep(direction, dt) {
             if (direction.SqrMagnitude().lessThan(MathUtils_1.MathUtils.D_SMALL))
                 return;
-            const speed = this.attribute.Get(Attribute_1.Attribute.Attr.MOVE_SPEED);
+            const speed = this.attribute.Get(Attribute_1.EAttr.MOVE_SPEED);
             const moveDelta = FVec2_1.FVec2.MulN(FVec2_1.FVec2.MulN(direction, speed), MathUtils_1.MathUtils.D_SMALL1.mul(dt));
             this.position = FVec2_1.FVec2.Add(this.position, moveDelta);
             this.direction = direction;

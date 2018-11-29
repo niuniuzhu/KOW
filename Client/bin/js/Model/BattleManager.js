@@ -6,7 +6,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         get vBattle() { return this._vBattle; }
         Init() {
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
-            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
             this._lBattle = new Battle_1.Battle();
             this._vBattle = new VBattle_1.VBattle();
         }

@@ -29,3 +29,7 @@ message GS2GC_Kick {
 	MsgOpts opts = 1;
 	CS2GS_KickGC.EReason reason = 2;
 }
+
+message GS2GC_CSLost {
+	MsgOpts opts = 1;
+}

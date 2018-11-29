@@ -1,1 +1,1 @@
-dotnet .\server pubilsh
+dotnet publish .\server -c Release

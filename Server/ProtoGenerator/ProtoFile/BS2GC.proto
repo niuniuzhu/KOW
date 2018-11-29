@@ -33,12 +33,6 @@ message BS2GC_RequestSnapshotRet {
 	bytes snapshot = 5;//快照数据
 }
 
-//战场结束
-message BS2GC_BattleEnd {
-	MsgOpts opts = 1;
-	uint32 id = 2;//战场id
-}
-
 //广播帧行为
 message BS2GC_FrameAction {
 	MsgOpts opts = 1;

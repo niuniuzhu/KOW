@@ -39,7 +39,7 @@ export class VBattle {
 		this._destroied = false;
 		this._mapID = battleInfo.mapID
 		//加载配置
-		this._def = CDefs.GetMap(Consts.ASSETS_MAP_PREFIX + this._mapID);
+		this._def = CDefs.GetMap(this._mapID);
 
 		this._camera.SetBounds(Hashtable.GetNumber(this._def, "width"), Hashtable.GetNumber(this._def, "height"));
 
@@ -56,7 +56,7 @@ export class VBattle {
 		if (this._destroied)
 			return;
 		this._destroied = true;
-		
+
 		EventManager.RemoveListener(SyncEvent.E_BATTLE_INIT);
 		EventManager.RemoveListener(SyncEvent.E_SNAPSHOT);
 

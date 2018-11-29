@@ -4,7 +4,7 @@ import { FSM } from "../../RC/FSM/FSM";
 import { FVec2 } from "../../RC/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Attribute } from "../Attribute";
+import { Attribute, EAttr } from "../Attribute";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
 import { ISnapshotable } from "../ISnapshotable";
@@ -18,6 +18,7 @@ export class Entity implements ISnapshotable {
 	public get actorID(): number { return this._actorID; }
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
+	public get def(): Hashtable { return this._def; }
 
 	public readonly attribute: Attribute = new Attribute();
 	public position: FVec2 = FVec2.zero;
@@ -57,11 +58,11 @@ export class Entity implements ISnapshotable {
 
 	private LoadDef(): void {
 		this._def = Defs.GetEntity(this.actorID);
-		this.attribute.Set(Attribute.Attr.MHP, new Decimal(Hashtable.GetNumber(this._def, "mhp")));
-		this.attribute.Set(Attribute.Attr.HP, this.attribute.Get(Attribute.Attr.MHP));
-		this.attribute.Set(Attribute.Attr.MMP, new Decimal(Hashtable.GetNumber(this._def, "mmp")));
-		this.attribute.Set(Attribute.Attr.MP, this.attribute.Get(Attribute.Attr.MMP));
-		this.attribute.Set(Attribute.Attr.MOVE_SPEED, new Decimal(Hashtable.GetNumber(this._def, "move_speed")));
+		this.attribute.Set(EAttr.MHP, new Decimal(Hashtable.GetNumber(this._def, "mhp")));
+		this.attribute.Set(EAttr.HP, this.attribute.Get(EAttr.MHP));
+		this.attribute.Set(EAttr.MMP, new Decimal(Hashtable.GetNumber(this._def, "mmp")));
+		this.attribute.Set(EAttr.MP, this.attribute.Get(EAttr.MMP));
+		this.attribute.Set(EAttr.MOVE_SPEED, new Decimal(Hashtable.GetNumber(this._def, "move_speed")));
 	}
 
 	/**
@@ -119,7 +120,7 @@ export class Entity implements ISnapshotable {
 	protected MoveStep(direction: FVec2, dt: number): void {
 		if (direction.SqrMagnitude().lessThan(MathUtils.D_SMALL))
 			return;
-		const speed = this.attribute.Get(Attribute.Attr.MOVE_SPEED);
+		const speed = this.attribute.Get(EAttr.MOVE_SPEED);
 		const moveDelta = FVec2.MulN(FVec2.MulN(direction, speed), MathUtils.D_SMALL1.mul(dt));
 		this.position = FVec2.Add(this.position, moveDelta);
 		this.direction = direction;

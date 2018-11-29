@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "./AniHolder", "./FSM/VEntityState", "./FSM/VIdle", "./FSM/VMove", "../../RC/FVec2", "../../Libs/decimal"], function (require, exports, Consts_1, CDefs_1, Global_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, AniHolder_1, VEntityState_1, VIdle_1, VMove_1, FVec2_1, decimal_1) {
+define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "./AniHolder", "./FSM/VEntityState", "../../RC/FVec2", "../../Libs/decimal", "../Defs"], function (require, exports, Consts_1, CDefs_1, Global_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, AniHolder_1, VEntityState_1, FVec2_1, decimal_1, Defs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -16,8 +16,8 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             this._root.setSize(0, 0);
             this._root.setPivot(0.5, 0.5, true);
             Global_1.Global.graphic.entityRoot.addChild(this._root);
-            this._fsm.AddState(new VIdle_1.VIdle(VEntityState_1.VEntityState.Type.Idle, this));
-            this._fsm.AddState(new VMove_1.VMove(VEntityState_1.VEntityState.Type.Move, this));
+            this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Idle, this));
+            this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Move, this));
             this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Attack, this));
             this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Die, this));
         }
@@ -25,6 +25,7 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
         get actorID() { return this._actorID; }
         get team() { return this._team; }
         get name() { return this._name; }
+        get def() { return this._def; }
         get root() { return this._root; }
         get position() { return this._position; }
         set position(value) {
@@ -70,8 +71,8 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
         }
         InitSnapshot(reader) {
             this._actorID = reader.int32();
-            this._def = CDefs_1.CDefs.GetEntity(Consts_1.Consts.ASSETS_ENTITY_PREFIX + this._actorID);
-            const aniDefs = Hashtable_1.Hashtable.GetMapArray(this._def, "animations");
+            this._def = Defs_1.Defs.GetEntity(this._actorID);
+            const aniDefs = Hashtable_1.Hashtable.GetMapArray(CDefs_1.CDefs.GetEntity(this._actorID), "animations");
             for (let i = 0; i < aniDefs.length; ++i) {
                 const aniDef = aniDefs[i];
                 const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");

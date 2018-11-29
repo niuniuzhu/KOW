@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/FSM/FSMState"], function (require, exports, FSMState_1) {
+define(["require", "exports", "../../../RC/FSM/FSMState", "../../../RC/Utils/Hashtable"], function (require, exports, FSMState_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Type;
@@ -14,6 +14,11 @@ define(["require", "exports", "../../../RC/FSM/FSMState"], function (require, ex
             this._owner = owner;
         }
         get owner() { return this._owner; }
+        OnEnter(param) {
+            const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this.owner.def, "states"), this.type.toString());
+            const aniName = Hashtable_1.Hashtable.GetString(def, "animation");
+            this.owner.PlayAnim(aniName);
+        }
     }
     VEntityState.Type = Type;
     exports.VEntityState = VEntityState;

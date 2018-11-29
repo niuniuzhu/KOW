@@ -21,6 +21,10 @@ namespace CentralServer.Match
 		/// </summary>
 		private readonly Dictionary<uint, List<uint>> _lidToBID = new Dictionary<uint, List<uint>>();
 
+		public void OnBattleCreated( uint lid, uint bid ) => this._lidToBID.AddToList( lid, bid );
+
+		public void OnBattleDestory( uint lid, uint bid ) => this._lidToBID.RemoveFromList( lid, bid );
+
 		/// <summary>
 		/// 把玩家添加到暂存区
 		/// </summary>
@@ -33,7 +37,6 @@ namespace CentralServer.Match
 			System.Diagnostics.Debug.Assert( !user.isInBattle, $"user:{user.gcNID} already in battle staging" );
 			//记录BS sessionID
 			user.EnterBattle( sid, lid, bid );
-			this._lidToBID.AddToList( lid, bid );
 			this._lbIDToUser.AddToList( lid | ( ulong )bid << 32, user );
 			Logger.Log( $"user:{user.gcNID} join staging. lid:{lid}, bid:{bid}" );
 		}
@@ -54,7 +57,6 @@ namespace CentralServer.Match
 			if ( !user.isConnected )
 				CS.instance.userMgr.DestroyUser( user );
 			this._lbIDToUser.Remove( lbID );
-			this._lidToBID.RemoveFromList( user.bsLID, user.bid );
 		}
 
 		/// <summary>
@@ -67,9 +69,9 @@ namespace CentralServer.Match
 			ulong lbID = lid | ( ulong )bid << 32;
 			List<CSUser> users = this._lbIDToUser[lbID];
 			int c2 = users.Count;
-			for ( int j = 0; j < c2; j++ )
+			for ( int i = 0; i < c2; i++ )
 			{
-				CSUser user = users[j];
+				CSUser user = users[i];
 				System.Diagnostics.Debug.Assert( user.isInBattle, $"user:{user.gcNID} not in battle staging" );
 				user.LeaveBattle();
 				Logger.Log( $"user:{user.gcNID} leave staging. lid:{lid}, bid:{bid}" );
@@ -78,7 +80,7 @@ namespace CentralServer.Match
 					CS.instance.userMgr.DestroyUser( user );
 			}
 			this._lbIDToUser.Remove( lbID );
-			this._lidToBID.RemoveFromList( lid, bid );
+			this.OnBattleDestory( lid, bid );
 		}
 
 		/// <summary>
@@ -90,6 +92,82 @@ namespace CentralServer.Match
 				return;
 			while ( bids.Count > 0 )
 				this.Remove( lid, bids[0] );
+		}
+
+		/// <summary>
+		/// 获取指定BS逻辑ID的指定BID的所有玩家的sid
+		/// </summary>
+		internal List<uint> GetUserSIDs( uint lid, uint bid )
+		{
+			List<uint> sids = new List<uint>();
+			ulong lbID = lid | ( ulong )bid << 32;
+			List<CSUser> users = this._lbIDToUser[lbID];
+			int c2 = users.Count;
+			for ( int i = 0; i < c2; i++ )
+			{
+				CSUser user = users[i];
+				if ( !user.isConnected )
+					continue;
+				sids.Add( user.gsSID );
+			}
+			return sids;
+		}
+
+		/// <summary>
+		/// 获取指定BS逻辑ID的指定BID的所有玩家
+		/// </summary>
+		internal List<CSUser> GetUsers( uint lid, uint bid )
+		{
+			List<CSUser> users = new List<CSUser>();
+			ulong lbID = lid | ( ulong )bid << 32;
+			users.AddRange( this._lbIDToUser[lbID] );
+			return users;
+		}
+
+		/// <summary>
+		/// 获取指定BS逻辑ID的所有玩家
+		/// </summary>
+		internal List<uint> GetUserSIDs( uint lid )
+		{
+			if ( !this._lidToBID.TryGetValue( lid, out List<uint> bids ) )
+				return null;
+			if ( bids.Count == 0 )
+				return null;
+			List<uint> sids = new List<uint>();
+			int count = bids.Count;
+			for ( int i = 0; i < count; i++ )
+			{
+				ulong lbID = lid | ( ulong )bids[i] << 32;
+				List<CSUser> users = this._lbIDToUser[lbID];
+				int c2 = users.Count;
+				for ( int j = 0; j < c2; j++ )
+				{
+					CSUser user = users[j];
+					if ( !user.isConnected )
+						continue;
+					sids.Add( user.gsSID );
+				}
+			}
+			return sids;
+		}
+
+		/// <summary>
+		/// 获取指定BS逻辑ID的所有玩家
+		/// </summary>
+		internal List<CSUser> GetUsers( uint lid )
+		{
+			if ( !this._lidToBID.TryGetValue( lid, out List<uint> bids ) )
+				return null;
+			if ( bids.Count == 0 )
+				return null;
+			List<CSUser> users = new List<CSUser>();
+			int count = bids.Count;
+			for ( int i = 0; i < count; i++ )
+			{
+				ulong lbID = lid | ( ulong )bids[i] << 32;
+				users.AddRange( this._lbIDToUser[lbID] );
+			}
+			return users;
 		}
 
 		/// <summary>

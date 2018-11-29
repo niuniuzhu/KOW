@@ -1,22 +1,24 @@
+import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
+import { CDefs } from "../Model/CDefs";
+import { Defs } from "../Model/Defs";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { WSConnector } from "../Net/WSConnector";
-import { SceneState } from "./SceneState";
-import { SceneManager } from "./SceneManager";
-import { Defs } from "../Defs";
 import { Logger } from "../RC/Utils/Logger";
-import { Global } from "../Global";
+import { SceneManager } from "./SceneManager";
+import { SceneState } from "./SceneState";
 export class LoginState extends SceneState {
     constructor(type) {
         super(type);
         this.__ui = this._ui = Global.uiManager.login;
     }
     ConnectToLS(connector) {
+        const config = CDefs.GetConfig();
         if (Global.platform == Global.Platform.Editor) {
-            connector.Connect("localhost", Defs.config["ls_port"]);
+            connector.Connect("localhost", config["ls_port"]);
         }
         else {
-            connector.Connect(Defs.config["ls_ip"], Defs.config["ls_port"]);
+            connector.Connect(config["ls_ip"], config["ls_port"]);
         }
     }
     Register(uname, platform, sdk) {
@@ -65,6 +67,8 @@ export class LoginState extends SceneState {
                 this._ui.OnLoginGSResult(resp);
                 switch (resp.result) {
                     case Protos.GS2GC_LoginRet.EResult.Success:
+                        const json = JSON.parse(new TextDecoder("utf-8").decode(resp.defs));
+                        Defs.Init(json);
                         if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
                             Global.sceneManager.ChangeState(SceneManager.State.Loading);
                             Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);

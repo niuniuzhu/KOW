@@ -6,20 +6,16 @@ var InputFlag;
     InputFlag[InputFlag["Skill2"] = 4] = "Skill2";
 })(InputFlag || (InputFlag = {}));
 export class FrameAction {
-    constructor(frame) {
-        this._frame = frame;
-    }
-    get frame() { return this._frame; }
     get gcNID() { return this._gcNID; }
     get inputFlag() { return this._inputFlag; }
     get dx() { return this._dx; }
     get dy() { return this._dy; }
-    DeSerialize(reader) {
-        this._gcNID = reader.uint64();
-        this._inputFlag = reader.int32();
+    DeSerialize(buffer) {
+        this._gcNID = buffer.readUint64();
+        this._inputFlag = buffer.readByte();
         if ((this.inputFlag & InputFlag.Move) > 0) {
-            this._dx = reader.float();
-            this._dy = reader.float();
+            this._dx = buffer.readFloat();
+            this._dy = buffer.readFloat();
         }
     }
 }

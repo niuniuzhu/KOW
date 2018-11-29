@@ -1,11 +1,12 @@
 import { Consts } from "./Consts";
 import { Global } from "./Global";
-import { Hashtable } from "./RC/Utils/Hashtable";
+import * as Long from "./Libs/long";
+import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
+import { Hashtable } from "./RC/Utils/Hashtable";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
-import * as $protobuf from "./Libs/protobufjs";
-import * as Long from "./Libs/long";
+import Decimal from "./Libs/decimal";
 export class Main {
     static get instance() { return Main._instance; }
     constructor(config) {
@@ -17,6 +18,8 @@ export class Main {
         Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
         Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
         fairygui.UIConfig.packageFileExtension = "bin";
+        Decimal.set({ precision: 3 });
+        Decimal.set({ rounding: 1 });
         const cfgJson = JSON.parse(config);
         Global.platform = Hashtable.GetNumber(cfgJson, "platform");
         this.ShowLogo();
@@ -67,6 +70,7 @@ export class Main {
         const dt = Laya.timer.delta;
         Global.connector.Update(dt);
         Global.sceneManager.Update(dt);
+        Global.battleManager.Update(dt);
     }
     OnResize(e) {
         Global.uiManager.OnResize(e);

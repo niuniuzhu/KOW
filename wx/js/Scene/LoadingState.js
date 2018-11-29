@@ -1,11 +1,12 @@
-import { SceneState } from "./SceneState";
+import { Consts } from "../Consts";
+import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
 import { BattleInfo } from "../Model/BattleInfo";
 import { Connector } from "../Net/Connector";
-import { Protos } from "../Libs/protos";
-import { Logger } from "../RC/Utils/Logger";
 import { ProtoCreator } from "../Net/ProtoHelper";
-import { Global } from "../Global";
+import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
+import { SceneState } from "./SceneState";
 export class LoadingState extends SceneState {
     constructor(type) {
         super(type);
@@ -34,12 +35,16 @@ export class LoadingState extends SceneState {
                 this._ui.OnLoginBSResut(resp.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
                 switch (resp.result) {
                     case Protos.Global.ECommon.Success:
+                        this._battleInfo.playerID = resp.playerID;
                         this._battleInfo.rndSeed = resp.rndSeed;
                         this._battleInfo.frameRate = resp.frameRate;
                         this._battleInfo.keyframeStep = resp.keyframeStep;
+                        this._battleInfo.snapshotStep = resp.snapshotStep;
                         this._battleInfo.battleTime = resp.battleTime;
                         this._battleInfo.mapID = resp.mapID;
-                        this.RequestSnapshot();
+                        this._battleInfo.playerInfos = resp.playerInfos;
+                        this._battleInfo.serverFrame = resp.curFrame;
+                        this.LoadAssets(this._battleInfo);
                         break;
                 }
             });
@@ -51,23 +56,17 @@ export class LoadingState extends SceneState {
             connector.Connect(ip, port);
         }
     }
-    RequestSnapshot() {
-        const requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
-        requestState.frame = 0;
-        Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
-            const ret = msg;
-            this._battleInfo.reqFrame = ret.reqFrame;
-            this._battleInfo.serverFrame = ret.curFrame;
-            this._battleInfo.snapshot = ret.snapshot;
-            this.LoadAssets();
-        });
-    }
-    LoadAssets() {
+    LoadAssets(battleInfo) {
         if (this._assetsLoadComplete) {
             this.InitBattle();
         }
         else {
             const urls = [];
+            const count = battleInfo.playerInfos.length;
+            for (let i = 0; i < count; ++i) {
+                const playerInfo = battleInfo.playerInfos[i];
+                urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: Laya.Loader.ATLAS });
+            }
             urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
             urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
             Laya.loader.load(urls, Laya.Handler.create(this, () => {

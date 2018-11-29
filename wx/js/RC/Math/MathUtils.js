@@ -1,3 +1,4 @@
+import Decimal from "../../Libs/decimal";
 import { Quat } from "./Quat";
 import { Vec2 } from "./Vec2";
 export class MathUtils {
@@ -123,6 +124,13 @@ export class MathUtils {
             num -= 360;
         }
         return a + num * MathUtils.Clamp01(t);
+    }
+    static LerpAngleUnclamped(a, b, t) {
+        let num = MathUtils.Repeat(b - a, 360);
+        if (num > 180) {
+            num -= 360;
+        }
+        return a + num * t;
     }
     static MoveTowards(current, target, maxDelta) {
         let result;
@@ -292,3 +300,8 @@ MathUtils.DEG_TO_RAD = MathUtils.PI / 180;
 MathUtils.RAD_TO_DEG = 180 / MathUtils.PI;
 MathUtils.INFINITY = Number.POSITIVE_INFINITY;
 MathUtils.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
+MathUtils.D_ZERO = new Decimal(0);
+MathUtils.D_ONE = new Decimal(1);
+MathUtils.D_N_ONE = new Decimal(-1);
+MathUtils.D_SMALL = new Decimal(0.01);
+MathUtils.D_SMALL1 = new Decimal(0.001);

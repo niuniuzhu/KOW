@@ -1,15 +1,15 @@
-import { MathUtils } from "../RC/Math/MathUtils";
-var Attr;
-(function (Attr) {
-    Attr[Attr["MHP"] = 0] = "MHP";
-    Attr[Attr["HP"] = 1] = "HP";
-    Attr[Attr["MMP"] = 2] = "MMP";
-    Attr[Attr["MP"] = 3] = "MP";
-    Attr[Attr["ATK"] = 4] = "ATK";
-    Attr[Attr["DEF"] = 5] = "DEF";
-    Attr[Attr["MOVE_SPEED"] = 6] = "MOVE_SPEED";
-    Attr[Attr["TURN_SPEED"] = 7] = "TURN_SPEED";
-})(Attr || (Attr = {}));
+import Decimal from "../Libs/decimal";
+export var EAttr;
+(function (EAttr) {
+    EAttr[EAttr["MHP"] = 0] = "MHP";
+    EAttr[EAttr["HP"] = 1] = "HP";
+    EAttr[EAttr["MMP"] = 2] = "MMP";
+    EAttr[EAttr["MP"] = 3] = "MP";
+    EAttr[EAttr["ATK"] = 4] = "ATK";
+    EAttr[EAttr["DEF"] = 5] = "DEF";
+    EAttr[EAttr["MOVE_SPEED"] = 6] = "MOVE_SPEED";
+    EAttr[EAttr["RADIUS"] = 7] = "RADIUS";
+})(EAttr || (EAttr = {}));
 export class Attribute {
     constructor() {
         this._map = new Map();
@@ -29,35 +29,38 @@ export class Attribute {
     }
     Add(attr, delta) {
         const value = this._map.get(attr);
-        this._map.set(attr, value + delta);
+        this._map.set(attr, value.add(delta));
     }
     Sub(attr, delta) {
         const value = this._map.get(attr);
-        this._map.set(attr, value - delta);
+        this._map.set(attr, value.sub(delta));
     }
     Mul(attr, factor) {
         const value = this._map.get(attr);
-        this._map.set(attr, value * factor);
+        this._map.set(attr, value.mul(factor));
     }
     Div(attr, factor) {
         const value = this._map.get(attr);
-        this._map.set(attr, value / factor);
+        this._map.set(attr, value.div(factor));
     }
     Mod(attr, mod) {
         const value = this._map.get(attr);
-        this._map.set(attr, value % mod);
+        this._map.set(attr, value.mod(mod));
     }
     Pow(attr, exp) {
         const value = this._map.get(attr);
-        this._map.set(attr, MathUtils.Pow(value, exp));
+        this._map.set(attr, Decimal.pow(value, exp));
+    }
+    Exp(attr) {
+        const value = this._map.get(attr);
+        this._map.set(attr, Decimal.exp(value));
     }
     Abs(attr) {
         const value = this._map.get(attr);
-        this._map.set(attr, MathUtils.Abs(value));
+        this._map.set(attr, Decimal.abs(value));
     }
     Sin(attr) {
         const value = this._map.get(attr);
-        this._map.set(attr, MathUtils.Sin(value));
+        this._map.set(attr, Decimal.sin(value));
     }
 }
-Attribute.Attr = Attr;

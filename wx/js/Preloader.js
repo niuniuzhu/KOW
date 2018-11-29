@@ -1,18 +1,18 @@
+import { CDefs } from "./Model/CDefs";
 import { Logger } from "./RC/Utils/Logger";
-import { Defs } from "./Defs";
 export class Preloader {
     static get complete() { return this._complete; }
     static Load(completeHandler) {
         Logger.Log("loading defs...");
         Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, () => {
             const json = Laya.loader.getRes("res/defs/b_defs.json");
-            Defs.Init(json);
+            CDefs.Init(json);
             this.LoadUIRes(completeHandler);
         }), undefined, Laya.Loader.JSON);
     }
     static LoadUIRes(completeHandler) {
         Logger.Log("loading res...");
-        const preloads = Defs.GetPreloads();
+        const preloads = CDefs.GetPreloads();
         const urls = [];
         for (const u of preloads) {
             const ss = u.split(",");

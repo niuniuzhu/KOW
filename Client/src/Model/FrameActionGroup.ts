@@ -1,5 +1,5 @@
 import { FrameAction } from "./FrameAction";
-import ByteBuffer = require("../Libs/ByteBuffer");
+import * as ByteBuffer from "../Libs/ByteBuffer";
 
 export class FrameActionGroup {
 	private readonly _frame;

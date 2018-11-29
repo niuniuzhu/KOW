@@ -12,5 +12,6 @@ export class BattleState extends SceneState {
         super.OnExit();
     }
     OnUpdate(dt) {
+        super.OnUpdate(dt);
     }
 }

@@ -33,6 +33,9 @@ export class Hashtable {
     static GetBoolArray(map, key) {
         return this.GetArray(map, key);
     }
+    static GetMapArray(map, key) {
+        return this.GetArray(map, key);
+    }
     static GetVec2Array(map, key) {
         let arrs = this.GetArray(map, key);
         if (arrs == null)

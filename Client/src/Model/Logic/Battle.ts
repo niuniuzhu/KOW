@@ -15,7 +15,6 @@ import { FrameActionGroup } from "../FrameActionGroup";
 import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity } from "./Entity";
-import ByteBuffer = require("../../Libs/ByteBuffer");
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;

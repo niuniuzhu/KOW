@@ -1,9 +1,9 @@
+import * as Long from "../Libs/long";
+import { Protos } from "../Libs/protos";
+import { Logger } from "../RC/Utils/Logger";
 import { ByteUtils } from "./ByteUtils";
 import { MsgCenter } from "./MsgCenter";
-import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "./ProtoHelper";
-import { Logger } from "../RC/Utils/Logger";
-import * as Long from "../Libs/long";
 
 export class WSConnector {
 	public get connected(): boolean { return this._socket != null && this._socket.readyState == WebSocket.OPEN };
@@ -32,7 +32,7 @@ export class WSConnector {
 
 	private _socket: WebSocket;
 	private readonly _msgCenter: MsgCenter;
-	private readonly _rpcHandlers: Map<number, (any) => any>;//可能是异步写入,但必定是同步读取,所以不用加锁
+	private readonly _rpcHandlers: Map<number, (any) => any>;
 	private _pid: number = 0;
 	private _time: number = 0;
 
@@ -52,7 +52,7 @@ export class WSConnector {
 	public Connect(ip: string, port: number): void {
 		if (this.connected)
 			this.Close();
-		this._socket = new WebSocket(`ws://${ip}:${port}`);
+		this._socket = new WebSocket(`wss://${ip}:${port}`);
 		this._socket.binaryType = "arraybuffer";
 		this._socket.onmessage = this.OnReceived.bind(this);
 		this._socket.onerror = this._onerror;

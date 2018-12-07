@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../RC/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../Defs", "../EntityType", "./FSM/EntityState"], function (require, exports, decimal_1, FSM_1, FVec2_1, MathUtils_1, Hashtable_1, Attribute_1, Defs_1, EntityType_1, EntityState_1) {
+define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../Defs", "../EntityType", "./FSM/EntityState"], function (require, exports, decimal_1, FSM_1, FVec2_1, MathUtils_1, Hashtable_1, Attribute_1, Defs_1, EntityType_1, EntityState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Entity {
@@ -33,11 +33,13 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../R
         }
         LoadDef() {
             this._def = Defs_1.Defs.GetEntity(this.actorID);
+            this.attribute.Set(Attribute_1.EAttr.RADIUS, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "radius")));
             this.attribute.Set(Attribute_1.EAttr.MHP, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "mhp")));
             this.attribute.Set(Attribute_1.EAttr.HP, this.attribute.Get(Attribute_1.EAttr.MHP));
             this.attribute.Set(Attribute_1.EAttr.MMP, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "mmp")));
             this.attribute.Set(Attribute_1.EAttr.MP, this.attribute.Get(Attribute_1.EAttr.MMP));
             this.attribute.Set(Attribute_1.EAttr.MOVE_SPEED, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "move_speed")));
+            this.attribute.Set(Attribute_1.EAttr.MOVE_SPEED_FACTOR, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "move_speed_factor")));
         }
         EncodeSnapshot(writer) {
             writer.int32(this.type);
@@ -86,7 +88,13 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../R
                 return;
             const speed = this.attribute.Get(Attribute_1.EAttr.MOVE_SPEED);
             const moveDelta = FVec2_1.FVec2.MulN(FVec2_1.FVec2.MulN(direction, speed), MathUtils_1.MathUtils.D_SMALL1.mul(dt));
-            this.position = FVec2_1.FVec2.Add(this.position, moveDelta);
+            const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
+            const radius = this.attribute.Get(Attribute_1.EAttr.RADIUS);
+            pos.x = decimal_1.default.max(decimal_1.default.add(this._battle.bounds.xMin, radius), pos.x);
+            pos.x = decimal_1.default.min(decimal_1.default.sub(this._battle.bounds.xMax, radius), pos.x);
+            pos.y = decimal_1.default.max(decimal_1.default.add(this._battle.bounds.yMin, radius), pos.y);
+            pos.y = decimal_1.default.min(decimal_1.default.sub(this._battle.bounds.yMax, radius), pos.y);
+            this.position = pos;
             this.direction = direction;
         }
     }

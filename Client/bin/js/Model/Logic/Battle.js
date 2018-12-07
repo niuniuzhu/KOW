@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FVec2_1, Hashtable_1, Defs_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Defs", "../EntityType", "../Events/SyncEvent", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, Defs_1, EntityType_1, SyncEvent_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -24,6 +24,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         get timeout() { return this._timeout; }
         get mapID() { return this._mapID; }
         get frame() { return this._frame; }
+        get bounds() { return this._bounds; }
         SetBattleInfo(battleInfo) {
             this._destroied = false;
             this._frameRate = battleInfo.frameRate;
@@ -33,6 +34,9 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._mapID = battleInfo.mapID;
             this._msPerFrame = 1000 / this._frameRate;
             this._def = Defs_1.Defs.GetMap(this._mapID);
+            const bWidth = Hashtable_1.Hashtable.GetNumber(this._def, "width");
+            const bHeight = Hashtable_1.Hashtable.GetNumber(this._def, "height");
+            this._bounds = new FRect_1.FRect(new decimal_1.default(-MathUtils_1.MathUtils.Floor(bWidth * 0.5)), new decimal_1.default(-MathUtils_1.MathUtils.Floor(bHeight * 0.5)), new decimal_1.default(bWidth), new decimal_1.default(bHeight));
             this.CreatePlayers(battleInfo.playerInfos);
         }
         Destroy() {
@@ -49,6 +53,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._logicElapsed = 0;
             this._realElapsed = 0;
             this._frameActionGroups.clear();
+            this._def = null;
+            this._bounds = null;
         }
         Update(dt) {
             this.Chase(this._frameActionGroups, true, true);

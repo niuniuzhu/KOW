@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "./AniHolder", "./FSM/VEntityState", "../../RC/FVec2", "../../Libs/decimal", "../Defs"], function (require, exports, Consts_1, CDefs_1, Global_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, AniHolder_1, VEntityState_1, FVec2_1, decimal_1, Defs_1) {
+define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "./AniHolder", "./FSM/VEntityState", "../../RC/FMath/FVec2", "../../Libs/decimal", "../Defs"], function (require, exports, Consts_1, CDefs_1, Global_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, AniHolder_1, VEntityState_1, FVec2_1, decimal_1, Defs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {

@@ -9,10 +9,6 @@ namespace Core.Net
 		public string method;
 		public string path;
 		public string body;
-		public string scheme;
-		public byte[] bytes;
-		public int size;
-		public int offset;
 
 		public string this[string name] => this.headers.TryGetValue( name, out string value ) ? value : string.Empty;
 
@@ -27,7 +23,7 @@ namespace Core.Net
 			StringBuilder sb = new StringBuilder();
 			foreach ( KeyValuePair<string, string> kv in this.headers )
 				sb.AppendLine( $"{kv.Key}:{kv.Value}" );
-			return $"method:{this.method}, path:{this.path}, body:{this.body}, scheme:{this.scheme}, headers:{sb}";
+			return $"method:{this.method}, path:{this.path}, body:{this.body}, headers:{sb}";
 		}
 	}
 }

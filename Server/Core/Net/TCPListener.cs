@@ -11,6 +11,8 @@ namespace Core.Net
 		public uint id { get; }
 		public SessionCreater sessionCreater { get; set; }
 
+		protected virtual ProtoType protoType => ProtoType.TCP;
+
 		public int recvBufSize { get; set; } = 10240;
 
 		public bool noDelay
@@ -144,7 +146,7 @@ namespace Core.Net
 		protected virtual INetSession CreateSession( Socket acceptSocket )
 		{
 			//调用委托创建session
-			INetSession session = this.sessionCreater( ProtoType.TCP );
+			INetSession session = this.sessionCreater( this.protoType );
 			if ( session == null )
 			{
 				Logger.Error( "create session failed" );
@@ -152,21 +154,26 @@ namespace Core.Net
 				return null;
 			}
 			session.isPassive = true;
-			TCPConnection tcpConnection = ( TCPConnection )session.connection;
-			tcpConnection.activeTime = TimeUtils.utcTime;
-			tcpConnection.socket = new SocketWrapper( acceptSocket );
-			tcpConnection.remoteEndPoint = acceptSocket.RemoteEndPoint;
-			tcpConnection.recvBufSize = this.recvBufSize;
+
+			TCPConnection connection = this.CreateConnection( session, acceptSocket );
 
 			NetEvent netEvent = NetworkMgr.instance.PopEvent();
 			netEvent.type = NetEvent.Type.Establish;
 			netEvent.session = session;
 			NetworkMgr.instance.PushEvent( netEvent );
-
-			//开始接收数据
-			tcpConnection.StartReceive();
+			connection.StartReceive();
 
 			return session;
+		}
+
+		protected virtual TCPConnection CreateConnection( INetSession session, Socket acceptSocket )
+		{
+			TCPConnection tcpConnection = ( TCPConnection )session.connection;
+			tcpConnection.activeTime = TimeUtils.utcTime;
+			tcpConnection.socket = new SocketWrapper( acceptSocket );
+			tcpConnection.remoteEndPoint = acceptSocket.RemoteEndPoint;
+			tcpConnection.recvBufSize = this.recvBufSize;
+			return tcpConnection;
 		}
 	}
 }

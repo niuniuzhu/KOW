@@ -9,8 +9,11 @@ function GetQueryString(name) {
 
 var mode = GetQueryString("mode");
 if (mode == undefined || mode == 0) {
+	var platform = GetQueryString("platform");
+	if (platform == undefined)
+		platform = 1;
 	require(["./js/Main"], function (G) {
-		new G.Main("{\"platform\": 0}");
+		new G.Main("{\"platform\": " + platform + "}");
 	})
 }
 else {

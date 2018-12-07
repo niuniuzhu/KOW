@@ -1,5 +1,5 @@
-import Decimal from "../Libs/decimal";
-import { MathUtils } from "./Math/MathUtils";
+import Decimal from "../../Libs/decimal";
+import { MathUtils } from "../Math/MathUtils";
 
 export class FVec2 {
 	public x: Decimal;
@@ -27,26 +27,26 @@ export class FVec2 {
 		return new FVec2(MathUtils.D_ZERO, MathUtils.D_N_ONE);
 	};
 
-	constructor(x: Decimal = new Decimal(0), y: Decimal = new Decimal(0)) {
-		this.x = x;
-		this.y = y;
+	constructor(x?: Decimal, y?: Decimal) {
+		this.x = new Decimal(x == null ? 0 : x);
+		this.y = new Decimal(y == null ? 0 : y);
 	}
 
 	public Set(x: Decimal, y: Decimal): void {
-		this.x = x;
-		this.y = y;
+		this.x = new Decimal(x);
+		this.y = new Decimal(y);
 	}
 
 	public Clone(): FVec2 {
-		let v = new FVec2();
-		v.x = this.x;
-		v.y = this.y;
+		const v = new FVec2();
+		v.x = new Decimal(this.x);
+		v.y = new Decimal(this.y);
 		return v;
 	}
 
 	public CopyFrom(v: FVec2): void {
-		this.x = v.x;
-		this.y = v.y;
+		this.x = new Decimal(v.x);
+		this.y = new Decimal(v.y);
 	}
 
 	public Add(v: FVec2): FVec2 {
@@ -125,13 +125,13 @@ export class FVec2 {
 	}
 
 	public Normalize(): void {
-		let f = MathUtils.D_ONE.div(this.Magnitude());
+		const f = MathUtils.D_ONE.div(this.Magnitude());
 		this.x = this.x.mul(f);
 		this.y = this.y.mul(f);
 	}
 
 	public NormalizeSafe(): void {
-		let f = this.Magnitude();
+		const f = this.Magnitude();
 		if (f.equals(MathUtils.D_ZERO))
 			return;
 		this.x = this.x.mul(f);
@@ -139,9 +139,9 @@ export class FVec2 {
 	}
 
 	public ClampMagnitude(maxLength: Decimal): void {
-		let sqrMagnitude = this.SqrMagnitude();
+		const sqrMagnitude = this.SqrMagnitude();
 		if (sqrMagnitude.greaterThan(maxLength.mul(maxLength))) {
-			let f = maxLength.sub(sqrMagnitude.sqrt());
+			const f = maxLength.sub(sqrMagnitude.sqrt());
 			this.x = this.x.mul(f);
 			this.y = this.y.mul(f);
 		}
@@ -240,7 +240,7 @@ export class FVec2 {
 	}
 
 	public static NormalizeSafe(v: FVec2): FVec2 {
-		let dis = v.Magnitude();
+		const dis = v.Magnitude();
 		if (dis.equals(MathUtils.D_ZERO))
 			return null;
 		return FVec2.MulN(v, (MathUtils.D_ONE.div(dis)));
@@ -260,7 +260,7 @@ export class FVec2 {
 
 	public static ClampMagnitude(v: FVec2, maxLength: Decimal): FVec2 {
 		let nor = v.Clone();
-		let sqrMagnitude = nor.SqrMagnitude();
+		const sqrMagnitude = nor.SqrMagnitude();
 		if (sqrMagnitude.greaterThan(maxLength.mul(maxLength)))
 			nor = FVec2.MulN(nor, (maxLength.div(sqrMagnitude.sqrt())));
 		return nor;

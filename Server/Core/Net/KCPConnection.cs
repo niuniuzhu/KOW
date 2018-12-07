@@ -3,6 +3,8 @@ using Core.Structure;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Core.Net
 {
@@ -37,6 +39,10 @@ namespace Core.Net
 		}
 		public INetSession session { get; }
 		public int recvBufSize { set => this._recvEventArgs.SetBuffer( new byte[value], 0, value ); }
+
+		public X509Certificate2 certificate { get; set; }
+		public SslProtocols sslProtocols { get; set; }
+		public bool isSecure => this.certificate != null;
 
 		/// <summary>
 		/// 连接状态

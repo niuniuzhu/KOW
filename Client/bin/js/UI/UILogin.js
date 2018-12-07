@@ -107,6 +107,7 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Global"], funct
             }
         }
         OnConnectToLSError(e) {
+            this.closeModalWait();
             UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
         }
         HandleLoginLSSuccess(loginResult) {

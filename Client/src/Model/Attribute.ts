@@ -1,6 +1,7 @@
 import Decimal from "../Libs/decimal";
 
 export enum EAttr {
+	RADIUS,
 	MHP,
 	HP,
 	MMP,
@@ -8,7 +9,7 @@ export enum EAttr {
 	ATK,
 	DEF,
 	MOVE_SPEED,
-	RADIUS
+	MOVE_SPEED_FACTOR,
 }
 
 /**

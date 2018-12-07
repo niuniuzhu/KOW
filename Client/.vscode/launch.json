@@ -15,10 +15,10 @@
 			"disableNetworkCache": true
 		},
 		{
-			"name": "kow(http)",
+			"name": "kow(https)",
 			"type": "chrome",
 			"request": "launch",
-			"url": "http://localhost/kow/Client/bin/index.html",
+			"url": "https://localhost/kow/Client/bin/index.html",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
 				"--auto-open-devtools-for-tabs"

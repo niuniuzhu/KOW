@@ -3,7 +3,7 @@
 		"module": "amd",
 		"target": "es6",
 		"outDir": "./bin/js",
-		//"outFile": "./bin/js/Main.js",
+		//"outFile": "./bin/js/Total.js",
 		"inlineSourceMap": false,
 		"inlineSources": false,
 		"sourceMap": true,

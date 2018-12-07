@@ -21,6 +21,7 @@ namespace Core.Net
 			}
 			get => this._receBufSize;
 		}
+
 		public bool connected => this.socket != null && this.socket.Connected;
 		public long activeTime { get; set; }
 
@@ -147,8 +148,10 @@ namespace Core.Net
 				this.OnError( $"remote:{this.remoteEndPoint} shutdown, code:{SocketError.NoData}" );
 				return;
 			}
+			int offset = recvEventArgs.Offset;
+			byte[] buffer = recvEventArgs.Buffer;
 			//写入缓冲区
-			this._cache.Write( recvEventArgs.Buffer, recvEventArgs.Offset, recvEventArgs.BytesTransferred );
+			this._cache.Write( buffer, offset, size );
 			//处理数据
 			this.ProcessData( this._cache );
 			//重新开始接收

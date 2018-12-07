@@ -10,11 +10,12 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState
     })(Type || (Type = {}));
     var Op;
     (function (Op) {
-        Op[Op["Add"] = 0] = "Add";
-        Op[Op["Mul"] = 1] = "Mul";
-        Op[Op["Mod"] = 2] = "Mod";
-        Op[Op["Pow"] = 3] = "Pow";
-        Op[Op["Exp"] = 4] = "Exp";
+        Op[Op["Equal"] = 0] = "Equal";
+        Op[Op["Add"] = 1] = "Add";
+        Op[Op["Mul"] = 2] = "Mul";
+        Op[Op["Mod"] = 3] = "Mod";
+        Op[Op["Pow"] = 4] = "Pow";
+        Op[Op["Exp"] = 5] = "Exp";
     })(Op || (Op = {}));
     class EntityState extends FSMState_1.FSMState {
         constructor(type, owner) {

@@ -1,4 +1,4 @@
-define(["require", "exports", "./ByteUtils", "./MsgCenter", "../Libs/protos", "./ProtoHelper", "../RC/Utils/Logger", "../Libs/long"], function (require, exports, ByteUtils_1, MsgCenter_1, protos_1, ProtoHelper_1, Logger_1, Long) {
+define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Logger", "./ByteUtils", "./MsgCenter", "./ProtoHelper"], function (require, exports, Long, protos_1, Logger_1, ByteUtils_1, MsgCenter_1, ProtoHelper_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class WSConnector {
@@ -34,7 +34,7 @@ define(["require", "exports", "./ByteUtils", "./MsgCenter", "../Libs/protos", ".
         Connect(ip, port) {
             if (this.connected)
                 this.Close();
-            this._socket = new WebSocket(`ws://${ip}:${port}`);
+            this._socket = new WebSocket(`wss://${ip}:${port}`);
             this._socket.binaryType = "arraybuffer";
             this._socket.onmessage = this.OnReceived.bind(this);
             this._socket.onerror = this._onerror;

@@ -31,6 +31,8 @@
 		/// 开始监听
 		/// </summary>
 		/// <param name="port">本地端口</param>
+		/// <param name="cert">证书</param>
+		/// <param name="sslProtocols">ssl协议</param>
 		/// <returns>操作是否成功</returns>
 		bool Start( int port );
 

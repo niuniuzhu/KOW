@@ -145,8 +145,8 @@ namespace Core.Net
 
 				ReceiveData receiveData = this._receiveDataPool.Pop();
 				receiveData.buffer.Write( recvEventArgs.Buffer, recvEventArgs.Offset, size );
-				receiveData.remoteEndPoint.Address = ( ( IPEndPoint ) recvEventArgs.RemoteEndPoint ).Address;
-				receiveData.remoteEndPoint.Port = ( ( IPEndPoint ) recvEventArgs.RemoteEndPoint ).Port;
+				receiveData.remoteEndPoint.Address = ( ( IPEndPoint )recvEventArgs.RemoteEndPoint ).Address;
+				receiveData.remoteEndPoint.Port = ( ( IPEndPoint )recvEventArgs.RemoteEndPoint ).Port;
 				this._recvDataBuffer.Post( receiveData );
 			} while ( false );
 			this.StartReceive( recvEventArgs );
@@ -177,7 +177,7 @@ namespace Core.Net
 				else
 				{
 					session.isPassive = true;
-					KCPConnection kcpConnection = ( KCPConnection ) session.connection;
+					KCPConnection kcpConnection = ( KCPConnection )session.connection;
 					kcpConnection.socket = new SocketWrapper( this._socket );
 					kcpConnection.isRefSocket = true;
 					kcpConnection.remoteEndPoint = recvData.remoteEndPoint;
@@ -202,7 +202,7 @@ namespace Core.Net
 				if ( session == null )
 					Logger.Error( $"get session failed with id:{connID}" );
 				else
-					( ( KCPConnection ) session.connection ).SendDataToMainThread( data, offset, size );
+					( ( KCPConnection )session.connection ).SendDataToMainThread( data, offset, size );
 			}
 			this._receiveDataPool.Push( recvData );
 		}

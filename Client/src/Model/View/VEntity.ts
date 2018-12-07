@@ -9,7 +9,7 @@ import { Attribute } from "../Attribute";
 import { AniHolder } from "./AniHolder";
 import { VEntityState } from "./FSM/VEntityState";
 import { VBattle } from "./VBattle";
-import { FVec2 } from "../../RC/FVec2";
+import { FVec2 } from "../../RC/FMath/FVec2";
 import Decimal from "../../Libs/decimal";
 import { Defs } from "../Defs";
 

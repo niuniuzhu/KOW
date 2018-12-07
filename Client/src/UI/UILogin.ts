@@ -130,6 +130,7 @@ export class UILogin extends fairygui.Window implements IUIModule {
 	}
 
 	public OnConnectToLSError(e: Event): void {
+		this.closeModalWait();
 		UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
 	}
 

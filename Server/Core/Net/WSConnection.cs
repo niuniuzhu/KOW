@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Authentication;
+using System.Net.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -21,10 +21,6 @@ namespace Core.Net
 			Pong = 10,
 		}
 
-		public string scheme;
-		public X509Certificate2 certificate;
-		public SslProtocols sslProtocols;
-		public bool isSecure => this.scheme == "wss" && this.certificate != null;
 		public HashSet<string> subProtocols;
 
 		private readonly StreamBuffer _readState;
@@ -33,18 +29,6 @@ namespace Core.Net
 		public WSConnection( INetSession session ) : base( session )
 		{
 			this._readState = new StreamBuffer( this.recvBufSize );
-		}
-
-		public void Authenticate( Action callback, Action<Exception> errorCallback )
-		{
-			if ( !this.isSecure )
-			{
-				callback();
-				return;
-			}
-			this.socket.Authenticate( this.certificate,
-									  this.sslProtocols == SslProtocols.None ? SslProtocols.Tls : this.sslProtocols,
-									  callback, errorCallback );
 		}
 
 		public override void Close()
@@ -82,7 +66,7 @@ namespace Core.Net
 
 				if ( !this._handshakeComplete )
 				{
-					WSHttpRequest request = ProcessHandShakeData( cache.GetBuffer(), 0, cache.length, this.scheme );
+					WSHttpRequest request = ProcessHandShakeData( cache.GetBuffer(), 0, cache.length );
 					if ( request == null )
 						break;
 
@@ -133,7 +117,7 @@ namespace Core.Net
 			}
 		}
 
-		private static WSHttpRequest ProcessHandShakeData( byte[] data, int offset, int size, string scheme )
+		private static WSHttpRequest ProcessHandShakeData( byte[] data, int offset, int size )
 		{
 			string body = Encoding.ASCII.GetString( data, offset, size );
 			Match match = ProtoConfig.REQUEST_REGEX.Match( body );
@@ -145,11 +129,7 @@ namespace Core.Net
 			{
 				method = match.Groups["method"].Value,
 				path = match.Groups["path"].Value,
-				body = match.Groups["body"].Value,
-				bytes = data,
-				offset = offset,
-				size = size,
-				scheme = scheme
+				body = match.Groups["body"].Value
 			};
 
 			CaptureCollection fields = match.Groups["field_name"].Captures;
@@ -162,6 +142,12 @@ namespace Core.Net
 				request.headers[name] = value;
 			}
 			return request;
+		}
+
+		public static bool ValidateServerCertificate( object sender, X509Certificate certificate,
+													  X509Chain chain, SslPolicyErrors sslPolicyErrors )
+		{
+			return true;
 		}
 
 		private static string Negotiate( IEnumerable<string> server, IEnumerable<string> client )

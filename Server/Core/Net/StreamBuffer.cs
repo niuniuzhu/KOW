@@ -89,10 +89,15 @@ namespace Core.Net
 		/// </summary>
 		public void Strip( int pos, int count )
 		{
-			byte[] bytes = this.ReadBytes( pos, count );
-			this.Clear();
-			this.Write( bytes );
-			this.position = 0;
+			if ( count > 0 )
+			{
+				byte[] bytes = this.ReadBytes( pos, count );
+				this.Clear();
+				this.Write( bytes );
+				this.position = 0;
+			}
+			else
+				this.Clear();
 		}
 
 		public void Write( StreamBuffer streamBuffer )

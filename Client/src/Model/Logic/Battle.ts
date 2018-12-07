@@ -4,7 +4,9 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
 import { ProtoCreator } from "../../Net/ProtoHelper";
 import Queue from "../../RC/Collections/Queue";
-import { FVec2 } from "../../RC/FVec2";
+import { FRect } from "../../RC/FMath/FRect";
+import { FVec2 } from "../../RC/FMath/FVec2";
+import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
@@ -30,12 +32,14 @@ export class Battle implements ISnapshotable {
 	public get timeout(): number { return this._timeout; }
 	public get mapID(): number { return this._mapID; }
 	public get frame(): number { return this._frame; }
+	public get bounds(): FRect { return this._bounds; }
 
 	private _msPerFrame: number = 0;
 	private _nextKeyFrame: number = 0;
 	private _logicElapsed: number = 0;
 	private _realElapsed: number = 0;
 	private _def: Hashtable;
+	private _bounds: FRect;
 	private _destroied: boolean = false;
 
 	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
@@ -56,6 +60,10 @@ export class Battle implements ISnapshotable {
 		this._msPerFrame = 1000 / this._frameRate;
 
 		this._def = Defs.GetMap(this._mapID);
+		const bWidth = Hashtable.GetNumber(this._def, "width");
+		const bHeight = Hashtable.GetNumber(this._def, "height");
+		this._bounds = new FRect(new Decimal(-MathUtils.Floor(bWidth * 0.5)),
+			new Decimal(-MathUtils.Floor(bHeight * 0.5)), new Decimal(bWidth), new Decimal(bHeight));
 
 		//创建玩家
 		this.CreatePlayers(battleInfo.playerInfos);
@@ -78,6 +86,8 @@ export class Battle implements ISnapshotable {
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
 		this._frameActionGroups.clear();
+		this._def = null;
+		this._bounds = null;
 	}
 
 	/**

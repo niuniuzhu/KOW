@@ -1,8 +1,8 @@
 {
-	"config": {
-		"ls_ip": "192.168.0.108",
-		"ls_port": 49996
-	},
+    "config": {
+        "ls_ip": "193.112.104.29",
+        "ls_port": 49996
+    },
 	"preloads": [
 		"global.bin,0",
 		"global_atlas0.png,1",
@@ -13,8 +13,41 @@
 		"main_atlas0.png,1",
 		"matching.bin,0",
 		"matching_atlas0.png,1",
+		"loading.bin,0",
+		"loading_atlas0.png,1",
 		"battle.bin,0",
-		"battle_atlas0.png,1",
-		"battle_atlas_p7qk1k.png,1"
-	]
+		"battle_atlas0.png,1"
+	],
+	"map": {
+		"m0": {
+			"width": 2000,
+			"height": 2000
+		}
+	},
+	"entity": {
+		"e0": {
+			"animations": [
+				{
+					"name": "attack",
+					"length": 7
+				},
+				{
+					"name": "b",
+					"length": 5
+				},
+				{
+					"name": "die",
+					"length": 1
+				},
+				{
+					"name": "run",
+					"length": 7
+				},
+				{
+					"name": "stand",
+					"length": 6
+				}
+			]
+		}
+	}
 }

@@ -12,6 +12,7 @@ enum Type {
 }
 
 enum Op {
+	Equal,
 	Add,
 	Mul,
 	Mod,

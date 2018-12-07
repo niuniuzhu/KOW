@@ -1,4 +1,4 @@
-define(["require", "exports", "./FrameAction", "../Libs/ByteBuffer"], function (require, exports, FrameAction_1, ByteBuffer) {
+define(["require", "exports", "./FrameAction", "../Libs/bytebuffer"], function (require, exports, FrameAction_1, ByteBuffer) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class FrameActionGroup {

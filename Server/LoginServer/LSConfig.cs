@@ -13,6 +13,8 @@ namespace LoginServer
 		public string redisIP;
 		public int redisPort;
 		public string redisPwd;
+		public string certPath;
+		public string certPass;
 		public long pingInterval;
 		public bool pwdVerification;
 		public bool autoRegister;
@@ -27,6 +29,8 @@ namespace LoginServer
 			this.redisIP = opts.redisIP;
 			this.redisPort = opts.redisPort;
 			this.redisPwd = opts.redisPwd;
+			this.certPath = opts.certPath;
+			this.certPass = opts.certPass;
 			this.pingInterval = opts.pingInterval;
 			this.pwdVerification = System.Convert.ToBoolean( opts.pwdVerification );
 			this.autoRegister = System.Convert.ToBoolean( opts.autoRegister );
@@ -42,6 +46,8 @@ namespace LoginServer
 			this.redisIP = json.GetString( "redisIP" );
 			this.redisPort = json.GetInt( "redisPort" );
 			this.redisPwd = json.GetString( "redisPwd" );
+			this.certPath = json.GetString( "certPath" );
+			this.certPass = json.GetString( "certPass" );
 			this.pingInterval = json.GetLong( "pingInterval" );
 			this.pwdVerification = json.GetBoolean( "pwdVerification" );
 			this.autoRegister = json.GetBoolean( "autoRegister" );

@@ -4,8 +4,11 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
 import { ProtoCreator } from "../../Net/ProtoHelper";
 import Queue from "../../RC/Collections/Queue";
-import { FVec2 } from "../../RC/FVec2";
+import { FRect } from "../../RC/FMath/FRect";
+import { FVec2 } from "../../RC/FMath/FVec2";
+import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
 import { SyncEvent } from "../Events/SyncEvent";
@@ -35,6 +38,7 @@ export class Battle {
     get timeout() { return this._timeout; }
     get mapID() { return this._mapID; }
     get frame() { return this._frame; }
+    get bounds() { return this._bounds; }
     SetBattleInfo(battleInfo) {
         this._destroied = false;
         this._frameRate = battleInfo.frameRate;
@@ -43,7 +47,11 @@ export class Battle {
         this._timeout = battleInfo.battleTime;
         this._mapID = battleInfo.mapID;
         this._msPerFrame = 1000 / this._frameRate;
+        this._cdef = CDefs.GetMap(this._mapID);
         this._def = Defs.GetMap(this._mapID);
+        const bWidth = Hashtable.GetNumber(this._cdef, "width");
+        const bHeight = Hashtable.GetNumber(this._cdef, "height");
+        this._bounds = new FRect(new Decimal(-MathUtils.Floor(bWidth * 0.5)), new Decimal(-MathUtils.Floor(bHeight * 0.5)), new Decimal(bWidth), new Decimal(bHeight));
         this.CreatePlayers(battleInfo.playerInfos);
     }
     Destroy() {
@@ -60,6 +68,8 @@ export class Battle {
         this._logicElapsed = 0;
         this._realElapsed = 0;
         this._frameActionGroups.clear();
+        this._def = null;
+        this._bounds = null;
     }
     Update(dt) {
         this.Chase(this._frameActionGroups, true, true);

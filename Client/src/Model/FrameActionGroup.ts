@@ -1,5 +1,5 @@
+import ByteBuffer from "../Libs/bytebuffer";
 import { FrameAction } from "./FrameAction";
-import * as ByteBuffer from "../Libs/bytebuffer";
 
 export class FrameActionGroup {
 	private readonly _frame;

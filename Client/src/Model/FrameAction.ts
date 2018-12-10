@@ -1,4 +1,5 @@
 import * as Long from "../Libs/long";
+import ByteBuffer from "../Libs/bytebuffer";
 
 enum InputFlag {
 	None = 0,

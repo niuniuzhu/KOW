@@ -5,6 +5,7 @@ import { Defs } from "../Model/Defs";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { WSConnector } from "../Net/WSConnector";
 import { Logger } from "../RC/Utils/Logger";
+import { TextUtils } from "../RC/Utils/TextUtils";
 import { UILogin } from "../UI/UILogin";
 import { SceneManager } from "./SceneManager";
 import { SceneState } from "./SceneState";
@@ -97,7 +98,7 @@ export class LoginState extends SceneState {
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
 						//处理定义文件
-						const json = JSON.parse(new TextDecoder("utf-8").decode(resp.defs));
+						const json = JSON.parse(TextUtils.DecodeUTF8(resp.defs));
 						Defs.Init(json);
 						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
 							//玩家处于战场,重新连接到BS

@@ -1,8 +1,8 @@
 {
-    "config": {
-        "ls_ip": "193.112.104.29",
-        "ls_port": 49996
-    },
+	"config": {
+		"ls_ip": "www.kow2019.com",
+		"ls_port": 49996
+	},
 	"preloads": [
 		"global.bin,0",
 		"global_atlas0.png,1",

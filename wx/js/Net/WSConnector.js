@@ -1,9 +1,9 @@
+import * as Long from "../Libs/long";
+import { Protos } from "../Libs/protos";
+import { Logger } from "../RC/Utils/Logger";
 import { ByteUtils } from "./ByteUtils";
 import { MsgCenter } from "./MsgCenter";
-import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "./ProtoHelper";
-import { Logger } from "../RC/Utils/Logger";
-import * as Long from "../Libs/long";
 export class WSConnector {
     constructor() {
         this._pid = 0;

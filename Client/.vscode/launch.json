@@ -16,10 +16,24 @@
 			"disableNetworkCache": true
 		},
 		{
-			"name": "kow(https)",
+			"name": "kow(local https)",
 			"type": "chrome",
 			"request": "launch",
 			"url": "https://localhost/kow/Client/bin/index.html",
+			"runtimeArgs": [
+				"--allow-file-access-from-files",
+				"--auto-open-devtools-for-tabs",
+				"--allow-insecure-localhost"
+			],
+			"sourceMaps": true,
+			"webRoot": "${workspaceRoot}",
+			"disableNetworkCache": true
+		},
+		{
+			"name": "kow(www.kow2019.com)",
+			"type": "chrome",
+			"request": "launch",
+			"url": "https://www.kow2019.com/kow/Client/bin/index.html?platform=1",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
 				"--auto-open-devtools-for-tabs",

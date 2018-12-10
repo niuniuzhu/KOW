@@ -1,14 +1,15 @@
 import Decimal from "../Libs/decimal";
 export var EAttr;
 (function (EAttr) {
-    EAttr[EAttr["MHP"] = 0] = "MHP";
-    EAttr[EAttr["HP"] = 1] = "HP";
-    EAttr[EAttr["MMP"] = 2] = "MMP";
-    EAttr[EAttr["MP"] = 3] = "MP";
-    EAttr[EAttr["ATK"] = 4] = "ATK";
-    EAttr[EAttr["DEF"] = 5] = "DEF";
-    EAttr[EAttr["MOVE_SPEED"] = 6] = "MOVE_SPEED";
-    EAttr[EAttr["RADIUS"] = 7] = "RADIUS";
+    EAttr[EAttr["RADIUS"] = 0] = "RADIUS";
+    EAttr[EAttr["MHP"] = 1] = "MHP";
+    EAttr[EAttr["HP"] = 2] = "HP";
+    EAttr[EAttr["MMP"] = 3] = "MMP";
+    EAttr[EAttr["MP"] = 4] = "MP";
+    EAttr[EAttr["ATK"] = 5] = "ATK";
+    EAttr[EAttr["DEF"] = 6] = "DEF";
+    EAttr[EAttr["MOVE_SPEED"] = 7] = "MOVE_SPEED";
+    EAttr[EAttr["MOVE_SPEED_FACTOR"] = 8] = "MOVE_SPEED_FACTOR";
 })(EAttr || (EAttr = {}));
 export class Attribute {
     constructor() {

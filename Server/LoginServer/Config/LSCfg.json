@@ -7,5 +7,7 @@
     "redisIP": "127.0.0.1",
     "redisPort": 7000,
     "redisPwd": "159753",
+    "certPath": "Config/server.pfx",
+    "certPass": "494e95674l66b0",
     "pingInterval": 10000
 }

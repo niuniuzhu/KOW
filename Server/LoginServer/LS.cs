@@ -50,7 +50,7 @@ namespace LoginServer
 		public ErrorCode Start()
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
-			X509Certificate2 certificate = new X509Certificate2( "Config/server.pfx", "159753" );
+			X509Certificate2 certificate = new X509Certificate2( this.config.certPath, this.config.certPass );
 			this.netSessionMgr.CreateListener( 0, 2048, ProtoType.WebSocket, certificate, this.netSessionMgr.CreateClientSession ).Start( this.config.cliPort );
 			this.netSessionMgr.CreateConnector<L2CSSession>( SessionType.ServerL2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 20480, 0 );
 			this.netSessionMgr.CreateConnector<L2DBSession>( SessionType.ServerL2DB, this.config.dbIP, this.config.dbPort, ProtoType.TCP, 20480, 0 );

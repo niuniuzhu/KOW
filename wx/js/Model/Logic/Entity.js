@@ -1,6 +1,6 @@
 import Decimal from "../../Libs/decimal";
 import { FSM } from "../../RC/FSM/FSM";
-import { FVec2 } from "../../RC/FVec2";
+import { FVec2 } from "../../RC/FMath/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute, EAttr } from "../Attribute";
@@ -39,11 +39,13 @@ export class Entity {
     }
     LoadDef() {
         this._def = Defs.GetEntity(this.actorID);
+        this.attribute.Set(EAttr.RADIUS, new Decimal(Hashtable.GetNumber(this._def, "radius")));
         this.attribute.Set(EAttr.MHP, new Decimal(Hashtable.GetNumber(this._def, "mhp")));
         this.attribute.Set(EAttr.HP, this.attribute.Get(EAttr.MHP));
         this.attribute.Set(EAttr.MMP, new Decimal(Hashtable.GetNumber(this._def, "mmp")));
         this.attribute.Set(EAttr.MP, this.attribute.Get(EAttr.MMP));
         this.attribute.Set(EAttr.MOVE_SPEED, new Decimal(Hashtable.GetNumber(this._def, "move_speed")));
+        this.attribute.Set(EAttr.MOVE_SPEED_FACTOR, new Decimal(Hashtable.GetNumber(this._def, "move_speed_factor")));
     }
     EncodeSnapshot(writer) {
         writer.int32(this.type);
@@ -92,7 +94,13 @@ export class Entity {
             return;
         const speed = this.attribute.Get(EAttr.MOVE_SPEED);
         const moveDelta = FVec2.MulN(FVec2.MulN(direction, speed), MathUtils.D_SMALL1.mul(dt));
-        this.position = FVec2.Add(this.position, moveDelta);
+        const pos = FVec2.Add(this.position, moveDelta);
+        const radius = this.attribute.Get(EAttr.RADIUS);
+        pos.x = Decimal.max(Decimal.add(this._battle.bounds.xMin, radius), pos.x);
+        pos.x = Decimal.min(Decimal.sub(this._battle.bounds.xMax, radius), pos.x);
+        pos.y = Decimal.max(Decimal.add(this._battle.bounds.yMin, radius), pos.y);
+        pos.y = Decimal.min(Decimal.sub(this._battle.bounds.yMax, radius), pos.y);
+        this.position = pos;
         this.direction = direction;
     }
 }

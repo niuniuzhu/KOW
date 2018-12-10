@@ -2,6 +2,7 @@
 using Core.Net;
 using Google.Protobuf;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Shared.Net
 {
@@ -17,9 +18,10 @@ namespace Shared.Net
 		/// <param name="id">监听器标识</param>
 		/// <param name="recvsize">接受缓冲区大小</param>
 		/// <param name="protoType">协议类型</param>
+		/// <param name="certificate">安全证书</param>
 		/// <param name="sessionCreateHandler">创建session的委托</param>
-		/// <returns></returns>
-		public IListener CreateListener( uint id, int recvsize, ProtoType protoType, SessionCreater sessionCreateHandler )
+		/// <returns>监听器</returns>
+		public IListener CreateListener( uint id, int recvsize, ProtoType protoType, X509Certificate2 certificate, SessionCreater sessionCreateHandler )
 		{
 			if ( NetworkMgr.instance.ContainsListener( id ) )
 				throw new System.Exception( "session id already exists" );
@@ -28,15 +30,29 @@ namespace Shared.Net
 			switch ( protoType )
 			{
 				case ProtoType.TCP:
-					listener = new TCPListener( id );
+					if ( certificate != null )
+					{
+						TLSListener tlsListener;
+						listener = tlsListener = new TLSListener( id );
+						tlsListener.certificate = certificate;
+					}
+					else
+						listener = new TCPListener( id );
+					break;
+
+				case ProtoType.WebSocket:
+					if ( certificate != null )
+					{
+						TLSListener tlsListener;
+						listener = tlsListener = new TLSWSListener( id );
+						tlsListener.certificate = certificate;
+					}
+					else
+						listener = new WSListener( id );
 					break;
 
 				case ProtoType.KCP:
 					listener = new KCPListener( id );
-					break;
-
-				case ProtoType.WebSocket:
-					listener = new WSListener( id );
 					break;
 			}
 			if ( listener == null )
@@ -59,7 +75,7 @@ namespace Shared.Net
 		/// <returns></returns>
 		public T CreateConnector<T>( SessionType sessionType, string ip, int port, ProtoType protoType, int recvsize, uint logicId ) where T : CliSession
 		{
-			T session = NetSessionPool.instance.Pop<T>( protoType );
+			T session = NetSessionPool.instance.Pop<T>( protoType, null );
 			session.owner = this;
 			session.type = sessionType;
 			session.logicID = logicId;

@@ -51,6 +51,18 @@ namespace GateServer
 			HelpText = "Exposed gate server port." )]
 		public int externalPort { get; set; }
 
+		[Option( "cert_path",
+			Default = "Config/server.pfx",
+			SetName = "bysetting",
+			HelpText = "Certificate path." )]
+		public string certPath { get; set; }
+
+		[Option( "cert_password",
+			Default = "159753",
+			SetName = "bysetting",
+			HelpText = "Certificate password." )]
+		public string certPass { get; set; }
+
 		[Option( "shell_port",
 			Default = 50002,
 			SetName = "bysetting",

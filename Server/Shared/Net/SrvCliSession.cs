@@ -1,4 +1,5 @@
 ﻿using Core.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Shared.Net
 {
@@ -7,7 +8,7 @@ namespace Shared.Net
 	/// </summary>
 	public abstract class SrvCliSession : NetSessionBase
 	{
-		protected SrvCliSession( uint id, ProtoType type ) : base( id, type )
+		protected SrvCliSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 		}
 	}

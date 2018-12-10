@@ -1,12 +1,13 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LoginServer.Net
 {
 	public class ClientSession : SrvCliSession
 	{
-		protected ClientSession( uint id, ProtoType type ) : base( id, type )
+		protected ClientSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			this.RegMsgHandler( Protos.MsgID.EGc2LsAskRegister, LS.instance.bizProcessor.OnGCtoLSAskRegister );
 			this.RegMsgHandler( Protos.MsgID.EGc2LsAskLogin, LS.instance.bizProcessor.OnGCtoLSAskLogin );

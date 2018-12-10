@@ -1,7 +1,9 @@
 {
     "ID": 40001,
-    "externalIP": "192.168.0.108",
+    "externalIP": "localhost",
     "externalPort": 40001,
+    "certPath": "Config/server.pfx",
+    "certPass": "159753",
     "csIP": "127.0.0.1",
     "csPort": 10003,
     "shellPort": 50003,

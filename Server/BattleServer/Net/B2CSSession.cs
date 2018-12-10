@@ -1,6 +1,7 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BattleServer.Net
 {
@@ -9,7 +10,7 @@ namespace BattleServer.Net
 		private long _pingTime;
 		private long _reportTime;
 
-		private B2CSSession( uint id, ProtoType type ) : base( id, type )
+		private B2CSSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			this.RegMsgHandler( Protos.MsgID.ECs2BsBattleInfo, BS.instance.bizProcessor.OnCs2BsBattleInfo );
 		}

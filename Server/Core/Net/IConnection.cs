@@ -7,7 +7,7 @@ namespace Core.Net
 		/// <summary>
 		/// 此连接持有的Socket实例
 		/// </summary>
-		SocketWrapper socket { get; set; }
+		ISocketWrapper socket { get; set; }
 
 		/// <summary>
 		/// 远程终端

@@ -9,6 +9,7 @@ using Shared.Battle;
 using Shared.Net;
 using System.Collections;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BattleServer
 {
@@ -57,10 +58,12 @@ namespace BattleServer
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 
-			WSListener cliListener = ( WSListener )this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
+			X509Certificate2 certificate = new X509Certificate2( this.config.certPath, this.config.certPass );
+
+			IListener cliListener = this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, certificate, this.netSessionMgr.CreateClientSession );
 			cliListener.Start( this.config.externalPort );
 
-			IListener shellListener = this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, this.netSessionMgr.CreateShellSession );
+			IListener shellListener = this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, null, this.netSessionMgr.CreateShellSession );
 			shellListener.Start( this.config.shellPort );
 			ShellSession.key = "4CA92E10-4FF7-485B-A553-32217319ADA1";
 			shellListener.OnSessionCreated += session =>

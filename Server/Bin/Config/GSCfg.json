@@ -1,8 +1,10 @@
 {
     "gsID": 30001,
     "name": "local",
-    "externalIP": "192.168.0.108",
+    "externalIP": "localhost",
     "externalPort": 30001,
+    "certPath": "Config/server.pfx",
+    "certPass": "159753",
     "shellPort": 50002,
     "password": "123456",
     "maxConnection": 10000,
@@ -10,5 +12,5 @@
     "csPort": 10002,
     "reportInterval": 10000,
     "pingInterval": 10000,
-    "gcLive": 15000 
+    "gcLive": 15000
 }

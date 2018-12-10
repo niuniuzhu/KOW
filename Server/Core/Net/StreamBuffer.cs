@@ -38,6 +38,14 @@ namespace Core.Net
 		/// </summary>
 		public long bytesAvailable => this.ms.Length - this.ms.Position;
 
+		/// <summary>
+		/// 分配的容量(bytes)
+		/// </summary>
+		public int capacity { get => this.ms.Capacity; set => this.ms.Capacity = value; }
+
+		/// <summary>
+		/// 自定义数据
+		/// </summary>
 		public object data;
 
 		public StreamBuffer()

@@ -2,6 +2,7 @@
 using Core.Net;
 using Google.Protobuf;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Shared.Net
 {
@@ -41,7 +42,7 @@ namespace Shared.Net
 		/// </summary>
 		private readonly MessageCenter _messageCenter = new MessageCenter();
 
-		protected NetSessionBase( uint id, ProtoType type ) : base( id, type )
+		protected NetSessionBase( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 		}
 

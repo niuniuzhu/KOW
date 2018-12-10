@@ -1,5 +1,6 @@
-﻿using System;
-using Core.Misc;
+﻿using Core.Misc;
+using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Core.Net
 {
@@ -22,21 +23,35 @@ namespace Core.Net
 		private long _timeToClose;
 		private string _delayCloseReason;
 
-		protected NetSession( uint id, ProtoType type )
+		protected NetSession( uint id, ProtoType type, X509Certificate2 certificate )
 		{
 			this.id = id;
 			switch ( type )
 			{
 				case ProtoType.TCP:
-					this.connection = new TCPConnection( this );
+					if ( certificate != null )
+					{
+						TLSConnection tlsConnection;
+						this.connection = tlsConnection = new TLSConnection( this );
+						tlsConnection.certificate = certificate;
+					}
+					else
+						this.connection = new TCPConnection( this );
+					break;
+
+				case ProtoType.WebSocket:
+					if ( certificate != null )
+					{
+						TLSWSConnection tlsWSConnection;
+						this.connection = tlsWSConnection = new TLSWSConnection( this );
+						tlsWSConnection.certificate = certificate;
+					}
+					else
+						this.connection = new WSConnection( this );
 					break;
 
 				case ProtoType.KCP:
 					this.connection = new KCPConnection( this );
-					break;
-
-				case ProtoType.WebSocket:
-					this.connection = new WSConnection( this );
 					break;
 
 				default:

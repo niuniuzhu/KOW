@@ -1,12 +1,13 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CentralServer.Net
 {
 	public class BattleSession : SrvCliSession
 	{
-		protected BattleSession( uint id, ProtoType type ) : base( id, type )
+		protected BattleSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			this.RegMsgHandler( Protos.MsgID.EGAskPing, CS.instance.bizProcessor.OnBSAskPing );
 			this.RegMsgHandler( Protos.MsgID.EBs2CsReportState, CS.instance.bizProcessor.OnBs2CsReportState );

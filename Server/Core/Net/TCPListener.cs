@@ -125,7 +125,7 @@ namespace Core.Net
 				if ( acceptEventArgs.SocketError != SocketError.Success )
 				{
 					//网络错误
-					Logger.Error( $"process accept fail,code{acceptEventArgs.SocketError}" );
+					Logger.Error( $"process accept fail,code:{acceptEventArgs.SocketError}" );
 					this.Close( acceptSocket );
 					break;
 				}
@@ -146,7 +146,7 @@ namespace Core.Net
 		protected virtual INetSession CreateSession( Socket acceptSocket )
 		{
 			//调用委托创建session
-			INetSession session = this.sessionCreater( this.protoType );
+			INetSession session = this.sessionCreater( this.protoType, null );
 			if ( session == null )
 			{
 				Logger.Error( "create session failed" );

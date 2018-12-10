@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using Core.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Shared.Net
 {
@@ -13,7 +14,7 @@ namespace Shared.Net
 		private bool _reconnectTag;
 		private long _reconnTime;
 
-		protected CliSession( uint id, ProtoType type ) : base( id, type )
+		protected CliSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			switch ( type )
 			{

@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using Core.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Shell
 {
@@ -7,7 +8,7 @@ namespace Shell
 	{
 		protected override string key => "88F77D88-8C5A-4FE7-B099-68088A27C8DE";
 
-		private GSSession( uint id, ProtoType type ) : base( id, type )
+		private GSSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 		}
 

@@ -3,6 +3,7 @@ using Core.Net;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Shared.Net
 {
@@ -18,7 +19,7 @@ namespace Shared.Net
 		{
 		}
 
-		public T Pop<T>( ProtoType protoType ) where T : INetSession
+		public T Pop<T>( ProtoType protoType, X509Certificate2 certificate ) where T : INetSession
 		{
 			lock ( this._typeToObjects )
 			{
@@ -37,7 +38,7 @@ namespace Shared.Net
 						_gid = 0;
 					}
 					uint id = ++_gid;
-					return ( T )Activator.CreateInstance( typeof( T ), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, protoType }, null );
+					return ( T )Activator.CreateInstance( typeof( T ), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, protoType, certificate }, null );
 				}
 
 				objs.TryDequeue( out INetSession session );

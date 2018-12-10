@@ -23,7 +23,7 @@ namespace Core.Net
 
 	public class KCPConnection : IConnection
 	{
-		public SocketWrapper socket { get; set; }
+		public ISocketWrapper socket { get; set; }
 		/// <summary>
 		/// 是否一个引用的socket
 		/// </summary>

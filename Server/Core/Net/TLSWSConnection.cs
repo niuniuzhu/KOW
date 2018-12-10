@@ -2,14 +2,14 @@
 
 namespace Core.Net
 {
-	public class WSConnection : TCPConnection
+	public class TLSWSConnection : TLSConnection
 	{
 		public HashSet<string> subProtocols;
 
 		private readonly StreamBuffer _readState;
 		private bool _handshakeComplete;
 
-		public WSConnection( INetSession session ) : base( session )
+		public TLSWSConnection( INetSession session ) : base( session )
 		{
 			this._readState = new StreamBuffer( this.recvBufSize );
 		}

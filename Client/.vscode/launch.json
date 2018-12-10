@@ -8,7 +8,8 @@
 			"file": "${workspaceRoot}/bin/index.html",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
-				"--auto-open-devtools-for-tabs"
+				"--auto-open-devtools-for-tabs",
+				"--allow-insecure-localhost"
 			],
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",
@@ -21,7 +22,8 @@
 			"url": "https://localhost/kow/Client/bin/index.html",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
-				"--auto-open-devtools-for-tabs"
+				"--auto-open-devtools-for-tabs",
+				"--allow-insecure-localhost"
 			],
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",
@@ -34,7 +36,8 @@
 			"file": "${workspaceRoot}/bin/index.html?mode=1",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
-				"--auto-open-devtools-for-tabs"
+				"--auto-open-devtools-for-tabs",
+				"--allow-insecure-localhost"
 			],
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",

@@ -8,6 +8,7 @@ using Shared.Net;
 using System;
 using System.Collections;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GateServer
 {
@@ -65,10 +66,12 @@ namespace GateServer
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 
-			WSListener cliListener = ( WSListener )this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, this.netSessionMgr.CreateClientSession );
+			X509Certificate2 certificate = new X509Certificate2( this.config.certPath, this.config.certPass );
+
+			IListener cliListener = this.netSessionMgr.CreateListener( 0, 65535, ProtoType.WebSocket, certificate, this.netSessionMgr.CreateClientSession );
 			cliListener.Start( this.config.externalPort );
 
-			IListener shellListener = this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, this.netSessionMgr.CreateShellSession );
+			IListener shellListener = this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, null, this.netSessionMgr.CreateShellSession );
 			shellListener.Start( this.config.shellPort );
 			ShellSession.key = "88F77D88-8C5A-4FE7-B099-68088A27C8DE";
 			shellListener.OnSessionCreated += session =>
@@ -122,6 +125,6 @@ namespace GateServer
 			NetSessionPool.instance.Dispose();
 		}
 
-		public void ReloadDefs() => Defs.Load(  File.ReadAllText( this.config.defPath ) );
+		public void ReloadDefs() => Defs.Load( File.ReadAllText( this.config.defPath ) );
 	}
 }

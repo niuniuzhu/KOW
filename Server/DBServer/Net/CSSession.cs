@@ -1,12 +1,13 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DBServer.Net
 {
 	public class CSSession : SrvCliSession
 	{
-		protected CSSession( uint id, ProtoType type ) : base( id, type )
+		protected CSSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 		}
 

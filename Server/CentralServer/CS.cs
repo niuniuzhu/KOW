@@ -99,13 +99,10 @@ namespace CentralServer
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
 
-			this.netSessionMgr.CreateListener( 0, 65535, ProtoType.TCP, this.netSessionMgr.CreateLSSession ).Start( this.config.lsPort );
-
-			this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, this.netSessionMgr.CreateGSSession ).Start( this.config.gsPort );
-
-			this.netSessionMgr.CreateListener( 2, 65535, ProtoType.TCP, this.netSessionMgr.CreateBSSession ).Start( this.config.bsPort );
-
-			IListener shellListener = this.netSessionMgr.CreateListener( 3, 65535, ProtoType.TCP, this.netSessionMgr.CreateShellSession );
+			this.netSessionMgr.CreateListener( 0, 65535, ProtoType.TCP, null, this.netSessionMgr.CreateLSSession ).Start( this.config.lsPort );
+			this.netSessionMgr.CreateListener( 1, 65535, ProtoType.TCP, null, this.netSessionMgr.CreateGSSession ).Start( this.config.gsPort );
+			this.netSessionMgr.CreateListener( 2, 65535, ProtoType.TCP, null, this.netSessionMgr.CreateBSSession ).Start( this.config.bsPort );
+			IListener shellListener = this.netSessionMgr.CreateListener( 3, 65535, ProtoType.TCP, null, this.netSessionMgr.CreateShellSession );
 			shellListener.Start( this.config.shellPort );
 			ShellSession.key = "C01B0BAE-4948-4F02-9F45-BC371274C295";
 			shellListener.OnSessionCreated += session =>

@@ -1,11 +1,14 @@
 ﻿using Core.Misc;
 using Core.Structure;
+using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Core.Net
 {
-	public class TCPConnection : IConnection
+	public class TLSConnection : IConnection
 	{
 		public ISocketWrapper socket { get; set; }
 		public EndPoint remoteEndPoint { get; set; }
@@ -24,31 +27,23 @@ namespace Core.Net
 
 		public bool connected => this.socket != null && this.socket.Connected;
 		public long activeTime { get; set; }
+		public X509Certificate2 certificate { get; set; }
 
-		private int _receBufSize = 1024;
-		private readonly SocketAsyncEventArgs _sendEventArgs;
-		private readonly SocketAsyncEventArgs _recvEventArgs;
 		private readonly StreamBuffer _cache;
-
 		protected readonly SwitchQueue<StreamBuffer> _sendQueue = new SwitchQueue<StreamBuffer>();
 		protected readonly ThreadSafeObjectPool<StreamBuffer> _bufferPool = new ThreadSafeObjectPool<StreamBuffer>( 10, 5 );
 
-		public TCPConnection( INetSession session )
+		private int _receBufSize = 1024;
+		private byte[] _buffer;
+
+		public TLSConnection( INetSession session )
 		{
 			this.session = session;
 			this._cache = new StreamBuffer( this.recvBufSize );
-			this._sendEventArgs = new SocketAsyncEventArgs { UserToken = this };
-			this._recvEventArgs = new SocketAsyncEventArgs { UserToken = this };
-			this._sendEventArgs.Completed += this.OnIOComplete;
-			this._recvEventArgs.Completed += this.OnIOComplete;
 		}
 
 		public void Dispose()
 		{
-			this._sendEventArgs.Completed -= this.OnIOComplete;
-			this._recvEventArgs.Completed -= this.OnIOComplete;
-			this._sendEventArgs.Dispose();
-			this._recvEventArgs.Dispose();
 		}
 
 		public virtual void Close()
@@ -70,13 +65,12 @@ namespace Core.Net
 			this.socket = null;
 			this.remoteEndPoint = null;
 			this.activeTime = 0;
-			this._cache.Clear();
 			this._sendQueue.Clear();
 		}
 
 		private void OnRecvBufSizeChanged()
 		{
-			this._recvEventArgs.SetBuffer( new byte[this._receBufSize], 0, this._receBufSize );
+			this._buffer = new byte[this._receBufSize];
 			this._cache.capacity = this._receBufSize;
 		}
 
@@ -94,74 +88,53 @@ namespace Core.Net
 
 		public void StartReceive()
 		{
-			if ( this.socket == null )
-				return;
-			bool asyncResult;
 			try
 			{
-				asyncResult = this.socket.ReceiveAsync( this._recvEventArgs );
+				this.socket.BeginAuthenticate( this.certificate, this.ProcessAuthentication );
 			}
-			catch ( SocketException e )
+			catch ( AuthenticationException e )
 			{
-				this.OnError( $"socket receive error, code:{e.SocketErrorCode} " );
-				return;
-			}
-			if ( !asyncResult )//有一个挂起的IO操作需要马上处理
-				this.ProcessReceive( this._recvEventArgs );
-		}
-
-		private void OnIOComplete( object sender, SocketAsyncEventArgs asyncEventArgs )
-		{
-			switch ( asyncEventArgs.LastOperation )
-			{
-				case SocketAsyncOperation.Receive:
-					this.ProcessReceive( asyncEventArgs );
-					break;
-
-				case SocketAsyncOperation.Send:
-					this.ProcessSend( asyncEventArgs );
-					break;
+				this.OnError( $"authenticate error, code:{e} " );
 			}
 		}
 
-		private void ProcessSend( SocketAsyncEventArgs sendEventArgs )
+		private void ProcessAuthentication( IAsyncResult ar )
 		{
-			if ( sendEventArgs.SocketError != SocketError.Success )
+			try
 			{
-				//网络错误
-				this.OnError( $"socket send error, code:{sendEventArgs.SocketError}" );
-				return;
+				this.socket.BeginReceive( this._buffer, 0, this._buffer.Length, this.ProcessReceive );
 			}
-
-			NetEvent netEvent = NetworkMgr.instance.PopEvent();
-			netEvent.type = NetEvent.Type.Send;
-			netEvent.session = this.session;
-			NetworkMgr.instance.PushEvent( netEvent );
+			catch ( Exception e )
+			{
+				this.OnError( $"socket start receive error, code:{e} " );
+			}
 		}
 
-		private void ProcessReceive( SocketAsyncEventArgs recvEventArgs )
+		private void ProcessReceive( IAsyncResult ar )
 		{
-			if ( recvEventArgs.SocketError != SocketError.Success )
+			TLSSocketWrapper socket = ( TLSSocketWrapper )ar.AsyncState;
+			int size = 0;
+			try
 			{
-				//网络错误
-				this.OnError( $"receive error, remote endpoint:{this.remoteEndPoint}, code:{recvEventArgs.SocketError}" );
+				size = socket.EndReceive( ar );
+			}
+			catch ( Exception e )
+			{
+				this.OnError( $"socket receive error, code:{e} " );
 				return;
 			}
-			int size = recvEventArgs.BytesTransferred;
 			if ( size <= 0 )
 			{
 				//远端可能已经关闭连接
 				this.OnError( $"remote:{this.remoteEndPoint} shutdown, code:{SocketError.NoData}" );
 				return;
 			}
-			int offset = recvEventArgs.Offset;
-			byte[] buffer = recvEventArgs.Buffer;
 			//写入缓冲区
-			this._cache.Write( buffer, offset, size );
+			this._cache.Write( this._buffer, 0, size );
 			//处理数据
 			this.ProcessData( this._cache );
-			//重新开始接收
-			this.StartReceive();
+
+			socket.BeginReceive( this._buffer, 0, this._buffer.Length, this.ProcessReceive );
 		}
 
 		protected virtual void ProcessData( StreamBuffer cache )
@@ -204,24 +177,38 @@ namespace Core.Net
 					this._bufferPool.Push( buffer );
 					continue;
 				}
-
-				this._sendEventArgs.SetBuffer( buffer.GetBuffer(), 0, buffer.length );
-				bool asyncResult;
 				try
 				{
-					asyncResult = this.socket.SendAsync( this._sendEventArgs );
+					this.socket.BeginSend( buffer.GetBuffer(), 0, buffer.length, this.ProcessSend );
 				}
 				catch ( SocketException e )
 				{
-					this.OnError( $"socket send error, code:{e.SocketErrorCode}" );
+					this.OnError( $"socket start send error, code:{e.SocketErrorCode}" );
 					this._bufferPool.Push( buffer );
 					continue;
 				}
-				if ( !asyncResult )
-					this.ProcessSend( this._sendEventArgs );
 
 				this._bufferPool.Push( buffer );
 			}
+		}
+
+		private void ProcessSend( IAsyncResult ar )
+		{
+			TLSSocketWrapper socket = ( TLSSocketWrapper )ar.AsyncState;
+			try
+			{
+				socket.EndSend( ar );
+			}
+			catch ( Exception e )
+			{
+				this.OnError( $"socket send error, code:{e.ToString()}" );
+				return;
+			}
+
+			NetEvent netEvent = NetworkMgr.instance.PopEvent();
+			netEvent.type = NetEvent.Type.Send;
+			netEvent.session = this.session;
+			NetworkMgr.instance.PushEvent( netEvent );
 		}
 
 		public void OnHeartBeat( long dt )

@@ -11,7 +11,7 @@ var mode = GetQueryString("mode");
 if (mode == undefined || mode == 0) {
 	var platform = GetQueryString("platform");
 	if (platform == undefined)
-		platform = 1;
+		platform = 0;
 	require(["./js/Main"], function (G) {
 		new G.Main("{\"platform\": " + platform + "}");
 	})

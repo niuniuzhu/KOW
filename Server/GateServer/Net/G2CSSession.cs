@@ -2,6 +2,7 @@
 using Core.Net;
 using Google.Protobuf;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GateServer.Net
 {
@@ -10,7 +11,7 @@ namespace GateServer.Net
 		private long _pingTime;
 		private long _reportTime;
 
-		private G2CSSession( uint id, ProtoType type ) : base( id, type )
+		private G2CSSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			this.RegMsgHandler( Protos.MsgID.ECs2GsKickGc, GS.instance.bizProcessor.OnECs2GsKickGc );
 		}

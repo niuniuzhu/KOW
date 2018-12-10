@@ -2,6 +2,7 @@
 using Core.Net;
 using Shared.Net;
 using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Shell
@@ -10,7 +11,7 @@ namespace Shell
 	{
 		protected abstract string key { get; }
 
-		protected MasterSession( uint id, ProtoType type ) : base( id, type )
+		protected MasterSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 		}
 

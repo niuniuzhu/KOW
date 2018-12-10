@@ -9,6 +9,7 @@ import { FVec2 } from "../../RC/FMath/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { BattleInfo } from "../BattleInfo";
+import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
 import { SyncEvent } from "../Events/SyncEvent";
@@ -39,6 +40,7 @@ export class Battle implements ISnapshotable {
 	private _logicElapsed: number = 0;
 	private _realElapsed: number = 0;
 	private _def: Hashtable;
+	private _cdef: Hashtable;
 	private _bounds: FRect;
 	private _destroied: boolean = false;
 
@@ -59,9 +61,10 @@ export class Battle implements ISnapshotable {
 		this._mapID = battleInfo.mapID
 		this._msPerFrame = 1000 / this._frameRate;
 
+		this._cdef = CDefs.GetMap(this._mapID);
 		this._def = Defs.GetMap(this._mapID);
-		const bWidth = Hashtable.GetNumber(this._def, "width");
-		const bHeight = Hashtable.GetNumber(this._def, "height");
+		const bWidth = Hashtable.GetNumber(this._cdef, "width");
+		const bHeight = Hashtable.GetNumber(this._cdef, "height");
 		this._bounds = new FRect(new Decimal(-MathUtils.Floor(bWidth * 0.5)),
 			new Decimal(-MathUtils.Floor(bHeight * 0.5)), new Decimal(bWidth), new Decimal(bHeight));
 

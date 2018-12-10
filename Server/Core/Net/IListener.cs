@@ -1,8 +1,10 @@
-﻿namespace Core.Net
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Core.Net
 {
 	public delegate byte[] PacketEncodeHandler( byte[] data, int offset, int size );
 	public delegate int PacketDecodeHandler( byte[] buf, int offset, int size, out byte[] data );
-	public delegate INetSession SessionCreater( ProtoType type );
+	public delegate INetSession SessionCreater( ProtoType type, X509Certificate2 certificate );
 
 	public delegate void SessionCreatedHandler( INetSession session );
 

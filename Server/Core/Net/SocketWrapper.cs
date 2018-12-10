@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using System;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Core.Net
 {
-	public class SocketWrapper
+	public class SocketWrapper : ISocketWrapper
 	{
 		public bool Connected => this._socket?.Connected ?? false;
 
@@ -17,16 +18,41 @@ namespace Core.Net
 		public void SetSocketOption( SocketOptionLevel optionLevel, SocketOptionName optionName, object optionValue ) =>
 			this._socket.SetSocketOption( optionLevel, optionName, optionValue );
 
-		public bool SendAsync( SocketAsyncEventArgs e ) => this._socket.SendAsync( e );
+		public void BeginAuthenticate( X509Certificate2 certificate, AsyncCallback callback )
+		{
+			throw new NotImplementedException();
+		}
 
-		public int Send( byte[] buffer, int offset, int size, SocketFlags socketFlags ) => this._socket.Send( buffer, offset, size, socketFlags );
+		public void EndAuthenticate( IAsyncResult ar )
+		{
+			throw new NotImplementedException();
+		}
+
+		public void BeginSend( byte[] buffer, int offset, int size, AsyncCallback callback )
+		{
+			throw new NotImplementedException();
+		}
+
+		public void EndSend( IAsyncResult ar )
+		{
+			throw new NotImplementedException();
+		}
+
+		public void BeginReceive( byte[] buffer, int offset, int size, AsyncCallback callback )
+		{
+			throw new NotImplementedException();
+		}
+
+		public int EndReceive( IAsyncResult ar )
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool SendAsync( SocketAsyncEventArgs e ) => this._socket.SendAsync( e );
 
 		public bool ReceiveAsync( SocketAsyncEventArgs e ) => this._socket.ReceiveAsync( e );
 
 		public bool SendToAsync( SocketAsyncEventArgs e ) => this._socket.SendToAsync( e );
-
-		public int SendTo( byte[] buffer, int offset, int size, SocketFlags socketFlags, EndPoint remoteEP ) =>
-			this._socket.SendTo( buffer, offset, size, socketFlags, remoteEP );
 
 		public bool ReceiveFromAsync( SocketAsyncEventArgs e ) => this._socket.ReceiveFromAsync( e );
 

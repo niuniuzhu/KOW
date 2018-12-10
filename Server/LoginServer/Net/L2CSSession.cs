@@ -1,6 +1,7 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LoginServer.Net
 {
@@ -8,7 +9,7 @@ namespace LoginServer.Net
 	{
 		private long _pingTime;
 
-		private L2CSSession( uint id, ProtoType type ) : base( id, type )
+		private L2CSSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			this.RegMsgHandler( Protos.MsgID.ECs2LsGsinfos, LS.instance.bizProcessor.OnCs2LsGsinfos );
 			this.RegMsgHandler( Protos.MsgID.ECs2LsGsinfo, LS.instance.bizProcessor.OnCs2LsGsinfo );

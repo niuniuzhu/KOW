@@ -1,12 +1,13 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CentralServer.Net
 {
 	public class GateSession : SrvCliSession
 	{
-		protected GateSession( uint id, ProtoType type ) : base( id, type )
+		protected GateSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			this.RegMsgHandler( Protos.MsgID.EGAskPing, CS.instance.bizProcessor.OnGSAskPing );
 			this.RegMsgHandler( Protos.MsgID.EGs2CsReportState, CS.instance.bizProcessor.OnGs2CsReportState );

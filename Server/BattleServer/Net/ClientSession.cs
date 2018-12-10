@@ -1,6 +1,7 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BattleServer.Net
 {
@@ -8,7 +9,7 @@ namespace BattleServer.Net
 	{
 		internal long activeTime;
 
-		protected ClientSession( uint id, ProtoType type ) : base( id, type )
+		protected ClientSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			this._accreditedMsgID = Protos.MsgID.EGc2BsAskLogin;
 

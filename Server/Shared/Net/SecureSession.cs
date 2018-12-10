@@ -2,6 +2,7 @@
 using Core.Net;
 using Google.Protobuf;
 using Protos;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Shared.Net
 {
@@ -18,7 +19,7 @@ namespace Shared.Net
 		/// </summary>
 		protected MsgID _accreditedMsgID;
 
-		protected SecureSession( uint id, ProtoType type ) : base( id, type )
+		protected SecureSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 		}
 

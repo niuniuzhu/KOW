@@ -1,12 +1,13 @@
 ﻿using Core.Misc;
 using Core.Net;
 using Shared.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DBServer.Net
 {
 	public class LoginSession : SrvCliSession
 	{
-		protected LoginSession( uint id, ProtoType type ) : base( id, type )
+		protected LoginSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
 			this.RegMsgHandler( Protos.MsgID.ELs2DbQueryAccount, DB.instance.bizProcessor.OnLs2DbQueryAccount );
 			this.RegMsgHandler( Protos.MsgID.ELs2DbQueryLogin, DB.instance.bizProcessor.OnLs2DbQueryLogin );

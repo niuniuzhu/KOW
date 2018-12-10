@@ -15,6 +15,8 @@ namespace BattleServer
 		public uint id;
 		public string externalIP;
 		public int externalPort;
+		public string certPath;
+		public string certPass;
 		public string csIP;
 		public int csPort;
 		public int shellPort;
@@ -28,6 +30,8 @@ namespace BattleServer
 			this.id = json.GetUInt( "ID" );
 			this.externalIP = json.GetString( "externalIP" );
 			this.externalPort = json.GetInt( "externalPort" );
+			this.certPath = json.GetString( "certPath" );
+			this.certPass = json.GetString( "certPass" );
 			this.csIP = json.GetString( "csIP" );
 			this.csPort = json.GetInt( "csPort" );
 			this.shellPort = json.GetInt( "shellPort" );
@@ -41,6 +45,8 @@ namespace BattleServer
 			this.id = opts.id;
 			this.externalIP = opts.externalIP;
 			this.externalPort = opts.externalPort;
+			this.certPath = opts.certPath;
+			this.certPass = opts.certPass;
 			this.csIP = opts.csIP;
 			this.csPort = opts.csPort;
 			this.shellPort = opts.shellPort;

@@ -171,7 +171,7 @@ namespace Core.Net
 			if ( connID == ProtoConfig.INVALID_SESSION_ID && signature == ProtoConfig.HANDSHAKE_SIGNATURE )
 			{
 				//调用委托创建session
-				INetSession session = this.sessionCreater( ProtoType.KCP );
+				INetSession session = this.sessionCreater( ProtoType.KCP, null );
 				if ( session == null )
 					Logger.Error( "create session failed" );
 				else

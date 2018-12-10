@@ -8,6 +8,7 @@ using Shared.Net;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LoginServer
 {
@@ -49,9 +50,8 @@ namespace LoginServer
 		public ErrorCode Start()
 		{
 			this._heartBeater.Start( Consts.HEART_BEAT_INTERVAL, this.OnHeartBeat );
-			( ( WSListener )this.netSessionMgr.CreateListener( 0, 2048, ProtoType.WebSocket,
-																this.netSessionMgr.CreateClientSession ) )
-				.Start( this.config.cliPort );
+			X509Certificate2 certificate = new X509Certificate2( "Config/server.pfx", "159753" );
+			this.netSessionMgr.CreateListener( 0, 2048, ProtoType.WebSocket, certificate, this.netSessionMgr.CreateClientSession ).Start( this.config.cliPort );
 			this.netSessionMgr.CreateConnector<L2CSSession>( SessionType.ServerL2CS, this.config.csIP, this.config.csPort, ProtoType.TCP, 20480, 0 );
 			this.netSessionMgr.CreateConnector<L2DBSession>( SessionType.ServerL2DB, this.config.dbIP, this.config.dbPort, ProtoType.TCP, 20480, 0 );
 			this.redisWrapper.Connect( this.config.redisIP, this.config.redisPort, this.config.redisPwd );

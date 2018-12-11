@@ -43,11 +43,7 @@ export class WSConnector {
         this._socket.onmessage = this.OnReceived.bind(this);
         this._socket.onerror = this._onerror;
         this._socket.onclose = this._onclose;
-        this._socket.onopen = (e) => {
-            Logger.Log("open");
-            this._time = 0;
-            this._onopen(e);
-        };
+        this._socket.onopen = this.OnOpen.bind(this);
     }
     Send(msgType, message, rpcHandler = null, transTarget = Protos.MsgOpts.TransTarget.Undefine, nsid = Long.ZERO) {
         let opts = ProtoCreator.GetMsgOpts(message);
@@ -73,13 +69,17 @@ export class WSConnector {
         let data = new Uint8Array(msgData.length + 4);
         ByteUtils.Encode32u(data, 0, ProtoCreator.GetMsgID(message));
         data.set(msgData, 4);
-        this._socket.send(data);
+        this._socket.send(data.buffer);
     }
     AddListener(msgID, handler) {
         this._msgCenter.Register(msgID, handler);
     }
     RemoveListener(msgID, handler) {
         return this._msgCenter.Unregister(msgID, handler);
+    }
+    OnOpen(ev) {
+        this._time = 0;
+        this._onopen(ev);
     }
     OnReceived(ev) {
         let data = new Uint8Array(ev.data);

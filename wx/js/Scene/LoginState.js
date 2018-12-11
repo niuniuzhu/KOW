@@ -30,7 +30,7 @@ export class LoginState extends SceneState {
         const connector = new WSConnector();
         connector.onerror = (e) => this._ui.OnConnectToLSError(e);
         connector.onclose = () => Logger.Log("connection closed.");
-        connector.onopen = () => {
+        connector.onopen = (e) => {
             connector.Send(Protos.GC2LS_AskRegister, register, message => {
                 const resp = message;
                 this._ui.OnRegisterResult(resp);
@@ -46,7 +46,7 @@ export class LoginState extends SceneState {
         const connector = new WSConnector();
         connector.onerror = (e) => this._ui.OnConnectToLSError(e);
         connector.onclose = () => Logger.Log("connection closed.");
-        connector.onopen = () => {
+        connector.onopen = (e) => {
             connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
                 const resp = message;
                 Logger.Log("gcNID:" + resp.sessionID);
@@ -58,7 +58,7 @@ export class LoginState extends SceneState {
     LoginGS(ip, port, pwd, gcNID) {
         const connector = Global.connector.gsConnector;
         connector.onerror = (e) => this._ui.OnConnectToGSError(e);
-        connector.onopen = () => {
+        connector.onopen = (e) => {
             Logger.Log("GS Connected");
             const askLogin = ProtoCreator.Q_GC2GS_AskLogin();
             askLogin.pwd = pwd;

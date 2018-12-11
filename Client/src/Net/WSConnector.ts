@@ -91,7 +91,7 @@ export class WSConnector {
 		let data = new Uint8Array(msgData.length + 4);
 		ByteUtils.Encode32u(data, 0, <number>ProtoCreator.GetMsgID(message));
 		data.set(msgData, 4);
-		this._socket.send(data);
+		this._socket.send(data.buffer);
 	}
 
 	public AddListener(msgID: number, handler: (message: any) => void): void {

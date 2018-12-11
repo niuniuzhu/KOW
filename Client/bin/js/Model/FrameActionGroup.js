@@ -1,4 +1,4 @@
-define(["require", "exports", "./FrameAction", "../Libs/bytebuffer"], function (require, exports, FrameAction_1, ByteBuffer) {
+define(["require", "exports", "../Libs/bytebuffer", "./FrameAction"], function (require, exports, bytebuffer_1, FrameAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class FrameActionGroup {
@@ -9,7 +9,7 @@ define(["require", "exports", "./FrameAction", "../Libs/bytebuffer"], function (
         get frame() { return this._frame; }
         get numActions() { return this._frameActions.length; }
         DeSerialize(data) {
-            const buffer = new ByteBuffer();
+            const buffer = new bytebuffer_1.default();
             buffer.littleEndian = true;
             buffer.append(data);
             buffer.offset = 0;

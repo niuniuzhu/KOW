@@ -16,7 +16,9 @@ namespace Core.Net
 		{
 			this._socket = socket;
 			this._sslStream = new SslStream( new NetworkStream( this._socket ), false );
-		}
+		    this._sslStream.ReadTimeout = 5000;
+		    this._sslStream.WriteTimeout = 5000;
+        }
 
 		public void SetSocketOption( SocketOptionLevel optionLevel, SocketOptionName optionName, object optionValue ) =>
 			this._socket.SetSocketOption( optionLevel, optionName, optionValue );

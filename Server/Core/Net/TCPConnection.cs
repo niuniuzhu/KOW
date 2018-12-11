@@ -154,10 +154,8 @@ namespace Core.Net
 				this.OnError( $"remote:{this.remoteEndPoint} shutdown, code:{SocketError.NoData}" );
 				return;
 			}
-			int offset = recvEventArgs.Offset;
-			byte[] buffer = recvEventArgs.Buffer;
 			//写入缓冲区
-			this._cache.Write( buffer, offset, size );
+			this._cache.Write( recvEventArgs.Buffer, recvEventArgs.Offset, size );
 			//处理数据
 			this.ProcessData( this._cache );
 			//重新开始接收

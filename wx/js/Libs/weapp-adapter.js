@@ -1487,7 +1487,6 @@
 	      }
 
 	      var socketTask = _socketTask.get(this);
-
 	      socketTask.send({
 	        data: data
 	      });

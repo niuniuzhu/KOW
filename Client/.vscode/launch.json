@@ -8,8 +8,7 @@
 			"file": "${workspaceRoot}/bin/index.html",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
-				"--auto-open-devtools-for-tabs",
-				"--allow-insecure-localhost"
+				"--auto-open-devtools-for-tabs"
 			],
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",
@@ -33,11 +32,10 @@
 			"name": "kow(www.kow2019.com)",
 			"type": "chrome",
 			"request": "launch",
-			"url": "https://www.kow2019.com/kow/Client/bin/index.html?platform=1",
+			"url": "https://www.kow2019.com/g/index.html?platform=1",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
-				"--auto-open-devtools-for-tabs",
-				"--allow-insecure-localhost"
+				"--auto-open-devtools-for-tabs"
 			],
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",

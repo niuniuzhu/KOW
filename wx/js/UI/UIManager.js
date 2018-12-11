@@ -13,7 +13,6 @@ export class UIManager {
         fairygui.UIPackage.addPackage("res/ui/global");
         fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
         fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
-        fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
         this._main = new UIMain();
         this._login = new UILogin();
         this._matching = new UIMatching();

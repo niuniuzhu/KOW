@@ -37,12 +37,14 @@ export class WSConnector {
     Connect(ip, port) {
         if (this.connected)
             this.Close();
+        Logger.Log(`Begin connect to: wss://${ip}:${port}`);
         this._socket = new WebSocket(`wss://${ip}:${port}`);
         this._socket.binaryType = "arraybuffer";
         this._socket.onmessage = this.OnReceived.bind(this);
         this._socket.onerror = this._onerror;
         this._socket.onclose = this._onclose;
         this._socket.onopen = (e) => {
+            Logger.Log("open");
             this._time = 0;
             this._onopen(e);
         };

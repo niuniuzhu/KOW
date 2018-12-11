@@ -1,12 +1,11 @@
 {
 	"config": {
-		"ls_ip": "localhost",
+		"ls_ip": "www.kow2019.com",
 		"ls_port": 49996
 	},
 	"preloads": [
 		"global.bin,0",
 		"global_atlas0.png,1",
-		"global_lqz41s.wav,2",
 		"login.bin,0",
 		"login_atlas0.png,1",
 		"main.bin,0",

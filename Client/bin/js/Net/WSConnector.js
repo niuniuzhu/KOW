@@ -78,6 +78,7 @@ define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Log
         }
         OnReceived(ev) {
             let data = new Uint8Array(ev.data);
+            Logger_1.Logger.Log("recv:" + data.length);
             let msgID = ByteUtils_1.ByteUtils.Decode32u(data, 0);
             data.copyWithin(0, 4);
             let message = ProtoHelper_1.ProtoCreator.DecodeMsg(msgID, data, data.length - 4);

@@ -52,15 +52,13 @@ export class WSConnector {
 	public Connect(ip: string, port: number): void {
 		if (this.connected)
 			this.Close();
+		Logger.Log(`Begin connect to: wss://${ip}:${port}`);
 		this._socket = new WebSocket(`wss://${ip}:${port}`);
 		this._socket.binaryType = "arraybuffer";
 		this._socket.onmessage = this.OnReceived.bind(this);
 		this._socket.onerror = this._onerror;
 		this._socket.onclose = this._onclose;
-		this._socket.onopen = (e) => {
-			this._time = 0;
-			this._onopen(e)
-		};
+		this._socket.onopen = this.OnOpen.bind(this);
 	}
 
 	public Send(msgType: any, message: any, rpcHandler: (any) => any = null,
@@ -102,6 +100,11 @@ export class WSConnector {
 
 	public RemoveListener(msgID: number, handler: (message: any) => void): boolean {
 		return this._msgCenter.Unregister(msgID, handler);
+	}
+
+	private OnOpen(ev: MessageEvent): void {
+		this._time = 0;
+		this._onopen(ev);
 	}
 
 	private OnReceived(ev: MessageEvent): void {

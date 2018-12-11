@@ -261,6 +261,8 @@ namespace LoginServer.Biz
 			Protos.GC2LS_AskSmartLogin login = ( Protos.GC2LS_AskSmartLogin )message;
 			Protos.LS2GC_AskLoginRet gcLoginRet = ProtoCreator.R_GC2LS_AskLogin( login.Opts.Pid );
 
+			Logger.Log( $"GC {login.Name}, {session.connection.remoteEndPoint} ask login" );
+
 			//检测用户名的合法性
 			if ( !this.CheckUsername( login.Name ) )
 			{

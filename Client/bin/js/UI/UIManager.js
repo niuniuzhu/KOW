@@ -11,7 +11,6 @@ define(["require", "exports", "./UILogin", "./UIMain", "./UIMatching", "./UILoad
             fairygui.UIPackage.addPackage("res/ui/global");
             fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
             fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
-            fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
             this._main = new UIMain_1.UIMain();
             this._login = new UILogin_1.UILogin();
             this._matching = new UIMatching_1.UIMatching();

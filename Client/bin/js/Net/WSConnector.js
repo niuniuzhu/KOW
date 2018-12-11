@@ -34,15 +34,13 @@ define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Log
         Connect(ip, port) {
             if (this.connected)
                 this.Close();
+            Logger_1.Logger.Log(`Begin connect to: wss://${ip}:${port}`);
             this._socket = new WebSocket(`wss://${ip}:${port}`);
             this._socket.binaryType = "arraybuffer";
             this._socket.onmessage = this.OnReceived.bind(this);
             this._socket.onerror = this._onerror;
             this._socket.onclose = this._onclose;
-            this._socket.onopen = (e) => {
-                this._time = 0;
-                this._onopen(e);
-            };
+            this._socket.onopen = this.OnOpen.bind(this);
         }
         Send(msgType, message, rpcHandler = null, transTarget = protos_1.Protos.MsgOpts.TransTarget.Undefine, nsid = Long.ZERO) {
             let opts = ProtoHelper_1.ProtoCreator.GetMsgOpts(message);
@@ -76,9 +74,12 @@ define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Log
         RemoveListener(msgID, handler) {
             return this._msgCenter.Unregister(msgID, handler);
         }
+        OnOpen(ev) {
+            this._time = 0;
+            this._onopen(ev);
+        }
         OnReceived(ev) {
             let data = new Uint8Array(ev.data);
-            Logger_1.Logger.Log("recv:" + data.length);
             let msgID = ByteUtils_1.ByteUtils.Decode32u(data, 0);
             data.copyWithin(0, 4);
             let message = ProtoHelper_1.ProtoCreator.DecodeMsg(msgID, data, data.length - 4);

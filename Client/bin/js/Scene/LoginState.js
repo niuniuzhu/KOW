@@ -23,7 +23,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
             const connector = new WSConnector_1.WSConnector();
             connector.onerror = (e) => this._ui.OnConnectToLSError(e);
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
-            connector.onopen = () => {
+            connector.onopen = (e) => {
                 connector.Send(protos_1.Protos.GC2LS_AskRegister, register, message => {
                     const resp = message;
                     this._ui.OnRegisterResult(resp);
@@ -39,7 +39,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
             const connector = new WSConnector_1.WSConnector();
             connector.onerror = (e) => this._ui.OnConnectToLSError(e);
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
-            connector.onopen = () => {
+            connector.onopen = (e) => {
                 connector.Send(protos_1.Protos.GC2LS_AskSmartLogin, login, message => {
                     const resp = message;
                     Logger_1.Logger.Log("gcNID:" + resp.sessionID);
@@ -51,7 +51,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
         LoginGS(ip, port, pwd, gcNID) {
             const connector = Global_1.Global.connector.gsConnector;
             connector.onerror = (e) => this._ui.OnConnectToGSError(e);
-            connector.onopen = () => {
+            connector.onopen = (e) => {
                 Logger_1.Logger.Log("GS Connected");
                 const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();
                 askLogin.pwd = pwd;

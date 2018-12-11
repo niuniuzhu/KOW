@@ -1,10 +1,10 @@
 {
     "gsID": 30001,
     "name": "local",
-    "externalIP": "localhost",
+    "externalIP": "www.kow2019.com",
     "externalPort": 30001,
     "certPath": "Config/server.pfx",
-    "certPass": "159753",
+    "certPass": "494e95674l66b0",
     "shellPort": 50002,
     "password": "123456",
     "maxConnection": 10000,

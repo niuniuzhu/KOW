@@ -1,9 +1,9 @@
 {
     "ID": 40001,
-    "externalIP": "localhost",
+    "externalIP": "www.kow2019.com",
     "externalPort": 40001,
     "certPath": "Config/server.pfx",
-    "certPass": "159753",
+    "certPass": "494e95674l66b0",
     "csIP": "127.0.0.1",
     "csPort": 10003,
     "shellPort": 50003,

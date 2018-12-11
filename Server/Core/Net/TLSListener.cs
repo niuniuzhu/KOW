@@ -14,11 +14,17 @@ namespace Core.Net
 		public SessionCreater sessionCreater { get; set; }
 		public int recvBufSize { get; set; }
 
-		public X509Certificate2 certificate;
+        public bool noDelay
+        {
+            get => this._socket.NoDelay;
+            set => this._socket.NoDelay = value;
+        }
+
+        public X509Certificate2 certificate;
 
 		protected virtual ProtoType protoType => ProtoType.TCP;
 
-		private TcpListener _socket;
+		private Socket _socket;
 
 		public TLSListener( uint id ) => this.id = id;
 
@@ -35,7 +41,9 @@ namespace Core.Net
 		{
 			if ( this._socket == null )
 				return false;
-			this._socket.Stop();
+            if ( this._socket.Connected)
+			    this._socket.Shutdown(SocketShutdown.Both);
+            this._socket.Close();
 			this._socket = null;
 			return true;
 		}
@@ -46,12 +54,37 @@ namespace Core.Net
 				throw new Exception( "certificate is null" );
 
 			Logger.Log( $"listen port: {port}" );
-			try
-			{
-				this._socket = new TcpListener( IPAddress.Any, port );
-				this._socket.Server.NoDelay = true;
-				this._socket.Start( 32 );
-				this._socket.BeginAcceptSocket( this.ProcessAccept, this._socket );
+            try
+            {
+                this._socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+            }
+            catch (SocketException e)
+            {
+                Logger.Error($"create socket error, code:{e.SocketErrorCode}");
+                return false;
+            }
+            this.noDelay = true;
+            try
+            {
+                this._socket.Bind(new IPEndPoint(IPAddress.Any, port));
+            }
+            catch (SocketException e)
+            {
+                Logger.Error($"socket bind at {port} fail, code:{e.SocketErrorCode}");
+                return false;
+            }
+            try
+            {
+                this._socket.Listen(32);
+            }
+            catch (SocketException e)
+            {
+                Logger.Error($"socket listen at {port} fail, code:{e.SocketErrorCode}");
+                return false;
+            }
+            try
+            { 
+                this._socket.BeginAccept( this.ProcessAccept, this._socket );
 			}
 			catch ( SocketException e )
 			{
@@ -63,11 +96,11 @@ namespace Core.Net
 
 		private void ProcessAccept( IAsyncResult ar )
 		{
-			TcpListener socket = ( TcpListener )ar.AsyncState;
+			Socket socket = (Socket)ar.AsyncState;
 			Socket client = null;
 			try
 			{
-				client = socket.EndAcceptSocket( ar );
+				client = socket.EndAccept( ar );
 			}
 			catch ( SocketException e )
 			{
@@ -80,7 +113,7 @@ namespace Core.Net
 			INetSession session = this.CreateSession( client );
 			this.OnSessionCreated?.Invoke( session );
 
-			socket.BeginAcceptSocket( this.ProcessAccept, socket );
+			socket.BeginAccept( this.ProcessAccept, socket );
 		}
 
 		protected virtual INetSession CreateSession( Socket client )

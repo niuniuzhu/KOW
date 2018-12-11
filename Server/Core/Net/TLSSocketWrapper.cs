@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Core.Net
 {
-	public class TLSSocketWrapper : ISocketWrapper
+    public class TLSSocketWrapper : ISocketWrapper
 	{
 		public bool Connected => this._socket?.Connected ?? false;
 
@@ -24,7 +25,7 @@ namespace Core.Net
 			this._socket.SetSocketOption( optionLevel, optionName, optionValue );
 
 		public void BeginAuthenticate( X509Certificate2 certificate, AsyncCallback callback ) =>
-			this._sslStream.BeginAuthenticateAsServer( certificate, false, true, callback, this );
+			this._sslStream.BeginAuthenticateAsServer( certificate, false, SslProtocols.Tls12, false, callback, this );
 
 		public void EndAuthenticate( IAsyncResult ar ) =>
 			this._sslStream.EndAuthenticateAsServer( ar );

@@ -5,7 +5,7 @@
 			"name": "kow(local)",
 			"type": "chrome",
 			"request": "launch",
-			"file": "${workspaceRoot}/bin/index.html",
+			"file": "${workspaceRoot}/bin/index.html?platform=1",
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
 				"--auto-open-devtools-for-tabs"

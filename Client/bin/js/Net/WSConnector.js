@@ -66,7 +66,7 @@ define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Log
             let data = new Uint8Array(msgData.length + 4);
             ByteUtils_1.ByteUtils.Encode32u(data, 0, ProtoHelper_1.ProtoCreator.GetMsgID(message));
             data.set(msgData, 4);
-            this._socket.send(data);
+            this._socket.send(data.buffer);
         }
         AddListener(msgID, handler) {
             this._msgCenter.Register(msgID, handler);

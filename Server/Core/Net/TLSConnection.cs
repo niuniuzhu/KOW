@@ -3,7 +3,6 @@ using Core.Structure;
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Core.Net
@@ -92,7 +91,7 @@ namespace Core.Net
             {
                 this.socket.BeginAuthenticate( this.certificate, this.ProcessAuthentication );
             }
-            catch ( AuthenticationException e )
+            catch ( Exception e )
             {
                 this.OnError( $"authenticate error, code:{e}" );
             }

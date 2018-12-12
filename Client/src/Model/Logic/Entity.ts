@@ -19,6 +19,7 @@ export class Entity implements ISnapshotable {
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
 	public get def(): Hashtable { return this._def; }
+	public get fsm(): FSM { return this._fsm; }
 
 	public readonly attribute: Attribute = new Attribute();
 	public position: FVec2 = FVec2.zero;
@@ -80,7 +81,7 @@ export class Entity implements ISnapshotable {
 		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
 		writer.float(this._moveDirection.x.toNumber()).float(this._moveDirection.y.toNumber());
 		writer.int32(this._fsm.currentState.type);
-		writer.int32((<EntityState>this._fsm.currentState).time);
+		writer.float((<EntityState>this._fsm.currentState).time.toNumber());
 		const count = this.attribute.count;
 		writer.int32(count);
 		this.attribute.Foreach((v, k, map) => {
@@ -99,18 +100,23 @@ export class Entity implements ISnapshotable {
 		this.direction = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this._moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this._fsm.ChangeState(reader.int32(), null, true);
-		(<EntityState>this._fsm.currentState).time = reader.int32();
+		(<EntityState>this._fsm.currentState).time = new Decimal(reader.float());
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
 		}
 	}
 
-	public Update(dt: number): void {
+	public Update(dt: Decimal): void {
 		this._fsm.Update(dt);
 		this.MoveStep(this._moveDirection, dt);
 	}
 
+	/**
+	 * 开始移动
+	 * @param dx x分量
+	 * @param dy y分量
+	 */
 	public BeginMove(dx: number, dy: number): void {
 		this._moveDirection = new FVec2(new Decimal(dx), new Decimal(dy));
 		if (this._moveDirection.SqrMagnitude().lessThan(MathUtils.D_SMALL))
@@ -119,7 +125,7 @@ export class Entity implements ISnapshotable {
 			this._fsm.ChangeState(EntityState.Type.Move);
 	}
 
-	protected MoveStep(direction: FVec2, dt: number): void {
+	protected MoveStep(direction: FVec2, dt: Decimal): void {
 		if (direction.SqrMagnitude().lessThan(MathUtils.D_SMALL))
 			return;
 		const speed = this.attribute.Get(EAttr.MOVE_SPEED);

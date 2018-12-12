@@ -63,11 +63,12 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
             if (!this._active)
                 return;
             if (!this._joystick.visible) {
-                this._touchTime += dt;
                 if (this._touchTime >= GestureState.TIME_TO_SHOW_JOYSTICK) {
                     this.ShowJoystick(this._touchPosition);
                     this._joystick.Reset();
+                    return;
                 }
+                this._touchTime += dt;
             }
         }
     }

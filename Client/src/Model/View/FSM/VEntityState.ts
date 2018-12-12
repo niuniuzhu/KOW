@@ -15,13 +15,40 @@ export class VEntityState extends FSMState {
 	 * 所属实体
 	 */
 	public get owner(): VEntity { return this._owner; }
+	/**
+	 * 获取状态运行时间
+	 */
+	public get time(): number { return this._time; }
+	/**
+	 * 设置状态运行时间
+	 */
+	public set time(value: number) {
+		if (this._time == value)
+			return;
+		this._time = value;
+		this.OnStateTimeChanged();
+	}
 
+	/**
+	 * 所属实体
+	 */
+	private _owner: VEntity;
+	/**
+	 * 状态持续时长
+	 */
+	private _duration: number;
+	/**
+	 * 动画事件是否自动适配状态时长
+	 */
+	private _autoScaleAniTime: boolean;
+	/**
+	 * 动画播放模式
+	 */
+	private _animationPlayMode;
 	/**
 	 * 状态的运行时间
 	 */
-	public time: number;
-
-	private _owner: VEntity;
+	private _time: number;
 
 	constructor(type: number, owner: VEntity) {
 		super(type);
@@ -33,5 +60,9 @@ export class VEntityState extends FSMState {
 		//播放动画
 		const aniName = Hashtable.GetString(def, "animation");
 		this.owner.PlayAnim(aniName);
+	}
+
+	protected OnStateTimeChanged(): void {
+		//can be overrided
 	}
 }

@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Utils/Logger", "../Scene/SceneManager", "./Logic/Battle", "./View/VBattle", "./FrameActionGroup", "../RC/Collections/Queue"], function (require, exports, Global_1, protos_1, Connector_1, ProtoHelper_1, Logger_1, SceneManager_1, Battle_1, VBattle_1, FrameActionGroup_1, Queue_1) {
+define(["require", "exports", "../Global", "../Libs/decimal", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Collections/Queue", "../RC/Utils/Logger", "../Scene/SceneManager", "./FrameActionGroup", "./Logic/Battle", "./View/VBattle"], function (require, exports, Global_1, decimal_1, protos_1, Connector_1, ProtoHelper_1, Queue_1, Logger_1, SceneManager_1, FrameActionGroup_1, Battle_1, VBattle_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleManager {
@@ -37,7 +37,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         Update(dt) {
             if (!this._init)
                 return;
-            this._lBattle.Update(dt);
+            this._lBattle.Update(new decimal_1.default(dt));
             this._vBattle.Update(dt);
         }
         RequestSnapshot(callback) {

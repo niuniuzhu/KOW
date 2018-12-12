@@ -1,4 +1,5 @@
 import { FSMState } from "./FSMState";
+import Decimal from "../../Libs/decimal";
 
 export class FSM {
 	private readonly _stateMap: Map<number, FSMState>;
@@ -52,7 +53,7 @@ export class FSM {
 		return true;
 	}
 
-	public Update(dt: number): void {
+	public Update(dt: Decimal | number): void {
 		if (this.globalState != null)
 			this.globalState.Update(dt);
 		if (this._currentState != null)

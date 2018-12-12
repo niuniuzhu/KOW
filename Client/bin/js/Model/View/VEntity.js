@@ -94,7 +94,7 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             this._logicRot = this.rotation;
             const moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             this._fsm.ChangeState(reader.int32(), null);
-            this._fsm.currentState.time = reader.int32();
+            this._fsm.currentState.time = reader.float();
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
@@ -111,7 +111,7 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
                 this._logicRot = 360 - this._logicRot;
             const moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             this._fsm.ChangeState(reader.int32(), null);
-            this._fsm.currentState.time = reader.int32();
+            this._fsm.currentState.time = reader.float();
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));

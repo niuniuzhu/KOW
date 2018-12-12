@@ -9,10 +9,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._timeout = 0;
             this._mapID = 0;
             this._frame = 0;
-            this._msPerFrame = 0;
-            this._nextKeyFrame = 0;
-            this._logicElapsed = 0;
-            this._realElapsed = 0;
             this._destroied = false;
             this._frameActionGroups = new Queue_1.default();
             this._entities = [];
@@ -32,7 +28,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._snapshotStep = battleInfo.snapshotStep;
             this._timeout = battleInfo.battleTime;
             this._mapID = battleInfo.mapID;
-            this._msPerFrame = 1000 / this._frameRate;
+            this._msPerFrame = new decimal_1.default(1000 / this._frameRate);
             this._cdef = CDefs_1.CDefs.GetMap(this._mapID);
             this._def = Defs_1.Defs.GetMap(this._mapID);
             const bWidth = Hashtable_1.Hashtable.GetNumber(this._cdef, "width");
@@ -51,23 +47,23 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._idToEntity.clear();
             this._frame = 0;
             this._nextKeyFrame = 0;
-            this._logicElapsed = 0;
-            this._realElapsed = 0;
+            this._logicElapsed = null;
+            this._realElapsed = null;
             this._frameActionGroups.clear();
             this._def = null;
             this._bounds = null;
         }
         Update(dt) {
             this.Chase(this._frameActionGroups, true, true);
-            this._realElapsed += dt;
+            this._realElapsed = this._realElapsed.add(dt);
             if (this.frame < this._nextKeyFrame) {
-                this._logicElapsed += dt;
-                while (this._logicElapsed >= this._msPerFrame) {
+                this._logicElapsed = this._logicElapsed.add(dt);
+                while (this._logicElapsed.greaterThanOrEqualTo(this._msPerFrame)) {
                     if (this.frame >= this._nextKeyFrame)
                         break;
                     this.UpdateLogic(this._msPerFrame, true, true);
-                    this._realElapsed = 0;
-                    this._logicElapsed -= this._msPerFrame;
+                    this._realElapsed = new decimal_1.default(0);
+                    this._logicElapsed = this._logicElapsed.sub(this._msPerFrame);
                 }
             }
         }

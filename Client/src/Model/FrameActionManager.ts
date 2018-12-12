@@ -3,7 +3,6 @@ import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Vec2 } from "../RC/Math/Vec2";
-import { Logger } from "../RC/Utils/Logger";
 import { Timer } from "../RC/Utils/Timer";
 
 enum InputFlag {

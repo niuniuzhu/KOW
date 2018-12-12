@@ -1,14 +1,15 @@
 import { Global } from "../Global";
+import Decimal from "../Libs/decimal";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
+import Queue from "../RC/Collections/Queue";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { BattleInfo } from "./BattleInfo";
+import { FrameActionGroup } from "./FrameActionGroup";
 import { Battle } from "./Logic/Battle";
 import { VBattle } from "./View/VBattle";
-import { FrameActionGroup } from "./FrameActionGroup";
-import Queue from "../RC/Collections/Queue";
 
 /**
  * 战场管理器
@@ -79,7 +80,7 @@ export class BattleManager {
 	public Update(dt: number): void {
 		if (!this._init)
 			return;
-		this._lBattle.Update(dt);
+		this._lBattle.Update(new Decimal(dt));
 		this._vBattle.Update(dt);
 	}
 

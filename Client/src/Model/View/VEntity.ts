@@ -136,7 +136,7 @@ export class VEntity {
 		//move direction
 		const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this._fsm.ChangeState(reader.int32(), null);
-		(<VEntityState>this._fsm.currentState).time = reader.int32();
+		(<VEntityState>this._fsm.currentState).time = reader.float();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
@@ -158,7 +158,7 @@ export class VEntity {
 		//move direction
 		const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this._fsm.ChangeState(reader.int32(), null);
-		(<VEntityState>this._fsm.currentState).time = reader.int32();
+		(<VEntityState>this._fsm.currentState).time = reader.float();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), new Decimal(reader.float()));

@@ -1,4 +1,5 @@
 import { Global } from "../Global";
+import Decimal from "../Libs/decimal";
 import { FrameAciontManager } from "../Model/FrameActionManager";
 import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";

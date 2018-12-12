@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="yiq63fi0" jpegQuality="80" compressPNG="true">
+  <resources>
+    <image id="p7qk1k" name="ground.png" path="/maps/m0/" scale=""/>
+    <component id="p7qk1m" name="m0.xml" path="/maps/m0/" exported="true"/>
+    <image id="avn11q" name="草地256.png" path="/maps/m0/" scale="tile"/>
+    <component id="p7qk1o" name="e0.xml" path="/entities/" exported="true"/>
+    <image id="avn10" name="石板拼图 副本.png" path="/maps/m0/" scale="" qualityOption="custom" quality="50"/>
+  </resources>
+  <publish name="assets"/>
+</packageDescription>

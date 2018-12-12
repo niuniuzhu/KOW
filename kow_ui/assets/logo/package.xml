@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="05ewitws" jpegQuality="80" compressPNG="true">
+  <resources>
+    <component id="p7qk1" name="Main.xml" path="/" exported="true"/>
+    <movieclip id="p7qk2" name="mat_ani.jta" path="/"/>
+    <image id="v43z6" name="loader_01.png" path="/matching_ani/"/>
+    <image id="v43z7" name="loader_02.png" path="/matching_ani/"/>
+    <image id="v43z8" name="loader_03.png" path="/matching_ani/"/>
+    <image id="v43z9" name="loader_04.png" path="/matching_ani/"/>
+    <image id="v43za" name="loader_05.png" path="/matching_ani/"/>
+    <image id="v43zb" name="loader_06.png" path="/matching_ani/"/>
+    <image id="v43zc" name="loader_07.png" path="/matching_ani/"/>
+    <image id="v43zd" name="loader_08.png" path="/matching_ani/"/>
+    <image id="v43ze" name="loader_09.png" path="/matching_ani/"/>
+    <image id="v43zf" name="loader_10.png" path="/matching_ani/"/>
+    <image id="v43zg" name="loader_11.png" path="/matching_ani/"/>
+    <image id="v43zh" name="loader_12.png" path="/matching_ani/"/>
+    <image id="v43zi" name="loader_13.png" path="/matching_ani/"/>
+    <image id="v43zj" name="loader_14.png" path="/matching_ani/"/>
+    <image id="v43zk" name="loader_15.png" path="/matching_ani/"/>
+    <image id="v43zl" name="loader_16.png" path="/matching_ani/"/>
+    <image id="v43zm" name="loader_17.png" path="/matching_ani/"/>
+    <image id="v43zn" name="loader_18.png" path="/matching_ani/"/>
+    <image id="v43zo" name="loader_19.png" path="/matching_ani/"/>
+    <component id="p7qk3" name="loading.xml" path="/"/>
+    <image id="p7qk4" name="bg01a.png" path="/assets/"/>
+    <component id="p7qk5" name="loading2.xml" path="/"/>
+    <image id="ia2hp" name="gamelogo.png" path="/assets/"/>
+  </resources>
+  <publish name="logo"/>
+</packageDescription>

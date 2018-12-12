@@ -1,8 +1,9 @@
-define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState", "../../../RC/Utils/Hashtable"], function (require, exports, decimal_1, FSMState_1, Hashtable_1) {
+define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState", "../../../RC/Utils/Hashtable", "../../EventTree/EventTreeBase"], function (require, exports, decimal_1, FSMState_1, Hashtable_1, EventTreeBase_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Type;
     (function (Type) {
+        Type[Type["None"] = -1] = "None";
         Type[Type["Idle"] = 0] = "Idle";
         Type[Type["Move"] = 1] = "Move";
         Type[Type["Attack"] = 2] = "Attack";
@@ -17,25 +18,63 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState
         Op[Op["Pow"] = 4] = "Pow";
         Op[Op["Exp"] = 5] = "Exp";
     })(Op || (Op = {}));
+    var StateAttr;
+    (function (StateAttr) {
+        StateAttr[StateAttr["DisableMove"] = 0] = "DisableMove";
+        StateAttr[StateAttr["DisableTurn"] = 1] = "DisableTurn";
+        StateAttr[StateAttr["SuperArmor"] = 2] = "SuperArmor";
+        StateAttr[StateAttr["Invulnerability"] = 3] = "Invulnerability";
+        StateAttr[StateAttr["ClearLastBullets"] = 4] = "ClearLastBullets";
+    })(StateAttr || (StateAttr = {}));
     class EntityState extends FSMState_1.FSMState {
         constructor(type, owner) {
             super(type);
+            this._rootEvent = new EventTreeBase_1.EventTreeBase();
             this._owner = owner;
+            this._def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
+            const eventDef = Hashtable_1.Hashtable.GetArray(this._def, "events");
+            this._rootEvent.Set(eventDef);
         }
         get owner() { return this._owner; }
+        get time() { return this._time; }
+        set time(value) {
+            if (this._time.equals(value))
+                return;
+            this._time = value;
+            this.OnStateTimeChanged();
+        }
         OnEnter(param) {
-            const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this.owner.def, "states"), this.type.toString());
-            const attrs = Hashtable_1.Hashtable.GetArray(def, "attrs");
-            const ops = Hashtable_1.Hashtable.GetArray(def, "ops");
-            const values = Hashtable_1.Hashtable.GetArray(def, "values");
+            this.HandleAttrs();
+            this.HandleEvents();
+        }
+        OnExit() {
+            this._time = new decimal_1.default(0);
+        }
+        OnUpdate(dt) {
+            if (this._time.greaterThanOrEqualTo(this._duration)) {
+                if (this._defaultConnectState != Type.None) {
+                    this._owner.fsm.ChangeState(this._defaultConnectState, null, true);
+                }
+            }
+            this._time = this._time.add(dt);
+            this._rootEvent.Update(dt);
+        }
+        OnStateTimeChanged() {
+        }
+        HandleAttrs() {
+            const attrs = Hashtable_1.Hashtable.GetArray(this._def, "attrs");
+            const ops = Hashtable_1.Hashtable.GetArray(this._def, "ops");
+            const values = Hashtable_1.Hashtable.GetArray(this._def, "values");
             const count = attrs.length;
             for (let i = 0; i < count; ++i) {
                 this.ActiveAttr(attrs[i], ops[i], new decimal_1.default(values[i]));
             }
-            const events = Hashtable_1.Hashtable.GetArray(def, "events");
         }
         ActiveAttr(attr, op, value) {
             switch (op) {
+                case Op.Equal:
+                    this.owner.attribute.Set(attr, value);
+                    break;
                 case Op.Add:
                     this.owner.attribute.Add(attr, value);
                     break;
@@ -55,9 +94,12 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState
         }
         DeactiveAttr(attr, op, value) {
         }
+        HandleEvents() {
+        }
     }
     EntityState.Type = Type;
     EntityState.Op = Op;
+    EntityState.StateAttr = StateAttr;
     exports.EntityState = EntityState;
 });
 //# sourceMappingURL=EntityState.js.map

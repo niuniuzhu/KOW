@@ -1,6 +1,6 @@
-import { SceneState } from "./SceneState";
-import { UIBattle } from "../UI/UIBattle";
 import { Global } from "../Global";
+import { UIBattle } from "../UI/UIBattle";
+import { SceneState } from "./SceneState";
 
 export class BattleState extends SceneState {
 	private readonly _ui: UIBattle;

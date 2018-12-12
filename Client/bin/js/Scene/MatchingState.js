@@ -1,4 +1,4 @@
-define(["require", "exports", "../Net/Connector", "../Libs/protos", "../Net/ProtoHelper", "./SceneState", "../RC/Utils/Logger", "./SceneManager", "../Global"], function (require, exports, Connector_1, protos_1, ProtoHelper_1, SceneState_1, Logger_1, SceneManager_1, Global_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Utils/Logger", "./SceneManager", "./SceneState"], function (require, exports, Global_1, protos_1, Connector_1, ProtoHelper_1, Logger_1, SceneManager_1, SceneState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MatchingState extends SceneState_1.SceneState {
@@ -17,8 +17,6 @@ define(["require", "exports", "../Net/Connector", "../Libs/protos", "../Net/Prot
         }
         OnExit() {
             super.OnExit();
-        }
-        OnUpdate(dt) {
         }
         OnUpdateRoomInfo(message) {
             const roomInfo = message;

@@ -1,11 +1,11 @@
-import { Connector } from "../Net/Connector";
-import { Protos } from "../Libs/protos";
-import { ProtoCreator } from "../Net/ProtoHelper";
-import { SceneState } from "./SceneState";
-import { UIMatching } from "../UI/UIMatching";
-import { Logger } from "../RC/Utils/Logger";
-import { SceneManager } from "./SceneManager";
 import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
+import { Connector } from "../Net/Connector";
+import { ProtoCreator } from "../Net/ProtoHelper";
+import { Logger } from "../RC/Utils/Logger";
+import { UIMatching } from "../UI/UIMatching";
+import { SceneManager } from "./SceneManager";
+import { SceneState } from "./SceneState";
 
 /**
  * 匹配状态
@@ -38,9 +38,6 @@ export class MatchingState extends SceneState {
 
 	protected OnExit(): void {
 		super.OnExit();
-	}
-
-	protected OnUpdate(dt: number): void {
 	}
 
 	private OnUpdateRoomInfo(message: any): void {

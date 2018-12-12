@@ -35,10 +35,10 @@ export class Battle implements ISnapshotable {
 	public get frame(): number { return this._frame; }
 	public get bounds(): FRect { return this._bounds; }
 
-	private _msPerFrame: number = 0;
-	private _nextKeyFrame: number = 0;
-	private _logicElapsed: number = 0;
-	private _realElapsed: number = 0;
+	private _msPerFrame: Decimal;
+	private _logicElapsed: Decimal;
+	private _realElapsed: Decimal;
+	private _nextKeyFrame: number;
 	private _def: Hashtable;
 	private _cdef: Hashtable;
 	private _bounds: FRect;
@@ -59,7 +59,7 @@ export class Battle implements ISnapshotable {
 		this._snapshotStep = battleInfo.snapshotStep;
 		this._timeout = battleInfo.battleTime;
 		this._mapID = battleInfo.mapID
-		this._msPerFrame = 1000 / this._frameRate;
+		this._msPerFrame = new Decimal(1000 / this._frameRate);
 
 		this._cdef = CDefs.GetMap(this._mapID);
 		this._def = Defs.GetMap(this._mapID);
@@ -86,8 +86,8 @@ export class Battle implements ISnapshotable {
 		this._idToEntity.clear();
 		this._frame = 0;
 		this._nextKeyFrame = 0;
-		this._logicElapsed = 0;
-		this._realElapsed = 0;
+		this._logicElapsed = null;
+		this._realElapsed = null;
 		this._frameActionGroups.clear();
 		this._def = null;
 		this._bounds = null;
@@ -97,21 +97,21 @@ export class Battle implements ISnapshotable {
 	 * 心跳更新
 	 * @param dt 上次更新到当前流逝的时间
 	 */
-	public Update(dt: number): void {
+	public Update(dt: Decimal): void {
 		//追帧
 		this.Chase(this._frameActionGroups, true, true);
 
-		this._realElapsed += dt;
+		this._realElapsed = this._realElapsed.add(dt);
 		if (this.frame < this._nextKeyFrame) {
-			this._logicElapsed += dt;
+			this._logicElapsed = this._logicElapsed.add(dt);
 
-			while (this._logicElapsed >= this._msPerFrame) {
+			while (this._logicElapsed.greaterThanOrEqualTo(this._msPerFrame)) {
 				if (this.frame >= this._nextKeyFrame)
 					break;
 
 				this.UpdateLogic(this._msPerFrame, true, true);
-				this._realElapsed = 0;
-				this._logicElapsed -= this._msPerFrame;
+				this._realElapsed = new Decimal(0);
+				this._logicElapsed = this._logicElapsed.sub(this._msPerFrame);
 			}
 		}
 	}
@@ -120,7 +120,7 @@ export class Battle implements ISnapshotable {
 	 * 更新逻辑帧
 	 * @param dt 上一帧到当前帧流逝的时间
 	 */
-	private UpdateLogic(dt: number, updateView: boolean, commitSnapshot: boolean): void {
+	private UpdateLogic(dt: Decimal, updateView: boolean, commitSnapshot: boolean): void {
 		++this._frame;
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++) {

@@ -259,5 +259,7 @@ paket-files/
 __pycache__/
 *.pyc
 
+# custom
 .svn/
 UI_design/
+Server/Shared/Config/secret.json

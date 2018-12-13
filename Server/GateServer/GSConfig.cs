@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO;
 using Core.Misc;
 
 namespace GateServer
@@ -34,8 +35,6 @@ namespace GateServer
 			this.name = opts.name;
 			this.externalIP = opts.externalIP;
 			this.externalPort = opts.externalPort;
-			this.certPath = opts.certPath;
-			this.certPass = opts.certPass;
 			this.shellPort = opts.shellPort;
 			this.password = opts.password;
 			this.maxConnection = opts.maxConnection;
@@ -44,7 +43,10 @@ namespace GateServer
 			this.reportInterval = opts.reportInterval;
 			this.pingInterval = opts.pingInterval;
 			this.gcLive = opts.gcLive;
-		}
+		    Hashtable secretDef = (Hashtable)MiniJSON.JsonDecode(File.ReadAllText(opts.secret));
+		    this.certPath = secretDef.GetString("certPath");
+		    this.certPass = secretDef.GetString("certPass");
+        }
 
 		public void CopyFromJson( Hashtable json )
 		{
@@ -52,8 +54,6 @@ namespace GateServer
 			this.name = json.GetString( "name" );
 			this.externalIP = json.GetString( "externalIP" );
 			this.externalPort = json.GetInt( "externalPort" );
-			this.certPath = json.GetString( "certPath" );
-			this.certPass = json.GetString( "certPass" );
 			this.shellPort = json.GetInt( "shellPort" );
 			this.password = json.GetString( "password" );
 			this.maxConnection = json.GetInt( "maxConnection" );
@@ -62,6 +62,9 @@ namespace GateServer
 			this.reportInterval = json.GetLong( "reportInterval" );
 			this.pingInterval = json.GetLong( "pingInterval" );
 			this.gcLive = json.GetLong( "gcLive" );
-		}
+		    Hashtable secretDef = (Hashtable)MiniJSON.JsonDecode(File.ReadAllText(json.GetString("secret")));
+		    this.certPath = secretDef.GetString("certPath");
+		    this.certPass = secretDef.GetString("certPass");
+        }
 	}
 }

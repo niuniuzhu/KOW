@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="110,110">
-  <displayList>
-    <image id="n0_v43z" name="n0" src="v43zg" fileName="assets/jinengkuang.png" xy="0,0"/>
-    <image id="n1_v43z" name="n1" src="v43z4" fileName="assets/gongji.png" xy="19,20"/>
-  </displayList>
-</component>

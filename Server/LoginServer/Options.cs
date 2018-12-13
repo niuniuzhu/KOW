@@ -63,17 +63,11 @@ namespace LoginServer
 			HelpText = "Password for redis server." )]
 		public string redisPwd { get; set; }
 
-		[Option( "cert_path",
-			Default = "Config/server.pfx",
+		[Option( "secret",
+			Default = "Config/secret.json",
 			SetName = "bysetting",
 			HelpText = "Certificate path." )]
-		public string certPath { get; set; }
-
-		[Option( "cert_password",
-			Default = "159753",
-			SetName = "bysetting",
-			HelpText = "Certificate password." )]
-		public string certPass { get; set; }
+		public string secret { get; set; }
 
 		[Option( "ping_interval",
 			Default = 10000,

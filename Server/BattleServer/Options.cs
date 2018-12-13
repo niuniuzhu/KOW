@@ -45,19 +45,13 @@ namespace BattleServer
 			HelpText = "Exposed gate server port." )]
 		public int externalPort { get; set; }
 
-		[Option( "cert_path",
-			Default = "Config/server.pfx",
-			SetName = "bysetting",
-			HelpText = "Certificate path." )]
-		public string certPath { get; set; }
+	    [Option("secret",
+	        Default = "Config/secret.json",
+	        SetName = "bysetting",
+	        HelpText = "Certificate path.")]
+	    public string secret { get; set; }
 
-		[Option( "cert_password",
-			Default = "159753",
-			SetName = "bysetting",
-			HelpText = "Certificate password." )]
-		public string certPass { get; set; }
-
-		[Option( "cs_ip",
+        [Option( "cs_ip",
 			Default = "127.0.0.1",
 			SetName = "bysetting",
 			HelpText = "IPaddress of central server." )]

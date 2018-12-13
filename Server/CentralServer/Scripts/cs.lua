@@ -10,5 +10,3 @@ cs = CS.CentralServer.CS.instance
 u = cs.userMgr
 m = cs.matcher
 b = cs.battleStaging
-
-print("init lua")

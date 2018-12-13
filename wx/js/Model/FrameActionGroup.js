@@ -1,4 +1,3 @@
-import ByteBuffer from "../Libs/bytebuffer";
 import { FrameAction } from "./FrameAction";
 export class FrameActionGroup {
     constructor(frame) {

@@ -1,10 +1,15 @@
-define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Hashtable", "./RC/Utils/Logger", "./Scene/SceneManager", "./Libs/decimal"], function (require, exports, Consts_1, Global_1, Long, $protobuf, Preloader_1, Hashtable_1, Logger_1, SceneManager_1, decimal_1) {
+define(["require", "exports", "./Consts", "./Global", "./Libs/decimal", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Hashtable", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, Consts_1, Global_1, decimal_1, Long, $protobuf, Preloader_1, Hashtable_1, Logger_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
         static get instance() { return Main._instance; }
         constructor(config) {
             Main._instance = this;
+            decimal_1.default.set({ precision: 3 });
+            decimal_1.default.set({ rounding: 1 });
+            const cfgJson = JSON.parse(config);
+            Global_1.Global.platform = Hashtable_1.Hashtable.GetNumber(cfgJson, "platform");
+            const b = new ByteBuffer();
             Laya.MiniAdpter.init();
             Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);
             Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
@@ -12,10 +17,6 @@ define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/pro
             Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
             Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
             fairygui.UIConfig.packageFileExtension = "bin";
-            decimal_1.default.set({ precision: 3 });
-            decimal_1.default.set({ rounding: 1 });
-            const cfgJson = JSON.parse(config);
-            Global_1.Global.platform = Hashtable_1.Hashtable.GetNumber(cfgJson, "platform");
             this.ShowLogo();
         }
         ShowLogo() {

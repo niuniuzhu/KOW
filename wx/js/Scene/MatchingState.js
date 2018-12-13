@@ -1,10 +1,10 @@
-import { Connector } from "../Net/Connector";
+import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
+import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
-import { SceneState } from "./SceneState";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
-import { Global } from "../Global";
+import { SceneState } from "./SceneState";
 export class MatchingState extends SceneState {
     constructor(type) {
         super(type);
@@ -21,8 +21,6 @@ export class MatchingState extends SceneState {
     }
     OnExit() {
         super.OnExit();
-    }
-    OnUpdate(dt) {
     }
     OnUpdateRoomInfo(message) {
         const roomInfo = message;

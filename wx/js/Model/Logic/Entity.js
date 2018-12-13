@@ -26,6 +26,7 @@ export class Entity {
     get team() { return this._team; }
     get name() { return this._name; }
     get def() { return this._def; }
+    get fsm() { return this._fsm; }
     Init(battle, id, actorID, team, name) {
         this._battle = battle;
         this._id = id;
@@ -57,7 +58,7 @@ export class Entity {
         writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
         writer.float(this._moveDirection.x.toNumber()).float(this._moveDirection.y.toNumber());
         writer.int32(this._fsm.currentState.type);
-        writer.int32(this._fsm.currentState.time);
+        writer.float(this._fsm.currentState.time.toNumber());
         const count = this.attribute.count;
         writer.int32(count);
         this.attribute.Foreach((v, k, map) => {
@@ -72,7 +73,7 @@ export class Entity {
         this.direction = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
         this._moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
         this._fsm.ChangeState(reader.int32(), null, true);
-        this._fsm.currentState.time = reader.int32();
+        this._fsm.currentState.time = new Decimal(reader.float());
         const count = reader.int32();
         for (let i = 0; i < count; i++) {
             this.attribute.Set(reader.int32(), new Decimal(reader.float()));

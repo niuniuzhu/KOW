@@ -30,10 +30,8 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState
         constructor(type, owner) {
             super(type);
             this._rootEvent = new EventTreeBase_1.EventTreeBase();
+            this._time = new decimal_1.default(0);
             this._owner = owner;
-            this._def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
-            const eventDef = Hashtable_1.Hashtable.GetArray(this._def, "events");
-            this._rootEvent.Set(eventDef);
         }
         get owner() { return this._owner; }
         get time() { return this._time; }
@@ -44,6 +42,11 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState
             this.OnStateTimeChanged();
         }
         OnEnter(param) {
+            if (this._def == null) {
+                this._def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
+                const eventDef = Hashtable_1.Hashtable.GetArray(this._def, "events");
+                this._rootEvent.Set(eventDef);
+            }
             this.HandleAttrs();
             this.HandleEvents();
         }

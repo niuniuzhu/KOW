@@ -1,12 +1,12 @@
 import { Consts } from "./Consts";
 import { Global } from "./Global";
+import Decimal from "./Libs/decimal";
 import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
 import { Hashtable } from "./RC/Utils/Hashtable";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
-import Decimal from "./Libs/decimal";
 
 export class Main {
 	private static _instance: Main;
@@ -18,6 +18,14 @@ export class Main {
 	constructor(config: string) {
 		Main._instance = this;
 
+		Decimal.set({ precision: 3 });
+		Decimal.set({ rounding: 1 });
+
+		const cfgJson = JSON.parse(config);
+		Global.platform = Hashtable.GetNumber(cfgJson, "platform");
+
+		const b = new ByteBuffer();
+
 		Laya.MiniAdpter.init();
 		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
@@ -26,12 +34,6 @@ export class Main {
 		Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
 		// laya.utils.Stat.show(0, 0);
 		fairygui.UIConfig.packageFileExtension = "bin";
-
-		Decimal.set({ precision: 3 });
-		Decimal.set({ rounding: 1 });
-
-		const cfgJson = JSON.parse(config);
-		Global.platform = Hashtable.GetNumber(cfgJson, "platform");
 
 		this.ShowLogo();
 	}

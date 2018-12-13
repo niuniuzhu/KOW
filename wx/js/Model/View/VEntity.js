@@ -103,7 +103,7 @@ export class VEntity {
         this._logicRot = this.rotation;
         const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
         this._fsm.ChangeState(reader.int32(), null);
-        this._fsm.currentState.time = reader.int32();
+        this._fsm.currentState.time = reader.float();
         const count = reader.int32();
         for (let i = 0; i < count; i++) {
             this.attribute.Set(reader.int32(), new Decimal(reader.float()));
@@ -120,7 +120,7 @@ export class VEntity {
             this._logicRot = 360 - this._logicRot;
         const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
         this._fsm.ChangeState(reader.int32(), null);
-        this._fsm.currentState.time = reader.int32();
+        this._fsm.currentState.time = reader.float();
         const count = reader.int32();
         for (let i = 0; i < count; i++) {
             this.attribute.Set(reader.int32(), new Decimal(reader.float()));

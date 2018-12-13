@@ -4,8 +4,6 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // Definitions by: SINTEF-9012 <https://github.com/SINTEF-9012>
 
-export default ByteBuffer;
-
 declare class ByteBuffer {
 	/**
 	 * Constructs a new ByteBuffer.
@@ -627,4 +625,8 @@ declare class ByteBuffer {
 	 * Writes a zig-zag encoded 64bit base 128 variable-length integer.
 	 */
 	writeVarint64ZigZag(value: number | Long, offset?: number): ByteBuffer | number;
+}
+
+declare module 'bytebuffer' {
+	export = ByteBuffer;
 }

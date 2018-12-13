@@ -1,16 +1,17 @@
 import { Consts } from "./Consts";
 import { Global } from "./Global";
+import Decimal from "./Libs/decimal";
 import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
 import { Hashtable } from "./RC/Utils/Hashtable";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
-import Decimal from "./Libs/decimal";
 export class Main {
     static get instance() { return Main._instance; }
     constructor(config) {
         Main._instance = this;
+        const b = new $ByteBuffer();
         Laya.MiniAdpter.init();
         Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
         Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;

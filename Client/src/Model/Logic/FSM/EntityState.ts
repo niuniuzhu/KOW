@@ -78,7 +78,7 @@ export class EntityState extends FSMState {
 	/**
 	 * 状态的运行时间
 	 */
-	private _time: Decimal;
+	private _time: Decimal = new Decimal(0);
 	/**
 	 * 状态配置
 	 */
@@ -86,15 +86,17 @@ export class EntityState extends FSMState {
 
 	constructor(type: number, owner: Entity) {
 		super(type);
-		
+
 		this._owner = owner;
-		this._def = Hashtable.GetMap(Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
-		//初始化根事件
-		const eventDef = Hashtable.GetArray(this._def, "events");
-		this._rootEvent.Set(eventDef);
 	}
 
 	protected OnEnter(param: any): void {
+		if (this._def == null) {
+			this._def = Hashtable.GetMap(Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
+			//初始化根事件
+			const eventDef = Hashtable.GetArray(this._def, "events");
+			this._rootEvent.Set(eventDef);
+		}
 		this.HandleAttrs();
 		this.HandleEvents();
 	}

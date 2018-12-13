@@ -13,10 +13,19 @@ export class VEntityState extends FSMState {
         this._owner = owner;
     }
     get owner() { return this._owner; }
+    get time() { return this._time; }
+    set time(value) {
+        if (this._time == value)
+            return;
+        this._time = value;
+        this.OnStateTimeChanged();
+    }
     OnEnter(param) {
         const def = Hashtable.GetMap(Hashtable.GetMap(this.owner.def, "states"), this.type.toString());
         const aniName = Hashtable.GetString(def, "animation");
         this.owner.PlayAnim(aniName);
+    }
+    OnStateTimeChanged() {
     }
 }
 VEntityState.Type = Type;

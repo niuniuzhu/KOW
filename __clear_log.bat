@@ -1,0 +1,1 @@
+del .\Server\Bin\log\*.* /Q

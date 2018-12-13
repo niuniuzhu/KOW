@@ -263,3 +263,4 @@ __pycache__/
 .svn/
 UI_design/
 Server/Shared/Config/secret.json
+Server/[Bb]in/

@@ -21,8 +21,10 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(CentralServer.Match.BattleStaging);
-			Utils.BeginObjectRegister(type, L, translator, 0, 6, 0, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 8, 0, 0);
 			
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnBattleCreated", _m_OnBattleCreated);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnBattleDestory", _m_OnBattleDestory);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListALLLBIDToUser", _m_ListALLLBIDToUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListLBIDToUser", _m_ListLBIDToUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetNumUsersByLBID", _m_GetNumUsersByLBID);
@@ -76,6 +78,64 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_OnBattleCreated(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                CentralServer.Match.BattleStaging __cl_gen_to_be_invoked = (CentralServer.Match.BattleStaging)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    uint lid = LuaAPI.xlua_touint(L, 2);
+                    uint bid = LuaAPI.xlua_touint(L, 3);
+                    
+                    __cl_gen_to_be_invoked.OnBattleCreated( lid, bid );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_OnBattleDestory(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                CentralServer.Match.BattleStaging __cl_gen_to_be_invoked = (CentralServer.Match.BattleStaging)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    uint lid = LuaAPI.xlua_touint(L, 2);
+                    uint bid = LuaAPI.xlua_touint(L, 3);
+                    
+                    __cl_gen_to_be_invoked.OnBattleDestory( lid, bid );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_ListALLLBIDToUser(RealStatePtr L)

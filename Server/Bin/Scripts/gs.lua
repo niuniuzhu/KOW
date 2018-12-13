@@ -8,5 +8,3 @@ end
 
 gs = CS.GateServer.GS.instance
 u = gs.userMgr
-
-print("init lua")

@@ -1,25 +1,25 @@
 ping -n 1 127.0>nul
 echo "start db"
-start db.bat
+start _db.bat
 
 ping -n 1 127.0>nul
 echo "start cs"
-start cs.bat
+start _cs.bat
 
 ping -n 1 127.0>nul
 echo "start gs"
-start gs.bat
+start _gs.bat
 
 ping -n 1 127.0>nul
 echo "start ls"
-start ls.bat
+start _ls.bat
 
 ping -n 1 127.0>nul
 echo "start bs"
-start bs.bat
+start _bs.bat
 
 ping -n 1 127.0>nul
 ping -n 1 127.0>nul
 ping -n 1 127.0>nul
 echo "start shell"
-start shell.bat
+start _shell.bat

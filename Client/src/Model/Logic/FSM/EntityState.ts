@@ -23,11 +23,11 @@ enum Op {
 }
 
 enum StateAttr {
-	DisableMove,
-	DisableTurn,
-	SuperArmor,//霸体
-	Invulnerability,//刀枪不入
-	ClearLastBullets,//清理上次子弹
+	DisableMove = 1 << 0,
+	DisableTurn = 1 << 1,
+	SuperArmor = 1 << 2,//霸体
+	Invulnerability = 1 << 3,//刀枪不入
+	ClearLastBullets = 1 << 4,//清理上次子弹
 }
 
 type pair = { [k: string]: any };
@@ -62,15 +62,15 @@ export class EntityState extends FSMState {
 	/**
 	 * 默认连接状态
 	 */
-	private _defaultConnectState: Type
+	private _defaultConnectState: Type = Type.None;
 	/**
 	 * 状态属性
 	 */
-	private _stateAttr: StateAttr;
+	private _stateAttr: number = 0;
 	/**
 	 * 状态持续时长
 	 */
-	private _duration: Decimal;
+	private _duration: Decimal = new Decimal(0);
 	/**
 	 * 根事件
 	 */

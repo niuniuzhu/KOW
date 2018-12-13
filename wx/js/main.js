@@ -11,7 +11,10 @@ export class Main {
     static get instance() { return Main._instance; }
     constructor(config) {
         Main._instance = this;
-        const b = new $ByteBuffer();
+        Decimal.set({ precision: 3 });
+        Decimal.set({ rounding: 1 });
+        const cfgJson = JSON.parse(config);
+        Global.platform = Hashtable.GetNumber(cfgJson, "platform");
         Laya.MiniAdpter.init();
         Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
         Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
@@ -19,10 +22,6 @@ export class Main {
         Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
         Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
         fairygui.UIConfig.packageFileExtension = "bin";
-        Decimal.set({ precision: 3 });
-        Decimal.set({ rounding: 1 });
-        const cfgJson = JSON.parse(config);
-        Global.platform = Hashtable.GetNumber(cfgJson, "platform");
         this.ShowLogo();
     }
     ShowLogo() {

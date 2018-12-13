@@ -43,6 +43,10 @@ export class Battle {
         this._timeout = battleInfo.battleTime;
         this._mapID = battleInfo.mapID;
         this._msPerFrame = new Decimal(1000 / this._frameRate);
+        this._frame = 0;
+        this._nextKeyFrame = 0;
+        this._logicElapsed = new Decimal(0);
+        this._realElapsed = new Decimal(0);
         this._cdef = CDefs.GetMap(this._mapID);
         this._def = Defs.GetMap(this._mapID);
         const bWidth = Hashtable.GetNumber(this._cdef, "width");
@@ -59,10 +63,6 @@ export class Battle {
             this._entities[i].Dispose();
         this._entities.splice(0);
         this._idToEntity.clear();
-        this._frame = 0;
-        this._nextKeyFrame = 0;
-        this._logicElapsed = null;
-        this._realElapsed = null;
         this._frameActionGroups.clear();
         this._def = null;
         this._bounds = null;
@@ -209,7 +209,7 @@ export class Battle {
     }
     HandleFrameAction(frame, data) {
         const frameActionGroup = new FrameActionGroup(frame);
-        frameActionGroup.DeSerialize(data);
+        frameActionGroup.Deserialize(data);
         this._frameActionGroups.enqueue(frameActionGroup);
     }
 }

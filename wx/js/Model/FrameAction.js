@@ -1,3 +1,5 @@
+import * as Long from "../Libs/long";
+import { Logger } from "../RC/Utils/Logger";
 var InputFlag;
 (function (InputFlag) {
     InputFlag[InputFlag["None"] = 0] = "None";
@@ -10,12 +12,15 @@ export class FrameAction {
     get inputFlag() { return this._inputFlag; }
     get dx() { return this._dx; }
     get dy() { return this._dy; }
-    DeSerialize(buffer) {
-        this._gcNID = buffer.readUint64();
-        this._inputFlag = buffer.readByte();
+    Deserialize(buffer) {
+        const low = buffer.ReadInt();
+        const high = buffer.ReadInt();
+        this._gcNID = Long.fromBits(low, high, true);
+        Logger.Log(this._gcNID.toString());
+        this._inputFlag = buffer.ReadByte();
         if ((this.inputFlag & InputFlag.Move) > 0) {
-            this._dx = buffer.readFloat();
-            this._dy = buffer.readFloat();
+            this._dx = buffer.ReadFloat();
+            this._dy = buffer.ReadFloat();
         }
     }
 }

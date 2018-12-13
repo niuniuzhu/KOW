@@ -1,4 +1,5 @@
 import { FrameAction } from "./FrameAction";
+import { ByteBuffer } from "../RC/Utils/ByteBuffer";
 export class FrameActionGroup {
     constructor(frame) {
         this._frameActions = [];
@@ -6,15 +7,12 @@ export class FrameActionGroup {
     }
     get frame() { return this._frame; }
     get numActions() { return this._frameActions.length; }
-    DeSerialize(data) {
-        const buffer = new ByteBuffer();
-        buffer.littleEndian = true;
-        buffer.append(data);
-        buffer.offset = 0;
-        const count = buffer.readByte();
+    Deserialize(data) {
+        const buffer = new ByteBuffer(data, ByteBuffer.Endian.Little);
+        const count = buffer.ReadByte();
         for (let i = 0; i < count; ++i) {
             const frameAction = new FrameAction();
-            frameAction.DeSerialize(buffer);
+            frameAction.Deserialize(buffer);
             this.Add(frameAction);
         }
     }

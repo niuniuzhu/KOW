@@ -127,7 +127,7 @@ export class BattleManager {
 		const count = frames.length;
 		for (let i = 0; i < count; ++i) {
 			const frameActionGroup = new FrameActionGroup(frames[i]);
-			frameActionGroup.DeSerialize(actions[i]);
+			frameActionGroup.Deserialize(actions[i]);
 			frameActionGroups.enqueue(frameActionGroup);
 		}
 		return frameActionGroups;

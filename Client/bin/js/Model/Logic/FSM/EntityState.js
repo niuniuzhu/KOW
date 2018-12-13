@@ -20,15 +20,18 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState
     })(Op || (Op = {}));
     var StateAttr;
     (function (StateAttr) {
-        StateAttr[StateAttr["DisableMove"] = 0] = "DisableMove";
-        StateAttr[StateAttr["DisableTurn"] = 1] = "DisableTurn";
-        StateAttr[StateAttr["SuperArmor"] = 2] = "SuperArmor";
-        StateAttr[StateAttr["Invulnerability"] = 3] = "Invulnerability";
-        StateAttr[StateAttr["ClearLastBullets"] = 4] = "ClearLastBullets";
+        StateAttr[StateAttr["DisableMove"] = 1] = "DisableMove";
+        StateAttr[StateAttr["DisableTurn"] = 2] = "DisableTurn";
+        StateAttr[StateAttr["SuperArmor"] = 4] = "SuperArmor";
+        StateAttr[StateAttr["Invulnerability"] = 8] = "Invulnerability";
+        StateAttr[StateAttr["ClearLastBullets"] = 16] = "ClearLastBullets";
     })(StateAttr || (StateAttr = {}));
     class EntityState extends FSMState_1.FSMState {
         constructor(type, owner) {
             super(type);
+            this._defaultConnectState = Type.None;
+            this._stateAttr = 0;
+            this._duration = new decimal_1.default(0);
             this._rootEvent = new EventTreeBase_1.EventTreeBase();
             this._time = new decimal_1.default(0);
             this._owner = owner;

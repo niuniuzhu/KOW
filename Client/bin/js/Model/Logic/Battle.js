@@ -29,6 +29,10 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._timeout = battleInfo.battleTime;
             this._mapID = battleInfo.mapID;
             this._msPerFrame = new decimal_1.default(1000 / this._frameRate);
+            this._frame = 0;
+            this._nextKeyFrame = 0;
+            this._logicElapsed = new decimal_1.default(0);
+            this._realElapsed = new decimal_1.default(0);
             this._cdef = CDefs_1.CDefs.GetMap(this._mapID);
             this._def = Defs_1.Defs.GetMap(this._mapID);
             const bWidth = Hashtable_1.Hashtable.GetNumber(this._cdef, "width");
@@ -45,10 +49,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                 this._entities[i].Dispose();
             this._entities.splice(0);
             this._idToEntity.clear();
-            this._frame = 0;
-            this._nextKeyFrame = 0;
-            this._logicElapsed = null;
-            this._realElapsed = null;
             this._frameActionGroups.clear();
             this._def = null;
             this._bounds = null;
@@ -195,7 +195,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         }
         HandleFrameAction(frame, data) {
             const frameActionGroup = new FrameActionGroup_1.FrameActionGroup(frame);
-            frameActionGroup.DeSerialize(data);
+            frameActionGroup.Deserialize(data);
             this._frameActionGroups.enqueue(frameActionGroup);
         }
     }

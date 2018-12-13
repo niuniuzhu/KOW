@@ -9,7 +9,6 @@ define(["require", "exports", "./Consts", "./Global", "./Libs/decimal", "./Libs/
             decimal_1.default.set({ rounding: 1 });
             const cfgJson = JSON.parse(config);
             Global_1.Global.platform = Hashtable_1.Hashtable.GetNumber(cfgJson, "platform");
-            const b = new ByteBuffer();
             Laya.MiniAdpter.init();
             Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);
             Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;

@@ -24,8 +24,6 @@ export class Main {
 		const cfgJson = JSON.parse(config);
 		Global.platform = Hashtable.GetNumber(cfgJson, "platform");
 
-		const b = new ByteBuffer();
-
 		Laya.MiniAdpter.init();
 		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;

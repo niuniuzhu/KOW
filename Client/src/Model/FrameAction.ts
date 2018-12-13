@@ -1,4 +1,5 @@
 import * as Long from "../Libs/long";
+import { ByteBuffer } from "../RC/Utils/ByteBuffer";
 
 enum InputFlag {
 	None = 0,
@@ -20,12 +21,14 @@ export class FrameAction {
 	public get dx(): number { return this._dx; }
 	public get dy(): number { return this._dy; }
 
-	public DeSerialize(buffer: ByteBuffer): void {
-		this._gcNID = buffer.readUint64();
-		this._inputFlag = buffer.readByte();
+	public Deserialize(buffer: ByteBuffer): void {
+		const low = buffer.ReadInt();
+		const high = buffer.ReadInt();
+		this._gcNID = Long.fromBits(low, high, true);
+		this._inputFlag = buffer.ReadByte();
 		if ((this.inputFlag & InputFlag.Move) > 0) {
-			this._dx = buffer.readFloat();
-			this._dy = buffer.readFloat();
+			this._dx = buffer.ReadFloat();
+			this._dy = buffer.ReadFloat();
 		}
 	}
 }

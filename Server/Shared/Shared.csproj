@@ -27,7 +27,7 @@
 	  <None Update="Config\battle_defs.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Config\server.pfx">
+	  <None Update="Config\localhost.pfx">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

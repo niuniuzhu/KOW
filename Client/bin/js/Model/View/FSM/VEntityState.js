@@ -8,9 +8,18 @@ define(["require", "exports", "../../../RC/FSM/FSMState", "../../../RC/Utils/Has
         Type[Type["Attack"] = 2] = "Attack";
         Type[Type["Die"] = 3] = "Die";
     })(Type || (Type = {}));
+    var AniPlayMode;
+    (function (AniPlayMode) {
+        AniPlayMode[AniPlayMode["Loop"] = 0] = "Loop";
+        AniPlayMode[AniPlayMode["Clamp"] = 1] = "Clamp";
+        AniPlayMode[AniPlayMode["Pingpong"] = 2] = "Pingpong";
+    })(AniPlayMode || (AniPlayMode = {}));
     class VEntityState extends FSMState_1.FSMState {
         constructor(type, owner) {
             super(type);
+            this._duration = -1;
+            this._autoScaleAniTime = true;
+            this._animationPlayMode = AniPlayMode.Clamp;
             this._owner = owner;
         }
         get owner() { return this._owner; }
@@ -30,6 +39,7 @@ define(["require", "exports", "../../../RC/FSM/FSMState", "../../../RC/Utils/Has
         }
     }
     VEntityState.Type = Type;
+    VEntityState.AniPlayMode = AniPlayMode;
     exports.VEntityState = VEntityState;
 });
 //# sourceMappingURL=VEntityState.js.map

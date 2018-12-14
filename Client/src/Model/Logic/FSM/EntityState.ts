@@ -4,6 +4,7 @@ import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { EAttr } from "../../Attribute";
 import { EventTreeBase } from "../../EventTree/EventTreeBase";
 import { Entity } from "../Entity";
+import { MathUtils } from "../../../RC/Math/MathUtils";
 
 enum Type {
 	None = -1,
@@ -29,8 +30,6 @@ enum StateAttr {
 	Invulnerability = 1 << 3,//刀枪不入
 	ClearLastBullets = 1 << 4,//清理上次子弹
 }
-
-type pair = { [k: string]: any };
 
 export class EntityState extends FSMState {
 	public static readonly Type = Type;
@@ -70,7 +69,7 @@ export class EntityState extends FSMState {
 	/**
 	 * 状态持续时长
 	 */
-	private _duration: Decimal = new Decimal(0);
+	private _duration: Decimal = new Decimal(-1);
 	/**
 	 * 根事件
 	 */
@@ -106,7 +105,7 @@ export class EntityState extends FSMState {
 	}
 
 	protected OnUpdate(dt: Decimal): void {
-		if (this._time.greaterThanOrEqualTo(this._duration)) {
+		if (this._duration.greaterThanOrEqualTo(MathUtils.D_ZERO) && this._time.greaterThanOrEqualTo(this._duration)) {
 			if (this._defaultConnectState != Type.None) {
 				this._owner.fsm.ChangeState(this._defaultConnectState, null, true);
 			}

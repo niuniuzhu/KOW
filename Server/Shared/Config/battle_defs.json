@@ -36,17 +36,20 @@
 			"move_speed_factor": 1,
 			"radius": 110,
 			"states": {
-				"0": {
-					"attrs": [],
-					"ops": [],
-					"values": [],
-					"events": [
-						{
-							"time": 0
-						}
-					],
-					"animation": "stand"
-				},
+                "0": {
+                    "state_attr": 0,
+                    "duration": -1,
+                    "connect_state": 0, 
+                    "attrs": [],
+                    "ops": [],
+                    "values": [],
+                    "events": [
+                        {
+                            "time": 0
+                        }
+                    ],
+                    "animation": "stand"
+                },
 				"1": {
 					"attrs": [],
 					"ops": [],

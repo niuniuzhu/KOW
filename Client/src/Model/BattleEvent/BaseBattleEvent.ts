@@ -1,6 +1,6 @@
-import { EventManager } from "./EventManager";
+import { BattleEventMgr } from "./BattleEventMgr";
 
-export abstract class BaseEvent {
+export abstract class BaseBattleEvent {
 	public __type: number;
 
 	public get type(): number {
@@ -12,7 +12,7 @@ export abstract class BaseEvent {
 	}
 
 	protected Invoke(): void {
-		EventManager.Invoke(this);
+		BattleEventMgr.Invoke(this);
 	}
 
 	public abstract Release();

@@ -1,7 +1,7 @@
-import { BaseEvent } from "./BaseEvent";
+import { BaseBattleEvent } from "./BaseBattleEvent";
 import { Stack } from "../../RC/Collections/Index";
 
-export class UIEvent extends BaseEvent {
+export class UIEvent extends BaseBattleEvent {
 
 	public static readonly NETWORK_DISCONNECT: number = 10500;
 

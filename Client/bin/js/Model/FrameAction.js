@@ -1,4 +1,4 @@
-define(["require", "exports", "../Libs/long", "../RC/Utils/Logger"], function (require, exports, Long, Logger_1) {
+define(["require", "exports", "../Libs/long"], function (require, exports, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var InputFlag;
@@ -16,8 +16,7 @@ define(["require", "exports", "../Libs/long", "../RC/Utils/Logger"], function (r
         Deserialize(buffer) {
             const low = buffer.ReadInt();
             const high = buffer.ReadInt();
-            this._gcNID = new Long(low, high, true);
-            Logger_1.Logger.Log(this._gcNID.toString());
+            this._gcNID = Long.fromBits(low, high, true);
             this._inputFlag = buffer.ReadByte();
             if ((this.inputFlag & InputFlag.Move) > 0) {
                 this._dx = buffer.ReadFloat();

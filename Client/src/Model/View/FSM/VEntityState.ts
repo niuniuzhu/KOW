@@ -9,8 +9,16 @@ enum Type {
 	Die
 }
 
+enum AniPlayMode {
+	Loop,
+	Clamp,
+	Pingpong
+}
+
 export class VEntityState extends FSMState {
 	public static readonly Type = Type;
+	public static readonly AniPlayMode = AniPlayMode;
+
 	/**
 	 * 所属实体
 	 */
@@ -36,15 +44,15 @@ export class VEntityState extends FSMState {
 	/**
 	 * 状态持续时长
 	 */
-	private _duration: number;
+	private _duration: number = -1;
 	/**
 	 * 动画事件是否自动适配状态时长
 	 */
-	private _autoScaleAniTime: boolean;
+	private _autoScaleAniTime: boolean = true;
 	/**
 	 * 动画播放模式
 	 */
-	private _animationPlayMode;
+	private _animationPlayMode: AniPlayMode = AniPlayMode.Clamp;
 	/**
 	 * 状态的运行时间
 	 */

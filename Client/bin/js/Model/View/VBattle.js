@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../EntityType", "../Events/EventManager", "../Events/SyncEvent", "./Camera", "./VChampion"], function (require, exports, Consts_1, CDefs_1, Global_1, $protobuf, Hashtable_1, EntityType_1, EventManager_1, SyncEvent_1, Camera_1, VChampion_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/BattleEventMgr", "../BattleEvent/SyncEvent", "../CDefs", "../EntityType", "./Camera", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, BattleEventMgr_1, SyncEvent_1, CDefs_1, EntityType_1, Camera_1, VChampion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -10,8 +10,8 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             this._camera = new Camera_1.Camera();
         }
         SetBattleInfo(battleInfo) {
-            EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
-            EventManager_1.EventManager.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+            BattleEventMgr_1.BattleEventMgr.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+            BattleEventMgr_1.BattleEventMgr.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
             this._destroied = false;
             this._mapID = battleInfo.mapID;
             this._def = CDefs_1.CDefs.GetMap(this._mapID);
@@ -25,8 +25,8 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             if (this._destroied)
                 return;
             this._destroied = true;
-            EventManager_1.EventManager.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
-            EventManager_1.EventManager.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
+            BattleEventMgr_1.BattleEventMgr.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
+            BattleEventMgr_1.BattleEventMgr.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
             const count = this._entities.length;
             for (let i = 0; i < count; ++i) {
                 this._entities[i].Dispose();

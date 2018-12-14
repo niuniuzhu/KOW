@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState", "../../../RC/Utils/Hashtable", "../../EventTree/EventTreeBase"], function (require, exports, decimal_1, FSMState_1, Hashtable_1, EventTreeBase_1) {
+define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState", "../../../RC/Utils/Hashtable", "../../EventTree/EventTreeBase", "../../../RC/Math/MathUtils"], function (require, exports, decimal_1, FSMState_1, Hashtable_1, EventTreeBase_1, MathUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Type;
@@ -31,7 +31,7 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState
             super(type);
             this._defaultConnectState = Type.None;
             this._stateAttr = 0;
-            this._duration = new decimal_1.default(0);
+            this._duration = new decimal_1.default(-1);
             this._rootEvent = new EventTreeBase_1.EventTreeBase();
             this._time = new decimal_1.default(0);
             this._owner = owner;
@@ -57,7 +57,7 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/FSM/FSMState
             this._time = new decimal_1.default(0);
         }
         OnUpdate(dt) {
-            if (this._time.greaterThanOrEqualTo(this._duration)) {
+            if (this._duration.greaterThanOrEqualTo(MathUtils_1.MathUtils.D_ZERO) && this._time.greaterThanOrEqualTo(this._duration)) {
                 if (this._defaultConnectState != Type.None) {
                     this._owner.fsm.ChangeState(this._defaultConnectState, null, true);
                 }

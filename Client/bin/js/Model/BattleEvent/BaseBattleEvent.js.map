@@ -1,0 +1,1 @@
+{"version":3,"file":"BaseBattleEvent.js","sourceRoot":"","sources":["../../../../src/Model/BattleEvent/BaseBattleEvent.ts"],"names":[],"mappings":";;;IAEA,MAAsB,eAAe;QAGpC,IAAW,IAAI;YACd,OAAO,IAAI,CAAC,MAAM,CAAC;QACpB,CAAC;QAED,IAAc,KAAK,CAAC,KAAa;YAChC,IAAI,CAAC,MAAM,GAAG,KAAK,CAAC;QACrB,CAAC;QAES,MAAM;YACf,+BAAc,CAAC,MAAM,CAAC,IAAI,CAAC,CAAC;QAC7B,CAAC;KAGD;IAhBD,0CAgBC"}

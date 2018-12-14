@@ -1,7 +1,7 @@
-import { BaseEvent } from "./BaseEvent";
+import { BaseBattleEvent } from "./BaseBattleEvent";
 import Stack from "../../RC/Collections/Stack";
 
-export class SyncEvent extends BaseEvent {
+export class SyncEvent extends BaseBattleEvent {
 
 	public static readonly E_BATTLE_INIT: number = 100;
 	public static readonly E_SNAPSHOT: number = 101;

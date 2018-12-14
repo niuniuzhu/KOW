@@ -1,13 +1,13 @@
 import { Consts } from "../../Consts";
-import { CDefs } from "../CDefs";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { BaseBattleEvent } from "../BattleEvent/BaseBattleEvent";
+import { BattleEventMgr } from "../BattleEvent/BattleEventMgr";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
+import { CDefs } from "../CDefs";
 import { EntityType } from "../EntityType";
-import { BaseEvent } from "../Events/BaseEvent";
-import { EventManager } from "../Events/EventManager";
-import { SyncEvent } from "../Events/SyncEvent";
 import { Camera } from "./Camera";
 import { VChampion } from "./VChampion";
 import { VEntity } from "./VEntity";
@@ -33,8 +33,8 @@ export class VBattle {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo): void {
-		EventManager.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
-		EventManager.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+		BattleEventMgr.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+		BattleEventMgr.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
 
 		this._destroied = false;
 		this._mapID = battleInfo.mapID
@@ -57,8 +57,8 @@ export class VBattle {
 			return;
 		this._destroied = true;
 
-		EventManager.RemoveListener(SyncEvent.E_BATTLE_INIT);
-		EventManager.RemoveListener(SyncEvent.E_SNAPSHOT);
+		BattleEventMgr.RemoveListener(SyncEvent.E_BATTLE_INIT);
+		BattleEventMgr.RemoveListener(SyncEvent.E_SNAPSHOT);
 
 		const count = this._entities.length;
 		for (let i = 0; i < count; ++i) {
@@ -143,13 +143,13 @@ export class VBattle {
 		return this._idToEntity.get(id);
 	}
 
-	private OnBattleInit(baseEvent: BaseEvent): void {
+	private OnBattleInit(baseEvent: BaseBattleEvent): void {
 		const e = <SyncEvent>baseEvent;
 		const reader = $protobuf.Reader.create(e.data);
 		this.InitSnapshot(reader);
 	}
 
-	private OnSnapshot(baseEvent: BaseEvent): void {
+	private OnSnapshot(baseEvent: BaseBattleEvent): void {
 		const e = <SyncEvent>baseEvent;
 		const reader = $protobuf.Reader.create(e.data);
 		this.DecodeSnapshot(reader);

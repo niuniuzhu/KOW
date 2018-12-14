@@ -27,24 +27,34 @@
 		"e0": {
 			"animations": [
 				{
+					"name": "stand",
+					"length": 6,
+					"auto_scale_time": true,
+					"play_mode": 0
+				},
+				{
 					"name": "attack",
-					"length": 7
+					"length": 7,
+					"auto_scale_time": true,
+					"play_mode": 1
 				},
 				{
 					"name": "b",
-					"length": 5
+					"length": 5,
+					"auto_scale_time": true,
+					"play_mode": 1
 				},
 				{
 					"name": "die",
-					"length": 1
+					"length": 1,
+					"auto_scale_time": true,
+					"play_mode": 1
 				},
 				{
 					"name": "run",
-					"length": 7
-				},
-				{
-					"name": "stand",
-					"length": 6
+					"length": 7,
+					"auto_scale_time": true,
+					"play_mode": 0
 				}
 			]
 		}

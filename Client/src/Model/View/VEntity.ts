@@ -1,17 +1,18 @@
 import { Consts } from "../../Consts";
-import { CDefs } from "../CDefs";
 import { Global } from "../../Global";
+import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
+import { FVec2 } from "../../RC/FMath/FVec2";
 import { FSM } from "../../RC/FSM/FSM";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute } from "../Attribute";
-import { AniHolder } from "./AniHolder";
-import { VEntityState } from "./FSM/VEntityState";
-import { VBattle } from "./VBattle";
-import { FVec2 } from "../../RC/FMath/FVec2";
-import Decimal from "../../Libs/decimal";
+import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
+import { StateType } from "../FSM/StateEnums";
+import { AniHolder } from "./AniHolder";
+import { VEntityState } from "../FSM/VEntityState";
+import { VBattle } from "./VBattle";
 
 export class VEntity {
 	public get id(): Long { return this._id; }
@@ -67,10 +68,10 @@ export class VEntity {
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
 		Global.graphic.entityRoot.addChild(this._root);
-		this._fsm.AddState(new VEntityState(VEntityState.Type.Idle, this));
-		this._fsm.AddState(new VEntityState(VEntityState.Type.Move, this));
-		this._fsm.AddState(new VEntityState(VEntityState.Type.Attack, this));
-		this._fsm.AddState(new VEntityState(VEntityState.Type.Die, this));
+		this._fsm.AddState(new VEntityState(StateType.Idle, this));
+		this._fsm.AddState(new VEntityState(StateType.Move, this));
+		this._fsm.AddState(new VEntityState(StateType.Attack, this));
+		this._fsm.AddState(new VEntityState(StateType.Die, this));
 	}
 
 	public Init(id: Long, battle: VBattle): void {

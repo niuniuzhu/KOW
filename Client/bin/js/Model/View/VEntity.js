@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "./AniHolder", "./FSM/VEntityState", "../../RC/FMath/FVec2", "../../Libs/decimal", "../Defs"], function (require, exports, Consts_1, CDefs_1, Global_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, AniHolder_1, VEntityState_1, FVec2_1, decimal_1, Defs_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../CDefs", "../Defs", "../FSM/StateEnums", "./AniHolder", "../FSM/VEntityState"], function (require, exports, Consts_1, Global_1, decimal_1, FVec2_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, CDefs_1, Defs_1, StateEnums_1, AniHolder_1, VEntityState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -16,10 +16,10 @@ define(["require", "exports", "../../Consts", "../CDefs", "../../Global", "../..
             this._root.setSize(0, 0);
             this._root.setPivot(0.5, 0.5, true);
             Global_1.Global.graphic.entityRoot.addChild(this._root);
-            this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Idle, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Move, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Attack, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(VEntityState_1.VEntityState.Type.Die, this));
+            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Idle, this));
+            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Move, this));
+            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Attack, this));
+            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Die, this));
         }
         get id() { return this._id; }
         get actorID() { return this._actorID; }

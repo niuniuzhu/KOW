@@ -21,16 +21,25 @@ export class Hashtable {
 		return map[key];
 	}
 
-	public static GetString(map: pair, key: string): string {
-		return <string>map[key];
+	public static GetString(map: pair, key: string, v: string = ""): string {
+		let result = <string>map[key];
+		if (result == null || result == undefined)
+			result = v;
+		return result;
 	}
 
-	public static GetNumber(map: pair, key: string): number {
-		return <number>map[key];
+	public static GetNumber(map: pair, key: string, v: number = 0): number {
+		let result = <number>map[key];
+		if (result == null || result == undefined)
+			result = v;
+		return result;
 	}
 
-	public static GetBool(map: pair, key: string): boolean {
-		return <boolean>map[key];
+	public static GetBool(map: pair, key: string, v: boolean = false): boolean {
+		let result = <boolean>map[key];
+		if (result == null || result == undefined)
+			result = v;
+		return result;
 	}
 
 	public static GetStringArray(map: pair, key: string): string[] {

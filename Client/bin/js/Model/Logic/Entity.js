@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../Defs", "../EntityType", "./FSM/EntityState"], function (require, exports, decimal_1, FSM_1, FVec2_1, MathUtils_1, Hashtable_1, Attribute_1, Defs_1, EntityType_1, EntityState_1) {
+define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../Defs", "../EntityType", "../FSM/EntityFSM", "../FSM/EntityState", "../FSM/StateEnums"], function (require, exports, decimal_1, FVec2_1, MathUtils_1, Hashtable_1, Attribute_1, Defs_1, EntityType_1, EntityFSM_1, EntityState_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Entity {
@@ -7,11 +7,11 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../R
             this.position = FVec2_1.FVec2.zero;
             this.direction = FVec2_1.FVec2.zero;
             this._moveDirection = FVec2_1.FVec2.zero;
-            this._fsm = new FSM_1.FSM();
-            this._fsm.AddState(new EntityState_1.EntityState(EntityState_1.EntityState.Type.Idle, this));
-            this._fsm.AddState(new EntityState_1.EntityState(EntityState_1.EntityState.Type.Move, this));
-            this._fsm.AddState(new EntityState_1.EntityState(EntityState_1.EntityState.Type.Attack, this));
-            this._fsm.AddState(new EntityState_1.EntityState(EntityState_1.EntityState.Type.Die, this));
+            this._fsm = new EntityFSM_1.EntityFSM();
+            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Idle, this));
+            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Move, this));
+            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Attack, this));
+            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Die, this));
         }
         get type() { return EntityType_1.EntityType.Undefined; }
         get id() { return this._id; }
@@ -28,7 +28,8 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../R
             this._team = team;
             this._name = name;
             this.LoadDef();
-            this._fsm.ChangeState(EntityState_1.EntityState.Type.Idle);
+            this._fsm.Init();
+            this._fsm.ChangeState(StateEnums_1.StateType.Idle);
         }
         Dispose() {
         }
@@ -80,9 +81,9 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSM", "../../R
         BeginMove(dx, dy) {
             this._moveDirection = new FVec2_1.FVec2(new decimal_1.default(dx), new decimal_1.default(dy));
             if (this._moveDirection.SqrMagnitude().lessThan(MathUtils_1.MathUtils.D_SMALL))
-                this._fsm.ChangeState(EntityState_1.EntityState.Type.Idle);
+                this._fsm.ChangeState(StateEnums_1.StateType.Idle);
             else
-                this._fsm.ChangeState(EntityState_1.EntityState.Type.Move);
+                this._fsm.ChangeState(StateEnums_1.StateType.Move);
         }
         MoveStep(direction, dt) {
             if (direction.SqrMagnitude().lessThan(MathUtils_1.MathUtils.D_SMALL))

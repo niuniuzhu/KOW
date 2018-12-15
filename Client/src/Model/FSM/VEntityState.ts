@@ -1,13 +1,6 @@
-import { FSMState } from "../../../RC/FSM/FSMState";
-import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { VEntity } from "../VEntity";
-
-enum Type {
-	Idle,
-	Move,
-	Attack,
-	Die
-}
+import { FSMState } from "../../RC/FSM/FSMState";
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { VEntity } from "../View/VEntity";
 
 enum AniPlayMode {
 	Loop,
@@ -16,7 +9,6 @@ enum AniPlayMode {
 }
 
 export class VEntityState extends FSMState {
-	public static readonly Type = Type;
 	public static readonly AniPlayMode = AniPlayMode;
 
 	/**

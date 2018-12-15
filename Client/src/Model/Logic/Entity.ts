@@ -1,15 +1,17 @@
 import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
-import { FSM } from "../../RC/FSM/FSM";
 import { FVec2 } from "../../RC/FMath/FVec2";
+import { FSM } from "../../RC/FSM/FSM";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute, EAttr } from "../Attribute";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
+import { EntityFSM } from "../FSM/EntityFSM";
+import { EntityState } from "../FSM/EntityState";
+import { StateType } from "../FSM/StateEnums";
 import { ISnapshotable } from "../ISnapshotable";
 import { Battle } from "./Battle";
-import { EntityState } from "./FSM/EntityState";
 
 export class Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Undefined; }
@@ -19,7 +21,7 @@ export class Entity implements ISnapshotable {
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
 	public get def(): Hashtable { return this._def; }
-	public get fsm(): FSM { return this._fsm; }
+	public get fsm(): EntityFSM { return this._fsm; }
 
 	public readonly attribute: Attribute = new Attribute();
 	public position: FVec2 = FVec2.zero;
@@ -34,13 +36,13 @@ export class Entity implements ISnapshotable {
 
 	private _moveDirection: FVec2 = FVec2.zero;
 
-	private readonly _fsm: FSM = new FSM();
+	private readonly _fsm: EntityFSM = new EntityFSM();
 
 	constructor() {
-		this._fsm.AddState(new EntityState(EntityState.Type.Idle, this));
-		this._fsm.AddState(new EntityState(EntityState.Type.Move, this));
-		this._fsm.AddState(new EntityState(EntityState.Type.Attack, this));
-		this._fsm.AddState(new EntityState(EntityState.Type.Die, this));
+		this._fsm.AddState(new EntityState(StateType.Idle, this));
+		this._fsm.AddState(new EntityState(StateType.Move, this));
+		this._fsm.AddState(new EntityState(StateType.Attack, this));
+		this._fsm.AddState(new EntityState(StateType.Die, this));
 	}
 
 	public Init(battle: Battle, id: Long, actorID: number, team: number, name: string): void {
@@ -50,7 +52,8 @@ export class Entity implements ISnapshotable {
 		this._team = team;
 		this._name = name;
 		this.LoadDef();
-		this._fsm.ChangeState(EntityState.Type.Idle);
+		this._fsm.Init();
+		this._fsm.ChangeState(StateType.Idle);
 	}
 
 	public Dispose(): void {
@@ -120,9 +123,9 @@ export class Entity implements ISnapshotable {
 	public BeginMove(dx: number, dy: number): void {
 		this._moveDirection = new FVec2(new Decimal(dx), new Decimal(dy));
 		if (this._moveDirection.SqrMagnitude().lessThan(MathUtils.D_SMALL))
-			this._fsm.ChangeState(EntityState.Type.Idle)
+			this._fsm.ChangeState(StateType.Idle)
 		else
-			this._fsm.ChangeState(EntityState.Type.Move);
+			this._fsm.ChangeState(StateType.Move);
 	}
 
 	protected MoveStep(direction: FVec2, dt: Decimal): void {

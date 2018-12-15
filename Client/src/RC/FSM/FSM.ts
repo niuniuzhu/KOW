@@ -2,7 +2,7 @@ import { FSMState } from "./FSMState";
 import Decimal from "../../Libs/decimal";
 
 export class FSM {
-	private readonly _stateMap: Map<number, FSMState>;
+	protected readonly _stateMap: Map<number, FSMState>;
 	private _currentState: FSMState;
 	private _previousState: FSMState;
 

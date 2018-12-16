@@ -1,5 +1,3 @@
-import { BattleEventMgr } from "./BattleEventMgr";
-
 export abstract class BaseBattleEvent {
 	public __type: number;
 
@@ -9,10 +7,6 @@ export abstract class BaseBattleEvent {
 
 	protected set _type(value: number) {
 		this.__type = value;
-	}
-
-	protected Invoke(): void {
-		BattleEventMgr.Invoke(this);
 	}
 
 	public abstract Release();

@@ -6,12 +6,16 @@ define(["require", "exports", "../RC/Utils/Hashtable", "../Consts"], function (r
             this._defs = json;
             this._mapMap = Hashtable_1.Hashtable.GetMap(this._defs, "map");
             this._entityMap = Hashtable_1.Hashtable.GetMap(this._defs, "entity");
+            this._skillMap = Hashtable_1.Hashtable.GetMap(this._defs, "skill");
         }
         static GetMap(id) {
             return Hashtable_1.Hashtable.GetMap(this._mapMap, Consts_1.Consts.ASSETS_MAP_PREFIX + id);
         }
         static GetEntity(id) {
             return Hashtable_1.Hashtable.GetMap(this._entityMap, Consts_1.Consts.ASSETS_ENTITY_PREFIX + id);
+        }
+        static GetSkill(id) {
+            return Hashtable_1.Hashtable.GetMap(this._skillMap, Consts_1.Consts.ASSETS_SKILL_PREFIX + id);
         }
     }
     exports.Defs = Defs;

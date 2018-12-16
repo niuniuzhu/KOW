@@ -24,6 +24,7 @@ message GC2BS_FrameAction {
 	int32 inputFlag = 2;
 	float dx = 3;
 	float dy = 4;
+	int32 sid = 5;
 }
 
 //请求帧行为记录

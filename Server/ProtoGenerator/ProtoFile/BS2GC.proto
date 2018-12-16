@@ -37,7 +37,7 @@ message BS2GC_RequestSnapshotRet {
 message BS2GC_FrameAction {
 	MsgOpts opts = 1;
 	int32 frame = 2;
-	bytes action = 3;//玩家ID到帧行为(已序列化)的映射
+	bytes action = 3;
 }
 
 //回应请求帧行为记录

@@ -1,9 +1,10 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../CDefs", "../Defs", "../FSM/StateEnums", "./AniHolder", "../FSM/VEntityState"], function (require, exports, Consts_1, Global_1, decimal_1, FVec2_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, CDefs_1, Defs_1, StateEnums_1, AniHolder_1, VEntityState_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./AniHolder"], function (require, exports, Consts_1, Global_1, decimal_1, FVec2_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, Skill_1, AniHolder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
         constructor() {
             this.attribute = new Attribute_1.Attribute();
+            this._skills = [];
             this._position = FVec2_1.FVec2.zero;
             this._worldPosition = FVec2_1.FVec2.zero;
             this._rotation = 0;
@@ -93,10 +94,16 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decima
                 this.rotation = 360 - this.rotation;
             this._logicRot = this.rotation;
             const moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            let count = reader.int32();
+            for (let i = 0; i < count; ++i) {
+                const skill = new Skill_1.Skill();
+                skill.Init(reader.int32());
+                this._skills.push(skill);
+            }
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.float();
-            const count = reader.int32();
-            for (let i = 0; i < count; i++) {
+            count = reader.int32();
+            for (let i = 0; i < count; ++i) {
                 this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
             }
         }
@@ -110,9 +117,13 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decima
             if (logicDir.x.lessThan(MathUtils_1.MathUtils.D_ZERO))
                 this._logicRot = 360 - this._logicRot;
             const moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            let count = reader.int32();
+            for (let i = 0; i < count; ++i) {
+                reader.int32();
+            }
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.float();
-            const count = reader.int32();
+            count = reader.int32();
             for (let i = 0; i < count; i++) {
                 this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
             }
@@ -125,6 +136,23 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decima
             this._root.removeChildren();
             this._root.addChild(aniHilder);
             aniHilder.Play();
+        }
+        HasSkill(id) {
+            for (const skill of this._skills) {
+                if (skill.id == id)
+                    return true;
+            }
+            return false;
+        }
+        GetSkill(id) {
+            for (const skill of this._skills) {
+                if (skill.id == id)
+                    return skill;
+            }
+            return null;
+        }
+        GetSkillAt(index) {
+            return this._skills[index];
         }
     }
     VEntity.D_SMALL0 = new decimal_1.default(0.012);

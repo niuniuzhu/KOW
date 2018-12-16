@@ -1,16 +1,17 @@
 import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FVec2 } from "../../RC/FMath/FVec2";
-import { FSM } from "../../RC/FSM/FSM";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute, EAttr } from "../Attribute";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
+import { ActStateAttrs } from "../FSM/ActStateAttrs";
 import { EntityFSM } from "../FSM/EntityFSM";
 import { EntityState } from "../FSM/EntityState";
-import { StateType } from "../FSM/StateEnums";
+import { StateAttrsID, StateType } from "../FSM/StateEnums";
 import { ISnapshotable } from "../ISnapshotable";
+import { Skill } from "../Skill";
 import { Battle } from "./Battle";
 
 export class Entity implements ISnapshotable {
@@ -33,6 +34,7 @@ export class Entity implements ISnapshotable {
 	private _team: number;
 	private _name: string;
 	private _def: Hashtable;
+	private readonly _skills: Skill[] = [];
 
 	private _moveDirection: FVec2 = FVec2.zero;
 
@@ -57,7 +59,6 @@ export class Entity implements ISnapshotable {
 	}
 
 	public Dispose(): void {
-
 	}
 
 	private LoadDef(): void {
@@ -69,12 +70,19 @@ export class Entity implements ISnapshotable {
 		this.attribute.Set(EAttr.MP, this.attribute.Get(EAttr.MMP));
 		this.attribute.Set(EAttr.MOVE_SPEED, new Decimal(Hashtable.GetNumber(this._def, "move_speed")));
 		this.attribute.Set(EAttr.MOVE_SPEED_FACTOR, new Decimal(Hashtable.GetNumber(this._def, "move_speed_factor")));
+		const skillsDef = Hashtable.GetNumberArray(this._def, "skills");
+		for (const sid of skillsDef) {
+			const skill = new Skill();
+			skill.Init(sid);
+			this._skills.push(skill);
+		}
 	}
 
 	/**
 	 * 编码快照
 	 */
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		//sync properties
 		writer.int32(this.type);
 		writer.uint64(this._id);
 		writer.int32(this._actorID);
@@ -83,8 +91,18 @@ export class Entity implements ISnapshotable {
 		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
 		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
 		writer.float(this._moveDirection.x.toNumber()).float(this._moveDirection.y.toNumber());
+
+		//sync skills
+		writer.int32(this._skills.length);
+		for (const skill of this._skills) {
+			writer.int32(skill.id);
+		}
+
+		//sync fsmstates
 		writer.int32(this._fsm.currentState.type);
 		writer.float((<EntityState>this._fsm.currentState).time.toNumber());
+
+		//sync attributes
 		const count = this.attribute.count;
 		writer.int32(count);
 		this.attribute.Foreach((v, k, map) => {
@@ -96,15 +114,28 @@ export class Entity implements ISnapshotable {
 	 * 解码快照
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		//read properties
 		this._actorID = reader.int32();
 		this._team = reader.int32();
 		this._name = reader.string();
 		this.position = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this.direction = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this._moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
+
+		//read skills
+		let count = reader.int32();
+		for (let i = 0; i < count; ++i) {
+			const skill = new Skill();
+			skill.Init(reader.int32());
+			this._skills.push(skill);
+		}
+
+		//read fsmstates
 		this._fsm.ChangeState(reader.int32(), null, true);
 		(<EntityState>this._fsm.currentState).time = new Decimal(reader.float());
-		const count = reader.int32();
+
+		//read attributes
+		count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
 		}
@@ -113,6 +144,98 @@ export class Entity implements ISnapshotable {
 	public Update(dt: Decimal): void {
 		this._fsm.Update(dt);
 		this.MoveStep(this._moveDirection, dt);
+	}
+
+	/**
+	 * 获取当前状态下是否可移动
+	 */
+	public CanMove(): boolean {
+		const stateAttrsAction = <ActStateAttrs>(<EntityState>this._fsm.currentState).GetAction(StateAttrsID);
+		if (stateAttrsAction != null) {
+			if (!stateAttrsAction.canMove)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 获取当前状态下是否可转身
+	 */
+	public CanTurn(): boolean {
+		const stateAttrsAction = <ActStateAttrs>(<EntityState>this._fsm.currentState).GetAction(StateAttrsID);
+		if (stateAttrsAction != null) {
+			if (!stateAttrsAction.canTurn)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 获取当前状态下是否霸体
+	 */
+	public IsSuperArmor(): boolean {
+		const stateAttrsAction = <ActStateAttrs>(<EntityState>this._fsm.currentState).GetAction(StateAttrsID);
+		if (stateAttrsAction != null) {
+			if (!stateAttrsAction.isSuperArmor)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 获取当前状态下是否无敌
+	 */
+	public IsInvulnerability(): boolean {
+		const stateAttrsAction = <ActStateAttrs>(<EntityState>this._fsm.currentState).GetAction(StateAttrsID);
+		if (stateAttrsAction != null) {
+			if (!stateAttrsAction.isInvulnerability)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 获取当前状态下是否可使用技能
+	 */
+	public CanUseSkill(): boolean {
+		const stateAttrsAction = <ActStateAttrs>(<EntityState>this._fsm.currentState).GetAction(StateAttrsID);
+		if (stateAttrsAction != null) {
+			if (!stateAttrsAction.canUseSkill)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 是否存在指定id的技能
+	 * @param id 技能id
+	 */
+	public HasSkill(id: number): boolean {
+		for (const skill of this._skills) {
+			if (skill.id == id)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 获取指定id的技能
+	 * @param id 技能id
+	 */
+	public GetSkill(id: number): Skill {
+		for (const skill of this._skills) {
+			if (skill.id == id)
+				return skill;
+		}
+		return null;
+	}
+
+	/**
+	 * 获取指定索引的技能
+	 * @param index 索引
+	 */
+	public GetSkillAt(index: number): Skill {
+		return this._skills[index];
 	}
 
 	/**
@@ -131,16 +254,31 @@ export class Entity implements ISnapshotable {
 	protected MoveStep(direction: FVec2, dt: Decimal): void {
 		if (direction.SqrMagnitude().lessThan(MathUtils.D_SMALL))
 			return;
-		const speed = this.attribute.Get(EAttr.MOVE_SPEED);
-		const moveDelta = FVec2.MulN(FVec2.MulN(direction, speed), MathUtils.D_SMALL1.mul(dt));
-		const pos = FVec2.Add(this.position, moveDelta);
-		//限制活动范围
-		const radius = this.attribute.Get(EAttr.RADIUS);
-		pos.x = Decimal.max(Decimal.add(this._battle.bounds.xMin, radius), pos.x);
-		pos.x = Decimal.min(Decimal.sub(this._battle.bounds.xMax, radius), pos.x);
-		pos.y = Decimal.max(Decimal.add(this._battle.bounds.yMin, radius), pos.y);
-		pos.y = Decimal.min(Decimal.sub(this._battle.bounds.yMax, radius), pos.y);
-		this.position = pos;
-		this.direction = direction;
+		if (this.CanMove()) {
+			const speed = this.attribute.Get(EAttr.MOVE_SPEED);
+			const moveDelta = FVec2.MulN(FVec2.MulN(direction, speed), MathUtils.D_SMALL1.mul(dt));
+			const pos = FVec2.Add(this.position, moveDelta);
+			//限制活动范围
+			const radius = this.attribute.Get(EAttr.RADIUS);
+			pos.x = Decimal.max(Decimal.add(this._battle.bounds.xMin, radius), pos.x);
+			pos.x = Decimal.min(Decimal.sub(this._battle.bounds.xMax, radius), pos.x);
+			pos.y = Decimal.max(Decimal.add(this._battle.bounds.yMin, radius), pos.y);
+			pos.y = Decimal.min(Decimal.sub(this._battle.bounds.yMax, radius), pos.y);
+			this.position = pos;
+		}
+		if (this.CanTurn())
+			this.direction = direction;
+	}
+
+	public UseSkill(sid: number): boolean {
+		if (!this.CanUseSkill())
+			return false;
+		const skill = this.GetSkill(sid);
+		if (skill == null)
+			return false;
+		if (!this.fsm.HasState(skill.connectedState))
+			return false;
+		this.fsm.ChangeState(skill.connectedState, skill);
+		return true;
 	}
 }

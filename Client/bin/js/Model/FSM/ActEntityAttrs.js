@@ -2,8 +2,8 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/Utils/Hashtable", 
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActEntityAttrs extends EntityStateAction_1.EntityStateAction {
-        constructor(state, def) {
-            super(state, def);
+        constructor(state, id, def) {
+            super(state, id, def);
             this._deltaAttrs = new Map();
             const attrs = Hashtable_1.Hashtable.GetArray(def, "attrs");
             const ops = Hashtable_1.Hashtable.GetArray(def, "ops");

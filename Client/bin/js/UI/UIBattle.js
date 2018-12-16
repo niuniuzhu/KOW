@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Model/FrameActionManager", "../RC/Math/Vec2", "./GestureState", "./Joystick"], function (require, exports, Global_1, FrameActionManager_1, Vec2_1, GestureState_1, Joystick_1) {
+define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/FrameActionManager", "../RC/Math/Vec2", "./GestureState", "./Joystick"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Vec2_1, GestureState_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
@@ -18,6 +18,7 @@ define(["require", "exports", "../Global", "../Model/FrameActionManager", "../RC
             this._gestureState.joystick.radius = 100;
             this._gestureState.joystick.resetDuration = 60;
             this._gestureState.onChanged = this.HandleAxisInput.bind(this);
+            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnEntityInit.bind(this));
         }
         get root() { return this._root; }
         Dispose() {
@@ -42,9 +43,18 @@ define(["require", "exports", "../Global", "../Model/FrameActionManager", "../RC
         }
         OnResize(e) {
         }
+        OnEntityInit(e) {
+            if (e.b0) {
+                this._player = e.entity;
+                this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
+                this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
+            }
+        }
         OnSkillBtnClick() {
+            this._frameActionManager.SetInputSkill(this._root.getChild("n0").data);
         }
         OnSkill2BtnClick() {
+            this._frameActionManager.SetInputSkill(this._root.getChild("n1").data);
         }
         HandleAxisInput(value) {
             this._frameActionManager.SetInputDirection(value);

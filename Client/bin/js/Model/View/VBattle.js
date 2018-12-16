@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/BattleEventMgr", "../BattleEvent/SyncEvent", "../CDefs", "../EntityType", "./Camera", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, BattleEventMgr_1, SyncEvent_1, CDefs_1, EntityType_1, Camera_1, VChampion_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "../CDefs", "../EntityType", "./Camera", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, CDefs_1, EntityType_1, Camera_1, VChampion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -10,8 +10,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._camera = new Camera_1.Camera();
         }
         SetBattleInfo(battleInfo) {
-            BattleEventMgr_1.BattleEventMgr.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
-            BattleEventMgr_1.BattleEventMgr.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
             this._destroied = false;
             this._mapID = battleInfo.mapID;
             this._def = CDefs_1.CDefs.GetMap(this._mapID);
@@ -25,8 +25,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             if (this._destroied)
                 return;
             this._destroied = true;
-            BattleEventMgr_1.BattleEventMgr.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
-            BattleEventMgr_1.BattleEventMgr.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
+            SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
+            SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
             const count = this._entities.length;
             for (let i = 0; i < count; ++i) {
                 this._entities[i].Dispose();
@@ -54,9 +54,11 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 const id = reader.uint64();
                 const entity = this.CreateEntity(type, id);
                 entity.InitSnapshot(reader);
-                if (entity.id.equals(this._playerID)) {
+                const isSelf = entity.id.equals(this._playerID);
+                if (isSelf) {
                     this._camera.lookAt = entity;
                 }
+                UIEvent_1.UIEvent.EntityInit(entity, isSelf);
             }
         }
         DecodeSnapshot(reader) {
@@ -88,13 +90,11 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         GetEntity(id) {
             return this._idToEntity.get(id);
         }
-        OnBattleInit(baseEvent) {
-            const e = baseEvent;
+        OnBattleInit(e) {
             const reader = $protobuf.Reader.create(e.data);
             this.InitSnapshot(reader);
         }
-        OnSnapshot(baseEvent) {
-            const e = baseEvent;
+        OnSnapshot(e) {
             const reader = $protobuf.Reader.create(e.data);
             this.DecodeSnapshot(reader);
         }

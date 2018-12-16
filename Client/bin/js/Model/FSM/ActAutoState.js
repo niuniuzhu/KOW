@@ -2,8 +2,8 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/Math/MathUtils", "
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActAutoState extends EntityStateAction_1.EntityStateAction {
-        constructor(state, def) {
-            super(state, def);
+        constructor(state, id, def) {
+            super(state, id, def);
             this._defaultConnectState = StateEnums_1.StateType.None;
             this._duration = new decimal_1.default(-1);
             this._defaultConnectState = Hashtable_1.Hashtable.GetNumber(def, "default_state");

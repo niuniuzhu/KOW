@@ -9,7 +9,7 @@ export enum EAttr {
 	ATK,
 	DEF,
 	MOVE_SPEED,
-	MOVE_SPEED_FACTOR,
+	MOVE_SPEED_FACTOR
 }
 
 /**

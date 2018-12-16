@@ -1,17 +1,16 @@
-﻿using Core.Misc;
+﻿using Core.Crypto;
+using Core.Misc;
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Core.Crypto;
 
 namespace BattleServer.Battle.Snapshot
 {
-	/// <summary>
-	/// 快照管理器
-	/// </summary>
-	public class SnapshotMgr
+    /// <summary>
+    /// 快照管理器
+    /// </summary>
+    public class SnapshotMgr
 	{
 		public delegate void OutOfSyncHandler( ulong gcNID, int frame, ByteString data1, ByteString data2 );
 
@@ -136,38 +135,39 @@ namespace BattleServer.Battle.Snapshot
 
 		private static string PrintSnapshot( ByteString data )
 		{
-			byte[] bytes = data.ToByteArray();
-			CodedInputStream reader = new CodedInputStream( bytes );
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine( BitConverter.ToString( bytes ) );
-			sb.AppendLine( "frame:" + reader.ReadInt32() );
-			int count = reader.ReadInt32();
-			sb.AppendLine( "count:" + count );
-			for ( int i = 0; i < count; i++ )
-			{
-				//entity decode
-				sb.AppendLine( "type:" + reader.ReadInt32() );
-				sb.AppendLine( "id:" + reader.ReadUInt64() );
-				sb.AppendLine( "actorID:" + reader.ReadInt32() );
-				sb.AppendLine( "team:" + reader.ReadInt32() );
-				sb.AppendLine( "name:" + reader.ReadString() );
-				sb.AppendLine( "px:" + reader.ReadFloat() );
-				sb.AppendLine( "py:" + reader.ReadFloat() );
-				sb.AppendLine( "dx:" + reader.ReadFloat() );
-				sb.AppendLine( "dy:" + reader.ReadFloat() );
-				sb.AppendLine( "mx:" + reader.ReadFloat() );
-				sb.AppendLine( "my:" + reader.ReadFloat() );
-				sb.AppendLine( "fsm_type:" + reader.ReadInt32() );
-				sb.AppendLine( "fsm_state:" + reader.ReadInt32() );
-				int c2 = reader.ReadInt32();
-				for ( int j = 0; j < c2; j++ )
-				{
-					sb.AppendLine( "attr:" + reader.ReadInt32() + ",v:" + reader.ReadFloat() );
-				}
-			}
-			return sb.ToString();
-		}
-	}
+		    return BitConverter.ToString( data.ToByteArray() );
+            //byte[] bytes = data.ToByteArray();
+            //CodedInputStream reader = new CodedInputStream( bytes );
+            //StringBuilder sb = new StringBuilder();
+            //sb.AppendLine( BitConverter.ToString( bytes ) );
+            //sb.AppendLine( "frame:" + reader.ReadInt32() );
+            //int count = reader.ReadInt32();
+            //sb.AppendLine( "count:" + count );
+            //for ( int i = 0; i < count; i++ )
+            //{
+            //	//entity decode
+            //	sb.AppendLine( "type:" + reader.ReadInt32() );
+            //	sb.AppendLine( "id:" + reader.ReadUInt64() );
+            //	sb.AppendLine( "actorID:" + reader.ReadInt32() );
+            //	sb.AppendLine( "team:" + reader.ReadInt32() );
+            //	sb.AppendLine( "name:" + reader.ReadString() );
+            //	sb.AppendLine( "px:" + reader.ReadFloat() );
+            //	sb.AppendLine( "py:" + reader.ReadFloat() );
+            //	sb.AppendLine( "dx:" + reader.ReadFloat() );
+            //	sb.AppendLine( "dy:" + reader.ReadFloat() );
+            //	sb.AppendLine( "mx:" + reader.ReadFloat() );
+            //	sb.AppendLine( "my:" + reader.ReadFloat() );
+            //	sb.AppendLine( "fsm_type:" + reader.ReadInt32() );
+            //	sb.AppendLine( "fsm_state:" + reader.ReadInt32() );
+            //	int c2 = reader.ReadInt32();
+            //	for ( int j = 0; j < c2; j++ )
+            //	{
+            //		sb.AppendLine( "attr:" + reader.ReadInt32() + ",v:" + reader.ReadFloat() );
+            //	}
+            //}
+            //return sb.ToString();
+        }
+    }
 
 	class PlayerSnapshot
 	{

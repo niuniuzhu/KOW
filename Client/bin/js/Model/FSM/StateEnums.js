@@ -25,12 +25,18 @@ define(["require", "exports", "./ActAutoState", "./ActEntityAttrs", "./ActStateA
         StateAttr[StateAttr["SuperArmor"] = 4] = "SuperArmor";
         StateAttr[StateAttr["Invulnerability"] = 8] = "Invulnerability";
         StateAttr[StateAttr["ClearLastBullets"] = 16] = "ClearLastBullets";
+        StateAttr[StateAttr["DisableUseSkill"] = 32] = "DisableUseSkill";
     })(StateAttr = exports.StateAttr || (exports.StateAttr = {}));
+    exports.AutoStateID = 0;
+    exports.VelocityID = 1;
+    exports.VelocityAccelerationID = 2;
+    exports.EntityAttrsID = 3;
+    exports.StateAttrsID = 4;
     exports.ID_TO_STATE_ACTION = new Map();
-    exports.ID_TO_STATE_ACTION.set(0, ActAutoState_1.ActAutoState);
-    exports.ID_TO_STATE_ACTION.set(1, ActVelocity_1.ActVelocity);
-    exports.ID_TO_STATE_ACTION.set(2, ActVelocityAcceleration_1.ActVelocityAcceleration);
-    exports.ID_TO_STATE_ACTION.set(3, ActEntityAttrs_1.ActEntityAttrs);
-    exports.ID_TO_STATE_ACTION.set(4, ActStateAttrs_1.ActStateAttrs);
+    exports.ID_TO_STATE_ACTION.set(exports.AutoStateID, ActAutoState_1.ActAutoState);
+    exports.ID_TO_STATE_ACTION.set(exports.VelocityID, ActVelocity_1.ActVelocity);
+    exports.ID_TO_STATE_ACTION.set(exports.VelocityAccelerationID, ActVelocityAcceleration_1.ActVelocityAcceleration);
+    exports.ID_TO_STATE_ACTION.set(exports.EntityAttrsID, ActEntityAttrs_1.ActEntityAttrs);
+    exports.ID_TO_STATE_ACTION.set(exports.StateAttrsID, ActStateAttrs_1.ActStateAttrs);
 });
 //# sourceMappingURL=StateEnums.js.map

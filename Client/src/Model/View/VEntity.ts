@@ -10,8 +10,9 @@ import { Attribute } from "../Attribute";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { StateType } from "../FSM/StateEnums";
-import { AniHolder } from "./AniHolder";
 import { VEntityState } from "../FSM/VEntityState";
+import { Skill } from "../Skill";
+import { AniHolder } from "./AniHolder";
 import { VBattle } from "./VBattle";
 
 export class VEntity {
@@ -50,6 +51,7 @@ export class VEntity {
 	private _team: number;
 	private _name: string;
 	private _def: Hashtable;
+	private readonly _skills: Skill[] = [];
 
 	private _position: FVec2 = FVec2.zero;
 	private _worldPosition: FVec2 = FVec2.zero;
@@ -125,6 +127,7 @@ export class VEntity {
 			this._animations.set(aniName, new AniHolder(urls));
 		}
 
+		//init properties
 		this._team = reader.int32();
 		this._name = reader.string();
 		this.position = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
@@ -134,12 +137,23 @@ export class VEntity {
 		if (logicDir.x.lessThan(MathUtils.D_ZERO))
 			this.rotation = 360 - this.rotation;
 		this._logicRot = this.rotation;
-		//move direction
 		const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
+
+		//init skills
+		let count = reader.int32();
+		for (let i = 0; i < count; ++i) {
+			const skill = new Skill();
+			skill.Init(reader.int32());
+			this._skills.push(skill);
+		}
+
+		//init fsmstates
 		this._fsm.ChangeState(reader.int32(), null);
 		(<VEntityState>this._fsm.currentState).time = reader.float();
-		const count = reader.int32();
-		for (let i = 0; i < count; i++) {
+
+		//init attribues
+		count = reader.int32();
+		for (let i = 0; i < count; ++i) {
 			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
 		}
 	}
@@ -148,6 +162,7 @@ export class VEntity {
 	 * 解码快照
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		//read properties
 		this._actorID = reader.int32();
 		this._team = reader.int32();
 		this._name = reader.string();
@@ -156,11 +171,20 @@ export class VEntity {
 		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(FVec2.down).toNumber()));
 		if (logicDir.x.lessThan(MathUtils.D_ZERO))
 			this._logicRot = 360 - this._logicRot;
-		//move direction
 		const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
+
+		//read skills
+		let count = reader.int32();
+		for (let i = 0; i < count; ++i) {
+			reader.int32()
+		}
+
+		//read fsmstates
 		this._fsm.ChangeState(reader.int32(), null);
 		(<VEntityState>this._fsm.currentState).time = reader.float();
-		const count = reader.int32();
+
+		//iread attribues
+		count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
 		}
@@ -179,5 +203,37 @@ export class VEntity {
 		this._root.removeChildren();
 		this._root.addChild(aniHilder);
 		aniHilder.Play();
+	}
+
+	/**
+	 * 是否存在指定id的技能
+	 * @param id 技能id
+	 */
+	public HasSkill(id: number): boolean {
+		for (const skill of this._skills) {
+			if (skill.id == id)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 获取指定id的技能
+	 * @param id 技能id
+	 */
+	public GetSkill(id: number): Skill {
+		for (const skill of this._skills) {
+			if (skill.id == id)
+				return skill;
+		}
+		return null;
+	}
+
+	/**
+	 * 获取指定索引的技能
+	 * @param index 索引
+	 */
+	public GetSkillAt(index: number): Skill {
+		return this._skills[index];
 	}
 }

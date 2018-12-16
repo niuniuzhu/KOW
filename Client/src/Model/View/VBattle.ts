@@ -2,9 +2,8 @@ import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { BaseBattleEvent } from "../BattleEvent/BaseBattleEvent";
-import { BattleEventMgr } from "../BattleEvent/BattleEventMgr";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
+import { UIEvent } from "../BattleEvent/UIEvent";
 import { BattleInfo } from "../BattleInfo";
 import { CDefs } from "../CDefs";
 import { EntityType } from "../EntityType";
@@ -33,8 +32,8 @@ export class VBattle {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo): void {
-		BattleEventMgr.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
-		BattleEventMgr.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
 
 		this._destroied = false;
 		this._mapID = battleInfo.mapID
@@ -44,6 +43,7 @@ export class VBattle {
 		this._camera.SetBounds(Hashtable.GetNumber(this._def, "width"), Hashtable.GetNumber(this._def, "height"));
 
 		this._playerID = battleInfo.playerID;
+
 		this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
 		this._root.touchable = false;
 		Global.graphic.mapRoot.addChild(this._root);
@@ -57,8 +57,8 @@ export class VBattle {
 			return;
 		this._destroied = true;
 
-		BattleEventMgr.RemoveListener(SyncEvent.E_BATTLE_INIT);
-		BattleEventMgr.RemoveListener(SyncEvent.E_SNAPSHOT);
+		SyncEvent.RemoveListener(SyncEvent.E_BATTLE_INIT);
+		SyncEvent.RemoveListener(SyncEvent.E_SNAPSHOT);
 
 		const count = this._entities.length;
 		for (let i = 0; i < count; ++i) {
@@ -95,9 +95,13 @@ export class VBattle {
 			const entity = this.CreateEntity(type, id);
 			entity.InitSnapshot(reader);
 
-			if (entity.id.equals(this._playerID)) {
+			const isSelf = entity.id.equals(this._playerID);
+			if (isSelf) {
 				this._camera.lookAt = entity;
 			}
+
+			//通知UI创建实体
+			UIEvent.EntityInit(entity, isSelf);
 		}
 	}
 
@@ -143,14 +147,12 @@ export class VBattle {
 		return this._idToEntity.get(id);
 	}
 
-	private OnBattleInit(baseEvent: BaseBattleEvent): void {
-		const e = <SyncEvent>baseEvent;
+	private OnBattleInit(e: SyncEvent): void {
 		const reader = $protobuf.Reader.create(e.data);
 		this.InitSnapshot(reader);
 	}
 
-	private OnSnapshot(baseEvent: BaseBattleEvent): void {
-		const e = <SyncEvent>baseEvent;
+	private OnSnapshot(e: SyncEvent): void {
 		const reader = $protobuf.Reader.create(e.data);
 		this.DecodeSnapshot(reader);
 	}

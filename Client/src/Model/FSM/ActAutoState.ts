@@ -18,8 +18,8 @@ export class ActAutoState extends EntityStateAction {
 	 */
 	private _duration: Decimal = new Decimal(-1);
 
-	constructor(state: EntityState, def: { [k: string]: any; }) {
-		super(state, def);
+	constructor(state: EntityState, id: number, def: Hashtable) {
+		super(state, id, def);
 		this._defaultConnectState = Hashtable.GetNumber(def, "default_state");
 		this._duration = new Decimal(Hashtable.GetNumber(def, "duration", -1));
 	}

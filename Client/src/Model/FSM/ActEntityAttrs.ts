@@ -11,8 +11,8 @@ import { StateOp } from "./StateEnums";
 export class ActEntityAttrs extends EntityStateAction {
 	private readonly _deltaAttrs: Map<EAttr, Decimal> = new Map<EAttr, Decimal>();
 
-	constructor(state: EntityState, def: { [k: string]: any; }) {
-		super(state, def);
+	constructor(state: EntityState, id: number, def: Hashtable) {
+		super(state, id, def);
 		const attrs = Hashtable.GetArray(def, "attrs");
 		const ops = Hashtable.GetArray(def, "ops");
 		const values = Hashtable.GetArray(def, "values");

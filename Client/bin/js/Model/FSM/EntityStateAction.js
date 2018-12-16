@@ -2,9 +2,10 @@ define(["require", "exports", "../../RC/FSM/FSMStateAction", "../../Libs/decimal
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityStateAction extends FSMStateAction_1.FSMStateAction {
-        constructor(state, def) {
+        constructor(state, id, def) {
             super(state);
             this._triggerTime = new decimal_1.default(0);
+            this.id = id;
             this._triggerTime = new decimal_1.default(Hashtable_1.Hashtable.GetNumber(def, "trigger_time"));
         }
         Trigger() {

@@ -11,6 +11,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Ne
     class FrameAciontManager {
         constructor() {
             this._direction = Vec2_1.Vec2.zero;
+            this._sid = 0;
             this._inputFlag = InputFlag.None;
             this._nextFrameActionSendTime = 0;
             this._changed = false;
@@ -20,19 +21,18 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Ne
         Reset() {
             this._nextFrameActionSendTime = 0;
             this._direction.Set(0, 0);
+            this._sid = 0;
             this._inputFlag = InputFlag.None;
+            this._changed = false;
         }
         SetInputDirection(direction) {
             this._direction.CopyFrom(direction);
             this._inputFlag |= InputFlag.Move;
             this._changed = true;
         }
-        SetInputSkill1() {
+        SetInputSkill(sid) {
+            this._sid = sid;
             this._inputFlag |= InputFlag.Skill1;
-            this._changed = true;
-        }
-        SetInputSkill2() {
-            this._inputFlag |= InputFlag.Skill2;
             this._changed = true;
         }
         Update(dt) {
@@ -42,9 +42,9 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Ne
                 frameAction.inputFlag = this.inputFlag;
                 frameAction.dx = this.direction.x;
                 frameAction.dy = this.direction.y;
+                frameAction.sid = this._sid;
                 Global_1.Global.connector.bsConnector.Send(protos_1.Protos.GC2BS_FrameAction, frameAction);
-                this._inputFlag = 0;
-                this._changed = false;
+                this.Reset();
             }
         }
     }

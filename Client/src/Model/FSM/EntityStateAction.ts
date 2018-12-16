@@ -4,11 +4,13 @@ import { EntityState } from "./EntityState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 
 export class EntityStateAction extends FSMStateAction {
+	public readonly id: number;
 	private _isTriggered: boolean;
 	private _triggerTime: Decimal = new Decimal(0);
 
-	constructor(state: EntityState, def: { [k: string]: any; }) {
+	constructor(state: EntityState, id: number, def: Hashtable) {
 		super(state);
+		this.id = id;
 		this._triggerTime = new Decimal(Hashtable.GetNumber(def, "trigger_time"));
 	}
 

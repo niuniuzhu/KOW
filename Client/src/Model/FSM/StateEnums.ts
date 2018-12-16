@@ -1,8 +1,10 @@
+import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ActAutoState } from "./ActAutoState";
 import { ActEntityAttrs } from "./ActEntityAttrs";
 import { ActStateAttrs } from "./ActStateAttrs";
 import { ActVelocity } from "./ActVelocity";
 import { ActVelocityAcceleration } from "./ActVelocityAcceleration";
+import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";
 
 export enum StateType {
@@ -28,11 +30,18 @@ export enum StateAttr {
 	SuperArmor = 1 << 2,//霸体
 	Invulnerability = 1 << 3,//刀枪不入
 	ClearLastBullets = 1 << 4,//清理上次子弹
+	DisableUseSkill = 1 << 5,//禁止使用技能
 }
 
-export const ID_TO_STATE_ACTION = new Map<number, new (EntityState, any) => EntityStateAction>();
-ID_TO_STATE_ACTION.set(0, ActAutoState);
-ID_TO_STATE_ACTION.set(1, ActVelocity);
-ID_TO_STATE_ACTION.set(2, ActVelocityAcceleration);
-ID_TO_STATE_ACTION.set(3, ActEntityAttrs);
-ID_TO_STATE_ACTION.set(4, ActStateAttrs);
+export const AutoStateID: number = 0;
+export const VelocityID: number = 1;
+export const VelocityAccelerationID: number = 2;
+export const EntityAttrsID: number = 3;
+export const StateAttrsID: number = 4;
+
+export const ID_TO_STATE_ACTION = new Map<number, new (state: EntityState, id: number, def: Hashtable) => EntityStateAction>();
+ID_TO_STATE_ACTION.set(AutoStateID, ActAutoState);
+ID_TO_STATE_ACTION.set(VelocityID, ActVelocity);
+ID_TO_STATE_ACTION.set(VelocityAccelerationID, ActVelocityAcceleration);
+ID_TO_STATE_ACTION.set(EntityAttrsID, ActEntityAttrs);
+ID_TO_STATE_ACTION.set(StateAttrsID, ActStateAttrs);

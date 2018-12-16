@@ -19,6 +19,7 @@ export class FrameAciontManager {
 	public get inputFlag(): InputFlag { return this._inputFlag; }
 
 	private _direction: Vec2 = Vec2.zero;
+	private _sid: number = 0;
 	private _inputFlag: InputFlag = InputFlag.None;
 	private _nextFrameActionSendTime: number = 0;
 	private _changed: boolean = false;
@@ -29,7 +30,9 @@ export class FrameAciontManager {
 	public Reset(): void {
 		this._nextFrameActionSendTime = 0;
 		this._direction.Set(0, 0);
+		this._sid = 0;
 		this._inputFlag = InputFlag.None;
+		this._changed = false;
 	}
 
 	public SetInputDirection(direction: Vec2): void {
@@ -38,13 +41,9 @@ export class FrameAciontManager {
 		this._changed = true;
 	}
 
-	public SetInputSkill1(): void {
+	public SetInputSkill(sid: number): void {
+		this._sid = sid;
 		this._inputFlag |= InputFlag.Skill1;
-		this._changed = true;
-	}
-
-	public SetInputSkill2(): void {
-		this._inputFlag |= InputFlag.Skill2;
 		this._changed = true;
 	}
 
@@ -55,9 +54,9 @@ export class FrameAciontManager {
 			frameAction.inputFlag = this.inputFlag;
 			frameAction.dx = this.direction.x;
 			frameAction.dy = this.direction.y;
+			frameAction.sid = this._sid;
 			Global.connector.bsConnector.Send(Protos.GC2BS_FrameAction, frameAction);
-			this._inputFlag = 0;
-			this._changed = false;
+			this.Reset();
 		}
 	}
 }

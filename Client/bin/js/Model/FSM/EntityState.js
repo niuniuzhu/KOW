@@ -4,6 +4,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSMState", "..
     class EntityState extends FSMState_1.FSMState {
         constructor(type, owner) {
             super(type);
+            this._idToActions = new Map();
             this._time = new decimal_1.default(0);
             this._owner = owner;
         }
@@ -14,6 +15,17 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSMState", "..
                 return;
             this._time = value;
             this.OnStateTimeChanged();
+        }
+        AddAction(action) {
+            super.AddAction(action);
+            this._idToActions.set(action.id, action);
+        }
+        RemoveAction(action) {
+            super.RemoveAction(action);
+            this._idToActions.delete(action.id);
+        }
+        GetAction(id) {
+            return this._idToActions.get(id);
         }
         Init() {
             const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
@@ -31,9 +43,9 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSMState", "..
         CreateActions(actionsDef) {
             let actionDef;
             for (actionDef of actionsDef) {
-                const type = Hashtable_1.Hashtable.GetNumber(actionDef, "type");
-                const ctr = StateEnums_1.ID_TO_STATE_ACTION.get(type);
-                const action = new ctr(this, actionDef);
+                const id = Hashtable_1.Hashtable.GetNumber(actionDef, "id");
+                const ctr = StateEnums_1.ID_TO_STATE_ACTION.get(id);
+                const action = new ctr(this, id, actionDef);
                 this.AddAction(action);
             }
         }

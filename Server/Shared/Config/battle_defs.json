@@ -35,38 +35,21 @@
 			"move_speed": 200,
 			"move_speed_factor": 1,
 			"radius": 110,
+			"skills": [
+				0,
+				1
+			],
 			"states": {
 				"0": {
 					"state_attr": 0,
-					"actions": [
-						{
-							"type": 0,
-							"trigger_time": 0
-						},
-						{
-							"type": 3,
-							"trigger_time": 0,
-							"attrs": [],
-							"ops": [],
-							"values": []
-						},
-						{
-							"type": 4,
-							"state_attrs": []
-						}
-					],
+					"actions": [],
 					"animation": "stand"
 				},
 				"1": {
 					"attrs": [],
 					"ops": [],
 					"values": [],
-					"actions": [
-						{
-							"type": 0,
-							"trigger_time": 0
-						}
-					],
+					"actions": [],
 					"animation": "run"
 				},
 				"2": {
@@ -75,8 +58,16 @@
 					"values": [],
 					"actions": [
 						{
-							"type": 0,
-							"trigger_time": 0
+							"id": 0,
+							"default_state": 0,
+							"duration": 700
+						},
+						{
+							"id": 4,
+							"state_attrs": [
+								0,
+								1
+							]
 						}
 					],
 					"animation": "attack"
@@ -85,27 +76,27 @@
 					"attrs": [],
 					"ops": [],
 					"values": [],
-					"actions": [
-						{
-							"type": 0,
-							"trigger_time": 0
-						}
-					],
+					"actions": [],
 					"animation": "die"
 				},
 				"4": {
 					"attrs": [],
 					"ops": [],
 					"values": [],
-					"actions": [
-						{
-							"type": 0,
-							"trigger_time": 0
-						}
-					],
+					"actions": [],
 					"animation": "b"
 				}
 			}
+		}
+	},
+	"skill": {
+		"s0": {
+			"connected_state": 2,
+			"damage": 10
+		},
+		"s1": {
+			"connected_state": 2,
+			"damage": 10
 		}
 	}
 }

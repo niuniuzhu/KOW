@@ -13,9 +13,6 @@ define(["require", "exports"], function (require, exports) {
         RemoveAction(action) {
             this._actions.splice(this._actions.indexOf(action), 1);
         }
-        GetAction(index) {
-            return this._actions[index];
-        }
         Enter(param) {
             this.OnEnter(param);
             for (const action of this._actions) {

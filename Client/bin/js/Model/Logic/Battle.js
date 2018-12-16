@@ -186,6 +186,9 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             if ((frameAction.inputFlag & FrameAction_1.FrameAction.InputFlag.Move) > 0) {
                 entity.BeginMove(frameAction.dx, frameAction.dy);
             }
+            if ((frameAction.inputFlag & FrameAction_1.FrameAction.InputFlag.Skill) > 0) {
+                entity.UseSkill(frameAction.sid);
+            }
         }
         HandleSnapShot(ret) {
             if (ret.snapshot.length == 0)

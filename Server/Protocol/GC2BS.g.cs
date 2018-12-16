@@ -29,20 +29,20 @@ namespace Protos {
             "c3Npb25JRBgCIAEoBCIwCg9HQzJCU19LZWVwQWxpdmUSHQoEb3B0cxgBIAEo",
             "CzIPLlByb3Rvcy5Nc2dPcHRzIkUKFUdDMkJTX1JlcXVlc3RTbmFwc2hvdBId",
             "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiABKAUi",
-            "XQoRR0MyQlNfRnJhbWVBY3Rpb24SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5N",
+            "agoRR0MyQlNfRnJhbWVBY3Rpb24SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5N",
             "c2dPcHRzEhEKCWlucHV0RmxhZxgCIAEoBRIKCgJkeBgDIAEoAhIKCgJkeRgE",
-            "IAEoAiJUChlHQzJCU19SZXF1ZXN0RnJhbWVBY3Rpb25zEh0KBG9wdHMYASAB",
-            "KAsyDy5Qcm90b3MuTXNnT3B0cxIMCgRmcm9tGAIgASgFEgoKAnRvGAMgASgF",
-            "IlIKFEdDMkJTX0NvbW1pdFNuYXBzaG90Eh0KBG9wdHMYASABKAsyDy5Qcm90",
-            "b3MuTXNnT3B0cxINCgVmcmFtZRgCIAEoBRIMCgRkYXRhGAMgASgMYgZwcm90",
-            "bzM="));
+            "IAEoAhILCgNzaWQYBSABKAUiVAoZR0MyQlNfUmVxdWVzdEZyYW1lQWN0aW9u",
+            "cxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDAoEZnJvbRgCIAEo",
+            "BRIKCgJ0bxgDIAEoBSJSChRHQzJCU19Db21taXRTbmFwc2hvdBIdCgRvcHRz",
+            "GAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiABKAUSDAoEZGF0",
+            "YRgDIAEoDGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_AskLogin), global::Protos.GC2BS_AskLogin.Parser, new[]{ "Opts", "SessionID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_KeepAlive), global::Protos.GC2BS_KeepAlive.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestSnapshot), global::Protos.GC2BS_RequestSnapshot.Parser, new[]{ "Opts", "Frame" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_FrameAction), global::Protos.GC2BS_FrameAction.Parser, new[]{ "Opts", "InputFlag", "Dx", "Dy" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_FrameAction), global::Protos.GC2BS_FrameAction.Parser, new[]{ "Opts", "InputFlag", "Dx", "Dy", "Sid" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestFrameActions), global::Protos.GC2BS_RequestFrameActions.Parser, new[]{ "Opts", "From", "To" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_CommitSnapshot), global::Protos.GC2BS_CommitSnapshot.Parser, new[]{ "Opts", "Frame", "Data" }, null, null, null)
           }));
@@ -547,6 +547,7 @@ namespace Protos {
       inputFlag_ = other.inputFlag_;
       dx_ = other.dx_;
       dy_ = other.dy_;
+      sid_ = other.sid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -599,6 +600,17 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "sid" field.</summary>
+    public const int SidFieldNumber = 5;
+    private int sid_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Sid {
+      get { return sid_; }
+      set {
+        sid_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GC2BS_FrameAction);
@@ -616,6 +628,7 @@ namespace Protos {
       if (InputFlag != other.InputFlag) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Dx, other.Dx)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Dy, other.Dy)) return false;
+      if (Sid != other.Sid) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -626,6 +639,7 @@ namespace Protos {
       if (InputFlag != 0) hash ^= InputFlag.GetHashCode();
       if (Dx != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Dx);
       if (Dy != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Dy);
+      if (Sid != 0) hash ^= Sid.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -655,6 +669,10 @@ namespace Protos {
         output.WriteRawTag(37);
         output.WriteFloat(Dy);
       }
+      if (Sid != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Sid);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -674,6 +692,9 @@ namespace Protos {
       }
       if (Dy != 0F) {
         size += 1 + 4;
+      }
+      if (Sid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Sid);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -700,6 +721,9 @@ namespace Protos {
       }
       if (other.Dy != 0F) {
         Dy = other.Dy;
+      }
+      if (other.Sid != 0) {
+        Sid = other.Sid;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -729,6 +753,10 @@ namespace Protos {
           }
           case 37: {
             Dy = input.ReadFloat();
+            break;
+          }
+          case 40: {
+            Sid = input.ReadInt32();
             break;
           }
         }

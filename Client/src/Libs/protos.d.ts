@@ -1,4 +1,4 @@
-import * as $protobuf from "./protobufjs";
+import * as $protobuf from "protobufjs";
 export namespace Protos {
 
     interface IBSInfo {
@@ -1031,6 +1031,7 @@ export namespace Protos {
         inputFlag?: (number|null);
         dx?: (number|null);
         dy?: (number|null);
+        sid?: (number|null);
     }
 
     class GC2BS_FrameAction implements IGC2BS_FrameAction {
@@ -1039,6 +1040,7 @@ export namespace Protos {
         public inputFlag: number;
         public dx: number;
         public dy: number;
+        public sid: number;
         public static create(properties?: Protos.IGC2BS_FrameAction): Protos.GC2BS_FrameAction;
         public static encode(message: Protos.IGC2BS_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGC2BS_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;

@@ -1,9 +1,9 @@
 import Decimal from "../../Libs/decimal";
 import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { EAttr } from "../Attribute";
 import { Entity } from "../Logic/Entity";
-import { ID_TO_STATE_ACTION, StateOp } from "./StateEnums";
+import { EntityStateAction } from "./EntityStateAction";
+import { ID_TO_STATE_ACTION } from "./StateEnums";
 
 export class EntityState extends FSMState {
 	/**
@@ -24,6 +24,7 @@ export class EntityState extends FSMState {
 		this.OnStateTimeChanged();
 	}
 
+	private readonly _idToActions: Map<number, EntityStateAction> = new Map<number, EntityStateAction>();
 	/**
 	 * 所属实体
 	 */
@@ -36,6 +37,20 @@ export class EntityState extends FSMState {
 	constructor(type: number, owner: Entity) {
 		super(type);
 		this._owner = owner;
+	}
+
+	public AddAction(action: EntityStateAction): void {
+		super.AddAction(action);
+		this._idToActions.set(action.id, action);
+	}
+
+	public RemoveAction(action: EntityStateAction): void {
+		super.RemoveAction(action);
+		this._idToActions.delete(action.id);
+	}
+
+	public GetAction(id: number): EntityStateAction {
+		return this._idToActions.get(id);
 	}
 
 	public Init(): void {
@@ -57,12 +72,12 @@ export class EntityState extends FSMState {
 		//can be overrided
 	}
 
-	private CreateActions(actionsDef: any[]): void {
-		let actionDef: { [k: string]: any; };
+	private CreateActions(actionsDef: Hashtable[]): void {
+		let actionDef: Hashtable;
 		for (actionDef of actionsDef) {
-			const type = Hashtable.GetNumber(actionDef, "type");
-			const ctr = ID_TO_STATE_ACTION.get(type);
-			const action = new ctr(this, actionDef);
+			const id = Hashtable.GetNumber(actionDef, "id");
+			const ctr = ID_TO_STATE_ACTION.get(id);
+			const action = new ctr(this, id, actionDef);
 			this.AddAction(action);
 		}
 	}

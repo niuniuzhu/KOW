@@ -827,9 +827,6 @@ namespace Protos {
     /// <summary>Field number for the "action" field.</summary>
     public const int ActionFieldNumber = 3;
     private pb::ByteString action_ = pb::ByteString.Empty;
-    /// <summary>
-    ///玩家ID到帧行为(已序列化)的映射
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pb::ByteString Action {
       get { return action_; }

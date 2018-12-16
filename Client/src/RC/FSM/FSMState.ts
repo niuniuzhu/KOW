@@ -19,10 +19,6 @@ export class FSMState {
 		this._actions.splice(this._actions.indexOf(action), 1);
 	}
 
-	public GetAction(index: number): FSMStateAction {
-		return this._actions[index];
-	}
-
 	public Enter(param: any): void {
 		this.OnEnter(param);
 		for (const action of this._actions) {

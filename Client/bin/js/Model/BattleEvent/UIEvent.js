@@ -1,4 +1,4 @@
-define(["require", "exports", "./BaseBattleEvent", "../../RC/Collections/Index"], function (require, exports, BaseBattleEvent_1, Index_1) {
+define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"], function (require, exports, Stack_1, BaseBattleEvent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIEvent extends BaseBattleEvent_1.BaseBattleEvent {
@@ -7,20 +7,39 @@ define(["require", "exports", "./BaseBattleEvent", "../../RC/Collections/Index"]
                 return UIEvent.POOL.pop();
             return new UIEvent();
         }
-        static Release(element) {
-            UIEvent.POOL.push(element);
+        static Release(e) {
+            e.Clear();
+            UIEvent.POOL.push(e);
+        }
+        static AddListener(type, handler) {
+            this.HANDLERS.set(type, handler);
+        }
+        static RemoveListener(type) {
+            this.HANDLERS.delete(type);
+        }
+        static Invoke(e) {
+            if (!this.HANDLERS.has(e.type))
+                return;
+            this.HANDLERS.get(e.type)(e);
+            e.Release();
+        }
+        Clear() {
+            this.entity = null;
         }
         Release() {
             UIEvent.Release(this);
         }
-        static NetworkDisconnect() {
+        static EntityInit(entity, isSelf) {
             let e = this.Get();
-            e._type = UIEvent.NETWORK_DISCONNECT;
-            e.Invoke();
+            e._type = UIEvent.E_ENTITY_INIT;
+            e.entity = entity;
+            e.b0 = isSelf;
+            this.Invoke(e);
         }
     }
-    UIEvent.NETWORK_DISCONNECT = 10500;
-    UIEvent.POOL = new Index_1.Stack();
+    UIEvent.E_ENTITY_INIT = 101;
+    UIEvent.POOL = new Stack_1.default();
+    UIEvent.HANDLERS = new Map();
     exports.UIEvent = UIEvent;
 });
 //# sourceMappingURL=UIEvent.js.map

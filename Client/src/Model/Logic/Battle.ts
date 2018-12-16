@@ -283,6 +283,9 @@ export class Battle implements ISnapshotable {
 		if ((frameAction.inputFlag & FrameAction.InputFlag.Move) > 0) {
 			entity.BeginMove(frameAction.dx, frameAction.dy);
 		}
+		if ((frameAction.inputFlag & FrameAction.InputFlag.Skill) > 0) {
+			entity.UseSkill(frameAction.sid);
+		}
 	}
 
 	/**

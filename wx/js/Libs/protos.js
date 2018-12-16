@@ -5547,6 +5547,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_FrameAction.prototype.inputFlag = 0;
         GC2BS_FrameAction.prototype.dx = 0;
         GC2BS_FrameAction.prototype.dy = 0;
+        GC2BS_FrameAction.prototype.sid = 0;
 
         GC2BS_FrameAction.create = function create(properties) {
             return new GC2BS_FrameAction(properties);
@@ -5563,6 +5564,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(29).float(message.dx);
             if (message.dy != null && message.hasOwnProperty("dy"))
                 writer.uint32(37).float(message.dy);
+            if (message.sid != null && message.hasOwnProperty("sid"))
+                writer.uint32(40).int32(message.sid);
             return writer;
         };
 
@@ -5588,6 +5591,9 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 4:
                     message.dy = reader.float();
+                    break;
+                case 5:
+                    message.sid = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -5620,6 +5626,9 @@ export const Protos = $root.Protos = (() => {
             if (message.dy != null && message.hasOwnProperty("dy"))
                 if (typeof message.dy !== "number")
                     return "dy: number expected";
+            if (message.sid != null && message.hasOwnProperty("sid"))
+                if (!$util.isInteger(message.sid))
+                    return "sid: integer expected";
             return null;
         };
 
@@ -5638,6 +5647,8 @@ export const Protos = $root.Protos = (() => {
                 message.dx = Number(object.dx);
             if (object.dy != null)
                 message.dy = Number(object.dy);
+            if (object.sid != null)
+                message.sid = object.sid | 0;
             return message;
         };
 
@@ -5650,6 +5661,7 @@ export const Protos = $root.Protos = (() => {
                 object.inputFlag = 0;
                 object.dx = 0;
                 object.dy = 0;
+                object.sid = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -5659,6 +5671,8 @@ export const Protos = $root.Protos = (() => {
                 object.dx = options.json && !isFinite(message.dx) ? String(message.dx) : message.dx;
             if (message.dy != null && message.hasOwnProperty("dy"))
                 object.dy = options.json && !isFinite(message.dy) ? String(message.dy) : message.dy;
+            if (message.sid != null && message.hasOwnProperty("sid"))
+                object.sid = message.sid;
             return object;
         };
 

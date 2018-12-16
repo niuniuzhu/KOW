@@ -1,5 +1,5 @@
-import { FSMState } from "./FSMState";
 import Decimal from "../../Libs/decimal";
+import { FSMState } from "./FSMState";
 
 export class FSM {
 	protected readonly _stateMap: Map<number, FSMState>;

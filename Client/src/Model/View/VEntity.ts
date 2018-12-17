@@ -114,17 +114,12 @@ export class VEntity {
 
 		//加载配置
 		this._def = Defs.GetEntity(this._actorID);
+
+		//加载动画数据
 		const aniDefs = Hashtable.GetMapArray(CDefs.GetEntity(this._actorID), "animations");
 		for (let i = 0; i < aniDefs.length; ++i) {
-			const aniDef = aniDefs[i];
-			const aniName = Hashtable.GetString(aniDef, "name");
-			const length = Hashtable.GetNumber(aniDef, "length");
-			//创建图形
-			const urls: string[] = [];
-			for (let i = 0; i < length; ++i) {
-				urls.push((Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + aniName + i + ".png");
-			}
-			this._animations.set(aniName, new AniHolder(urls));
+			const aniHolder = new AniHolder(this._actorID, aniDefs[i]);
+			this._animations.set(aniHolder.aniName, aniHolder);
 		}
 
 		//init properties
@@ -202,7 +197,7 @@ export class VEntity {
 		const aniHilder = this._animations.get(name);
 		this._root.removeChildren();
 		this._root.addChild(aniHilder);
-		aniHilder.Play();
+		aniHilder.Play(0);
 	}
 
 	/**

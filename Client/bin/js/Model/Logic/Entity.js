@@ -84,7 +84,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "../
                 skill.Init(reader.int32());
                 this._skills.push(skill);
             }
-            this._fsm.ChangeState(reader.int32(), null, true);
+            this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = new decimal_1.default(reader.float());
             count = reader.int32();
             for (let i = 0; i < count; i++) {

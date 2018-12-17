@@ -1,10 +1,10 @@
+import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { ActAutoState } from "./ActAutoState";
 import { ActEntityAttrs } from "./ActEntityAttrs";
+import { ActInterrupt } from "./ActInterrupt";
 import { ActStateAttrs } from "./ActStateAttrs";
 import { ActVelocity } from "./ActVelocity";
 import { ActVelocityAcceleration } from "./ActVelocityAcceleration";
-import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";
 
 export enum StateType {
@@ -39,8 +39,8 @@ export const VelocityAccelerationID: number = 2;
 export const EntityAttrsID: number = 3;
 export const StateAttrsID: number = 4;
 
-export const ID_TO_STATE_ACTION = new Map<number, new (state: EntityState, id: number, def: Hashtable) => EntityStateAction>();
-ID_TO_STATE_ACTION.set(AutoStateID, ActAutoState);
+export const ID_TO_STATE_ACTION = new Map<number, new (state: FSMState, id: number, def: Hashtable) => EntityStateAction>();
+ID_TO_STATE_ACTION.set(AutoStateID, ActInterrupt);
 ID_TO_STATE_ACTION.set(VelocityID, ActVelocity);
 ID_TO_STATE_ACTION.set(VelocityAccelerationID, ActVelocityAcceleration);
 ID_TO_STATE_ACTION.set(EntityAttrsID, ActEntityAttrs);

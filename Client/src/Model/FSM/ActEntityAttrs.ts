@@ -1,4 +1,5 @@
 import Decimal from "../../Libs/decimal";
+import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { EAttr } from "../Attribute";
 import { EntityState } from "./EntityState";
@@ -11,7 +12,7 @@ import { StateOp } from "./StateEnums";
 export class ActEntityAttrs extends EntityStateAction {
 	private readonly _deltaAttrs: Map<EAttr, Decimal> = new Map<EAttr, Decimal>();
 
-	constructor(state: EntityState, id: number, def: Hashtable) {
+	constructor(state: FSMState, id: number, def: Hashtable) {
 		super(state, id, def);
 		const attrs = Hashtable.GetArray(def, "attrs");
 		const ops = Hashtable.GetArray(def, "ops");

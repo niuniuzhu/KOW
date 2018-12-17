@@ -1,5 +1,5 @@
+import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";
 import { StateAttr } from "./StateEnums";
 
@@ -32,7 +32,7 @@ export class ActStateAttrs extends EntityStateAction {
 	 */
 	public get canUseSkill(): boolean { return (this._stateAttr & StateAttr.DisableUseSkill) == 0; }
 
-	constructor(state: EntityState, id: number, def: Hashtable) {
+	constructor(state: FSMState, id: number, def: Hashtable) {
 		super(state, id, def);
 		const arr = Hashtable.GetNumberArray(def, "state_attrs");
 		let stateType: number = 0;

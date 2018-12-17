@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./AniHolder"], function (require, exports, Consts_1, Global_1, decimal_1, FVec2_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, Skill_1, AniHolder_1) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attribute", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./AniHolder"], function (require, exports, Global_1, decimal_1, FVec2_1, FSM_1, MathUtils_1, Hashtable_1, Attribute_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, Skill_1, AniHolder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -75,14 +75,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decima
             this._def = Defs_1.Defs.GetEntity(this._actorID);
             const aniDefs = Hashtable_1.Hashtable.GetMapArray(CDefs_1.CDefs.GetEntity(this._actorID), "animations");
             for (let i = 0; i < aniDefs.length; ++i) {
-                const aniDef = aniDefs[i];
-                const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
-                const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
-                const urls = [];
-                for (let i = 0; i < length; ++i) {
-                    urls.push((Consts_1.Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + aniName + i + ".png");
-                }
-                this._animations.set(aniName, new AniHolder_1.AniHolder(urls));
+                const aniHolder = new AniHolder_1.AniHolder(this._actorID, aniDefs[i]);
+                this._animations.set(aniHolder.aniName, aniHolder);
             }
             this._team = reader.int32();
             this._name = reader.string();
@@ -135,7 +129,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/decima
             const aniHilder = this._animations.get(name);
             this._root.removeChildren();
             this._root.addChild(aniHilder);
-            aniHilder.Play();
+            aniHilder.Play(0);
         }
         HasSkill(id) {
             for (const skill of this._skills) {

@@ -41,26 +41,23 @@
 			],
 			"states": {
 				"0": {
-					"state_attr": 0,
-					"actions": [],
 					"animation": "stand"
 				},
 				"1": {
-					"attrs": [],
-					"ops": [],
-					"values": [],
-					"actions": [],
 					"animation": "run"
 				},
 				"2": {
-					"attrs": [],
-					"ops": [],
-					"values": [],
+					"states_available": [],
 					"actions": [
 						{
 							"id": 0,
-							"default_state": 0,
-							"duration": 700
+							"interrupts": [
+								{
+									"id": 0,
+									"connect_state": 0,
+									"duration": 700
+								}
+							]
 						},
 						{
 							"id": 4,
@@ -74,17 +71,9 @@
 					"animation": "attack"
 				},
 				"3": {
-					"attrs": [],
-					"ops": [],
-					"values": [],
-					"actions": [],
 					"animation": "die"
 				},
 				"4": {
-					"attrs": [],
-					"ops": [],
-					"values": [],
-					"actions": [],
 					"animation": "b"
 				}
 			}

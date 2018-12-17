@@ -1,4 +1,4 @@
-define(["require", "exports", "./ActAutoState", "./ActEntityAttrs", "./ActStateAttrs", "./ActVelocity", "./ActVelocityAcceleration"], function (require, exports, ActAutoState_1, ActEntityAttrs_1, ActStateAttrs_1, ActVelocity_1, ActVelocityAcceleration_1) {
+define(["require", "exports", "./ActEntityAttrs", "./ActInterrupt", "./ActStateAttrs", "./ActVelocity", "./ActVelocityAcceleration"], function (require, exports, ActEntityAttrs_1, ActInterrupt_1, ActStateAttrs_1, ActVelocity_1, ActVelocityAcceleration_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;
@@ -33,7 +33,7 @@ define(["require", "exports", "./ActAutoState", "./ActEntityAttrs", "./ActStateA
     exports.EntityAttrsID = 3;
     exports.StateAttrsID = 4;
     exports.ID_TO_STATE_ACTION = new Map();
-    exports.ID_TO_STATE_ACTION.set(exports.AutoStateID, ActAutoState_1.ActAutoState);
+    exports.ID_TO_STATE_ACTION.set(exports.AutoStateID, ActInterrupt_1.ActInterrupt);
     exports.ID_TO_STATE_ACTION.set(exports.VelocityID, ActVelocity_1.ActVelocity);
     exports.ID_TO_STATE_ACTION.set(exports.VelocityAccelerationID, ActVelocityAcceleration_1.ActVelocityAcceleration);
     exports.ID_TO_STATE_ACTION.set(exports.EntityAttrsID, ActEntityAttrs_1.ActEntityAttrs);

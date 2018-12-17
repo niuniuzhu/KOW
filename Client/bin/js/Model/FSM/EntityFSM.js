@@ -8,6 +8,16 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
                 entityFSM.Init();
             });
         }
+        ChangeState(type, param = null, igroneIntrptList = false, force = false) {
+            if (!igroneIntrptList) {
+                const state = this.currentState;
+                if (state != null &&
+                    !state.IsStateAvailable(type)) {
+                    return false;
+                }
+            }
+            return super.ChangeState(type, param, force);
+        }
     }
     exports.EntityFSM = EntityFSM;
 });

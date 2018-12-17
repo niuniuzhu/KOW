@@ -1,13 +1,14 @@
 import Decimal from "../../Libs/decimal";
+import { StateType } from "../../Model/FSM/StateEnums";
 import { FSMStateAction } from "./FSMStateAction";
 
 export class FSMState {
-	private readonly _type: number;
+	private readonly _type: StateType;
 	private readonly _actions: FSMStateAction[] = [];
 
-	public get type(): number { return this._type; }
+	public get type(): StateType { return this._type; }
 
-	constructor(type: number) {
+	constructor(type: StateType) {
 		this._type = type;
 	}
 

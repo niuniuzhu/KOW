@@ -131,7 +131,7 @@ export class Entity implements ISnapshotable {
 		}
 
 		//read fsmstates
-		this._fsm.ChangeState(reader.int32(), null, true);
+		this._fsm.ChangeState(reader.int32(), null);
 		(<EntityState>this._fsm.currentState).time = new Decimal(reader.float());
 
 		//read attributes

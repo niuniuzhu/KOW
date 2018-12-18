@@ -1,6 +1,8 @@
 import Decimal from "../../../Libs/decimal";
+import * as $protobuf from "../../../Libs/protobufjs";
 import { MathUtils } from "../../../RC/Math/MathUtils";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { ISnapshotable } from "../../ISnapshotable";
 import { EntityState } from "../EntityState";
 import { EntityStateAction } from "../EntityStateAction";
 import { StateType } from "../StateEnums";
@@ -9,7 +11,7 @@ import { IntrptBase } from "./IntrptBase";
 /**
  * 指定时间到达时中断
  */
-export class IntrptTimeup extends IntrptBase {
+export class IntrptTimeup extends IntrptBase implements ISnapshotable{
 	/**
 	 * 默认连接状态
 	 */
@@ -23,6 +25,14 @@ export class IntrptTimeup extends IntrptBase {
 		super(action, def);
 		this._connectState = Hashtable.GetNumber(def, "connect_state");
 		this._duration = new Decimal(Hashtable.GetNumber(def, "duration", -1));
+	}
+
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		super.EncodeSnapshot(writer);
+	}
+
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		super.DecodeSnapshot(reader);
 	}
 
 	public Update(dt: Decimal): void {

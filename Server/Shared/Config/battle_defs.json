@@ -33,7 +33,6 @@
 			"mhp": 1000,
 			"mmp": 100,
 			"move_speed": 200,
-			"move_speed_factor": 1,
 			"radius": 110,
 			"skills": [
 				0,
@@ -60,11 +59,16 @@
 							]
 						},
 						{
-							"id": 4,
-							"state_attrs": [
-								0,
+							"id": 1,
+							"attrs": [
+								500,
+								501,
+								502
+							],
+							"values": [
 								1,
-								5
+								1,
+								1
 							]
 						}
 					],

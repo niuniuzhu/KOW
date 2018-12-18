@@ -7,17 +7,24 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction",
         InterruptType[InterruptType["Collision"] = 1] = "Collision";
     })(InterruptType = exports.InterruptType || (exports.InterruptType = {}));
     class ActInterrupt extends EntityStateAction_1.EntityStateAction {
-        constructor(state, id, def) {
-            super(state, id, def);
+        constructor(state, type, def) {
+            super(state, type, def);
             this._interrupts = [];
-            const interruptDefs = Hashtable_1.Hashtable.GetMapArray(def, "interrupts");
+            const interruptDefs = Hashtable_1.Hashtable.GetMapArray(this._def, "interrupts");
             for (const interruptDef of interruptDefs) {
                 this.CreateInturrupt(interruptDef);
             }
         }
-        OnUpdate(dt) {
+        EncodeSnapshot(writer) {
+            super.EncodeSnapshot(writer);
             for (const interrupt of this._interrupts) {
-                interrupt.Update(dt);
+                interrupt.EncodeSnapshot(writer);
+            }
+        }
+        DecodeSnapshot(reader) {
+            super.DecodeSnapshot(reader);
+            for (const interrupt of this._interrupts) {
+                interrupt.DecodeSnapshot(reader);
             }
         }
         CreateInturrupt(def) {
@@ -29,6 +36,12 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction",
                     break;
                 case InterruptType.Collision:
                     break;
+            }
+        }
+        OnUpdate(dt) {
+            super.OnUpdate(dt);
+            for (const interrupt of this._interrupts) {
+                interrupt.Update(dt);
             }
         }
     }

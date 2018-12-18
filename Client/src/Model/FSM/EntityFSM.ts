@@ -1,14 +1,18 @@
+import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
-import { FSMState } from "../../RC/FSM/FSMState";
+import { ISnapshotable } from "../ISnapshotable";
 import { EntityState } from "./EntityState";
 import { StateType } from "./StateEnums";
 
-export class EntityFSM extends FSM {
+export class EntityFSM extends FSM implements ISnapshotable {
+	public get currentEntityState(): EntityState { return <EntityState>this.currentState; }
+	public get previousEntityState(): EntityState { return <EntityState>this.previousState; }
+
 	public Init() {
-		this._stateMap.forEach((state: FSMState, type: StateType, _) => {
+		for (const state of this._states) {
 			const entityFSM = <EntityState>state;
 			entityFSM.Init();
-		});
+		}
 	}
 
 	/**
@@ -27,5 +31,29 @@ export class EntityFSM extends FSM {
 			}
 		}
 		return super.ChangeState(type, param, force);
+	}
+
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		for (const state of this._states) {
+			const entityFSM = <EntityState>state;
+			entityFSM.EncodeSnapshot(writer);
+		}
+		if (this.globalState != null) {
+			(<EntityState>this.globalState).EncodeSnapshot(writer);
+		}
+		writer.int32(this.currentEntityState.type);
+		writer.int32(this.previousEntityState.type);
+	}
+
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		for (const state of this._states) {
+			const entityFSM = <EntityState>state;
+			entityFSM.DecodeSnapshot(reader);
+		}
+		if (this.globalState != null) {
+			(<EntityState>this.globalState).DecodeSnapshot(reader);
+		}
+		this._currentState = this.GetState(reader.int32());
+		this._previousState = this.GetState(reader.int32());
 	}
 }

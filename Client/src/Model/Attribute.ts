@@ -1,7 +1,7 @@
 import Decimal from "../Libs/decimal";
 
 export enum EAttr {
-	RADIUS,
+	RADIUS = 0,
 	MHP,
 	HP,
 	MMP,
@@ -9,8 +9,41 @@ export enum EAttr {
 	ATK,
 	DEF,
 	MOVE_SPEED,
-	MOVE_SPEED_FACTOR
+
+	S_DISABLE_MOVE = 500,
+	S_DISABLE_TURN,
+	S_DISABLE_SKILL,
+	S_SUPPER_ARMOR,
+	S_INVULNER_ABILITY,
+	S_MOVE_SPEED_ADD = 600,
+	S_MOVE_SPEED_MUL,
+	S_ATK_ADD,
+	S_ATK_MUL,
+	S_DEF_ADD,
+	S_DEF_MUL
 }
+
+export const DEFAULT_ATTR_VALUES: Map<EAttr, Decimal> = new Map<EAttr, Decimal>();
+DEFAULT_ATTR_VALUES.set(EAttr.RADIUS, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.MHP, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.HP, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.MMP, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.MP, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.ATK, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.DEF, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.MOVE_SPEED, new Decimal(0));
+
+DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_MOVE, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_TURN, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_SKILL, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.S_SUPPER_ARMOR, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.S_INVULNER_ABILITY, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.S_MOVE_SPEED_ADD, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.S_MOVE_SPEED_MUL, new Decimal(1));
+DEFAULT_ATTR_VALUES.set(EAttr.S_ATK_ADD, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.S_ATK_MUL, new Decimal(1));
+DEFAULT_ATTR_VALUES.set(EAttr.S_DEF_ADD, new Decimal(0));
+DEFAULT_ATTR_VALUES.set(EAttr.S_DEF_MUL, new Decimal(1));
 
 /**
  * 属性管理器
@@ -19,6 +52,12 @@ export class Attribute {
 	private readonly _map: Map<EAttr, Decimal> = new Map<EAttr, Decimal>();
 
 	public get count(): number { return this._map.size; }
+
+	constructor() {
+		DEFAULT_ATTR_VALUES.forEach((v, k, m) => {
+			this._map.set(k, v);
+		});
+	}
 
 	/**
 	 * 遍历属性

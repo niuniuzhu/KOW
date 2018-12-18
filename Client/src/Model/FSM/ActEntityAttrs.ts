@@ -1,67 +1,41 @@
 import Decimal from "../../Libs/decimal";
-import { FSMState } from "../../RC/FSM/FSMState";
+import * as $protobuf from "../../Libs/protobufjs";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { EAttr } from "../Attribute";
+import { DEFAULT_ATTR_VALUES, EAttr } from "../Attribute";
+import { ISnapshotable } from "../ISnapshotable";
 import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";
-import { StateOp } from "./StateEnums";
 
 /**
  * 设置实体属性行为
  */
-export class ActEntityAttrs extends EntityStateAction {
-	private readonly _deltaAttrs: Map<EAttr, Decimal> = new Map<EAttr, Decimal>();
-
-	constructor(state: FSMState, id: number, def: Hashtable) {
-		super(state, id, def);
-		const attrs = Hashtable.GetArray(def, "attrs");
-		const ops = Hashtable.GetArray(def, "ops");
-		const values = Hashtable.GetArray(def, "values");
+export class ActEntityAttrs extends EntityStateAction implements ISnapshotable {
+	protected OnTrigger(): void {
+		super.OnTrigger();
+		const attrs = Hashtable.GetArray(this._def, "attrs");
+		const values = Hashtable.GetArray(this._def, "values");
 		const count = attrs.length;
 		for (let i = 0; i < count; ++i) {
-			this.ActiveAttr(attrs[i], ops[i], new Decimal(values[i]));
+			this.ActiveAttr(attrs[i], new Decimal(values[i]));
 		}
 	}
 
 	protected OnExit(): void {
 		this.DeactiveAttrs();
-		this._deltaAttrs.clear();
+		super.OnExit();
 	}
 
-	private ActiveAttr(attr: EAttr, op: StateOp, value: Decimal): any {
+	private ActiveAttr(attr: EAttr, value: Decimal): void {
 		const owner = (<EntityState>this.state).owner;
-		const oldValue = owner.attribute.Get(attr);
-		switch (op) {
-			case StateOp.Equal:
-				owner.attribute.Set(attr, value);
-				break;
-			case StateOp.Add:
-				owner.attribute.Add(attr, value);
-				break;
-			case StateOp.Mul:
-				owner.attribute.Mul(attr, value);
-				break;
-			case StateOp.Mod:
-				owner.attribute.Mod(attr, value);
-				break;
-			case StateOp.Pow:
-				owner.attribute.Pow(attr, value);
-				break;
-			case StateOp.Exp:
-				owner.attribute.Exp(attr);
-				break;
-		}
-		let delta = value.sub(oldValue);
-		if (this._deltaAttrs.has(attr))
-			delta = delta.add(this._deltaAttrs.get(attr));
-		this._deltaAttrs.set(attr, delta);
+		owner.attribute.Set(attr, value);
 	}
 
 	private DeactiveAttrs(): void {
 		const owner = (<EntityState>this.state).owner;
-		this._deltaAttrs.forEach((delta, attr, _) => {
-			const curValue = owner.attribute.Get(attr);
-			owner.attribute.Set(attr, curValue.sub(delta));
-		})
+		const attrs = Hashtable.GetArray(this._def, "attrs");
+		const count = attrs.length;
+		for (let i = 0; i < count; ++i) {
+			owner.attribute.Set(attrs[i], DEFAULT_ATTR_VALUES.get(attrs[i]));
+		}
 	}
 }

@@ -6,6 +6,10 @@ define(["require", "exports", "../../../RC/Utils/Hashtable"], function (require,
             this._action = action;
             this.id = Hashtable_1.Hashtable.GetNumber(def, "id");
         }
+        EncodeSnapshot(writer) {
+        }
+        DecodeSnapshot(reader) {
+        }
         Update(dt) {
         }
         ChangeState(type, param = null, igroneIntrptList = false, force = false) {

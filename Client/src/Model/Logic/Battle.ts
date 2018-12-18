@@ -176,11 +176,24 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 同步数据编码
+	 */
+	public EncodeSync(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		writer.int32(this._frame);
+		const count = this._entities.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			entity.EncodeSync(writer);
+		}
+	}
+
+	/**
 	 * 把初始状态同步到表现层
 	 */
-	public InitSyncToView(): void {
+	public SyncInitToView(): void {
 		const writer = $protobuf.Writer.create();
-		this.EncodeSnapshot(writer);
+		this.EncodeSync(writer);
 		const data = writer.finish();
 		SyncEvent.BattleInit(data);
 	}
@@ -190,7 +203,7 @@ export class Battle implements ISnapshotable {
 	 */
 	public SyncToView(): void {
 		const writer = $protobuf.Writer.create();
-		this.EncodeSnapshot(writer);
+		this.EncodeSync(writer);
 		const data = writer.finish();
 		SyncEvent.Snapshot(data);
 	}

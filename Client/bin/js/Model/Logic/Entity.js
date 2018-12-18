@@ -22,6 +22,11 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "../
         get name() { return this._name; }
         get def() { return this._def; }
         get fsm() { return this._fsm; }
+        get canMove() { return this.attribute.Get(Attribute_1.EAttr.S_DISABLE_MOVE).lessThanOrEqualTo(MathUtils_1.MathUtils.D_ZERO); }
+        get canTurn() { return this.attribute.Get(Attribute_1.EAttr.S_DISABLE_TURN).lessThanOrEqualTo(MathUtils_1.MathUtils.D_ZERO); }
+        get canUseSkill() { return this.attribute.Get(Attribute_1.EAttr.S_DISABLE_SKILL).lessThanOrEqualTo(MathUtils_1.MathUtils.D_ZERO); }
+        get isSuperArmor() { return this.attribute.Get(Attribute_1.EAttr.S_SUPPER_ARMOR).greaterThan(MathUtils_1.MathUtils.D_ZERO); }
+        get isInvulnerability() { return this.attribute.Get(Attribute_1.EAttr.S_INVULNER_ABILITY).greaterThan(MathUtils_1.MathUtils.D_ZERO); }
         Init(battle, id, actorID, team, name) {
             this._battle = battle;
             this._id = id;
@@ -42,7 +47,6 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "../
             this.attribute.Set(Attribute_1.EAttr.MMP, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "mmp")));
             this.attribute.Set(Attribute_1.EAttr.MP, this.attribute.Get(Attribute_1.EAttr.MMP));
             this.attribute.Set(Attribute_1.EAttr.MOVE_SPEED, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "move_speed")));
-            this.attribute.Set(Attribute_1.EAttr.MOVE_SPEED_FACTOR, new decimal_1.default(Hashtable_1.Hashtable.GetNumber(this._def, "move_speed_factor")));
             const skillsDef = Hashtable_1.Hashtable.GetNumberArray(this._def, "skills");
             for (const sid of skillsDef) {
                 const skill = new Skill_1.Skill();
@@ -59,17 +63,16 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "../
             writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
             writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
             writer.float(this._moveDirection.x.toNumber()).float(this._moveDirection.y.toNumber());
-            writer.int32(this._skills.length);
-            for (const skill of this._skills) {
-                writer.int32(skill.id);
-            }
-            writer.int32(this._fsm.currentState.type);
-            writer.float(this._fsm.currentState.time.toNumber());
             const count = this.attribute.count;
             writer.int32(count);
             this.attribute.Foreach((v, k, map) => {
                 writer.int32(k).float(v.toNumber());
             });
+            writer.int32(this._skills.length);
+            for (const skill of this._skills) {
+                writer.int32(skill.id);
+            }
+            this._fsm.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
             this._actorID = reader.int32();
@@ -79,61 +82,41 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "../
             this.direction = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             this._moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             let count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
+            }
+            count = reader.int32();
             for (let i = 0; i < count; ++i) {
                 const skill = new Skill_1.Skill();
                 skill.Init(reader.int32());
                 this._skills.push(skill);
             }
-            this._fsm.ChangeState(reader.int32(), null);
-            this._fsm.currentState.time = new decimal_1.default(reader.float());
-            count = reader.int32();
-            for (let i = 0; i < count; i++) {
-                this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
+            this._fsm.DecodeSnapshot(reader);
+        }
+        EncodeSync(writer) {
+            writer.int32(this.type);
+            writer.uint64(this._id);
+            writer.int32(this._actorID);
+            writer.int32(this._team);
+            writer.string(this._name);
+            writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
+            writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
+            writer.float(this._moveDirection.x.toNumber()).float(this._moveDirection.y.toNumber());
+            const count = this.attribute.count;
+            writer.int32(count);
+            this.attribute.Foreach((v, k, map) => {
+                writer.int32(k).float(v.toNumber());
+            });
+            writer.int32(this._skills.length);
+            for (const skill of this._skills) {
+                writer.int32(skill.id);
             }
+            writer.int32(this._fsm.currentState.type);
+            writer.float(this._fsm.currentState.time.toNumber());
         }
         Update(dt) {
             this._fsm.Update(dt);
             this.MoveStep(this._moveDirection, dt);
-        }
-        CanMove() {
-            const stateAttrsAction = this._fsm.currentState.GetAction(StateEnums_1.StateAttrsID);
-            if (stateAttrsAction != null) {
-                if (!stateAttrsAction.canMove)
-                    return false;
-            }
-            return true;
-        }
-        CanTurn() {
-            const stateAttrsAction = this._fsm.currentState.GetAction(StateEnums_1.StateAttrsID);
-            if (stateAttrsAction != null) {
-                if (!stateAttrsAction.canTurn)
-                    return false;
-            }
-            return true;
-        }
-        IsSuperArmor() {
-            const stateAttrsAction = this._fsm.currentState.GetAction(StateEnums_1.StateAttrsID);
-            if (stateAttrsAction != null) {
-                if (!stateAttrsAction.isSuperArmor)
-                    return false;
-            }
-            return true;
-        }
-        IsInvulnerability() {
-            const stateAttrsAction = this._fsm.currentState.GetAction(StateEnums_1.StateAttrsID);
-            if (stateAttrsAction != null) {
-                if (!stateAttrsAction.isInvulnerability)
-                    return false;
-            }
-            return true;
-        }
-        CanUseSkill() {
-            const stateAttrsAction = this._fsm.currentState.GetAction(StateEnums_1.StateAttrsID);
-            if (stateAttrsAction != null) {
-                if (!stateAttrsAction.canUseSkill)
-                    return false;
-            }
-            return true;
         }
         HasSkill(id) {
             for (const skill of this._skills) {
@@ -154,15 +137,13 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "../
         }
         BeginMove(dx, dy) {
             this._moveDirection = new FVec2_1.FVec2(new decimal_1.default(dx), new decimal_1.default(dy));
-            if (this._moveDirection.SqrMagnitude().lessThan(MathUtils_1.MathUtils.D_SMALL))
-                this._fsm.ChangeState(StateEnums_1.StateType.Idle);
-            else
-                this._fsm.ChangeState(StateEnums_1.StateType.Move);
         }
         MoveStep(direction, dt) {
-            if (direction.SqrMagnitude().lessThan(MathUtils_1.MathUtils.D_SMALL))
+            if (direction.SqrMagnitude().lessThan(MathUtils_1.MathUtils.D_SMALL)) {
+                this._fsm.ChangeState(StateEnums_1.StateType.Idle);
                 return;
-            if (this.CanMove()) {
+            }
+            if (this.canMove) {
                 const speed = this.attribute.Get(Attribute_1.EAttr.MOVE_SPEED);
                 const moveDelta = FVec2_1.FVec2.MulN(FVec2_1.FVec2.MulN(direction, speed), MathUtils_1.MathUtils.D_SMALL1.mul(dt));
                 const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
@@ -172,12 +153,14 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "../
                 pos.y = decimal_1.default.max(decimal_1.default.add(this._battle.bounds.yMin, radius), pos.y);
                 pos.y = decimal_1.default.min(decimal_1.default.sub(this._battle.bounds.yMax, radius), pos.y);
                 this.position = pos;
+                this._fsm.ChangeState(StateEnums_1.StateType.Move);
             }
-            if (this.CanTurn())
+            if (this.canTurn) {
                 this.direction = direction;
+            }
         }
         UseSkill(sid) {
-            if (!this.CanUseSkill())
+            if (!this.canUseSkill)
                 return false;
             const skill = this.GetSkill(sid);
             if (skill == null)

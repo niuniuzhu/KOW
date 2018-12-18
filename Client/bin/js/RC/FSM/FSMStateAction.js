@@ -2,9 +2,11 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class FSMStateAction {
+        get type() { return this._type; }
         get state() { return this._state; }
-        constructor(state) {
+        constructor(state, type) {
             this._state = state;
+            this._type = type;
         }
         Enter(param) {
             this.OnEnter(param);

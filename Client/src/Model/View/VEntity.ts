@@ -58,11 +58,10 @@ export class VEntity {
 	private _rotation: number = 0;
 	private _logicPos: FVec2 = FVec2.zero;
 	private _logicRot: number = 0;
-	private _playingName: string = "";
 
 	private readonly _fsm: FSM = new FSM();
 	private readonly _root = new fairygui.GComponent();
-	private readonly _animations: Map<string, AniHolder> = new Map<string, AniHolder>();
+	private readonly _aniHolder: AniHolder = new AniHolder();
 
 	private static readonly D_SMALL0 = new Decimal(0.012);
 
@@ -82,10 +81,6 @@ export class VEntity {
 	}
 
 	public Dispose(): void {
-		this._animations.forEach((v, k, map) => {
-			v.dispose();
-		});
-		this._animations.clear();
 		this._root.dispose();
 	}
 
@@ -116,11 +111,8 @@ export class VEntity {
 		this._def = Defs.GetEntity(this._actorID);
 
 		//加载动画数据
-		const aniDefs = Hashtable.GetMapArray(CDefs.GetEntity(this._actorID), "animations");
-		for (let i = 0; i < aniDefs.length; ++i) {
-			const aniHolder = new AniHolder(this._actorID, aniDefs[i]);
-			this._animations.set(aniHolder.aniName, aniHolder);
-		}
+		this._aniHolder.Init(this._actorID);
+		this._root.addChild(this._aniHolder);
 
 		//init properties
 		this._team = reader.int32();
@@ -134,8 +126,14 @@ export class VEntity {
 		this._logicRot = this.rotation;
 		const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 
-		//init skills
+		//init attribues
 		let count = reader.int32();
+		for (let i = 0; i < count; ++i) {
+			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
+		}
+
+		//init skills
+		count = reader.int32();
 		for (let i = 0; i < count; ++i) {
 			const skill = new Skill();
 			skill.Init(reader.int32());
@@ -145,12 +143,6 @@ export class VEntity {
 		//init fsmstates
 		this._fsm.ChangeState(reader.int32(), null);
 		(<VEntityState>this._fsm.currentState).time = reader.float();
-
-		//init attribues
-		count = reader.int32();
-		for (let i = 0; i < count; ++i) {
-			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
-		}
 	}
 
 	/**
@@ -168,8 +160,14 @@ export class VEntity {
 			this._logicRot = 360 - this._logicRot;
 		const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 
-		//read skills
+		//read attribues
 		let count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
+		}
+
+		//read skills
+		count = reader.int32();
 		for (let i = 0; i < count; ++i) {
 			reader.int32()
 		}
@@ -177,12 +175,6 @@ export class VEntity {
 		//read fsmstates
 		this._fsm.ChangeState(reader.int32(), null);
 		(<VEntityState>this._fsm.currentState).time = reader.float();
-
-		//iread attribues
-		count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
-		}
 	}
 
 	/**
@@ -191,13 +183,7 @@ export class VEntity {
 	 * @param force 是否强制重新播放
 	 */
 	public PlayAnim(name: string, force: boolean = false): void {
-		if (!force && this._playingName == name)
-			return;
-		this._playingName = name;
-		const aniHilder = this._animations.get(name);
-		this._root.removeChildren();
-		this._root.addChild(aniHilder);
-		aniHilder.Play(0);
+		this._aniHolder.Play(name, 0, force);
 	}
 
 	/**

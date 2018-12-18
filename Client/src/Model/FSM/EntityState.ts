@@ -1,11 +1,14 @@
 import Decimal from "../../Libs/decimal";
+import * as $protobuf from "../../Libs/protobufjs";
 import Set from "../../RC/Collections/Set";
+import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { ISnapshotable } from "../ISnapshotable";
 import { Entity } from "../Logic/Entity";
-import { EntityStateBase } from "./EntityStateBase";
-import { StateType } from "./StateEnums";
+import { EntityStateAction } from "./EntityStateAction";
+import { ID_TO_STATE_ACTION, StateType } from "./StateEnums";
 
-export class EntityState extends EntityStateBase {
+export class EntityState extends FSMState implements ISnapshotable {
 	/**
 	 * 所属实体
 	 */
@@ -35,7 +38,17 @@ export class EntityState extends EntityStateBase {
 
 	public Init(): void {
 		const def = Hashtable.GetMap(Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
-		super.Init(def);
+
+		//初始化状态行为
+		const actionsDef = Hashtable.GetMapArray(def, "actions");
+		if (actionsDef != null) {
+			for (const actionDef of actionsDef) {
+				const type = Hashtable.GetNumber(actionDef, "id");
+				const ctr = ID_TO_STATE_ACTION.get(type);
+				const action = new ctr(this, type, actionDef);
+				this.AddAction(action);
+			}
+		}
 
 		//能被中断的状态列表
 		const sa = Hashtable.GetNumberArray(def, "states_available");
@@ -47,6 +60,20 @@ export class EntityState extends EntityStateBase {
 		}
 	}
 
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		for (const action of this._actions) {
+			(<EntityStateAction>action).EncodeSnapshot(writer);
+		}
+		writer.float(this._time.toNumber());
+	}
+
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		for (const action of this._actions) {
+			(<EntityStateAction>action).DecodeSnapshot(reader);
+		}
+		this._time = new Decimal(reader.float());
+	}
+
 	protected OnEnter(param: any): void {
 		this._time = new Decimal(0);
 	}
@@ -56,8 +83,12 @@ export class EntityState extends EntityStateBase {
 	}
 
 	protected OnStateTimeChanged(): void {
-		//can be overrided
+		for (const action of this._actions) {
+			(<EntityStateAction>action).OnStateTimeChanged(this._time);
+		}
 	}
+
+	//todo 处理状态属性加成
 
 	/**
 	 * 查询该状态下是否能转换到指定状态

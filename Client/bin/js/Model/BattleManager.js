@@ -27,7 +27,7 @@ define(["require", "exports", "../Global", "../Libs/decimal", "../Libs/protos", 
                     const ret = msg;
                     const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
                     this._lBattle.Chase(frameActionGroups, false, false);
-                    this._lBattle.InitSyncToView();
+                    this._lBattle.SyncInitToView();
                     this._init = true;
                     Logger_1.Logger.Log("battle inited");
                     completeHandler();

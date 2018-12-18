@@ -108,15 +108,24 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                 entity.DecodeSnapshot(reader);
             }
         }
-        InitSyncToView() {
+        EncodeSync(writer) {
+            writer.int32(this._frame);
+            const count = this._entities.length;
+            writer.int32(count);
+            for (let i = 0; i < count; i++) {
+                const entity = this._entities[i];
+                entity.EncodeSync(writer);
+            }
+        }
+        SyncInitToView() {
             const writer = $protobuf.Writer.create();
-            this.EncodeSnapshot(writer);
+            this.EncodeSync(writer);
             const data = writer.finish();
             SyncEvent_1.SyncEvent.BattleInit(data);
         }
         SyncToView() {
             const writer = $protobuf.Writer.create();
-            this.EncodeSnapshot(writer);
+            this.EncodeSync(writer);
             const data = writer.finish();
             SyncEvent_1.SyncEvent.Snapshot(data);
         }

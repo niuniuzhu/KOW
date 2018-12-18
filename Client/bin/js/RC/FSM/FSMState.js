@@ -4,14 +4,26 @@ define(["require", "exports"], function (require, exports) {
     class FSMState {
         constructor(type) {
             this._actions = [];
+            this._typeToAction = new Map();
             this._type = type;
         }
         get type() { return this._type; }
         AddAction(action) {
+            if (this._typeToAction.has(action.type))
+                return false;
+            this._typeToAction.set(action.type, action);
             this._actions.push(action);
+            return true;
         }
-        RemoveAction(action) {
+        RemoveAction(type) {
+            const action = this._typeToAction.get(type);
+            if (!action == null)
+                return false;
+            this._typeToAction.delete(type);
             this._actions.splice(this._actions.indexOf(action), 1);
+        }
+        GetAction(id) {
+            return this._typeToAction.get(id);
         }
         Enter(param) {
             this.OnEnter(param);

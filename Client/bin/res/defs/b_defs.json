@@ -30,31 +30,36 @@
 					"name": "stand",
 					"length": 6,
 					"auto_scale_time": true,
-					"play_mode": 0
+					"play_mode": 0,
+					"interval": 100
 				},
 				{
 					"name": "attack",
 					"length": 7,
 					"auto_scale_time": true,
-					"play_mode": 1
+					"play_mode": 1,
+					"interval": 100
 				},
 				{
 					"name": "b",
-					"length": 6,
+					"length": 5,
 					"auto_scale_time": true,
-					"play_mode": 1
+					"play_mode": 1,
+					"interval": 100
 				},
 				{
 					"name": "die",
 					"length": 1,
 					"auto_scale_time": true,
-					"play_mode": 1
+					"play_mode": 1,
+					"interval": 100
 				},
 				{
 					"name": "run",
 					"length": 7,
 					"auto_scale_time": true,
-					"play_mode": 0
+					"play_mode": 0,
+					"interval": 100
 				}
 			]
 		}

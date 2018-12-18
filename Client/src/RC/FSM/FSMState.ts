@@ -1,23 +1,35 @@
 import Decimal from "../../Libs/decimal";
-import { StateType } from "../../Model/FSM/StateEnums";
 import { FSMStateAction } from "./FSMStateAction";
 
 export class FSMState {
-	private readonly _type: StateType;
-	private readonly _actions: FSMStateAction[] = [];
+	protected readonly _type: number;
+	protected readonly _actions: FSMStateAction[] = [];
+	protected readonly _typeToAction = new Map<number, FSMStateAction>();
 
-	public get type(): StateType { return this._type; }
+	public get type(): number { return this._type; }
 
-	constructor(type: StateType) {
+	constructor(type: number) {
 		this._type = type;
 	}
 
-	public AddAction(action: FSMStateAction): void {
+	public AddAction(action: FSMStateAction): boolean {
+		if (this._typeToAction.has(action.type))
+			return false;
+		this._typeToAction.set(action.type, action);
 		this._actions.push(action);
+		return true;
 	}
 
-	public RemoveAction(action: FSMStateAction): void {
+	public RemoveAction(type: number): boolean {
+		const action = this._typeToAction.get(type);
+		if (!action == null)
+			return false;
+		this._typeToAction.delete(type);
 		this._actions.splice(this._actions.indexOf(action), 1);
+	}
+
+	public GetAction(id: number): FSMStateAction {
+		return this._typeToAction.get(id);
 	}
 
 	public Enter(param: any): void {

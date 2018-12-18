@@ -67,7 +67,7 @@ export class BattleManager {
 				//追赶服务端帧数
 				this._lBattle.Chase(frameActionGroups, false, false);
 				//同步到表现层
-				this._lBattle.InitSyncToView();
+				this._lBattle.SyncInitToView();
 
 				this._init = true;
 				Logger.Log("battle inited");

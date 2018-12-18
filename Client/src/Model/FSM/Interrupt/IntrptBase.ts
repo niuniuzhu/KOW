@@ -1,16 +1,24 @@
 import Decimal from "../../../Libs/decimal";
+import * as $protobuf from "../../../Libs/protobufjs";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { ISnapshotable } from "../../ISnapshotable";
 import { EntityState } from "../EntityState";
 import { EntityStateAction } from "../EntityStateAction";
 import { StateType } from "../StateEnums";
 
-export abstract class IntrptBase {
+export abstract class IntrptBase implements ISnapshotable {
 	public readonly id: number;
 	protected _action: EntityStateAction;
 
 	constructor(action: EntityStateAction, def: Hashtable) {
 		this._action = action;
 		this.id = Hashtable.GetNumber(def, "id");
+	}
+
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+	}
+
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 	}
 
 	public Update(dt: Decimal): void {

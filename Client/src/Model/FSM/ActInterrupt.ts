@@ -1,9 +1,12 @@
 import Decimal from "../../Libs/decimal";
+import * as $protobuf from "../../Libs/protobufjs";
 import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { ISnapshotable } from "../ISnapshotable";
 import { EntityStateAction } from "./EntityStateAction";
 import { IntrptBase } from "./Interrupt/IntrptBase";
 import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
+import { ActionType } from "./StateEnums";
 
 export enum InterruptType {
 	Timeup,//指定时间
@@ -13,20 +16,28 @@ export enum InterruptType {
 /**
  * 中断状态
  */
-export class ActInterrupt extends EntityStateAction {
+export class ActInterrupt extends EntityStateAction implements ISnapshotable {
 	private readonly _interrupts: IntrptBase[] = [];
 
-	constructor(state: FSMState, id: number, def: Hashtable) {
-		super(state, id, def);
-		const interruptDefs = Hashtable.GetMapArray(def, "interrupts");
-		for (const interruptDef of interruptDefs) {
-			this.CreateInturrupt(interruptDef);
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		super.EncodeSnapshot(writer);
+		for (const interrupt of this._interrupts) {
+			interrupt.EncodeSnapshot(writer);
 		}
 	}
 
-	protected OnUpdate(dt: Decimal): void {
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		super.DecodeSnapshot(reader);
 		for (const interrupt of this._interrupts) {
-			interrupt.Update(dt);
+			interrupt.DecodeSnapshot(reader);
+		}
+	}
+
+	constructor(state: FSMState, type: ActionType, def: Hashtable) {
+		super(state, type, def);
+		const interruptDefs = Hashtable.GetMapArray(this._def, "interrupts");
+		for (const interruptDef of interruptDefs) {
+			this.CreateInturrupt(interruptDef);
 		}
 	}
 
@@ -44,6 +55,13 @@ export class ActInterrupt extends EntityStateAction {
 			case InterruptType.Collision:
 				//todo
 				break;
+		}
+	}
+
+	protected OnUpdate(dt: Decimal): void {
+		super.OnUpdate(dt);
+		for (const interrupt of this._interrupts) {
+			interrupt.Update(dt);
 		}
 	}
 }

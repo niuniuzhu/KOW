@@ -23,13 +23,64 @@ define(["require", "exports", "../../RC/FSM/FSMState", "../../RC/Utils/Hashtable
         AddAction(action) {
             super.AddAction(action);
             this._idToActions.set(action.id, action);
+            switch (action.id) {
+                case StateEnums_1.EntityAttrsID:
+                    this._entityAttrs = action;
+                    break;
+                case StateEnums_1.StateAttrsID:
+                    this._stateAttrs = action;
+                    break;
+            }
         }
         RemoveAction(action) {
             super.RemoveAction(action);
+            switch (action.id) {
+                case StateEnums_1.EntityAttrsID:
+                    this._entityAttrs = null;
+                    break;
+                case StateEnums_1.StateAttrsID:
+                    this._stateAttrs = null;
+                    break;
+            }
             this._idToActions.delete(action.id);
         }
         GetAction(id) {
             return this._idToActions.get(id);
+        }
+        CanMove() {
+            if (this._stateAttrs != null) {
+                if (!this._stateAttrs.canMove)
+                    return false;
+            }
+            return true;
+        }
+        CanTurn() {
+            if (this._stateAttrs != null) {
+                if (!this._stateAttrs.canTurn)
+                    return false;
+            }
+            return true;
+        }
+        IsSuperArmor() {
+            if (this._stateAttrs != null) {
+                if (!this._stateAttrs.isSuperArmor)
+                    return false;
+            }
+            return true;
+        }
+        IsInvulnerability() {
+            if (this._stateAttrs != null) {
+                if (!this._stateAttrs.isInvulnerability)
+                    return false;
+            }
+            return true;
+        }
+        CanUseSkill() {
+            if (this._stateAttrs != null) {
+                if (!this._stateAttrs.canUseSkill)
+                    return false;
+            }
+            return true;
         }
     }
     exports.EntityStateBase = EntityStateBase;

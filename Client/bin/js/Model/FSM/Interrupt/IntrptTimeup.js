@@ -9,6 +9,12 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/Math/MathUti
             this._connectState = Hashtable_1.Hashtable.GetNumber(def, "connect_state");
             this._duration = new decimal_1.default(Hashtable_1.Hashtable.GetNumber(def, "duration", -1));
         }
+        EncodeSnapshot(writer) {
+            super.EncodeSnapshot(writer);
+        }
+        DecodeSnapshot(reader) {
+            super.DecodeSnapshot(reader);
+        }
         Update(dt) {
             const state = this._action.state;
             if (this._connectState != StateEnums_1.StateType.None &&

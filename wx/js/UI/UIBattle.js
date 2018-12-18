@@ -1,4 +1,5 @@
 import { Global } from "../Global";
+import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { FrameAciontManager } from "../Model/FrameActionManager";
 import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
@@ -20,6 +21,7 @@ export class UIBattle {
         this._gestureState.joystick.radius = 100;
         this._gestureState.joystick.resetDuration = 60;
         this._gestureState.onChanged = this.HandleAxisInput.bind(this);
+        UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnEntityInit.bind(this));
     }
     get root() { return this._root; }
     Dispose() {
@@ -44,9 +46,18 @@ export class UIBattle {
     }
     OnResize(e) {
     }
+    OnEntityInit(e) {
+        if (e.b0) {
+            this._player = e.entity;
+            this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
+            this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
+        }
+    }
     OnSkillBtnClick() {
+        this._frameActionManager.SetInputSkill(this._root.getChild("n0").data);
     }
     OnSkill2BtnClick() {
+        this._frameActionManager.SetInputSkill(this._root.getChild("n1").data);
     }
     HandleAxisInput(value) {
         this._frameActionManager.SetInputDirection(value);

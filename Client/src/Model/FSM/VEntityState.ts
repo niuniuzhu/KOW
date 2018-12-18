@@ -2,15 +2,7 @@ import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { VEntity } from "../View/VEntity";
 
-enum AniPlayMode {
-	Loop,
-	Clamp,
-	Pingpong
-}
-
 export class VEntityState extends FSMState {
-	public static readonly AniPlayMode = AniPlayMode;
-
 	/**
 	 * 所属实体
 	 */
@@ -34,18 +26,6 @@ export class VEntityState extends FSMState {
 	 */
 	private _owner: VEntity;
 	/**
-	 * 状态持续时长
-	 */
-	private _duration: number = -1;
-	/**
-	 * 动画事件是否自动适配状态时长
-	 */
-	private _autoScaleAniTime: boolean = true;
-	/**
-	 * 动画播放模式
-	 */
-	private _animationPlayMode: AniPlayMode = AniPlayMode.Clamp;
-	/**
 	 * 状态的运行时间
 	 */
 	private _time: number;
@@ -56,10 +36,22 @@ export class VEntityState extends FSMState {
 	}
 
 	protected OnEnter(param: any): void {
-		const def = Hashtable.GetMap(Hashtable.GetMap(this.owner.def, "states"), this.type.toString());
+		const vDef = Hashtable.GetMap(Hashtable.GetMap(this.owner.cdef, "states"), this.type.toString());
 		//播放动画
-		const aniName = Hashtable.GetString(def, "animation");
-		this.owner.PlayAnim(aniName);
+		const aniName = Hashtable.GetString(vDef, "animation");
+		const scaleTime = Hashtable.GetBool(vDef, "auto_scale_time");
+		const duration = Hashtable.GetNumber(vDef, "duration");
+		let timeScale = 1;
+		if (scaleTime) {
+			const animationSetting = this.owner.animationProxy.GetAnimationSetting(aniName);
+			timeScale = duration / (animationSetting.length * animationSetting.interval);
+		}
+		this.owner.PlayAnim(aniName, timeScale);
+		this._time = 0;
+	}
+
+	protected OnUpdate(dt: number): void {
+		this._time += dt;
 	}
 
 	protected OnStateTimeChanged(): void {

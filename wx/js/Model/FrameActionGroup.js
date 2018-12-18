@@ -1,5 +1,5 @@
-import { FrameAction } from "./FrameAction";
 import { ByteBuffer } from "../RC/Utils/ByteBuffer";
+import { FrameAction } from "./FrameAction";
 export class FrameActionGroup {
     constructor(frame) {
         this._frameActions = [];

@@ -1,41 +1,43 @@
-import { Consts } from "../../Consts";
-import { CDefs } from "../CDefs";
 import { Global } from "../../Global";
+import Decimal from "../../Libs/decimal";
+import { FVec2 } from "../../RC/FMath/FVec2";
 import { FSM } from "../../RC/FSM/FSM";
 import { MathUtils } from "../../RC/Math/MathUtils";
-import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Attribute } from "../Attribute";
-import { AniHolder } from "./AniHolder";
-import { VEntityState } from "./FSM/VEntityState";
-import { FVec2 } from "../../RC/FMath/FVec2";
-import Decimal from "../../Libs/decimal";
+import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
+import { StateType } from "../FSM/StateEnums";
+import { VEntityState } from "../FSM/VEntityState";
+import { Skill } from "../Skill";
+import { AnimationProxy } from "./AnimationProxy";
 export class VEntity {
     constructor() {
         this.attribute = new Attribute();
+        this._skills = [];
         this._position = FVec2.zero;
         this._worldPosition = FVec2.zero;
         this._rotation = 0;
         this._logicPos = FVec2.zero;
         this._logicRot = 0;
-        this._playingName = "";
         this._fsm = new FSM();
         this._root = new fairygui.GComponent();
-        this._animations = new Map();
+        this._animationProxy = new AnimationProxy();
         this._root.setSize(0, 0);
         this._root.setPivot(0.5, 0.5, true);
         Global.graphic.entityRoot.addChild(this._root);
-        this._fsm.AddState(new VEntityState(VEntityState.Type.Idle, this));
-        this._fsm.AddState(new VEntityState(VEntityState.Type.Move, this));
-        this._fsm.AddState(new VEntityState(VEntityState.Type.Attack, this));
-        this._fsm.AddState(new VEntityState(VEntityState.Type.Die, this));
+        this._fsm.AddState(new VEntityState(StateType.Idle, this));
+        this._fsm.AddState(new VEntityState(StateType.Move, this));
+        this._fsm.AddState(new VEntityState(StateType.Attack, this));
+        this._fsm.AddState(new VEntityState(StateType.Die, this));
     }
     get id() { return this._id; }
     get actorID() { return this._actorID; }
     get team() { return this._team; }
     get name() { return this._name; }
     get def() { return this._def; }
+    get cdef() { return this._cdef; }
     get root() { return this._root; }
+    get animationProxy() { return this._animationProxy; }
     get position() { return this._position; }
     set position(value) {
         if (this._position.EqualsTo(value))
@@ -58,10 +60,6 @@ export class VEntity {
         this._battle = battle;
     }
     Dispose() {
-        this._animations.forEach((v, k, map) => {
-            v.dispose();
-        });
-        this._animations.clear();
         this._root.dispose();
     }
     Update(dt) {
@@ -81,17 +79,9 @@ export class VEntity {
     InitSnapshot(reader) {
         this._actorID = reader.int32();
         this._def = Defs.GetEntity(this._actorID);
-        const aniDefs = Hashtable.GetMapArray(CDefs.GetEntity(this._actorID), "animations");
-        for (let i = 0; i < aniDefs.length; ++i) {
-            const aniDef = aniDefs[i];
-            const aniName = Hashtable.GetString(aniDef, "name");
-            const length = Hashtable.GetNumber(aniDef, "length");
-            const urls = [];
-            for (let i = 0; i < length; ++i) {
-                urls.push((Consts.ASSETS_ENTITY_PREFIX + this._actorID) + "/" + aniName + i + ".png");
-            }
-            this._animations.set(aniName, new AniHolder(urls));
-        }
+        this._cdef = CDefs.GetEntity(this._actorID);
+        this._animationProxy.Init(this._actorID, this._cdef);
+        this._root.addChild(this._animationProxy);
         this._team = reader.int32();
         this._name = reader.string();
         this.position = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
@@ -102,12 +92,18 @@ export class VEntity {
             this.rotation = 360 - this.rotation;
         this._logicRot = this.rotation;
         const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-        this._fsm.ChangeState(reader.int32(), null);
-        this._fsm.currentState.time = reader.float();
-        const count = reader.int32();
-        for (let i = 0; i < count; i++) {
+        let count = reader.int32();
+        for (let i = 0; i < count; ++i) {
             this.attribute.Set(reader.int32(), new Decimal(reader.float()));
         }
+        count = reader.int32();
+        for (let i = 0; i < count; ++i) {
+            const skill = new Skill();
+            skill.Init(reader.int32());
+            this._skills.push(skill);
+        }
+        this._fsm.ChangeState(reader.int32(), null);
+        this._fsm.currentState.time = reader.float();
     }
     DecodeSnapshot(reader) {
         this._actorID = reader.int32();
@@ -119,21 +115,36 @@ export class VEntity {
         if (logicDir.x.lessThan(MathUtils.D_ZERO))
             this._logicRot = 360 - this._logicRot;
         const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-        this._fsm.ChangeState(reader.int32(), null);
-        this._fsm.currentState.time = reader.float();
-        const count = reader.int32();
+        let count = reader.int32();
         for (let i = 0; i < count; i++) {
             this.attribute.Set(reader.int32(), new Decimal(reader.float()));
         }
+        count = reader.int32();
+        for (let i = 0; i < count; ++i) {
+            reader.int32();
+        }
+        this._fsm.ChangeState(reader.int32(), null);
+        this._fsm.currentState.time = reader.float();
     }
-    PlayAnim(name, force = false) {
-        if (!force && this._playingName == name)
-            return;
-        this._playingName = name;
-        const aniHilder = this._animations.get(name);
-        this._root.removeChildren();
-        this._root.addChild(aniHilder);
-        aniHilder.Play();
+    PlayAnim(name, timeScale = 1, force = false) {
+        this._animationProxy.Play(name, 0, timeScale, force);
+    }
+    HasSkill(id) {
+        for (const skill of this._skills) {
+            if (skill.id == id)
+                return true;
+        }
+        return false;
+    }
+    GetSkill(id) {
+        for (const skill of this._skills) {
+            if (skill.id == id)
+                return skill;
+        }
+        return null;
+    }
+    GetSkillAt(index) {
+        return this._skills[index];
     }
 }
 VEntity.D_SMALL0 = new Decimal(0.012);

@@ -1,5 +1,4 @@
 import Decimal from "../../Libs/decimal";
-import * as $protobuf from "../../Libs/protobufjs";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { DEFAULT_ATTR_VALUES, EAttr } from "../Attribute";
 import { ISnapshotable } from "../ISnapshotable";

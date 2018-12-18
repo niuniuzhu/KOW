@@ -1,6 +1,6 @@
 {
 	"config": {
-		"ls_ip": "localhost",
+		"ls_ip": "www.kow2019.com",
 		"ls_port": 49996
 	},
 	"preloads": [
@@ -25,39 +25,51 @@
 	},
 	"entity": {
 		"e0": {
+			"states": {
+				"0": {
+					"animation": "stand"
+				},
+				"1": {
+					"animation": "run"
+				},
+				"2": {
+					"animation": "attack"
+				},
+				"3": {
+					"animation": "die"
+				},
+				"4": {
+					"animation": "b"
+				}
+			},
 			"animations": [
 				{
 					"name": "stand",
 					"length": 6,
-					"auto_scale_time": true,
 					"play_mode": 0,
 					"interval": 100
 				},
 				{
 					"name": "attack",
 					"length": 7,
-					"auto_scale_time": true,
 					"play_mode": 1,
 					"interval": 100
 				},
 				{
 					"name": "b",
 					"length": 5,
-					"auto_scale_time": true,
 					"play_mode": 1,
 					"interval": 100
 				},
 				{
 					"name": "die",
 					"length": 1,
-					"auto_scale_time": true,
 					"play_mode": 1,
 					"interval": 100
 				},
 				{
 					"name": "run",
 					"length": 7,
-					"auto_scale_time": true,
 					"play_mode": 0,
 					"interval": 100
 				}

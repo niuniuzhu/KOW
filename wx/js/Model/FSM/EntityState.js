@@ -1,16 +1,65 @@
+import Decimal from "../../Libs/decimal";
+import Set from "../../RC/Collections/Set";
 import { FSMState } from "../../RC/FSM/FSMState";
-var Type;
-(function (Type) {
-    Type[Type["Idle"] = 0] = "Idle";
-    Type[Type["Move"] = 1] = "Move";
-    Type[Type["Attack"] = 2] = "Attack";
-    Type[Type["Die"] = 3] = "Die";
-})(Type || (Type = {}));
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { ID_TO_STATE_ACTION } from "./StateEnums";
 export class EntityState extends FSMState {
     constructor(type, owner) {
         super(type);
+        this._time = new Decimal(0);
         this._owner = owner;
     }
     get owner() { return this._owner; }
+    get time() { return this._time; }
+    set time(value) {
+        if (this._time.equals(value))
+            return;
+        this._time = value;
+        this.OnStateTimeChanged();
+    }
+    Init() {
+        const def = Hashtable.GetMap(Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
+        const actionsDef = Hashtable.GetMapArray(def, "actions");
+        if (actionsDef != null) {
+            for (const actionDef of actionsDef) {
+                const type = Hashtable.GetNumber(actionDef, "id");
+                const ctr = ID_TO_STATE_ACTION.get(type);
+                const action = new ctr(this, type, actionDef);
+                this.AddAction(action);
+            }
+        }
+        const sa = Hashtable.GetNumberArray(def, "states_available");
+        if (sa != null) {
+            this._statesAvailable = new Set();
+            for (const type of sa) {
+                this._statesAvailable.add(type);
+            }
+        }
+    }
+    EncodeSnapshot(writer) {
+        for (const action of this._actions) {
+            action.EncodeSnapshot(writer);
+        }
+        writer.float(this._time.toNumber());
+    }
+    DecodeSnapshot(reader) {
+        for (const action of this._actions) {
+            action.DecodeSnapshot(reader);
+        }
+        this._time = new Decimal(reader.float());
+    }
+    OnEnter(param) {
+        this._time = new Decimal(0);
+    }
+    OnUpdate(dt) {
+        this._time = Decimal.add(this._time, dt);
+    }
+    OnStateTimeChanged() {
+        for (const action of this._actions) {
+            action.OnStateTimeChanged(this._time);
+        }
+    }
+    IsStateAvailable(type) {
+        return this._statesAvailable == null || this._statesAvailable.contains(type);
+    }
 }
-EntityState.Type = Type;

@@ -50,7 +50,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/Collections/Set", 
             this._time = new decimal_1.default(0);
         }
         OnUpdate(dt) {
-            this._time = this._time.add(dt);
+            this._time = decimal_1.default.add(this._time, dt);
         }
         OnStateTimeChanged() {
             for (const action of this._actions) {

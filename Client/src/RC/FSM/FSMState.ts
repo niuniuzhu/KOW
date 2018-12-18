@@ -47,10 +47,10 @@ export class FSMState {
 	}
 
 	public Update(dt: Decimal | number): void {
-		this.OnUpdate(dt);
 		for (const action of this._actions) {
 			action.Update(dt);
 		}
+		this.OnUpdate(dt);
 	}
 
 	protected OnEnter(param: any): void {

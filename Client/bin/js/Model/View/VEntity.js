@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../Attribute", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./AniHolder"], function (require, exports, Global_1, decimal_1, FVec2_1, FSM_1, MathUtils_1, Attribute_1, Defs_1, StateEnums_1, VEntityState_1, Skill_1, AniHolder_1) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../Attribute", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./AnimationProxy"], function (require, exports, Global_1, decimal_1, FVec2_1, FSM_1, MathUtils_1, Attribute_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, Skill_1, AnimationProxy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -12,7 +12,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
             this._logicRot = 0;
             this._fsm = new FSM_1.FSM();
             this._root = new fairygui.GComponent();
-            this._aniHolder = new AniHolder_1.AniHolder();
+            this._animationProxy = new AnimationProxy_1.AnimationProxy();
             this._root.setSize(0, 0);
             this._root.setPivot(0.5, 0.5, true);
             Global_1.Global.graphic.entityRoot.addChild(this._root);
@@ -26,7 +26,9 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
         get team() { return this._team; }
         get name() { return this._name; }
         get def() { return this._def; }
+        get cdef() { return this._cdef; }
         get root() { return this._root; }
+        get animationProxy() { return this._animationProxy; }
         get position() { return this._position; }
         set position(value) {
             if (this._position.EqualsTo(value))
@@ -68,8 +70,9 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
         InitSnapshot(reader) {
             this._actorID = reader.int32();
             this._def = Defs_1.Defs.GetEntity(this._actorID);
-            this._aniHolder.Init(this._actorID);
-            this._root.addChild(this._aniHolder);
+            this._cdef = CDefs_1.CDefs.GetEntity(this._actorID);
+            this._animationProxy.Init(this._actorID, this._cdef);
+            this._root.addChild(this._animationProxy);
             this._team = reader.int32();
             this._name = reader.string();
             this.position = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
@@ -114,8 +117,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.float();
         }
-        PlayAnim(name, force = false) {
-            this._aniHolder.Play(name, 0, force);
+        PlayAnim(name, timeScale = 1, force = false) {
+            this._animationProxy.Play(name, 0, timeScale, force);
         }
         HasSkill(id) {
             for (const skill of this._skills) {

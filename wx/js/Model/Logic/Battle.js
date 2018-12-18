@@ -8,10 +8,10 @@ import { FRect } from "../../RC/FMath/FRect";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
-import { SyncEvent } from "../Events/SyncEvent";
 import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
 import { Champion } from "./Champion";
@@ -122,15 +122,24 @@ export class Battle {
             entity.DecodeSnapshot(reader);
         }
     }
-    InitSyncToView() {
+    EncodeSync(writer) {
+        writer.int32(this._frame);
+        const count = this._entities.length;
+        writer.int32(count);
+        for (let i = 0; i < count; i++) {
+            const entity = this._entities[i];
+            entity.EncodeSync(writer);
+        }
+    }
+    SyncInitToView() {
         const writer = $protobuf.Writer.create();
-        this.EncodeSnapshot(writer);
+        this.EncodeSync(writer);
         const data = writer.finish();
         SyncEvent.BattleInit(data);
     }
     SyncToView() {
         const writer = $protobuf.Writer.create();
-        this.EncodeSnapshot(writer);
+        this.EncodeSync(writer);
         const data = writer.finish();
         SyncEvent.Snapshot(data);
     }
@@ -199,6 +208,9 @@ export class Battle {
         const entity = this.GetEntity(frameAction.gcNID.toString());
         if ((frameAction.inputFlag & FrameAction.InputFlag.Move) > 0) {
             entity.BeginMove(frameAction.dx, frameAction.dy);
+        }
+        if ((frameAction.inputFlag & FrameAction.InputFlag.Skill) > 0) {
+            entity.UseSkill(frameAction.sid);
         }
     }
     HandleSnapShot(ret) {

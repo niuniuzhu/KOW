@@ -28,22 +28,11 @@ export class EntityStateAction extends FSMStateAction implements ISnapshotable {
 		this._isTriggered = reader.bool();
 	}
 
-	public Trigger(): void {
-		this._isTriggered = true;
-		this.OnTrigger();
-	}
-
-	protected OnTrigger(): void {
-	}
-
 	protected OnEnter(param: any): void {
+		this._isTriggered = false;
 		if (this._triggerTime.lessThanOrEqualTo(MathUtils.D_ZERO)) {
 			this.Trigger();
 		}
-	}
-
-	protected OnExit(): void {
-		this._isTriggered = false;
 	}
 
 	public Update(dt: number | Decimal): void {
@@ -55,6 +44,14 @@ export class EntityStateAction extends FSMStateAction implements ISnapshotable {
 		}
 		else
 			super.Update(dt);
+	}
+
+	public Trigger(): void {
+		this._isTriggered = true;
+		this.OnTrigger();
+	}
+
+	protected OnTrigger(): void {
 	}
 
 	/**

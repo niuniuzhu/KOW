@@ -38,10 +38,10 @@ define(["require", "exports"], function (require, exports) {
             this.OnExit();
         }
         Update(dt) {
-            this.OnUpdate(dt);
             for (const action of this._actions) {
                 action.Update(dt);
             }
+            this.OnUpdate(dt);
         }
         OnEnter(param) {
         }

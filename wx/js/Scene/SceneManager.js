@@ -34,8 +34,8 @@ export class SceneManager {
         this.fsm.AddState(this._loading);
         this.fsm.AddState(this._battle);
     }
-    ChangeState(state, param = null, force = false) {
-        this.fsm.ChangeState(state, param, force);
+    ChangeState(state, param = null) {
+        this.fsm.ChangeState(state, param);
     }
     Update(dt) {
         this.fsm.Update(dt);

@@ -1,11 +1,11 @@
 import { Consts } from "../../Consts";
-import { CDefs } from "../CDefs";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
+import { UIEvent } from "../BattleEvent/UIEvent";
+import { CDefs } from "../CDefs";
 import { EntityType } from "../EntityType";
-import { EventManager } from "../Events/EventManager";
-import { SyncEvent } from "../Events/SyncEvent";
 import { Camera } from "./Camera";
 import { VChampion } from "./VChampion";
 export class VBattle {
@@ -17,8 +17,8 @@ export class VBattle {
         this._camera = new Camera();
     }
     SetBattleInfo(battleInfo) {
-        EventManager.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
-        EventManager.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
         this._destroied = false;
         this._mapID = battleInfo.mapID;
         this._def = CDefs.GetMap(this._mapID);
@@ -32,8 +32,8 @@ export class VBattle {
         if (this._destroied)
             return;
         this._destroied = true;
-        EventManager.RemoveListener(SyncEvent.E_BATTLE_INIT);
-        EventManager.RemoveListener(SyncEvent.E_SNAPSHOT);
+        SyncEvent.RemoveListener(SyncEvent.E_BATTLE_INIT);
+        SyncEvent.RemoveListener(SyncEvent.E_SNAPSHOT);
         const count = this._entities.length;
         for (let i = 0; i < count; ++i) {
             this._entities[i].Dispose();
@@ -61,9 +61,11 @@ export class VBattle {
             const id = reader.uint64();
             const entity = this.CreateEntity(type, id);
             entity.InitSnapshot(reader);
-            if (entity.id.equals(this._playerID)) {
+            const isSelf = entity.id.equals(this._playerID);
+            if (isSelf) {
                 this._camera.lookAt = entity;
             }
+            UIEvent.EntityInit(entity, isSelf);
         }
     }
     DecodeSnapshot(reader) {
@@ -95,13 +97,11 @@ export class VBattle {
     GetEntity(id) {
         return this._idToEntity.get(id);
     }
-    OnBattleInit(baseEvent) {
-        const e = baseEvent;
+    OnBattleInit(e) {
         const reader = $protobuf.Reader.create(e.data);
         this.InitSnapshot(reader);
     }
-    OnSnapshot(baseEvent) {
-        const e = baseEvent;
+    OnSnapshot(e) {
         const reader = $protobuf.Reader.create(e.data);
         this.DecodeSnapshot(reader);
     }

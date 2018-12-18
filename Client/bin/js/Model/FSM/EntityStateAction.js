@@ -14,19 +14,11 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSMStateAction
         DecodeSnapshot(reader) {
             this._isTriggered = reader.bool();
         }
-        Trigger() {
-            this._isTriggered = true;
-            this.OnTrigger();
-        }
-        OnTrigger() {
-        }
         OnEnter(param) {
+            this._isTriggered = false;
             if (this._triggerTime.lessThanOrEqualTo(MathUtils_1.MathUtils.D_ZERO)) {
                 this.Trigger();
             }
-        }
-        OnExit() {
-            this._isTriggered = false;
         }
         Update(dt) {
             const time = this.state.time;
@@ -37,6 +29,12 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSMStateAction
             }
             else
                 super.Update(dt);
+        }
+        Trigger() {
+            this._isTriggered = true;
+            this.OnTrigger();
+        }
+        OnTrigger() {
         }
         OnStateTimeChanged(time) {
         }

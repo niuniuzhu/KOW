@@ -59,9 +59,9 @@ export class ActInterrupt extends EntityStateAction implements ISnapshotable {
 	}
 
 	protected OnUpdate(dt: Decimal): void {
-		super.OnUpdate(dt);
 		for (const interrupt of this._interrupts) {
 			interrupt.Update(dt);
 		}
+		super.OnUpdate(dt);
 	}
 }

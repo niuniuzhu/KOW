@@ -79,7 +79,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 	}
 
 	protected OnUpdate(dt: Decimal): void {
-		this._time = this._time.add(dt);
+		this._time = Decimal.add(this._time, dt);
 	}
 
 	protected OnStateTimeChanged(): void {

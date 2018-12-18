@@ -40,24 +40,12 @@
 			],
 			"states": {
 				"0": {
-					"animation": "stand"
 				},
 				"1": {
-					"animation": "run"
 				},
 				"2": {
 					"states_available": [],
 					"actions": [
-						{
-							"id": 0,
-							"interrupts": [
-								{
-									"id": 0,
-									"connect_state": 0,
-									"duration": 700
-								}
-							]
-						},
 						{
 							"id": 1,
 							"attrs": [
@@ -70,15 +58,22 @@
 								1,
 								1
 							]
+						},
+						{
+							"id": 0,
+							"interrupts": [
+								{
+									"id": 0,
+									"connect_state": 0,
+									"duration": 700
+								}
+							]
 						}
-					],
-					"animation": "attack"
+					]
 				},
 				"3": {
-					"animation": "die"
 				},
 				"4": {
-					"animation": "b"
 				}
 			}
 		}

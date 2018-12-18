@@ -1,4 +1,3 @@
-import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
@@ -12,7 +11,7 @@ import { Defs } from "../Defs";
 import { StateType } from "../FSM/StateEnums";
 import { VEntityState } from "../FSM/VEntityState";
 import { Skill } from "../Skill";
-import { AniHolder } from "./AniHolder";
+import { AnimationProxy } from "./AnimationProxy";
 import { VBattle } from "./VBattle";
 
 export class VEntity {
@@ -21,7 +20,9 @@ export class VEntity {
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
 	public get def(): Hashtable { return this._def; }
+	public get cdef(): Hashtable { return this._cdef; }
 	public get root(): fairygui.GComponent { return this._root; }
+	public get animationProxy(): AnimationProxy { return this._animationProxy; }
 
 	public readonly attribute: Attribute = new Attribute();
 
@@ -51,6 +52,7 @@ export class VEntity {
 	private _team: number;
 	private _name: string;
 	private _def: Hashtable;
+	private _cdef: Hashtable;
 	private readonly _skills: Skill[] = [];
 
 	private _position: FVec2 = FVec2.zero;
@@ -61,7 +63,7 @@ export class VEntity {
 
 	private readonly _fsm: FSM = new FSM();
 	private readonly _root = new fairygui.GComponent();
-	private readonly _aniHolder: AniHolder = new AniHolder();
+	private readonly _animationProxy: AnimationProxy = new AnimationProxy();
 
 	private static readonly D_SMALL0 = new Decimal(0.012);
 
@@ -109,10 +111,11 @@ export class VEntity {
 
 		//加载配置
 		this._def = Defs.GetEntity(this._actorID);
+		this._cdef = CDefs.GetEntity(this._actorID);
 
 		//加载动画数据
-		this._aniHolder.Init(this._actorID);
-		this._root.addChild(this._aniHolder);
+		this._animationProxy.Init(this._actorID, this._cdef);
+		this._root.addChild(this._animationProxy);
 
 		//init properties
 		this._team = reader.int32();
@@ -180,10 +183,11 @@ export class VEntity {
 	/**
 	 * 播放动画
 	 * @param name 动画名称
+	 * @param timeScale 时间缩放
 	 * @param force 是否强制重新播放
 	 */
-	public PlayAnim(name: string, force: boolean = false): void {
-		this._aniHolder.Play(name, 0, force);
+	public PlayAnim(name: string, timeScale: number = 1, force: boolean = false): void {
+		this._animationProxy.Play(name, 0, timeScale, force);
 	}
 
 	/**

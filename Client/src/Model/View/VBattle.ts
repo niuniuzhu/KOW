@@ -84,31 +84,29 @@ export class VBattle {
 	}
 
 	/**
-	 * 解码初始化快照
+	 * 初始化同步数据
 	 */
-	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._logicFrame = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();
 			const rid = <Long>reader.uint64();
 			const entity = this.CreateEntity(type, rid);
-			entity.InitSnapshot(reader);
-
+			entity.InitSync(reader);
 			const isSelf = entity.id.equals(this._playerID);
 			if (isSelf) {
 				this._camera.lookAt = entity;
 			}
-
 			//通知UI创建实体
 			UIEvent.EntityInit(entity, isSelf);
 		}
 	}
 
 	/**
-	 * 解码快照
+	 * 解码同步数据
 	 */
-	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._logicFrame = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
@@ -117,7 +115,7 @@ export class VBattle {
 			const entity = this.GetEntity(rid);
 			if (entity == null)
 				continue;
-			entity.DecodeSnapshot(reader);
+			entity.DecodeSync(reader);
 		}
 	}
 
@@ -149,11 +147,11 @@ export class VBattle {
 
 	private OnBattleInit(e: SyncEvent): void {
 		const reader = $protobuf.Reader.create(e.data);
-		this.InitSnapshot(reader);
+		this.InitSync(reader);
 	}
 
 	private OnSnapshot(e: SyncEvent): void {
 		const reader = $protobuf.Reader.create(e.data);
-		this.DecodeSnapshot(reader);
+		this.DecodeSync(reader);
 	}
 }

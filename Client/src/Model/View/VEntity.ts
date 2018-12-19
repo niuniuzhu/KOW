@@ -103,7 +103,7 @@ export class VEntity {
 	/**
 	 * 初始化快照
 	 */
-	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._actorID = reader.int32();
 
 		//加载配置
@@ -148,7 +148,7 @@ export class VEntity {
 	/**
 	 * 解码快照
 	 */
-	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		//read properties
 		this._actorID = reader.int32();
 		this._team = reader.int32();

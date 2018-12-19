@@ -1,6 +1,9 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attack/Emitter", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/long"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, Emitter_1, SyncEvent_1, CDefs_1, Defs_1, FrameAction_1, FrameActionGroup_1, Champion_1, Long) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attack/Bullet", "../Attack/Emitter", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../EntityType", "../FrameAction", "../FrameActionGroup", "./Champion", "./Entity", "../../Libs/long"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, Bullet_1, Emitter_1, SyncEvent_1, CDefs_1, Defs_1, EntityType_1, FrameAction_1, FrameActionGroup_1, Champion_1, Entity_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    const TYPE_TO_CONSTRUCT = new Map();
+    TYPE_TO_CONSTRUCT.set(EntityType_1.EntityType.Champion, Champion_1.Champion);
+    TYPE_TO_CONSTRUCT.set(EntityType_1.EntityType.Bullet, Bullet_1.Bullet);
     class Battle {
         constructor() {
             this._frameRate = 0;
@@ -44,7 +47,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             const bWidth = Hashtable_1.Hashtable.GetNumber(this._cdef, "width");
             const bHeight = Hashtable_1.Hashtable.GetNumber(this._cdef, "height");
             this._bounds = new FRect_1.FRect(new decimal_1.default(-MathUtils_1.MathUtils.Floor(bWidth * 0.5)), new decimal_1.default(-MathUtils_1.MathUtils.Floor(bHeight * 0.5)), new decimal_1.default(bWidth), new decimal_1.default(bHeight));
-            this.CreatePlayers(battleInfo.playerInfos);
         }
         Destroy() {
             if (this._destroied)
@@ -100,7 +102,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
                 writer.int32(entity.type);
-                writer.uint64(entity.rid);
                 entity.EncodeSnapshot(writer);
             }
         }
@@ -109,9 +110,11 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
-                const rid = reader.uint64();
-                const entity = this.GetEntity(rid);
+                const ctr = TYPE_TO_CONSTRUCT.get(type);
+                const entity = new ctr(this);
                 entity.DecodeSnapshot(reader);
+                this._entities.push(entity);
+                this._idToEntity.set(entity.rid.toString(), entity);
             }
         }
         EncodeSync(writer) {
@@ -136,6 +139,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             SyncEvent_1.SyncEvent.Snapshot(data);
         }
         Chase(frameActionGroups, updateView, commitSnapshot) {
+            if (frameActionGroups == null)
+                return;
             while (!frameActionGroups.isEmpty()) {
                 const frameActionGroup = frameActionGroups.dequeue();
                 let length = frameActionGroup.frame - this.frame;
@@ -166,11 +171,15 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                 const pi = arr[i];
                 bornDirs.push(new FVec2_1.FVec2(new decimal_1.default(pi[0]), new decimal_1.default(pi[1])));
             }
+            const params = new Entity_1.EntityInitParams();
             count = playerInfos.length;
             for (let i = 0; i < count; ++i) {
                 const playerInfo = playerInfos[i];
-                const player = this.CreateEntity(Champion_1.Champion, playerInfo.gcNID, playerInfo.actorID);
-                player.Init(playerInfo.team, playerInfo.name);
+                params.rid = playerInfo.gcNID;
+                params.id = playerInfo.actorID;
+                params.team = playerInfo.team;
+                params.name = playerInfo.name;
+                const player = this.CreateEntity(EntityType_1.EntityType.Champion, params);
                 if (player.team >= bornPoses.length ||
                     player.team >= bornDirs.length) {
                     throw new Error("invalid team:" + player.team + ", player:" + player.rid);
@@ -179,8 +188,10 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                 player.direction = bornDirs[player.team];
             }
         }
-        CreateEntity(c, rid, id) {
-            const entity = new c(this, rid, id);
+        CreateEntity(type, params) {
+            const ctr = TYPE_TO_CONSTRUCT.get(type);
+            const entity = new ctr(this);
+            entity.Init(params);
             this._entities.push(entity);
             this._idToEntity.set(entity.rid.toString(), entity);
             return entity;
@@ -210,8 +221,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             }
         }
         HandleSnapShot(ret) {
-            if (ret.snapshot.length == 0)
-                return;
             const reader = $protobuf.Reader.create(ret.snapshot);
             this.DecodeSnapshot(reader);
         }

@@ -14,6 +14,8 @@ define(["require", "exports", "../EntityType", "../Logic/Entity"], function (req
     })(BulletShape = exports.BulletShape || (exports.BulletShape = {}));
     class Bullet extends Entity_1.Entity {
         get type() { return EntityType_1.EntityType.Bullet; }
+        OnInit() {
+        }
         EncodeSnapshot(writer) {
         }
         DecodeSnapshot(reader) {

@@ -1,8 +1,6 @@
-import { EntityStateAction } from "./EntityStateAction";
-import { ISnapshotable } from "../ISnapshotable";
-import { FSMState } from "../../RC/FSM/FSMState";
-import { ActionType } from "./StateEnums";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { ISnapshotable } from "../ISnapshotable";
+import { EntityStateAction } from "./EntityStateAction";
 
 /**
  * 攻击行为

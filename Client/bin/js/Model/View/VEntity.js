@@ -67,7 +67,7 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
         OnRatationChanged(delta) {
             this._root.rotation = this._rotation;
         }
-        InitSnapshot(reader) {
+        InitSync(reader) {
             this._actorID = reader.int32();
             this._def = Defs_1.Defs.GetEntity(this._actorID);
             this._cdef = CDefs_1.CDefs.GetEntity(this._actorID);
@@ -96,7 +96,7 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.float();
         }
-        DecodeSnapshot(reader) {
+        DecodeSync(reader) {
             this._actorID = reader.int32();
             this._team = reader.int32();
             this._name = reader.string();

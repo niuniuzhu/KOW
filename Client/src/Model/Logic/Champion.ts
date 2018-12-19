@@ -11,11 +11,12 @@ import { StateType } from "../FSM/StateEnums";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
 import { EAttr } from "./Attribute";
-import { Entity } from "./Entity";
+import { Battle } from "./Battle";
+import { Entity, EntityInitParams } from "./Entity";
 
 export class Champion extends Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Champion; }
-	
+
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
 	/**
@@ -42,22 +43,25 @@ export class Champion extends Entity implements ISnapshotable {
 	private _team: number;
 	private _name: string;
 	private _skills: Skill[];
-	private _speed: FVec2 = FVec2.zero;
+	private _moveSpeed: FVec2 = FVec2.zero;
 
-	public Init(team: number, name: string): void {
-		this._team = team;
-		this._name = name;
+	constructor(battle: Battle) {
+		super(battle);
 		this._fsm = new EntityFSM();
 		this._fsm.AddState(new EntityState(StateType.Idle, this));
 		this._fsm.AddState(new EntityState(StateType.Move, this));
 		this._fsm.AddState(new EntityState(StateType.Attack, this));
 		this._fsm.AddState(new EntityState(StateType.Die, this));
-		this._fsm.Init();
-		this._fsm.ChangeState(StateType.Idle);
 	}
 
-	protected LoadDef(): void {
-		this._def = Defs.GetEntity(this.id);
+	protected InternalInit(params: EntityInitParams): void {
+		super.InternalInit(params);
+		this._team = params.team;
+		this._name = params.name;
+	}
+
+	protected OnInit(): void {
+		this._def = Defs.GetEntity(this._id);
 
 		this.attribute.Set(EAttr.RADIUS, new Decimal(Hashtable.GetNumber(this._def, "radius")));
 		this.attribute.Set(EAttr.MHP, new Decimal(Hashtable.GetNumber(this._def, "mhp")));
@@ -73,6 +77,9 @@ export class Champion extends Entity implements ISnapshotable {
 			skill.Init(sid);
 			this._skills.push(skill);
 		}
+
+		this._fsm.Init();
+		this._fsm.ChangeState(StateType.Idle);
 	}
 
 	/**
@@ -81,12 +88,14 @@ export class Champion extends Entity implements ISnapshotable {
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		super.EncodeSnapshot(writer);
 
-		//encode properties
+		//encode params
 		writer.int32(this._team);
 		writer.string(this._name);
+
+		//encode properties
 		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
 		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
-		writer.float(this._speed.x.toNumber()).float(this._speed.y.toNumber());
+		writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
 
 		//encode attributes
 		const count = this.attribute.count;
@@ -111,12 +120,15 @@ export class Champion extends Entity implements ISnapshotable {
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		super.DecodeSnapshot(reader);
 
-		//decode properties
+		//decode params
 		this._team = reader.int32();
 		this._name = reader.string();
+		this.OnInit();
+
+		//decode properties
 		this.position = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this.direction = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-		this._speed = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
+		this._moveSpeed = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 
 		//decode attributes
 		let count = reader.int32();
@@ -150,7 +162,7 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.string(this._name);
 		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
 		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
-		writer.float(this._speed.x.toNumber()).float(this._speed.y.toNumber());
+		writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
 
 		//sync attributes
 		const count = this.attribute.count;
@@ -216,19 +228,24 @@ export class Champion extends Entity implements ISnapshotable {
 	 */
 	public BeginMove(dx: number, dy: number): void {
 		const direction = new FVec2(new Decimal(dx), new Decimal(dy));
-		if (this.canTurn) {
-			this.direction = direction;
+		if (direction.SqrMagnitude().lessThan(FMathUtils.D_SMALL)) {
+			this._moveSpeed = FVec2.zero;
 		}
-		this._speed = FVec2.MulN(direction, this.attribute.Get(EAttr.MOVE_SPEED));
+		else {
+			if (this.canTurn) {
+				this.direction = direction;
+			}
+			this._moveSpeed = FVec2.MulN(direction, this.attribute.Get(EAttr.MOVE_SPEED));
+		}
 	}
 
 	private MoveStep(dt: Decimal): void {
-		if (this._speed.SqrMagnitude().lessThan(FMathUtils.D_SMALL)) {
+		if (this._moveSpeed.SqrMagnitude().lessThan(FMathUtils.D_SMALL)) {
 			this._fsm.ChangeState(StateType.Idle);
 			return;
 		}
 		if (this.canMove) {
-			const moveDelta = FVec2.MulN(this._speed, FMathUtils.D_SMALL1.mul(dt));
+			const moveDelta = FVec2.MulN(this._moveSpeed, FMathUtils.D_SMALL1.mul(dt));
 			const pos = FVec2.Add(this.position, moveDelta);
 			//限制活动范围
 			const radius = this.attribute.Get(EAttr.RADIUS);

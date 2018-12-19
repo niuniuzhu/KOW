@@ -55,7 +55,11 @@ export class BattleManager {
 
 		const curFrame = battleInfo.serverFrame;
 		//请求最新战场快照
-		this.RequestSnapshot(() => {
+		this.RequestSnapshot(success => {
+			if (!success) {
+				//如果没有快照,则创建初始战场状态
+				this._lBattle.CreatePlayers(battleInfo.playerInfos);
+			}
 			//请求帧行为历史记录
 			const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
 			request.from = this._lBattle.frame;
@@ -87,13 +91,18 @@ export class BattleManager {
 	/**
 	 * 请求快照
 	 */
-	private RequestSnapshot(callback: () => void): void {
+	private RequestSnapshot(callback: (success: boolean) => void): void {
 		const requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
 		requestState.frame = -1;
 		Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
 			const ret = <Protos.BS2GC_RequestSnapshotRet>msg;
-			this._lBattle.HandleSnapShot(ret);
-			callback();
+			if (ret.snapshot.length == 0) {//没有数据,说明没有快照
+				callback(false);
+			}
+			else {
+				this._lBattle.HandleSnapShot(ret);
+				callback(true);
+			}
 		});
 	}
 
@@ -123,8 +132,10 @@ export class BattleManager {
 	 * @param actions 帧行为列表
 	 */
 	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): Queue<FrameActionGroup> {
-		const frameActionGroups = new Queue<FrameActionGroup>();
 		const count = frames.length;
+		if (count == 0)
+			return null;
+		const frameActionGroups = new Queue<FrameActionGroup>();
 		for (let i = 0; i < count; ++i) {
 			const frameActionGroup = new FrameActionGroup(frames[i]);
 			frameActionGroup.Deserialize(actions[i]);

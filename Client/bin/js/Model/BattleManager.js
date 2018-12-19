@@ -19,7 +19,10 @@ define(["require", "exports", "../Global", "../Libs/decimal", "../Libs/protos", 
             this._vBattle.SetBattleInfo(battleInfo);
             this._lBattle.SetBattleInfo(battleInfo);
             const curFrame = battleInfo.serverFrame;
-            this.RequestSnapshot(() => {
+            this.RequestSnapshot(success => {
+                if (!success) {
+                    this._lBattle.CreatePlayers(battleInfo.playerInfos);
+                }
                 const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestFrameActions();
                 request.from = this._lBattle.frame;
                 request.to = curFrame;
@@ -45,8 +48,13 @@ define(["require", "exports", "../Global", "../Libs/decimal", "../Libs/protos", 
             requestState.frame = -1;
             Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestSnapshot, requestState, msg => {
                 const ret = msg;
-                this._lBattle.HandleSnapShot(ret);
-                callback();
+                if (ret.snapshot.length == 0) {
+                    callback(false);
+                }
+                else {
+                    this._lBattle.HandleSnapShot(ret);
+                    callback(true);
+                }
             });
         }
         HandleBattleEnd(message) {
@@ -60,8 +68,10 @@ define(["require", "exports", "../Global", "../Libs/decimal", "../Libs/protos", 
             this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
         }
         HandleRequestFrameActions(frames, actions) {
-            const frameActionGroups = new Queue_1.default();
             const count = frames.length;
+            if (count == 0)
+                return null;
+            const frameActionGroups = new Queue_1.default();
             for (let i = 0; i < count; ++i) {
                 const frameActionGroup = new FrameActionGroup_1.FrameActionGroup(frames[i]);
                 frameActionGroup.Deserialize(actions[i]);

@@ -8,6 +8,15 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Attribute } from "./Attribute";
 import { Battle } from "./Battle";
 
+export class EntityInitParams {
+	//entity
+	public rid: Long;
+	public id: number;
+	//champion
+	public team: number;
+	public name: string;
+}
+
 export abstract class Entity implements ISnapshotable {
 	public abstract get type(): EntityType;
 	public get battle(): Battle { return this._battle; }
@@ -20,29 +29,36 @@ export abstract class Entity implements ISnapshotable {
 	public position: FVec2 = FVec2.zero;
 	public direction: FVec2 = FVec2.zero;
 
-	protected _battle: Battle;
+	protected readonly _battle: Battle;
 	protected _rid: Long;
 	protected _id: number;
 	protected _def: Hashtable;
 	protected _fsm: EntityFSM
 
-	constructor(battle: Battle, rid: Long, id: number) {
+	constructor(battle: Battle) {
 		this._battle = battle;
-		this._rid = rid;
-		this._id = id;
-		this.LoadDef();
+	}
+
+	public Init(params: EntityInitParams): void {
+		this.InternalInit(params);
+		this.OnInit();
+	}
+
+	protected InternalInit(params: EntityInitParams): void {
+		this._rid = params.rid;
+		this._id = params.id;
 	}
 
 	public Dispose(): void {
 	}
 
-	protected LoadDef(): void {
-	}
+	protected abstract OnInit(): void;
 
 	/**
 	 * 编码快照
 	 */
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		writer.uint64(this._rid);
 		writer.int32(this._id);
 	}
 
@@ -50,6 +66,7 @@ export abstract class Entity implements ISnapshotable {
 	 * 解码快照
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._rid = <Long>reader.uint64();
 		this._id = reader.int32();
 	}
 

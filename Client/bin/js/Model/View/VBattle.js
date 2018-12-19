@@ -46,14 +46,14 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 entity.Update(dt);
             }
         }
-        InitSnapshot(reader) {
+        InitSync(reader) {
             this._logicFrame = reader.int32();
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
                 const rid = reader.uint64();
                 const entity = this.CreateEntity(type, rid);
-                entity.InitSnapshot(reader);
+                entity.InitSync(reader);
                 const isSelf = entity.id.equals(this._playerID);
                 if (isSelf) {
                     this._camera.lookAt = entity;
@@ -61,7 +61,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 UIEvent_1.UIEvent.EntityInit(entity, isSelf);
             }
         }
-        DecodeSnapshot(reader) {
+        DecodeSync(reader) {
             this._logicFrame = reader.int32();
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
@@ -70,7 +70,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 const entity = this.GetEntity(rid);
                 if (entity == null)
                     continue;
-                entity.DecodeSnapshot(reader);
+                entity.DecodeSync(reader);
             }
         }
         CreateEntity(type, id) {
@@ -92,11 +92,11 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         OnBattleInit(e) {
             const reader = $protobuf.Reader.create(e.data);
-            this.InitSnapshot(reader);
+            this.InitSync(reader);
         }
         OnSnapshot(e) {
             const reader = $protobuf.Reader.create(e.data);
-            this.DecodeSnapshot(reader);
+            this.DecodeSync(reader);
         }
     }
     exports.VBattle = VBattle;

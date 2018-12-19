@@ -33,6 +33,9 @@ export class Bullet extends Entity implements ISnapshotable {
 	//run time properties
 	private _target: Entity;
 
+	protected OnInit(): void {
+	}
+
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 	}
 

@@ -22,8 +22,12 @@ import { FrameActionGroup } from "../FrameActionGroup";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
 import { Champion } from "./Champion";
-import { Entity } from "./Entity";
+import { Entity, EntityInitParams } from "./Entity";
 import Long = require("../../Libs/long");
+
+const TYPE_TO_CONSTRUCT = new Map<EntityType, new (battle: Battle) => Entity>();
+TYPE_TO_CONSTRUCT.set(EntityType.Champion, Champion);
+TYPE_TO_CONSTRUCT.set(EntityType.Bullet, Bullet);
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -84,9 +88,6 @@ export class Battle implements ISnapshotable {
 		const bHeight = Hashtable.GetNumber(this._cdef, "height");
 		this._bounds = new FRect(new Decimal(-MathUtils.Floor(bWidth * 0.5)),
 			new Decimal(-MathUtils.Floor(bHeight * 0.5)), new Decimal(bWidth), new Decimal(bHeight));
-
-		//创建玩家
-		this.CreatePlayers(battleInfo.playerInfos);
 	}
 
 	/**
@@ -169,7 +170,6 @@ export class Battle implements ISnapshotable {
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
 			writer.int32(entity.type);
-			writer.uint64(entity.rid);
 			entity.EncodeSnapshot(writer);
 		}
 	}
@@ -181,11 +181,14 @@ export class Battle implements ISnapshotable {
 		this._frame = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
+			//create entity
 			const type = <EntityType>reader.int32();
-			//todo 需要改为根据快照创建所有游戏对象,初始状态应该在服务端
-			const rid = <Long>reader.uint64();
-			const entity = this.GetEntity(rid);
+			const ctr = TYPE_TO_CONSTRUCT.get(type);
+			const entity = new ctr(this);
 			entity.DecodeSnapshot(reader);
+			this._entities.push(entity);
+			this._idToEntity.set(entity.rid.toString(), entity);
+
 		}
 	}
 
@@ -226,6 +229,8 @@ export class Battle implements ISnapshotable {
 	 * 追赶服务端帧数
 	 */
 	public Chase(frameActionGroups: Queue<FrameActionGroup>, updateView: boolean, commitSnapshot: boolean): void {
+		if (frameActionGroups == null)
+			return;
 		while (!frameActionGroups.isEmpty()) {
 			const frameActionGroup = frameActionGroups.dequeue();
 			let length = frameActionGroup.frame - this.frame;
@@ -238,6 +243,9 @@ export class Battle implements ISnapshotable {
 		}
 	}
 
+	/**
+	 * 给定指定id制作运行时id
+	 */
 	public MakeRid(id: number): Long {
 		const rnd = this._random.NextFloor(FMathUtils.D_ZERO, FMathUtils.D_BIG);
 		return Long.fromBits(id, rnd.toNumber());
@@ -247,7 +255,7 @@ export class Battle implements ISnapshotable {
 	 * 创建玩家
 	 * @param playerInfos 玩家信息
 	 */
-	private CreatePlayers(playerInfos: Protos.ICS2BS_PlayerInfo[]): void {
+	public CreatePlayers(playerInfos: Protos.ICS2BS_PlayerInfo[]): void {
 		let arr = Hashtable.GetArray(this._def, "born_pos");
 		let count = arr.length;
 		const bornPoses: FVec2[] = [];
@@ -264,11 +272,15 @@ export class Battle implements ISnapshotable {
 			bornDirs.push(new FVec2(new Decimal(pi[0]), new Decimal(pi[1])));
 		}
 
+		const params = new EntityInitParams();
 		count = playerInfos.length;
 		for (let i = 0; i < count; ++i) {
 			const playerInfo = playerInfos[i];
-			const player = this.CreateEntity(Champion, playerInfo.gcNID, playerInfo.actorID);
-			player.Init(playerInfo.team, playerInfo.name);
+			params.rid = playerInfo.gcNID;
+			params.id = playerInfo.actorID;
+			params.team = playerInfo.team;
+			params.name = playerInfo.name;
+			const player = <Champion>this.CreateEntity(EntityType.Champion, params);
 			if (player.team >= bornPoses.length ||
 				player.team >= bornDirs.length) {
 				throw new Error("invalid team:" + player.team + ", player:" + player.rid);
@@ -281,17 +293,25 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 创建实体
 	 */
-	public CreateEntity<T extends Entity>(c: new (battle: Battle, rid: Long, id: number) => T, rid: Long, id: number): T {
-		const entity: T = new c(this, rid, id);
+	public CreateEntity(type: EntityType, params: EntityInitParams): Entity {
+		const ctr = TYPE_TO_CONSTRUCT.get(type);
+		const entity = new ctr(this);
+		entity.Init(params);
 		this._entities.push(entity);
 		this._idToEntity.set(entity.rid.toString(), entity);
 		return entity;
 	}
 
+	/**
+	 * 获取指定id的实体
+	 */
 	public GetEntity(rid: Long): Entity {
 		return this._idToEntity.get(rid.toString());
 	}
 
+	/**
+	 * 创建发射器
+	 */
 	public CreateEmitter(id: number, caster: Entity, skill: Skill): Emitter {
 		const emitter = new Emitter(this, this.MakeRid(id), id);
 		emitter.Init(caster, skill);
@@ -325,8 +345,6 @@ export class Battle implements ISnapshotable {
 	 * @param ret 协议
 	 */
 	public HandleSnapShot(ret: Protos.BS2GC_RequestSnapshotRet): void {
-		if (ret.snapshot.length == 0)
-			return;
 		//解码快照
 		const reader = $protobuf.Reader.create(ret.snapshot);
 		this.DecodeSnapshot(reader);

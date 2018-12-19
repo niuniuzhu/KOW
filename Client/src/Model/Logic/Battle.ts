@@ -4,10 +4,13 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
 import { ProtoCreator } from "../../Net/ProtoHelper";
 import Queue from "../../RC/Collections/Queue";
+import { FMathUtils } from "../../RC/FMath/FMathUtils";
+import { FRandom } from "../../RC/FMath/FRandom";
 import { FRect } from "../../RC/FMath/FRect";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { Emitter } from "../Attack/Emitter";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
 import { CDefs } from "../CDefs";
@@ -16,8 +19,10 @@ import { EntityType } from "../EntityType";
 import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
 import { ISnapshotable } from "../ISnapshotable";
+import { Skill } from "../Skill";
 import { Champion } from "./Champion";
 import { Entity } from "./Entity";
+import Long = require("../../Libs/long");
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -26,6 +31,7 @@ export class Battle implements ISnapshotable {
 	private _timeout: number = 0;
 	private _mapID: number = 0;
 	private _frame: number = 0;
+	private _random: FRandom;
 
 	public get frameRate(): number { return this._frameRate; }
 	public get keyframeStep(): number { return this._keyframeStep; }
@@ -34,6 +40,7 @@ export class Battle implements ISnapshotable {
 	public get mapID(): number { return this._mapID; }
 	public get frame(): number { return this._frame; }
 	public get bounds(): FRect { return this._bounds; }
+	public get random(): FRandom { return this._random; }
 
 	private _msPerFrame: Decimal;
 	private _logicElapsed: Decimal;
@@ -47,6 +54,8 @@ export class Battle implements ISnapshotable {
 	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
 	private readonly _entities: Entity[] = [];
 	private readonly _idToEntity: Map<string, Entity> = new Map<string, Entity>();
+	private readonly _emitters: Emitter[] = [];
+	private readonly _idToEmitter: Map<string, Emitter> = new Map<string, Emitter>();
 
 	/**
 	 * 设置战场信息
@@ -57,6 +66,7 @@ export class Battle implements ISnapshotable {
 		this._frameRate = battleInfo.frameRate;
 		this._keyframeStep = battleInfo.keyframeStep;
 		this._snapshotStep = battleInfo.snapshotStep;
+		this._random = new FRandom(new Decimal(battleInfo.rndSeed));
 		this._timeout = battleInfo.battleTime;
 		this._mapID = battleInfo.mapID
 		this._msPerFrame = new Decimal(1000 / this._frameRate);
@@ -168,7 +178,7 @@ export class Battle implements ISnapshotable {
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();
 			const id = <Long>reader.uint64();
-			const entity = this.GetEntity(id.toString());
+			const entity = this.GetEntity(id);
 			if (entity == null)
 				continue;
 			entity.DecodeSnapshot(reader);
@@ -224,6 +234,11 @@ export class Battle implements ISnapshotable {
 		}
 	}
 
+	public MakeRid(id: number): Long {
+		const rnd = this._random.NextFloor(FMathUtils.D_ZERO, FMathUtils.D_BIG);
+		return Long.fromBits(id, rnd.toNumber());
+	}
+
 	/**
 	 * 创建玩家
 	 * @param playerInfos 玩家信息
@@ -277,8 +292,14 @@ export class Battle implements ISnapshotable {
 		return entity;
 	}
 
-	public GetEntity(id: string): Entity {
-		return this._idToEntity.get(id);
+	public GetEntity(id: Long): Entity {
+		return this._idToEntity.get(id.toString());
+	}
+
+	public CreateEmitter(id: number, caster: Entity, skill: Skill): Emitter {
+		const emitter = new Emitter();
+		emitter.Init(this, id, this.MakeRid(id), caster, skill);
+		return emitter;
 	}
 
 	/**
@@ -292,7 +313,7 @@ export class Battle implements ISnapshotable {
 	}
 
 	private ApplyFrameAction(frameAction: FrameAction): void {
-		const entity = this.GetEntity(frameAction.gcNID.toString());
+		const entity = this.GetEntity(frameAction.gcNID);
 		if ((frameAction.inputFlag & FrameAction.InputFlag.Move) > 0) {
 			entity.BeginMove(frameAction.dx, frameAction.dy);
 		}

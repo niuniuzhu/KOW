@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../EntityType", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, EntityType_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attack/Emitter", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../EntityType", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/long"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, Emitter_1, SyncEvent_1, CDefs_1, Defs_1, EntityType_1, FrameAction_1, FrameActionGroup_1, Champion_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -13,6 +13,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._frameActionGroups = new Queue_1.default();
             this._entities = [];
             this._idToEntity = new Map();
+            this._emitters = [];
+            this._idToEmitter = new Map();
         }
         get frameRate() { return this._frameRate; }
         get keyframeStep() { return this._keyframeStep; }
@@ -21,11 +23,13 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         get mapID() { return this._mapID; }
         get frame() { return this._frame; }
         get bounds() { return this._bounds; }
+        get random() { return this._random; }
         SetBattleInfo(battleInfo) {
             this._destroied = false;
             this._frameRate = battleInfo.frameRate;
             this._keyframeStep = battleInfo.keyframeStep;
             this._snapshotStep = battleInfo.snapshotStep;
+            this._random = new FRandom_1.FRandom(new decimal_1.default(battleInfo.rndSeed));
             this._timeout = battleInfo.battleTime;
             this._mapID = battleInfo.mapID;
             this._msPerFrame = new decimal_1.default(1000 / this._frameRate);
@@ -102,7 +106,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
                 const id = reader.uint64();
-                const entity = this.GetEntity(id.toString());
+                const entity = this.GetEntity(id);
                 if (entity == null)
                     continue;
                 entity.DecodeSnapshot(reader);
@@ -140,6 +144,10 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                 this.ApplyFrameActionGroup(frameActionGroup);
                 this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
             }
+        }
+        MakeRid(id) {
+            const rnd = this._random.NextFloor(FMathUtils_1.FMathUtils.D_ZERO, FMathUtils_1.FMathUtils.D_BIG);
+            return Long.fromBits(id, rnd.toNumber());
         }
         CreatePlayers(playerInfos) {
             let arr = Hashtable_1.Hashtable.GetArray(this._def, "born_pos");
@@ -183,7 +191,12 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             return entity;
         }
         GetEntity(id) {
-            return this._idToEntity.get(id);
+            return this._idToEntity.get(id.toString());
+        }
+        CreateEmitter(id, caster, skill) {
+            const emitter = new Emitter_1.Emitter();
+            emitter.Init(this, id, this.MakeRid(id), caster, skill);
+            return emitter;
         }
         ApplyFrameActionGroup(frameActionGroup) {
             for (let i = 0; i < frameActionGroup.numActions; i++) {
@@ -191,7 +204,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             }
         }
         ApplyFrameAction(frameAction) {
-            const entity = this.GetEntity(frameAction.gcNID.toString());
+            const entity = this.GetEntity(frameAction.gcNID);
             if ((frameAction.inputFlag & FrameAction_1.FrameAction.InputFlag.Move) > 0) {
                 entity.BeginMove(frameAction.dx, frameAction.dy);
             }

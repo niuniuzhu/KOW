@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSMStateAction", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable"], function (require, exports, decimal_1, FSMStateAction_1, MathUtils_1, Hashtable_1) {
+define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils", "../../RC/FSM/FSMStateAction", "../../RC/Utils/Hashtable"], function (require, exports, decimal_1, FMathUtils_1, FSMStateAction_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityStateAction extends FSMStateAction_1.FSMStateAction {
@@ -16,7 +16,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FSM/FSMStateAction
         }
         OnEnter(param) {
             this._isTriggered = false;
-            if (this._triggerTime.lessThanOrEqualTo(MathUtils_1.MathUtils.D_ZERO)) {
+            if (this._triggerTime.lessThanOrEqualTo(FMathUtils_1.FMathUtils.D_ZERO)) {
                 this.Trigger();
             }
         }

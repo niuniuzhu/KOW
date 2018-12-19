@@ -1,9 +1,8 @@
 import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
+import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
-import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Attribute, EAttr } from "../Attribute";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
 import { EntityFSM } from "../FSM/EntityFSM";
@@ -11,6 +10,7 @@ import { EntityState } from "../FSM/EntityState";
 import { StateType } from "../FSM/StateEnums";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
+import { Attribute, EAttr } from "./Attribute";
 import { Battle } from "./Battle";
 
 export class Entity implements ISnapshotable {
@@ -25,23 +25,23 @@ export class Entity implements ISnapshotable {
 	/**
 	 * 获取当前状态下是否可移动
 	 */
-	public get canMove(): boolean { return this.attribute.Get(EAttr.S_DISABLE_MOVE).lessThanOrEqualTo(MathUtils.D_ZERO); }
+	public get canMove(): boolean { return this.attribute.Get(EAttr.S_DISABLE_MOVE).lessThanOrEqualTo(FMathUtils.D_ZERO); }
 	/**
 	 * 获取当前状态下是否可转身
 	 */
-	public get canTurn(): boolean { return this.attribute.Get(EAttr.S_DISABLE_TURN).lessThanOrEqualTo(MathUtils.D_ZERO); }
+	public get canTurn(): boolean { return this.attribute.Get(EAttr.S_DISABLE_TURN).lessThanOrEqualTo(FMathUtils.D_ZERO); }
 	/**
 	 * 获取当前状态下是否可使用技能
 	 */
-	public get canUseSkill(): boolean { return this.attribute.Get(EAttr.S_DISABLE_SKILL).lessThanOrEqualTo(MathUtils.D_ZERO); }
+	public get canUseSkill(): boolean { return this.attribute.Get(EAttr.S_DISABLE_SKILL).lessThanOrEqualTo(FMathUtils.D_ZERO); }
 	/**
 	 * 获取当前状态下是否霸体
 	 */
-	public get isSuperArmor(): boolean { return this.attribute.Get(EAttr.S_SUPPER_ARMOR).greaterThan(MathUtils.D_ZERO); }
+	public get isSuperArmor(): boolean { return this.attribute.Get(EAttr.S_SUPPER_ARMOR).greaterThan(FMathUtils.D_ZERO); }
 	/**
 	 * 获取当前状态下是否无敌
 	 */
-	public get isInvulnerability(): boolean { return this.attribute.Get(EAttr.S_INVULNER_ABILITY).greaterThan(MathUtils.D_ZERO); }
+	public get isInvulnerability(): boolean { return this.attribute.Get(EAttr.S_INVULNER_ABILITY).greaterThan(FMathUtils.D_ZERO); }
 
 	public readonly attribute: Attribute = new Attribute();
 	public position: FVec2 = FVec2.zero;
@@ -55,7 +55,7 @@ export class Entity implements ISnapshotable {
 	private _def: Hashtable;
 	private readonly _skills: Skill[] = [];
 
-	private _moveDirection: FVec2 = FVec2.zero;
+	private _speed: FVec2 = FVec2.zero;
 
 	private readonly _fsm: EntityFSM = new EntityFSM();
 
@@ -108,12 +108,12 @@ export class Entity implements ISnapshotable {
 		writer.string(this._name);
 		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
 		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
-		writer.float(this._moveDirection.x.toNumber()).float(this._moveDirection.y.toNumber());
+		writer.float(this._speed.x.toNumber()).float(this._speed.y.toNumber());
 
 		//encode attributes
 		const count = this.attribute.count;
 		writer.int32(count);
-		this.attribute.Foreach((v, k, map) => {
+		this.attribute.Foreach((v, k) => {
 			writer.int32(k).float(v.toNumber());
 		});
 
@@ -137,7 +137,7 @@ export class Entity implements ISnapshotable {
 		this._name = reader.string();
 		this.position = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this.direction = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-		this._moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
+		this._speed = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 
 		//decode attributes
 		let count = reader.int32();
@@ -169,7 +169,7 @@ export class Entity implements ISnapshotable {
 		writer.string(this._name);
 		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
 		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
-		writer.float(this._moveDirection.x.toNumber()).float(this._moveDirection.y.toNumber());
+		writer.float(this._speed.x.toNumber()).float(this._speed.y.toNumber());
 
 		//sync attributes
 		const count = this.attribute.count;
@@ -192,7 +192,7 @@ export class Entity implements ISnapshotable {
 
 	public Update(dt: Decimal): void {
 		this._fsm.Update(dt);
-		this.MoveStep(this._moveDirection, dt);
+		this.MoveStep(dt);
 	}
 
 	/**
@@ -233,17 +233,20 @@ export class Entity implements ISnapshotable {
 	 * @param dy y分量
 	 */
 	public BeginMove(dx: number, dy: number): void {
-		this._moveDirection = new FVec2(new Decimal(dx), new Decimal(dy));
+		const direction = new FVec2(new Decimal(dx), new Decimal(dy));
+		if (this.canTurn) {
+			this.direction = direction;
+		}
+		this._speed = direction.MulN(this.attribute.Get(EAttr.MOVE_SPEED));
 	}
 
-	private MoveStep(direction: FVec2, dt: Decimal): void {
-		if (direction.SqrMagnitude().lessThan(MathUtils.D_SMALL)) {
+	private MoveStep(dt: Decimal): void {
+		if (this._speed.SqrMagnitude().lessThan(FMathUtils.D_SMALL)) {
 			this._fsm.ChangeState(StateType.Idle);
 			return;
 		}
 		if (this.canMove) {
-			const speed = this.attribute.Get(EAttr.MOVE_SPEED);
-			const moveDelta = FVec2.MulN(FVec2.MulN(direction, speed), MathUtils.D_SMALL1.mul(dt));
+			const moveDelta = FVec2.MulN(this._speed, FMathUtils.D_SMALL1.mul(dt));
 			const pos = FVec2.Add(this.position, moveDelta);
 			//限制活动范围
 			const radius = this.attribute.Get(EAttr.RADIUS);
@@ -253,9 +256,6 @@ export class Entity implements ISnapshotable {
 			pos.y = Decimal.min(Decimal.sub(this._battle.bounds.yMax, radius), pos.y);
 			this.position = pos;
 			this._fsm.ChangeState(StateType.Move);
-		}
-		if (this.canTurn) {
-			this.direction = direction;
 		}
 	}
 

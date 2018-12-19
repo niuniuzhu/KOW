@@ -1,4 +1,4 @@
-import Decimal from "../Libs/decimal";
+import Decimal from "../../Libs/decimal";
 
 export enum EAttr {
 	RADIUS = 0,
@@ -114,12 +114,12 @@ export class Attribute {
 
 	public Mod(attr: EAttr, mod: Decimal): void {
 		const value = this._map.get(attr);
-		this._map.set(attr, value.mod(mod));
+		this._map.set(attr, value.mod(value));
 	}
 
 	public Pow(attr: EAttr, exp: Decimal): void {
 		const value = this._map.get(attr);
-		this._map.set(attr, Decimal.pow(value, exp));
+		this._map.set(attr, value.pow(value));
 	}
 
 	public Exp(attr: EAttr): void {
@@ -135,5 +135,50 @@ export class Attribute {
 	public Sin(attr: EAttr): void {
 		const value = this._map.get(attr);
 		this._map.set(attr, Decimal.sin(value));
+	}
+
+	public Cos(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.cos(value));
+	}
+
+	public Tan(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.tan(value));
+	}
+
+	public ACos(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.acos(value));
+	}
+
+	public ASin(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.asin(value));
+	}
+
+	public ATan(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.atan(value));
+	}
+
+	public Sqrt(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.sqrt(value));
+	}
+
+	public Log(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.log(value));
+	}
+
+	public Log2(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.log2(value));
+	}
+
+	public Log10(attr: EAttr): void {
+		const value = this._map.get(attr);
+		this._map.set(attr, Decimal.log10(value));
 	}
 }

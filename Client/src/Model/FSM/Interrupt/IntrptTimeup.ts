@@ -1,6 +1,6 @@
 import Decimal from "../../../Libs/decimal";
 import * as $protobuf from "../../../Libs/protobufjs";
-import { MathUtils } from "../../../RC/Math/MathUtils";
+import { FMathUtils } from "../../../RC/FMath/FMathUtils";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
 import { EntityState } from "../EntityState";
@@ -38,7 +38,7 @@ export class IntrptTimeup extends IntrptBase implements ISnapshotable{
 	public Update(dt: Decimal): void {
 		const state = (<EntityState>this._action.state);
 		if (this._connectState != StateType.None &&
-			this._duration.greaterThanOrEqualTo(MathUtils.D_ZERO) &&
+			this._duration.greaterThanOrEqualTo(FMathUtils.D_ZERO) &&
 			state.time.greaterThanOrEqualTo(this._duration)) {
 			this.ChangeState(this._connectState, null, true, true);
 		}

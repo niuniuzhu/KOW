@@ -1,9 +1,7 @@
-import Decimal from "../../Libs/decimal";
+import { Timer } from "../Utils/Timer";
 import { Quat } from "./Quat";
 import { Vec2 } from "./Vec2";
 import { Vec3 } from "./Vec3";
-
-
 
 export class MathUtils {
 	/// <summary>
@@ -73,8 +71,11 @@ export class MathUtils {
 	/// </summary>
 	public static readonly NEGATIVE_INFINITY: number = Number.NEGATIVE_INFINITY;
 
-	public static Random(min: number, max: number): number {
-		return Math.random() * (max - min) + min;
+	public static randomSeed: number = Timer.utcTime;
+
+	public static Random(min: number = 0, max: number = 1): number {
+		this.randomSeed = (this.randomSeed * 9301 + 49297) % 233280;
+		return this.randomSeed / (233280.0) * (max - min) + min;
 	}
 
 	public static RandomFloor(min: number, max: number): number {
@@ -568,15 +569,4 @@ export class MathUtils {
 	public static RubberDelta(overStretching: number, viewSize: number): number {
 		return (1 - (1 / ((MathUtils.Abs(overStretching) * 0.55 / viewSize) + 1))) * viewSize * MathUtils.Sign(overStretching);
 	}
-
-	public static readonly D_ZERO: Decimal = new Decimal(0);
-	public static readonly D_ONE: Decimal = new Decimal(1);
-	public static readonly D_TWO: Decimal = new Decimal(2);
-	public static readonly D_THREE: Decimal = new Decimal(3);
-	public static readonly D_FOUR: Decimal = new Decimal(4);
-	public static readonly D_FIVE: Decimal = new Decimal(5);
-	public static readonly D_HALF: Decimal = new Decimal(0.5);
-	public static readonly D_N_ONE: Decimal = new Decimal(-1);
-	public static readonly D_SMALL: Decimal = new Decimal(0.01);
-	public static readonly D_SMALL1: Decimal = new Decimal(0.001);
 }

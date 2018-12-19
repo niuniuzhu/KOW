@@ -5,6 +5,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
         constructor() {
             this._gestureState = new GestureState_1.GestureState();
             this._frameActionManager = new FrameActionManager_1.FrameAciontManager();
+            this._touchID = -1;
             fairygui.UIPackage.addPackage("res/ui/battle");
             fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick_1.Joystick);
             this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
@@ -26,6 +27,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._root.dispose();
         }
         Enter(param) {
+            this._touchID = -1;
             Global_1.Global.graphic.uiRoot.addChild(this._root);
             fairygui.GRoot.inst.on(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
             this._frameActionManager.Reset();
@@ -60,21 +62,23 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._frameActionManager.SetInputDirection(value);
         }
         OnDragStart(e) {
-            if (e.touchId == 0) {
-                fairygui.GRoot.inst.on(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
-                fairygui.GRoot.inst.on(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
-                this._gestureState.OnTouchBegin(e.stageX, e.stageY);
-            }
+            if (this._touchID != -1)
+                return;
+            this._touchID = e.touchId;
+            fairygui.GRoot.inst.on(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
+            fairygui.GRoot.inst.on(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
+            this._gestureState.OnTouchBegin(e.stageX, e.stageY);
         }
         OnDragEnd(e) {
-            if (e.touchId == 0) {
+            if (e.touchId == this._touchID) {
+                this._touchID = -1;
                 this._gestureState.OnTouchEnd();
                 fairygui.GRoot.inst.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
                 fairygui.GRoot.inst.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
             }
         }
         OnDrag(e) {
-            if (e.touchId == 0) {
+            if (e.touchId == this._touchID) {
                 this._gestureState.OnDrag(e.stageX, e.stageY);
             }
         }

@@ -1,14 +1,14 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FMath/FVec2", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../Attribute", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./AnimationProxy"], function (require, exports, Global_1, decimal_1, FVec2_1, FSM_1, MathUtils_1, Attribute_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, Skill_1, AnimationProxy_1) {
+define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./AnimationProxy", "./VAttribute"], function (require, exports, Global_1, FSM_1, MathUtils_1, Vec2_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, Skill_1, AnimationProxy_1, VAttribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
         constructor() {
-            this.attribute = new Attribute_1.Attribute();
+            this.attribute = new VAttribute_1.VAttribute();
             this._skills = [];
-            this._position = FVec2_1.FVec2.zero;
-            this._worldPosition = FVec2_1.FVec2.zero;
+            this._position = Vec2_1.Vec2.zero;
+            this._worldPosition = Vec2_1.Vec2.zero;
             this._rotation = 0;
-            this._logicPos = FVec2_1.FVec2.zero;
+            this._logicPos = Vec2_1.Vec2.zero;
             this._logicRot = 0;
             this._fsm = new FSM_1.FSM();
             this._root = new fairygui.GComponent();
@@ -33,7 +33,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
         set position(value) {
             if (this._position.EqualsTo(value))
                 return;
-            const delta = FVec2_1.FVec2.Sub(value, this._position);
+            const delta = Vec2_1.Vec2.Sub(value, this._position);
             this._position = value;
             this.OnPositionChanged(delta);
         }
@@ -54,15 +54,15 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
             this._root.dispose();
         }
         Update(dt) {
-            this.position = FVec2_1.FVec2.Lerp(this._position, this._logicPos, VEntity.D_SMALL0.mul(dt));
+            this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
             this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.018);
         }
         OnPositionChanged(delta) {
-            this._root.setXY(this._position.x.toNumber(), this._position.y.toNumber());
+            this._root.setXY(this._position.x, this._position.y);
             let point = new Laya.Point();
             this._root.localToGlobal(0, 0, point);
-            this._worldPosition.x = new decimal_1.default(point.x);
-            this._worldPosition.y = new decimal_1.default(point.y);
+            this._worldPosition.x = point.x;
+            this._worldPosition.y = point.y;
         }
         OnRatationChanged(delta) {
             this._root.rotation = this._rotation;
@@ -75,17 +75,17 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
             this._root.addChild(this._animationProxy);
             this._team = reader.int32();
             this._name = reader.string();
-            this.position = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            this.position = new Vec2_1.Vec2(reader.float(), reader.float());
             this._logicPos.CopyFrom(this.position);
-            const logicDir = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
-            this.rotation = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(FVec2_1.FVec2.down).toNumber()));
-            if (logicDir.x.lessThan(MathUtils_1.MathUtils.D_ZERO))
+            const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
+            this.rotation = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
+            if (logicDir.x < 0)
                 this.rotation = 360 - this.rotation;
             this._logicRot = this.rotation;
-            const moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            const speed = new Vec2_1.Vec2(reader.float(), reader.float());
             let count = reader.int32();
             for (let i = 0; i < count; ++i) {
-                this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
+                this.attribute.Set(reader.int32(), reader.float());
             }
             count = reader.int32();
             for (let i = 0; i < count; ++i) {
@@ -100,15 +100,15 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
             this._actorID = reader.int32();
             this._team = reader.int32();
             this._name = reader.string();
-            this._logicPos = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
-            const logicDir = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
-            this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(FVec2_1.FVec2.down).toNumber()));
-            if (logicDir.x.lessThan(MathUtils_1.MathUtils.D_ZERO))
+            this._logicPos = new Vec2_1.Vec2(reader.float(), reader.float());
+            const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
+            this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
+            if (logicDir.x < 0)
                 this._logicRot = 360 - this._logicRot;
-            const moveDirection = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            const speed = new Vec2_1.Vec2(reader.float(), reader.float());
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
-                this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
+                this.attribute.Set(reader.int32(), reader.float());
             }
             count = reader.int32();
             for (let i = 0; i < count; ++i) {
@@ -138,7 +138,6 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../RC/FM
             return this._skills[index];
         }
     }
-    VEntity.D_SMALL0 = new decimal_1.default(0.012);
     exports.VEntity = VEntity;
 });
 //# sourceMappingURL=VEntity.js.map

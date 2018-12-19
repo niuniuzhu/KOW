@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/decimal", "../../RC/Utils/Hashtable", "../Attribute", "./EntityStateAction"], function (require, exports, decimal_1, Hashtable_1, Attribute_1, EntityStateAction_1) {
+define(["require", "exports", "../../Libs/decimal", "../../RC/Utils/Hashtable", "../Logic/Attribute", "./EntityStateAction"], function (require, exports, decimal_1, Hashtable_1, Attribute_1, EntityStateAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActEntityAttrs extends EntityStateAction_1.EntityStateAction {

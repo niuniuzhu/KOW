@@ -1,30 +1,30 @@
 import Decimal from "../../Libs/decimal";
-import { MathUtils } from "../Math/MathUtils";
+import { FMathUtils } from "./FMathUtils";
 
 export class FVec2 {
 	public x: Decimal;
 	public y: Decimal;
 
 	public static get one(): FVec2 {
-		return new FVec2(MathUtils.D_ONE, MathUtils.D_ONE);
+		return new FVec2(FMathUtils.D_ONE, FMathUtils.D_ONE);
 	}
 	public static get minusOne(): FVec2 {
-		return new FVec2(MathUtils.D_N_ONE, MathUtils.D_N_ONE);
+		return new FVec2(FMathUtils.D_N_ONE, FMathUtils.D_N_ONE);
 	}
 	public static get zero(): FVec2 {
-		return new FVec2(MathUtils.D_ZERO, MathUtils.D_ZERO);
+		return new FVec2(FMathUtils.D_ZERO, FMathUtils.D_ZERO);
 	}
 	public static get right(): FVec2 {
-		return new FVec2(MathUtils.D_ONE, MathUtils.D_ZERO);
+		return new FVec2(FMathUtils.D_ONE, FMathUtils.D_ZERO);
 	};
 	public static get left(): FVec2 {
-		return new FVec2(MathUtils.D_N_ONE, MathUtils.D_ZERO);
+		return new FVec2(FMathUtils.D_N_ONE, FMathUtils.D_ZERO);
 	};
 	public static get up(): FVec2 {
-		return new FVec2(MathUtils.D_ZERO, MathUtils.D_ONE);
+		return new FVec2(FMathUtils.D_ZERO, FMathUtils.D_ONE);
 	};
 	public static get down(): FVec2 {
-		return new FVec2(MathUtils.D_ZERO, MathUtils.D_N_ONE);
+		return new FVec2(FMathUtils.D_ZERO, FMathUtils.D_N_ONE);
 	};
 
 	constructor(x?: Decimal, y?: Decimal) {
@@ -125,14 +125,14 @@ export class FVec2 {
 	}
 
 	public Normalize(): void {
-		const f = MathUtils.D_ONE.div(this.Magnitude());
+		const f = FMathUtils.D_ONE.div(this.Magnitude());
 		this.x = this.x.mul(f);
 		this.y = this.y.mul(f);
 	}
 
 	public NormalizeSafe(): void {
 		const f = this.Magnitude();
-		if (f.equals(MathUtils.D_ZERO))
+		if (f.equals(FMathUtils.D_ZERO))
 			return;
 		this.x = this.x.mul(f);
 		this.y = this.y.mul(f);
@@ -236,14 +236,14 @@ export class FVec2 {
 	}
 
 	public static Normalize(v: FVec2): FVec2 {
-		return FVec2.MulN(v, (MathUtils.D_ONE.div(v.Magnitude())));
+		return FVec2.MulN(v, (FMathUtils.D_ONE.div(v.Magnitude())));
 	}
 
 	public static NormalizeSafe(v: FVec2): FVec2 {
 		const dis = v.Magnitude();
-		if (dis.equals(MathUtils.D_ZERO))
+		if (dis.equals(FMathUtils.D_ZERO))
 			return null;
-		return FVec2.MulN(v, (MathUtils.D_ONE.div(dis)));
+		return FVec2.MulN(v, (FMathUtils.D_ONE.div(dis)));
 	}
 
 	public static Dot(v0: FVec2, v1: FVec2): Decimal {
@@ -271,7 +271,7 @@ export class FVec2 {
 	}
 
 	public static Lerp(from: FVec2, to: FVec2, t: Decimal): FVec2 {
-		return t.lessThanOrEqualTo(MathUtils.D_ZERO) ? from.Clone() : (t.greaterThanOrEqualTo(MathUtils.D_ONE) ? to.Clone() : FVec2.LerpUnclamped(from, to, t));
+		return t.lessThanOrEqualTo(FMathUtils.D_ZERO) ? from.Clone() : (t.greaterThanOrEqualTo(FMathUtils.D_ONE) ? to.Clone() : FVec2.LerpUnclamped(from, to, t));
 	}
 
 	public static Equals(v1: FVec2, v2: FVec2): boolean {

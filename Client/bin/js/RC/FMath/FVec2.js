@@ -1,30 +1,30 @@
-define(["require", "exports", "../../Libs/decimal", "../Math/MathUtils"], function (require, exports, decimal_1, MathUtils_1) {
+define(["require", "exports", "../../Libs/decimal", "./FMathUtils"], function (require, exports, decimal_1, FMathUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class FVec2 {
         static get one() {
-            return new FVec2(MathUtils_1.MathUtils.D_ONE, MathUtils_1.MathUtils.D_ONE);
+            return new FVec2(FMathUtils_1.FMathUtils.D_ONE, FMathUtils_1.FMathUtils.D_ONE);
         }
         static get minusOne() {
-            return new FVec2(MathUtils_1.MathUtils.D_N_ONE, MathUtils_1.MathUtils.D_N_ONE);
+            return new FVec2(FMathUtils_1.FMathUtils.D_N_ONE, FMathUtils_1.FMathUtils.D_N_ONE);
         }
         static get zero() {
-            return new FVec2(MathUtils_1.MathUtils.D_ZERO, MathUtils_1.MathUtils.D_ZERO);
+            return new FVec2(FMathUtils_1.FMathUtils.D_ZERO, FMathUtils_1.FMathUtils.D_ZERO);
         }
         static get right() {
-            return new FVec2(MathUtils_1.MathUtils.D_ONE, MathUtils_1.MathUtils.D_ZERO);
+            return new FVec2(FMathUtils_1.FMathUtils.D_ONE, FMathUtils_1.FMathUtils.D_ZERO);
         }
         ;
         static get left() {
-            return new FVec2(MathUtils_1.MathUtils.D_N_ONE, MathUtils_1.MathUtils.D_ZERO);
+            return new FVec2(FMathUtils_1.FMathUtils.D_N_ONE, FMathUtils_1.FMathUtils.D_ZERO);
         }
         ;
         static get up() {
-            return new FVec2(MathUtils_1.MathUtils.D_ZERO, MathUtils_1.MathUtils.D_ONE);
+            return new FVec2(FMathUtils_1.FMathUtils.D_ZERO, FMathUtils_1.FMathUtils.D_ONE);
         }
         ;
         static get down() {
-            return new FVec2(MathUtils_1.MathUtils.D_ZERO, MathUtils_1.MathUtils.D_N_ONE);
+            return new FVec2(FMathUtils_1.FMathUtils.D_ZERO, FMathUtils_1.FMathUtils.D_N_ONE);
         }
         ;
         constructor(x, y) {
@@ -108,13 +108,13 @@ define(["require", "exports", "../../Libs/decimal", "../Math/MathUtils"], functi
             return this.x.mul(v.x).add(this.y.mul(v.y));
         }
         Normalize() {
-            const f = MathUtils_1.MathUtils.D_ONE.div(this.Magnitude());
+            const f = FMathUtils_1.FMathUtils.D_ONE.div(this.Magnitude());
             this.x = this.x.mul(f);
             this.y = this.y.mul(f);
         }
         NormalizeSafe() {
             const f = this.Magnitude();
-            if (f.equals(MathUtils_1.MathUtils.D_ZERO))
+            if (f.equals(FMathUtils_1.FMathUtils.D_ZERO))
                 return;
             this.x = this.x.mul(f);
             this.y = this.y.mul(f);
@@ -197,13 +197,13 @@ define(["require", "exports", "../../Libs/decimal", "../Math/MathUtils"], functi
             return v.Negate();
         }
         static Normalize(v) {
-            return FVec2.MulN(v, (MathUtils_1.MathUtils.D_ONE.div(v.Magnitude())));
+            return FVec2.MulN(v, (FMathUtils_1.FMathUtils.D_ONE.div(v.Magnitude())));
         }
         static NormalizeSafe(v) {
             const dis = v.Magnitude();
-            if (dis.equals(MathUtils_1.MathUtils.D_ZERO))
+            if (dis.equals(FMathUtils_1.FMathUtils.D_ZERO))
                 return null;
-            return FVec2.MulN(v, (MathUtils_1.MathUtils.D_ONE.div(dis)));
+            return FVec2.MulN(v, (FMathUtils_1.FMathUtils.D_ONE.div(dis)));
         }
         static Dot(v0, v1) {
             return v0.x.mul(v1.x).add(v0.y.mul(v1.y));
@@ -225,7 +225,7 @@ define(["require", "exports", "../../Libs/decimal", "../Math/MathUtils"], functi
             return new FVec2(from.x.add(to.x.sub(from.x).mul(t)), from.y.add(to.y.sub(from.y).mul(t)));
         }
         static Lerp(from, to, t) {
-            return t.lessThanOrEqualTo(MathUtils_1.MathUtils.D_ZERO) ? from.Clone() : (t.greaterThanOrEqualTo(MathUtils_1.MathUtils.D_ONE) ? to.Clone() : FVec2.LerpUnclamped(from, to, t));
+            return t.lessThanOrEqualTo(FMathUtils_1.FMathUtils.D_ZERO) ? from.Clone() : (t.greaterThanOrEqualTo(FMathUtils_1.FMathUtils.D_ONE) ? to.Clone() : FVec2.LerpUnclamped(from, to, t));
         }
         static Equals(v1, v2) {
             if (v1 == null || v2 == null)

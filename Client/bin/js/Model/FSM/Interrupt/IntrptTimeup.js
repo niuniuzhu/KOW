@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../Libs/decimal", "../../../RC/Math/MathUtils", "../../../RC/Utils/Hashtable", "../StateEnums", "./IntrptBase"], function (require, exports, decimal_1, MathUtils_1, Hashtable_1, StateEnums_1, IntrptBase_1) {
+define(["require", "exports", "../../../Libs/decimal", "../../../RC/FMath/FMathUtils", "../../../RC/Utils/Hashtable", "../StateEnums", "./IntrptBase"], function (require, exports, decimal_1, FMathUtils_1, Hashtable_1, StateEnums_1, IntrptBase_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class IntrptTimeup extends IntrptBase_1.IntrptBase {
@@ -18,7 +18,7 @@ define(["require", "exports", "../../../Libs/decimal", "../../../RC/Math/MathUti
         Update(dt) {
             const state = this._action.state;
             if (this._connectState != StateEnums_1.StateType.None &&
-                this._duration.greaterThanOrEqualTo(MathUtils_1.MathUtils.D_ZERO) &&
+                this._duration.greaterThanOrEqualTo(FMathUtils_1.FMathUtils.D_ZERO) &&
                 state.time.greaterThanOrEqualTo(this._duration)) {
                 this.ChangeState(this._connectState, null, true, true);
             }

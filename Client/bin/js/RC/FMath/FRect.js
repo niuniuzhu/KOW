@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/decimal", "../Math/MathUtils", "./FVec2"], function (require, exports, decimal_1, MathUtils_1, FVec2_1) {
+define(["require", "exports", "../../Libs/decimal", "./FMathUtils", "./FVec2"], function (require, exports, decimal_1, FMathUtils_1, FVec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class FRect {
@@ -14,10 +14,10 @@ define(["require", "exports", "../../Libs/decimal", "../Math/MathUtils", "./FVec
             this._xMin = value.x;
             this._yMin = value.y;
         }
-        get center() { return new FVec2_1.FVec2(this.x.add(this._width.mul(MathUtils_1.MathUtils.D_HALF)), this.y.add(this._height.mul(MathUtils_1.MathUtils.D_HALF))); }
+        get center() { return new FVec2_1.FVec2(this.x.add(this._width.mul(FMathUtils_1.FMathUtils.D_HALF)), this.y.add(this._height.mul(FMathUtils_1.FMathUtils.D_HALF))); }
         set center(value) {
-            this._xMin = value.x.sub(this._width.mul(MathUtils_1.MathUtils.D_HALF));
-            this._yMin = value.y.sub(this._height.mul(MathUtils_1.MathUtils.D_HALF));
+            this._xMin = value.x.sub(this._width.mul(FMathUtils_1.FMathUtils.D_HALF));
+            this._yMin = value.y.sub(this._height.mul(FMathUtils_1.FMathUtils.D_HALF));
         }
         get min() { return new FVec2_1.FVec2(this.xMin, this.yMin); }
         set min(value) {

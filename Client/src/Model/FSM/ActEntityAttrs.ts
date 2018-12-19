@@ -1,6 +1,6 @@
 import Decimal from "../../Libs/decimal";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { DEFAULT_ATTR_VALUES, EAttr } from "../Attribute";
+import { DEFAULT_ATTR_VALUES, EAttr } from "../Logic/Attribute";
 import { ISnapshotable } from "../ISnapshotable";
 import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";

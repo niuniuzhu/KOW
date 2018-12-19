@@ -9,6 +9,8 @@ define(["require", "exports"], function (require, exports) {
     Consts.ASSETS_MAP_PREFIX = "m";
     Consts.ASSETS_ENTITY_PREFIX = "e";
     Consts.ASSETS_SKILL_PREFIX = "s";
+    Consts.ASSETS_EMITTER_PREFIX = "m";
+    Consts.ASSETS_BULLET_PREFIX = "b";
     exports.Consts = Consts;
 });
 //# sourceMappingURL=Consts.js.map

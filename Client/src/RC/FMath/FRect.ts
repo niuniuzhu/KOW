@@ -1,5 +1,5 @@
 import Decimal from "../../Libs/decimal";
-import { MathUtils } from "../Math/MathUtils";
+import { FMathUtils } from "./FMathUtils";
 import { FVec2 } from "./FVec2";
 
 export class FRect {
@@ -24,10 +24,10 @@ export class FRect {
 		this._yMin = value.y;
 	}
 
-	public get center(): FVec2 { return new FVec2(this.x.add(this._width.mul(MathUtils.D_HALF)), this.y.add(this._height.mul(MathUtils.D_HALF))); }
+	public get center(): FVec2 { return new FVec2(this.x.add(this._width.mul(FMathUtils.D_HALF)), this.y.add(this._height.mul(FMathUtils.D_HALF))); }
 	public set center(value: FVec2) {
-		this._xMin = value.x.sub(this._width.mul(MathUtils.D_HALF));
-		this._yMin = value.y.sub(this._height.mul(MathUtils.D_HALF));
+		this._xMin = value.x.sub(this._width.mul(FMathUtils.D_HALF));
+		this._yMin = value.y.sub(this._height.mul(FMathUtils.D_HALF));
 	}
 
 	public get min(): FVec2 { return new FVec2(this.xMin, this.yMin); }

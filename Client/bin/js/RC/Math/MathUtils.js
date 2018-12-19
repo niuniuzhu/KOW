@@ -1,9 +1,10 @@
-define(["require", "exports", "../../Libs/decimal", "./Quat", "./Vec2"], function (require, exports, decimal_1, Quat_1, Vec2_1) {
+define(["require", "exports", "../Utils/Timer", "./Quat", "./Vec2"], function (require, exports, Timer_1, Quat_1, Vec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MathUtils {
-        static Random(min, max) {
-            return Math.random() * (max - min) + min;
+        static Random(min = 0, max = 1) {
+            this.randomSeed = (this.randomSeed * 9301 + 49297) % 233280;
+            return this.randomSeed / (233280.0) * (max - min) + min;
         }
         static RandomFloor(min, max) {
             return this.Floor(this.Random(min, max));
@@ -300,16 +301,7 @@ define(["require", "exports", "../../Libs/decimal", "./Quat", "./Vec2"], functio
     MathUtils.RAD_TO_DEG = 180 / MathUtils.PI;
     MathUtils.INFINITY = Number.POSITIVE_INFINITY;
     MathUtils.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
-    MathUtils.D_ZERO = new decimal_1.default(0);
-    MathUtils.D_ONE = new decimal_1.default(1);
-    MathUtils.D_TWO = new decimal_1.default(2);
-    MathUtils.D_THREE = new decimal_1.default(3);
-    MathUtils.D_FOUR = new decimal_1.default(4);
-    MathUtils.D_FIVE = new decimal_1.default(5);
-    MathUtils.D_HALF = new decimal_1.default(0.5);
-    MathUtils.D_N_ONE = new decimal_1.default(-1);
-    MathUtils.D_SMALL = new decimal_1.default(0.01);
-    MathUtils.D_SMALL1 = new decimal_1.default(0.001);
+    MathUtils.randomSeed = Timer_1.Timer.utcTime;
     exports.MathUtils = MathUtils;
 });
 //# sourceMappingURL=MathUtils.js.map

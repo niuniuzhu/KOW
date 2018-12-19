@@ -1,8 +1,8 @@
 import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
+import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FSMState } from "../../RC/FSM/FSMState";
 import { FSMStateAction } from "../../RC/FSM/FSMStateAction";
-import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
 import { EntityState } from "./EntityState";
@@ -30,7 +30,7 @@ export class EntityStateAction extends FSMStateAction implements ISnapshotable {
 
 	protected OnEnter(param: any): void {
 		this._isTriggered = false;
-		if (this._triggerTime.lessThanOrEqualTo(MathUtils.D_ZERO)) {
+		if (this._triggerTime.lessThanOrEqualTo(FMathUtils.D_ZERO)) {
 			this.Trigger();
 		}
 	}

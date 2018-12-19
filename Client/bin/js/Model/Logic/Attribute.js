@@ -46,9 +46,6 @@ define(["require", "exports", "../../Libs/decimal"], function (require, exports,
     class Attribute {
         constructor() {
             this._map = new Map();
-            exports.DEFAULT_ATTR_VALUES.forEach((v, k, m) => {
-                this._map.set(k, v);
-            });
         }
         get count() { return this._map.size; }
         Foreach(handler) {
@@ -58,6 +55,8 @@ define(["require", "exports", "../../Libs/decimal"], function (require, exports,
             this._map.set(attr, value);
         }
         Get(attr) {
+            if (!this._map.has(attr))
+                this._map.set(attr, exports.DEFAULT_ATTR_VALUES.get(attr));
             return this._map.get(attr);
         }
         Contains(attr) {

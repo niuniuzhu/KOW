@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attack/Emitter", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../EntityType", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/long"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, Emitter_1, SyncEvent_1, CDefs_1, Defs_1, EntityType_1, FrameAction_1, FrameActionGroup_1, Champion_1, Long) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attack/Emitter", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameAction", "../FrameActionGroup", "./Champion", "../../Libs/long"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, Emitter_1, SyncEvent_1, CDefs_1, Defs_1, FrameAction_1, FrameActionGroup_1, Champion_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -15,6 +15,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._idToEntity = new Map();
             this._emitters = [];
             this._idToEmitter = new Map();
+            this._bullets = [];
+            this._idToBullet = new Map();
         }
         get frameRate() { return this._frameRate; }
         get keyframeStep() { return this._keyframeStep; }
@@ -97,6 +99,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             writer.int32(count);
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
+                writer.int32(entity.type);
+                writer.uint64(entity.rid);
                 entity.EncodeSnapshot(writer);
             }
         }
@@ -105,10 +109,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
-                const id = reader.uint64();
-                const entity = this.GetEntity(id);
-                if (entity == null)
-                    continue;
+                const rid = reader.uint64();
+                const entity = this.GetEntity(rid);
                 entity.DecodeSnapshot(reader);
             }
         }
@@ -167,35 +169,30 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             count = playerInfos.length;
             for (let i = 0; i < count; ++i) {
                 const playerInfo = playerInfos[i];
-                const player = this.CreateEntity(EntityType_1.EntityType.Champion, playerInfo.gcNID, playerInfo.actorID, playerInfo.team, playerInfo.name);
+                const player = this.CreateEntity(Champion_1.Champion, playerInfo.gcNID, playerInfo.actorID);
+                player.Init(playerInfo.team, playerInfo.name);
                 if (player.team >= bornPoses.length ||
                     player.team >= bornDirs.length) {
-                    throw new Error("invalid team:" + player.team + ", player:" + player.id);
+                    throw new Error("invalid team:" + player.team + ", player:" + player.rid);
                 }
                 player.position = bornPoses[player.team];
                 player.direction = bornDirs[player.team];
             }
         }
-        CreateEntity(type, id, actorID, team, name) {
-            let entity;
-            switch (type) {
-                case EntityType_1.EntityType.Champion:
-                    entity = new Champion_1.Champion();
-                    break;
-                default:
-                    throw new Error("not supported entity type:" + type);
-            }
-            entity.Init(this, id, actorID, team, name);
+        CreateEntity(c, rid, id) {
+            const entity = new c(this, rid, id);
             this._entities.push(entity);
-            this._idToEntity.set(entity.id.toString(), entity);
+            this._idToEntity.set(entity.rid.toString(), entity);
             return entity;
         }
-        GetEntity(id) {
-            return this._idToEntity.get(id.toString());
+        GetEntity(rid) {
+            return this._idToEntity.get(rid.toString());
         }
         CreateEmitter(id, caster, skill) {
-            const emitter = new Emitter_1.Emitter();
-            emitter.Init(this, id, this.MakeRid(id), caster, skill);
+            const emitter = new Emitter_1.Emitter(this, this.MakeRid(id), id);
+            emitter.Init(caster, skill);
+            this._emitters.push(emitter);
+            this._idToEmitter.set(emitter.rid.toString(), emitter);
             return emitter;
         }
         ApplyFrameActionGroup(frameActionGroup) {

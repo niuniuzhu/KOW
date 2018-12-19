@@ -10,6 +10,7 @@ import { FRect } from "../../RC/FMath/FRect";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { Bullet } from "../Attack/Bullet";
 import { Emitter } from "../Attack/Emitter";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
@@ -56,6 +57,8 @@ export class Battle implements ISnapshotable {
 	private readonly _idToEntity: Map<string, Entity> = new Map<string, Entity>();
 	private readonly _emitters: Emitter[] = [];
 	private readonly _idToEmitter: Map<string, Emitter> = new Map<string, Emitter>();
+	private readonly _bullets: Bullet[] = [];
+	private readonly _idToBullet: Map<string, Bullet> = new Map<string, Bullet>();
 
 	/**
 	 * 设置战场信息
@@ -165,6 +168,8 @@ export class Battle implements ISnapshotable {
 		writer.int32(count);
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
+			writer.int32(entity.type);
+			writer.uint64(entity.rid);
 			entity.EncodeSnapshot(writer);
 		}
 	}
@@ -177,10 +182,9 @@ export class Battle implements ISnapshotable {
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();
-			const id = <Long>reader.uint64();
-			const entity = this.GetEntity(id);
-			if (entity == null)
-				continue;
+			//todo 需要改为根据快照创建所有游戏对象,初始状态应该在服务端
+			const rid = <Long>reader.uint64();
+			const entity = this.GetEntity(rid);
 			entity.DecodeSnapshot(reader);
 		}
 	}
@@ -263,12 +267,12 @@ export class Battle implements ISnapshotable {
 		count = playerInfos.length;
 		for (let i = 0; i < count; ++i) {
 			const playerInfo = playerInfos[i];
-			const player = this.CreateEntity(EntityType.Champion, playerInfo.gcNID, playerInfo.actorID, playerInfo.team, playerInfo.name);
+			const player = this.CreateEntity(Champion, playerInfo.gcNID, playerInfo.actorID);
+			player.Init(playerInfo.team, playerInfo.name);
 			if (player.team >= bornPoses.length ||
 				player.team >= bornDirs.length) {
-				throw new Error("invalid team:" + player.team + ", player:" + player.id);
+				throw new Error("invalid team:" + player.team + ", player:" + player.rid);
 			}
-
 			player.position = bornPoses[player.team];
 			player.direction = bornDirs[player.team];
 		}
@@ -277,28 +281,22 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 创建实体
 	 */
-	public CreateEntity(type: EntityType, id: Long, actorID: number, team: number, name: string): Entity {
-		let entity: Entity;
-		switch (type) {
-			case EntityType.Champion:
-				entity = new Champion();
-				break;
-			default:
-				throw new Error("not supported entity type:" + type);
-		}
-		entity.Init(this, id, actorID, team, name);
+	public CreateEntity<T extends Entity>(c: new (battle: Battle, rid: Long, id: number) => T, rid: Long, id: number): T {
+		const entity: T = new c(this, rid, id);
 		this._entities.push(entity);
-		this._idToEntity.set(entity.id.toString(), entity);
+		this._idToEntity.set(entity.rid.toString(), entity);
 		return entity;
 	}
 
-	public GetEntity(id: Long): Entity {
-		return this._idToEntity.get(id.toString());
+	public GetEntity(rid: Long): Entity {
+		return this._idToEntity.get(rid.toString());
 	}
 
 	public CreateEmitter(id: number, caster: Entity, skill: Skill): Emitter {
-		const emitter = new Emitter();
-		emitter.Init(this, id, this.MakeRid(id), caster, skill);
+		const emitter = new Emitter(this, this.MakeRid(id), id);
+		emitter.Init(caster, skill);
+		this._emitters.push(emitter);
+		this._idToEmitter.set(emitter.rid.toString(), emitter);
 		return emitter;
 	}
 
@@ -313,7 +311,7 @@ export class Battle implements ISnapshotable {
 	}
 
 	private ApplyFrameAction(frameAction: FrameAction): void {
-		const entity = this.GetEntity(frameAction.gcNID);
+		const entity = <Champion>this.GetEntity(frameAction.gcNID);
 		if ((frameAction.inputFlag & FrameAction.InputFlag.Move) > 0) {
 			entity.BeginMove(frameAction.dx, frameAction.dy);
 		}

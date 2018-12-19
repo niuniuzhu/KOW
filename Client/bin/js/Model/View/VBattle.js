@@ -51,8 +51,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
-                const id = reader.uint64();
-                const entity = this.CreateEntity(type, id);
+                const rid = reader.uint64();
+                const entity = this.CreateEntity(type, rid);
                 entity.InitSnapshot(reader);
                 const isSelf = entity.id.equals(this._playerID);
                 if (isSelf) {
@@ -66,8 +66,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
-                const id = reader.uint64();
-                const entity = this.GetEntity(id.toString());
+                const rid = reader.uint64();
+                const entity = this.GetEntity(rid);
                 if (entity == null)
                     continue;
                 entity.DecodeSnapshot(reader);
@@ -87,8 +87,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._idToEntity.set(entity.id.toString(), entity);
             return entity;
         }
-        GetEntity(id) {
-            return this._idToEntity.get(id);
+        GetEntity(rid) {
+            return this._idToEntity.get(rid.toString());
         }
         OnBattleInit(e) {
             const reader = $protobuf.Reader.create(e.data);

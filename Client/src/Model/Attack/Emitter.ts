@@ -13,6 +13,11 @@ export enum EmitterMouthType {
 }
 
 export class Emitter implements ISnapshotable {
+	public get rid(): Long { return this._rid; }
+	public get id(): number { return this._id; }
+
+	private _battle: Battle;
+	private _rid: Long;
 	private _id: number;
 	private _raduis: Decimal;
 	private _offset: FVec2;
@@ -22,10 +27,11 @@ export class Emitter implements ISnapshotable {
 	private _lifeTime: Decimal;
 	private _mouthType: EmitterMouthType;
 
-	//runtime properties
-	private _rid: Long;
-
-	constructor() {
+	constructor(battle: Battle, rid: Long, id: number) {
+		this._battle = battle;
+		this._rid = rid;
+		this._id = id;
+		this.LoadDef();
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
@@ -34,7 +40,7 @@ export class Emitter implements ISnapshotable {
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 	}
 
-	public Init(battle: Battle, id: number, rid: Long, caster: Entity, skill: Skill): void {
+	public Init(caster: Entity, skill: Skill): void {
 	}
 
 	private LoadDef(): void {

@@ -8,13 +8,19 @@ define(["require", "exports"], function (require, exports) {
         EmitterMouthType[EmitterMouthType["Inside"] = 2] = "Inside";
     })(EmitterMouthType = exports.EmitterMouthType || (exports.EmitterMouthType = {}));
     class Emitter {
-        constructor() {
+        get rid() { return this._rid; }
+        get id() { return this._id; }
+        constructor(battle, rid, id) {
+            this._battle = battle;
+            this._rid = rid;
+            this._id = id;
+            this.LoadDef();
         }
         EncodeSnapshot(writer) {
         }
         DecodeSnapshot(reader) {
         }
-        Init(battle, id, rid, caster, skill) {
+        Init(caster, skill) {
         }
         LoadDef() {
         }

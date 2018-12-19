@@ -53,12 +53,6 @@ export class Attribute {
 
 	public get count(): number { return this._map.size; }
 
-	constructor() {
-		DEFAULT_ATTR_VALUES.forEach((v, k, m) => {
-			this._map.set(k, v);
-		});
-	}
-
 	/**
 	 * 遍历属性
 	 * @param handler 回调函数
@@ -81,6 +75,8 @@ export class Attribute {
 	 * @param attr 属性
 	 */
 	public Get(attr: EAttr): Decimal {
+		if (!this._map.has(attr))
+			this._map.set(attr, DEFAULT_ATTR_VALUES.get(attr));
 		return this._map.get(attr);
 	}
 

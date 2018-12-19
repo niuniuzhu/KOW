@@ -91,8 +91,8 @@ export class VBattle {
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();
-			const id = <Long>reader.uint64();
-			const entity = this.CreateEntity(type, id);
+			const rid = <Long>reader.uint64();
+			const entity = this.CreateEntity(type, rid);
 			entity.InitSnapshot(reader);
 
 			const isSelf = entity.id.equals(this._playerID);
@@ -113,8 +113,8 @@ export class VBattle {
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();
-			const id = <Long>reader.uint64();
-			const entity = this.GetEntity(id.toString());
+			const rid = <Long>reader.uint64();
+			const entity = this.GetEntity(rid);
 			if (entity == null)
 				continue;
 			entity.DecodeSnapshot(reader);
@@ -141,10 +141,10 @@ export class VBattle {
 
 	/**
 	 * 获取指定ID的实体
-	 * @param id 实体ID
+	 * @param rid 实体ID
 	 */
-	public GetEntity(id: string): VEntity {
-		return this._idToEntity.get(id);
+	public GetEntity(rid: Long): VEntity {
+		return this._idToEntity.get(rid.toString());
 	}
 
 	private OnBattleInit(e: SyncEvent): void {

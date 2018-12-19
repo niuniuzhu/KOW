@@ -1,5 +1,4 @@
 import { Vec2 } from "../RC/Math/Vec2";
-import { Logger } from "../RC/Utils/Logger";
 export class GestureState {
     constructor() {
         this.showDuration = 20;
@@ -39,7 +38,6 @@ export class GestureState {
     OnDrag(px, py) {
         this._active = true;
         this.ShowJoystick(this._touchPosition);
-        Logger.Log(this._touchPosition);
         let point = new laya.maths.Point();
         this._joystick.globalToLocal(px, py, point);
         this._joystick.touchPosition = new Vec2(point.x, point.y);

@@ -11,6 +11,9 @@ import { Camera } from "./Camera";
 import { VChampion } from "./VChampion";
 import { VEntity } from "./VEntity";
 
+const TYPE_TO_CONSTRUCT = new Map<EntityType, new (battle: VBattle) => VEntity>();
+TYPE_TO_CONSTRUCT.set(EntityType.Champion, VChampion);
+
 export class VBattle {
 	private _mapID: number = 0;
 	private _playerID: Long;
@@ -62,7 +65,7 @@ export class VBattle {
 
 		const count = this._entities.length;
 		for (let i = 0; i < count; ++i) {
-			this._entities[i].Dispose();
+			this._entities[i].Destroy();
 		}
 		this._entities.splice(0);
 		this._idToEntity.clear();
@@ -76,10 +79,21 @@ export class VBattle {
 		//更新摄像机
 		this._camera.Update(dt);
 
-		const count = this._entities.length;
+		let count = this._entities.length;
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
 			entity.Update(dt);
+		}
+
+		//destroy entities
+		count = this._entities.length;
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			if (entity.markToDestroy) {
+				this.DestroyEntityAt(i);
+				--i;
+				--count;
+			}
 		}
 	}
 
@@ -91,10 +105,8 @@ export class VBattle {
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const type = <EntityType>reader.int32();
-			const rid = <Long>reader.uint64();
-			const entity = this.CreateEntity(type, rid);
-			entity.InitSync(reader);
-			const isSelf = entity.id.equals(this._playerID);
+			const entity = this.CreateEntity(type, reader);
+			const isSelf = entity.rid.equals(this._playerID);
 			if (isSelf) {
 				this._camera.lookAt = entity;
 			}
@@ -110,11 +122,9 @@ export class VBattle {
 		this._logicFrame = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
-			const type = <EntityType>reader.int32();
+			reader.int32();
 			const rid = <Long>reader.uint64();
 			const entity = this.GetEntity(rid);
-			if (entity == null)
-				continue;
 			entity.DecodeSync(reader);
 		}
 	}
@@ -122,24 +132,36 @@ export class VBattle {
 	/**
 	 * 创建实体
 	 */
-	public CreateEntity(type: EntityType, id: Long): VEntity {
-		let entity: VEntity;
-		switch (type) {
-			case EntityType.Champion:
-				entity = new VChampion();
-				break;
-			default:
-				throw new Error("not supported entity type:" + type);
-		}
-		entity.Init(id, this);
+	public CreateEntity(type: EntityType, reader: $protobuf.Reader | $protobuf.BufferReader): VEntity {
+		const ctr = TYPE_TO_CONSTRUCT.get(type);
+		const entity = new ctr(this);
+		entity.InitSync(reader);
 		this._entities.push(entity);
-		this._idToEntity.set(entity.id.toString(), entity);
+		this._idToEntity.set(entity.rid.toString(), entity);
 		return entity;
 	}
 
 	/**
-	 * 获取指定ID的实体
-	 * @param rid 实体ID
+	 * 销毁实体
+	 */
+	public DestroyEntity(entity: VEntity): void {
+		entity.Destroy();
+		this._entities.splice(this._entities.indexOf(entity), 1);
+		this._idToEntity.delete(entity.rid.toString());
+	}
+
+	/**
+	 * 销毁实体
+	 */
+	private DestroyEntityAt(index: number): void {
+		const entity = this._entities[index];
+		entity.Destroy();
+		this._entities.splice(index, 1);
+		this._idToEntity.delete(entity.rid.toString());
+	}
+
+	/**
+	 * 获取指定rid的实体
 	 */
 	public GetEntity(rid: Long): VEntity {
 		return this._idToEntity.get(rid.toString());

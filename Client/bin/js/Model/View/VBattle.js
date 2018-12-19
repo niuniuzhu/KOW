@@ -1,6 +1,8 @@
 define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "../CDefs", "../EntityType", "./Camera", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, CDefs_1, EntityType_1, Camera_1, VChampion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    const TYPE_TO_CONSTRUCT = new Map();
+    TYPE_TO_CONSTRUCT.set(EntityType_1.EntityType.Champion, VChampion_1.VChampion);
     class VBattle {
         constructor() {
             this._mapID = 0;
@@ -29,7 +31,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
             const count = this._entities.length;
             for (let i = 0; i < count; ++i) {
-                this._entities[i].Dispose();
+                this._entities[i].Destroy();
             }
             this._entities.splice(0);
             this._idToEntity.clear();
@@ -40,10 +42,19 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         Update(dt) {
             this._camera.Update(dt);
-            const count = this._entities.length;
+            let count = this._entities.length;
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
                 entity.Update(dt);
+            }
+            count = this._entities.length;
+            for (let i = 0; i < count; i++) {
+                const entity = this._entities[i];
+                if (entity.markToDestroy) {
+                    this.DestroyEntityAt(i);
+                    --i;
+                    --count;
+                }
             }
         }
         InitSync(reader) {
@@ -51,10 +62,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const type = reader.int32();
-                const rid = reader.uint64();
-                const entity = this.CreateEntity(type, rid);
-                entity.InitSync(reader);
-                const isSelf = entity.id.equals(this._playerID);
+                const entity = this.CreateEntity(type, reader);
+                const isSelf = entity.rid.equals(this._playerID);
                 if (isSelf) {
                     this._camera.lookAt = entity;
                 }
@@ -65,27 +74,30 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._logicFrame = reader.int32();
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
-                const type = reader.int32();
+                reader.int32();
                 const rid = reader.uint64();
                 const entity = this.GetEntity(rid);
-                if (entity == null)
-                    continue;
                 entity.DecodeSync(reader);
             }
         }
-        CreateEntity(type, id) {
-            let entity;
-            switch (type) {
-                case EntityType_1.EntityType.Champion:
-                    entity = new VChampion_1.VChampion();
-                    break;
-                default:
-                    throw new Error("not supported entity type:" + type);
-            }
-            entity.Init(id, this);
+        CreateEntity(type, reader) {
+            const ctr = TYPE_TO_CONSTRUCT.get(type);
+            const entity = new ctr(this);
+            entity.InitSync(reader);
             this._entities.push(entity);
-            this._idToEntity.set(entity.id.toString(), entity);
+            this._idToEntity.set(entity.rid.toString(), entity);
             return entity;
+        }
+        DestroyEntity(entity) {
+            entity.Destroy();
+            this._entities.splice(this._entities.indexOf(entity), 1);
+            this._idToEntity.delete(entity.rid.toString());
+        }
+        DestroyEntityAt(index) {
+            const entity = this._entities[index];
+            entity.Destroy();
+            this._entities.splice(index, 1);
+            this._idToEntity.delete(entity.rid.toString());
         }
         GetEntity(rid) {
             return this._idToEntity.get(rid.toString());

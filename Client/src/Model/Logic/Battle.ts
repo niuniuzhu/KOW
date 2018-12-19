@@ -10,8 +10,6 @@ import { FRect } from "../../RC/FMath/FRect";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Bullet } from "../Attack/Bullet";
-import { Emitter } from "../Attack/Emitter";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
 import { CDefs } from "../CDefs";
@@ -21,7 +19,9 @@ import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
+import { Bullet } from "./Bullet";
 import { Champion } from "./Champion";
+import { Emitter } from "./Emitter";
 import { Entity, EntityInitParams } from "./Entity";
 import Long = require("../../Libs/long");
 
@@ -99,7 +99,7 @@ export class Battle implements ISnapshotable {
 		this._destroied = true;
 		const count = this._entities.length;
 		for (let i = 0; i < count; i++)
-			this._entities[i].Dispose();
+			this._entities[i].Destroy();
 		this._entities.splice(0);
 		this._idToEntity.clear();
 		this._frameActionGroups.clear();
@@ -136,15 +136,46 @@ export class Battle implements ISnapshotable {
 	 */
 	private UpdateLogic(dt: Decimal, updateView: boolean, commitSnapshot: boolean): void {
 		++this._frame;
-		const count = this._entities.length;
+
+		//update entities
+		let count = this._entities.length;
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
 			entity.Update(dt);
 		}
 
+		//update emitters
+		count = this._emitters.length;
+		for (let i = 0; i < count; i++) {
+			const emitter = this._emitters[i];
+			emitter.Update(dt);
+		}
+
+		//sync to view
 		if (updateView) {
-			//同步到表现层
 			this.SyncToView();
+		}
+
+		//destroy entities
+		count = this._entities.length;
+		for (let i = 0; i < count; i++) {
+			const entity = this._entities[i];
+			if (entity.markToDestroy) {
+				this.DestroyEntityAt(i);
+				--i;
+				--count;
+			}
+		}
+
+		//destroy emitters
+		count = this._emitters.length;
+		for (let i = 0; i < count; i++) {
+			const emitter = this._emitters[i];
+			if (emitter.markToDestroy) {
+				this.DestroyEmitterAt(i);
+				--i;
+				--count;
+			}
 		}
 
 		//判断是否需要提交快照数据
@@ -303,7 +334,26 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 获取指定id的实体
+	 * 销毁实体
+	 */
+	public DestroyEntity(entity: Entity): void {
+		entity.Destroy();
+		this._entities.splice(this._entities.indexOf(entity), 1);
+		this._idToEntity.delete(entity.rid.toString());
+	}
+
+	/**
+	 * 销毁实体
+	 */
+	private DestroyEntityAt(index: number): void {
+		const entity = this._entities[index];
+		entity.Destroy();
+		this._entities.splice(index, 1);
+		this._idToEntity.delete(entity.rid.toString());
+	}
+
+	/**
+	 * 获取指定rid的实体
 	 */
 	public GetEntity(rid: Long): Entity {
 		return this._idToEntity.get(rid.toString());
@@ -312,12 +362,38 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 创建发射器
 	 */
-	public CreateEmitter(id: number, caster: Entity, skill: Skill): Emitter {
-		const emitter = new Emitter(this, this.MakeRid(id), id);
-		emitter.Init(caster, skill);
+	public CreateEmitter(id: number, caster: Champion, skill: Skill): Emitter {
+		const emitter = new Emitter(this);
+		emitter.Init(this.MakeRid(id), id, caster, skill);
 		this._emitters.push(emitter);
 		this._idToEmitter.set(emitter.rid.toString(), emitter);
 		return emitter;
+	}
+
+	/**
+	 * 销毁发射器
+	 */
+	public DestroyEmitter(emitter: Emitter): void {
+		emitter.Destroy();
+		this._emitters.splice(this._emitters.indexOf(emitter), 1);
+		this._idToEmitter.delete(emitter.rid.toString());
+	}
+
+	/**
+	 * 销毁发射器
+	 */
+	private DestroyEmitterAt(index: number): void {
+		const emitter = this._emitters[index];
+		emitter.Destroy();
+		this._emitters.splice(index, 1);
+		this._idToEmitter.delete(emitter.rid.toString());
+	}
+
+	/**
+	 * 获取指定rid的发射器
+	 */
+	public GetEmitter(rid: Long): Emitter {
+		return this._idToEmitter.get(rid.toString());
 	}
 
 	/**

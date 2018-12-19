@@ -24,6 +24,7 @@ export abstract class Entity implements ISnapshotable {
 	public get rid(): Long { return this._rid; }
 	public get def(): Hashtable { return this._def; }
 	public get fsm(): EntityFSM { return this._fsm; }
+	public get markToDestroy(): boolean { return this._markToDestroy; }
 
 	public readonly attribute: Attribute = new Attribute();
 	public position: FVec2 = FVec2.zero;
@@ -33,7 +34,8 @@ export abstract class Entity implements ISnapshotable {
 	protected _rid: Long;
 	protected _id: number;
 	protected _def: Hashtable;
-	protected _fsm: EntityFSM
+	protected _fsm: EntityFSM;
+	protected _markToDestroy: boolean;
 
 	constructor(battle: Battle) {
 		this._battle = battle;
@@ -47,9 +49,10 @@ export abstract class Entity implements ISnapshotable {
 	protected InternalInit(params: EntityInitParams): void {
 		this._rid = params.rid;
 		this._id = params.id;
+		this._markToDestroy = false;
 	}
 
-	public Dispose(): void {
+	public Destroy(): void {
 	}
 
 	protected abstract OnInit(): void;
@@ -60,6 +63,7 @@ export abstract class Entity implements ISnapshotable {
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.uint64(this._rid);
 		writer.int32(this._id);
+		writer.bool(this._markToDestroy);
 	}
 
 	/**
@@ -68,6 +72,7 @@ export abstract class Entity implements ISnapshotable {
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._rid = <Long>reader.uint64();
 		this._id = reader.int32();
+		this._markToDestroy = reader.bool();
 	}
 
 	/**

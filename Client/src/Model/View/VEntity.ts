@@ -14,14 +14,15 @@ import { VAttribute } from "./VAttribute";
 import { VBattle } from "./VBattle";
 
 export class VEntity {
-	public get id(): Long { return this._id; }
-	public get actorID(): number { return this._actorID; }
+	public get rid(): Long { return this._rid; }
+	public get id(): number { return this._id; }
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
 	public get def(): Hashtable { return this._def; }
 	public get cdef(): Hashtable { return this._cdef; }
 	public get root(): fairygui.GComponent { return this._root; }
 	public get animationProxy(): AnimationProxy { return this._animationProxy; }
+	public get markToDestroy(): boolean { return this._markToDestroy; }
 
 	public readonly attribute: VAttribute = new VAttribute();
 
@@ -45,9 +46,9 @@ export class VEntity {
 
 	public get worldPosition(): Vec2 { return this._worldPosition; }
 
-	private _battle: VBattle;
-	private _id: Long;
-	private _actorID: number;
+	private readonly _battle: VBattle;
+	private _rid: Long;
+	private _id: number;
 	private _team: number;
 	private _name: string;
 	private _def: Hashtable;
@@ -59,12 +60,14 @@ export class VEntity {
 	private _rotation: number = 0;
 	private _logicPos: Vec2 = Vec2.zero;
 	private _logicRot: number = 0;
+	private _markToDestroy: boolean;
 
 	private readonly _fsm: FSM = new FSM();
 	private readonly _root = new fairygui.GComponent();
 	private readonly _animationProxy: AnimationProxy = new AnimationProxy();
 
-	constructor() {
+	constructor(battle: VBattle) {
+		this._battle = battle;
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
 		Global.graphic.entityRoot.addChild(this._root);
@@ -74,12 +77,7 @@ export class VEntity {
 		this._fsm.AddState(new VEntityState(StateType.Die, this));
 	}
 
-	public Init(id: Long, battle: VBattle): void {
-		this._id = id;
-		this._battle = battle;
-	}
-
-	public Dispose(): void {
+	public Destroy(): void {
 		this._root.dispose();
 	}
 
@@ -104,14 +102,16 @@ export class VEntity {
 	 * 初始化快照
 	 */
 	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._actorID = reader.int32();
+		this._rid = <Long>reader.uint64();
+		this._id = reader.int32();
+		this._markToDestroy = reader.bool();
 
 		//加载配置
-		this._def = Defs.GetEntity(this._actorID);
-		this._cdef = CDefs.GetEntity(this._actorID);
+		this._def = Defs.GetEntity(this._id);
+		this._cdef = CDefs.GetEntity(this._id);
 
 		//加载动画数据
-		this._animationProxy.Init(this._actorID, this._cdef);
+		this._animationProxy.Init(this._id, this._cdef);
 		this._root.addChild(this._animationProxy);
 
 		//init properties
@@ -150,7 +150,10 @@ export class VEntity {
 	 */
 	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		//read properties
-		this._actorID = reader.int32();
+		// this._rid = <Long>reader.uint64();
+		this._id = reader.int32();
+		this._markToDestroy = reader.bool();
+
 		this._team = reader.int32();
 		this._name = reader.string();
 		this._logicPos = new Vec2(reader.float(), reader.float());

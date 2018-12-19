@@ -2,7 +2,7 @@ import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { EntityType } from "../EntityType";
 import { ISnapshotable } from "../ISnapshotable";
-import { Entity } from "../Logic/Entity";
+import { Entity } from "./Entity";
 
 export enum BulletMoveType {
 	Linear,

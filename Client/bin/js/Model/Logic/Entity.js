@@ -16,6 +16,7 @@ define(["require", "exports", "../../RC/FMath/FVec2", "./Attribute"], function (
         get rid() { return this._rid; }
         get def() { return this._def; }
         get fsm() { return this._fsm; }
+        get markToDestroy() { return this._markToDestroy; }
         Init(params) {
             this.InternalInit(params);
             this.OnInit();
@@ -23,16 +24,19 @@ define(["require", "exports", "../../RC/FMath/FVec2", "./Attribute"], function (
         InternalInit(params) {
             this._rid = params.rid;
             this._id = params.id;
+            this._markToDestroy = false;
         }
-        Dispose() {
+        Destroy() {
         }
         EncodeSnapshot(writer) {
             writer.uint64(this._rid);
             writer.int32(this._id);
+            writer.bool(this._markToDestroy);
         }
         DecodeSnapshot(reader) {
             this._rid = reader.uint64();
             this._id = reader.int32();
+            this._markToDestroy = reader.bool();
         }
         EncodeSync(writer) {
         }

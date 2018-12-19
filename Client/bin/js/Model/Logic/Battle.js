@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Attack/Bullet", "../Attack/Emitter", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../EntityType", "../FrameAction", "../FrameActionGroup", "./Champion", "./Entity", "../../Libs/long"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, Bullet_1, Emitter_1, SyncEvent_1, CDefs_1, Defs_1, EntityType_1, FrameAction_1, FrameActionGroup_1, Champion_1, Entity_1, Long) {
+define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../EntityType", "../FrameAction", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "../../Libs/long"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, EntityType_1, FrameAction_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const TYPE_TO_CONSTRUCT = new Map();
@@ -54,7 +54,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._destroied = true;
             const count = this._entities.length;
             for (let i = 0; i < count; i++)
-                this._entities[i].Dispose();
+                this._entities[i].Destroy();
             this._entities.splice(0);
             this._idToEntity.clear();
             this._frameActionGroups.clear();
@@ -77,13 +77,36 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         }
         UpdateLogic(dt, updateView, commitSnapshot) {
             ++this._frame;
-            const count = this._entities.length;
+            let count = this._entities.length;
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
                 entity.Update(dt);
             }
+            count = this._emitters.length;
+            for (let i = 0; i < count; i++) {
+                const emitter = this._emitters[i];
+                emitter.Update(dt);
+            }
             if (updateView) {
                 this.SyncToView();
+            }
+            count = this._entities.length;
+            for (let i = 0; i < count; i++) {
+                const entity = this._entities[i];
+                if (entity.markToDestroy) {
+                    this.DestroyEntityAt(i);
+                    --i;
+                    --count;
+                }
+            }
+            count = this._emitters.length;
+            for (let i = 0; i < count; i++) {
+                const emitter = this._emitters[i];
+                if (emitter.markToDestroy) {
+                    this.DestroyEmitterAt(i);
+                    --i;
+                    --count;
+                }
             }
             if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
                 const writer = $protobuf.Writer.create();
@@ -196,15 +219,40 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._idToEntity.set(entity.rid.toString(), entity);
             return entity;
         }
+        DestroyEntity(entity) {
+            entity.Destroy();
+            this._entities.splice(this._entities.indexOf(entity), 1);
+            this._idToEntity.delete(entity.rid.toString());
+        }
+        DestroyEntityAt(index) {
+            const entity = this._entities[index];
+            entity.Destroy();
+            this._entities.splice(index, 1);
+            this._idToEntity.delete(entity.rid.toString());
+        }
         GetEntity(rid) {
             return this._idToEntity.get(rid.toString());
         }
         CreateEmitter(id, caster, skill) {
-            const emitter = new Emitter_1.Emitter(this, this.MakeRid(id), id);
-            emitter.Init(caster, skill);
+            const emitter = new Emitter_1.Emitter(this);
+            emitter.Init(this.MakeRid(id), id, caster, skill);
             this._emitters.push(emitter);
             this._idToEmitter.set(emitter.rid.toString(), emitter);
             return emitter;
+        }
+        DestroyEmitter(emitter) {
+            emitter.Destroy();
+            this._emitters.splice(this._emitters.indexOf(emitter), 1);
+            this._idToEmitter.delete(emitter.rid.toString());
+        }
+        DestroyEmitterAt(index) {
+            const emitter = this._emitters[index];
+            emitter.Destroy();
+            this._emitters.splice(index, 1);
+            this._idToEmitter.delete(emitter.rid.toString());
+        }
+        GetEmitter(rid) {
+            return this._idToEmitter.get(rid.toString());
         }
         ApplyFrameActionGroup(frameActionGroup) {
             for (let i = 0; i < frameActionGroup.numActions; i++) {

@@ -2,7 +2,7 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
-        constructor() {
+        constructor(battle) {
             this.attribute = new VAttribute_1.VAttribute();
             this._skills = [];
             this._position = Vec2_1.Vec2.zero;
@@ -13,6 +13,7 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._fsm = new FSM_1.FSM();
             this._root = new fairygui.GComponent();
             this._animationProxy = new AnimationProxy_1.AnimationProxy();
+            this._battle = battle;
             this._root.setSize(0, 0);
             this._root.setPivot(0.5, 0.5, true);
             Global_1.Global.graphic.entityRoot.addChild(this._root);
@@ -21,14 +22,15 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Attack, this));
             this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Die, this));
         }
+        get rid() { return this._rid; }
         get id() { return this._id; }
-        get actorID() { return this._actorID; }
         get team() { return this._team; }
         get name() { return this._name; }
         get def() { return this._def; }
         get cdef() { return this._cdef; }
         get root() { return this._root; }
         get animationProxy() { return this._animationProxy; }
+        get markToDestroy() { return this._markToDestroy; }
         get position() { return this._position; }
         set position(value) {
             if (this._position.EqualsTo(value))
@@ -46,11 +48,7 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this.OnRatationChanged(delta);
         }
         get worldPosition() { return this._worldPosition; }
-        Init(id, battle) {
-            this._id = id;
-            this._battle = battle;
-        }
-        Dispose() {
+        Destroy() {
             this._root.dispose();
         }
         Update(dt) {
@@ -68,10 +66,12 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._root.rotation = this._rotation;
         }
         InitSync(reader) {
-            this._actorID = reader.int32();
-            this._def = Defs_1.Defs.GetEntity(this._actorID);
-            this._cdef = CDefs_1.CDefs.GetEntity(this._actorID);
-            this._animationProxy.Init(this._actorID, this._cdef);
+            this._rid = reader.uint64();
+            this._id = reader.int32();
+            this._markToDestroy = reader.bool();
+            this._def = Defs_1.Defs.GetEntity(this._id);
+            this._cdef = CDefs_1.CDefs.GetEntity(this._id);
+            this._animationProxy.Init(this._id, this._cdef);
             this._root.addChild(this._animationProxy);
             this._team = reader.int32();
             this._name = reader.string();
@@ -97,7 +97,8 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._fsm.currentState.time = reader.float();
         }
         DecodeSync(reader) {
-            this._actorID = reader.int32();
+            this._id = reader.int32();
+            this._markToDestroy = reader.bool();
             this._team = reader.int32();
             this._name = reader.string();
             this._logicPos = new Vec2_1.Vec2(reader.float(), reader.float());

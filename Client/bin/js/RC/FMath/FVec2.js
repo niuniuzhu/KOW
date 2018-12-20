@@ -146,6 +146,26 @@ define(["require", "exports", "../../Libs/decimal", "./FMathUtils"], function (r
         ApproxEquals(vector, tolerance) {
             return this.Distance(vector).lessThanOrEqualTo(tolerance);
         }
+        Angle(vector) {
+            const vec = FVec2.Normalize(this);
+            let val = vec.Dot(FVec2.Normalize(vector));
+            val = val.greaterThan(1) ? new decimal_1.default(1) : val;
+            val = val.lessThan(-1) ? new decimal_1.default(-1) : val;
+            return decimal_1.default.acos(val);
+        }
+        static Angle(v1, v2) {
+            return v1.Angle(v2);
+        }
+        Rotate(angle) {
+            const x = this.x.mul(decimal_1.default.cos(angle)).sub(this.y.mul(decimal_1.default.sin(angle)));
+            const y = this.x.mul(decimal_1.default.sin(angle)).add(this.y.mul(decimal_1.default.cos(angle)));
+            this.Set(x, y);
+        }
+        static Rotate(v, angle) {
+            const x = v.x.mul(decimal_1.default.cos(angle)).sub(v.y.mul(decimal_1.default.sin(angle)));
+            const y = v.x.mul(decimal_1.default.sin(angle)).add(v.y.mul(decimal_1.default.cos(angle)));
+            return new FVec2(x, y);
+        }
         EqualsTo(v) {
             return FVec2.Equals(this, v);
         }

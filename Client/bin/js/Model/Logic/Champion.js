@@ -46,8 +46,6 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
             super.EncodeSnapshot(writer);
             writer.int32(this._team);
             writer.string(this._name);
-            writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
-            writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
             writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
             const count = this.attribute.count;
             writer.int32(count);
@@ -65,8 +63,6 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
             this._team = reader.int32();
             this._name = reader.string();
             this.OnInit();
-            this.position = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
-            this.direction = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             this._moveSpeed = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
@@ -82,13 +78,8 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
         }
         EncodeSync(writer) {
             super.EncodeSync(writer);
-            writer.int32(this.type);
-            writer.uint64(this._rid);
-            writer.int32(this._id);
             writer.int32(this._team);
             writer.string(this._name);
-            writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
-            writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
             writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
             const count = this.attribute.count;
             writer.int32(count);
@@ -131,7 +122,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
             }
             else {
                 if (this.canTurn) {
-                    this.direction = direction;
+                    this.direction.CopyFrom(direction);
                 }
                 this._moveSpeed = FVec2_1.FVec2.MulN(direction, this.attribute.Get(Attribute_1.EAttr.MOVE_SPEED));
             }
@@ -149,7 +140,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
                 pos.x = decimal_1.default.min(decimal_1.default.sub(this._battle.bounds.xMax, radius), pos.x);
                 pos.y = decimal_1.default.max(decimal_1.default.add(this._battle.bounds.yMin, radius), pos.y);
                 pos.y = decimal_1.default.min(decimal_1.default.sub(this._battle.bounds.yMax, radius), pos.y);
-                this.position = pos;
+                this.position.CopyFrom(pos);
                 this._fsm.ChangeState(StateEnums_1.StateType.Move);
             }
         }
@@ -161,7 +152,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
                 return false;
             if (!this.fsm.HasState(skill.connectedState))
                 return false;
-            this.fsm.ChangeState(skill.connectedState, skill);
+            this.fsm.ChangeState(skill.connectedState, [this.rid, skill.id]);
             return true;
         }
     }

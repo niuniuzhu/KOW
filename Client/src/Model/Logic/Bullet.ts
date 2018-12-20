@@ -3,6 +3,7 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { EntityType } from "../EntityType";
 import { ISnapshotable } from "../ISnapshotable";
 import { Entity } from "./Entity";
+import { Defs } from "../Defs";
 
 export enum BulletMoveType {
 	Linear,
@@ -34,6 +35,7 @@ export class Bullet extends Entity implements ISnapshotable {
 	private _target: Entity;
 
 	protected OnInit(): void {
+		this._def = Defs.GetBullet(this._id);
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {

@@ -80,11 +80,15 @@
 	},
 	"skill": {
 		"s0": {
-			"connected_state": 2,
+			"connect_state": 2,
+			"emitter": 0,
+			"bullet": 0,
 			"damage": 10
 		},
 		"s1": {
-			"connected_state": 2,
+			"connect_state": 2,
+			"emitter": 0,
+			"bullet": 0,
 			"damage": 10
 		}
 	},
@@ -97,9 +101,10 @@
 			],
 			"angle": 0,
 			"follow": false,
-			"frequency": 0,
-			"lifeTime": 0,
-			"mouthType": 0
+			"frequency": 100,
+			"lifeTime": 100,
+			"mouthType": 0,
+			"destroyWhenDie": true
 		}
 	},
 	"bullet": {

@@ -69,7 +69,7 @@ export class UIBattle implements IUIModule {
 	private OnEntityInit(e: UIEvent): void {
 		//检查是否玩家自己
 		if (e.b0) {
-			this._player = e.entity
+			this._player = e.entity;
 			this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
 			this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
 		}

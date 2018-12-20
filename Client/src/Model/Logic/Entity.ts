@@ -27,8 +27,8 @@ export abstract class Entity implements ISnapshotable {
 	public get markToDestroy(): boolean { return this._markToDestroy; }
 
 	public readonly attribute: Attribute = new Attribute();
-	public position: FVec2 = FVec2.zero;
-	public direction: FVec2 = FVec2.zero;
+	public readonly position: FVec2 = FVec2.zero;
+	public readonly direction: FVec2 = FVec2.zero;
 
 	protected readonly _battle: Battle;
 	protected _rid: Long;
@@ -64,6 +64,8 @@ export abstract class Entity implements ISnapshotable {
 		writer.uint64(this._rid);
 		writer.int32(this._id);
 		writer.bool(this._markToDestroy);
+		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
+		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
 	}
 
 	/**
@@ -73,12 +75,19 @@ export abstract class Entity implements ISnapshotable {
 		this._rid = <Long>reader.uint64();
 		this._id = reader.int32();
 		this._markToDestroy = reader.bool();
+		this.position.Set(new Decimal(reader.float()), new Decimal(reader.float()));
+		this.direction.Set(new Decimal(reader.float()), new Decimal(reader.float()));
 	}
 
 	/**
 	 * 同步数据编码
 	 */
 	public EncodeSync(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		writer.uint64(this._rid);
+		writer.int32(this._id);
+		writer.bool(this._markToDestroy);
+		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
+		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
 	}
 
 	public Update(dt: Decimal): void {

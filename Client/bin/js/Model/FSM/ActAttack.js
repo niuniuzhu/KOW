@@ -1,10 +1,32 @@
-define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction"], function (require, exports, Hashtable_1, EntityStateAction_1) {
+define(["require", "exports", "./EntityStateAction", "../../Libs/long"], function (require, exports, EntityStateAction_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActAttack extends EntityStateAction_1.EntityStateAction {
+        constructor() {
+            super(...arguments);
+            this._casterID = Long.ZERO;
+            this._skillID = 0;
+        }
+        EncodeSnapshot(writer) {
+            super.EncodeSnapshot(writer);
+            writer.uint64(this._casterID);
+            writer.int32(this._skillID);
+        }
+        DecodeSnapshot(reader) {
+            super.DecodeSnapshot(reader);
+            this._casterID = reader.uint64();
+            this._skillID = reader.int32();
+        }
+        OnEnter(param) {
+            this._casterID = param[0];
+            this._skillID = param[1];
+        }
         OnTrigger() {
             super.OnTrigger();
-            const emitterID = Hashtable_1.Hashtable.GetNumber(this._def, "emitter");
+            const owner = this.state.owner;
+            const caster = owner.battle.GetEntity(this._casterID);
+            const skill = caster.GetSkill(this._skillID);
+            owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
         }
     }
     exports.ActAttack = ActAttack;

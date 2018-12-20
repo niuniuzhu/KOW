@@ -31,7 +31,7 @@ export class VEntity {
 		if (this._position.EqualsTo(value))
 			return;
 		const delta = Vec2.Sub(value, this._position);
-		this._position = value;
+		this._position.CopyFrom(value);
 		this.OnPositionChanged(delta);
 	}
 
@@ -55,8 +55,8 @@ export class VEntity {
 	private _cdef: Hashtable;
 	private readonly _skills: Skill[] = [];
 
-	private _position: Vec2 = Vec2.zero;
-	private _worldPosition: Vec2 = Vec2.zero;
+	private readonly _position: Vec2 = Vec2.zero;
+	private readonly _worldPosition: Vec2 = Vec2.zero;
 	private _rotation: number = 0;
 	private _logicPos: Vec2 = Vec2.zero;
 	private _logicRot: number = 0;
@@ -83,15 +83,14 @@ export class VEntity {
 
 	public Update(dt: number): void {
 		this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
-		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.018);
+		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.008);
 	}
 
 	private OnPositionChanged(delta: Vec2): void {
 		this._root.setXY(this._position.x, this._position.y);
 		let point = new Laya.Point();
 		this._root.localToGlobal(0, 0, point);
-		this._worldPosition.x = point.x;
-		this._worldPosition.y = point.y;
+		this._worldPosition.Set(point.x, point.y);
 	}
 
 	private OnRatationChanged(delta: number): void {
@@ -115,8 +114,6 @@ export class VEntity {
 		this._root.addChild(this._animationProxy);
 
 		//init properties
-		this._team = reader.int32();
-		this._name = reader.string();
 		this.position = new Vec2(reader.float(), reader.float());
 		this._logicPos.CopyFrom(this.position);
 		const logicDir = new Vec2(reader.float(), reader.float());
@@ -124,6 +121,9 @@ export class VEntity {
 		if (logicDir.x < 0)
 			this.rotation = 360 - this.rotation;
 		this._logicRot = this.rotation;
+
+		this._team = reader.int32();
+		this._name = reader.string();
 		const speed = new Vec2(reader.float(), reader.float());
 
 		//init attribues
@@ -154,13 +154,14 @@ export class VEntity {
 		this._id = reader.int32();
 		this._markToDestroy = reader.bool();
 
-		this._team = reader.int32();
-		this._name = reader.string();
 		this._logicPos = new Vec2(reader.float(), reader.float());
 		const logicDir = new Vec2(reader.float(), reader.float());
 		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
 		if (logicDir.x < 0)
 			this._logicRot = 360 - this._logicRot;
+
+		this._team = reader.int32();
+		this._name = reader.string();
 		const speed = new Vec2(reader.float(), reader.float());
 
 		//read attribues
@@ -172,7 +173,7 @@ export class VEntity {
 		//read skills
 		count = reader.int32();
 		for (let i = 0; i < count; ++i) {
-			reader.int32()
+			reader.int32();
 		}
 
 		//read fsmstates

@@ -172,6 +172,30 @@ export class FVec2 {
 		return this.Distance(vector).lessThanOrEqualTo(tolerance);
 	}
 
+	public Angle(vector: FVec2): Decimal {
+		const vec = FVec2.Normalize(this);
+		let val = vec.Dot(FVec2.Normalize(vector));
+		val = val.greaterThan(1) ? new Decimal(1) : val;
+		val = val.lessThan(-1) ? new Decimal(-1) : val;
+		return Decimal.acos(val);
+	}
+
+	public static Angle(v1: FVec2, v2: FVec2): Decimal {
+		return v1.Angle(v2);
+	}
+
+	public Rotate(angle: Decimal): void {
+		const x = this.x.mul(Decimal.cos(angle)).sub(this.y.mul(Decimal.sin(angle)));
+		const y = this.x.mul(Decimal.sin(angle)).add(this.y.mul(Decimal.cos(angle)));
+		this.Set(x, y);
+	}
+
+	public static Rotate(v: FVec2, angle: Decimal): FVec2 {
+		const x = v.x.mul(Decimal.cos(angle)).sub(v.y.mul(Decimal.sin(angle)));
+		const y = v.x.mul(Decimal.sin(angle)).add(v.y.mul(Decimal.cos(angle)));
+		return new FVec2(x, y);
+	}
+
 	public EqualsTo(v: FVec2): boolean {
 		return FVec2.Equals(this, v);
 	}

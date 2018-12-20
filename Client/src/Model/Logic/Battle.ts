@@ -232,6 +232,7 @@ export class Battle implements ISnapshotable {
 		writer.int32(count);
 		for (let i = 0; i < count; i++) {
 			const entity = this._entities[i];
+			writer.int32(entity.type);
 			entity.EncodeSync(writer);
 		}
 	}
@@ -316,8 +317,8 @@ export class Battle implements ISnapshotable {
 				player.team >= bornDirs.length) {
 				throw new Error("invalid team:" + player.team + ", player:" + player.rid);
 			}
-			player.position = bornPoses[player.team];
-			player.direction = bornDirs[player.team];
+			player.position.CopyFrom(bornPoses[player.team]);
+			player.direction.CopyFrom(bornDirs[player.team]);
 		}
 	}
 
@@ -362,9 +363,9 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 创建发射器
 	 */
-	public CreateEmitter(id: number, caster: Champion, skill: Skill): Emitter {
+	public CreateEmitter(id: number, casterID: Long, skillID: number): Emitter {
 		const emitter = new Emitter(this);
-		emitter.Init(this.MakeRid(id), id, caster, skill);
+		emitter.Init(this.MakeRid(id), id, casterID, skillID);
 		this._emitters.push(emitter);
 		this._idToEmitter.set(emitter.rid.toString(), emitter);
 		return emitter;

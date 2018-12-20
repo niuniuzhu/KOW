@@ -93,8 +93,6 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.string(this._name);
 
 		//encode properties
-		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
-		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
 		writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
 
 		//encode attributes
@@ -126,8 +124,6 @@ export class Champion extends Entity implements ISnapshotable {
 		this.OnInit();
 
 		//decode properties
-		this.position = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-		this.direction = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 		this._moveSpeed = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 
 		//decode attributes
@@ -154,14 +150,11 @@ export class Champion extends Entity implements ISnapshotable {
 	public EncodeSync(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		super.EncodeSync(writer);
 
-		//sync properties
-		writer.int32(this.type);
-		writer.uint64(this._rid);
-		writer.int32(this._id);
+		//sync params
 		writer.int32(this._team);
 		writer.string(this._name);
-		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
-		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
+
+		//sync properties
 		writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
 
 		//sync attributes
@@ -233,7 +226,7 @@ export class Champion extends Entity implements ISnapshotable {
 		}
 		else {
 			if (this.canTurn) {
-				this.direction = direction;
+				this.direction.CopyFrom(direction);
 			}
 			this._moveSpeed = FVec2.MulN(direction, this.attribute.Get(EAttr.MOVE_SPEED));
 		}
@@ -253,7 +246,7 @@ export class Champion extends Entity implements ISnapshotable {
 			pos.x = Decimal.min(Decimal.sub(this._battle.bounds.xMax, radius), pos.x);
 			pos.y = Decimal.max(Decimal.add(this._battle.bounds.yMin, radius), pos.y);
 			pos.y = Decimal.min(Decimal.sub(this._battle.bounds.yMax, radius), pos.y);
-			this.position = pos;
+			this.position.CopyFrom(pos);
 			this._fsm.ChangeState(StateType.Move);
 		}
 	}
@@ -266,7 +259,7 @@ export class Champion extends Entity implements ISnapshotable {
 			return false;
 		if (!this.fsm.HasState(skill.connectedState))
 			return false;
-		this.fsm.ChangeState(skill.connectedState, skill);
+		this.fsm.ChangeState(skill.connectedState, [this.rid, skill.id]);
 		return true;
 	}
 }

@@ -1,13 +1,39 @@
-import { Hashtable } from "../../RC/Utils/Hashtable";
+import * as $protobuf from "../../Libs/protobufjs";
 import { ISnapshotable } from "../ISnapshotable";
+import { Champion } from "../Logic/Champion";
+import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";
+import Long = require("../../Libs/long");
 
 /**
  * 攻击行为
  */
 export class ActAttack extends EntityStateAction implements ISnapshotable {
-	protected OnTrigger():void{
+	private _casterID: Long = Long.ZERO;
+	private _skillID: number = 0;
+
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		super.EncodeSnapshot(writer);
+		writer.uint64(this._casterID);
+		writer.int32(this._skillID);
+	}
+
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		super.DecodeSnapshot(reader);
+		this._casterID = <Long>reader.uint64();
+		this._skillID = reader.int32();
+	}
+
+	protected OnEnter(param: any): void {
+		this._casterID = <Long>param[0];
+		this._skillID = <number>param[1];
+	}
+
+	protected OnTrigger(): void {
 		super.OnTrigger();
-		const emitterID = Hashtable.GetNumber(this._def, "emitter");
+		const owner = (<EntityState>this.state).owner;
+		const caster = <Champion>owner.battle.GetEntity(this._casterID);
+		const skill = caster.GetSkill(this._skillID);
+		owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
 	}
 }

@@ -146,6 +146,7 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             writer.int32(count);
             for (let i = 0; i < count; i++) {
                 const entity = this._entities[i];
+                writer.int32(entity.type);
                 entity.EncodeSync(writer);
             }
         }
@@ -207,8 +208,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                     player.team >= bornDirs.length) {
                     throw new Error("invalid team:" + player.team + ", player:" + player.rid);
                 }
-                player.position = bornPoses[player.team];
-                player.direction = bornDirs[player.team];
+                player.position.CopyFrom(bornPoses[player.team]);
+                player.direction.CopyFrom(bornDirs[player.team]);
             }
         }
         CreateEntity(type, params) {
@@ -233,9 +234,9 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         GetEntity(rid) {
             return this._idToEntity.get(rid.toString());
         }
-        CreateEmitter(id, caster, skill) {
+        CreateEmitter(id, casterID, skillID) {
             const emitter = new Emitter_1.Emitter(this);
-            emitter.Init(this.MakeRid(id), id, caster, skill);
+            emitter.Init(this.MakeRid(id), id, casterID, skillID);
             this._emitters.push(emitter);
             this._idToEmitter.set(emitter.rid.toString(), emitter);
             return emitter;

@@ -36,7 +36,7 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             if (this._position.EqualsTo(value))
                 return;
             const delta = Vec2_1.Vec2.Sub(value, this._position);
-            this._position = value;
+            this._position.CopyFrom(value);
             this.OnPositionChanged(delta);
         }
         get rotation() { return this._rotation; }
@@ -53,14 +53,13 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
         }
         Update(dt) {
             this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
-            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.018);
+            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.008);
         }
         OnPositionChanged(delta) {
             this._root.setXY(this._position.x, this._position.y);
             let point = new Laya.Point();
             this._root.localToGlobal(0, 0, point);
-            this._worldPosition.x = point.x;
-            this._worldPosition.y = point.y;
+            this._worldPosition.Set(point.x, point.y);
         }
         OnRatationChanged(delta) {
             this._root.rotation = this._rotation;
@@ -73,8 +72,6 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._cdef = CDefs_1.CDefs.GetEntity(this._id);
             this._animationProxy.Init(this._id, this._cdef);
             this._root.addChild(this._animationProxy);
-            this._team = reader.int32();
-            this._name = reader.string();
             this.position = new Vec2_1.Vec2(reader.float(), reader.float());
             this._logicPos.CopyFrom(this.position);
             const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
@@ -82,6 +79,8 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             if (logicDir.x < 0)
                 this.rotation = 360 - this.rotation;
             this._logicRot = this.rotation;
+            this._team = reader.int32();
+            this._name = reader.string();
             const speed = new Vec2_1.Vec2(reader.float(), reader.float());
             let count = reader.int32();
             for (let i = 0; i < count; ++i) {
@@ -99,13 +98,13 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
         DecodeSync(reader) {
             this._id = reader.int32();
             this._markToDestroy = reader.bool();
-            this._team = reader.int32();
-            this._name = reader.string();
             this._logicPos = new Vec2_1.Vec2(reader.float(), reader.float());
             const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
             this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
             if (logicDir.x < 0)
                 this._logicRot = 360 - this._logicRot;
+            this._team = reader.int32();
+            this._name = reader.string();
             const speed = new Vec2_1.Vec2(reader.float(), reader.float());
             let count = reader.int32();
             for (let i = 0; i < count; i++) {

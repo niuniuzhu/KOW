@@ -25,6 +25,7 @@ export class ActAttack extends EntityStateAction implements ISnapshotable {
 	}
 
 	protected OnEnter(param: any): void {
+		super.OnEnter(param);
 		this._casterID = <Long>param[0];
 		this._skillID = <number>param[1];
 	}
@@ -32,7 +33,7 @@ export class ActAttack extends EntityStateAction implements ISnapshotable {
 	protected OnTrigger(): void {
 		super.OnTrigger();
 		const owner = (<EntityState>this.state).owner;
-		const caster = <Champion>owner.battle.GetEntity(this._casterID);
+		const caster = owner.battle.GetChampion(this._casterID);
 		const skill = caster.GetSkill(this._skillID);
 		owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
 	}

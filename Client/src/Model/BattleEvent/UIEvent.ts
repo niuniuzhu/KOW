@@ -1,6 +1,5 @@
 import Stack from "../../RC/Collections/Stack";
-import { BattleInfo } from "../BattleInfo";
-import { VEntity } from "../View/VEntity";
+import { VChampion } from "../View/VChampion";
 import { BaseBattleEvent } from "./BaseBattleEvent";
 
 export class UIEvent extends BaseBattleEvent {
@@ -36,7 +35,7 @@ export class UIEvent extends BaseBattleEvent {
 	}
 
 	private Clear(): void {
-		this.entity = null;
+		this.champion = null;
 	}
 
 	/**
@@ -46,14 +45,14 @@ export class UIEvent extends BaseBattleEvent {
 		UIEvent.Release(this);
 	}
 
-	public static EntityInit(entity: VEntity, isSelf: boolean): void {
+	public static ChampionInit(champion: VChampion, isSelf: boolean): void {
 		let e = this.Get();
 		e._type = UIEvent.E_ENTITY_INIT;
-		e.entity = entity;
+		e.champion = champion;
 		e.b0 = isSelf;
 		this.Invoke(e);
 	}
 
-	public entity: VEntity;
+	public champion: VChampion;
 	public b0: boolean;
 }

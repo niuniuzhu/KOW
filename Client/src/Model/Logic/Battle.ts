@@ -14,20 +14,14 @@ import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
-import { EntityType } from "../EntityType";
 import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
 import { ISnapshotable } from "../ISnapshotable";
-import { Skill } from "../Skill";
 import { Bullet } from "./Bullet";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
-import { Entity, EntityInitParams } from "./Entity";
+import { EntityInitParams } from "./Entity";
 import Long = require("../../Libs/long");
-
-const TYPE_TO_CONSTRUCT = new Map<EntityType, new (battle: Battle) => Entity>();
-TYPE_TO_CONSTRUCT.set(EntityType.Champion, Champion);
-TYPE_TO_CONSTRUCT.set(EntityType.Bullet, Bullet);
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -57,8 +51,8 @@ export class Battle implements ISnapshotable {
 	private _destroied: boolean = false;
 
 	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
-	private readonly _entities: Entity[] = [];
-	private readonly _idToEntity: Map<string, Entity> = new Map<string, Entity>();
+	private readonly _champions: Champion[] = [];
+	private readonly _idToChampion: Map<string, Champion> = new Map<string, Champion>();
 	private readonly _emitters: Emitter[] = [];
 	private readonly _idToEmitter: Map<string, Emitter> = new Map<string, Emitter>();
 	private readonly _bullets: Bullet[] = [];
@@ -97,14 +91,24 @@ export class Battle implements ISnapshotable {
 		if (this._destroied)
 			return;
 		this._destroied = true;
-		const count = this._entities.length;
-		for (let i = 0; i < count; i++)
-			this._entities[i].Destroy();
-		this._entities.splice(0);
-		this._idToEntity.clear();
 		this._frameActionGroups.clear();
 		this._def = null;
 		this._bounds = null;
+
+		for (let i = 0, count = this._bullets.length; i < count; i++)
+			this._bullets[i].Destroy();
+		this._bullets.splice(0);
+		this._idToBullet.clear();
+
+		for (let i = 0, count = this._emitters.length; i < count; i++)
+			this._emitters[i].Destroy();
+		this._emitters.splice(0);
+		this._idToEmitter.clear();
+
+		for (let i = 0, count = this._champions.length; i < count; i++)
+			this._champions[i].Destroy();
+		this._champions.splice(0);
+		this._idToChampion.clear();
 	}
 
 	/**
@@ -137,18 +141,22 @@ export class Battle implements ISnapshotable {
 	private UpdateLogic(dt: Decimal, updateView: boolean, commitSnapshot: boolean): void {
 		++this._frame;
 
-		//update entities
-		let count = this._entities.length;
-		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			entity.Update(dt);
+		//update champions
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			champion.Update(dt);
 		}
 
 		//update emitters
-		count = this._emitters.length;
-		for (let i = 0; i < count; i++) {
+		for (let i = 0, count = this._emitters.length; i < count; i++) {
 			const emitter = this._emitters[i];
 			emitter.Update(dt);
+		}
+
+		//update bullets
+		for (let i = 0, count = this._bullets.length; i < count; i++) {
+			const bullet = this._bullets[i];
+			bullet.Update(dt);
 		}
 
 		//sync to view
@@ -156,23 +164,31 @@ export class Battle implements ISnapshotable {
 			this.SyncToView();
 		}
 
-		//destroy entities
-		count = this._entities.length;
-		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			if (entity.markToDestroy) {
-				this.DestroyEntityAt(i);
+		//destroy bullets
+		for (let i = 0, count = this._bullets.length; i < count; i++) {
+			const bullet = this._bullets[i];
+			if (bullet.markToDestroy) {
+				this.DestroyBulletAt(i);
 				--i;
 				--count;
 			}
 		}
 
 		//destroy emitters
-		count = this._emitters.length;
-		for (let i = 0; i < count; i++) {
+		for (let i = 0, count = this._emitters.length; i < count; i++) {
 			const emitter = this._emitters[i];
 			if (emitter.markToDestroy) {
 				this.DestroyEmitterAt(i);
+				--i;
+				--count;
+			}
+		}
+
+		//destroy champions
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			if (champion.markToDestroy) {
+				this.DestroyChampionAt(i);
 				--i;
 				--count;
 			}
@@ -196,12 +212,29 @@ export class Battle implements ISnapshotable {
 	 */
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.int32(this._frame);
-		const count = this._entities.length;
+
+		//champions
+		let count = this._champions.length;
 		writer.int32(count);
 		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			writer.int32(entity.type);
-			entity.EncodeSnapshot(writer);
+			const champion = this._champions[i];
+			champion.EncodeSnapshot(writer);
+		}
+
+		//emitters
+		count = this._emitters.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const emitter = this._emitters[i];
+			emitter.EncodeSnapshot(writer);
+		}
+
+		//bullets
+		count = this._bullets.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const bullet = this._bullets[i];
+			bullet.EncodeSnapshot(writer);
 		}
 	}
 
@@ -210,16 +243,31 @@ export class Battle implements ISnapshotable {
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._frame = reader.int32();
-		const count = reader.int32();
+		//champions
+		let count = reader.int32();
 		for (let i = 0; i < count; i++) {
-			//create entity
-			const type = <EntityType>reader.int32();
-			const ctr = TYPE_TO_CONSTRUCT.get(type);
-			const entity = new ctr(this);
-			entity.DecodeSnapshot(reader);
-			this._entities.push(entity);
-			this._idToEntity.set(entity.rid.toString(), entity);
+			const champion = new Champion(this);
+			champion.DecodeSnapshot(reader);
+			this._champions.push(champion);
+			this._idToChampion.set(champion.rid.toString(), champion);
+		}
 
+		//emitters
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const emitter = new Emitter(this);
+			emitter.DecodeSnapshot(reader);
+			this._emitters.push(emitter);
+			this._idToEmitter.set(emitter.rid.toString(), emitter);
+		}
+
+		//bullets
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const bullet = new Bullet(this);
+			bullet.DecodeSnapshot(reader);
+			this._bullets.push(bullet);
+			this._idToBullet.set(bullet.rid.toString(), bullet);
 		}
 	}
 
@@ -228,12 +276,21 @@ export class Battle implements ISnapshotable {
 	 */
 	public EncodeSync(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.int32(this._frame);
-		const count = this._entities.length;
+		//champions
+		let count = this._champions.length;
 		writer.int32(count);
 		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			writer.int32(entity.type);
-			entity.EncodeSync(writer);
+			const champion = this._champions[i];
+			champion.EncodeSync(writer);
+		}
+		//emitter no need
+
+		//bullets
+		count = this._bullets.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const bullet = this._bullets[i];
+			bullet.EncodeSync(writer);
 		}
 	}
 
@@ -312,7 +369,7 @@ export class Battle implements ISnapshotable {
 			params.id = playerInfo.actorID;
 			params.team = playerInfo.team;
 			params.name = playerInfo.name;
-			const player = <Champion>this.CreateEntity(EntityType.Champion, params);
+			const player = this.CreateChampion(params);
 			if (player.team >= bornPoses.length ||
 				player.team >= bornDirs.length) {
 				throw new Error("invalid team:" + player.team + ", player:" + player.rid);
@@ -323,41 +380,40 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 创建实体
+	 * 创建战士
 	 */
-	public CreateEntity(type: EntityType, params: EntityInitParams): Entity {
-		const ctr = TYPE_TO_CONSTRUCT.get(type);
-		const entity = new ctr(this);
-		entity.Init(params);
-		this._entities.push(entity);
-		this._idToEntity.set(entity.rid.toString(), entity);
-		return entity;
+	public CreateChampion(params: EntityInitParams): Champion {
+		const champion = new Champion(this);
+		champion.Init(params);
+		this._champions.push(champion);
+		this._idToChampion.set(champion.rid.toString(), champion);
+		return champion;
 	}
 
 	/**
-	 * 销毁实体
+	 * 销毁战士
 	 */
-	public DestroyEntity(entity: Entity): void {
-		entity.Destroy();
-		this._entities.splice(this._entities.indexOf(entity), 1);
-		this._idToEntity.delete(entity.rid.toString());
+	public DestroyChampion(champion: Champion): void {
+		champion.Destroy();
+		this._champions.splice(this._champions.indexOf(champion), 1);
+		this._idToChampion.delete(champion.rid.toString());
 	}
 
 	/**
-	 * 销毁实体
+	 * 销毁战士
 	 */
-	private DestroyEntityAt(index: number): void {
-		const entity = this._entities[index];
-		entity.Destroy();
-		this._entities.splice(index, 1);
-		this._idToEntity.delete(entity.rid.toString());
+	private DestroyChampionAt(index: number): void {
+		const champion = this._champions[index];
+		champion.Destroy();
+		this._champions.splice(index, 1);
+		this._idToChampion.delete(champion.rid.toString());
 	}
 
 	/**
-	 * 获取指定rid的实体
+	 * 获取指定rid的战士
 	 */
-	public GetEntity(rid: Long): Entity {
-		return this._idToEntity.get(rid.toString());
+	public GetChampion(rid: Long): Champion {
+		return this._idToChampion.get(rid.toString());
 	}
 
 	/**
@@ -398,6 +454,43 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 创建子弹
+	 */
+	public CreateBullet(params: EntityInitParams): Bullet {
+		const bullet = new Bullet(this);
+		bullet.Init(params);
+		this._bullets.push(bullet);
+		this._idToBullet.set(bullet.rid.toString(), bullet);
+		return bullet;
+	}
+
+	/**
+	 * 销毁子弹
+	 */
+	public DestroyBullet(bullet: Bullet): void {
+		bullet.Destroy();
+		this._bullets.splice(this._bullets.indexOf(bullet), 1);
+		this._idToBullet.delete(bullet.rid.toString());
+	}
+
+	/**
+	 * 销毁子弹
+	 */
+	private DestroyBulletAt(index: number): void {
+		const bullet = this._bullets[index];
+		bullet.Destroy();
+		this._bullets.splice(index, 1);
+		this._idToBullet.delete(bullet.rid.toString());
+	}
+
+	/**
+	 * 获取指定rid的子弹
+	 */
+	public GetBullet(rid: Long): Bullet {
+		return this._idToBullet.get(rid.toString());
+	}
+
+	/**
 	 * 应用帧行为
 	 * @param frameAction 帧行为
 	 */
@@ -408,12 +501,12 @@ export class Battle implements ISnapshotable {
 	}
 
 	private ApplyFrameAction(frameAction: FrameAction): void {
-		const entity = <Champion>this.GetEntity(frameAction.gcNID);
+		const champion = this.GetChampion(frameAction.gcNID);
 		if ((frameAction.inputFlag & FrameAction.InputFlag.Move) > 0) {
-			entity.BeginMove(frameAction.dx, frameAction.dy);
+			champion.BeginMove(frameAction.dx, frameAction.dy);
 		}
 		if ((frameAction.inputFlag & FrameAction.InputFlag.Skill) > 0) {
-			entity.UseSkill(frameAction.sid);
+			champion.UseSkill(frameAction.sid);
 		}
 	}
 

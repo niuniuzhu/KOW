@@ -1,10 +1,9 @@
-define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./AnimationProxy", "./VAttribute"], function (require, exports, Global_1, FSM_1, MathUtils_1, Vec2_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, Skill_1, AnimationProxy_1, VAttribute_1) {
+define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "./AnimationProxy", "./VAttribute"], function (require, exports, Global_1, FSM_1, MathUtils_1, Vec2_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, AnimationProxy_1, VAttribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
         constructor(battle) {
             this.attribute = new VAttribute_1.VAttribute();
-            this._skills = [];
             this._position = Vec2_1.Vec2.zero;
             this._worldPosition = Vec2_1.Vec2.zero;
             this._rotation = 0;
@@ -24,8 +23,6 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
         }
         get rid() { return this._rid; }
         get id() { return this._id; }
-        get team() { return this._team; }
-        get name() { return this._name; }
         get def() { return this._def; }
         get cdef() { return this._cdef; }
         get root() { return this._root; }
@@ -67,30 +64,22 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
         InitSync(reader) {
             this._rid = reader.uint64();
             this._id = reader.int32();
-            this._markToDestroy = reader.bool();
             this._def = Defs_1.Defs.GetEntity(this._id);
             this._cdef = CDefs_1.CDefs.GetEntity(this._id);
             this._animationProxy.Init(this._id, this._cdef);
             this._root.addChild(this._animationProxy);
+            this._markToDestroy = reader.bool();
             this.position = new Vec2_1.Vec2(reader.float(), reader.float());
             this._logicPos.CopyFrom(this.position);
             const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
             this.rotation = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
-            if (logicDir.x < 0)
+            if (logicDir.x < 0) {
                 this.rotation = 360 - this.rotation;
+            }
             this._logicRot = this.rotation;
-            this._team = reader.int32();
-            this._name = reader.string();
-            const speed = new Vec2_1.Vec2(reader.float(), reader.float());
-            let count = reader.int32();
+            const count = reader.int32();
             for (let i = 0; i < count; ++i) {
                 this.attribute.Set(reader.int32(), reader.float());
-            }
-            count = reader.int32();
-            for (let i = 0; i < count; ++i) {
-                const skill = new Skill_1.Skill();
-                skill.Init(reader.int32());
-                this._skills.push(skill);
             }
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.float();
@@ -101,41 +90,18 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._logicPos = new Vec2_1.Vec2(reader.float(), reader.float());
             const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
             this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
-            if (logicDir.x < 0)
+            if (logicDir.x < 0) {
                 this._logicRot = 360 - this._logicRot;
-            this._team = reader.int32();
-            this._name = reader.string();
-            const speed = new Vec2_1.Vec2(reader.float(), reader.float());
-            let count = reader.int32();
+            }
+            const count = reader.int32();
             for (let i = 0; i < count; i++) {
                 this.attribute.Set(reader.int32(), reader.float());
-            }
-            count = reader.int32();
-            for (let i = 0; i < count; ++i) {
-                reader.int32();
             }
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.float();
         }
         PlayAnim(name, timeScale = 1, force = false) {
             this._animationProxy.Play(name, 0, timeScale, force);
-        }
-        HasSkill(id) {
-            for (const skill of this._skills) {
-                if (skill.id == id)
-                    return true;
-            }
-            return false;
-        }
-        GetSkill(id) {
-            for (const skill of this._skills) {
-                if (skill.id == id)
-                    return skill;
-            }
-            return null;
-        }
-        GetSkillAt(index) {
-            return this._skills[index];
         }
     }
     exports.VEntity = VEntity;

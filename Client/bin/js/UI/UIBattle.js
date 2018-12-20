@@ -19,7 +19,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._gestureState.joystick.radius = 100;
             this._gestureState.joystick.resetDuration = 60;
             this._gestureState.onChanged = this.HandleAxisInput.bind(this);
-            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnEntityInit.bind(this));
+            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
         }
         get root() { return this._root; }
         Dispose() {
@@ -45,9 +45,9 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
         }
         OnResize(e) {
         }
-        OnEntityInit(e) {
+        OnChampionInit(e) {
             if (e.b0) {
-                this._player = e.entity;
+                this._player = e.champion;
                 this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
                 this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
             }

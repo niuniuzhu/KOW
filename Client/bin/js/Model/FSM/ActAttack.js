@@ -18,13 +18,14 @@ define(["require", "exports", "./EntityStateAction", "../../Libs/long"], functio
             this._skillID = reader.int32();
         }
         OnEnter(param) {
+            super.OnEnter(param);
             this._casterID = param[0];
             this._skillID = param[1];
         }
         OnTrigger() {
             super.OnTrigger();
             const owner = this.state.owner;
-            const caster = owner.battle.GetEntity(this._casterID);
+            const caster = owner.battle.GetChampion(this._casterID);
             const skill = caster.GetSkill(this._skillID);
             owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
         }

@@ -1,12 +1,11 @@
 import { Global } from "../Global";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { FrameAciontManager } from "../Model/FrameActionManager";
+import { VChampion } from "../Model/View/VChampion";
 import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
-import { VEntity } from "../Model/View/VEntity";
-import { Logger } from "../RC/Utils/Logger";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
@@ -15,7 +14,7 @@ export class UIBattle implements IUIModule {
 	private readonly _gestureState: GestureState = new GestureState();
 	private readonly _frameActionManager: FrameAciontManager = new FrameAciontManager();
 
-	private _player: VEntity;
+	private _player: VChampion;
 	private _touchID: number = -1;
 
 	constructor() {
@@ -35,7 +34,7 @@ export class UIBattle implements IUIModule {
 		this._gestureState.joystick.resetDuration = 60;
 		this._gestureState.onChanged = this.HandleAxisInput.bind(this);
 
-		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnEntityInit.bind(this));
+		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
 	}
 
 	public Dispose(): void {
@@ -66,10 +65,10 @@ export class UIBattle implements IUIModule {
 	public OnResize(e: laya.events.Event): void {
 	}
 
-	private OnEntityInit(e: UIEvent): void {
+	private OnChampionInit(e: UIEvent): void {
 		//检查是否玩家自己
 		if (e.b0) {
-			this._player = e.entity;
+			this._player = e.champion;
 			this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
 			this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
 		}

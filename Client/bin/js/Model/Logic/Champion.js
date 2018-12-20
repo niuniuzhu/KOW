@@ -1,17 +1,11 @@
-define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../EntityType", "../FSM/EntityFSM", "../FSM/EntityState", "../FSM/StateEnums", "../Skill", "./Attribute", "./Entity"], function (require, exports, decimal_1, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityType_1, EntityFSM_1, EntityState_1, StateEnums_1, Skill_1, Attribute_1, Entity_1) {
+define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../FSM/StateEnums", "../Skill", "./Attribute", "./Entity"], function (require, exports, decimal_1, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, StateEnums_1, Skill_1, Attribute_1, Entity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Champion extends Entity_1.Entity {
-        constructor(battle) {
-            super(battle);
+        constructor() {
+            super(...arguments);
             this._moveSpeed = FVec2_1.FVec2.zero;
-            this._fsm = new EntityFSM_1.EntityFSM();
-            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Idle, this));
-            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Move, this));
-            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Attack, this));
-            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Die, this));
         }
-        get type() { return EntityType_1.EntityType.Champion; }
         get team() { return this._team; }
         get name() { return this._name; }
         get canMove() { return this.attribute.Get(Attribute_1.EAttr.S_DISABLE_MOVE).lessThanOrEqualTo(FMathUtils_1.FMathUtils.D_ZERO); }
@@ -19,8 +13,8 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
         get canUseSkill() { return this.attribute.Get(Attribute_1.EAttr.S_DISABLE_SKILL).lessThanOrEqualTo(FMathUtils_1.FMathUtils.D_ZERO); }
         get isSuperArmor() { return this.attribute.Get(Attribute_1.EAttr.S_SUPPER_ARMOR).greaterThan(FMathUtils_1.FMathUtils.D_ZERO); }
         get isInvulnerability() { return this.attribute.Get(Attribute_1.EAttr.S_INVULNER_ABILITY).greaterThan(FMathUtils_1.FMathUtils.D_ZERO); }
-        InternalInit(params) {
-            super.InternalInit(params);
+        Init(params) {
+            super.Init(params);
             this._team = params.team;
             this._name = params.name;
         }
@@ -39,6 +33,11 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
                 skill.Init(sid);
                 this._skills.push(skill);
             }
+            this._fsm = new EntityFSM_1.EntityFSM();
+            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Idle, this));
+            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Move, this));
+            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Attack, this));
+            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Die, this));
             this._fsm.Init();
             this._fsm.ChangeState(StateEnums_1.StateType.Idle);
         }
@@ -47,16 +46,10 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
             writer.int32(this._team);
             writer.string(this._name);
             writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
-            const count = this.attribute.count;
-            writer.int32(count);
-            this.attribute.Foreach((v, k) => {
-                writer.int32(k).float(v.toNumber());
-            });
             writer.int32(this._skills.length);
             for (const skill of this._skills) {
                 writer.int32(skill.id);
             }
-            this._fsm.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
             super.DecodeSnapshot(reader);
@@ -64,34 +57,22 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FMathUtils",
             this._name = reader.string();
             this.OnInit();
             this._moveSpeed = new FVec2_1.FVec2(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
-            let count = reader.int32();
-            for (let i = 0; i < count; i++) {
-                this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
-            }
-            count = reader.int32();
+            const count = reader.int32();
             for (let i = 0; i < count; ++i) {
                 const skill = new Skill_1.Skill();
                 skill.Init(reader.int32());
                 this._skills.push(skill);
             }
-            this._fsm.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {
             super.EncodeSync(writer);
             writer.int32(this._team);
             writer.string(this._name);
             writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
-            const count = this.attribute.count;
-            writer.int32(count);
-            this.attribute.Foreach((v, k, map) => {
-                writer.int32(k).float(v.toNumber());
-            });
             writer.int32(this._skills.length);
             for (const skill of this._skills) {
                 writer.int32(skill.id);
             }
-            writer.int32(this._fsm.currentState.type);
-            writer.float(this._fsm.currentState.time.toNumber());
         }
         Update(dt) {
             super.Update(dt);

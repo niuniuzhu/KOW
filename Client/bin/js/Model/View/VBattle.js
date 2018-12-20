@@ -1,13 +1,13 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "../CDefs", "../EntityType", "./Camera", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, CDefs_1, EntityType_1, Camera_1, VChampion_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "../CDefs", "./Camera", "./VBullet", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, CDefs_1, Camera_1, VBullet_1, VChampion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const TYPE_TO_CONSTRUCT = new Map();
-    TYPE_TO_CONSTRUCT.set(EntityType_1.EntityType.Champion, VChampion_1.VChampion);
     class VBattle {
         constructor() {
             this._mapID = 0;
-            this._entities = [];
-            this._idToEntity = new Map();
+            this._champions = [];
+            this._idToChampion = new Map();
+            this._bullets = [];
+            this._idToBullet = new Map();
             this._destroied = false;
             this._camera = new Camera_1.Camera();
         }
@@ -29,12 +29,16 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._destroied = true;
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
-            const count = this._entities.length;
-            for (let i = 0; i < count; ++i) {
-                this._entities[i].Destroy();
+            for (let i = 0, count = this._bullets.length; i < count; ++i) {
+                this._bullets[i].Destroy();
             }
-            this._entities.splice(0);
-            this._idToEntity.clear();
+            this._bullets.splice(0);
+            this._idToBullet.clear();
+            for (let i = 0, count = this._champions.length; i < count; ++i) {
+                this._champions[i].Destroy();
+            }
+            this._champions.splice(0);
+            this._idToChampion.clear();
             this._root.dispose();
             this._root = null;
             this._def = null;
@@ -42,16 +46,26 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         Update(dt) {
             this._camera.Update(dt);
-            let count = this._entities.length;
-            for (let i = 0; i < count; i++) {
-                const entity = this._entities[i];
-                entity.Update(dt);
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                champion.Update(dt);
             }
-            count = this._entities.length;
-            for (let i = 0; i < count; i++) {
-                const entity = this._entities[i];
-                if (entity.markToDestroy) {
-                    this.DestroyEntityAt(i);
+            for (let i = 0, count = this._bullets.length; i < count; i++) {
+                const bullet = this._bullets[i];
+                bullet.Update(dt);
+            }
+            for (let i = 0, count = this._bullets.length; i < count; i++) {
+                const bullet = this._bullets[i];
+                if (bullet.markToDestroy) {
+                    this.DestroyBulletAt(i);
+                    --i;
+                    --count;
+                }
+            }
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                if (champion.markToDestroy) {
+                    this.DestroyChampionAt(i);
                     --i;
                     --count;
                 }
@@ -59,48 +73,76 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         InitSync(reader) {
             this._logicFrame = reader.int32();
-            const count = reader.int32();
+            let count = reader.int32();
             for (let i = 0; i < count; i++) {
-                const type = reader.int32();
-                const entity = this.CreateEntity(type, reader);
-                const isSelf = entity.rid.equals(this._playerID);
+                const champion = this.CreateChampion(reader);
+                const isSelf = champion.rid.equals(this._playerID);
                 if (isSelf) {
-                    this._camera.lookAt = entity;
+                    this._camera.lookAt = champion;
                 }
-                UIEvent_1.UIEvent.EntityInit(entity, isSelf);
+                UIEvent_1.UIEvent.ChampionInit(champion, isSelf);
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const bullet = this.CreateBullet(reader);
             }
         }
         DecodeSync(reader) {
             this._logicFrame = reader.int32();
-            const count = reader.int32();
+            let count = reader.int32();
             for (let i = 0; i < count; i++) {
-                reader.int32();
                 const rid = reader.uint64();
-                const entity = this.GetEntity(rid);
-                entity.DecodeSync(reader);
+                const champion = this.GetChampion(rid);
+                champion.DecodeSync(reader);
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const rid = reader.uint64();
+                const bullet = this.GetBullet(rid);
+                bullet.DecodeSync(reader);
             }
         }
-        CreateEntity(type, reader) {
-            const ctr = TYPE_TO_CONSTRUCT.get(type);
-            const entity = new ctr(this);
-            entity.InitSync(reader);
-            this._entities.push(entity);
-            this._idToEntity.set(entity.rid.toString(), entity);
-            return entity;
+        CreateChampion(reader) {
+            const champion = new VChampion_1.VChampion(this);
+            champion.InitSync(reader);
+            this._champions.push(champion);
+            this._idToChampion.set(champion.rid.toString(), champion);
+            return champion;
         }
-        DestroyEntity(entity) {
-            entity.Destroy();
-            this._entities.splice(this._entities.indexOf(entity), 1);
-            this._idToEntity.delete(entity.rid.toString());
+        DestroyChampion(champion) {
+            champion.Destroy();
+            this._champions.splice(this._champions.indexOf(champion), 1);
+            this._idToChampion.delete(champion.rid.toString());
         }
-        DestroyEntityAt(index) {
-            const entity = this._entities[index];
-            entity.Destroy();
-            this._entities.splice(index, 1);
-            this._idToEntity.delete(entity.rid.toString());
+        DestroyChampionAt(index) {
+            const champion = this._champions[index];
+            champion.Destroy();
+            this._champions.splice(index, 1);
+            this._idToChampion.delete(champion.rid.toString());
         }
-        GetEntity(rid) {
-            return this._idToEntity.get(rid.toString());
+        GetChampion(rid) {
+            return this._idToChampion.get(rid.toString());
+        }
+        CreateBullet(reader) {
+            const bullet = new VBullet_1.VBullet(this);
+            bullet.InitSync(reader);
+            this._bullets.push(bullet);
+            this._idToBullet.set(bullet.rid.toString(), bullet);
+            return bullet;
+        }
+        DestroyBullet(bullet) {
+            bullet.Destroy();
+            this._bullets.splice(this._bullets.indexOf(bullet), 1);
+            this._idToBullet.delete(bullet.rid.toString());
+        }
+        DestroyBulletAt(index) {
+            const bullet = this._bullets[index];
+            bullet.Destroy();
+            this._bullets.splice(index, 1);
+            this._idToBullet.delete(bullet.rid.toString());
+        }
+        GetBullet(rid) {
+            return this._idToBullet.get(rid.toString());
         }
         OnBattleInit(e) {
             const reader = $protobuf.Reader.create(e.data);

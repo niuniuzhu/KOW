@@ -8,16 +8,13 @@ import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { StateType } from "../FSM/StateEnums";
 import { VEntityState } from "../FSM/VEntityState";
-import { Skill } from "../Skill";
 import { AnimationProxy } from "./AnimationProxy";
 import { VAttribute } from "./VAttribute";
 import { VBattle } from "./VBattle";
 
-export class VEntity {
+export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
 	public get id(): number { return this._id; }
-	public get team(): number { return this._team; }
-	public get name(): string { return this._name; }
 	public get def(): Hashtable { return this._def; }
 	public get cdef(): Hashtable { return this._cdef; }
 	public get root(): fairygui.GComponent { return this._root; }
@@ -49,11 +46,8 @@ export class VEntity {
 	private readonly _battle: VBattle;
 	private _rid: Long;
 	private _id: number;
-	private _team: number;
-	private _name: string;
 	private _def: Hashtable;
 	private _cdef: Hashtable;
-	private readonly _skills: Skill[] = [];
 
 	private readonly _position: Vec2 = Vec2.zero;
 	private readonly _worldPosition: Vec2 = Vec2.zero;
@@ -103,7 +97,6 @@ export class VEntity {
 	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._rid = <Long>reader.uint64();
 		this._id = reader.int32();
-		this._markToDestroy = reader.bool();
 
 		//加载配置
 		this._def = Defs.GetEntity(this._id);
@@ -113,31 +106,22 @@ export class VEntity {
 		this._animationProxy.Init(this._id, this._cdef);
 		this._root.addChild(this._animationProxy);
 
+		this._markToDestroy = reader.bool();
+
 		//init properties
 		this.position = new Vec2(reader.float(), reader.float());
 		this._logicPos.CopyFrom(this.position);
 		const logicDir = new Vec2(reader.float(), reader.float());
 		this.rotation = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
-		if (logicDir.x < 0)
+		if (logicDir.x < 0) {
 			this.rotation = 360 - this.rotation;
+		}
 		this._logicRot = this.rotation;
 
-		this._team = reader.int32();
-		this._name = reader.string();
-		const speed = new Vec2(reader.float(), reader.float());
-
 		//init attribues
-		let count = reader.int32();
+		const count = reader.int32();
 		for (let i = 0; i < count; ++i) {
 			this.attribute.Set(reader.int32(), reader.float());
-		}
-
-		//init skills
-		count = reader.int32();
-		for (let i = 0; i < count; ++i) {
-			const skill = new Skill();
-			skill.Init(reader.int32());
-			this._skills.push(skill);
 		}
 
 		//init fsmstates
@@ -157,23 +141,14 @@ export class VEntity {
 		this._logicPos = new Vec2(reader.float(), reader.float());
 		const logicDir = new Vec2(reader.float(), reader.float());
 		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
-		if (logicDir.x < 0)
+		if (logicDir.x < 0) {
 			this._logicRot = 360 - this._logicRot;
-
-		this._team = reader.int32();
-		this._name = reader.string();
-		const speed = new Vec2(reader.float(), reader.float());
-
-		//read attribues
-		let count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), reader.float());
 		}
 
-		//read skills
-		count = reader.int32();
-		for (let i = 0; i < count; ++i) {
-			reader.int32();
+		//read attribues
+		const count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			this.attribute.Set(reader.int32(), reader.float());
 		}
 
 		//read fsmstates
@@ -189,37 +164,5 @@ export class VEntity {
 	 */
 	public PlayAnim(name: string, timeScale: number = 1, force: boolean = false): void {
 		this._animationProxy.Play(name, 0, timeScale, force);
-	}
-
-	/**
-	 * 是否存在指定id的技能
-	 * @param id 技能id
-	 */
-	public HasSkill(id: number): boolean {
-		for (const skill of this._skills) {
-			if (skill.id == id)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * 获取指定id的技能
-	 * @param id 技能id
-	 */
-	public GetSkill(id: number): Skill {
-		for (const skill of this._skills) {
-			if (skill.id == id)
-				return skill;
-		}
-		return null;
-	}
-
-	/**
-	 * 获取指定索引的技能
-	 * @param index 索引
-	 */
-	public GetSkillAt(index: number): Skill {
-		return this._skills[index];
 	}
 }

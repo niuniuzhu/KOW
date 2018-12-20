@@ -4,19 +4,15 @@ import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
-import { EntityType } from "../EntityType";
 import { EntityFSM } from "../FSM/EntityFSM";
 import { EntityState } from "../FSM/EntityState";
 import { StateType } from "../FSM/StateEnums";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
 import { EAttr } from "./Attribute";
-import { Battle } from "./Battle";
 import { Entity, EntityInitParams } from "./Entity";
 
 export class Champion extends Entity implements ISnapshotable {
-	public get type(): EntityType { return EntityType.Champion; }
-
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
 	/**
@@ -45,24 +41,17 @@ export class Champion extends Entity implements ISnapshotable {
 	private _skills: Skill[];
 	private _moveSpeed: FVec2 = FVec2.zero;
 
-	constructor(battle: Battle) {
-		super(battle);
-		this._fsm = new EntityFSM();
-		this._fsm.AddState(new EntityState(StateType.Idle, this));
-		this._fsm.AddState(new EntityState(StateType.Move, this));
-		this._fsm.AddState(new EntityState(StateType.Attack, this));
-		this._fsm.AddState(new EntityState(StateType.Die, this));
-	}
-
-	protected InternalInit(params: EntityInitParams): void {
-		super.InternalInit(params);
+	public Init(params: EntityInitParams): void {
+		super.Init(params);
 		this._team = params.team;
 		this._name = params.name;
 	}
 
+	/**
+	 * 在初始化或解码快照后执行
+	 */
 	protected OnInit(): void {
 		this._def = Defs.GetEntity(this._id);
-
 		this.attribute.Set(EAttr.RADIUS, new Decimal(Hashtable.GetNumber(this._def, "radius")));
 		this.attribute.Set(EAttr.MHP, new Decimal(Hashtable.GetNumber(this._def, "mhp")));
 		this.attribute.Set(EAttr.HP, this.attribute.Get(EAttr.MHP));
@@ -78,6 +67,11 @@ export class Champion extends Entity implements ISnapshotable {
 			this._skills.push(skill);
 		}
 
+		this._fsm = new EntityFSM();
+		this._fsm.AddState(new EntityState(StateType.Idle, this));
+		this._fsm.AddState(new EntityState(StateType.Move, this));
+		this._fsm.AddState(new EntityState(StateType.Attack, this));
+		this._fsm.AddState(new EntityState(StateType.Die, this));
 		this._fsm.Init();
 		this._fsm.ChangeState(StateType.Idle);
 	}
@@ -95,21 +89,11 @@ export class Champion extends Entity implements ISnapshotable {
 		//encode properties
 		writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
 
-		//encode attributes
-		const count = this.attribute.count;
-		writer.int32(count);
-		this.attribute.Foreach((v, k) => {
-			writer.int32(k).float(v.toNumber());
-		});
-
 		//encode skills
 		writer.int32(this._skills.length);
 		for (const skill of this._skills) {
 			writer.int32(skill.id);
 		}
-
-		//encode fsmstates
-		this._fsm.EncodeSnapshot(writer);
 	}
 
 	/**
@@ -126,22 +110,13 @@ export class Champion extends Entity implements ISnapshotable {
 		//decode properties
 		this._moveSpeed = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
 
-		//decode attributes
-		let count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
-		}
-
 		//decode skills
-		count = reader.int32();
+		const count = reader.int32();
 		for (let i = 0; i < count; ++i) {
 			const skill = new Skill();
 			skill.Init(reader.int32());
 			this._skills.push(skill);
 		}
-
-		//decode fsmstates
-		this._fsm.DecodeSnapshot(reader);
 	}
 
 	/**
@@ -157,22 +132,11 @@ export class Champion extends Entity implements ISnapshotable {
 		//sync properties
 		writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
 
-		//sync attributes
-		const count = this.attribute.count;
-		writer.int32(count);
-		this.attribute.Foreach((v, k, map) => {
-			writer.int32(k).float(v.toNumber());
-		});
-
 		//sync skills
 		writer.int32(this._skills.length);
 		for (const skill of this._skills) {
 			writer.int32(skill.id);
 		}
-
-		//sync fsmstates
-		writer.int32(this._fsm.currentState.type);
-		writer.float((<EntityState>this._fsm.currentState).time.toNumber());
 	}
 
 

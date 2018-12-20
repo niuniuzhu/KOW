@@ -6,20 +6,19 @@ import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { UIEvent } from "../BattleEvent/UIEvent";
 import { BattleInfo } from "../BattleInfo";
 import { CDefs } from "../CDefs";
-import { EntityType } from "../EntityType";
 import { Camera } from "./Camera";
+import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
-import { VEntity } from "./VEntity";
-
-const TYPE_TO_CONSTRUCT = new Map<EntityType, new (battle: VBattle) => VEntity>();
-TYPE_TO_CONSTRUCT.set(EntityType.Champion, VChampion);
 
 export class VBattle {
 	private _mapID: number = 0;
 	private _playerID: Long;
 	private readonly _camera: Camera;
-	private readonly _entities: VEntity[] = [];
-	private readonly _idToEntity: Map<string, VEntity> = new Map<string, VEntity>();
+
+	private readonly _champions: VChampion[] = [];
+	private readonly _idToChampion: Map<string, VChampion> = new Map<string, VChampion>();
+	private readonly _bullets: VBullet[] = [];
+	private readonly _idToBullet: Map<string, VBullet> = new Map<string, VBullet>();
 
 	private _root: fairygui.GComponent;
 	private _logicFrame: number;
@@ -63,12 +62,18 @@ export class VBattle {
 		SyncEvent.RemoveListener(SyncEvent.E_BATTLE_INIT);
 		SyncEvent.RemoveListener(SyncEvent.E_SNAPSHOT);
 
-		const count = this._entities.length;
-		for (let i = 0; i < count; ++i) {
-			this._entities[i].Destroy();
+		for (let i = 0, count = this._bullets.length; i < count; ++i) {
+			this._bullets[i].Destroy();
 		}
-		this._entities.splice(0);
-		this._idToEntity.clear();
+		this._bullets.splice(0);
+		this._idToBullet.clear();
+
+		for (let i = 0, count = this._champions.length; i < count; ++i) {
+			this._champions[i].Destroy();
+		}
+		this._champions.splice(0);
+		this._idToChampion.clear();
+
 		this._root.dispose();
 		this._root = null;
 		this._def = null;
@@ -79,18 +84,33 @@ export class VBattle {
 		//更新摄像机
 		this._camera.Update(dt);
 
-		let count = this._entities.length;
-		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			entity.Update(dt);
+		//update champions
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			champion.Update(dt);
 		}
 
-		//destroy entities
-		count = this._entities.length;
-		for (let i = 0; i < count; i++) {
-			const entity = this._entities[i];
-			if (entity.markToDestroy) {
-				this.DestroyEntityAt(i);
+		//update bullets
+		for (let i = 0, count = this._bullets.length; i < count; i++) {
+			const bullet = this._bullets[i];
+			bullet.Update(dt);
+		}
+
+		//destroy bullets
+		for (let i = 0, count = this._bullets.length; i < count; i++) {
+			const bullet = this._bullets[i];
+			if (bullet.markToDestroy) {
+				this.DestroyBulletAt(i);
+				--i;
+				--count;
+			}
+		}
+
+		//destroy champions
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			if (champion.markToDestroy) {
+				this.DestroyChampionAt(i);
 				--i;
 				--count;
 			}
@@ -102,16 +122,22 @@ export class VBattle {
 	 */
 	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._logicFrame = reader.int32();
-		const count = reader.int32();
+		//champions
+		let count = reader.int32();
 		for (let i = 0; i < count; i++) {
-			const type = <EntityType>reader.int32();
-			const entity = this.CreateEntity(type, reader);
-			const isSelf = entity.rid.equals(this._playerID);
+			const champion = this.CreateChampion(reader);
+			const isSelf = champion.rid.equals(this._playerID);
 			if (isSelf) {
-				this._camera.lookAt = entity;
+				this._camera.lookAt = champion;
 			}
 			//通知UI创建实体
-			UIEvent.EntityInit(entity, isSelf);
+			UIEvent.ChampionInit(champion, isSelf);
+		}
+
+		//bullets
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const bullet = this.CreateBullet(reader);
 		}
 	}
 
@@ -120,51 +146,95 @@ export class VBattle {
 	 */
 	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._logicFrame = reader.int32();
-		const count = reader.int32();
+		//champions
+		let count = reader.int32();
 		for (let i = 0; i < count; i++) {
-			reader.int32();
 			const rid = <Long>reader.uint64();
-			const entity = this.GetEntity(rid);
-			entity.DecodeSync(reader);
+			const champion = this.GetChampion(rid);
+			champion.DecodeSync(reader);
+		}
+
+		//bullets
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const rid = <Long>reader.uint64();
+			const bullet = this.GetBullet(rid);
+			bullet.DecodeSync(reader);
 		}
 	}
 
 	/**
-	 * 创建实体
+	 * 创建战士
 	 */
-	public CreateEntity(type: EntityType, reader: $protobuf.Reader | $protobuf.BufferReader): VEntity {
-		const ctr = TYPE_TO_CONSTRUCT.get(type);
-		const entity = new ctr(this);
-		entity.InitSync(reader);
-		this._entities.push(entity);
-		this._idToEntity.set(entity.rid.toString(), entity);
-		return entity;
+	public CreateChampion(reader: $protobuf.Reader | $protobuf.BufferReader): VChampion {
+		const champion = new VChampion(this);
+		champion.InitSync(reader);
+		this._champions.push(champion);
+		this._idToChampion.set(champion.rid.toString(), champion);
+		return champion;
 	}
 
 	/**
-	 * 销毁实体
+	 * 销毁战士
 	 */
-	public DestroyEntity(entity: VEntity): void {
-		entity.Destroy();
-		this._entities.splice(this._entities.indexOf(entity), 1);
-		this._idToEntity.delete(entity.rid.toString());
+	public DestroyChampion(champion: VChampion): void {
+		champion.Destroy();
+		this._champions.splice(this._champions.indexOf(champion), 1);
+		this._idToChampion.delete(champion.rid.toString());
 	}
 
 	/**
-	 * 销毁实体
+	 * 销毁战士
 	 */
-	private DestroyEntityAt(index: number): void {
-		const entity = this._entities[index];
-		entity.Destroy();
-		this._entities.splice(index, 1);
-		this._idToEntity.delete(entity.rid.toString());
+	private DestroyChampionAt(index: number): void {
+		const champion = this._champions[index];
+		champion.Destroy();
+		this._champions.splice(index, 1);
+		this._idToChampion.delete(champion.rid.toString());
 	}
 
 	/**
-	 * 获取指定rid的实体
+	 * 获取指定rid的战士
 	 */
-	public GetEntity(rid: Long): VEntity {
-		return this._idToEntity.get(rid.toString());
+	public GetChampion(rid: Long): VChampion {
+		return this._idToChampion.get(rid.toString());
+	}
+
+	/**
+	 * 创建子弹
+	 */
+	public CreateBullet(reader: $protobuf.Reader | $protobuf.BufferReader): VBullet {
+		const bullet = new VBullet(this);
+		bullet.InitSync(reader);
+		this._bullets.push(bullet);
+		this._idToBullet.set(bullet.rid.toString(), bullet);
+		return bullet;
+	}
+
+	/**
+	 * 销毁子弹
+	 */
+	public DestroyBullet(bullet: VBullet): void {
+		bullet.Destroy();
+		this._bullets.splice(this._bullets.indexOf(bullet), 1);
+		this._idToBullet.delete(bullet.rid.toString());
+	}
+
+	/**
+	 * 销毁子弹
+	 */
+	private DestroyBulletAt(index: number): void {
+		const bullet = this._bullets[index];
+		bullet.Destroy();
+		this._bullets.splice(index, 1);
+		this._idToBullet.delete(bullet.rid.toString());
+	}
+
+	/**
+	 * 获取指定rid的子弹
+	 */
+	public GetBullet(rid: Long): VBullet {
+		return this._idToBullet.get(rid.toString());
 	}
 
 	private OnBattleInit(e: SyncEvent): void {

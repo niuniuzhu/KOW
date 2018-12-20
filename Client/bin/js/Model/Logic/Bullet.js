@@ -1,4 +1,4 @@
-define(["require", "exports", "../EntityType", "./Entity", "../Defs"], function (require, exports, EntityType_1, Entity_1, Defs_1) {
+define(["require", "exports", "../Defs", "./Entity"], function (require, exports, Defs_1, Entity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -13,7 +13,6 @@ define(["require", "exports", "../EntityType", "./Entity", "../Defs"], function 
         BulletShape[BulletShape["Rect"] = 1] = "Rect";
     })(BulletShape = exports.BulletShape || (exports.BulletShape = {}));
     class Bullet extends Entity_1.Entity {
-        get type() { return EntityType_1.EntityType.Bullet; }
         OnInit() {
             this._def = Defs_1.Defs.GetBullet(this._id);
         }

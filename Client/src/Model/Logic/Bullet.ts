@@ -1,9 +1,8 @@
 import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
-import { EntityType } from "../EntityType";
+import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Entity } from "./Entity";
-import { Defs } from "../Defs";
 
 export enum BulletMoveType {
 	Linear,
@@ -17,8 +16,6 @@ export enum BulletShape {
 }
 
 export class Bullet extends Entity implements ISnapshotable {
-	public get type(): EntityType { return EntityType.Bullet; }
-
 	private _moveType: BulletMoveType;
 	private _speed: Decimal;
 	private _angleSpeed: Decimal;

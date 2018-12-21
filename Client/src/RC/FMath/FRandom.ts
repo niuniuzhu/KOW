@@ -1,31 +1,31 @@
-import Decimal from "../../Libs/decimal";
+import { FMathUtils } from "./FMathUtils";
 
 export class FRandom {
-	private _seed: Decimal;
+	private _seed: number;
 
-	constructor(seed?: Decimal) {
-		this._seed = seed || Decimal.random();
+	constructor(seed?: number) {
+		this._seed = seed || Math.random();
 	}
 
-	public Next(): Decimal {
-		this._seed = this._seed.mul(9301).add(49497).mod(233280);
-		return this._seed.div(233280.0);
+	public Next(): number {
+		this._seed = FMathUtils.Mod(FMathUtils.Add(FMathUtils.Mul(this._seed, 9301), 49497), 233280);
+		return FMathUtils.Div(this._seed, 233280);
 	}
 
-	public NextD(min: Decimal, max: Decimal): Decimal {
-		this._seed = this._seed.mul(9301).add(49497).mod(233280);
-		return this._seed.div(233280.0).mul(max.sub(min)).add(min);
+	public NextD(min: number, max: number): number {
+		this._seed = FMathUtils.Mod(FMathUtils.Add(FMathUtils.Mul(this._seed, 9301), 49497), 233280);
+		return FMathUtils.Add(FMathUtils.Mul(FMathUtils.Div(this._seed, 233280), FMathUtils.Sub(max, min)), min);
 	}
 
-	public NextFloor(min: Decimal, max: Decimal): Decimal {
-		return Decimal.floor(this.NextD(min, max));
+	public NextFloor(min: number, max: number): number {
+		return FMathUtils.Floor(this.NextD(min, max));
 	}
 
-	public NextRound(min: Decimal, max: Decimal): Decimal {
-		return Decimal.round(this.NextD(min, max));
+	public NextRound(min: number, max: number): number {
+		return FMathUtils.Round(this.NextD(min, max));
 	}
 
-	public NextCeil(min: Decimal, max: Decimal): Decimal {
-		return Decimal.ceil(this.NextD(min, max));
+	public NextCeil(min: number, max: number): number {
+		return FMathUtils.Ceil(this.NextD(min, max));
 	}
 }

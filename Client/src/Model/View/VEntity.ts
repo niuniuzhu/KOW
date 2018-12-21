@@ -109,9 +109,9 @@ export abstract class VEntity {
 		this._markToDestroy = reader.bool();
 
 		//init properties
-		this.position = new Vec2(reader.float(), reader.float());
+		this.position = new Vec2(reader.double(), reader.double());
 		this._logicPos.CopyFrom(this.position);
-		const logicDir = new Vec2(reader.float(), reader.float());
+		const logicDir = new Vec2(reader.double(), reader.double());
 		this.rotation = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
 		if (logicDir.x < 0) {
 			this.rotation = 360 - this.rotation;
@@ -121,12 +121,12 @@ export abstract class VEntity {
 		//init attribues
 		const count = reader.int32();
 		for (let i = 0; i < count; ++i) {
-			this.attribute.Set(reader.int32(), reader.float());
+			this.attribute.Set(reader.int32(), reader.double());
 		}
 
 		//init fsmstates
 		this._fsm.ChangeState(reader.int32(), null);
-		(<VEntityState>this._fsm.currentState).time = reader.float();
+		(<VEntityState>this._fsm.currentState).time = reader.double();
 	}
 
 	/**
@@ -138,8 +138,8 @@ export abstract class VEntity {
 		this._id = reader.int32();
 		this._markToDestroy = reader.bool();
 
-		this._logicPos = new Vec2(reader.float(), reader.float());
-		const logicDir = new Vec2(reader.float(), reader.float());
+		this._logicPos = new Vec2(reader.double(), reader.double());
+		const logicDir = new Vec2(reader.double(), reader.double());
 		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
 		if (logicDir.x < 0) {
 			this._logicRot = 360 - this._logicRot;
@@ -148,12 +148,12 @@ export abstract class VEntity {
 		//read attribues
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), reader.float());
+			this.attribute.Set(reader.int32(), reader.double());
 		}
 
 		//read fsmstates
 		this._fsm.ChangeState(reader.int32(), null);
-		(<VEntityState>this._fsm.currentState).time = reader.float();
+		(<VEntityState>this._fsm.currentState).time = reader.double();
 	}
 
 	/**

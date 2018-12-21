@@ -1,9 +1,9 @@
 import { Global } from "../Global";
-import Decimal from "../Libs/decimal";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import Queue from "../RC/Collections/Queue";
+import { FMathUtils } from "../RC/FMath/FMathUtils";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { BattleInfo } from "./BattleInfo";
@@ -84,7 +84,7 @@ export class BattleManager {
 	public Update(dt: number): void {
 		if (!this._init)
 			return;
-		this._lBattle.Update(new Decimal(dt));
+		this._lBattle.Update(FMathUtils.ToFixed(dt));
 		this._vBattle.Update(dt);
 	}
 

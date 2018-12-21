@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { DEFAULT_ATTR_VALUES, EAttr } from "../Logic/Attribute";
 import { ISnapshotable } from "../ISnapshotable";
@@ -15,7 +14,7 @@ export class ActEntityAttrs extends EntityStateAction implements ISnapshotable {
 		const values = Hashtable.GetArray(this._def, "values");
 		const count = attrs.length;
 		for (let i = 0; i < count; ++i) {
-			this.ActiveAttr(attrs[i], new Decimal(values[i]));
+			this.ActiveAttr(attrs[i], values[i]);
 		}
 	}
 
@@ -24,7 +23,7 @@ export class ActEntityAttrs extends EntityStateAction implements ISnapshotable {
 		super.OnExit();
 	}
 
-	private ActiveAttr(attr: EAttr, value: Decimal): void {
+	private ActiveAttr(attr: EAttr, value: number): void {
 		const owner = (<EntityState>this.state).owner;
 		owner.attribute.Set(attr, value);
 	}

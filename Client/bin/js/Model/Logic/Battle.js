@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameAction", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "../../Libs/long"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, FrameAction_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, Long) {
+define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameAction", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "../../Libs/long"], function (require, exports, Global_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, FrameAction_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -31,19 +31,19 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._frameRate = battleInfo.frameRate;
             this._keyframeStep = battleInfo.keyframeStep;
             this._snapshotStep = battleInfo.snapshotStep;
-            this._random = new FRandom_1.FRandom(new decimal_1.default(battleInfo.rndSeed));
+            this._random = new FRandom_1.FRandom(battleInfo.rndSeed);
             this._timeout = battleInfo.battleTime;
             this._mapID = battleInfo.mapID;
-            this._msPerFrame = new decimal_1.default(1000 / this._frameRate);
+            this._msPerFrame = FMathUtils_1.FMathUtils.ToFixed(1000 / this._frameRate);
             this._frame = 0;
             this._nextKeyFrame = 0;
-            this._logicElapsed = new decimal_1.default(0);
-            this._realElapsed = new decimal_1.default(0);
+            this._logicElapsed = 0;
+            this._realElapsed = 0;
             this._cdef = CDefs_1.CDefs.GetMap(this._mapID);
             this._def = Defs_1.Defs.GetMap(this._mapID);
             const bWidth = Hashtable_1.Hashtable.GetNumber(this._cdef, "width");
             const bHeight = Hashtable_1.Hashtable.GetNumber(this._cdef, "height");
-            this._bounds = new FRect_1.FRect(new decimal_1.default(-MathUtils_1.MathUtils.Floor(bWidth * 0.5)), new decimal_1.default(-MathUtils_1.MathUtils.Floor(bHeight * 0.5)), new decimal_1.default(bWidth), new decimal_1.default(bHeight));
+            this._bounds = new FRect_1.FRect(-FMathUtils_1.FMathUtils.Floor(bWidth * 0.5), -FMathUtils_1.FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
         }
         Destroy() {
             if (this._destroied)
@@ -67,15 +67,15 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         }
         Update(dt) {
             this.Chase(this._frameActionGroups, true, true);
-            this._realElapsed = this._realElapsed.add(dt);
+            this._realElapsed = FMathUtils_1.FMathUtils.Add(this._realElapsed, dt);
             if (this.frame < this._nextKeyFrame) {
-                this._logicElapsed = this._logicElapsed.add(dt);
-                while (this._logicElapsed.greaterThanOrEqualTo(this._msPerFrame)) {
+                this._logicElapsed = FMathUtils_1.FMathUtils.Add(this._logicElapsed, dt);
+                while (this._logicElapsed >= this._msPerFrame) {
                     if (this.frame >= this._nextKeyFrame)
                         break;
                     this.UpdateLogic(this._msPerFrame, true, true);
-                    this._realElapsed = new decimal_1.default(0);
-                    this._logicElapsed = this._logicElapsed.sub(this._msPerFrame);
+                    this._realElapsed = 0;
+                    this._logicElapsed = FMathUtils_1.FMathUtils.Sub(this._logicElapsed, this._msPerFrame);
                 }
             }
         }
@@ -217,8 +217,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             }
         }
         MakeRid(id) {
-            const rnd = this._random.NextFloor(FMathUtils_1.FMathUtils.D_ZERO, FMathUtils_1.FMathUtils.D_BIG);
-            return Long.fromBits(id, rnd.toNumber());
+            const rnd = this._random.NextFloor(0, 0xffffffff);
+            return Long.fromBits(id, rnd);
         }
         CreatePlayers(playerInfos) {
             let arr = Hashtable_1.Hashtable.GetArray(this._def, "born_pos");
@@ -226,14 +226,14 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             const bornPoses = [];
             for (let i = 0; i < count; i++) {
                 const pi = arr[i];
-                bornPoses.push(new FVec2_1.FVec2(new decimal_1.default(pi[0]), new decimal_1.default(pi[1])));
+                bornPoses.push(new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(pi[0]), FMathUtils_1.FMathUtils.ToFixed(pi[1])));
             }
             arr = Hashtable_1.Hashtable.GetArray(this._def, "born_dir");
             count = arr.length;
             const bornDirs = [];
             for (let i = 0; i < count; i++) {
                 const pi = arr[i];
-                bornDirs.push(new FVec2_1.FVec2(new decimal_1.default(pi[0]), new decimal_1.default(pi[1])));
+                bornDirs.push(new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(pi[0]), FMathUtils_1.FMathUtils.ToFixed(pi[1])));
             }
             const params = new Entity_1.EntityInitParams();
             count = playerInfos.length;

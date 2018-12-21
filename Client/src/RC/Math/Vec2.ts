@@ -126,11 +126,6 @@ export class Vec2 {
 		return this;
 	}
 
-	public Scale(scale: Vec2): void {
-		this.x *= scale.x;
-		this.y *= scale.y;
-	}
-
 	public Dot(v: Vec2): number {
 		return this.x * v.x + this.y * v.y;
 	}
@@ -297,7 +292,7 @@ export class Vec2 {
 		let nor = v.Clone();
 		let sqrMagnitude = nor.SqrMagnitude();
 		if (sqrMagnitude > (maxLength * maxLength))
-			nor = Vec2.MulN(nor, (maxLength / MathUtils.Sqrt(sqrMagnitude)));
+			nor.MulN(maxLength / MathUtils.Sqrt(sqrMagnitude));
 		return nor;
 	}
 

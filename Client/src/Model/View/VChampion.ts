@@ -16,7 +16,7 @@ export class VChampion extends VEntity {
 
 		this._team = reader.int32();
 		this._name = reader.string();
-		const speed = new Vec2(reader.float(), reader.float());
+		const speed = new Vec2(reader.double(), reader.double());
 
 		//init skills
 		const count = reader.int32();
@@ -32,7 +32,7 @@ export class VChampion extends VEntity {
 
 		this._team = reader.int32();
 		this._name = reader.string();
-		const speed = new Vec2(reader.float(), reader.float());
+		const speed = new Vec2(reader.double(), reader.double());
 
 		//read skills
 		const count = reader.int32();

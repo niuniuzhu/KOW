@@ -1,6 +1,4 @@
-import Decimal from "../../../Libs/decimal";
 import * as $protobuf from "../../../Libs/protobufjs";
-import { FMathUtils } from "../../../RC/FMath/FMathUtils";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
 import { EntityState } from "../EntityState";
@@ -11,7 +9,7 @@ import { IntrptBase } from "./IntrptBase";
 /**
  * 指定时间到达时中断
  */
-export class IntrptTimeup extends IntrptBase implements ISnapshotable{
+export class IntrptTimeup extends IntrptBase implements ISnapshotable {
 	/**
 	 * 默认连接状态
 	 */
@@ -19,12 +17,12 @@ export class IntrptTimeup extends IntrptBase implements ISnapshotable{
 	/**
 	 * 状态持续时长
 	 */
-	private _duration: Decimal = new Decimal(-1);
+	private _duration: number;
 
 	constructor(action: EntityStateAction, def: Hashtable) {
 		super(action, def);
 		this._connectState = Hashtable.GetNumber(def, "connect_state");
-		this._duration = new Decimal(Hashtable.GetNumber(def, "duration", -1));
+		this._duration = Hashtable.GetNumber(def, "duration", -1);
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
@@ -35,11 +33,11 @@ export class IntrptTimeup extends IntrptBase implements ISnapshotable{
 		super.DecodeSnapshot(reader);
 	}
 
-	public Update(dt: Decimal): void {
+	public Update(dt: number): void {
 		const state = (<EntityState>this._action.state);
 		if (this._connectState != StateType.None &&
-			this._duration.greaterThanOrEqualTo(FMathUtils.D_ZERO) &&
-			state.time.greaterThanOrEqualTo(this._duration)) {
+			this._duration >= 0 &&
+			state.time >= this._duration) {
 			this.ChangeState(this._connectState, null, true, true);
 		}
 	}

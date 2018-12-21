@@ -69,9 +69,9 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._animationProxy.Init(this._id, this._cdef);
             this._root.addChild(this._animationProxy);
             this._markToDestroy = reader.bool();
-            this.position = new Vec2_1.Vec2(reader.float(), reader.float());
+            this.position = new Vec2_1.Vec2(reader.double(), reader.double());
             this._logicPos.CopyFrom(this.position);
-            const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
+            const logicDir = new Vec2_1.Vec2(reader.double(), reader.double());
             this.rotation = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
             if (logicDir.x < 0) {
                 this.rotation = 360 - this.rotation;
@@ -79,26 +79,26 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._logicRot = this.rotation;
             const count = reader.int32();
             for (let i = 0; i < count; ++i) {
-                this.attribute.Set(reader.int32(), reader.float());
+                this.attribute.Set(reader.int32(), reader.double());
             }
             this._fsm.ChangeState(reader.int32(), null);
-            this._fsm.currentState.time = reader.float();
+            this._fsm.currentState.time = reader.double();
         }
         DecodeSync(reader) {
             this._id = reader.int32();
             this._markToDestroy = reader.bool();
-            this._logicPos = new Vec2_1.Vec2(reader.float(), reader.float());
-            const logicDir = new Vec2_1.Vec2(reader.float(), reader.float());
+            this._logicPos = new Vec2_1.Vec2(reader.double(), reader.double());
+            const logicDir = new Vec2_1.Vec2(reader.double(), reader.double());
             this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
             if (logicDir.x < 0) {
                 this._logicRot = 360 - this._logicRot;
             }
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
-                this.attribute.Set(reader.int32(), reader.float());
+                this.attribute.Set(reader.int32(), reader.double());
             }
             this._fsm.ChangeState(reader.int32(), null);
-            this._fsm.currentState.time = reader.float();
+            this._fsm.currentState.time = reader.double();
         }
         PlayAnim(name, timeScale = 1, force = false) {
             this._animationProxy.Play(name, 0, timeScale, force);

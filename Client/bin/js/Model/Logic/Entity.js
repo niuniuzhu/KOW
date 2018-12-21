@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "./Attribute"], function (require, exports, decimal_1, FVec2_1, Attribute_1) {
+define(["require", "exports", "../../RC/FMath/FVec2", "./Attribute"], function (require, exports, FVec2_1, Attribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityInitParams {
@@ -29,12 +29,12 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "./A
             writer.uint64(this._rid);
             writer.int32(this._id);
             writer.bool(this._markToDestroy);
-            writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
-            writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
+            writer.double(this.position.x).double(this.position.y);
+            writer.double(this.direction.x).double(this.direction.y);
             const count = this.attribute.count;
             writer.int32(count);
             this.attribute.Foreach((v, k) => {
-                writer.int32(k).float(v.toNumber());
+                writer.int32(k).double(v);
             });
             this._fsm.EncodeSnapshot(writer);
         }
@@ -43,11 +43,11 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "./A
             this._id = reader.int32();
             this.OnInit();
             this._markToDestroy = reader.bool();
-            this.position.Set(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
-            this.direction.Set(new decimal_1.default(reader.float()), new decimal_1.default(reader.float()));
+            this.position.Set(reader.double(), reader.double());
+            this.direction.Set(reader.double(), reader.double());
             const count = reader.int32();
             for (let i = 0; i < count; i++) {
-                this.attribute.Set(reader.int32(), new decimal_1.default(reader.float()));
+                this.attribute.Set(reader.int32(), reader.double());
             }
             this._fsm.DecodeSnapshot(reader);
         }
@@ -55,15 +55,15 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/FMath/FVec2", "./A
             writer.uint64(this._rid);
             writer.int32(this._id);
             writer.bool(this._markToDestroy);
-            writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
-            writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
+            writer.double(this.position.x).double(this.position.y);
+            writer.double(this.direction.x).double(this.direction.y);
             const count = this.attribute.count;
             writer.int32(count);
             this.attribute.Foreach((v, k, map) => {
-                writer.int32(k).float(v.toNumber());
+                writer.int32(k).double(v);
             });
             writer.int32(this._fsm.currentState.type);
-            writer.float(this._fsm.currentState.time.toNumber());
+            writer.double(this._fsm.currentState.time);
         }
         Update(dt) {
         }

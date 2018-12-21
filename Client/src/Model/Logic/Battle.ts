@@ -1,5 +1,4 @@
 import { Global } from "../../Global";
-import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
 import { ProtoCreator } from "../../Net/ProtoHelper";
@@ -41,9 +40,9 @@ export class Battle implements ISnapshotable {
 	public get bounds(): FRect { return this._bounds; }
 	public get random(): FRandom { return this._random; }
 
-	private _msPerFrame: Decimal;
-	private _logicElapsed: Decimal;
-	private _realElapsed: Decimal;
+	private _msPerFrame: number;
+	private _logicElapsed: number;
+	private _realElapsed: number;
 	private _nextKeyFrame: number;
 	private _def: Hashtable;
 	private _cdef: Hashtable;
@@ -67,21 +66,21 @@ export class Battle implements ISnapshotable {
 		this._frameRate = battleInfo.frameRate;
 		this._keyframeStep = battleInfo.keyframeStep;
 		this._snapshotStep = battleInfo.snapshotStep;
-		this._random = new FRandom(new Decimal(battleInfo.rndSeed));
+		this._random = new FRandom(battleInfo.rndSeed);
 		this._timeout = battleInfo.battleTime;
 		this._mapID = battleInfo.mapID
-		this._msPerFrame = new Decimal(1000 / this._frameRate);
+		this._msPerFrame = FMathUtils.ToFixed(1000 / this._frameRate);
 		this._frame = 0;
 		this._nextKeyFrame = 0;
-		this._logicElapsed = new Decimal(0);
-		this._realElapsed = new Decimal(0);
+		this._logicElapsed = 0;
+		this._realElapsed = 0;
 
 		this._cdef = CDefs.GetMap(this._mapID);
 		this._def = Defs.GetMap(this._mapID);
 		const bWidth = Hashtable.GetNumber(this._cdef, "width");
 		const bHeight = Hashtable.GetNumber(this._cdef, "height");
-		this._bounds = new FRect(new Decimal(-MathUtils.Floor(bWidth * 0.5)),
-			new Decimal(-MathUtils.Floor(bHeight * 0.5)), new Decimal(bWidth), new Decimal(bHeight));
+		this._bounds = new FRect(-FMathUtils.Floor(bWidth * 0.5),
+			-FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
 	}
 
 	/**
@@ -115,21 +114,21 @@ export class Battle implements ISnapshotable {
 	 * 心跳更新
 	 * @param dt 上次更新到当前流逝的时间
 	 */
-	public Update(dt: Decimal): void {
+	public Update(dt: number): void {
 		//追帧
 		this.Chase(this._frameActionGroups, true, true);
 
-		this._realElapsed = this._realElapsed.add(dt);
+		this._realElapsed = FMathUtils.Add(this._realElapsed, dt);
 		if (this.frame < this._nextKeyFrame) {
-			this._logicElapsed = this._logicElapsed.add(dt);
+			this._logicElapsed = FMathUtils.Add(this._logicElapsed, dt);
 
-			while (this._logicElapsed.greaterThanOrEqualTo(this._msPerFrame)) {
+			while (this._logicElapsed >= this._msPerFrame) {
 				if (this.frame >= this._nextKeyFrame)
 					break;
 
 				this.UpdateLogic(this._msPerFrame, true, true);
-				this._realElapsed = new Decimal(0);
-				this._logicElapsed = this._logicElapsed.sub(this._msPerFrame);
+				this._realElapsed = 0;
+				this._logicElapsed = FMathUtils.Sub(this._logicElapsed, this._msPerFrame);
 			}
 		}
 	}
@@ -138,7 +137,7 @@ export class Battle implements ISnapshotable {
 	 * 更新逻辑帧
 	 * @param dt 上一帧到当前帧流逝的时间
 	 */
-	private UpdateLogic(dt: Decimal, updateView: boolean, commitSnapshot: boolean): void {
+	private UpdateLogic(dt: number, updateView: boolean, commitSnapshot: boolean): void {
 		++this._frame;
 
 		//update champions
@@ -336,8 +335,8 @@ export class Battle implements ISnapshotable {
 	 * 给定指定id制作运行时id
 	 */
 	public MakeRid(id: number): Long {
-		const rnd = this._random.NextFloor(FMathUtils.D_ZERO, FMathUtils.D_BIG);
-		return Long.fromBits(id, rnd.toNumber());
+		const rnd = this._random.NextFloor(0, 0xffffffff);
+		return Long.fromBits(id, rnd);
 	}
 
 	/**
@@ -350,7 +349,7 @@ export class Battle implements ISnapshotable {
 		const bornPoses: FVec2[] = [];
 		for (let i = 0; i < count; i++) {
 			const pi = <number[]>arr[i];
-			bornPoses.push(new FVec2(new Decimal(pi[0]), new Decimal(pi[1])));
+			bornPoses.push(new FVec2(FMathUtils.ToFixed(pi[0]), FMathUtils.ToFixed(pi[1])));
 		}
 
 		arr = Hashtable.GetArray(this._def, "born_dir");
@@ -358,7 +357,7 @@ export class Battle implements ISnapshotable {
 		const bornDirs: FVec2[] = [];
 		for (let i = 0; i < count; i++) {
 			const pi = <number[]>arr[i];
-			bornDirs.push(new FVec2(new Decimal(pi[0]), new Decimal(pi[1])));
+			bornDirs.push(new FVec2(FMathUtils.ToFixed(pi[0]), FMathUtils.ToFixed(pi[1])));
 		}
 
 		const params = new EntityInitParams();

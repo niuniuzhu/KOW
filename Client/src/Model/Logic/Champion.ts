@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
@@ -18,23 +17,23 @@ export class Champion extends Entity implements ISnapshotable {
 	/**
 	 * 获取当前状态下是否可移动
 	 */
-	public get canMove(): boolean { return this.attribute.Get(EAttr.S_DISABLE_MOVE).lessThanOrEqualTo(FMathUtils.D_ZERO); }
+	public get canMove(): boolean { return this.attribute.Get(EAttr.S_DISABLE_MOVE) <= 0; }
 	/**
 	 * 获取当前状态下是否可转身
 	 */
-	public get canTurn(): boolean { return this.attribute.Get(EAttr.S_DISABLE_TURN).lessThanOrEqualTo(FMathUtils.D_ZERO); }
+	public get canTurn(): boolean { return this.attribute.Get(EAttr.S_DISABLE_TURN) <= 0; }
 	/**
 	 * 获取当前状态下是否可使用技能
 	 */
-	public get canUseSkill(): boolean { return this.attribute.Get(EAttr.S_DISABLE_SKILL).lessThanOrEqualTo(FMathUtils.D_ZERO); }
+	public get canUseSkill(): boolean { return this.attribute.Get(EAttr.S_DISABLE_SKILL) <= 0; }
 	/**
 	 * 获取当前状态下是否霸体
 	 */
-	public get isSuperArmor(): boolean { return this.attribute.Get(EAttr.S_SUPPER_ARMOR).greaterThan(FMathUtils.D_ZERO); }
+	public get isSuperArmor(): boolean { return this.attribute.Get(EAttr.S_SUPPER_ARMOR) > 0; }
 	/**
 	 * 获取当前状态下是否无敌
 	 */
-	public get isInvulnerability(): boolean { return this.attribute.Get(EAttr.S_INVULNER_ABILITY).greaterThan(FMathUtils.D_ZERO); }
+	public get isInvulnerability(): boolean { return this.attribute.Get(EAttr.S_INVULNER_ABILITY) > 0; }
 
 	private _team: number;
 	private _name: string;
@@ -52,12 +51,12 @@ export class Champion extends Entity implements ISnapshotable {
 	 */
 	protected OnInit(): void {
 		this._def = Defs.GetEntity(this._id);
-		this.attribute.Set(EAttr.RADIUS, new Decimal(Hashtable.GetNumber(this._def, "radius")));
-		this.attribute.Set(EAttr.MHP, new Decimal(Hashtable.GetNumber(this._def, "mhp")));
+		this.attribute.Set(EAttr.RADIUS, Hashtable.GetNumber(this._def, "radius"));
+		this.attribute.Set(EAttr.MHP, Hashtable.GetNumber(this._def, "mhp"));
 		this.attribute.Set(EAttr.HP, this.attribute.Get(EAttr.MHP));
-		this.attribute.Set(EAttr.MMP, new Decimal(Hashtable.GetNumber(this._def, "mmp")));
+		this.attribute.Set(EAttr.MMP, Hashtable.GetNumber(this._def, "mmp"));
 		this.attribute.Set(EAttr.MP, this.attribute.Get(EAttr.MMP));
-		this.attribute.Set(EAttr.MOVE_SPEED, new Decimal(Hashtable.GetNumber(this._def, "move_speed")));
+		this.attribute.Set(EAttr.MOVE_SPEED, Hashtable.GetNumber(this._def, "move_speed"));
 
 		this._skills = [];
 		const skillsDef = Hashtable.GetNumberArray(this._def, "skills");
@@ -87,7 +86,7 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.string(this._name);
 
 		//encode properties
-		writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
+		writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
 
 		//encode skills
 		writer.int32(this._skills.length);
@@ -108,7 +107,7 @@ export class Champion extends Entity implements ISnapshotable {
 		this.OnInit();
 
 		//decode properties
-		this._moveSpeed = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
+		this._moveSpeed = new FVec2(reader.double(), reader.double());
 
 		//decode skills
 		const count = reader.int32();
@@ -130,7 +129,7 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.string(this._name);
 
 		//sync properties
-		writer.float(this._moveSpeed.x.toNumber()).float(this._moveSpeed.y.toNumber());
+		writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
 
 		//sync skills
 		writer.int32(this._skills.length);
@@ -140,7 +139,7 @@ export class Champion extends Entity implements ISnapshotable {
 	}
 
 
-	public Update(dt: Decimal): void {
+	public Update(dt: number): void {
 		super.Update(dt);
 		this._fsm.Update(dt);
 		this.MoveStep(dt);
@@ -184,8 +183,8 @@ export class Champion extends Entity implements ISnapshotable {
 	 * @param dy y分量
 	 */
 	public BeginMove(dx: number, dy: number): void {
-		const direction = new FVec2(new Decimal(dx), new Decimal(dy));
-		if (direction.SqrMagnitude().lessThan(FMathUtils.D_SMALL)) {
+		const direction = new FVec2(FMathUtils.ToFixed(dx), FMathUtils.ToFixed(dy));
+		if (direction.SqrMagnitude() < FMathUtils.EPSILON) {
 			this._moveSpeed = FVec2.zero;
 		}
 		else {
@@ -196,20 +195,20 @@ export class Champion extends Entity implements ISnapshotable {
 		}
 	}
 
-	private MoveStep(dt: Decimal): void {
-		if (this._moveSpeed.SqrMagnitude().lessThan(FMathUtils.D_SMALL)) {
+	private MoveStep(dt: number): void {
+		if (this._moveSpeed.SqrMagnitude() < FMathUtils.EPSILON) {
 			this._fsm.ChangeState(StateType.Idle);
 			return;
 		}
 		if (this.canMove) {
-			const moveDelta = FVec2.MulN(this._moveSpeed, FMathUtils.D_SMALL1.mul(dt));
+			const moveDelta = FVec2.MulN(this._moveSpeed, FMathUtils.Mul(0.001, dt));
 			const pos = FVec2.Add(this.position, moveDelta);
 			//限制活动范围
 			const radius = this.attribute.Get(EAttr.RADIUS);
-			pos.x = Decimal.max(Decimal.add(this._battle.bounds.xMin, radius), pos.x);
-			pos.x = Decimal.min(Decimal.sub(this._battle.bounds.xMax, radius), pos.x);
-			pos.y = Decimal.max(Decimal.add(this._battle.bounds.yMin, radius), pos.y);
-			pos.y = Decimal.min(Decimal.sub(this._battle.bounds.yMax, radius), pos.y);
+			pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, radius), pos.x);
+			pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, radius), pos.x);
+			pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, radius), pos.y);
+			pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, radius), pos.y);
 			this.position.CopyFrom(pos);
 			this._fsm.ChangeState(StateType.Move);
 		}

@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
@@ -24,12 +23,12 @@ export class Emitter implements ISnapshotable {
 	private readonly _battle: Battle;
 	private _rid: Long;
 	private _id: number;
-	private _raduis: Decimal;
+	private _raduis: number;
 	private _offset: FVec2;
-	private _angle: Decimal;
+	private _angle: number;
 	private _follow: boolean;
-	private _frequency: Decimal;
-	private _lifeTime: Decimal;
+	private _frequency: number;
+	private _lifeTime: number;
 	private _mouthType: EmitterMouthType;
 	private _destroyWhenDie: boolean;
 	private _def: Hashtable;
@@ -38,8 +37,8 @@ export class Emitter implements ISnapshotable {
 	private _casterID: Long = Long.ZERO;
 	private _skillID: number = 0;
 	private _markToDestroy: boolean;
-	private _time: Decimal;
-	private _nextEmitTime: Decimal;
+	private _time: number;
+	private _nextEmitTime: number;
 	private readonly _position: FVec2 = FVec2.zero;
 	private readonly _direction: FVec2 = FVec2.zero;
 
@@ -53,8 +52,8 @@ export class Emitter implements ISnapshotable {
 		this._casterID = casterID;
 		this._skillID = skillID;
 		this._markToDestroy = false;
-		this._time = new Decimal(0);
-		this._nextEmitTime = new Decimal(0);
+		this._time = 0;
+		this._nextEmitTime = 0;
 
 		this.OnInit();
 
@@ -62,7 +61,7 @@ export class Emitter implements ISnapshotable {
 		const caster = this._battle.GetChampion(this._casterID);
 		this.UpdatePosition(caster);
 		this._direction.CopyFrom(caster.direction);
-		if (!this._angle.equals(FMathUtils.D_ZERO)) {
+		if (this._angle != 0) {
 			this._direction.Rotate(this._angle);
 		}
 	}
@@ -72,13 +71,13 @@ export class Emitter implements ISnapshotable {
 	 */
 	private OnInit(): void {
 		this._def = Defs.GetEmitter(this._id);
-		this._raduis = new Decimal(Hashtable.GetNumber(this._def, "radius"));
+		this._raduis = Hashtable.GetNumber(this._def, "radius");
 		const mOffset = Hashtable.GetVec2(this._def, "offset");
-		this._offset = new FVec2(new Decimal(mOffset.x), new Decimal(mOffset.y));
-		this._angle = new Decimal(Hashtable.GetNumber(this._def, "angle"));
+		this._offset = new FVec2(mOffset.x, mOffset.y);
+		this._angle = Hashtable.GetNumber(this._def, "angle");
 		this._follow = Hashtable.GetBool(this._def, "follow");
-		this._frequency = new Decimal(Hashtable.GetNumber(this._def, "frequency"));
-		this._lifeTime = new Decimal(Hashtable.GetNumber(this._def, "lifeTime"));
+		this._frequency = Hashtable.GetNumber(this._def, "frequency");
+		this._lifeTime = Hashtable.GetNumber(this._def, "lifeTime");
 		this._mouthType = Hashtable.GetNumber(this._def, "mouthType");
 		this._destroyWhenDie = Hashtable.GetBool(this._def, "destroyWhenDie");
 	}
@@ -92,10 +91,10 @@ export class Emitter implements ISnapshotable {
 		writer.uint64(this._casterID);
 		writer.int32(this._skillID);
 		writer.bool(this._markToDestroy);
-		writer.float(this._time.toNumber());
-		writer.float(this._nextEmitTime.toNumber());
-		writer.float(this._position.x.toNumber()).float(this._position.y.toNumber());
-		writer.float(this._direction.x.toNumber()).float(this._direction.y.toNumber());
+		writer.int32(this._time);
+		writer.int32(this._nextEmitTime);
+		writer.double(this._position.x).double(this._position.y);
+		writer.double(this._direction.x).double(this._direction.y);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -105,24 +104,23 @@ export class Emitter implements ISnapshotable {
 		this._casterID = <Long>reader.uint64();
 		this._skillID = reader.int32();
 		this._markToDestroy = reader.bool();
-		this._time = new Decimal(reader.float());
-		this._nextEmitTime = new Decimal(reader.float());
-		this._position.Set(new Decimal(reader.float()), new Decimal(reader.float()));
-		this._direction.Set(new Decimal(reader.float()), new Decimal(reader.float()));
+		this._time = reader.int32();
+		this._nextEmitTime = reader.int32();
+		this._position.Set(reader.double(), reader.double());
+		this._direction.Set(reader.double(), reader.double());
 	}
 
-	public Update(dt: Decimal): void {
-		this._time = this._time.add(dt);
-		Logger.Log(this._position.x.toNumber());
-		if (this._time.greaterThanOrEqualTo(this._lifeTime)) {
+	public Update(dt: number): void {
+		this._time += dt;
+		if (this._time >= this._lifeTime) {
 			this._markToDestroy = true;
 		}
 		if (this._follow) {
 			this.UpdatePosition();
 		}
-		if (this._time.greaterThanOrEqualTo(this._nextEmitTime)) {
+		if (this._time >= this._nextEmitTime) {
 			//更新下次发射的时间,需补偿此次多出的时间
-			this._nextEmitTime = this._nextEmitTime.add(this._frequency).sub(this._time.sub(this._nextEmitTime));
+			this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
 			//发射子弹
 			const caster = this._battle.GetChampion(this._casterID);
 			const skill = caster.GetSkill(this._skillID);

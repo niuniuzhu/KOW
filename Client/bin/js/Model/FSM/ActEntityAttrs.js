@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/decimal", "../../RC/Utils/Hashtable", "../Logic/Attribute", "./EntityStateAction"], function (require, exports, decimal_1, Hashtable_1, Attribute_1, EntityStateAction_1) {
+define(["require", "exports", "../../RC/Utils/Hashtable", "../Logic/Attribute", "./EntityStateAction"], function (require, exports, Hashtable_1, Attribute_1, EntityStateAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActEntityAttrs extends EntityStateAction_1.EntityStateAction {
@@ -8,7 +8,7 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/Utils/Hashtable", 
             const values = Hashtable_1.Hashtable.GetArray(this._def, "values");
             const count = attrs.length;
             for (let i = 0; i < count; ++i) {
-                this.ActiveAttr(attrs[i], new decimal_1.default(values[i]));
+                this.ActiveAttr(attrs[i], values[i]);
             }
         }
         OnExit() {

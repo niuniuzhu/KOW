@@ -1,4 +1,3 @@
-import Decimal from "../../../Libs/decimal";
 import * as $protobuf from "../../../Libs/protobufjs";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
@@ -21,7 +20,7 @@ export abstract class IntrptBase implements ISnapshotable {
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 	}
 
-	public Update(dt: Decimal): void {
+	public Update(dt: number): void {
 	}
 
 	/**

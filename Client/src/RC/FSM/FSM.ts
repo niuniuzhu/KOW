@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import { FSMState } from "./FSMState";
 
 export class FSM {
@@ -51,7 +50,7 @@ export class FSM {
 		return true;
 	}
 
-	public Update(dt: Decimal | number): void {
+	public Update(dt: number): void {
 		if (this.globalState != null)
 			this.globalState.Update(dt);
 		if (this._currentState != null)

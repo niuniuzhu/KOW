@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
@@ -17,16 +16,16 @@ export enum BulletShape {
 
 export class Bullet extends Entity implements ISnapshotable {
 	private _moveType: BulletMoveType;
-	private _speed: Decimal;
-	private _angleSpeed: Decimal;
-	private _angleRadius: Decimal;
-	private _lifeTime: Decimal;
-	private _collisionStartTime: Decimal;
+	private _speed: number;
+	private _angleSpeed: number;
+	private _angleRadius: number;
+	private _lifeTime: number;
+	private _collisionStartTime: number;
 	private _maxCollisionCount: number;
 	private _shape: BulletShape;
-	private _shapeRadius: Decimal;
-	private _shapeWidth: Decimal;
-	private _shapHeight: Decimal;
+	private _shapeRadius: number;
+	private _shapeWidth: number;
+	private _shapHeight: number;
 
 	//run time properties
 	private _target: Entity;

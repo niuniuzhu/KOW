@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
@@ -62,14 +61,14 @@ export abstract class Entity implements ISnapshotable {
 		writer.uint64(this._rid);
 		writer.int32(this._id);
 		writer.bool(this._markToDestroy);
-		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
-		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
+		writer.double(this.position.x).double(this.position.y);
+		writer.double(this.direction.x).double(this.direction.y);
 
 		//encode attributes
 		const count = this.attribute.count;
 		writer.int32(count);
 		this.attribute.Foreach((v, k) => {
-			writer.int32(k).float(v.toNumber());
+			writer.int32(k).double(v);
 		});
 
 		//encode fsmstates
@@ -84,13 +83,13 @@ export abstract class Entity implements ISnapshotable {
 		this._id = reader.int32();
 		this.OnInit();
 		this._markToDestroy = reader.bool();
-		this.position.Set(new Decimal(reader.float()), new Decimal(reader.float()));
-		this.direction.Set(new Decimal(reader.float()), new Decimal(reader.float()));
+		this.position.Set(reader.double(), reader.double());
+		this.direction.Set(reader.double(), reader.double());
 
 		//decode attributes
 		const count = reader.int32();
 		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
+			this.attribute.Set(reader.int32(), reader.double());
 		}
 
 		//decode fsmstates
@@ -104,21 +103,21 @@ export abstract class Entity implements ISnapshotable {
 		writer.uint64(this._rid);
 		writer.int32(this._id);
 		writer.bool(this._markToDestroy);
-		writer.float(this.position.x.toNumber()).float(this.position.y.toNumber());
-		writer.float(this.direction.x.toNumber()).float(this.direction.y.toNumber());
-		
+		writer.double(this.position.x).double(this.position.y);
+		writer.double(this.direction.x).double(this.direction.y);
+
 		//sync attributes
 		const count = this.attribute.count;
 		writer.int32(count);
 		this.attribute.Foreach((v, k, map) => {
-			writer.int32(k).float(v.toNumber());
+			writer.int32(k).double(v);
 		});
 
 		//sync fsmstates
 		writer.int32(this._fsm.currentState.type);
-		writer.float((<EntityState>this._fsm.currentState).time.toNumber());
+		writer.double((<EntityState>this._fsm.currentState).time);
 	}
 
-	public Update(dt: Decimal): void {
+	public Update(dt: number): void {
 	}
 }

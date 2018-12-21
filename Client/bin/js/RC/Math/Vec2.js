@@ -113,10 +113,6 @@ define(["require", "exports", "./MathUtils"], function (require, exports, MathUt
             this.y = -this.y;
             return this;
         }
-        Scale(scale) {
-            this.x *= scale.x;
-            this.y *= scale.y;
-        }
         Dot(v) {
             return this.x * v.x + this.y * v.y;
         }
@@ -251,7 +247,7 @@ define(["require", "exports", "./MathUtils"], function (require, exports, MathUt
             let nor = v.Clone();
             let sqrMagnitude = nor.SqrMagnitude();
             if (sqrMagnitude > (maxLength * maxLength))
-                nor = Vec2.MulN(nor, (maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude)));
+                nor.MulN(maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude));
             return nor;
         }
         static LerpUnclamped(from, to, t) {

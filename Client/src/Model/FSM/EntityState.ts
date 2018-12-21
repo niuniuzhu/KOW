@@ -1,6 +1,6 @@
-import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import Set from "../../RC/Collections/Set";
+import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
@@ -16,12 +16,12 @@ export class EntityState extends FSMState implements ISnapshotable {
 	/**
 	 * 获取状态运行时间
 	 */
-	public get time(): Decimal { return this._time; }
+	public get time(): number { return this._time; }
 	/**
 	 * 设置状态运行时间
 	 */
-	public set time(value: Decimal) {
-		if (this._time.equals(value))
+	public set time(value: number) {
+		if (this._time == value)
 			return;
 		this._time = value;
 		this.OnStateTimeChanged();
@@ -29,7 +29,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 
 	private _statesAvailable: Set<StateType>;
 	private _owner: Entity;
-	private _time: Decimal = new Decimal(0);
+	private _time: number;
 
 	constructor(type: number, owner: Entity) {
 		super(type);
@@ -64,22 +64,22 @@ export class EntityState extends FSMState implements ISnapshotable {
 		for (const action of this._actions) {
 			(<EntityStateAction>action).EncodeSnapshot(writer);
 		}
-		writer.float(this._time.toNumber());
+		writer.int32(this._time);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		for (const action of this._actions) {
 			(<EntityStateAction>action).DecodeSnapshot(reader);
 		}
-		this._time = new Decimal(reader.float());
+		this._time = reader.int32();
 	}
 
 	protected OnEnter(param: any): void {
-		this._time = new Decimal(0);
+		this._time = 0;
 	}
 
-	protected OnUpdate(dt: Decimal): void {
-		this._time = Decimal.add(this._time, dt);
+	protected OnUpdate(dt: number): void {
+		this._time += dt;
 	}
 
 	protected OnStateTimeChanged(): void {

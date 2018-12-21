@@ -1,10 +1,9 @@
-define(["require", "exports", "../Utils/Timer", "./Quat", "./Vec2"], function (require, exports, Timer_1, Quat_1, Vec2_1) {
+define(["require", "exports", "./Quat", "./Vec2"], function (require, exports, Quat_1, Vec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MathUtils {
         static Random(min = 0, max = 1) {
-            this.randomSeed = (this.randomSeed * 9301 + 49297) % 233280;
-            return this.randomSeed / (233280.0) * (max - min) + min;
+            return Math.random() * (max - min) + min;
         }
         static RandomFloor(min, max) {
             return this.Floor(this.Random(min, max));
@@ -288,7 +287,7 @@ define(["require", "exports", "../Utils/Timer", "./Quat", "./Vec2"], function (r
     }
     MathUtils.EPSILON = 0.0001;
     MathUtils.MAX_VALUE = Number.MAX_VALUE;
-    MathUtils.MIN_VALUE = Number.MIN_VALUE;
+    MathUtils.MIN_VALUE = -MathUtils.MAX_VALUE;
     MathUtils.PI = Math.PI;
     MathUtils.PI2 = MathUtils.PI * 2;
     MathUtils.PI4 = MathUtils.PI * 4;
@@ -301,7 +300,6 @@ define(["require", "exports", "../Utils/Timer", "./Quat", "./Vec2"], function (r
     MathUtils.RAD_TO_DEG = 180 / MathUtils.PI;
     MathUtils.INFINITY = Number.POSITIVE_INFINITY;
     MathUtils.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
-    MathUtils.randomSeed = Timer_1.Timer.utcTime;
     exports.MathUtils = MathUtils;
 });
 //# sourceMappingURL=MathUtils.js.map

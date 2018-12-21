@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/decimal"], function (require, exports, decimal_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils"], function (require, exports, FMathUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var EAttr;
@@ -24,25 +24,25 @@ define(["require", "exports", "../../Libs/decimal"], function (require, exports,
         EAttr[EAttr["S_DEF_MUL"] = 605] = "S_DEF_MUL";
     })(EAttr = exports.EAttr || (exports.EAttr = {}));
     exports.DEFAULT_ATTR_VALUES = new Map();
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.RADIUS, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.MHP, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.HP, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.MMP, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.MP, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.ATK, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.DEF, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.MOVE_SPEED, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_MOVE, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_TURN, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_SKILL, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_SUPPER_ARMOR, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_INVULNER_ABILITY, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_MOVE_SPEED_ADD, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_MOVE_SPEED_MUL, new decimal_1.default(1));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_ATK_ADD, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_ATK_MUL, new decimal_1.default(1));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DEF_ADD, new decimal_1.default(0));
-    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DEF_MUL, new decimal_1.default(1));
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.RADIUS, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.MHP, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.HP, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.MMP, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.MP, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.ATK, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.DEF, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.MOVE_SPEED, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_MOVE, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_TURN, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_SKILL, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_SUPPER_ARMOR, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_INVULNER_ABILITY, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_MOVE_SPEED_ADD, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_MOVE_SPEED_MUL, 1);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_ATK_ADD, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_ATK_MUL, 1);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DEF_ADD, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DEF_MUL, 1);
     class Attribute {
         constructor() {
             this._map = new Map();
@@ -64,75 +64,75 @@ define(["require", "exports", "../../Libs/decimal"], function (require, exports,
         }
         Add(attr, delta) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.add(delta));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Add(value, delta));
         }
         Sub(attr, delta) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.sub(delta));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Sub(value, delta));
         }
         Mul(attr, factor) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.mul(factor));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Mul(value, factor));
         }
         Div(attr, factor) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.div(factor));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Div(value, factor));
         }
         Mod(attr, mod) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.mod(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Mod(value, mod));
         }
         Pow(attr, exp) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.pow(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Pow(value, value));
         }
         Exp(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.exp(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Exp(value));
         }
         Abs(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.abs(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Abs(value));
         }
         Sin(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.sin(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Sin(value));
         }
         Cos(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.cos(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Cos(value));
         }
         Tan(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.tan(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Tan(value));
         }
         ACos(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.acos(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Acos(value));
         }
         ASin(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.asin(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Asin(value));
         }
         ATan(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.atan(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Atan(value));
         }
         Sqrt(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.sqrt(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Sqrt(value));
         }
         Log(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.log(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Log(value));
         }
         Log2(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.log2(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Log2(value));
         }
         Log10(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.log10(value));
+            this._map.set(attr, FMathUtils_1.FMathUtils.Log10(value));
         }
     }
     exports.Attribute = Attribute;

@@ -11,7 +11,7 @@ export class MathUtils {
 
 	public static readonly MAX_VALUE: number = Number.MAX_VALUE;
 
-	public static readonly MIN_VALUE: number = Number.MIN_VALUE;
+	public static readonly MIN_VALUE: number = -MathUtils.MAX_VALUE;
 
 	/// <summary>
 	///     Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π.
@@ -71,11 +71,8 @@ export class MathUtils {
 	/// </summary>
 	public static readonly NEGATIVE_INFINITY: number = Number.NEGATIVE_INFINITY;
 
-	public static randomSeed: number = Timer.utcTime;
-
 	public static Random(min: number = 0, max: number = 1): number {
-		this.randomSeed = (this.randomSeed * 9301 + 49297) % 233280;
-		return this.randomSeed / (233280.0) * (max - min) + min;
+		return Math.random() * (max - min) + min;
 	}
 
 	public static RandomFloor(min: number, max: number): number {

@@ -4,6 +4,7 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
     class EntityFSM extends FSM_1.FSM {
         get currentEntityState() { return this.currentState; }
         get previousEntityState() { return this.previousState; }
+        get globalEntityState() { return this.globalState; }
         Init() {
             for (const state of this._states) {
                 const entityFSM = state;
@@ -25,8 +26,8 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
                 const entityFSM = state;
                 entityFSM.EncodeSnapshot(writer);
             }
-            if (this.globalState != null) {
-                this.globalState.EncodeSnapshot(writer);
+            if (this.globalEntityState != null) {
+                this.globalEntityState.EncodeSnapshot(writer);
             }
             writer.int32(this.currentEntityState.type);
             writer.bool(this.previousEntityState != null);
@@ -38,13 +39,27 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
                 const entityFSM = state;
                 entityFSM.DecodeSnapshot(reader);
             }
-            if (this.globalState != null) {
-                this.globalState.DecodeSnapshot(reader);
+            if (this.globalEntityState != null) {
+                this.globalEntityState.DecodeSnapshot(reader);
             }
             this._currentState = this.GetState(reader.int32());
             const b = reader.bool();
             if (b)
                 this._previousState = this.GetState(reader.int32());
+        }
+        Dump() {
+            let str = "";
+            str += `state count:${this._states.length}\n`;
+            for (const state of this._states) {
+                str += state.Dump();
+            }
+            if (this.globalEntityState != null) {
+                str += `global state:${this.globalEntityState.Dump()}\n`;
+            }
+            str += "current state:" + this.currentEntityState.Dump();
+            if (this.previousEntityState != null)
+                str += `previous state:${this.previousEntityState.Dump()}\n`;
+            return str;
         }
     }
     exports.EntityFSM = EntityFSM;

@@ -59,6 +59,15 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
         IsStateAvailable(type) {
             return this._statesAvailable == null || this._statesAvailable.contains(type);
         }
+        Dump() {
+            let str = "";
+            str += `action count:${this._actions.length}\n`;
+            for (const action of this._actions) {
+                str += action.Dump();
+            }
+            str += `time:${this._time}\n`;
+            return str;
+        }
     }
     exports.EntityState = EntityState;
 });

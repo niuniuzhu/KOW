@@ -7,6 +7,7 @@ import { StateType } from "./StateEnums";
 export class EntityFSM extends FSM implements ISnapshotable {
 	public get currentEntityState(): EntityState { return <EntityState>this.currentState; }
 	public get previousEntityState(): EntityState { return <EntityState>this.previousState; }
+	public get globalEntityState(): EntityState { return <EntityState>this.globalState; }
 
 	public Init() {
 		for (const state of this._states) {
@@ -38,13 +39,13 @@ export class EntityFSM extends FSM implements ISnapshotable {
 			const entityFSM = <EntityState>state;
 			entityFSM.EncodeSnapshot(writer);
 		}
-		if (this.globalState != null) {
-			(<EntityState>this.globalState).EncodeSnapshot(writer);
+		if (this.globalEntityState != null) {
+			(<EntityState>this.globalEntityState).EncodeSnapshot(writer);
 		}
 		writer.int32(this.currentEntityState.type);
 		writer.bool(this.previousEntityState != null);
 		if (this.previousEntityState != null)
-			writer.int32(this.previousEntityState.type); 
+			writer.int32(this.previousEntityState.type);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -52,12 +53,27 @@ export class EntityFSM extends FSM implements ISnapshotable {
 			const entityFSM = <EntityState>state;
 			entityFSM.DecodeSnapshot(reader);
 		}
-		if (this.globalState != null) {
-			(<EntityState>this.globalState).DecodeSnapshot(reader);
+		if (this.globalEntityState != null) {
+			(<EntityState>this.globalEntityState).DecodeSnapshot(reader);
 		}
 		this._currentState = this.GetState(reader.int32());
 		const b = reader.bool();
 		if (b)
 			this._previousState = this.GetState(reader.int32());
+	}
+
+	public Dump(): string {
+		let str = "";
+		str += `state count:${this._states.length}\n`;
+		for (const state of this._states) {
+			str += (<EntityState>state).Dump();
+		}
+		if (this.globalEntityState != null) {
+			str += `global state:${this.globalEntityState.Dump()}\n`;
+		}
+		str += "current state:" + this.currentEntityState.Dump();
+		if (this.previousEntityState != null)
+			str += `previous state:${this.previousEntityState.Dump()}\n`;
+		return str;
 	}
 }

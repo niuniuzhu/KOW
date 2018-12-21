@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../../Libs/long", "../../RC/Utils/Logger"], function (require, exports, FVec2_1, Hashtable_1, Defs_1, Long, Logger_1) {
+define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../../Libs/long"], function (require, exports, FVec2_1, Hashtable_1, Defs_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var EmitterMouthType;
@@ -69,12 +69,10 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             this._time = reader.int32();
             this._nextEmitTime = reader.int32();
             this._position.Set(reader.double(), reader.double());
-            Logger_1.Logger.Log(this._position.x);
             this._direction.Set(reader.double(), reader.double());
         }
         Update(dt) {
             this._time += dt;
-            Logger_1.Logger.Log(this._position.x);
             if (this._time >= this._lifeTime) {
                 this._markToDestroy = true;
             }
@@ -93,6 +91,19 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             }
             this._position.CopyFrom(caster.position);
             this._position.Add(this._offset);
+        }
+        Dump() {
+            let str = "";
+            str += `rid:${this._rid.toNumber()}\n`;
+            str += `id:${this._id}\n`;
+            str += `caster id:${this._casterID}\n`;
+            str += `skill id:${this._skillID}\n`;
+            str += `markToDestroy:${this._markToDestroy}\n`;
+            str += `time:${this._time}\n`;
+            str += `next emmit time:${this._nextEmitTime}\n`;
+            str += `positionX:${this._position.x}, positionY:${this._position.y}\n`;
+            str += `directionX:${this._direction.x}, directionY:${this._direction.y}\n`;
+            return str;
         }
     }
     exports.Emitter = Emitter;

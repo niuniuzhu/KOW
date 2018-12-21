@@ -29,6 +29,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Mo
                     this._ui.OnLoginBSResut(resp.result, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
                     switch (resp.result) {
                         case protos_1.Protos.Global.ECommon.Success:
+                            Global_1.Global.battleManager.Start();
                             this._battleInfo.playerID = resp.playerID;
                             this._battleInfo.rndSeed = resp.rndSeed;
                             this._battleInfo.frameRate = resp.frameRate;

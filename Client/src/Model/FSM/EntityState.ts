@@ -1,6 +1,5 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import Set from "../../RC/Collections/Set";
-import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
@@ -96,5 +95,15 @@ export class EntityState extends FSMState implements ISnapshotable {
 	 */
 	public IsStateAvailable(type: StateType): boolean {
 		return this._statesAvailable == null || this._statesAvailable.contains(type);
+	}
+
+	public Dump(): string {
+		let str = "";
+		str += `action count:${this._actions.length}\n`;
+		for (const action of this._actions) {
+			str += (<EntityStateAction>action).Dump();
+		}
+		str += `time:${this._time}\n`;
+		return str;
 	}
 }

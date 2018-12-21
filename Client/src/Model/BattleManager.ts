@@ -24,6 +24,7 @@ export class BattleManager {
 	 */
 	private _vBattle: VBattle;
 	private _init: boolean;
+	private _destroied: boolean;
 
 	public get lBattle(): Battle { return this._lBattle; }
 	public get vBattle(): VBattle { return this._vBattle; }
@@ -32,17 +33,30 @@ export class BattleManager {
 	 * 初始化
 	 */
 	public Init() {
-		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
-
 		this._lBattle = new Battle();
 		this._vBattle = new VBattle();
 	}
 
 	public Destroy() {
+		if (this._destroied)
+			return;
+
+		this._destroied = true;
+		this._init = false;
+
+		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+		Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+
 		this._lBattle.Destroy();
 		this._vBattle.Destroy();
-		this._init = false;
+	}
+
+	public Start():void{
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+		this._destroied = false;
 	}
 
 	/**
@@ -50,12 +64,15 @@ export class BattleManager {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo, completeHandler: () => void): void {
+
 		this._vBattle.SetBattleInfo(battleInfo);
 		this._lBattle.SetBattleInfo(battleInfo);
 
 		const curFrame = battleInfo.serverFrame;
 		//请求最新战场快照
 		this.RequestSnapshot(success => {
+			if (this._destroied)
+				return;
 			if (!success) {
 				//如果没有快照,则创建初始战场状态
 				this._lBattle.CreatePlayers(battleInfo.playerInfos);
@@ -65,6 +82,8 @@ export class BattleManager {
 			request.from = this._lBattle.frame;
 			request.to = curFrame;
 			Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
+				if (this._destroied)
+					return;
 				const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
 				//处理历史记录
 				const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
@@ -124,6 +143,15 @@ export class BattleManager {
 	private HandleFrameAction(message: any): void {
 		const frameAction = <Protos.BS2GC_FrameAction>message;
 		this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
+	}
+
+	/**
+	 * 服务端通知发生不同步
+	 * @param message 协议
+	 */
+	private HandleOutOfSync(message: any): void {
+		const outOfSync = <Protos.BS2GC_OutOfSync>message;
+		this._lBattle.HandleOutOfSync(outOfSync);
 	}
 
 	/**

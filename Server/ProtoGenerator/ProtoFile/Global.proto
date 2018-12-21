@@ -54,6 +54,7 @@ enum MsgID {
 	eBS2GC_RequestSnapshotRet = 4101;
 	eBS2GC_FrameAction = 4102;
 	eBS2GC_RequestFrameActionsRet = 4103;
+	eBS2GC_OutOfSync = 4104;
 
 	//cs
 	eCS2LS_GSInfos = 5000;

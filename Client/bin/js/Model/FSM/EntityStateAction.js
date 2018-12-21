@@ -37,6 +37,11 @@ define(["require", "exports", "../../RC/FSM/FSMStateAction", "../../RC/Utils/Has
         }
         OnStateTimeChanged(time) {
         }
+        Dump() {
+            let str = "";
+            str += `istriggered:${this._isTriggered}\n`;
+            return str;
+        }
     }
     exports.EntityStateAction = EntityStateAction;
 });

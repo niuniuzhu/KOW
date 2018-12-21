@@ -1,6 +1,5 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { ISnapshotable } from "../ISnapshotable";
-import { Champion } from "../Logic/Champion";
 import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";
 import Long = require("../../Libs/long");
@@ -36,5 +35,12 @@ export class ActAttack extends EntityStateAction implements ISnapshotable {
 		const caster = owner.battle.GetChampion(this._casterID);
 		const skill = caster.GetSkill(this._skillID);
 		owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
+	}
+
+	public Dump(): string {
+		let str = super.Dump();
+		str +=`caster id:${this._casterID}\n`;
+		str +=`skill id:${this._skillID}\n`;
+		return str;
 	}
 }

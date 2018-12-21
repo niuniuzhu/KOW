@@ -136,6 +136,14 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.fsm.ChangeState(skill.connectedState, [this.rid, skill.id]);
             return true;
         }
+        Dump() {
+            let str = super.Dump();
+            str += `team:${this._team}\n`;
+            str += `name:${this._name}\n`;
+            str += `move speed${this._moveSpeed}\n`;
+            str += `skill count${this._skills.length}\n`;
+            return str;
+        }
     }
     exports.Champion = Champion;
 });

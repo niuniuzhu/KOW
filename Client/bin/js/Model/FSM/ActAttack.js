@@ -29,6 +29,12 @@ define(["require", "exports", "./EntityStateAction", "../../Libs/long"], functio
             const skill = caster.GetSkill(this._skillID);
             owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
         }
+        Dump() {
+            let str = super.Dump();
+            str += `caster id:${this._casterID}\n`;
+            str += `skill id:${this._skillID}\n`;
+            return str;
+        }
     }
     exports.ActAttack = ActAttack;
 });

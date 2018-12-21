@@ -62,6 +62,7 @@ export class LoadingState extends SceneState {
 
 				switch (resp.result) {
 					case Protos.Global.ECommon.Success:
+						Global.battleManager.Start();
 						//把数据保存,加载资源后用于创建战场
 						this._battleInfo.playerID = resp.playerID;
 						this._battleInfo.rndSeed = resp.rndSeed;

@@ -120,4 +120,19 @@ export abstract class Entity implements ISnapshotable {
 
 	public Update(dt: number): void {
 	}
+
+	public Dump(): string {
+		let str = "";
+		str += `rid:${this._rid.toString()}\n`;
+		str += `id:${this._id}\n`;
+		str += `markToDestroy:${this._markToDestroy}\n`;
+		str += `positionX:${this.position.x}, positionY:${this.position.y}\n`;
+		str += `directionX:${this.direction.x}, directionY:${this.direction.y}\n`;
+		str += `attribute count:${this.attribute.count}\n`;
+		this.attribute.Foreach((v, k) => {
+			str += `  attr:${k}, v:${v}\n`;
+		});
+		str += this._fsm.Dump();
+		return str;
+	}
 }

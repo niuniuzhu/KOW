@@ -711,6 +711,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[4101] = "eBS2GC_RequestSnapshotRet"] = 4101;
         values[valuesById[4102] = "eBS2GC_FrameAction"] = 4102;
         values[valuesById[4103] = "eBS2GC_RequestFrameActionsRet"] = 4103;
+        values[valuesById[4104] = "eBS2GC_OutOfSync"] = 4104;
         values[valuesById[5000] = "eCS2LS_GSInfos"] = 5000;
         values[valuesById[5001] = "eCS2LS_GSInfo"] = 5001;
         values[valuesById[5002] = "eCS2LS_GSLost"] = 5002;
@@ -1998,6 +1999,159 @@ export const Protos = $root.Protos = (() => {
         };
 
         return BS2GC_RequestFrameActionsRet;
+    })();
+
+    Protos.BS2GC_OutOfSync = (function() {
+
+        function BS2GC_OutOfSync(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        BS2GC_OutOfSync.prototype.opts = null;
+        BS2GC_OutOfSync.prototype.frame = 0;
+        BS2GC_OutOfSync.prototype.data1 = $util.newBuffer([]);
+        BS2GC_OutOfSync.prototype.data2 = $util.newBuffer([]);
+
+        BS2GC_OutOfSync.create = function create(properties) {
+            return new BS2GC_OutOfSync(properties);
+        };
+
+        BS2GC_OutOfSync.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                writer.uint32(16).int32(message.frame);
+            if (message.data1 != null && message.hasOwnProperty("data1"))
+                writer.uint32(26).bytes(message.data1);
+            if (message.data2 != null && message.hasOwnProperty("data2"))
+                writer.uint32(34).bytes(message.data2);
+            return writer;
+        };
+
+        BS2GC_OutOfSync.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        BS2GC_OutOfSync.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_OutOfSync();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.frame = reader.int32();
+                    break;
+                case 3:
+                    message.data1 = reader.bytes();
+                    break;
+                case 4:
+                    message.data2 = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        BS2GC_OutOfSync.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        BS2GC_OutOfSync.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                if (!$util.isInteger(message.frame))
+                    return "frame: integer expected";
+            if (message.data1 != null && message.hasOwnProperty("data1"))
+                if (!(message.data1 && typeof message.data1.length === "number" || $util.isString(message.data1)))
+                    return "data1: buffer expected";
+            if (message.data2 != null && message.hasOwnProperty("data2"))
+                if (!(message.data2 && typeof message.data2.length === "number" || $util.isString(message.data2)))
+                    return "data2: buffer expected";
+            return null;
+        };
+
+        BS2GC_OutOfSync.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.BS2GC_OutOfSync)
+                return object;
+            let message = new $root.Protos.BS2GC_OutOfSync();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.BS2GC_OutOfSync.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.frame != null)
+                message.frame = object.frame | 0;
+            if (object.data1 != null)
+                if (typeof object.data1 === "string")
+                    $util.base64.decode(object.data1, message.data1 = $util.newBuffer($util.base64.length(object.data1)), 0);
+                else if (object.data1.length)
+                    message.data1 = object.data1;
+            if (object.data2 != null)
+                if (typeof object.data2 === "string")
+                    $util.base64.decode(object.data2, message.data2 = $util.newBuffer($util.base64.length(object.data2)), 0);
+                else if (object.data2.length)
+                    message.data2 = object.data2;
+            return message;
+        };
+
+        BS2GC_OutOfSync.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.frame = 0;
+                if (options.bytes === String)
+                    object.data1 = "";
+                else {
+                    object.data1 = [];
+                    if (options.bytes !== Array)
+                        object.data1 = $util.newBuffer(object.data1);
+                }
+                if (options.bytes === String)
+                    object.data2 = "";
+                else {
+                    object.data2 = [];
+                    if (options.bytes !== Array)
+                        object.data2 = $util.newBuffer(object.data2);
+                }
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                object.frame = message.frame;
+            if (message.data1 != null && message.hasOwnProperty("data1"))
+                object.data1 = options.bytes === String ? $util.base64.encode(message.data1, 0, message.data1.length) : options.bytes === Array ? Array.prototype.slice.call(message.data1) : message.data1;
+            if (message.data2 != null && message.hasOwnProperty("data2"))
+                object.data2 = options.bytes === String ? $util.base64.encode(message.data2, 0, message.data2.length) : options.bytes === Array ? Array.prototype.slice.call(message.data2) : message.data2;
+            return object;
+        };
+
+        BS2GC_OutOfSync.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return BS2GC_OutOfSync;
     })();
 
     Protos.CS2BS_PlayerInfo = (function() {

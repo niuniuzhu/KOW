@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameAction", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "../../Libs/long"], function (require, exports, Global_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, FrameAction_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, Long) {
+define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameAction", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "../../Libs/long", "../../RC/Utils/Logger"], function (require, exports, Global_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, FrameAction_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, Long, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -49,9 +49,10 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
             if (this._destroied)
                 return;
             this._destroied = true;
-            this._frameActionGroups.clear();
             this._def = null;
+            this._cdef = null;
             this._bounds = null;
+            this._frameActionGroups.clear();
             for (let i = 0, count = this._bullets.length; i < count; i++)
                 this._bullets[i].Destroy();
             this._bullets.splice(0);
@@ -337,6 +338,41 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
             const frameActionGroup = new FrameActionGroup_1.FrameActionGroup(frame);
             frameActionGroup.Deserialize(data);
             this._frameActionGroups.enqueue(frameActionGroup);
+        }
+        HandleOutOfSync(msg) {
+            let str = "===============data1===============";
+            let reader = $protobuf.Reader.create(msg.data1);
+            str += this.Dump(reader);
+            str += "===============data2===============";
+            reader = $protobuf.Reader.create(msg.data2);
+            str += this.Dump(reader);
+            Logger_1.Logger.Log(str);
+        }
+        Dump(reader) {
+            let str = "";
+            reader.int32();
+            let count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const champion = new Champion_1.Champion(this);
+                champion.DecodeSnapshot(reader);
+                str += "======champion======\n";
+                str += champion.Dump();
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const emitter = new Emitter_1.Emitter(this);
+                emitter.DecodeSnapshot(reader);
+                str += "======emitter======\n";
+                str += emitter.Dump();
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const bullet = new Bullet_1.Bullet(this);
+                bullet.DecodeSnapshot(reader);
+                str += "======bullet======\n";
+                str += bullet.Dump();
+            }
+            return str;
         }
     }
     exports.Battle = Battle;

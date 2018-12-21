@@ -58,4 +58,10 @@ export class EntityStateAction extends FSMStateAction implements ISnapshotable {
 	 */
 	public OnStateTimeChanged(time: number): void {
 	}
+
+	public Dump(): string {
+		let str = "";
+		str += `istriggered:${this._isTriggered}\n`;
+		return str;
+	}
 }

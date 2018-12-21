@@ -63,4 +63,13 @@ export class ActInterrupt extends EntityStateAction implements ISnapshotable {
 		}
 		super.OnUpdate(dt);
 	}
+
+	public Dump(): string {
+		let str = super.Dump();
+		str += `interrupt count:${this._interrupts.length}\n`;
+		for (const interrupt of this._interrupts) {
+			str += interrupt.Dump();
+		}
+		return str;
+	}
 }

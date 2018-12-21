@@ -135,4 +135,18 @@ export class Emitter implements ISnapshotable {
 		this._position.CopyFrom(caster.position);
 		this._position.Add(this._offset);
 	}
+
+	public Dump(): string {
+		let str = "";
+		str += `rid:${this._rid.toNumber()}\n`;
+		str += `id:${this._id}\n`;
+		str += `caster id:${this._casterID}\n`;
+		str += `skill id:${this._skillID}\n`;
+		str += `markToDestroy:${this._markToDestroy}\n`;
+		str += `time:${this._time}\n`;
+		str += `next emmit time:${this._nextEmitTime}\n`;
+		str += `positionX:${this._position.x}, positionY:${this._position.y}\n`;
+		str += `directionX:${this._direction.x}, directionY:${this._direction.y}\n`;
+		return str;
+	}
 }

@@ -32,7 +32,7 @@ namespace Protos {
             "a1BpbmcSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgwKBHRpbWUY",
             "AiABKAMiSgoMR19Bc2tQaW5nUmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
             "TXNnT3B0cxINCgVzdGltZRgCIAEoAxIMCgR0aW1lGAMgASgDIiwKBkdsb2Jh",
-            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASrRCQoFTXNn",
+            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASroCQoFTXNn",
             "SUQSDAoIVW5kZWZpbmUQABIOCgplR19Bc2tQaW5nEAoSEQoNZUdfQXNrUGlu",
             "Z1JldBALEhcKEmVHQzJMU19Bc2tSZWdpc3RlchDoBxIUCg9lR0MyTFNfQXNr",
             "TG9naW4Q6QcSGQoUZUdDMkxTX0Fza1NtYXJ0TG9naW4Q6gcSFAoPZUdDMkdT",
@@ -51,16 +51,16 @@ namespace Protos {
             "X0JhdHRsZUluZm9SZXQQoR8SFQoQZUJTMkNTX0JhdHRsZUVuZBCiHxIUCg9l",
             "QlMyQ1NfS2lja1VzZXIQox8SFAoPZUJTMkdDX0xvZ2luUmV0EIQgEh4KGWVC",
             "UzJHQ19SZXF1ZXN0U25hcHNob3RSZXQQhSASFwoSZUJTMkdDX0ZyYW1lQWN0",
-            "aW9uEIYgEiIKHWVCUzJHQ19SZXF1ZXN0RnJhbWVBY3Rpb25zUmV0EIcgEhMK",
-            "DmVDUzJMU19HU0luZm9zEIgnEhIKDWVDUzJMU19HU0luZm8QiScSEgoNZUNT",
-            "MkxTX0dTTG9zdBCKJxIWChFlQ1MyTFNfR0NMb2dpblJldBCLJxIWChFlQ1My",
-            "R1NfR0NMb2dpblJldBDsJxISCg1lQ1MyR1NfS2lja0dDEO0nEhYKEWVDUzJC",
-            "U19CYXR0bGVJbmZvENAoEhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhYK",
-            "EWVDUzJHQ19QbGF5ZXJKb2luELUpEhcKEmVDUzJHQ19QbGF5ZXJMZWF2ZRC2",
-            "KRIUCg9lQ1MyR0NfUm9vbUluZm8QtykSFwoSZUNTMkdDX0VudGVyQmF0dGxl",
-            "ELgpEhUKEGVDUzJHQ19CYXR0bGVFbmQQuSkSGwoWZURCMkxTX1F1ZXJ5QWNj",
-            "b3VudFJldBDAPhIZChRlREIyTFNfUXVlcnlMb2dpblJldBDBPhITCg5lREIy",
-            "TFNfRXhlY1JldBDCPmIGcHJvdG8z"));
+            "aW9uEIYgEiIKHWVCUzJHQ19SZXF1ZXN0RnJhbWVBY3Rpb25zUmV0EIcgEhUK",
+            "EGVCUzJHQ19PdXRPZlN5bmMQiCASEwoOZUNTMkxTX0dTSW5mb3MQiCcSEgoN",
+            "ZUNTMkxTX0dTSW5mbxCJJxISCg1lQ1MyTFNfR1NMb3N0EIonEhYKEWVDUzJM",
+            "U19HQ0xvZ2luUmV0EIsnEhYKEWVDUzJHU19HQ0xvZ2luUmV0EOwnEhIKDWVD",
+            "UzJHU19LaWNrR0MQ7ScSFgoRZUNTMkJTX0JhdHRsZUluZm8Q0CgSGQoUZUNT",
+            "MkdDX0JlZ2luTWF0Y2hSZXQQtCkSFgoRZUNTMkdDX1BsYXllckpvaW4QtSkS",
+            "FwoSZUNTMkdDX1BsYXllckxlYXZlELYpEhQKD2VDUzJHQ19Sb29tSW5mbxC3",
+            "KRIXChJlQ1MyR0NfRW50ZXJCYXR0bGUQuCkSFQoQZUNTMkdDX0JhdHRsZUVu",
+            "ZBC5KRIbChZlREIyTFNfUXVlcnlBY2NvdW50UmV0EMA+EhkKFGVEQjJMU19R",
+            "dWVyeUxvZ2luUmV0EME+EhMKDmVEQjJMU19FeGVjUmV0EMI+YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
@@ -123,6 +123,7 @@ namespace Protos {
     [pbr::OriginalName("eBS2GC_RequestSnapshotRet")] EBs2GcRequestSnapshotRet = 4101,
     [pbr::OriginalName("eBS2GC_FrameAction")] EBs2GcFrameAction = 4102,
     [pbr::OriginalName("eBS2GC_RequestFrameActionsRet")] EBs2GcRequestFrameActionsRet = 4103,
+    [pbr::OriginalName("eBS2GC_OutOfSync")] EBs2GcOutOfSync = 4104,
     /// <summary>
     ///cs
     /// </summary>

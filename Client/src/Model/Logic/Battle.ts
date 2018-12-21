@@ -7,7 +7,6 @@ import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FRandom } from "../../RC/FMath/FRandom";
 import { FRect } from "../../RC/FMath/FRect";
 import { FVec2 } from "../../RC/FMath/FVec2";
-import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
@@ -21,6 +20,7 @@ import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
 import Long = require("../../Libs/long");
+import { Logger } from "../../RC/Utils/Logger";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -90,9 +90,10 @@ export class Battle implements ISnapshotable {
 		if (this._destroied)
 			return;
 		this._destroied = true;
-		this._frameActionGroups.clear();
 		this._def = null;
+		this._cdef = null;
 		this._bounds = null;
+		this._frameActionGroups.clear();
 
 		for (let i = 0, count = this._bullets.length; i < count; i++)
 			this._bullets[i].Destroy();
@@ -527,5 +528,52 @@ export class Battle implements ISnapshotable {
 		const frameActionGroup = new FrameActionGroup(frame);
 		frameActionGroup.Deserialize(data);
 		this._frameActionGroups.enqueue(frameActionGroup);
+	}
+
+	/**
+	 * 处理服务端通知数据不同步
+	 * @param outOfSync 协议
+	 */
+	public HandleOutOfSync(msg: Protos.BS2GC_OutOfSync): void {
+		let str = "===============data1===============";
+		let reader = $protobuf.Reader.create(msg.data1);
+		str += this.Dump(reader);
+		str += "===============data2===============";
+		reader = $protobuf.Reader.create(msg.data2);
+		str += this.Dump(reader);
+		Logger.Log(str);
+	}
+
+	private Dump(reader: $protobuf.Reader | $protobuf.BufferReader): string {
+		let str = "";
+		//frame
+		reader.int32();
+		//champions
+		let count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const champion = new Champion(this);
+			champion.DecodeSnapshot(reader);
+			str += "======champion======\n";
+			str += champion.Dump();
+		}
+
+		//emitters
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const emitter = new Emitter(this);
+			emitter.DecodeSnapshot(reader);
+			str += "======emitter======\n";
+			str += emitter.Dump();
+		}
+
+		//bullets
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const bullet = new Bullet(this);
+			bullet.DecodeSnapshot(reader);
+			str += "======bullet======\n";
+			str += bullet.Dump();
+		}
+		return str;
 	}
 }

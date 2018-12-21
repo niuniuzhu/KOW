@@ -5,21 +5,33 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         get lBattle() { return this._lBattle; }
         get vBattle() { return this._vBattle; }
         Init() {
-            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
-            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
             this._lBattle = new Battle_1.Battle();
             this._vBattle = new VBattle_1.VBattle();
         }
         Destroy() {
+            if (this._destroied)
+                return;
+            this._destroied = true;
+            this._init = false;
+            Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+            Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+            Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
             this._lBattle.Destroy();
             this._vBattle.Destroy();
-            this._init = false;
+        }
+        Start() {
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+            this._destroied = false;
         }
         SetBattleInfo(battleInfo, completeHandler) {
             this._vBattle.SetBattleInfo(battleInfo);
             this._lBattle.SetBattleInfo(battleInfo);
             const curFrame = battleInfo.serverFrame;
             this.RequestSnapshot(success => {
+                if (this._destroied)
+                    return;
                 if (!success) {
                     this._lBattle.CreatePlayers(battleInfo.playerInfos);
                 }
@@ -27,6 +39,8 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                 request.from = this._lBattle.frame;
                 request.to = curFrame;
                 Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestFrameActions, request, msg => {
+                    if (this._destroied)
+                        return;
                     const ret = msg;
                     const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
                     this._lBattle.Chase(frameActionGroups, false, false);
@@ -66,6 +80,10 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         HandleFrameAction(message) {
             const frameAction = message;
             this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
+        }
+        HandleOutOfSync(message) {
+            const outOfSync = message;
+            this._lBattle.HandleOutOfSync(outOfSync);
         }
         HandleRequestFrameActions(frames, actions) {
             const count = frames.length;

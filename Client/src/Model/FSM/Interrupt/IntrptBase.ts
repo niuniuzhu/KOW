@@ -34,4 +34,8 @@ export abstract class IntrptBase implements ISnapshotable {
 		const state = (<EntityState>this._action.state);
 		state.owner.fsm.ChangeState(type, param, igroneIntrptList, force);
 	}
+
+	public Dump(): string {
+		return "";
+	}
 }

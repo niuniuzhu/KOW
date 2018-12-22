@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../CDefs", "../Defs", "./AnimationProxy", "./VAttribute"], function (require, exports, Global_1, FSM_1, MathUtils_1, Vec2_1, CDefs_1, Defs_1, AnimationProxy_1, VAttribute_1) {
+define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../CDefs", "../Defs", "./AnimationProxy", "./VAttribute"], function (require, exports, Global_1, MathUtils_1, Vec2_1, CDefs_1, Defs_1, AnimationProxy_1, VAttribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -9,7 +9,6 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._rotation = 0;
             this._logicPos = Vec2_1.Vec2.zero;
             this._logicRot = 0;
-            this._fsm = new FSM_1.FSM();
             this._root = new fairygui.GComponent();
             this._animationProxy = new AnimationProxy_1.AnimationProxy();
             this._battle = battle;
@@ -80,8 +79,6 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             for (let i = 0; i < count; ++i) {
                 this.attribute.Set(reader.int32(), reader.double());
             }
-            this._fsm.ChangeState(reader.int32(), null);
-            this._fsm.currentState.time = reader.double();
         }
         DecodeSync(reader) {
             this._id = reader.int32();
@@ -96,8 +93,6 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             for (let i = 0; i < count; i++) {
                 this.attribute.Set(reader.int32(), reader.double());
             }
-            this._fsm.ChangeState(reader.int32(), null);
-            this._fsm.currentState.time = reader.double();
         }
         PlayAnim(name, timeScale = 1, force = false) {
             this._animationProxy.Play(name, 0, timeScale, force);

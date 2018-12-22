@@ -63,18 +63,21 @@ export class Champion extends Entity implements ISnapshotable {
 
 		this._skills = [];
 		const skillsDef = Hashtable.GetNumberArray(this._def, "skills");
+		if (skillsDef != null) { }
 		for (const sid of skillsDef) {
 			const skill = new Skill();
 			skill.Init(sid);
 			this._skills.push(skill);
 		}
 
-		this._fsm.AddState(new EntityState(StateType.Idle, this));
-		this._fsm.AddState(new EntityState(StateType.Move, this));
-		this._fsm.AddState(new EntityState(StateType.Attack, this));
-		this._fsm.AddState(new EntityState(StateType.Die, this));
-		this._fsm.Init();
-		this._fsm.ChangeState(StateType.Idle);
+		const statesDef = Hashtable.GetMap(this._def, "states");
+		if (statesDef != null) {
+			for (const type in statesDef) {
+				this._fsm.AddState(new EntityState(Number.parseInt(type), this));
+			}
+			this._fsm.Init();
+			this._fsm.ChangeState(Hashtable.GetNumber(this._def, "default_state"));
+		}
 	}
 
 	/**
@@ -125,8 +128,11 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
 
 		//sync fsmstates
-		writer.int32(this._fsm.currentState.type);
-		writer.double((<EntityState>this._fsm.currentState).time);
+		writer.bool(this._fsm.currentState != null);
+		if (this._fsm.currentState != null) {
+			writer.int32(this._fsm.currentState.type);
+			writer.double((<EntityState>this._fsm.currentState).time);
+		}
 	}
 
 

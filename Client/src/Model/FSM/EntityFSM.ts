@@ -39,10 +39,15 @@ export class EntityFSM extends FSM implements ISnapshotable {
 			const entityFSM = <EntityState>state;
 			entityFSM.EncodeSnapshot(writer);
 		}
+
 		if (this.globalEntityState != null) {
 			(<EntityState>this.globalEntityState).EncodeSnapshot(writer);
 		}
-		writer.int32(this.currentEntityState.type);
+
+		writer.bool(this.currentEntityState != null);
+		if (this.currentEntityState != null)
+			writer.int32(this.currentEntityState.type);
+
 		writer.bool(this.previousEntityState != null);
 		if (this.previousEntityState != null)
 			writer.int32(this.previousEntityState.type);
@@ -53,12 +58,15 @@ export class EntityFSM extends FSM implements ISnapshotable {
 			const entityFSM = <EntityState>state;
 			entityFSM.DecodeSnapshot(reader);
 		}
+
 		if (this.globalEntityState != null) {
 			(<EntityState>this.globalEntityState).DecodeSnapshot(reader);
 		}
-		this._currentState = this.GetState(reader.int32());
-		const b = reader.bool();
-		if (b)
+
+		if (reader.bool())
+			this._currentState = this.GetState(reader.int32());
+
+		if (reader.bool())
 			this._previousState = this.GetState(reader.int32());
 	}
 

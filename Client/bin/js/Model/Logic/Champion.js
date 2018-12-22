@@ -30,17 +30,20 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.attribute.Set(Attribute_1.EAttr.MOVE_SPEED, Hashtable_1.Hashtable.GetNumber(this._def, "move_speed"));
             this._skills = [];
             const skillsDef = Hashtable_1.Hashtable.GetNumberArray(this._def, "skills");
+            if (skillsDef != null) { }
             for (const sid of skillsDef) {
                 const skill = new Skill_1.Skill();
                 skill.Init(sid);
                 this._skills.push(skill);
             }
-            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Idle, this));
-            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Move, this));
-            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Attack, this));
-            this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Die, this));
-            this._fsm.Init();
-            this._fsm.ChangeState(StateEnums_1.StateType.Idle);
+            const statesDef = Hashtable_1.Hashtable.GetMap(this._def, "states");
+            if (statesDef != null) {
+                for (const type in statesDef) {
+                    this._fsm.AddState(new EntityState_1.EntityState(Number.parseInt(type), this));
+                }
+                this._fsm.Init();
+                this._fsm.ChangeState(Hashtable_1.Hashtable.GetNumber(this._def, "default_state"));
+            }
         }
         EncodeSnapshot(writer) {
             super.EncodeSnapshot(writer);
@@ -61,8 +64,11 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this._team);
             writer.string(this._name);
             writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
-            writer.int32(this._fsm.currentState.type);
-            writer.double(this._fsm.currentState.time);
+            writer.bool(this._fsm.currentState != null);
+            if (this._fsm.currentState != null) {
+                writer.int32(this._fsm.currentState.type);
+                writer.double(this._fsm.currentState.time);
+            }
         }
         Update(dt) {
             super.Update(dt);

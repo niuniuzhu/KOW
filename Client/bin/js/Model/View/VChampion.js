@@ -1,9 +1,10 @@
-define(["require", "exports", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../FSM/StateEnums", "../FSM/VEntityState", "../Skill", "./VEntity"], function (require, exports, Vec2_1, Hashtable_1, StateEnums_1, VEntityState_1, Skill_1, VEntity_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../FSM/VEntityState", "../Skill", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, VEntityState_1, Skill_1, VEntity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VChampion extends VEntity_1.VEntity {
         constructor() {
             super(...arguments);
+            this._fsm = new FSM_1.FSM();
             this._moveSpeed = Vec2_1.Vec2.zero;
         }
         get team() { return this._team; }
@@ -17,22 +18,32 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", 
                 skill.Init(sid);
                 this._skills.push(skill);
             }
-            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Idle, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Move, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Attack, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Die, this));
+            const statesDef = Hashtable_1.Hashtable.GetMap(this._def, "states");
+            if (statesDef != null) {
+                for (const type in statesDef) {
+                    this._fsm.AddState(new VEntityState_1.VEntityState(Number.parseInt(type), this));
+                }
+            }
         }
         InitSync(reader) {
             super.InitSync(reader);
             this._team = reader.int32();
             this._name = reader.string();
             this._moveSpeed.Set(reader.double(), reader.double());
+            if (reader.bool()) {
+                this._fsm.ChangeState(reader.int32(), null);
+                this._fsm.currentState.time = reader.double();
+            }
         }
         DecodeSync(reader) {
             super.DecodeSync(reader);
             this._team = reader.int32();
             this._name = reader.string();
             this._moveSpeed.Set(reader.double(), reader.double());
+            if (reader.bool()) {
+                this._fsm.ChangeState(reader.int32(), null);
+                this._fsm.currentState.time = reader.double();
+            }
         }
         HasSkill(id) {
             for (const skill of this._skills) {

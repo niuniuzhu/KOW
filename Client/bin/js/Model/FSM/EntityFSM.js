@@ -29,7 +29,9 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
             if (this.globalEntityState != null) {
                 this.globalEntityState.EncodeSnapshot(writer);
             }
-            writer.int32(this.currentEntityState.type);
+            writer.bool(this.currentEntityState != null);
+            if (this.currentEntityState != null)
+                writer.int32(this.currentEntityState.type);
             writer.bool(this.previousEntityState != null);
             if (this.previousEntityState != null)
                 writer.int32(this.previousEntityState.type);
@@ -42,9 +44,9 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
             if (this.globalEntityState != null) {
                 this.globalEntityState.DecodeSnapshot(reader);
             }
-            this._currentState = this.GetState(reader.int32());
-            const b = reader.bool();
-            if (b)
+            if (reader.bool())
+                this._currentState = this.GetState(reader.int32());
+            if (reader.bool())
                 this._previousState = this.GetState(reader.int32());
         }
         Dump() {

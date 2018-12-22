@@ -1,12 +1,10 @@
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
-import { FSM } from "../../RC/FSM/FSM";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
-import { VEntityState } from "../FSM/VEntityState";
 import { AnimationProxy } from "./AnimationProxy";
 import { VAttribute } from "./VAttribute";
 import { VBattle } from "./VBattle";
@@ -55,7 +53,6 @@ export abstract class VEntity {
 	private _logicRot: number = 0;
 	private _markToDestroy: boolean;
 
-	protected readonly _fsm: FSM = new FSM();
 	private readonly _root = new fairygui.GComponent();
 	private readonly _animationProxy: AnimationProxy = new AnimationProxy();
 
@@ -122,10 +119,6 @@ export abstract class VEntity {
 		for (let i = 0; i < count; ++i) {
 			this.attribute.Set(reader.int32(), reader.double());
 		}
-
-		//init fsmstates
-		this._fsm.ChangeState(reader.int32(), null);
-		(<VEntityState>this._fsm.currentState).time = reader.double();
 	}
 
 	/**
@@ -149,10 +142,6 @@ export abstract class VEntity {
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), reader.double());
 		}
-
-		//read fsmstates
-		this._fsm.ChangeState(reader.int32(), null);
-		(<VEntityState>this._fsm.currentState).time = reader.double();
 	}
 
 	/**

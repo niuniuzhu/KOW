@@ -1,7 +1,7 @@
 import * as $protobuf from "../../Libs/protobufjs";
+import { FSM } from "../../RC/FSM/FSM";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { StateType } from "../FSM/StateEnums";
 import { VEntityState } from "../FSM/VEntityState";
 import { Skill } from "../Skill";
 import { VEntity } from "./VEntity";
@@ -13,6 +13,7 @@ export class VChampion extends VEntity {
 	private _team: number;
 	private _name: string;
 	private _skills: Skill[];
+	private readonly _fsm: FSM = new FSM();
 	private readonly _moveSpeed: Vec2 = Vec2.zero;
 
 	protected OnInit(): void {
@@ -26,10 +27,12 @@ export class VChampion extends VEntity {
 			this._skills.push(skill);
 		}
 
-		this._fsm.AddState(new VEntityState(StateType.Idle, this));
-		this._fsm.AddState(new VEntityState(StateType.Move, this));
-		this._fsm.AddState(new VEntityState(StateType.Attack, this));
-		this._fsm.AddState(new VEntityState(StateType.Die, this));
+		const statesDef = Hashtable.GetMap(this._def, "states");
+		if (statesDef != null) {
+			for (const type in statesDef) {
+				this._fsm.AddState(new VEntityState(Number.parseInt(type), this));
+			}
+		}
 	}
 
 	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -37,6 +40,12 @@ export class VChampion extends VEntity {
 		this._team = reader.int32();
 		this._name = reader.string();
 		this._moveSpeed.Set(reader.double(), reader.double());
+
+		//init fsmstates
+		if (reader.bool()) {
+			this._fsm.ChangeState(reader.int32(), null);
+			(<VEntityState>this._fsm.currentState).time = reader.double();
+		}
 	}
 
 	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -44,6 +53,12 @@ export class VChampion extends VEntity {
 		this._team = reader.int32();
 		this._name = reader.string();
 		this._moveSpeed.Set(reader.double(), reader.double());
+
+		//read fsmstates
+		if (reader.bool()) {
+			this._fsm.ChangeState(reader.int32(), null);
+			(<VEntityState>this._fsm.currentState).time = reader.double();
+		}
 	}
 
 	/**

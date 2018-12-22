@@ -4,10 +4,12 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
     class Champion extends Entity_1.Entity {
         constructor() {
             super(...arguments);
+            this._fsm = new EntityFSM_1.EntityFSM();
             this._moveSpeed = FVec2_1.FVec2.zero;
         }
         get team() { return this._team; }
         get name() { return this._name; }
+        get fsm() { return this._fsm; }
         get canMove() { return this.attribute.Get(Attribute_1.EAttr.S_DISABLE_MOVE) <= 0; }
         get canTurn() { return this.attribute.Get(Attribute_1.EAttr.S_DISABLE_TURN) <= 0; }
         get canUseSkill() { return this.attribute.Get(Attribute_1.EAttr.S_DISABLE_SKILL) <= 0; }
@@ -33,7 +35,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                 skill.Init(sid);
                 this._skills.push(skill);
             }
-            this._fsm = new EntityFSM_1.EntityFSM();
             this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Idle, this));
             this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Move, this));
             this._fsm.AddState(new EntityState_1.EntityState(StateEnums_1.StateType.Attack, this));
@@ -46,33 +47,22 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this._team);
             writer.string(this._name);
             writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
-            writer.int32(this._skills.length);
-            for (const skill of this._skills) {
-                writer.int32(skill.id);
-            }
+            this._fsm.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
             super.DecodeSnapshot(reader);
             this._team = reader.int32();
             this._name = reader.string();
-            this.OnInit();
-            this._moveSpeed = new FVec2_1.FVec2(reader.double(), reader.double());
-            const count = reader.int32();
-            for (let i = 0; i < count; ++i) {
-                const skill = new Skill_1.Skill();
-                skill.Init(reader.int32());
-                this._skills.push(skill);
-            }
+            this._moveSpeed.Set(reader.double(), reader.double());
+            this._fsm.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {
             super.EncodeSync(writer);
             writer.int32(this._team);
             writer.string(this._name);
             writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
-            writer.int32(this._skills.length);
-            for (const skill of this._skills) {
-                writer.int32(skill.id);
-            }
+            writer.int32(this._fsm.currentState.type);
+            writer.double(this._fsm.currentState.time);
         }
         Update(dt) {
             super.Update(dt);
@@ -99,13 +89,13 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         BeginMove(dx, dy) {
             const direction = new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(dx), FMathUtils_1.FMathUtils.ToFixed(dy));
             if (direction.SqrMagnitude() < FMathUtils_1.FMathUtils.EPSILON) {
-                this._moveSpeed = FVec2_1.FVec2.zero;
+                this._moveSpeed.Set(0, 0);
             }
             else {
                 if (this.canTurn) {
                     this.direction.CopyFrom(direction);
                 }
-                this._moveSpeed = FVec2_1.FVec2.MulN(direction, this.attribute.Get(Attribute_1.EAttr.MOVE_SPEED));
+                this._moveSpeed.CopyFrom(FVec2_1.FVec2.MulN(direction, this.attribute.Get(Attribute_1.EAttr.MOVE_SPEED)));
             }
         }
         MoveStep(dt) {
@@ -142,6 +132,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             str += `name:${this._name}\n`;
             str += `move speed${this._moveSpeed}\n`;
             str += `skill count${this._skills.length}\n`;
+            str += this._fsm.Dump();
             return str;
         }
     }

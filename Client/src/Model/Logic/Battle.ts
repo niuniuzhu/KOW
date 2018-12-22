@@ -456,7 +456,14 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 创建子弹
 	 */
-	public CreateBullet(params: EntityInitParams): Bullet {
+	public CreateBullet(id: number, casterID: Long, skillID: number, position: FVec2, direction: FVec2): Bullet {
+		const params = new EntityInitParams();
+		params.rid = this.MakeRid(id);
+		params.id = id;
+		params.casterID = casterID;
+		params.skillID = skillID;
+		params.position = position;
+		params.direction = direction;
 		const bullet = new Bullet(this);
 		bullet.Init(params);
 		this._bullets.push(bullet);

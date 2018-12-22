@@ -5,7 +5,7 @@
 			"keyframe_step": 4,
 			"snapshot_step": 100,
 			"timeout": 180000,
-			"max_players": 2,
+			"max_players": 1,
 			"born_pos": [
 				[
 					0,
@@ -102,12 +102,22 @@
 			"angle": 0,
 			"follow": false,
 			"frequency": 100,
-			"lifeTime": 100000,
-			"mouthType": 0,
-			"destroyWhenDie": true
+			"bullet_count": 1,
+			"life_time": 100000,
+			"emit_type": 0,
+			"destroy_type": 0
 		}
 	},
 	"bullet": {
-		"b0": {}
+		"b0": {
+			"move_type": 0,
+			"speed": 5,
+			"life_time": 100000,
+			"destroy_type": 0,
+			"collision_start_time": 0,
+			"max_collision_count": -1,
+			"shape": 0,
+			"shape_radius": 40
+		}
 	}
 }

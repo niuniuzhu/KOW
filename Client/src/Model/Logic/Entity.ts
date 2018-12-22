@@ -1,8 +1,6 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { EntityFSM } from "../FSM/EntityFSM";
-import { EntityState } from "../FSM/EntityState";
 import { ISnapshotable } from "../ISnapshotable";
 import { Attribute } from "./Attribute";
 import { Battle } from "./Battle";
@@ -14,6 +12,11 @@ export class EntityInitParams {
 	//champion
 	public team: number;
 	public name: string;
+	//bullet
+	public casterID: Long;
+	public skillID: number;
+	public position: FVec2;
+	public direction: FVec2;
 }
 
 export abstract class Entity implements ISnapshotable {
@@ -21,7 +24,6 @@ export abstract class Entity implements ISnapshotable {
 	public get id(): number { return this._id; }
 	public get rid(): Long { return this._rid; }
 	public get def(): Hashtable { return this._def; }
-	public get fsm(): EntityFSM { return this._fsm; }
 	public get markToDestroy(): boolean { return this._markToDestroy; }
 
 	public readonly attribute: Attribute = new Attribute();
@@ -32,7 +34,6 @@ export abstract class Entity implements ISnapshotable {
 	protected _rid: Long;
 	protected _id: number;
 	protected _def: Hashtable;
-	protected _fsm: EntityFSM;
 	protected _markToDestroy: boolean;
 
 	constructor(battle: Battle) {
@@ -49,7 +50,8 @@ export abstract class Entity implements ISnapshotable {
 	/**
 	 * 在初始化后或解码快照时执行
 	 */
-	protected abstract OnInit(): void;
+	protected OnInit(): void {
+	}
 
 	public Destroy(): void {
 	}
@@ -70,9 +72,6 @@ export abstract class Entity implements ISnapshotable {
 		this.attribute.Foreach((v, k) => {
 			writer.int32(k).double(v);
 		});
-
-		//encode fsmstates
-		this._fsm.EncodeSnapshot(writer);
 	}
 
 	/**
@@ -91,9 +90,6 @@ export abstract class Entity implements ISnapshotable {
 		for (let i = 0; i < count; i++) {
 			this.attribute.Set(reader.int32(), reader.double());
 		}
-
-		//decode fsmstates
-		this._fsm.DecodeSnapshot(reader);
 	}
 
 	/**
@@ -112,10 +108,6 @@ export abstract class Entity implements ISnapshotable {
 		this.attribute.Foreach((v, k, map) => {
 			writer.int32(k).double(v);
 		});
-
-		//sync fsmstates
-		writer.int32(this._fsm.currentState.type);
-		writer.double((<EntityState>this._fsm.currentState).time);
 	}
 
 	public Update(dt: number): void {
@@ -132,7 +124,6 @@ export abstract class Entity implements ISnapshotable {
 		this.attribute.Foreach((v, k) => {
 			str += `  attr:${k}, v:${v}\n`;
 		});
-		str += this._fsm.Dump();
 		return str;
 	}
 }

@@ -1,12 +1,18 @@
 define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../../Libs/long"], function (require, exports, FVec2_1, Hashtable_1, Defs_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var EmitterMouthType;
-    (function (EmitterMouthType) {
-        EmitterMouthType[EmitterMouthType["Center"] = 0] = "Center";
-        EmitterMouthType[EmitterMouthType["Edage"] = 1] = "Edage";
-        EmitterMouthType[EmitterMouthType["Inside"] = 2] = "Inside";
-    })(EmitterMouthType = exports.EmitterMouthType || (exports.EmitterMouthType = {}));
+    var EmitType;
+    (function (EmitType) {
+        EmitType[EmitType["Center"] = 0] = "Center";
+        EmitType[EmitType["Edage"] = 1] = "Edage";
+        EmitType[EmitType["Inside"] = 2] = "Inside";
+    })(EmitType || (EmitType = {}));
+    var DestroyType;
+    (function (DestroyType) {
+        DestroyType[DestroyType["Life"] = 0] = "Life";
+        DestroyType[DestroyType["Bullet"] = 1] = "Bullet";
+        DestroyType[DestroyType["Caster"] = 2] = "Caster";
+    })(DestroyType || (DestroyType = {}));
     class Emitter {
         constructor(battle) {
             this._casterID = Long.ZERO;
@@ -21,12 +27,12 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
         Init(rid, id, casterID, skillID) {
             this._rid = rid;
             this._id = id;
+            this.OnInit();
             this._casterID = casterID;
             this._skillID = skillID;
             this._markToDestroy = false;
             this._time = 0;
             this._nextEmitTime = 0;
-            this.OnInit();
             const caster = this._battle.GetChampion(this._casterID);
             this.UpdatePosition(caster);
             this._direction.CopyFrom(caster.direction);
@@ -42,9 +48,10 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             this._angle = Hashtable_1.Hashtable.GetNumber(this._def, "angle");
             this._follow = Hashtable_1.Hashtable.GetBool(this._def, "follow");
             this._frequency = Hashtable_1.Hashtable.GetNumber(this._def, "frequency");
-            this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._def, "lifeTime");
-            this._mouthType = Hashtable_1.Hashtable.GetNumber(this._def, "mouthType");
-            this._destroyWhenDie = Hashtable_1.Hashtable.GetBool(this._def, "destroyWhenDie");
+            this._bulletCount = Hashtable_1.Hashtable.GetNumber(this._def, "bullet_count", 1);
+            this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._def, "life_time", -1);
+            this._emitType = Hashtable_1.Hashtable.GetNumber(this._def, "emit_type");
+            this._destroyType = Hashtable_1.Hashtable.GetNumber(this._def, "destroy_type");
         }
         Destroy() {
         }
@@ -73,16 +80,23 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
         }
         Update(dt) {
             this._time += dt;
-            if (this._time >= this._lifeTime) {
-                this._markToDestroy = true;
+            switch (this._destroyType) {
+                case DestroyType.Life:
+                    if (this._time >= this._lifeTime) {
+                        this._markToDestroy = true;
+                    }
+                    break;
+                case DestroyType.Caster:
+                    break;
+                case DestroyType.Bullet:
+                    break;
             }
             if (this._follow) {
                 this.UpdatePosition();
             }
             if (this._time >= this._nextEmitTime) {
                 this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
-                const caster = this._battle.GetChampion(this._casterID);
-                const skill = caster.GetSkill(this._skillID);
+                this.Emit();
             }
         }
         UpdatePosition(caster) {
@@ -91,6 +105,19 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             }
             this._position.CopyFrom(caster.position);
             this._position.Add(this._offset);
+        }
+        Emit() {
+            const caster = this._battle.GetChampion(this._casterID);
+            const skill = caster.GetSkill(this._skillID);
+            switch (this._emitType) {
+                case EmitType.Center:
+                    this._battle.CreateBullet(skill.emitterID, this._casterID, this._skillID, new FVec2_1.FVec2(this._position.x, this._position.y), new FVec2_1.FVec2(this._direction.x, this._direction.y));
+                    break;
+                case EmitType.Edage:
+                    break;
+                case EmitType.Inside:
+                    break;
+            }
         }
         Dump() {
             let str = "";

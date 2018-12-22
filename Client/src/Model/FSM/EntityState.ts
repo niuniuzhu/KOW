@@ -3,7 +3,7 @@ import Set from "../../RC/Collections/Set";
 import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
-import { Entity } from "../Logic/Entity";
+import { Champion } from "../Logic/Champion";
 import { EntityStateAction } from "./EntityStateAction";
 import { ID_TO_STATE_ACTION, StateType } from "./StateEnums";
 
@@ -11,7 +11,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 	/**
 	 * 所属实体
 	 */
-	public get owner(): Entity { return this._owner; }
+	public get owner(): Champion { return this._owner; }
 	/**
 	 * 获取状态运行时间
 	 */
@@ -27,10 +27,10 @@ export class EntityState extends FSMState implements ISnapshotable {
 	}
 
 	private _statesAvailable: Set<StateType>;
-	private _owner: Entity;
+	private _owner: Champion;
 	private _time: number;
 
-	constructor(type: number, owner: Entity) {
+	constructor(type: number, owner: Champion) {
 		super(type);
 		this._owner = owner;
 	}

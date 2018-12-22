@@ -15,7 +15,7 @@ export class Defs {
 		this._entityMap = Hashtable.GetMap(this._defs, "entity");
 		this._skillMap = Hashtable.GetMap(this._defs, "skill");
 		this._emitterMap = Hashtable.GetMap(this._defs, "emitter");
-		this._bulletMap = Hashtable.GetMap(this._defs, "buttle");
+		this._bulletMap = Hashtable.GetMap(this._defs, "bullet");
 	}
 
 	public static GetMap(id: number): Hashtable {

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable"], function (require, exports, Consts_1, Hashtable_1) {
+define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, exports, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var AnimationPlayMode;
@@ -17,14 +17,15 @@ define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable"], funct
             this._playingName = "";
         }
         get animation() { return this._animation; }
-        Init(actorID, def) {
+        Init(def) {
+            const model = Hashtable_1.Hashtable.GetString(def, "model");
             const aniDefs = Hashtable_1.Hashtable.GetMapArray(def, "animations");
             for (const aniDef of aniDefs) {
                 const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
                 const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
                 const urls = [];
                 for (let i = 0; i < length; ++i) {
-                    urls.push((Consts_1.Consts.ASSETS_ENTITY_PREFIX + actorID) + "/" + aniName + i + ".png");
+                    urls.push(`${model}/${aniName}${i}.png`);
                 }
                 Laya.Animation.createFrames(urls, aniName);
                 const aniSetting = new AnimationSetting();

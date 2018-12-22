@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../CDefs", "../Defs", "../FSM/StateEnums", "../FSM/VEntityState", "./AnimationProxy", "./VAttribute"], function (require, exports, Global_1, FSM_1, MathUtils_1, Vec2_1, CDefs_1, Defs_1, StateEnums_1, VEntityState_1, AnimationProxy_1, VAttribute_1) {
+define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../CDefs", "../Defs", "./AnimationProxy", "./VAttribute"], function (require, exports, Global_1, FSM_1, MathUtils_1, Vec2_1, CDefs_1, Defs_1, AnimationProxy_1, VAttribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -16,10 +16,6 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
             this._root.setSize(0, 0);
             this._root.setPivot(0.5, 0.5, true);
             Global_1.Global.graphic.entityRoot.addChild(this._root);
-            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Idle, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Move, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Attack, this));
-            this._fsm.AddState(new VEntityState_1.VEntityState(StateEnums_1.StateType.Die, this));
         }
         get rid() { return this._rid; }
         get id() { return this._id; }
@@ -61,13 +57,16 @@ define(["require", "exports", "../../Global", "../../RC/FSM/FSM", "../../RC/Math
         OnRatationChanged(delta) {
             this._root.rotation = this._rotation;
         }
+        OnInit() {
+            this._def = Defs_1.Defs.GetEntity(this._id);
+            this._cdef = CDefs_1.CDefs.GetEntity(this._id);
+            this._animationProxy.Init(this._cdef);
+            this._root.addChild(this._animationProxy);
+        }
         InitSync(reader) {
             this._rid = reader.uint64();
             this._id = reader.int32();
-            this._def = Defs_1.Defs.GetEntity(this._id);
-            this._cdef = CDefs_1.CDefs.GetEntity(this._id);
-            this._animationProxy.Init(this._id, this._cdef);
-            this._root.addChild(this._animationProxy);
+            this.OnInit();
             this._markToDestroy = reader.bool();
             this.position = new Vec2_1.Vec2(reader.double(), reader.double());
             this._logicPos.CopyFrom(this.position);

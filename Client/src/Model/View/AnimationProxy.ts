@@ -20,7 +20,8 @@ export class AnimationProxy extends fairygui.GGraph {
 	private _animation: Laya.Animation;
 	private _playingName: string = "";
 
-	public Init(actorID: number, def: Hashtable) {
+	public Init(def: Hashtable) {
+		const model = Hashtable.GetString(def, "model");
 		const aniDefs = Hashtable.GetMapArray(def, "animations");
 		for (const aniDef of aniDefs) {
 			//创建图形
@@ -28,7 +29,7 @@ export class AnimationProxy extends fairygui.GGraph {
 			const length = Hashtable.GetNumber(aniDef, "length");
 			const urls: string[] = [];
 			for (let i = 0; i < length; ++i) {
-				urls.push((Consts.ASSETS_ENTITY_PREFIX + actorID) + "/" + aniName + i + ".png");
+				urls.push(`${model}/${aniName}${i}.png`);
 			}
 			//创建动画模板
 			Laya.Animation.createFrames(urls, aniName);

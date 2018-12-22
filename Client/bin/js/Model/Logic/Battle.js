@@ -295,7 +295,14 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
         GetEmitter(rid) {
             return this._idToEmitter.get(rid.toString());
         }
-        CreateBullet(params) {
+        CreateBullet(id, casterID, skillID, position, direction) {
+            const params = new Entity_1.EntityInitParams();
+            params.rid = this.MakeRid(id);
+            params.id = id;
+            params.casterID = casterID;
+            params.skillID = skillID;
+            params.position = position;
+            params.direction = direction;
             const bullet = new Bullet_1.Bullet(this);
             bullet.Init(params);
             this._bullets.push(bullet);

@@ -6,7 +6,6 @@ import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
-import { StateType } from "../FSM/StateEnums";
 import { VEntityState } from "../FSM/VEntityState";
 import { AnimationProxy } from "./AnimationProxy";
 import { VAttribute } from "./VAttribute";
@@ -43,11 +42,11 @@ export abstract class VEntity {
 
 	public get worldPosition(): Vec2 { return this._worldPosition; }
 
-	private readonly _battle: VBattle;
-	private _rid: Long;
-	private _id: number;
-	private _def: Hashtable;
-	private _cdef: Hashtable;
+	protected readonly _battle: VBattle;
+	protected _rid: Long;
+	protected _id: number;
+	protected _def: Hashtable;
+	protected _cdef: Hashtable;
 
 	private readonly _position: Vec2 = Vec2.zero;
 	private readonly _worldPosition: Vec2 = Vec2.zero;
@@ -56,7 +55,7 @@ export abstract class VEntity {
 	private _logicRot: number = 0;
 	private _markToDestroy: boolean;
 
-	private readonly _fsm: FSM = new FSM();
+	protected readonly _fsm: FSM = new FSM();
 	private readonly _root = new fairygui.GComponent();
 	private readonly _animationProxy: AnimationProxy = new AnimationProxy();
 
@@ -65,10 +64,6 @@ export abstract class VEntity {
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
 		Global.graphic.entityRoot.addChild(this._root);
-		this._fsm.AddState(new VEntityState(StateType.Idle, this));
-		this._fsm.AddState(new VEntityState(StateType.Move, this));
-		this._fsm.AddState(new VEntityState(StateType.Attack, this));
-		this._fsm.AddState(new VEntityState(StateType.Die, this));
 	}
 
 	public Destroy(): void {
@@ -91,6 +86,16 @@ export abstract class VEntity {
 		this._root.rotation = this._rotation;
 	}
 
+	protected OnInit(): void {
+		//加载配置
+		this._def = Defs.GetEntity(this._id);
+		this._cdef = CDefs.GetEntity(this._id);
+
+		//加载动画数据
+		this._animationProxy.Init(this._cdef);
+		this._root.addChild(this._animationProxy);
+	}
+
 	/**
 	 * 初始化快照
 	 */
@@ -98,13 +103,7 @@ export abstract class VEntity {
 		this._rid = <Long>reader.uint64();
 		this._id = reader.int32();
 
-		//加载配置
-		this._def = Defs.GetEntity(this._id);
-		this._cdef = CDefs.GetEntity(this._id);
-
-		//加载动画数据
-		this._animationProxy.Init(this._id, this._cdef);
-		this._root.addChild(this._animationProxy);
+		this.OnInit();
 
 		this._markToDestroy = reader.bool();
 

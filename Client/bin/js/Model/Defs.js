@@ -8,7 +8,7 @@ define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (r
             this._entityMap = Hashtable_1.Hashtable.GetMap(this._defs, "entity");
             this._skillMap = Hashtable_1.Hashtable.GetMap(this._defs, "skill");
             this._emitterMap = Hashtable_1.Hashtable.GetMap(this._defs, "emitter");
-            this._bulletMap = Hashtable_1.Hashtable.GetMap(this._defs, "buttle");
+            this._bulletMap = Hashtable_1.Hashtable.GetMap(this._defs, "bullet");
         }
         static GetMap(id) {
             return Hashtable_1.Hashtable.GetMap(this._mapMap, Consts_1.Consts.ASSETS_MAP_PREFIX + id);

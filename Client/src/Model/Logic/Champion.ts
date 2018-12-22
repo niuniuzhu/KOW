@@ -14,6 +14,8 @@ import { Entity, EntityInitParams } from "./Entity";
 export class Champion extends Entity implements ISnapshotable {
 	public get team(): number { return this._team; }
 	public get name(): string { return this._name; }
+	public get fsm(): EntityFSM { return this._fsm; }
+
 	/**
 	 * 获取当前状态下是否可移动
 	 */
@@ -38,7 +40,8 @@ export class Champion extends Entity implements ISnapshotable {
 	private _team: number;
 	private _name: string;
 	private _skills: Skill[];
-	private _moveSpeed: FVec2 = FVec2.zero;
+	protected readonly _fsm = new EntityFSM();
+	private readonly _moveSpeed: FVec2 = FVec2.zero;
 
 	public Init(params: EntityInitParams): void {
 		super.Init(params);
@@ -66,7 +69,6 @@ export class Champion extends Entity implements ISnapshotable {
 			this._skills.push(skill);
 		}
 
-		this._fsm = new EntityFSM();
 		this._fsm.AddState(new EntityState(StateType.Idle, this));
 		this._fsm.AddState(new EntityState(StateType.Move, this));
 		this._fsm.AddState(new EntityState(StateType.Attack, this));
@@ -88,11 +90,8 @@ export class Champion extends Entity implements ISnapshotable {
 		//encode properties
 		writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
 
-		//encode skills
-		writer.int32(this._skills.length);
-		for (const skill of this._skills) {
-			writer.int32(skill.id);
-		}
+		//encode fsmstates
+		this._fsm.EncodeSnapshot(writer);
 	}
 
 	/**
@@ -104,18 +103,12 @@ export class Champion extends Entity implements ISnapshotable {
 		//decode params
 		this._team = reader.int32();
 		this._name = reader.string();
-		this.OnInit();
 
 		//decode properties
-		this._moveSpeed = new FVec2(reader.double(), reader.double());
+		this._moveSpeed.Set(reader.double(), reader.double());
 
-		//decode skills
-		const count = reader.int32();
-		for (let i = 0; i < count; ++i) {
-			const skill = new Skill();
-			skill.Init(reader.int32());
-			this._skills.push(skill);
-		}
+		//decode fsmstates
+		this._fsm.DecodeSnapshot(reader);
 	}
 
 	/**
@@ -131,11 +124,9 @@ export class Champion extends Entity implements ISnapshotable {
 		//sync properties
 		writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
 
-		//sync skills
-		writer.int32(this._skills.length);
-		for (const skill of this._skills) {
-			writer.int32(skill.id);
-		}
+		//sync fsmstates
+		writer.int32(this._fsm.currentState.type);
+		writer.double((<EntityState>this._fsm.currentState).time);
 	}
 
 
@@ -185,13 +176,13 @@ export class Champion extends Entity implements ISnapshotable {
 	public BeginMove(dx: number, dy: number): void {
 		const direction = new FVec2(FMathUtils.ToFixed(dx), FMathUtils.ToFixed(dy));
 		if (direction.SqrMagnitude() < FMathUtils.EPSILON) {
-			this._moveSpeed = FVec2.zero;
+			this._moveSpeed.Set(0, 0);
 		}
 		else {
 			if (this.canTurn) {
 				this.direction.CopyFrom(direction);
 			}
-			this._moveSpeed = FVec2.MulN(direction, this.attribute.Get(EAttr.MOVE_SPEED));
+			this._moveSpeed.CopyFrom(FVec2.MulN(direction, this.attribute.Get(EAttr.MOVE_SPEED)));
 		}
 	}
 
@@ -232,6 +223,7 @@ export class Champion extends Entity implements ISnapshotable {
 		str += `name:${this._name}\n`;
 		str += `move speed${this._moveSpeed}\n`;
 		str += `skill count${this._skills.length}\n`;
+		str += this._fsm.Dump();
 		return str;
 	}
 }

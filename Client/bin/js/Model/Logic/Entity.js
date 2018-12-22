@@ -15,13 +15,14 @@ define(["require", "exports", "../../RC/FMath/FVec2", "./Attribute"], function (
         get id() { return this._id; }
         get rid() { return this._rid; }
         get def() { return this._def; }
-        get fsm() { return this._fsm; }
         get markToDestroy() { return this._markToDestroy; }
         Init(params) {
             this._rid = params.rid;
             this._id = params.id;
             this._markToDestroy = false;
             this.OnInit();
+        }
+        OnInit() {
         }
         Destroy() {
         }
@@ -36,7 +37,6 @@ define(["require", "exports", "../../RC/FMath/FVec2", "./Attribute"], function (
             this.attribute.Foreach((v, k) => {
                 writer.int32(k).double(v);
             });
-            this._fsm.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
             this._rid = reader.uint64();
@@ -49,7 +49,6 @@ define(["require", "exports", "../../RC/FMath/FVec2", "./Attribute"], function (
             for (let i = 0; i < count; i++) {
                 this.attribute.Set(reader.int32(), reader.double());
             }
-            this._fsm.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {
             writer.uint64(this._rid);
@@ -62,8 +61,6 @@ define(["require", "exports", "../../RC/FMath/FVec2", "./Attribute"], function (
             this.attribute.Foreach((v, k, map) => {
                 writer.int32(k).double(v);
             });
-            writer.int32(this._fsm.currentState.type);
-            writer.double(this._fsm.currentState.time);
         }
         Update(dt) {
         }
@@ -78,7 +75,6 @@ define(["require", "exports", "../../RC/FMath/FVec2", "./Attribute"], function (
             this.attribute.Foreach((v, k) => {
                 str += `  attr:${k}, v:${v}\n`;
             });
-            str += this._fsm.Dump();
             return str;
         }
     }

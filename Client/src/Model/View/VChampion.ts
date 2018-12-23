@@ -35,21 +35,8 @@ export class VChampion extends VEntity {
 		}
 	}
 
-	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		super.InitSync(reader);
-		this._team = reader.int32();
-		this._name = reader.string();
-		this._moveSpeed.Set(reader.double(), reader.double());
-
-		//init fsmstates
-		if (reader.bool()) {
-			this._fsm.ChangeState(reader.int32(), null);
-			(<VEntityState>this._fsm.currentState).time = reader.double();
-		}
-	}
-
-	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		super.DecodeSync(reader);
+	public DecodeSync(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader, isNew: boolean): void {
+		super.DecodeSync(rid, reader, isNew);
 		this._team = reader.int32();
 		this._name = reader.string();
 		this._moveSpeed.Set(reader.double(), reader.double());

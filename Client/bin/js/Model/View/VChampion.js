@@ -25,18 +25,8 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
                 }
             }
         }
-        InitSync(reader) {
-            super.InitSync(reader);
-            this._team = reader.int32();
-            this._name = reader.string();
-            this._moveSpeed.Set(reader.double(), reader.double());
-            if (reader.bool()) {
-                this._fsm.ChangeState(reader.int32(), null);
-                this._fsm.currentState.time = reader.double();
-            }
-        }
-        DecodeSync(reader) {
-            super.DecodeSync(reader);
+        DecodeSync(rid, reader, isNew) {
+            super.DecodeSync(rid, reader, isNew);
             this._team = reader.int32();
             this._name = reader.string();
             this._moveSpeed.Set(reader.double(), reader.double());

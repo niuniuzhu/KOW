@@ -71,43 +71,41 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 }
             }
         }
-        InitSync(reader) {
-            this._logicFrame = reader.int32();
-            let count = reader.int32();
-            for (let i = 0; i < count; i++) {
-                const champion = this.CreateChampion(reader);
-                const isSelf = champion.rid.equals(this._playerID);
-                if (isSelf) {
-                    this._camera.lookAt = champion;
-                }
-                UIEvent_1.UIEvent.ChampionInit(champion, isSelf);
-            }
-            count = reader.int32();
-            for (let i = 0; i < count; i++) {
-                const bullet = this.CreateBullet(reader);
-            }
-        }
         DecodeSync(reader) {
             this._logicFrame = reader.int32();
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const rid = reader.uint64();
-                const champion = this.GetChampion(rid);
-                champion.DecodeSync(reader);
+                let champion = this.GetChampion(rid);
+                if (champion == null) {
+                    champion = new VChampion_1.VChampion(this);
+                    champion.DecodeSync(rid, reader, true);
+                    this._champions.push(champion);
+                    this._idToChampion.set(champion.rid.toString(), champion);
+                    const isSelf = champion.rid.equals(this._playerID);
+                    if (isSelf) {
+                        this._camera.lookAt = champion;
+                    }
+                    UIEvent_1.UIEvent.ChampionInit(champion, isSelf);
+                }
+                else {
+                    champion.DecodeSync(rid, reader, false);
+                }
             }
             count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const rid = reader.uint64();
-                const bullet = this.GetBullet(rid);
-                bullet.DecodeSync(reader);
+                let bullet = this.GetBullet(rid);
+                if (bullet == null) {
+                    bullet = new VBullet_1.VBullet(this);
+                    bullet.DecodeSync(rid, reader, true);
+                    this._bullets.push(bullet);
+                    this._idToBullet.set(bullet.rid.toString(), bullet);
+                }
+                else {
+                    bullet.DecodeSync(rid, reader, false);
+                }
             }
-        }
-        CreateChampion(reader) {
-            const champion = new VChampion_1.VChampion(this);
-            champion.InitSync(reader);
-            this._champions.push(champion);
-            this._idToChampion.set(champion.rid.toString(), champion);
-            return champion;
         }
         DestroyChampion(champion) {
             champion.Destroy();
@@ -122,13 +120,6 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         GetChampion(rid) {
             return this._idToChampion.get(rid.toString());
-        }
-        CreateBullet(reader) {
-            const bullet = new VBullet_1.VBullet(this);
-            bullet.InitSync(reader);
-            this._bullets.push(bullet);
-            this._idToBullet.set(bullet.rid.toString(), bullet);
-            return bullet;
         }
         DestroyBullet(bullet) {
             bullet.Destroy();
@@ -146,7 +137,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         OnBattleInit(e) {
             const reader = $protobuf.Reader.create(e.data);
-            this.InitSync(reader);
+            this.DecodeSync(reader);
         }
         OnSnapshot(e) {
             const reader = $protobuf.Reader.create(e.data);

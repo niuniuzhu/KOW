@@ -125,6 +125,7 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
                 const writer = $protobuf.Writer.create();
                 this.EncodeSnapshot(writer);
                 const data = writer.finish();
+                Logger_1.Logger.Log(data.length);
                 const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_CommitSnapshot();
                 request.frame = this._frame;
                 request.data = data;

@@ -9,6 +9,7 @@ import { CDefs } from "../CDefs";
 import { Camera } from "./Camera";
 import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
+import { Bullet } from "../Logic/Bullet";
 
 export class VBattle {
 	private _mapID: number = 0;
@@ -118,30 +119,6 @@ export class VBattle {
 	}
 
 	/**
-	 * 初始化同步数据
-	 */
-	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._logicFrame = reader.int32();
-		//champions
-		let count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			const champion = this.CreateChampion(reader);
-			const isSelf = champion.rid.equals(this._playerID);
-			if (isSelf) {
-				this._camera.lookAt = champion;
-			}
-			//通知UI创建实体
-			UIEvent.ChampionInit(champion, isSelf);
-		}
-
-		//bullets
-		count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			const bullet = this.CreateBullet(reader);
-		}
-	}
-
-	/**
 	 * 解码同步数据
 	 */
 	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -150,28 +127,37 @@ export class VBattle {
 		let count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const rid = <Long>reader.uint64();
-			const champion = this.GetChampion(rid);
-			champion.DecodeSync(reader);
+			let champion = this.GetChampion(rid);
+			if (champion == null) {
+				champion = new VChampion(this);
+				champion.DecodeSync(rid, reader, true);
+				this._champions.push(champion);
+				this._idToChampion.set(champion.rid.toString(), champion);
+				const isSelf = champion.rid.equals(this._playerID);
+				if (isSelf) {
+					this._camera.lookAt = champion;
+				}
+				//通知UI创建实体
+				UIEvent.ChampionInit(champion, isSelf);
+			} else {
+				champion.DecodeSync(rid, reader, false);
+			}
 		}
 
 		//bullets
 		count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const rid = <Long>reader.uint64();
-			const bullet = this.GetBullet(rid);
-			bullet.DecodeSync(reader);
+			let bullet = this.GetBullet(rid);
+			if (bullet == null) {
+				bullet = new VBullet(this);
+				bullet.DecodeSync(rid, reader, true);
+				this._bullets.push(bullet);
+				this._idToBullet.set(bullet.rid.toString(), bullet);
+			} else {
+				bullet.DecodeSync(rid, reader, false);
+			}
 		}
-	}
-
-	/**
-	 * 创建战士
-	 */
-	public CreateChampion(reader: $protobuf.Reader | $protobuf.BufferReader): VChampion {
-		const champion = new VChampion(this);
-		champion.InitSync(reader);
-		this._champions.push(champion);
-		this._idToChampion.set(champion.rid.toString(), champion);
-		return champion;
 	}
 
 	/**
@@ -198,17 +184,6 @@ export class VBattle {
 	 */
 	public GetChampion(rid: Long): VChampion {
 		return this._idToChampion.get(rid.toString());
-	}
-
-	/**
-	 * 创建子弹
-	 */
-	public CreateBullet(reader: $protobuf.Reader | $protobuf.BufferReader): VBullet {
-		const bullet = new VBullet(this);
-		bullet.InitSync(reader);
-		this._bullets.push(bullet);
-		this._idToBullet.set(bullet.rid.toString(), bullet);
-		return bullet;
 	}
 
 	/**
@@ -239,7 +214,7 @@ export class VBattle {
 
 	private OnBattleInit(e: SyncEvent): void {
 		const reader = $protobuf.Reader.create(e.data);
-		this.InitSync(reader);
+		this.DecodeSync(reader);
 	}
 
 	private OnSnapshot(e: SyncEvent): void {

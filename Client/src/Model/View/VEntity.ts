@@ -94,40 +94,14 @@ export abstract class VEntity {
 	}
 
 	/**
-	 * 初始化快照
-	 */
-	public InitSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._rid = <Long>reader.uint64();
-		this._id = reader.int32();
-
-		this.OnInit();
-
-		this._markToDestroy = reader.bool();
-
-		//init properties
-		this.position = new Vec2(reader.double(), reader.double());
-		this._logicPos.CopyFrom(this.position);
-		const logicDir = new Vec2(reader.double(), reader.double());
-		this.rotation = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
-		if (logicDir.x < 0) {
-			this.rotation = 360 - this.rotation;
-		}
-		this._logicRot = this.rotation;
-
-		//init attribues
-		const count = reader.int32();
-		for (let i = 0; i < count; ++i) {
-			this.attribute.Set(reader.int32(), reader.double());
-		}
-	}
-
-	/**
 	 * 解码快照
 	 */
-	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+	public DecodeSync(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader, isNew: boolean): void {
 		//read properties
-		// this._rid = <Long>reader.uint64();
+		this._rid = rid;
 		this._id = reader.int32();
+		if (isNew)
+			this.OnInit();
 		this._markToDestroy = reader.bool();
 
 		this._logicPos = new Vec2(reader.double(), reader.double());
@@ -135,6 +109,10 @@ export abstract class VEntity {
 		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
 		if (logicDir.x < 0) {
 			this._logicRot = 360 - this._logicRot;
+		}
+		if (isNew) {
+			this.position = this._logicPos.Clone();
+			this.rotation = this._logicRot;
 		}
 
 		//read attribues

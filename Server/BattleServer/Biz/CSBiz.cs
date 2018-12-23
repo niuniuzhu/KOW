@@ -43,7 +43,7 @@ namespace BattleServer.Biz
 			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
 			long lag = ( long )( ( currTime - askPingRet.Stime ) * 0.5 );
 			long timeDiff = askPingRet.Time + lag - currTime;
-			Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
+			//Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
 		}
 
 		public void ReportStateToCS( NetSessionBase session )

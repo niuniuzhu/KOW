@@ -62,32 +62,21 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
             this._animationProxy.Init(this._cdef);
             this._root.addChild(this._animationProxy);
         }
-        InitSync(reader) {
-            this._rid = reader.uint64();
+        DecodeSync(rid, reader, isNew) {
+            this._rid = rid;
             this._id = reader.int32();
-            this.OnInit();
-            this._markToDestroy = reader.bool();
-            this.position = new Vec2_1.Vec2(reader.double(), reader.double());
-            this._logicPos.CopyFrom(this.position);
-            const logicDir = new Vec2_1.Vec2(reader.double(), reader.double());
-            this.rotation = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
-            if (logicDir.x < 0) {
-                this.rotation = 360 - this.rotation;
-            }
-            this._logicRot = this.rotation;
-            const count = reader.int32();
-            for (let i = 0; i < count; ++i) {
-                this.attribute.Set(reader.int32(), reader.double());
-            }
-        }
-        DecodeSync(reader) {
-            this._id = reader.int32();
+            if (isNew)
+                this.OnInit();
             this._markToDestroy = reader.bool();
             this._logicPos = new Vec2_1.Vec2(reader.double(), reader.double());
             const logicDir = new Vec2_1.Vec2(reader.double(), reader.double());
             this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
             if (logicDir.x < 0) {
                 this._logicRot = 360 - this._logicRot;
+            }
+            if (isNew) {
+                this.position = this._logicPos.Clone();
+                this.rotation = this._logicRot;
             }
             const count = reader.int32();
             for (let i = 0; i < count; i++) {

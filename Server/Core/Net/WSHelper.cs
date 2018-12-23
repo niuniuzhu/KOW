@@ -105,10 +105,9 @@ namespace Core.Net
                     return false;
                 // 等于126 随后的两个字节16位表示数据长度
                 // 调换字节序
-                byte[] read = new byte[2];
-                read[0] = data[offset + 1];
-                read[1] = data[offset + 0];
-                packageLength = BitConverter.ToUInt16( read );
+                packageLength = 0;
+                packageLength |= data[1 + offset];
+                packageLength |= data[0 + offset] << 8;
                 offset += 2;
             }
             else if ( packageLength == 127 )
@@ -117,16 +116,15 @@ namespace Core.Net
                     return false;
                 // 等于127 随后的八个字节64位表示数据长度
                 // 调换字节序
-                byte[] read = new byte[8];
-                read[0] = data[offset + 7];
-                read[1] = data[offset + 6];
-                read[2] = data[offset + 5];
-                read[3] = data[offset + 4];
-                read[4] = data[offset + 3];
-                read[5] = data[offset + 2];
-                read[6] = data[offset + 1];
-                read[7] = data[offset + 0];
-                packageLength = ( int )BitConverter.ToUInt64( read );
+                packageLength = 0;
+                packageLength |= data[7 + offset];
+                packageLength |= data[6 + offset] << 8;
+                packageLength |= data[5 + offset] << 16;
+                packageLength |= data[4 + offset] << 24;
+                packageLength |= data[3 + offset] << 32;
+                packageLength |= data[2 + offset] << 40;
+                packageLength |= data[1 + offset] << 48;
+                packageLength |= data[0 + offset] << 56;
                 offset += 8;
             }
             // 存储4位掩码值

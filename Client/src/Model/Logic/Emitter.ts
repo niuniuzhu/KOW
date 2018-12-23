@@ -51,7 +51,7 @@ export class Emitter implements ISnapshotable {
 	/**
 	 * 发射数量
 	 */
-	private _bulletCount: number;
+	private _maxBulletCount: number;
 	/**
 	 * 生命周期
 	 */
@@ -77,6 +77,7 @@ export class Emitter implements ISnapshotable {
 	private _markToDestroy: boolean;
 	private _time: number;
 	private _nextEmitTime: number;
+	private _bulletCount: number;
 	private readonly _position: FVec2 = FVec2.zero;
 	private readonly _direction: FVec2 = FVec2.zero;
 
@@ -113,7 +114,7 @@ export class Emitter implements ISnapshotable {
 		this._angle = Hashtable.GetNumber(this._def, "angle");
 		this._follow = Hashtable.GetBool(this._def, "follow");
 		this._frequency = Hashtable.GetNumber(this._def, "frequency");
-		this._bulletCount = Hashtable.GetNumber(this._def, "bullet_count", 1);
+		this._maxBulletCount = Hashtable.GetNumber(this._def, "max_bullet_count", 1);
 		this._lifeTime = Hashtable.GetNumber(this._def, "life_time", -1);
 		this._emitType = Hashtable.GetNumber(this._def, "emit_type");
 		this._destroyType = Hashtable.GetNumber(this._def, "destroy_type");
@@ -130,6 +131,7 @@ export class Emitter implements ISnapshotable {
 		writer.bool(this._markToDestroy);
 		writer.int32(this._time);
 		writer.int32(this._nextEmitTime);
+		writer.int32(this._bulletCount);
 		writer.double(this._position.x).double(this._position.y);
 		writer.double(this._direction.x).double(this._direction.y);
 	}
@@ -143,6 +145,7 @@ export class Emitter implements ISnapshotable {
 		this._markToDestroy = reader.bool();
 		this._time = reader.int32();
 		this._nextEmitTime = reader.int32();
+		this._bulletCount = reader.int32();
 		this._position.Set(reader.double(), reader.double());
 		this._direction.Set(reader.double(), reader.double());
 	}
@@ -172,7 +175,10 @@ export class Emitter implements ISnapshotable {
 			//更新下次发射的时间,需补偿此次多出的时间
 			this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
 			//发射子弹
-			this.Emit();
+			if (this._bulletCount < this._maxBulletCount) {
+				this.Emit();
+				++this._bulletCount;
+			}
 		}
 	}
 

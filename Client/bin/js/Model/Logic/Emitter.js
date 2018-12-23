@@ -48,7 +48,7 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             this._angle = Hashtable_1.Hashtable.GetNumber(this._def, "angle");
             this._follow = Hashtable_1.Hashtable.GetBool(this._def, "follow");
             this._frequency = Hashtable_1.Hashtable.GetNumber(this._def, "frequency");
-            this._bulletCount = Hashtable_1.Hashtable.GetNumber(this._def, "bullet_count", 1);
+            this._maxBulletCount = Hashtable_1.Hashtable.GetNumber(this._def, "max_bullet_count", 1);
             this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._def, "life_time", -1);
             this._emitType = Hashtable_1.Hashtable.GetNumber(this._def, "emit_type");
             this._destroyType = Hashtable_1.Hashtable.GetNumber(this._def, "destroy_type");
@@ -63,6 +63,7 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             writer.bool(this._markToDestroy);
             writer.int32(this._time);
             writer.int32(this._nextEmitTime);
+            writer.int32(this._bulletCount);
             writer.double(this._position.x).double(this._position.y);
             writer.double(this._direction.x).double(this._direction.y);
         }
@@ -75,6 +76,7 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             this._markToDestroy = reader.bool();
             this._time = reader.int32();
             this._nextEmitTime = reader.int32();
+            this._bulletCount = reader.int32();
             this._position.Set(reader.double(), reader.double());
             this._direction.Set(reader.double(), reader.double());
         }
@@ -96,7 +98,10 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             }
             if (this._time >= this._nextEmitTime) {
                 this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
-                this.Emit();
+                if (this._bulletCount < this._maxBulletCount) {
+                    this.Emit();
+                    ++this._bulletCount;
+                }
             }
         }
         UpdatePosition(caster) {

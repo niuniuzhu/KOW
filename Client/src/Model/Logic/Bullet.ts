@@ -6,6 +6,7 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Entity, EntityInitParams } from "./Entity";
 import Long = require("../../Libs/long");
+import { Champion } from "./Champion";
 
 enum BulletMoveType {
 	Linear,
@@ -36,11 +37,11 @@ enum AttrFilter {
 enum AttrFilterOP {
 	Max,
 	Min,
+	Equal,
 	Greater,
 	GreaterEqual,
 	Less,
-	LessEqual,
-	Equal
+	LessEqual
 }
 
 enum DestroyType {
@@ -66,6 +67,10 @@ export class Bullet extends Entity implements ISnapshotable {
 	private _targetType: TargetType;
 	private _attrTypes: AttrFilter[];
 	private _attrFilterOPs: AttrFilterOP[];
+	private _attrCompareValues: number[];
+
+	private readonly _targets0: Champion[] = [];
+	private readonly _targets1: Champion[] = [];
 
 	/**
 	 * 产生者ID
@@ -105,6 +110,7 @@ export class Bullet extends Entity implements ISnapshotable {
 		this._targetType = Hashtable.GetNumber(this._def, "target_type");
 		this._attrTypes = Hashtable.GetNumberArray(this._def, "attr_types");
 		this._attrFilterOPs = Hashtable.GetNumberArray(this._def, "attr_filter_ops");
+		this._attrCompareValues = Hashtable.GetNumberArray(this._def, "attr_compare_values");
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
@@ -167,6 +173,165 @@ export class Bullet extends Entity implements ISnapshotable {
 			case BulletMoveType.Follow:
 				//todo
 				break;
+		}
+	}
+
+	private SelectTargets(): void {
+		const champions = this._battle.GetChampions();
+		const caster = this._battle.GetChampion(this._casterID);
+
+		//选择目标
+		switch (this._targetType) {
+			case TargetType.Opponent:
+				for (const champion of champions) {
+					if (champion.team != caster.team)
+						this._targets0.push(champion);
+				}
+				break;
+
+			case TargetType.Teamate:
+				for (const champion of champions) {
+					if (champion.team == caster.team)
+						this._targets0.push(champion);
+				}
+				break;
+
+			case TargetType.Self:
+				this._targets0.push(caster);
+				break;
+		}
+
+		//没有找到目标
+		if (this._targets0.length == 0)
+			return;
+
+		//过滤属性
+		const count = this._attrTypes.length;
+		for (let i = 0; i < count; ++i) {
+			const attrType = this._attrTypes[i];
+			const attrOp = this._attrFilterOPs[i];
+			const compareValue = this._attrCompareValues[i];
+			switch (attrType) {
+				case AttrFilter.Distence:
+					this.FilterDistance(caster, attrType, attrOp, compareValue);
+					break;
+				case AttrFilter.Hp:
+					break;
+				case AttrFilter.Mp:
+					break;
+				case AttrFilter.Atk:
+					break;
+				case AttrFilter.Def:
+					break;
+				case AttrFilter.Speed:
+					break;
+			}
+		}
+	}
+
+	private FilterDistance(caster: Champion, attrType: AttrFilter, attrOp: AttrFilterOP, compareValue: number): void {
+		switch (attrOp) {
+			case AttrFilterOP.Max: {
+				if (this._targets0.length == 1) {
+					this._targets1.push(this._targets0[0]);
+				}
+				else {
+					let maxValue = 0;
+					let meet: Champion;
+					for (const target of this._targets0) {
+						const distanceSqr = caster.position.DistanceSquared(target.position);
+						if (distanceSqr > maxValue) {
+							maxValue = distanceSqr;
+							meet = target;
+						}
+					}
+					this._targets1.push(meet);
+				}
+				break;
+			}
+
+			case AttrFilterOP.Min:
+				if (this._targets0.length == 1) {
+					this._targets1.push(this._targets0[0]);
+				}
+				else {
+					let minValue = FMathUtils.MAX_VALUE;
+					let meet: Champion;
+					for (const target of this._targets0) {
+						const distanceSqr = caster.position.DistanceSquared(target.position);
+						if (distanceSqr < minValue) {
+							minValue = distanceSqr;
+							meet = target;
+						}
+					}
+					this._targets1.push(meet);
+				}
+				break;
+
+			case AttrFilterOP.Equal: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const distanceSqr = caster.position.DistanceSquared(target.position);
+					if (distanceSqr == FMathUtils.Mul(compareValue, compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+
+			case AttrFilterOP.Greater: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const distanceSqr = caster.position.DistanceSquared(target.position);
+					if (distanceSqr < FMathUtils.Mul(compareValue, compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+
+			case AttrFilterOP.GreaterEqual: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const distanceSqr = caster.position.DistanceSquared(target.position);
+					if (distanceSqr <= FMathUtils.Mul(compareValue, compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+
+			case AttrFilterOP.Less: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const distanceSqr = caster.position.DistanceSquared(target.position);
+					if (distanceSqr > FMathUtils.Mul(compareValue, compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+
+			case AttrFilterOP.LessEqual: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const distanceSqr = caster.position.DistanceSquared(target.position);
+					if (distanceSqr >= FMathUtils.Mul(compareValue, compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
 		}
 	}
 }

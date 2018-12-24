@@ -274,6 +274,9 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
         GetChampion(rid) {
             return this._idToChampion.get(rid.toString());
         }
+        GetChampions() {
+            return this._champions;
+        }
         CreateEmitter(id, casterID, skillID) {
             const emitter = new Emitter_1.Emitter(this);
             emitter.Init(this.MakeRid(id), id, casterID, skillID);

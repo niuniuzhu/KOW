@@ -96,7 +96,7 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             if (this._follow) {
                 this.UpdatePosition();
             }
-            if (this._time >= this._nextEmitTime) {
+            if (this._time > this._nextEmitTime) {
                 this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
                 if (this._bulletCount < this._maxBulletCount) {
                     this.Emit();

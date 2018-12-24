@@ -120,7 +120,8 @@
 			"shape_radius": 40,
 			"target_type": 0,
 			"attr_types": [],
-			"attr_filter_ops": []
+			"attr_filter_ops": [],
+			"attr_compare_values":[]
 		}
 	}
 }

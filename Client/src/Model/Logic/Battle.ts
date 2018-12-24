@@ -417,6 +417,13 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 获取战士列表
+	 */
+	public GetChampions(): Champion[] {
+		return this._champions;
+	}
+
+	/**
 	 * 创建发射器
 	 */
 	public CreateEmitter(id: number, casterID: Long, skillID: number): Emitter {

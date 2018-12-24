@@ -171,7 +171,7 @@ export class Emitter implements ISnapshotable {
 		if (this._follow) {
 			this.UpdatePosition();
 		}
-		if (this._time >= this._nextEmitTime) {
+		if (this._time > this._nextEmitTime) {
 			//更新下次发射的时间,需补偿此次多出的时间
 			this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
 			//发射子弹

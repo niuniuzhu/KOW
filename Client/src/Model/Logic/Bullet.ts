@@ -18,6 +18,31 @@ enum BulletShape {
 	Rect
 }
 
+enum TargetType {
+	Opponent,
+	Teamate,
+	Self
+}
+
+enum AttrFilter {
+	Distence,
+	Hp,
+	Mp,
+	Atk,
+	Def,
+	Speed
+}
+
+enum AttrFilterOP {
+	Max,
+	Min,
+	Greater,
+	GreaterEqual,
+	Less,
+	LessEqual,
+	Equal
+}
+
 enum DestroyType {
 	Life,
 	Collsion,
@@ -38,6 +63,9 @@ export class Bullet extends Entity implements ISnapshotable {
 	private _shapeRadius: number;
 	private _shapeWidth: number;
 	private _shapeHeight: number;
+	private _targetType: TargetType;
+	private _attrTypes: AttrFilter[];
+	private _attrFilterOPs: AttrFilterOP[];
 
 	/**
 	 * 产生者ID
@@ -74,11 +102,14 @@ export class Bullet extends Entity implements ISnapshotable {
 		this._shapeRadius = Hashtable.GetNumber(this._def, "shape_radius");
 		this._shapeWidth = Hashtable.GetNumber(this._def, "shape_width");
 		this._shapeHeight = Hashtable.GetNumber(this._def, "shape_height");
+		this._targetType = Hashtable.GetNumber(this._def, "target_type");
+		this._attrTypes = Hashtable.GetNumberArray(this._def, "attr_types");
+		this._attrFilterOPs = Hashtable.GetNumberArray(this._def, "attr_filter_ops");
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		super.EncodeSnapshot(writer);
-		writer.uint64(this._casterID); 
+		writer.uint64(this._casterID);
 		writer.int32(this._skillID);
 		writer.int32(this._time);
 	}

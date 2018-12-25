@@ -2,7 +2,6 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
-import { Attribute } from "./Attribute";
 import { Battle } from "./Battle";
 
 export class EntityInitParams {
@@ -23,17 +22,16 @@ export abstract class Entity implements ISnapshotable {
 	public get battle(): Battle { return this._battle; }
 	public get id(): number { return this._id; }
 	public get rid(): Long { return this._rid; }
-	public get def(): Hashtable { return this._def; }
+	public get defs(): Hashtable { return this._defs; }
 	public get markToDestroy(): boolean { return this._markToDestroy; }
 
-	public readonly attribute: Attribute = new Attribute();
 	public readonly position: FVec2 = FVec2.zero;
 	public readonly direction: FVec2 = FVec2.zero;
 
 	protected readonly _battle: Battle;
 	protected _rid: Long;
 	protected _id: number;
-	protected _def: Hashtable;
+	protected _defs: Hashtable;
 	protected _markToDestroy: boolean;
 
 	constructor(battle: Battle) {
@@ -44,14 +42,16 @@ export abstract class Entity implements ISnapshotable {
 		this._rid = params.rid;
 		this._id = params.id;
 		this._markToDestroy = false;
+		this.LoadDefs();
 		this.OnInit();
 	}
+
+	protected abstract LoadDefs(): void;
 
 	/**
 	 * 在初始化后或解码快照时执行
 	 */
-	protected OnInit(): void {
-	}
+	protected abstract OnInit(): void;
 
 	public Destroy(): void {
 	}
@@ -65,13 +65,6 @@ export abstract class Entity implements ISnapshotable {
 		writer.bool(this._markToDestroy);
 		writer.double(this.position.x).double(this.position.y);
 		writer.double(this.direction.x).double(this.direction.y);
-
-		//encode attributes
-		const count = this.attribute.count;
-		writer.int32(count);
-		this.attribute.Foreach((v, k) => {
-			writer.int32(k).double(v);
-		});
 	}
 
 	/**
@@ -84,12 +77,6 @@ export abstract class Entity implements ISnapshotable {
 		this._markToDestroy = reader.bool();
 		this.position.Set(reader.double(), reader.double());
 		this.direction.Set(reader.double(), reader.double());
-
-		//decode attributes
-		const count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), reader.double());
-		}
 	}
 
 	/**
@@ -101,13 +88,6 @@ export abstract class Entity implements ISnapshotable {
 		writer.bool(this._markToDestroy);
 		writer.double(this.position.x).double(this.position.y);
 		writer.double(this.direction.x).double(this.direction.y);
-
-		//sync attributes
-		const count = this.attribute.count;
-		writer.int32(count);
-		this.attribute.Foreach((v, k, map) => {
-			writer.int32(k).double(v);
-		});
 	}
 
 	public Update(dt: number): void {
@@ -120,10 +100,6 @@ export abstract class Entity implements ISnapshotable {
 		str += `markToDestroy:${this._markToDestroy}\n`;
 		str += `positionX:${this.position.x}, positionY:${this.position.y}\n`;
 		str += `directionX:${this.direction.x}, directionY:${this.direction.y}\n`;
-		str += `attribute count:${this.attribute.count}\n`;
-		this.attribute.Foreach((v, k) => {
-			str += `  attr:${k}, v:${v}\n`;
-		});
 		return str;
 	}
 }

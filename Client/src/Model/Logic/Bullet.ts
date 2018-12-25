@@ -1,14 +1,14 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
+import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
+import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";
 import Long = require("../../Libs/long");
-import { Champion } from "./Champion";
-import { EAttr } from "./Attribute";
-import { Intersection } from "../../RC/FMath/Intersection";
+import { Logger } from "../../RC/Utils/Logger";
 
 enum BulletMoveType {
 	Linear,
@@ -49,6 +49,9 @@ enum DestroyType {
 }
 
 export class Bullet extends Entity implements ISnapshotable {
+	//static properties
+	private _radius: number;
+	private _moveSpeed: number;
 	private _moveType: BulletMoveType;
 	private _angleSpeed: number;
 	private _angleRadius: number;
@@ -61,6 +64,7 @@ export class Bullet extends Entity implements ISnapshotable {
 	private _attrFilterOPs: AttrFilterOP[];
 	private _attrCompareValues: number[];
 
+	//runtie properties
 	private readonly _targets0: Champion[] = [];
 	private readonly _targets1: Champion[] = [];
 	private readonly _targets2: Champion[] = [];
@@ -86,21 +90,24 @@ export class Bullet extends Entity implements ISnapshotable {
 		this.direction.CopyFrom(params.direction);
 	}
 
+	protected LoadDefs(): void {
+		this._defs = Defs.GetBullet(this._id);
+	}
+
 	protected OnInit(): void {
-		this._def = Defs.GetBullet(this._id);
-		this.attribute.Set(EAttr.RADIUS, Hashtable.GetNumber(this._def, "radius"));
-		this.attribute.Set(EAttr.MOVE_SPEED, Hashtable.GetNumber(this._def, "move_speed"));
-		this._moveType = Hashtable.GetNumber(this._def, "move_type");
-		this._angleSpeed = Hashtable.GetNumber(this._def, "angle_speed");
-		this._angleRadius = Hashtable.GetNumber(this._def, "angle_radius");
-		this._lifeTime = Hashtable.GetNumber(this._def, "life_time", -1);
-		this._destroyType = Hashtable.GetNumber(this._def, "destroy_type");
-		this._collisionStartTime = Hashtable.GetNumber(this._def, "collision_start_time");
-		this._maxCollisionCount = Hashtable.GetNumber(this._def, "max_collision_count", -1);
-		this._targetType = Hashtable.GetNumber(this._def, "target_type");
-		this._attrTypes = Hashtable.GetNumberArray(this._def, "attr_types");
-		this._attrFilterOPs = Hashtable.GetNumberArray(this._def, "attr_filter_ops");
-		this._attrCompareValues = Hashtable.GetNumberArray(this._def, "attr_compare_values");
+		this._radius = Hashtable.GetNumber(this._defs, "radius");
+		this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
+		this._moveType = Hashtable.GetNumber(this._defs, "move_type");
+		this._angleSpeed = Hashtable.GetNumber(this._defs, "angle_speed");
+		this._angleRadius = Hashtable.GetNumber(this._defs, "angle_radius");
+		this._lifeTime = Hashtable.GetNumber(this._defs, "life_time", -1);
+		this._destroyType = Hashtable.GetNumber(this._defs, "destroy_type");
+		this._collisionStartTime = Hashtable.GetNumber(this._defs, "collision_start_time");
+		this._maxCollisionCount = Hashtable.GetNumber(this._defs, "max_collision_count", -1);
+		this._targetType = Hashtable.GetNumber(this._defs, "target_type");
+		this._attrTypes = Hashtable.GetNumberArray(this._defs, "attr_types");
+		this._attrFilterOPs = Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
+		this._attrCompareValues = Hashtable.GetNumberArray(this._defs, "attr_compare_values");
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
@@ -120,9 +127,6 @@ export class Bullet extends Entity implements ISnapshotable {
 	public Update(dt: number): void {
 		super.Update(dt);
 		this.MoveStep(dt);
-
-		this._targets1.splice(0);
-		this._targets2.splice(0);
 
 		this._time += dt;
 		switch (this._destroyType) {
@@ -147,13 +151,13 @@ export class Bullet extends Entity implements ISnapshotable {
 	}
 
 	private MoveStep(dt: number): void {
-		if (this._speed == 0) {
+		if (this._moveSpeed == 0) {
 			return;
 		}
 		switch (this._moveType) {
 			case BulletMoveType.Linear:
 				{
-					const moveDelta = FVec2.MulN(FVec2.MulN(this.direction, this._speed), FMathUtils.Mul(0.001, dt));
+					const moveDelta = FVec2.MulN(FVec2.MulN(this.direction, this._moveSpeed), FMathUtils.Mul(0.001, dt));
 					const pos = FVec2.Add(this.position, moveDelta);
 					this.position.CopyFrom(pos);
 				}
@@ -169,11 +173,19 @@ export class Bullet extends Entity implements ISnapshotable {
 		}
 	}
 
+	/**
+	 * 相交性检测
+	 */
 	public Intersect(): void {
 		this.SelectTargets();
 		for (const target of this._targets1) {
-			Intersection.IntersectsCC(this.position, this._radius, target.position, target.attribute.Get(EAttr.RADIUS));
+			const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
+			if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
+				Logger.Log("hit");
+			}
 		}
+		this._targets1.splice(0);
+		this._targets2.splice(0);
 	}
 
 	private SelectTargets(): void {
@@ -220,27 +232,27 @@ export class Bullet extends Entity implements ISnapshotable {
 					break;
 				case AttrFilter.Hp:
 					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-						return t.attribute.Get(EAttr.HP);
+						return t.hp;
 					}, v => v, v => v);
 					break;
 				case AttrFilter.Mp:
 					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-						return t.attribute.Get(EAttr.MP);
+						return t.mp;
 					}, v => v, v => v);
 					break;
 				case AttrFilter.Atk:
 					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-						return t.attribute.Get(EAttr.ATK);
+						return t.atk;
 					}, v => v, v => v);
 					break;
 				case AttrFilter.Def:
 					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-						return t.attribute.Get(EAttr.DEF);
+						return t.def;
 					}, v => v, v => v);
 					break;
 				case AttrFilter.Velocity:
 					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-						return t.attribute.Get(EAttr.VELOCITY);
+						return t.velocity;
 					}, v => v, v => v);
 					break;
 			}

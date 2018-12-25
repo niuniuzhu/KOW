@@ -17,7 +17,7 @@ export class Intersection {
 	 * @param radius1 
 	 */
 	public static IntersectsCC(center0: FVec2, radius0: number, center1: FVec2, radius1: number): IntersectionType {
-		const a = center1.Sub(center0).SqrMagnitude();
+		const a = FVec2.Sub(center1, center0).SqrMagnitude();
 		let r = FMathUtils.Add(radius0, radius1);
 		r = FMathUtils.Mul(r, r);
 		if (a > r)
@@ -36,7 +36,7 @@ export class Intersection {
 	 * @param direction 移动方向(正规化)
 	 */
 	public static IntersectsMovingCC(mCenter: FVec2, mRadius: number, sCenter: FVec2, sRadius: number, direction: FVec2): number {
-		const e = sCenter.Sub(mCenter);
+		const e = FVec2.Sub(sCenter, mCenter);
 		const r = FMathUtils.Add(mRadius, sRadius);
 		const rSqrt = FMathUtils.Mul(r, r);
 		//距离小于半径和,已经相交了

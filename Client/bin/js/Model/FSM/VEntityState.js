@@ -15,16 +15,18 @@ define(["require", "exports", "../../RC/FSM/FSMState", "../../RC/Utils/Hashtable
             this._owner = owner;
         }
         OnEnter(param) {
-            const vDef = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this.owner.cdef, "states"), this.type.toString());
-            const aniName = Hashtable_1.Hashtable.GetString(vDef, "animation");
-            const scaleTime = Hashtable_1.Hashtable.GetBool(vDef, "auto_scale_time");
-            const duration = Hashtable_1.Hashtable.GetNumber(vDef, "duration");
-            let timeScale = 1;
-            if (scaleTime) {
-                const animationSetting = this.owner.animationProxy.GetAnimationSetting(aniName);
-                timeScale = duration / (animationSetting.length * animationSetting.interval);
+            if (this.owner.animationProxy.available) {
+                const vDef = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this.owner.cdefs, "states"), this.type.toString());
+                const aniName = Hashtable_1.Hashtable.GetString(vDef, "animation");
+                const scaleTime = Hashtable_1.Hashtable.GetBool(vDef, "auto_scale_time");
+                const duration = Hashtable_1.Hashtable.GetNumber(vDef, "duration");
+                let timeScale = 1;
+                if (scaleTime) {
+                    const animationSetting = this.owner.animationProxy.GetAnimationSetting(aniName);
+                    timeScale = duration / (animationSetting.length * animationSetting.interval);
+                }
+                this.owner.PlayAnim(aniName, timeScale);
             }
-            this.owner.PlayAnim(aniName, timeScale);
             this._time = 0;
         }
         OnUpdate(dt) {

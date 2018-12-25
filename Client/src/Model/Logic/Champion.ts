@@ -8,62 +8,104 @@ import { EntityState } from "../FSM/EntityState";
 import { StateType } from "../FSM/StateEnums";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
-import { EAttr } from "./Attribute";
 import { Entity, EntityInitParams } from "./Entity";
-import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
 
 export class Champion extends Entity implements ISnapshotable {
-	public get team(): number { return this._team; }
-	public get name(): string { return this._name; }
 	public get fsm(): EntityFSM { return this._fsm; }
+	public get radius(): number { return this._radius; }
+	public get moveSpeed(): number { return this._moveSpeed; }
 
-	/**
-	 * 获取当前状态下是否可移动
-	 */
-	public get canMove(): boolean { return this.attribute.Get(EAttr.S_DISABLE_MOVE) <= 0; }
-	/**
-	 * 获取当前状态下是否可转身
-	 */
-	public get canTurn(): boolean { return this.attribute.Get(EAttr.S_DISABLE_TURN) <= 0; }
-	/**
-	 * 获取当前状态下是否可使用技能
-	 */
-	public get canUseSkill(): boolean { return this.attribute.Get(EAttr.S_DISABLE_SKILL) <= 0; }
-	/**
-	 * 获取当前状态下是否霸体
-	 */
-	public get isSuperArmor(): boolean { return this.attribute.Get(EAttr.S_SUPPER_ARMOR) > 0; }
-	/**
-	 * 获取当前状态下是否无敌
-	 */
-	public get isInvulnerability(): boolean { return this.attribute.Get(EAttr.S_INVULNER_ABILITY) > 0; }
-
-	private _team: number;
-	private _name: string;
+	//static properties
+	private _radius: number;
+	private _moveSpeed: number;
 	private _skills: Skill[];
 	protected readonly _fsm = new EntityFSM();
 
+	//run time properties
+	/**
+	 * 队伍
+	 */
+	public team: number;
+	/**
+	 * 名字
+	 */
+	public name: string;
+	/**
+	 * 当前血量
+	 */
+	public hp: number;
+	/**
+	 * 最大血量
+	 */
+	public mhp: number;
+	/**
+	 * 当前怒气
+	 */
+	public mp: number;
+	/**
+	 * 最大怒气
+	 */
+	public mmp: number;
+	/**
+	 * 攻击力
+	 */
+	public atk: number;
+	/**
+	 * 防御力
+	 */
+	public def: number;
+	/**
+	 * 禁止移动
+	 */
+	public disableMove: number = 0;
+	/**
+	 * 禁止转身
+	 */
+	public disableTurn: number = 0;
+	/**
+	 * 禁止使用技能
+	 */
+	public disableSkill: number = 0;
+	/**
+	 * 霸体
+	 */
+	public supperArmor: number = 0;
+	/**
+	 * 无敌
+	 */
+	public invulnerAbility: number = 0;
+	/**
+	 * 移动方向
+	 */
+	public readonly moveDirection: FVec2 = FVec2.zero;
+	/**
+	 * 相交向量
+	 */
+	public readonly intersectVector: FVec2 = FVec2.zero
+	/**
+	 * 当前速率
+	 */
+	public velocity: number;
+
 	public Init(params: EntityInitParams): void {
 		super.Init(params);
-		this._team = params.team;
-		this._name = params.name;
+		this.team = params.team;
+		this.name = params.name;
+	}
+
+	protected LoadDefs(): void {
+		this._defs = Defs.GetEntity(this._id);
 	}
 
 	/**
 	 * 在初始化或解码快照后执行
 	 */
 	protected OnInit(): void {
-		this._def = Defs.GetEntity(this._id);
-
-		this.attribute.Set(EAttr.RADIUS, Hashtable.GetNumber(this._def, "radius"));
-		this.attribute.Set(EAttr.MHP, Hashtable.GetNumber(this._def, "mhp"));
-		this.attribute.Set(EAttr.HP, this.attribute.Get(EAttr.MHP));
-		this.attribute.Set(EAttr.MMP, Hashtable.GetNumber(this._def, "mmp"));
-		this.attribute.Set(EAttr.MP, this.attribute.Get(EAttr.MMP));
-		this.attribute.Set(EAttr.MOVE_SPEED, Hashtable.GetNumber(this._def, "move_speed"));
+		this._radius = Hashtable.GetNumber(this._defs, "radius");
+		this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
 
 		this._skills = [];
-		const skillsDef = Hashtable.GetNumberArray(this._def, "skills");
+		const skillsDef = Hashtable.GetNumberArray(this._defs, "skills");
 		if (skillsDef != null) { }
 		for (const sid of skillsDef) {
 			const skill = new Skill();
@@ -71,14 +113,17 @@ export class Champion extends Entity implements ISnapshotable {
 			this._skills.push(skill);
 		}
 
-		const statesDef = Hashtable.GetMap(this._def, "states");
+		const statesDef = Hashtable.GetMap(this._defs, "states");
 		if (statesDef != null) {
 			for (const type in statesDef) {
 				this._fsm.AddState(new EntityState(Number.parseInt(type), this));
 			}
 			this._fsm.Init();
-			this._fsm.ChangeState(Hashtable.GetNumber(this._def, "default_state"));
+			this._fsm.ChangeState(Hashtable.GetNumber(this._defs, "default_state"));
 		}
+
+		this.hp = this.mhp = Hashtable.GetNumber(this._defs, "mhp");
+		this.mp = this.mmp = Hashtable.GetNumber(this._defs, "mmp");
 	}
 
 	/**
@@ -88,8 +133,20 @@ export class Champion extends Entity implements ISnapshotable {
 		super.EncodeSnapshot(writer);
 
 		//encode params
-		writer.int32(this._team);
-		writer.string(this._name);
+		writer.int32(this.team);
+		writer.string(this.name);
+		writer.int32(this.hp);
+		writer.int32(this.mhp);
+		writer.int32(this.mp);
+		writer.int32(this.mmp);
+		writer.int32(this.atk);
+		writer.int32(this.def);
+		writer.int32(this.disableMove);
+		writer.int32(this.disableTurn);
+		writer.int32(this.disableSkill);
+		writer.int32(this.supperArmor);
+		writer.int32(this.invulnerAbility);
+		writer.double(this.moveDirection.x).double(this.moveDirection.y);
 
 		//encode fsmstates
 		this._fsm.EncodeSnapshot(writer);
@@ -102,8 +159,20 @@ export class Champion extends Entity implements ISnapshotable {
 		super.DecodeSnapshot(reader);
 
 		//decode params
-		this._team = reader.int32();
-		this._name = reader.string();
+		this.team = reader.int32();
+		this.name = reader.string();
+		this.hp = reader.int32();
+		this.mhp = reader.int32();
+		this.mp = reader.int32();
+		this.mmp = reader.int32();
+		this.atk = reader.int32();
+		this.def = reader.int32();
+		this.disableMove = reader.int32();
+		this.disableTurn = reader.int32();
+		this.disableSkill = reader.int32();
+		this.supperArmor = reader.int32();
+		this.invulnerAbility = reader.int32();
+		this.moveDirection.Set(reader.double(), reader.double());
 
 		//decode fsmstates
 		this._fsm.DecodeSnapshot(reader);
@@ -116,8 +185,20 @@ export class Champion extends Entity implements ISnapshotable {
 		super.EncodeSync(writer);
 
 		//sync params
-		writer.int32(this._team);
-		writer.string(this._name);
+		writer.int32(this.team);
+		writer.string(this.name);
+		writer.int32(this.hp);
+		writer.int32(this.mhp);
+		writer.int32(this.mp);
+		writer.int32(this.mmp);
+		writer.int32(this.atk);
+		writer.int32(this.def);
+		writer.int32(this.disableMove);
+		writer.int32(this.disableTurn);
+		writer.int32(this.disableSkill);
+		writer.int32(this.supperArmor);
+		writer.int32(this.invulnerAbility);
+		writer.double(this.moveDirection.x).double(this.moveDirection.y);
 
 		//sync fsmstates
 		writer.bool(this._fsm.currentState != null);
@@ -174,57 +255,48 @@ export class Champion extends Entity implements ISnapshotable {
 	public BeginMove(dx: number, dy: number): void {
 		const direction = new FVec2(FMathUtils.ToFixed(dx), FMathUtils.ToFixed(dy));
 		if (direction.SqrMagnitude() < FMathUtils.EPSILON) {
-			this.attribute.Set(EAttr.MOVE_DIRECTION_X, 0);
-			this.attribute.Set(EAttr.MOVE_DIRECTION_Y, 0);
+			this.moveDirection.Set(0, 0);
 		}
 		else {
-			this.attribute.Set(EAttr.MOVE_DIRECTION_X, direction.x);
-			this.attribute.Set(EAttr.MOVE_DIRECTION_Y, direction.y);
+			this.moveDirection.CopyFrom(direction);
 		}
 	}
 
 	private MoveStep(dt: number): void {
-		let mx = 0;
-		let my = 0;
-		if (this.canMove) {
-			mx = this.attribute.Get(EAttr.MOVE_DIRECTION_X);
-			my = this.attribute.Get(EAttr.MOVE_DIRECTION_Y);
+		const moveVector = FVec2.zero;
+		if (this.disableMove <= 0) {
+			moveVector.CopyFrom(this.moveDirection);
 		}
 
-		if (mx == 0 && my == 0) {
+		if (moveVector.x == 0 && moveVector.y == 0) {
 			this._fsm.ChangeState(StateType.Idle);
 		} else {
-			if (this.canTurn) {
-				this.direction.Set(this.attribute.Get(EAttr.MOVE_DIRECTION_X), this.attribute.Get(EAttr.MOVE_DIRECTION_Y));
+			if (this.disableTurn <= 0) {
+				this.direction.CopyFrom(this.moveDirection);
 			}
-			const moveSpeed = this.attribute.Get(EAttr.MOVE_SPEED);
-			mx = FMathUtils.Mul(mx, moveSpeed);
-			my = FMathUtils.Mul(my, moveSpeed);
+			moveVector.MulN(this._moveSpeed);
 			this._fsm.ChangeState(StateType.Move);
 		}
 
-		const ix = this.attribute.Get(EAttr.INTERSET_VECTOR_X);
-		const iy = this.attribute.Get(EAttr.INTERSET_VECTOR_Y);
-		const moveVector = new FVec2(FMathUtils.Add(mx, ix), FMathUtils.Add(my, iy));
+		moveVector.Add(this.intersectVector);
 		const sqrtDis = moveVector.SqrMagnitude();
 		if (sqrtDis < FMathUtils.EPSILON) {
-			this.attribute.Set(EAttr.VELOCITY, 0);
+			this.velocity = 0;
 			return;
 		}
-		this.attribute.Set(EAttr.VELOCITY, FMathUtils.Sqrt(sqrtDis));
+		this.velocity = FMathUtils.Sqrt(sqrtDis);
 		const moveDelta = FVec2.MulN(moveVector, FMathUtils.Mul(0.001, dt));
 		const pos = FVec2.Add(this.position, moveDelta);
 		//限制活动范围
-		const radius = this.attribute.Get(EAttr.RADIUS);
-		pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, radius), pos.x);
-		pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, radius), pos.x);
-		pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, radius), pos.y);
-		pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, radius), pos.y);
+		pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
+		pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
+		pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
+		pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
 		this.position.CopyFrom(pos);
 	}
 
 	public Intersect(others: Champion[]): void {
-		const intersectVector = FVec2.zero;
+		this.intersectVector.Set(0, 0);
 		//todo 优化搜索范围
 		for (const other of others) {
 			if (other == this) {
@@ -234,22 +306,20 @@ export class Champion extends Entity implements ISnapshotable {
 			//圆圆相交性检测
 			const d = FVec2.Sub(this.position, other.position);
 			const magnitude = d.Magnitude();
-			const r = FMathUtils.Add(this.attribute.Get(EAttr.RADIUS), other.attribute.Get(EAttr.RADIUS));
+			const r = FMathUtils.Add(this._radius, other._radius);
 			if (magnitude >= r)
 				continue;
 			//相交深度
 			const delta = r - magnitude;
-			const deltaFactor = FMathUtils.Mul(this.attribute.Get(EAttr.VELOCITY), 0.15);//因子
+			const deltaFactor = FMathUtils.Mul(this.velocity, 0.15);//因子
 			const direction = d.DivN(magnitude);//归一
 			//根据相交深度计算相交向量
-			intersectVector.Add(FVec2.MulN(direction, FMathUtils.Mul(delta, deltaFactor)));
+			this.intersectVector.Add(FVec2.MulN(direction, FMathUtils.Mul(delta, deltaFactor)));
 		}
-		this.attribute.Set(EAttr.INTERSET_VECTOR_X, intersectVector.x);
-		this.attribute.Set(EAttr.INTERSET_VECTOR_Y, intersectVector.y);
 	}
 
 	public UseSkill(sid: number): boolean {
-		if (!this.canUseSkill)
+		if (this.disableSkill > 0)
 			return false;
 		const skill = this.GetSkill(sid);
 		if (skill == null)
@@ -262,8 +332,8 @@ export class Champion extends Entity implements ISnapshotable {
 
 	public Dump(): string {
 		let str = super.Dump();
-		str += `team:${this._team}\n`;
-		str += `name:${this._name}\n`;
+		str += `team:${this.team}\n`;
+		str += `name:${this.name}\n`;
 		str += `skill count${this._skills.length}\n`;
 		str += this._fsm.Dump();
 		return str;

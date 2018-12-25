@@ -1,4 +1,4 @@
-define(["require", "exports", "./FMathUtils"], function (require, exports, FMathUtils_1) {
+define(["require", "exports", "./FMathUtils", "./FVec2"], function (require, exports, FMathUtils_1, FVec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var IntersectionType;
@@ -9,7 +9,7 @@ define(["require", "exports", "./FMathUtils"], function (require, exports, FMath
     })(IntersectionType = exports.IntersectionType || (exports.IntersectionType = {}));
     class Intersection {
         static IntersectsCC(center0, radius0, center1, radius1) {
-            const a = center1.Sub(center0).SqrMagnitude();
+            const a = FVec2_1.FVec2.Sub(center1, center0).SqrMagnitude();
             let r = FMathUtils_1.FMathUtils.Add(radius0, radius1);
             r = FMathUtils_1.FMathUtils.Mul(r, r);
             if (a > r)
@@ -19,7 +19,7 @@ define(["require", "exports", "./FMathUtils"], function (require, exports, FMath
             return IntersectionType.Cling;
         }
         static IntersectsMovingCC(mCenter, mRadius, sCenter, sRadius, direction) {
-            const e = sCenter.Sub(mCenter);
+            const e = FVec2_1.FVec2.Sub(sCenter, mCenter);
             const r = FMathUtils_1.FMathUtils.Add(mRadius, sRadius);
             const rSqrt = FMathUtils_1.FMathUtils.Mul(r, r);
             if (e.SqrMagnitude() <= rSqrt)

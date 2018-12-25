@@ -16,10 +16,15 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
             this._aniSettings = new Map();
             this._playingName = "";
         }
+        get available() { return this._aniSettings != null && this._animation != null; }
         get animation() { return this._animation; }
         Init(def) {
             const model = Hashtable_1.Hashtable.GetString(def, "model");
+            if (model == null)
+                return;
             const aniDefs = Hashtable_1.Hashtable.GetMapArray(def, "animations");
+            if (aniDefs == null)
+                return;
             for (const aniDef of aniDefs) {
                 const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
                 const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
@@ -42,6 +47,8 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
             this._animation = roleAni;
         }
         Play(name, startFrame, timeScale = 1, force = false) {
+            if (!this.available)
+                return;
             if (!force && this._playingName == name)
                 return;
             this._playingName = name;
@@ -51,10 +58,13 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
             this.setSize(this._animation.width, this._animation.height);
         }
         GetAnimationSetting(name) {
+            if (!this.available)
+                return null;
             return this._aniSettings.get(name);
         }
         dispose() {
-            this.animation.destroy();
+            if (this._animation != null)
+                this._animation.destroy();
             super.dispose();
         }
     }

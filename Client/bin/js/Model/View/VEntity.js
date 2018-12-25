@@ -1,9 +1,8 @@
-define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../CDefs", "../Defs", "./AnimationProxy", "./VAttribute"], function (require, exports, Global_1, MathUtils_1, Vec2_1, CDefs_1, Defs_1, AnimationProxy_1, VAttribute_1) {
+define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "./AnimationProxy"], function (require, exports, Global_1, MathUtils_1, Vec2_1, AnimationProxy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
         constructor(battle) {
-            this.attribute = new VAttribute_1.VAttribute();
             this._position = Vec2_1.Vec2.zero;
             this._worldPosition = Vec2_1.Vec2.zero;
             this._rotation = 0;
@@ -18,8 +17,8 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
         }
         get rid() { return this._rid; }
         get id() { return this._id; }
-        get def() { return this._def; }
-        get cdef() { return this._cdef; }
+        get defs() { return this._defs; }
+        get cdefs() { return this._cdefs; }
         get root() { return this._root; }
         get animationProxy() { return this._animationProxy; }
         get markToDestroy() { return this._markToDestroy; }
@@ -57,16 +56,16 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
             this._root.rotation = this._rotation;
         }
         OnInit() {
-            this._def = Defs_1.Defs.GetEntity(this._id);
-            this._cdef = CDefs_1.CDefs.GetEntity(this._id);
-            this._animationProxy.Init(this._cdef);
+            this._animationProxy.Init(this._cdefs);
             this._root.addChild(this._animationProxy);
         }
         DecodeSync(rid, reader, isNew) {
             this._rid = rid;
             this._id = reader.int32();
-            if (isNew)
+            if (isNew) {
+                this.LoadDefs();
                 this.OnInit();
+            }
             this._markToDestroy = reader.bool();
             this._logicPos = new Vec2_1.Vec2(reader.double(), reader.double());
             const logicDir = new Vec2_1.Vec2(reader.double(), reader.double());
@@ -77,10 +76,6 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
             if (isNew) {
                 this.position = this._logicPos.Clone();
                 this.rotation = this._logicRot;
-            }
-            const count = reader.int32();
-            for (let i = 0; i < count; i++) {
-                this.attribute.Set(reader.int32(), reader.double());
             }
         }
         PlayAnim(name, timeScale = 1, force = false) {

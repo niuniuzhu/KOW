@@ -15,7 +15,7 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
             this._owner = owner;
         }
         Init() {
-            const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
+            const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.defs, "states"), this.type.toString());
             const actionsDef = Hashtable_1.Hashtable.GetMapArray(def, "actions");
             if (actionsDef != null) {
                 for (const actionDef of actionsDef) {

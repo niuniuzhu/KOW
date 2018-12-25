@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../../Libs/long"], function (require, exports, FVec2_1, Hashtable_1, Defs_1, Long) {
+define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Defs", "../../Libs/long"], function (require, exports, FVec2_1, MathUtils_1, Hashtable_1, Defs_1, Long) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var EmitType;
@@ -33,6 +33,7 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             this._markToDestroy = false;
             this._time = 0;
             this._nextEmitTime = 0;
+            this._bulletCount = 0;
             const caster = this._battle.GetChampion(this._casterID);
             this.UpdatePosition(caster);
             this._direction.CopyFrom(caster.direction);
@@ -108,6 +109,11 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable"
             if (caster == null) {
                 caster = this._battle.GetChampion(this._casterID);
             }
+            let rot = MathUtils_1.MathUtils.Acos(caster.direction.Dot(FVec2_1.FVec2.up));
+            if (caster.direction.x > 0) {
+                rot = -rot;
+            }
+            this._offset.Rotate(rot);
             this._position.CopyFrom(caster.position);
             this._position.Add(this._offset);
         }

@@ -1,32 +1,51 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
-import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { CDefs } from "../CDefs";
+import { Defs } from "../Defs";
 import { VEntityState } from "../FSM/VEntityState";
 import { Skill } from "../Skill";
 import { VEntity } from "./VEntity";
+import { Vec2 } from "../../RC/Math/Vec2";
 
 export class VChampion extends VEntity {
-	public get team(): number { return this._team; }
-	public get name(): string { return this._name; }
-
-	private _team: number;
-	private _name: string;
+	//static properties
 	private _skills: Skill[];
 	private readonly _fsm: FSM = new FSM();
+
+	//runtime properties
+	public team: number;
+	public name: string;
+	public hp: number;
+	public mhp: number;
+	public mp: number;
+	public mmp: number;
+	public atk: number;
+	public def: number;
+	public disableMove: number;
+	public disableTurn: number;
+	public disableSkill: number;
+	public supperArmor: number;
+	public invulnerAbility: number;
+	public readonly moveDirection: Vec2 = Vec2.zero;
+
+	protected LoadDefs(): void {
+		this._defs = Defs.GetEntity(this._id);
+		this._cdefs = CDefs.GetEntity(this._id);
+	}
 
 	protected OnInit(): void {
 		super.OnInit();
 
 		this._skills = [];
-		const skillsDef = Hashtable.GetNumberArray(this._def, "skills");
+		const skillsDef = Hashtable.GetNumberArray(this._defs, "skills");
 		for (const sid of skillsDef) {
 			const skill = new Skill();
 			skill.Init(sid);
 			this._skills.push(skill);
 		}
 
-		const statesDef = Hashtable.GetMap(this._def, "states");
+		const statesDef = Hashtable.GetMap(this._defs, "states");
 		if (statesDef != null) {
 			for (const type in statesDef) {
 				this._fsm.AddState(new VEntityState(Number.parseInt(type), this));
@@ -36,8 +55,20 @@ export class VChampion extends VEntity {
 
 	public DecodeSync(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader, isNew: boolean): void {
 		super.DecodeSync(rid, reader, isNew);
-		this._team = reader.int32();
-		this._name = reader.string();
+		this.team = reader.int32();
+		this.name = reader.string();
+		this.hp = reader.int32();
+		this.mhp = reader.int32();
+		this.mp = reader.int32();
+		this.mmp = reader.int32();
+		this.atk = reader.int32();
+		this.def = reader.int32();
+		this.disableMove = reader.int32();
+		this.disableTurn = reader.int32();
+		this.disableSkill = reader.int32();
+		this.supperArmor = reader.int32();
+		this.invulnerAbility = reader.int32();
+		this.moveDirection.Set(reader.double(), reader.double());
 
 		//read fsmstates
 		if (reader.bool()) {

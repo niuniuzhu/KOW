@@ -3,22 +3,17 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { CDefs } from "../CDefs";
-import { Defs } from "../Defs";
 import { AnimationProxy } from "./AnimationProxy";
-import { VAttribute } from "./VAttribute";
 import { VBattle } from "./VBattle";
 
 export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
 	public get id(): number { return this._id; }
-	public get def(): Hashtable { return this._def; }
-	public get cdef(): Hashtable { return this._cdef; }
+	public get defs(): Hashtable { return this._defs; }
+	public get cdefs(): Hashtable { return this._cdefs; }
 	public get root(): fairygui.GComponent { return this._root; }
 	public get animationProxy(): AnimationProxy { return this._animationProxy; }
 	public get markToDestroy(): boolean { return this._markToDestroy; }
-
-	public readonly attribute: VAttribute = new VAttribute();
 
 	public get position(): Vec2 { return this._position; }
 	public set position(value: Vec2) {
@@ -43,8 +38,8 @@ export abstract class VEntity {
 	protected readonly _battle: VBattle;
 	protected _rid: Long;
 	protected _id: number;
-	protected _def: Hashtable;
-	protected _cdef: Hashtable;
+	protected _defs: Hashtable;
+	protected _cdefs: Hashtable;
 
 	private readonly _position: Vec2 = Vec2.zero;
 	private readonly _worldPosition: Vec2 = Vec2.zero;
@@ -83,13 +78,11 @@ export abstract class VEntity {
 		this._root.rotation = this._rotation;
 	}
 
-	protected OnInit(): void {
-		//加载配置
-		this._def = Defs.GetEntity(this._id);
-		this._cdef = CDefs.GetEntity(this._id);
+	protected abstract LoadDefs(): void;
 
+	protected OnInit(): void {
 		//加载动画数据
-		this._animationProxy.Init(this._cdef);
+		this._animationProxy.Init(this._cdefs);
 		this._root.addChild(this._animationProxy);
 	}
 
@@ -100,8 +93,10 @@ export abstract class VEntity {
 		//read properties
 		this._rid = rid;
 		this._id = reader.int32();
-		if (isNew)
+		if (isNew) {
+			this.LoadDefs();
 			this.OnInit();
+		}
 		this._markToDestroy = reader.bool();
 
 		this._logicPos = new Vec2(reader.double(), reader.double());
@@ -113,12 +108,6 @@ export abstract class VEntity {
 		if (isNew) {
 			this.position = this._logicPos.Clone();
 			this.rotation = this._logicRot;
-		}
-
-		//read attribues
-		const count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), reader.double());
 		}
 	}
 

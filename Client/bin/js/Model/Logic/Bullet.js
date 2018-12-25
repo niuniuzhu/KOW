@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../../Libs/long", "./Attribute"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, Entity_1, Long, Attribute_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../../Libs/long", "../../RC/Utils/Logger"], function (require, exports, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1, Long, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -7,11 +7,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         BulletMoveType[BulletMoveType["Ring"] = 1] = "Ring";
         BulletMoveType[BulletMoveType["Follow"] = 2] = "Follow";
     })(BulletMoveType || (BulletMoveType = {}));
-    var BulletShape;
-    (function (BulletShape) {
-        BulletShape[BulletShape["Circle"] = 0] = "Circle";
-        BulletShape[BulletShape["Rect"] = 1] = "Rect";
-    })(BulletShape || (BulletShape = {}));
     var TargetType;
     (function (TargetType) {
         TargetType[TargetType["Opponent"] = 0] = "Opponent";
@@ -49,6 +44,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             super(...arguments);
             this._targets0 = [];
             this._targets1 = [];
+            this._targets2 = [];
             this._casterID = Long.ZERO;
             this._skillID = 0;
             this._time = 0;
@@ -60,24 +56,23 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.position.CopyFrom(params.position);
             this.direction.CopyFrom(params.direction);
         }
+        LoadDefs() {
+            this._defs = Defs_1.Defs.GetBullet(this._id);
+        }
         OnInit() {
-            this._def = Defs_1.Defs.GetBullet(this._id);
-            this._moveType = Hashtable_1.Hashtable.GetNumber(this._def, "move_type");
-            this._speed = Hashtable_1.Hashtable.GetNumber(this._def, "speed");
-            this._angleSpeed = Hashtable_1.Hashtable.GetNumber(this._def, "angle_speed");
-            this._angleRadius = Hashtable_1.Hashtable.GetNumber(this._def, "angle_radius");
-            this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._def, "life_time", -1);
-            this._destroyType = Hashtable_1.Hashtable.GetNumber(this._def, "destroy_type");
-            this._collisionStartTime = Hashtable_1.Hashtable.GetNumber(this._def, "collision_start_time");
-            this._maxCollisionCount = Hashtable_1.Hashtable.GetNumber(this._def, "max_collision_count", -1);
-            this._shape = Hashtable_1.Hashtable.GetNumber(this._def, "shape");
-            this._shapeRadius = Hashtable_1.Hashtable.GetNumber(this._def, "shape_radius");
-            this._shapeWidth = Hashtable_1.Hashtable.GetNumber(this._def, "shape_width");
-            this._shapeHeight = Hashtable_1.Hashtable.GetNumber(this._def, "shape_height");
-            this._targetType = Hashtable_1.Hashtable.GetNumber(this._def, "target_type");
-            this._attrTypes = Hashtable_1.Hashtable.GetNumberArray(this._def, "attr_types");
-            this._attrFilterOPs = Hashtable_1.Hashtable.GetNumberArray(this._def, "attr_filter_ops");
-            this._attrCompareValues = Hashtable_1.Hashtable.GetNumberArray(this._def, "attr_compare_values");
+            this._radius = Hashtable_1.Hashtable.GetNumber(this._defs, "radius");
+            this._moveSpeed = Hashtable_1.Hashtable.GetNumber(this._defs, "move_speed");
+            this._moveType = Hashtable_1.Hashtable.GetNumber(this._defs, "move_type");
+            this._angleSpeed = Hashtable_1.Hashtable.GetNumber(this._defs, "angle_speed");
+            this._angleRadius = Hashtable_1.Hashtable.GetNumber(this._defs, "angle_radius");
+            this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._defs, "life_time", -1);
+            this._destroyType = Hashtable_1.Hashtable.GetNumber(this._defs, "destroy_type");
+            this._collisionStartTime = Hashtable_1.Hashtable.GetNumber(this._defs, "collision_start_time");
+            this._maxCollisionCount = Hashtable_1.Hashtable.GetNumber(this._defs, "max_collision_count", -1);
+            this._targetType = Hashtable_1.Hashtable.GetNumber(this._defs, "target_type");
+            this._attrTypes = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_types");
+            this._attrFilterOPs = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
+            this._attrCompareValues = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_compare_values");
         }
         EncodeSnapshot(writer) {
             super.EncodeSnapshot(writer);
@@ -94,9 +89,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         Update(dt) {
             super.Update(dt);
             this.MoveStep(dt);
-            this.SelectTargets();
-            this._targets0.splice(0);
-            this._targets1.splice(0);
             this._time += dt;
             switch (this._destroyType) {
                 case DestroyType.Life:
@@ -113,13 +105,13 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             }
         }
         MoveStep(dt) {
-            if (this._speed == 0) {
+            if (this._moveSpeed == 0) {
                 return;
             }
             switch (this._moveType) {
                 case BulletMoveType.Linear:
                     {
-                        const moveDelta = FVec2_1.FVec2.MulN(FVec2_1.FVec2.MulN(this.direction, this._speed), FMathUtils_1.FMathUtils.Mul(0.001, dt));
+                        const moveDelta = FVec2_1.FVec2.MulN(FVec2_1.FVec2.MulN(this.direction, this._moveSpeed), FMathUtils_1.FMathUtils.Mul(0.001, dt));
                         const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
                         this.position.CopyFrom(pos);
                     }
@@ -130,6 +122,17 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                     break;
             }
         }
+        Intersect() {
+            this.SelectTargets();
+            for (const target of this._targets1) {
+                const intersectType = Intersection_1.Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
+                if (intersectType == Intersection_1.IntersectionType.Cling || intersectType == Intersection_1.IntersectionType.Inside) {
+                    Logger_1.Logger.Log("hit");
+                }
+            }
+            this._targets1.splice(0);
+            this._targets2.splice(0);
+        }
         SelectTargets() {
             const champions = this._battle.GetChampions();
             const caster = this._battle.GetChampion(this._casterID);
@@ -137,24 +140,24 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                 case TargetType.Opponent:
                     for (const champion of champions) {
                         if (champion.team != caster.team)
-                            this._targets0.push(champion);
+                            this._targets1.push(champion);
                     }
                     break;
                 case TargetType.Teamate:
                     for (const champion of champions) {
                         if (champion.team == caster.team)
-                            this._targets0.push(champion);
+                            this._targets1.push(champion);
                     }
                     break;
                 case TargetType.Self:
-                    this._targets0.push(caster);
+                    this._targets1.push(caster);
                     break;
             }
-            if (this._targets0.length == 0) {
+            if (this._targets1.length == 0) {
                 return;
             }
             if (this._attrTypes == null || this._attrTypes.length == 0) {
-                this._targets1.concat(this._targets0);
+                this._targets2.concat(this._targets1);
             }
             const count = this._attrTypes.length;
             for (let i = 0; i < count; ++i) {
@@ -167,27 +170,27 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                         break;
                     case AttrFilter.Hp:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-                            return t.attribute.Get(Attribute_1.EAttr.HP);
+                            return t.hp;
                         }, v => v, v => v);
                         break;
                     case AttrFilter.Mp:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-                            return t.attribute.Get(Attribute_1.EAttr.MP);
+                            return t.mp;
                         }, v => v, v => v);
                         break;
                     case AttrFilter.Atk:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-                            return t.attribute.Get(Attribute_1.EAttr.ATK);
+                            return t.atk;
                         }, v => v, v => v);
                         break;
                     case AttrFilter.Def:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-                            return t.attribute.Get(Attribute_1.EAttr.DEF);
+                            return t.def;
                         }, v => v, v => v);
                         break;
                     case AttrFilter.Velocity:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-                            return t.attribute.Get(Attribute_1.EAttr.VELOCITY);
+                            return t.velocity;
                         }, v => v, v => v);
                         break;
                 }
@@ -196,98 +199,98 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         FilterDistance(caster, attrOp, compareValue) {
             switch (attrOp) {
                 case AttrFilterOP.Max: {
-                    if (this._targets0.length == 1) {
-                        this._targets1.push(this._targets0[0]);
+                    if (this._targets1.length == 1) {
+                        this._targets2.push(this._targets1[0]);
                     }
                     else {
                         let maxValue = 0;
                         let meet;
-                        for (const target of this._targets0) {
+                        for (const target of this._targets1) {
                             const distanceSqr = caster.position.DistanceSquared(target.position);
                             if (distanceSqr > maxValue) {
                                 maxValue = distanceSqr;
                                 meet = target;
                             }
                         }
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     }
                     break;
                 }
                 case AttrFilterOP.Min:
-                    if (this._targets0.length == 1) {
-                        this._targets1.push(this._targets0[0]);
+                    if (this._targets1.length == 1) {
+                        this._targets2.push(this._targets1[0]);
                     }
                     else {
                         let minValue = FMathUtils_1.FMathUtils.MAX_VALUE;
                         let meet;
-                        for (const target of this._targets0) {
+                        for (const target of this._targets1) {
                             const distanceSqr = caster.position.DistanceSquared(target.position);
                             if (distanceSqr < minValue) {
                                 minValue = distanceSqr;
                                 meet = target;
                             }
                         }
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     }
                     break;
                 case AttrFilterOP.Equal: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const distanceSqr = caster.position.DistanceSquared(target.position);
                         if (distanceSqr == FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.Greater: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const distanceSqr = caster.position.DistanceSquared(target.position);
                         if (distanceSqr < FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.GreaterEqual: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const distanceSqr = caster.position.DistanceSquared(target.position);
                         if (distanceSqr <= FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.Less: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const distanceSqr = caster.position.DistanceSquared(target.position);
                         if (distanceSqr > FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.LessEqual: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const distanceSqr = caster.position.DistanceSquared(target.position);
                         if (distanceSqr >= FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
             }
@@ -295,99 +298,99 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         FilterAttr(caster, attrOp, compareValue, getFunc, compValFunc, targetValFunc) {
             switch (attrOp) {
                 case AttrFilterOP.Max: {
-                    if (this._targets0.length == 1) {
-                        this._targets1.push(this._targets0[0]);
+                    if (this._targets1.length == 1) {
+                        this._targets2.push(this._targets1[0]);
                     }
                     else {
                         let maxValue = 0;
                         let meet;
-                        for (const target of this._targets0) {
+                        for (const target of this._targets1) {
                             const attrValue = getFunc(caster, target);
                             if (targetValFunc(attrValue) > compValFunc(maxValue)) {
                                 maxValue = attrValue;
                                 meet = target;
                             }
                         }
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     }
                     break;
                 }
                 case AttrFilterOP.Min: {
-                    if (this._targets0.length == 1) {
-                        this._targets1.push(this._targets0[0]);
+                    if (this._targets1.length == 1) {
+                        this._targets2.push(this._targets1[0]);
                     }
                     else {
                         let minValue = FMathUtils_1.FMathUtils.MAX_VALUE;
                         let meet;
-                        for (const target of this._targets0) {
+                        for (const target of this._targets1) {
                             const attrValue = getFunc(caster, target);
                             if (targetValFunc(attrValue) < compValFunc(minValue)) {
                                 minValue = attrValue;
                                 meet = target;
                             }
                         }
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     }
                     break;
                 }
                 case AttrFilterOP.Equal: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) == compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.Greater: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) > compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.GreaterEqual: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) >= compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.Less: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) < compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.LessEqual: {
                     let meet;
-                    for (const target of this._targets0) {
+                    for (const target of this._targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) <= compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets1.push(meet);
+                        this._targets2.push(meet);
                     break;
                 }
             }

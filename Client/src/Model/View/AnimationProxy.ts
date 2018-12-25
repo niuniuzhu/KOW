@@ -14,6 +14,7 @@ export class AnimationSetting {
 }
 
 export class AnimationProxy extends fairygui.GGraph {
+	public get available(): boolean { return this._aniSettings != null && this._animation != null; }
 	public get animation(): Laya.Animation { return this._animation; }
 
 	private readonly _aniSettings = new Map<string, AnimationSetting>();
@@ -22,7 +23,11 @@ export class AnimationProxy extends fairygui.GGraph {
 
 	public Init(def: Hashtable) {
 		const model = Hashtable.GetString(def, "model");
+		if (model == null)
+			return;
 		const aniDefs = Hashtable.GetMapArray(def, "animations");
+		if (aniDefs == null)
+			return;
 		for (const aniDef of aniDefs) {
 			//创建图形
 			const aniName = Hashtable.GetString(aniDef, "name");
@@ -51,6 +56,8 @@ export class AnimationProxy extends fairygui.GGraph {
 	}
 
 	public Play(name: string, startFrame: number, timeScale: number = 1, force: boolean = false): void {
+		if (!this.available)
+			return;
 		if (!force && this._playingName == name)
 			return;
 		this._playingName = name;
@@ -61,11 +68,14 @@ export class AnimationProxy extends fairygui.GGraph {
 	}
 
 	public GetAnimationSetting(name: string): AnimationSetting {
+		if (!this.available)
+			return null;
 		return this._aniSettings.get(name);
 	}
 
 	public dispose(): void {
-		this.animation.destroy();
+		if (this._animation != null)
+			this._animation.destroy();
 		super.dispose();
 	}
 }

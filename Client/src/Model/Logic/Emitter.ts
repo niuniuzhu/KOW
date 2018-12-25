@@ -1,12 +1,12 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FVec2 } from "../../RC/FMath/FVec2";
+import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Battle } from "./Battle";
 import { Champion } from "./Champion";
 import Long = require("../../Libs/long");
-import { EntityInitParams } from "./Entity";
 
 enum EmitType {
 	Center,
@@ -94,6 +94,7 @@ export class Emitter implements ISnapshotable {
 		this._markToDestroy = false;
 		this._time = 0;
 		this._nextEmitTime = 0;
+		this._bulletCount = 0;
 		//place it
 		const caster = this._battle.GetChampion(this._casterID);
 		this.UpdatePosition(caster);
@@ -186,6 +187,11 @@ export class Emitter implements ISnapshotable {
 		if (caster == null) {
 			caster = this._battle.GetChampion(this._casterID);
 		}
+		let rot = MathUtils.Acos(caster.direction.Dot(FVec2.up));
+		if (caster.direction.x > 0) {
+			rot = - rot;
+		}
+		this._offset.Rotate(rot);
 		this._position.CopyFrom(caster.position);
 		this._position.Add(this._offset);
 	}

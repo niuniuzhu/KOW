@@ -1,36 +1,26 @@
-import { Consts } from "../../Consts";
 import { Global } from "../../Global";
-import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
-import { FVec2 } from "../../RC/FMath/FVec2";
-import { FSM } from "../../RC/FSM/FSM";
 import { MathUtils } from "../../RC/Math/MathUtils";
+import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Attribute } from "../Attribute";
-import { CDefs } from "../CDefs";
-import { Defs } from "../Defs";
-import { StateType } from "../FSM/StateEnums";
-import { VEntityState } from "../FSM/VEntityState";
-import { Skill } from "../Skill";
-import { AniHolder } from "./AniHolder";
+import { AnimationProxy } from "./AnimationProxy";
 import { VBattle } from "./VBattle";
 
-export class VEntity {
-	public get id(): Long { return this._id; }
-	public get actorID(): number { return this._actorID; }
-	public get team(): number { return this._team; }
-	public get name(): string { return this._name; }
-	public get def(): Hashtable { return this._def; }
+export abstract class VEntity {
+	public get rid(): Long { return this._rid; }
+	public get id(): number { return this._id; }
+	public get defs(): Hashtable { return this._defs; }
+	public get cdefs(): Hashtable { return this._cdefs; }
 	public get root(): fairygui.GComponent { return this._root; }
+	public get animationProxy(): AnimationProxy { return this._animationProxy; }
+	public get markToDestroy(): boolean { return this._markToDestroy; }
 
-	public readonly attribute: Attribute = new Attribute();
-
-	public get position(): FVec2 { return this._position; }
-	public set position(value: FVec2) {
+	public get position(): Vec2 { return this._position; }
+	public set position(value: Vec2) {
 		if (this._position.EqualsTo(value))
 			return;
-		const delta = FVec2.Sub(value, this._position);
-		this._position = value;
+		const delta = Vec2.Sub(value, this._position);
+		this._position.CopyFrom(value);
 		this.OnPositionChanged(delta);
 	}
 
@@ -43,178 +33,91 @@ export class VEntity {
 		this.OnRatationChanged(delta);
 	}
 
-	public get worldPosition(): FVec2 { return this._worldPosition; }
+	public get worldPosition(): Vec2 { return this._worldPosition; }
 
-	private _battle: VBattle;
-	private _id: Long;
-	private _actorID: number;
-	private _team: number;
-	private _name: string;
-	private _def: Hashtable;
-	private readonly _skills: Skill[] = [];
+	protected readonly _battle: VBattle;
+	protected _rid: Long;
+	protected _id: number;
+	protected _defs: Hashtable;
+	protected _cdefs: Hashtable;
 
-	private _position: FVec2 = FVec2.zero;
-	private _worldPosition: FVec2 = FVec2.zero;
+	private readonly _position: Vec2 = Vec2.zero;
+	private readonly _worldPosition: Vec2 = Vec2.zero;
 	private _rotation: number = 0;
-	private _logicPos: FVec2 = FVec2.zero;
+	private _logicPos: Vec2 = Vec2.zero;
 	private _logicRot: number = 0;
+	private _markToDestroy: boolean;
 
-	private readonly _fsm: FSM = new FSM();
 	private readonly _root = new fairygui.GComponent();
-	private readonly _aniHolder: AniHolder = new AniHolder();
+	private readonly _animationProxy: AnimationProxy = new AnimationProxy();
 
-	private static readonly D_SMALL0 = new Decimal(0.012);
-
-	constructor() {
+	constructor(battle: VBattle) {
+		this._battle = battle;
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
 		Global.graphic.entityRoot.addChild(this._root);
-		this._fsm.AddState(new VEntityState(StateType.Idle, this));
-		this._fsm.AddState(new VEntityState(StateType.Move, this));
-		this._fsm.AddState(new VEntityState(StateType.Attack, this));
-		this._fsm.AddState(new VEntityState(StateType.Die, this));
 	}
 
-	public Init(id: Long, battle: VBattle): void {
-		this._id = id;
-		this._battle = battle;
-	}
-
-	public Dispose(): void {
+	public Destroy(): void {
 		this._root.dispose();
 	}
 
 	public Update(dt: number): void {
-		this.position = FVec2.Lerp(this._position, this._logicPos, VEntity.D_SMALL0.mul(dt));
-		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.018);
+		this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
+		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.008);
 	}
 
-	private OnPositionChanged(delta: FVec2): void {
-		this._root.setXY(this._position.x.toNumber(), this._position.y.toNumber());
+	private OnPositionChanged(delta: Vec2): void {
+		this._root.setXY(this._position.x, this._position.y);
 		let point = new Laya.Point();
 		this._root.localToGlobal(0, 0, point);
-		this._worldPosition.x = new Decimal(point.x);
-		this._worldPosition.y = new Decimal(point.y);
+		this._worldPosition.Set(point.x, point.y);
 	}
 
 	private OnRatationChanged(delta: number): void {
 		this._root.rotation = this._rotation;
 	}
 
-	/**
-	 * 初始化快照
-	 */
-	public InitSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._actorID = reader.int32();
+	protected abstract LoadDefs(): void;
 
-		//加载配置
-		this._def = Defs.GetEntity(this._actorID);
-
+	protected OnInit(): void {
 		//加载动画数据
-		this._aniHolder.Init(this._actorID);
-		this._root.addChild(this._aniHolder);
-
-		//init properties
-		this._team = reader.int32();
-		this._name = reader.string();
-		this.position = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-		this._logicPos.CopyFrom(this.position);
-		const logicDir = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-		this.rotation = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(FVec2.down).toNumber()));
-		if (logicDir.x.lessThan(MathUtils.D_ZERO))
-			this.rotation = 360 - this.rotation;
-		this._logicRot = this.rotation;
-		const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-
-		//init attribues
-		let count = reader.int32();
-		for (let i = 0; i < count; ++i) {
-			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
-		}
-
-		//init skills
-		count = reader.int32();
-		for (let i = 0; i < count; ++i) {
-			const skill = new Skill();
-			skill.Init(reader.int32());
-			this._skills.push(skill);
-		}
-
-		//init fsmstates
-		this._fsm.ChangeState(reader.int32(), null);
-		(<VEntityState>this._fsm.currentState).time = reader.float();
+		this._animationProxy.Init(this._cdefs);
+		this._root.addChild(this._animationProxy);
 	}
 
 	/**
 	 * 解码快照
 	 */
-	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+	public DecodeSync(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader, isNew: boolean): void {
 		//read properties
-		this._actorID = reader.int32();
-		this._team = reader.int32();
-		this._name = reader.string();
-		this._logicPos = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-		const logicDir = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(FVec2.down).toNumber()));
-		if (logicDir.x.lessThan(MathUtils.D_ZERO))
+		this._rid = rid;
+		this._id = reader.int32();
+		if (isNew) {
+			this.LoadDefs();
+			this.OnInit();
+		}
+		this._markToDestroy = reader.bool();
+
+		this._logicPos = new Vec2(reader.double(), reader.double());
+		const logicDir = new Vec2(reader.double(), reader.double());
+		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
+		if (logicDir.x < 0) {
 			this._logicRot = 360 - this._logicRot;
-		const moveDirection = new FVec2(new Decimal(reader.float()), new Decimal(reader.float()));
-
-		//read attribues
-		let count = reader.int32();
-		for (let i = 0; i < count; i++) {
-			this.attribute.Set(reader.int32(), new Decimal(reader.float()));
 		}
-
-		//read skills
-		count = reader.int32();
-		for (let i = 0; i < count; ++i) {
-			reader.int32()
+		if (isNew) {
+			this.position = this._logicPos.Clone();
+			this.rotation = this._logicRot;
 		}
-
-		//read fsmstates
-		this._fsm.ChangeState(reader.int32(), null);
-		(<VEntityState>this._fsm.currentState).time = reader.float();
 	}
 
 	/**
 	 * 播放动画
 	 * @param name 动画名称
+	 * @param timeScale 时间缩放
 	 * @param force 是否强制重新播放
 	 */
-	public PlayAnim(name: string, force: boolean = false): void {
-		this._aniHolder.Play(name, 0, force);
-	}
-
-	/**
-	 * 是否存在指定id的技能
-	 * @param id 技能id
-	 */
-	public HasSkill(id: number): boolean {
-		for (const skill of this._skills) {
-			if (skill.id == id)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * 获取指定id的技能
-	 * @param id 技能id
-	 */
-	public GetSkill(id: number): Skill {
-		for (const skill of this._skills) {
-			if (skill.id == id)
-				return skill;
-		}
-		return null;
-	}
-
-	/**
-	 * 获取指定索引的技能
-	 * @param index 索引
-	 */
-	public GetSkillAt(index: number): Skill {
-		return this._skills[index];
+	public PlayAnim(name: string, timeScale: number = 1, force: boolean = false): void {
+		this._animationProxy.Play(name, 0, timeScale, force);
 	}
 }

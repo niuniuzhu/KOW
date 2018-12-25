@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../EntityType", "../FrameAction", "../FrameActionGroup", "./Champion"], function (require, exports, Global_1, decimal_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FRect_1, FVec2_1, MathUtils_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, EntityType_1, FrameAction_1, FrameActionGroup_1, Champion_1) {
+define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameAction", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "../../Libs/long", "../../RC/Utils/Logger"], function (require, exports, Global_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, FrameAction_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, Long, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -11,8 +11,12 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             this._frame = 0;
             this._destroied = false;
             this._frameActionGroups = new Queue_1.default();
-            this._entities = [];
-            this._idToEntity = new Map();
+            this._champions = [];
+            this._idToChampion = new Map();
+            this._emitters = [];
+            this._idToEmitter = new Map();
+            this._bullets = [];
+            this._idToBullet = new Map();
         }
         get frameRate() { return this._frameRate; }
         get keyframeStep() { return this._keyframeStep; }
@@ -21,61 +25,109 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         get mapID() { return this._mapID; }
         get frame() { return this._frame; }
         get bounds() { return this._bounds; }
+        get random() { return this._random; }
         SetBattleInfo(battleInfo) {
             this._destroied = false;
             this._frameRate = battleInfo.frameRate;
             this._keyframeStep = battleInfo.keyframeStep;
             this._snapshotStep = battleInfo.snapshotStep;
+            this._random = new FRandom_1.FRandom(battleInfo.rndSeed);
             this._timeout = battleInfo.battleTime;
             this._mapID = battleInfo.mapID;
-            this._msPerFrame = new decimal_1.default(1000 / this._frameRate);
+            this._msPerFrame = FMathUtils_1.FMathUtils.ToFixed(1000 / this._frameRate);
             this._frame = 0;
             this._nextKeyFrame = 0;
-            this._logicElapsed = new decimal_1.default(0);
-            this._realElapsed = new decimal_1.default(0);
+            this._logicElapsed = 0;
+            this._realElapsed = 0;
             this._cdef = CDefs_1.CDefs.GetMap(this._mapID);
             this._def = Defs_1.Defs.GetMap(this._mapID);
             const bWidth = Hashtable_1.Hashtable.GetNumber(this._cdef, "width");
             const bHeight = Hashtable_1.Hashtable.GetNumber(this._cdef, "height");
-            this._bounds = new FRect_1.FRect(new decimal_1.default(-MathUtils_1.MathUtils.Floor(bWidth * 0.5)), new decimal_1.default(-MathUtils_1.MathUtils.Floor(bHeight * 0.5)), new decimal_1.default(bWidth), new decimal_1.default(bHeight));
-            this.CreatePlayers(battleInfo.playerInfos);
+            this._bounds = new FRect_1.FRect(-FMathUtils_1.FMathUtils.Floor(bWidth * 0.5), -FMathUtils_1.FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
         }
         Destroy() {
             if (this._destroied)
                 return;
             this._destroied = true;
-            const count = this._entities.length;
-            for (let i = 0; i < count; i++)
-                this._entities[i].Dispose();
-            this._entities.splice(0);
-            this._idToEntity.clear();
-            this._frameActionGroups.clear();
             this._def = null;
+            this._cdef = null;
             this._bounds = null;
+            this._frameActionGroups.clear();
+            for (let i = 0, count = this._bullets.length; i < count; i++)
+                this._bullets[i].Destroy();
+            this._bullets.splice(0);
+            this._idToBullet.clear();
+            for (let i = 0, count = this._emitters.length; i < count; i++)
+                this._emitters[i].Destroy();
+            this._emitters.splice(0);
+            this._idToEmitter.clear();
+            for (let i = 0, count = this._champions.length; i < count; i++)
+                this._champions[i].Destroy();
+            this._champions.splice(0);
+            this._idToChampion.clear();
         }
         Update(dt) {
             this.Chase(this._frameActionGroups, true, true);
-            this._realElapsed = this._realElapsed.add(dt);
+            this._realElapsed = FMathUtils_1.FMathUtils.Add(this._realElapsed, dt);
             if (this.frame < this._nextKeyFrame) {
-                this._logicElapsed = this._logicElapsed.add(dt);
-                while (this._logicElapsed.greaterThanOrEqualTo(this._msPerFrame)) {
+                this._logicElapsed = FMathUtils_1.FMathUtils.Add(this._logicElapsed, dt);
+                while (this._logicElapsed >= this._msPerFrame) {
                     if (this.frame >= this._nextKeyFrame)
                         break;
                     this.UpdateLogic(this._msPerFrame, true, true);
-                    this._realElapsed = new decimal_1.default(0);
-                    this._logicElapsed = this._logicElapsed.sub(this._msPerFrame);
+                    this._realElapsed = 0;
+                    this._logicElapsed = FMathUtils_1.FMathUtils.Sub(this._logicElapsed, this._msPerFrame);
                 }
             }
         }
         UpdateLogic(dt, updateView, commitSnapshot) {
             ++this._frame;
-            const count = this._entities.length;
-            for (let i = 0; i < count; i++) {
-                const entity = this._entities[i];
-                entity.Update(dt);
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                champion.Update(dt);
+            }
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                champion.Intersect(this._champions);
+            }
+            for (let i = 0, count = this._emitters.length; i < count; i++) {
+                const emitter = this._emitters[i];
+                emitter.Update(dt);
+            }
+            for (let i = 0, count = this._bullets.length; i < count; i++) {
+                const bullet = this._bullets[i];
+                bullet.Update(dt);
+            }
+            for (let i = 0, count = this._bullets.length; i < count; i++) {
+                const bullet = this._bullets[i];
+                bullet.Intersect();
             }
             if (updateView) {
                 this.SyncToView();
+            }
+            for (let i = 0, count = this._bullets.length; i < count; i++) {
+                const bullet = this._bullets[i];
+                if (bullet.markToDestroy) {
+                    this.DestroyBulletAt(i);
+                    --i;
+                    --count;
+                }
+            }
+            for (let i = 0, count = this._emitters.length; i < count; i++) {
+                const emitter = this._emitters[i];
+                if (emitter.markToDestroy) {
+                    this.DestroyEmitterAt(i);
+                    --i;
+                    --count;
+                }
+            }
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                if (champion.markToDestroy) {
+                    this.DestroyChampionAt(i);
+                    --i;
+                    --count;
+                }
             }
             if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
                 const writer = $protobuf.Writer.create();
@@ -89,32 +141,62 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
         }
         EncodeSnapshot(writer) {
             writer.int32(this._frame);
-            const count = this._entities.length;
+            let count = this._champions.length;
             writer.int32(count);
             for (let i = 0; i < count; i++) {
-                const entity = this._entities[i];
-                entity.EncodeSnapshot(writer);
+                const champion = this._champions[i];
+                champion.EncodeSnapshot(writer);
+            }
+            count = this._emitters.length;
+            writer.int32(count);
+            for (let i = 0; i < count; i++) {
+                const emitter = this._emitters[i];
+                emitter.EncodeSnapshot(writer);
+            }
+            count = this._bullets.length;
+            writer.int32(count);
+            for (let i = 0; i < count; i++) {
+                const bullet = this._bullets[i];
+                bullet.EncodeSnapshot(writer);
             }
         }
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
-            const count = reader.int32();
+            let count = reader.int32();
             for (let i = 0; i < count; i++) {
-                const type = reader.int32();
-                const id = reader.uint64();
-                const entity = this.GetEntity(id.toString());
-                if (entity == null)
-                    continue;
-                entity.DecodeSnapshot(reader);
+                const champion = new Champion_1.Champion(this);
+                champion.DecodeSnapshot(reader);
+                this._champions.push(champion);
+                this._idToChampion.set(champion.rid.toString(), champion);
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const emitter = new Emitter_1.Emitter(this);
+                emitter.DecodeSnapshot(reader);
+                this._emitters.push(emitter);
+                this._idToEmitter.set(emitter.rid.toString(), emitter);
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const bullet = new Bullet_1.Bullet(this);
+                bullet.DecodeSnapshot(reader);
+                this._bullets.push(bullet);
+                this._idToBullet.set(bullet.rid.toString(), bullet);
             }
         }
         EncodeSync(writer) {
             writer.int32(this._frame);
-            const count = this._entities.length;
+            let count = this._champions.length;
             writer.int32(count);
             for (let i = 0; i < count; i++) {
-                const entity = this._entities[i];
-                entity.EncodeSync(writer);
+                const champion = this._champions[i];
+                champion.EncodeSync(writer);
+            }
+            count = this._bullets.length;
+            writer.int32(count);
+            for (let i = 0; i < count; i++) {
+                const bullet = this._bullets[i];
+                bullet.EncodeSync(writer);
             }
         }
         SyncInitToView() {
@@ -130,6 +212,8 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             SyncEvent_1.SyncEvent.Snapshot(data);
         }
         Chase(frameActionGroups, updateView, commitSnapshot) {
+            if (frameActionGroups == null)
+                return;
             while (!frameActionGroups.isEmpty()) {
                 const frameActionGroup = frameActionGroups.dequeue();
                 let length = frameActionGroup.frame - this.frame;
@@ -141,49 +225,114 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
                 this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
             }
         }
+        MakeRid(id) {
+            const rnd = this._random.NextFloor(0, 0xffffffff);
+            return Long.fromBits(id, rnd);
+        }
         CreatePlayers(playerInfos) {
             let arr = Hashtable_1.Hashtable.GetArray(this._def, "born_pos");
             let count = arr.length;
             const bornPoses = [];
             for (let i = 0; i < count; i++) {
                 const pi = arr[i];
-                bornPoses.push(new FVec2_1.FVec2(new decimal_1.default(pi[0]), new decimal_1.default(pi[1])));
+                bornPoses.push(new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(pi[0]), FMathUtils_1.FMathUtils.ToFixed(pi[1])));
             }
             arr = Hashtable_1.Hashtable.GetArray(this._def, "born_dir");
             count = arr.length;
             const bornDirs = [];
             for (let i = 0; i < count; i++) {
                 const pi = arr[i];
-                bornDirs.push(new FVec2_1.FVec2(new decimal_1.default(pi[0]), new decimal_1.default(pi[1])));
+                bornDirs.push(new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(pi[0]), FMathUtils_1.FMathUtils.ToFixed(pi[1])));
             }
+            const params = new Entity_1.EntityInitParams();
             count = playerInfos.length;
             for (let i = 0; i < count; ++i) {
                 const playerInfo = playerInfos[i];
-                const player = this.CreateEntity(EntityType_1.EntityType.Champion, playerInfo.gcNID, playerInfo.actorID, playerInfo.team, playerInfo.name);
+                params.rid = playerInfo.gcNID;
+                params.id = playerInfo.actorID;
+                params.team = playerInfo.team;
+                params.name = playerInfo.name;
+                const player = this.CreateChampion(params);
                 if (player.team >= bornPoses.length ||
                     player.team >= bornDirs.length) {
-                    throw new Error("invalid team:" + player.team + ", player:" + player.id);
+                    throw new Error("invalid team:" + player.team + ", player:" + player.rid);
                 }
-                player.position = bornPoses[player.team];
-                player.direction = bornDirs[player.team];
+                player.position.CopyFrom(bornPoses[player.team]);
+                player.direction.CopyFrom(bornDirs[player.team]);
             }
         }
-        CreateEntity(type, id, actorID, team, name) {
-            let entity;
-            switch (type) {
-                case EntityType_1.EntityType.Champion:
-                    entity = new Champion_1.Champion();
-                    break;
-                default:
-                    throw new Error("not supported entity type:" + type);
-            }
-            entity.Init(this, id, actorID, team, name);
-            this._entities.push(entity);
-            this._idToEntity.set(entity.id.toString(), entity);
-            return entity;
+        CreateChampion(params) {
+            const champion = new Champion_1.Champion(this);
+            champion.Init(params);
+            this._champions.push(champion);
+            this._idToChampion.set(champion.rid.toString(), champion);
+            return champion;
         }
-        GetEntity(id) {
-            return this._idToEntity.get(id);
+        DestroyChampion(champion) {
+            champion.Destroy();
+            this._champions.splice(this._champions.indexOf(champion), 1);
+            this._idToChampion.delete(champion.rid.toString());
+        }
+        DestroyChampionAt(index) {
+            const champion = this._champions[index];
+            champion.Destroy();
+            this._champions.splice(index, 1);
+            this._idToChampion.delete(champion.rid.toString());
+        }
+        GetChampion(rid) {
+            return this._idToChampion.get(rid.toString());
+        }
+        GetChampions() {
+            return this._champions;
+        }
+        CreateEmitter(id, casterID, skillID) {
+            const emitter = new Emitter_1.Emitter(this);
+            emitter.Init(this.MakeRid(id), id, casterID, skillID);
+            this._emitters.push(emitter);
+            this._idToEmitter.set(emitter.rid.toString(), emitter);
+            return emitter;
+        }
+        DestroyEmitter(emitter) {
+            emitter.Destroy();
+            this._emitters.splice(this._emitters.indexOf(emitter), 1);
+            this._idToEmitter.delete(emitter.rid.toString());
+        }
+        DestroyEmitterAt(index) {
+            const emitter = this._emitters[index];
+            emitter.Destroy();
+            this._emitters.splice(index, 1);
+            this._idToEmitter.delete(emitter.rid.toString());
+        }
+        GetEmitter(rid) {
+            return this._idToEmitter.get(rid.toString());
+        }
+        CreateBullet(id, casterID, skillID, position, direction) {
+            const params = new Entity_1.EntityInitParams();
+            params.rid = this.MakeRid(id);
+            params.id = id;
+            params.casterID = casterID;
+            params.skillID = skillID;
+            params.position = position;
+            params.direction = direction;
+            const bullet = new Bullet_1.Bullet(this);
+            bullet.Init(params);
+            this._bullets.push(bullet);
+            this._idToBullet.set(bullet.rid.toString(), bullet);
+            return bullet;
+        }
+        DestroyBullet(bullet) {
+            bullet.Destroy();
+            this._bullets.splice(this._bullets.indexOf(bullet), 1);
+            this._idToBullet.delete(bullet.rid.toString());
+        }
+        DestroyBulletAt(index) {
+            const bullet = this._bullets[index];
+            bullet.Destroy();
+            this._bullets.splice(index, 1);
+            this._idToBullet.delete(bullet.rid.toString());
+        }
+        GetBullet(rid) {
+            return this._idToBullet.get(rid.toString());
         }
         ApplyFrameActionGroup(frameActionGroup) {
             for (let i = 0; i < frameActionGroup.numActions; i++) {
@@ -191,17 +340,15 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             }
         }
         ApplyFrameAction(frameAction) {
-            const entity = this.GetEntity(frameAction.gcNID.toString());
+            const champion = this.GetChampion(frameAction.gcNID);
             if ((frameAction.inputFlag & FrameAction_1.FrameAction.InputFlag.Move) > 0) {
-                entity.BeginMove(frameAction.dx, frameAction.dy);
+                champion.BeginMove(frameAction.dx, frameAction.dy);
             }
             if ((frameAction.inputFlag & FrameAction_1.FrameAction.InputFlag.Skill) > 0) {
-                entity.UseSkill(frameAction.sid);
+                champion.UseSkill(frameAction.sid);
             }
         }
         HandleSnapShot(ret) {
-            if (ret.snapshot.length == 0)
-                return;
             const reader = $protobuf.Reader.create(ret.snapshot);
             this.DecodeSnapshot(reader);
         }
@@ -209,6 +356,41 @@ define(["require", "exports", "../../Global", "../../Libs/decimal", "../../Libs/
             const frameActionGroup = new FrameActionGroup_1.FrameActionGroup(frame);
             frameActionGroup.Deserialize(data);
             this._frameActionGroups.enqueue(frameActionGroup);
+        }
+        HandleOutOfSync(msg) {
+            let str = "===============data1===============";
+            let reader = $protobuf.Reader.create(msg.data1);
+            str += this.Dump(reader);
+            str += "===============data2===============";
+            reader = $protobuf.Reader.create(msg.data2);
+            str += this.Dump(reader);
+            Logger_1.Logger.Log(str);
+        }
+        Dump(reader) {
+            let str = "";
+            reader.int32();
+            let count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const champion = new Champion_1.Champion(this);
+                champion.DecodeSnapshot(reader);
+                str += "======champion======\n";
+                str += champion.Dump();
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const emitter = new Emitter_1.Emitter(this);
+                emitter.DecodeSnapshot(reader);
+                str += "======emitter======\n";
+                str += emitter.Dump();
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const bullet = new Bullet_1.Bullet(this);
+                bullet.DecodeSnapshot(reader);
+                str += "======bullet======\n";
+                str += bullet.Dump();
+            }
+            return str;
         }
     }
     exports.Battle = Battle;

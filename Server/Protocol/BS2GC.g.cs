@@ -40,14 +40,17 @@ namespace Protos {
             "dGlvbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUY",
             "AiABKAUSDgoGYWN0aW9uGAMgASgMIl4KHEJTMkdDX1JlcXVlc3RGcmFtZUFj",
             "dGlvbnNSZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg4KBmZy",
-            "YW1lcxgCIAMoBRIPCgdhY3Rpb25zGAMgAygMYgZwcm90bzM="));
+            "YW1lcxgCIAMoBRIPCgdhY3Rpb25zGAMgAygMIl0KD0JTMkdDX091dE9mU3lu",
+            "YxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiAB",
+            "KAUSDQoFZGF0YTEYAyABKAwSDQoFZGF0YTIYBCABKAxiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2BSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_LoginRet), global::Protos.BS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "PlayerID", "RndSeed", "FrameRate", "KeyframeStep", "SnapshotStep", "BattleTime", "MapID", "CurFrame", "PlayerInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestSnapshotRet), global::Protos.BS2GC_RequestSnapshotRet.Parser, new[]{ "Opts", "Result", "ReqFrame", "CurFrame", "Snapshot" }, null, new[]{ typeof(global::Protos.BS2GC_RequestSnapshotRet.Types.EResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_FrameAction), global::Protos.BS2GC_FrameAction.Parser, new[]{ "Opts", "Frame", "Action" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestFrameActionsRet), global::Protos.BS2GC_RequestFrameActionsRet.Parser, new[]{ "Opts", "Frames", "Actions" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestFrameActionsRet), global::Protos.BS2GC_RequestFrameActionsRet.Parser, new[]{ "Opts", "Frames", "Actions" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_OutOfSync), global::Protos.BS2GC_OutOfSync.Parser, new[]{ "Opts", "Frame", "Data1", "Data2" }, null, null, null)
           }));
     }
     #endregion
@@ -1128,6 +1131,228 @@ namespace Protos {
           }
           case 26: {
             actions_.AddEntriesFrom(input, _repeated_actions_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///发生不同步的数据
+  /// </summary>
+  public sealed partial class BS2GC_OutOfSync : pb::IMessage<BS2GC_OutOfSync> {
+    private static readonly pb::MessageParser<BS2GC_OutOfSync> _parser = new pb::MessageParser<BS2GC_OutOfSync>(() => new BS2GC_OutOfSync());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BS2GC_OutOfSync> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.BS2GCReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2GC_OutOfSync() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2GC_OutOfSync(BS2GC_OutOfSync other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      frame_ = other.frame_;
+      data1_ = other.data1_;
+      data2_ = other.data2_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2GC_OutOfSync Clone() {
+      return new BS2GC_OutOfSync(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "frame" field.</summary>
+    public const int FrameFieldNumber = 2;
+    private int frame_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Frame {
+      get { return frame_; }
+      set {
+        frame_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "data1" field.</summary>
+    public const int Data1FieldNumber = 3;
+    private pb::ByteString data1_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pb::ByteString Data1 {
+      get { return data1_; }
+      set {
+        data1_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "data2" field.</summary>
+    public const int Data2FieldNumber = 4;
+    private pb::ByteString data2_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pb::ByteString Data2 {
+      get { return data2_; }
+      set {
+        data2_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BS2GC_OutOfSync);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BS2GC_OutOfSync other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Frame != other.Frame) return false;
+      if (Data1 != other.Data1) return false;
+      if (Data2 != other.Data2) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Frame != 0) hash ^= Frame.GetHashCode();
+      if (Data1.Length != 0) hash ^= Data1.GetHashCode();
+      if (Data2.Length != 0) hash ^= Data2.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Frame != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Frame);
+      }
+      if (Data1.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteBytes(Data1);
+      }
+      if (Data2.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteBytes(Data2);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Frame != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Frame);
+      }
+      if (Data1.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Data1);
+      }
+      if (Data2.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Data2);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BS2GC_OutOfSync other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Frame != 0) {
+        Frame = other.Frame;
+      }
+      if (other.Data1.Length != 0) {
+        Data1 = other.Data1;
+      }
+      if (other.Data2.Length != 0) {
+        Data2 = other.Data2;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            Frame = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            Data1 = input.ReadBytes();
+            break;
+          }
+          case 34: {
+            Data2 = input.ReadBytes();
             break;
           }
         }

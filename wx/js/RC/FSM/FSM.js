@@ -1,30 +1,32 @@
 export class FSM {
+    constructor() {
+        this._typeToState = new Map();
+        this._states = [];
+    }
     get currentState() { return this._currentState; }
     get previousState() { return this._previousState; }
-    constructor() {
-        this._stateMap = new Map();
-    }
     AddState(state) {
-        if (this._stateMap.has(state.type))
+        if (this._typeToState.has(state.type))
             return false;
-        this._stateMap.set(state.type, state);
+        this._typeToState.set(state.type, state);
+        this._states.push(state);
         return true;
     }
     RemoveState(type) {
-        return this._stateMap.delete(type);
+        const state = this._typeToState.get(type);
+        if (!state == null)
+            return false;
+        this._typeToState.delete(type);
+        this._states.splice(this._states.indexOf(state), 1);
     }
     HasState(type) {
-        return this._stateMap.has(type);
+        return this._typeToState.has(type);
     }
-    ExitState(type) {
-        if (!this._stateMap.has(type))
-            return false;
-        let state = this._stateMap.get(type);
-        state.Exit();
-        return true;
+    GetState(type) {
+        return this._typeToState.get(type);
     }
     ChangeState(type, param = null, force = false) {
-        if (!this._stateMap.has(type))
+        if (!this._typeToState.has(type))
             return false;
         if (this._currentState != null) {
             if (!force && this._currentState.type == type)
@@ -33,7 +35,7 @@ export class FSM {
             this._previousState = this._currentState;
             this._currentState = null;
         }
-        let state = this._stateMap.get(type);
+        let state = this._typeToState.get(type);
         this._currentState = state;
         this._currentState.Enter(param);
         return true;

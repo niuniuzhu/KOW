@@ -39,10 +39,18 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction",
             }
         }
         OnUpdate(dt) {
-            super.OnUpdate(dt);
             for (const interrupt of this._interrupts) {
                 interrupt.Update(dt);
             }
+            super.OnUpdate(dt);
+        }
+        Dump() {
+            let str = super.Dump();
+            str += `interrupt count:${this._interrupts.length}\n`;
+            for (const interrupt of this._interrupts) {
+                str += interrupt.Dump();
+            }
+            return str;
         }
     }
     exports.ActInterrupt = ActInterrupt;

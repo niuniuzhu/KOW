@@ -1,22 +1,21 @@
-import Decimal from "../../Libs/decimal";
-import { MathUtils } from "../Math/MathUtils";
 import { FVec2 } from "./FVec2";
+import { FMathUtils } from "./FMathUtils";
 
 export class FRect {
-	private _xMin: Decimal;
-	private _yMin: Decimal;
-	private _width: Decimal;
-	private _height: Decimal;
+	private _xMin: number;
+	private _yMin: number;
+	private _width: number;
+	private _height: number;
 
 	public static get zero(): FRect {
 		return new FRect();
 	}
 
-	public get x(): Decimal { return this._xMin; }
-	public set x(value: Decimal) { this._xMin = value; }
+	public get x(): number { return this._xMin; }
+	public set x(value: number) { this._xMin = value; }
 
-	public get y(): Decimal { return this._yMin; }
-	public set y(value: Decimal) { this._yMin = value; }
+	public get y(): number { return this._yMin; }
+	public set y(value: number) { this._yMin = value; }
 
 	public get position(): FVec2 { return new FVec2(this._xMin, this._yMin); }
 	public set position(value: FVec2) {
@@ -24,10 +23,12 @@ export class FRect {
 		this._yMin = value.y;
 	}
 
-	public get center(): FVec2 { return new FVec2(this.x.add(this._width.mul(MathUtils.D_HALF)), this.y.add(this._height.mul(MathUtils.D_HALF))); }
+	public get center(): FVec2 {
+		return new FVec2(FMathUtils.Add(this.x, FMathUtils.Div(this._width, 2)), FMathUtils.Add(this.y, FMathUtils.Div(this._height, 2)));
+	}
 	public set center(value: FVec2) {
-		this._xMin = value.x.sub(this._width.mul(MathUtils.D_HALF));
-		this._yMin = value.y.sub(this._height.mul(MathUtils.D_HALF));
+		this._xMin = FMathUtils.Sub(value.x, FMathUtils.Div(this._width, 2));
+		this._yMin = FMathUtils.Sub(value.y, FMathUtils.Div(this._height, 2));
 	}
 
 	public get min(): FVec2 { return new FVec2(this.xMin, this.yMin); }
@@ -42,11 +43,11 @@ export class FRect {
 		this.yMax = value.y;
 	}
 
-	public get width(): Decimal { return this._width; }
-	public set width(value: Decimal) { this._width = value; }
+	public get width(): number { return this._width; }
+	public set width(value: number) { this._width = value; }
 
-	public get height(): Decimal { return this._height; }
-	public set height(value: Decimal) { this.height = value; }
+	public get height(): number { return this._height; }
+	public set height(value: number) { this.height = value; }
 
 	public get size(): FVec2 { return new FVec2(this._width, this._height); }
 	public set size(value: FVec2) {
@@ -54,94 +55,86 @@ export class FRect {
 		this._height = value.y;
 	}
 
-	public get xMin(): Decimal { return this._xMin; }
-	public set xMin(value: Decimal) {
+	public get xMin(): number { return this._xMin; }
+	public set xMin(value: number) {
 		let xMax = this.xMax;
 		this._xMin = value;
-		this._width = xMax.sub(this._xMin);
+		this._width = FMathUtils.Sub(xMax, this._xMin);
 	}
 
-	public get yMin(): Decimal { return this._yMin; }
-	public set yMin(value: Decimal) {
+	public get yMin(): number { return this._yMin; }
+	public set yMin(value: number) {
 		let yMax = this.yMax;
 		this._yMin = value;
-		this._height = yMax.sub(this._yMin);
+		this._height = FMathUtils.Sub(yMax, this._yMin);
 	}
 
-	public get xMax(): Decimal { return this._width.add(this._xMin); }
-	public set xMax(value: Decimal) {
-		this._width = value.sub(this._xMin);
+	public get xMax(): number { return FMathUtils.Add(this._width, this._xMin); }
+	public set xMax(value: number) {
+		this._width = FMathUtils.Sub(value, this._xMin);
 	}
 
-	public get yMax(): Decimal { return this._height.add(this._yMin); }
-	public set yMax(value: Decimal) {
-		this._height = value.sub(this._yMin);
+	public get yMax(): number { return FMathUtils.Add(this._height, this._yMin); }
+	public set yMax(value: number) {
+		this._height = FMathUtils.Sub(value, this._yMin);
 	}
 
-	public constructor(x?: Decimal, y?: Decimal, width?: Decimal, height?: Decimal) {
-		this._xMin = new Decimal(x == null ? 0 : x);
-		this._yMin = new Decimal(y == null ? 0 : y);
-		this._width = new Decimal(width == null ? 0 : width);
-		this._height = new Decimal(height == null ? 0 : height);
+	public constructor(x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+		this._xMin = x;
+		this._yMin = y;
+		this._width = width;
+		this._height = height;
 	}
 
 	public CopyFrom(source: FRect) {
-		this._xMin = new Decimal(source._xMin);
-		this._yMin = new Decimal(source._yMin);
-		this._width = new Decimal(source._width);
-		this._height = new Decimal(source._height);
+		this._xMin = source._xMin;
+		this._yMin = source._yMin;
+		this._width = source._width;
+		this._height = source._height;
 	}
 
 	public Clone(): FRect {
 		let rect = new FRect();
-		rect._xMin = new Decimal(this._xMin);
-		rect._yMin = new Decimal(this._yMin);
-		rect._width = new Decimal(this._width);
-		rect._height = new Decimal(this._height);
+		rect._xMin = this._xMin;
+		rect._yMin = this._yMin;
+		rect._width = this._width;
+		rect._height = this._height;
 		return rect;
 	}
 
-	public static MinMaxRect(xmin: Decimal, ymin: Decimal, xmax: Decimal, ymax: Decimal): FRect {
-		return new FRect(xmin, ymin, xmax.sub(xmin), ymax.sub(ymin));
+	public static MinMaxRect(xmin: number, ymin: number, xmax: number, ymax: number): FRect {
+		return new FRect(xmin, ymin, FMathUtils.Sub(xmax, xmin), FMathUtils.Sub(ymax, ymin));
 	}
 
-	public Set(x: Decimal, y: Decimal, width: Decimal, height: Decimal): void {
-		this._xMin = new Decimal(x);
-		this._yMin = new Decimal(y);
-		this._width = new Decimal(width);
-		this._height = new Decimal(height);
+	public Set(x: number, y: number, width: number, height: number): void {
+		this._xMin = x;
+		this._yMin = y;
+		this._width = width;
+		this._height = height;
 	}
 
 	public Contains(point: FVec2, allowInverse: boolean = false): boolean {
 		let result: boolean;
 		if (!allowInverse) {
-			result = point.x.greaterThanOrEqualTo(this.xMin) &&
-				point.x.lessThan(this.xMax) &&
-				point.y.greaterThanOrEqualTo(this.yMin) &&
-				point.y.lessThan(this.yMax);
+			result = point.x >= this.xMin && point.x < this.xMax && point.y >= this.yMin && point.y < this.yMax;
 		}
 		else {
 			let flag = false;
-			if ((this.width.lessThan(0) &&
-				point.x.lessThanOrEqualTo(this.xMin) &&
-				point.x.greaterThan(this.xMax)) ||
-				(this.width.greaterThanOrEqualTo(0) &&
-					point.x.greaterThanOrEqualTo(this.xMin) &&
-					point.x.lessThan(this.xMax))) {
+			if ((this.width < 0 && point.x <= this.xMin && point.x > this.xMax) || (this.width >= 0 && point.x >= this.xMin && point.x < this.xMax)) {
 				flag = true;
 			}
-			result = flag && ((this.height.lessThan(0) && point.y.lessThanOrEqualTo(this.yMin) && point.y.greaterThan(this.yMax)) || (this.height.greaterThanOrEqualTo(0) && point.y.greaterThanOrEqualTo(this.yMin) && point.y.lessThan(this.yMax)));
+			result = (flag && ((this.height < 0 && point.y <= this.yMin && point.y > this.yMax) || (this.height >= 0 && point.y >= this.yMin && point.y < this.yMax)));
 		}
 		return result;
 	}
 
 	private static OrderMinMax(rect: FRect): FRect {
-		if (rect.xMin.greaterThan(rect.xMax)) {
+		if (rect.xMin > rect.xMax) {
 			let xMin = rect.xMin;
 			rect.xMin = rect.xMax;
 			rect.xMax = xMin;
 		}
-		if (rect.yMin.greaterThan(rect.yMax)) {
+		if (rect.yMin > rect.yMax) {
 			let yMin = rect.yMin;
 			rect.yMin = rect.yMax;
 			rect.yMax = yMin;
@@ -155,6 +148,14 @@ export class FRect {
 			rect = FRect.OrderMinMax(rect);
 			other = FRect.OrderMinMax(other);
 		}
-		return other.xMax.greaterThan(rect.xMin) && other.xMin.lessThan(rect.xMax) && other.yMax.greaterThan(rect.yMin) && other.yMin.lessThan(rect.yMax);
+		return other.xMax > rect.xMin && other.xMin < rect.xMax && other.yMax > rect.yMin && other.yMin < rect.yMax;
+	}
+
+	public static NormalizedToPoint(rectangle: FRect, normalizedRectCoordinates: FVec2): FVec2 {
+		return new FVec2(FMathUtils.Lerp(rectangle.x, rectangle.xMax, normalizedRectCoordinates.x), FMathUtils.Lerp(rectangle.y, rectangle.yMax, normalizedRectCoordinates.y));
+	}
+
+	public static PointToNormalized(rectangle: FRect, point: FVec2): FVec2 {
+		return new FVec2(FMathUtils.InverseLerp(rectangle.x, rectangle.xMax, point.x), FMathUtils.InverseLerp(rectangle.y, rectangle.yMax, point.y));
 	}
 }

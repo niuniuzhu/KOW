@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import { FSMStateAction } from "./FSMStateAction";
 
 export class FSMState {
@@ -46,11 +45,11 @@ export class FSMState {
 		this.OnExit();
 	}
 
-	public Update(dt: Decimal | number): void {
-		this.OnUpdate(dt);
+	public Update(dt: number): void {
 		for (const action of this._actions) {
 			action.Update(dt);
 		}
+		this.OnUpdate(dt);
 	}
 
 	protected OnEnter(param: any): void {
@@ -59,6 +58,6 @@ export class FSMState {
 	protected OnExit(): void {
 	}
 
-	protected OnUpdate(dt: Decimal | number): void {
+	protected OnUpdate(dt: number): void {
 	}
 }

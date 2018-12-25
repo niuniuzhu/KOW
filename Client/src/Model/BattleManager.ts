@@ -1,9 +1,9 @@
 import { Global } from "../Global";
-import Decimal from "../Libs/decimal";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import Queue from "../RC/Collections/Queue";
+import { FMathUtils } from "../RC/FMath/FMathUtils";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { BattleInfo } from "./BattleInfo";
@@ -24,6 +24,7 @@ export class BattleManager {
 	 */
 	private _vBattle: VBattle;
 	private _init: boolean;
+	private _destroied: boolean;
 
 	public get lBattle(): Battle { return this._lBattle; }
 	public get vBattle(): VBattle { return this._vBattle; }
@@ -32,17 +33,30 @@ export class BattleManager {
 	 * 初始化
 	 */
 	public Init() {
-		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
-
 		this._lBattle = new Battle();
 		this._vBattle = new VBattle();
 	}
 
 	public Destroy() {
+		if (this._destroied)
+			return;
+
+		this._destroied = true;
+		this._init = false;
+
+		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+		Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+
 		this._lBattle.Destroy();
 		this._vBattle.Destroy();
-		this._init = false;
+	}
+
+	public Start():void{
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+		this._destroied = false;
 	}
 
 	/**
@@ -50,17 +64,26 @@ export class BattleManager {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo, completeHandler: () => void): void {
+
 		this._vBattle.SetBattleInfo(battleInfo);
 		this._lBattle.SetBattleInfo(battleInfo);
 
 		const curFrame = battleInfo.serverFrame;
 		//请求最新战场快照
-		this.RequestSnapshot(() => {
+		this.RequestSnapshot(success => {
+			if (this._destroied)
+				return;
+			if (!success) {
+				//如果没有快照,则创建初始战场状态
+				this._lBattle.CreatePlayers(battleInfo.playerInfos);
+			}
 			//请求帧行为历史记录
 			const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
 			request.from = this._lBattle.frame;
 			request.to = curFrame;
 			Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
+				if (this._destroied)
+					return;
 				const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
 				//处理历史记录
 				const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
@@ -80,20 +103,25 @@ export class BattleManager {
 	public Update(dt: number): void {
 		if (!this._init)
 			return;
-		this._lBattle.Update(new Decimal(dt));
+		this._lBattle.Update(FMathUtils.ToFixed(dt));
 		this._vBattle.Update(dt);
 	}
 
 	/**
 	 * 请求快照
 	 */
-	private RequestSnapshot(callback: () => void): void {
+	private RequestSnapshot(callback: (success: boolean) => void): void {
 		const requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
 		requestState.frame = -1;
 		Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
 			const ret = <Protos.BS2GC_RequestSnapshotRet>msg;
-			this._lBattle.HandleSnapShot(ret);
-			callback();
+			if (ret.snapshot.length == 0) {//没有数据,说明没有快照
+				callback(false);
+			}
+			else {
+				this._lBattle.HandleSnapShot(ret);
+				callback(true);
+			}
 		});
 	}
 
@@ -118,13 +146,24 @@ export class BattleManager {
 	}
 
 	/**
+	 * 服务端通知发生不同步
+	 * @param message 协议
+	 */
+	private HandleOutOfSync(message: any): void {
+		const outOfSync = <Protos.BS2GC_OutOfSync>message;
+		this._lBattle.HandleOutOfSync(outOfSync);
+	}
+
+	/**
 	 * 处理服务端回应的帧行为历史记录
 	 * @param frames 帧数列表
 	 * @param actions 帧行为列表
 	 */
 	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): Queue<FrameActionGroup> {
-		const frameActionGroups = new Queue<FrameActionGroup>();
 		const count = frames.length;
+		if (count == 0)
+			return null;
+		const frameActionGroups = new Queue<FrameActionGroup>();
 		for (let i = 0; i < count; ++i) {
 			const frameActionGroup = new FrameActionGroup(frames[i]);
 			frameActionGroup.Deserialize(actions[i]);

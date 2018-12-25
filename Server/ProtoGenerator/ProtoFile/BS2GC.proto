@@ -46,3 +46,11 @@ message BS2GC_RequestFrameActionsRet {
 	repeated int32 frames = 2;
 	repeated bytes actions = 3;
 }
+
+//发生不同步的数据
+message BS2GC_OutOfSync {
+	MsgOpts opts = 1;
+	int32 frame = 2;
+	bytes data1 = 3;
+	bytes data2 = 4;
+}

@@ -1,22 +1,21 @@
-define(["require", "exports", "../../Libs/decimal", "../../RC/Collections/Set", "../../RC/FSM/FSMState", "../../RC/Utils/Hashtable", "./StateEnums"], function (require, exports, decimal_1, Set_1, FSMState_1, Hashtable_1, StateEnums_1) {
+define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState", "../../RC/Utils/Hashtable", "./StateEnums"], function (require, exports, Set_1, FSMState_1, Hashtable_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityState extends FSMState_1.FSMState {
-        constructor(type, owner) {
-            super(type);
-            this._time = new decimal_1.default(0);
-            this._owner = owner;
-        }
         get owner() { return this._owner; }
         get time() { return this._time; }
         set time(value) {
-            if (this._time.equals(value))
+            if (this._time == value)
                 return;
             this._time = value;
             this.OnStateTimeChanged();
         }
+        constructor(type, owner) {
+            super(type);
+            this._owner = owner;
+        }
         Init() {
-            const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
+            const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.defs, "states"), this.type.toString());
             const actionsDef = Hashtable_1.Hashtable.GetMapArray(def, "actions");
             if (actionsDef != null) {
                 for (const actionDef of actionsDef) {
@@ -38,19 +37,19 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/Collections/Set", 
             for (const action of this._actions) {
                 action.EncodeSnapshot(writer);
             }
-            writer.float(this._time.toNumber());
+            writer.int32(this._time);
         }
         DecodeSnapshot(reader) {
             for (const action of this._actions) {
                 action.DecodeSnapshot(reader);
             }
-            this._time = new decimal_1.default(reader.float());
+            this._time = reader.int32();
         }
         OnEnter(param) {
-            this._time = new decimal_1.default(0);
+            this._time = 0;
         }
         OnUpdate(dt) {
-            this._time = this._time.add(dt);
+            this._time += dt;
         }
         OnStateTimeChanged() {
             for (const action of this._actions) {
@@ -59,6 +58,15 @@ define(["require", "exports", "../../Libs/decimal", "../../RC/Collections/Set", 
         }
         IsStateAvailable(type) {
             return this._statesAvailable == null || this._statesAvailable.contains(type);
+        }
+        Dump() {
+            let str = "";
+            str += `action count:${this._actions.length}\n`;
+            for (const action of this._actions) {
+                str += action.Dump();
+            }
+            str += `time:${this._time}\n`;
+            return str;
         }
     }
     exports.EntityState = EntityState;

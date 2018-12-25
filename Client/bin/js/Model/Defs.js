@@ -1,4 +1,4 @@
-define(["require", "exports", "../RC/Utils/Hashtable", "../Consts"], function (require, exports, Hashtable_1, Consts_1) {
+define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (require, exports, Consts_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Defs {
@@ -7,6 +7,8 @@ define(["require", "exports", "../RC/Utils/Hashtable", "../Consts"], function (r
             this._mapMap = Hashtable_1.Hashtable.GetMap(this._defs, "map");
             this._entityMap = Hashtable_1.Hashtable.GetMap(this._defs, "entity");
             this._skillMap = Hashtable_1.Hashtable.GetMap(this._defs, "skill");
+            this._emitterMap = Hashtable_1.Hashtable.GetMap(this._defs, "emitter");
+            this._bulletMap = Hashtable_1.Hashtable.GetMap(this._defs, "bullet");
         }
         static GetMap(id) {
             return Hashtable_1.Hashtable.GetMap(this._mapMap, Consts_1.Consts.ASSETS_MAP_PREFIX + id);
@@ -16,6 +18,12 @@ define(["require", "exports", "../RC/Utils/Hashtable", "../Consts"], function (r
         }
         static GetSkill(id) {
             return Hashtable_1.Hashtable.GetMap(this._skillMap, Consts_1.Consts.ASSETS_SKILL_PREFIX + id);
+        }
+        static GetEmitter(id) {
+            return Hashtable_1.Hashtable.GetMap(this._emitterMap, Consts_1.Consts.ASSETS_EMITTER_PREFIX + id);
+        }
+        static GetBullet(id) {
+            return Hashtable_1.Hashtable.GetMap(this._bulletMap, Consts_1.Consts.ASSETS_BULLET_PREFIX + id);
         }
     }
     exports.Defs = Defs;

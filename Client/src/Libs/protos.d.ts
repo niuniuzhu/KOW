@@ -163,6 +163,7 @@ export namespace Protos {
         eBS2GC_RequestSnapshotRet = 4101,
         eBS2GC_FrameAction = 4102,
         eBS2GC_RequestFrameActionsRet = 4103,
+        eBS2GC_OutOfSync = 4104,
         eCS2LS_GSInfos = 5000,
         eCS2LS_GSInfo = 5001,
         eCS2LS_GSLost = 5002,
@@ -405,6 +406,30 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.BS2GC_RequestFrameActionsRet;
         public static toObject(message: Protos.BS2GC_RequestFrameActionsRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IBS2GC_OutOfSync {
+        opts?: (Protos.IMsgOpts|null);
+        frame?: (number|null);
+        data1?: (Uint8Array|null);
+        data2?: (Uint8Array|null);
+    }
+
+    class BS2GC_OutOfSync implements IBS2GC_OutOfSync {
+        constructor(properties?: Protos.IBS2GC_OutOfSync);
+        public opts?: (Protos.IMsgOpts|null);
+        public frame: number;
+        public data1: Uint8Array;
+        public data2: Uint8Array;
+        public static create(properties?: Protos.IBS2GC_OutOfSync): Protos.BS2GC_OutOfSync;
+        public static encode(message: Protos.IBS2GC_OutOfSync, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IBS2GC_OutOfSync, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2GC_OutOfSync;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2GC_OutOfSync;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.BS2GC_OutOfSync;
+        public static toObject(message: Protos.BS2GC_OutOfSync, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

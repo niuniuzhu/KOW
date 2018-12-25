@@ -5,7 +5,7 @@
 			"keyframe_step": 4,
 			"snapshot_step": 100,
 			"timeout": 180000,
-			"max_players": 1,
+			"max_players": 2,
 			"born_pos": [
 				[
 					0,
@@ -32,32 +32,21 @@
 		"e0": {
 			"mhp": 1000,
 			"mmp": 100,
+			"atk": 50,
+			"def": 0,
 			"move_speed": 200,
-			"radius": 110,
+			"radius": 70,
 			"skills": [
 				0,
 				1
 			],
+			"default_state": 0,
 			"states": {
-				"0": {
-					"animation": "stand"
-				},
-				"1": {
-					"animation": "run"
-				},
+				"0": {},
+				"1": {},
 				"2": {
 					"states_available": [],
 					"actions": [
-						{
-							"id": 0,
-							"interrupts": [
-								{
-									"id": 0,
-									"connect_state": 0,
-									"duration": 700
-								}
-							]
-						},
 						{
 							"id": 1,
 							"attrs": [
@@ -70,27 +59,70 @@
 								1,
 								1
 							]
+						},
+						{
+							"id": 4,
+							"trigger_time": 500
+						},
+						{
+							"id": 0,
+							"interrupts": [
+								{
+									"id": 0,
+									"connect_state": 0,
+									"duration": 700
+								}
+							]
 						}
-					],
-					"animation": "attack"
+					]
 				},
-				"3": {
-					"animation": "die"
-				},
-				"4": {
-					"animation": "b"
-				}
+				"3": {}
 			}
 		}
 	},
 	"skill": {
 		"s0": {
-			"connected_state": 2,
+			"connect_state": 2,
+			"emitter": 0,
+			"bullet": 0,
 			"damage": 10
 		},
 		"s1": {
-			"connected_state": 2,
+			"connect_state": 2,
+			"emitter": 0,
+			"bullet": 0,
 			"damage": 10
+		}
+	},
+	"emitter": {
+		"m0": {
+			"radius": 0,
+			"offset": [
+				0,
+				40
+			],
+			"angle": 0,
+			"follow": false,
+			"frequency": 100,
+			"max_bullet_count": 1,
+			"life_time": 100,
+			"emit_type": 0,
+			"destroy_type": 0
+		}
+	},
+	"bullet": {
+		"b0": {
+			"move_type": 0,
+			"radius": 60,
+			"move_speed": 0,
+			"life_time": 100000,
+			"destroy_type": 0,
+			"collision_start_time": 0,
+			"max_collision_count": -1,
+			"target_type": 0,
+			"attr_types": [],
+			"attr_filter_ops": [],
+			"attr_compare_values": []
 		}
 	}
 }

@@ -15,14 +15,23 @@ export class Hashtable {
     static GetMap(map, key) {
         return map[key];
     }
-    static GetString(map, key) {
-        return map[key];
+    static GetString(map, key, v = "") {
+        let result = map[key];
+        if (result == null || result == undefined)
+            result = v;
+        return result;
     }
-    static GetNumber(map, key) {
-        return map[key];
+    static GetNumber(map, key, v = 0) {
+        let result = map[key];
+        if (result == null || result == undefined)
+            result = v;
+        return result;
     }
-    static GetBool(map, key) {
-        return map[key];
+    static GetBool(map, key, v = false) {
+        let result = map[key];
+        if (result == null || result == undefined)
+            result = v;
+        return result;
     }
     static GetStringArray(map, key) {
         return this.GetArray(map, key);

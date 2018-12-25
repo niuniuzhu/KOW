@@ -1,4 +1,3 @@
-import Decimal from "../../../Libs/decimal";
 import * as $protobuf from "../../../Libs/protobufjs";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
@@ -21,7 +20,7 @@ export abstract class IntrptBase implements ISnapshotable {
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 	}
 
-	public Update(dt: Decimal): void {
+	public Update(dt: number): void {
 	}
 
 	/**
@@ -34,5 +33,9 @@ export abstract class IntrptBase implements ISnapshotable {
 	protected ChangeState(type: StateType, param: any = null, igroneIntrptList: boolean = false, force: boolean = false): void {
 		const state = (<EntityState>this._action.state);
 		state.owner.fsm.ChangeState(type, param, igroneIntrptList, force);
+	}
+
+	public Dump(): string {
+		return "";
 	}
 }

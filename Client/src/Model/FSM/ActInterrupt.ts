@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
@@ -58,10 +57,19 @@ export class ActInterrupt extends EntityStateAction implements ISnapshotable {
 		}
 	}
 
-	protected OnUpdate(dt: Decimal): void {
-		super.OnUpdate(dt);
+	protected OnUpdate(dt: number): void {
 		for (const interrupt of this._interrupts) {
 			interrupt.Update(dt);
 		}
+		super.OnUpdate(dt);
+	}
+
+	public Dump(): string {
+		let str = super.Dump();
+		str += `interrupt count:${this._interrupts.length}\n`;
+		for (const interrupt of this._interrupts) {
+			str += interrupt.Dump();
+		}
+		return str;
 	}
 }

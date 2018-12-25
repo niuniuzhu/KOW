@@ -113,10 +113,6 @@ define(["require", "exports", "./MathUtils"], function (require, exports, MathUt
             this.y = -this.y;
             return this;
         }
-        Scale(scale) {
-            this.x *= scale.x;
-            this.y *= scale.y;
-        }
         Dot(v) {
             return this.x * v.x + this.y * v.y;
         }
@@ -160,15 +156,23 @@ define(["require", "exports", "./MathUtils"], function (require, exports, MathUt
             return this.Distance(vector) <= tolerance;
         }
         Angle(vector) {
-            let vec = Vec2.Normalize(this);
+            const vec = Vec2.Normalize(this);
             let val = vec.Dot(Vec2.Normalize(vector));
             val = val > 1 ? 1 : val;
             val = val < -1 ? -1 : val;
             return MathUtils_1.MathUtils.Acos(val);
         }
+        static Angle(v1, v2) {
+            return v1.Angle(v2);
+        }
         Rotate(angle) {
-            let x = this.x * MathUtils_1.MathUtils.Cos(angle) - this.y * MathUtils_1.MathUtils.Sin(angle);
-            let y = this.x * MathUtils_1.MathUtils.Sin(angle) + this.y * MathUtils_1.MathUtils.Cos(angle);
+            const x = this.x * MathUtils_1.MathUtils.Cos(angle) - this.y * MathUtils_1.MathUtils.Sin(angle);
+            const y = this.x * MathUtils_1.MathUtils.Sin(angle) + this.y * MathUtils_1.MathUtils.Cos(angle);
+            this.Set(x, y);
+        }
+        static Rotate(v, angle) {
+            const x = v.x * MathUtils_1.MathUtils.Cos(angle) - v.y * MathUtils_1.MathUtils.Sin(angle);
+            const y = v.x * MathUtils_1.MathUtils.Sin(angle) + v.y * MathUtils_1.MathUtils.Cos(angle);
             return new Vec2(x, y);
         }
         EqualsTo(v) {
@@ -243,7 +247,7 @@ define(["require", "exports", "./MathUtils"], function (require, exports, MathUt
             let nor = v.Clone();
             let sqrMagnitude = nor.SqrMagnitude();
             if (sqrMagnitude > (maxLength * maxLength))
-                nor = Vec2.MulN(nor, (maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude)));
+                nor.MulN(maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude));
             return nor;
         }
         static LerpUnclamped(from, to, t) {

@@ -126,11 +126,6 @@ export class Vec2 {
 		return this;
 	}
 
-	public Scale(scale: Vec2): void {
-		this.x *= scale.x;
-		this.y *= scale.y;
-	}
-
 	public Dot(v: Vec2): number {
 		return this.x * v.x + this.y * v.y;
 	}
@@ -184,16 +179,26 @@ export class Vec2 {
 	}
 
 	public Angle(vector: Vec2): number {
-		let vec = Vec2.Normalize(this);
+		const vec = Vec2.Normalize(this);
 		let val = vec.Dot(Vec2.Normalize(vector));
 		val = val > 1 ? 1 : val;
 		val = val < -1 ? -1 : val;
 		return MathUtils.Acos(val);
 	}
 
-	public Rotate(angle: number): Vec2 {
-		let x = this.x * MathUtils.Cos(angle) - this.y * MathUtils.Sin(angle);
-		let y = this.x * MathUtils.Sin(angle) + this.y * MathUtils.Cos(angle);
+	public static Angle(v1: Vec2, v2: Vec2): number {
+		return v1.Angle(v2);
+	}
+
+	public Rotate(angle: number): void {
+		const x = this.x * MathUtils.Cos(angle) - this.y * MathUtils.Sin(angle);
+		const y = this.x * MathUtils.Sin(angle) + this.y * MathUtils.Cos(angle);
+		this.Set(x, y);
+	}
+
+	public static Rotate(v: Vec2, angle: number): Vec2 {
+		const x = v.x * MathUtils.Cos(angle) - v.y * MathUtils.Sin(angle);
+		const y = v.x * MathUtils.Sin(angle) + v.y * MathUtils.Cos(angle);
 		return new Vec2(x, y);
 	}
 
@@ -287,7 +292,7 @@ export class Vec2 {
 		let nor = v.Clone();
 		let sqrMagnitude = nor.SqrMagnitude();
 		if (sqrMagnitude > (maxLength * maxLength))
-			nor = Vec2.MulN(nor, (maxLength / MathUtils.Sqrt(sqrMagnitude)));
+			nor.MulN(maxLength / MathUtils.Sqrt(sqrMagnitude));
 		return nor;
 	}
 

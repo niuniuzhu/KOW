@@ -1,4 +1,3 @@
-import Decimal from "../../Libs/decimal";
 import { FSMState } from "./FSMState";
 import { ActionType } from "../../Model/FSM/StateEnums";
 
@@ -22,7 +21,7 @@ export class FSMStateAction {
 		this.OnExit();
 	}
 
-	public Update(dt: number | Decimal): void {
+	public Update(dt: number): void {
 		this.OnUpdate(dt);
 	}
 
@@ -32,6 +31,6 @@ export class FSMStateAction {
 	protected OnExit(): void {
 	}
 
-	protected OnUpdate(dt: number | Decimal): void {
+	protected OnUpdate(dt: number): void {
 	}
 }

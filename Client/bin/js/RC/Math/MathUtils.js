@@ -1,8 +1,8 @@
-define(["require", "exports", "../../Libs/decimal", "./Quat", "./Vec2"], function (require, exports, decimal_1, Quat_1, Vec2_1) {
+define(["require", "exports", "./Quat", "./Vec2"], function (require, exports, Quat_1, Vec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MathUtils {
-        static Random(min, max) {
+        static Random(min = 0, max = 1) {
             return Math.random() * (max - min) + min;
         }
         static RandomFloor(min, max) {
@@ -287,7 +287,7 @@ define(["require", "exports", "../../Libs/decimal", "./Quat", "./Vec2"], functio
     }
     MathUtils.EPSILON = 0.0001;
     MathUtils.MAX_VALUE = Number.MAX_VALUE;
-    MathUtils.MIN_VALUE = Number.MIN_VALUE;
+    MathUtils.MIN_VALUE = -MathUtils.MAX_VALUE;
     MathUtils.PI = Math.PI;
     MathUtils.PI2 = MathUtils.PI * 2;
     MathUtils.PI4 = MathUtils.PI * 4;
@@ -300,16 +300,6 @@ define(["require", "exports", "../../Libs/decimal", "./Quat", "./Vec2"], functio
     MathUtils.RAD_TO_DEG = 180 / MathUtils.PI;
     MathUtils.INFINITY = Number.POSITIVE_INFINITY;
     MathUtils.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
-    MathUtils.D_ZERO = new decimal_1.default(0);
-    MathUtils.D_ONE = new decimal_1.default(1);
-    MathUtils.D_TWO = new decimal_1.default(2);
-    MathUtils.D_THREE = new decimal_1.default(3);
-    MathUtils.D_FOUR = new decimal_1.default(4);
-    MathUtils.D_FIVE = new decimal_1.default(5);
-    MathUtils.D_HALF = new decimal_1.default(0.5);
-    MathUtils.D_N_ONE = new decimal_1.default(-1);
-    MathUtils.D_SMALL = new decimal_1.default(0.01);
-    MathUtils.D_SMALL1 = new decimal_1.default(0.001);
     exports.MathUtils = MathUtils;
 });
 //# sourceMappingURL=MathUtils.js.map

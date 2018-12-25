@@ -65,39 +65,129 @@ define(["require", "exports", "../Libs/decimal"], function (require, exports, de
         }
         Add(attr, delta) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.add(delta));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, value.add(delta));
+            else
+                this._map.set(attr, value + delta);
         }
         Sub(attr, delta) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.sub(delta));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, value.sub(delta));
+            else
+                this._map.set(attr, value - delta);
         }
         Mul(attr, factor) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.mul(factor));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, value.mul(factor));
+            else
+                this._map.set(attr, value * factor);
         }
         Div(attr, factor) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.div(factor));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, value.div(factor));
+            else
+                this._map.set(attr, value / factor);
         }
         Mod(attr, mod) {
             const value = this._map.get(attr);
-            this._map.set(attr, value.mod(mod));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, value.mod(value));
+            else
+                this._map.set(attr, value % value);
         }
         Pow(attr, exp) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.pow(value, exp));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, value.pow(value));
+            else
+                this._map.set(attr, Math.pow(value, value));
         }
         Exp(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.exp(value));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.exp(value));
+            else
+                this._map.set(attr, Math.exp(value));
         }
         Abs(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.abs(value));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.abs(value));
+            else
+                this._map.set(attr, Math.abs(value));
         }
         Sin(attr) {
             const value = this._map.get(attr);
-            this._map.set(attr, decimal_1.default.sin(value));
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.sin(value));
+            else
+                this._map.set(attr, Math.sin(value));
+        }
+        Cos(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.cos(value));
+            else
+                this._map.set(attr, Math.cos(value));
+        }
+        Tan(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.tan(value));
+            else
+                this._map.set(attr, Math.tan(value));
+        }
+        ACos(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.acos(value));
+            else
+                this._map.set(attr, Math.acos(value));
+        }
+        ASin(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.asin(value));
+            else
+                this._map.set(attr, Math.asin(value));
+        }
+        ATan(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.atan(value));
+            else
+                this._map.set(attr, Math.atan(value));
+        }
+        Sqrt(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.sqrt(value));
+            else
+                this._map.set(attr, Math.sqrt(value));
+        }
+        Log(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.log(value));
+            else
+                this._map.set(attr, Math.log(value));
+        }
+        Log2(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.log2(value));
+            else
+                this._map.set(attr, Math.log2(value));
+        }
+        Log10(attr) {
+            const value = this._map.get(attr);
+            if (value instanceof decimal_1.default)
+                this._map.set(attr, decimal_1.default.log10(value));
+            else
+                this._map.set(attr, Math.log10(value));
         }
     }
     exports.Attribute = Attribute;

@@ -16,6 +16,9 @@ define(["require", "exports", "../../../RC/Utils/Hashtable"], function (require,
             const state = this._action.state;
             state.owner.fsm.ChangeState(type, param, igroneIntrptList, force);
         }
+        Dump() {
+            return "";
+        }
     }
     exports.IntrptBase = IntrptBase;
 });

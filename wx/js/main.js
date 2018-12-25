@@ -1,6 +1,5 @@
 import { Consts } from "./Consts";
 import { Global } from "./Global";
-import Decimal from "./Libs/decimal";
 import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
@@ -11,8 +10,6 @@ export class Main {
     static get instance() { return Main._instance; }
     constructor(config) {
         Main._instance = this;
-        Decimal.set({ precision: 3 });
-        Decimal.set({ rounding: 1 });
         const cfgJson = JSON.parse(config);
         Global.platform = Hashtable.GetNumber(cfgJson, "platform");
         Laya.MiniAdpter.init();

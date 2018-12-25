@@ -133,41 +133,8 @@ namespace BattleServer.Battle.Snapshot
 			}
 		}
 
-		private static string PrintSnapshot( ByteString data )
-		{
-		    return BitConverter.ToString( data.ToByteArray() );
-            //byte[] bytes = data.ToByteArray();
-            //CodedInputStream reader = new CodedInputStream( bytes );
-            //StringBuilder sb = new StringBuilder();
-            //sb.AppendLine( BitConverter.ToString( bytes ) );
-            //sb.AppendLine( "frame:" + reader.ReadInt32() );
-            //int count = reader.ReadInt32();
-            //sb.AppendLine( "count:" + count );
-            //for ( int i = 0; i < count; i++ )
-            //{
-            //	//entity decode
-            //	sb.AppendLine( "type:" + reader.ReadInt32() );
-            //	sb.AppendLine( "id:" + reader.ReadUInt64() );
-            //	sb.AppendLine( "actorID:" + reader.ReadInt32() );
-            //	sb.AppendLine( "team:" + reader.ReadInt32() );
-            //	sb.AppendLine( "name:" + reader.ReadString() );
-            //	sb.AppendLine( "px:" + reader.ReadFloat() );
-            //	sb.AppendLine( "py:" + reader.ReadFloat() );
-            //	sb.AppendLine( "dx:" + reader.ReadFloat() );
-            //	sb.AppendLine( "dy:" + reader.ReadFloat() );
-            //	sb.AppendLine( "mx:" + reader.ReadFloat() );
-            //	sb.AppendLine( "my:" + reader.ReadFloat() );
-            //	sb.AppendLine( "fsm_type:" + reader.ReadInt32() );
-            //	sb.AppendLine( "fsm_state:" + reader.ReadInt32() );
-            //	int c2 = reader.ReadInt32();
-            //	for ( int j = 0; j < c2; j++ )
-            //	{
-            //		sb.AppendLine( "attr:" + reader.ReadInt32() + ",v:" + reader.ReadFloat() );
-            //	}
-            //}
-            //return sb.ToString();
-        }
-    }
+		private static string PrintSnapshot( ByteString data ) => BitConverter.ToString( data.ToByteArray() );
+	}
 
 	class PlayerSnapshot
 	{

@@ -86,6 +86,10 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
                 const champion = this._champions[i];
                 champion.Update(dt);
             }
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                champion.DetectIntersetions(this._champions);
+            }
             for (let i = 0, count = this._emitters.length; i < count; i++) {
                 const emitter = this._emitters[i];
                 emitter.Update(dt);

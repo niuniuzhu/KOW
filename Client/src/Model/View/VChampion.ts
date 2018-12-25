@@ -14,7 +14,6 @@ export class VChampion extends VEntity {
 	private _name: string;
 	private _skills: Skill[];
 	private readonly _fsm: FSM = new FSM();
-	private readonly _moveSpeed: Vec2 = Vec2.zero;
 
 	protected OnInit(): void {
 		super.OnInit();
@@ -39,7 +38,6 @@ export class VChampion extends VEntity {
 		super.DecodeSync(rid, reader, isNew);
 		this._team = reader.int32();
 		this._name = reader.string();
-		this._moveSpeed.Set(reader.double(), reader.double());
 
 		//read fsmstates
 		if (reader.bool()) {

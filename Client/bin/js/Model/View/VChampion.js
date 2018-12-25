@@ -1,11 +1,10 @@
-define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../FSM/VEntityState", "../Skill", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, VEntityState_1, Skill_1, VEntity_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Utils/Hashtable", "../FSM/VEntityState", "../Skill", "./VEntity"], function (require, exports, FSM_1, Hashtable_1, VEntityState_1, Skill_1, VEntity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VChampion extends VEntity_1.VEntity {
         constructor() {
             super(...arguments);
             this._fsm = new FSM_1.FSM();
-            this._moveSpeed = Vec2_1.Vec2.zero;
         }
         get team() { return this._team; }
         get name() { return this._name; }
@@ -29,7 +28,6 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             super.DecodeSync(rid, reader, isNew);
             this._team = reader.int32();
             this._name = reader.string();
-            this._moveSpeed.Set(reader.double(), reader.double());
             if (reader.bool()) {
                 this._fsm.ChangeState(reader.int32(), null);
                 this._fsm.currentState.time = reader.double();

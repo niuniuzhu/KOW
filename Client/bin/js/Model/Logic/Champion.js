@@ -5,7 +5,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         constructor() {
             super(...arguments);
             this._fsm = new EntityFSM_1.EntityFSM();
-            this._moveSpeed = FVec2_1.FVec2.zero;
         }
         get team() { return this._team; }
         get name() { return this._name; }
@@ -49,21 +48,18 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             super.EncodeSnapshot(writer);
             writer.int32(this._team);
             writer.string(this._name);
-            writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
             this._fsm.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
             super.DecodeSnapshot(reader);
             this._team = reader.int32();
             this._name = reader.string();
-            this._moveSpeed.Set(reader.double(), reader.double());
             this._fsm.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {
             super.EncodeSync(writer);
             writer.int32(this._team);
             writer.string(this._name);
-            writer.double(this._moveSpeed.x).double(this._moveSpeed.y);
             writer.bool(this._fsm.currentState != null);
             if (this._fsm.currentState != null) {
                 writer.int32(this._fsm.currentState.type);
@@ -95,31 +91,72 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         BeginMove(dx, dy) {
             const direction = new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(dx), FMathUtils_1.FMathUtils.ToFixed(dy));
             if (direction.SqrMagnitude() < FMathUtils_1.FMathUtils.EPSILON) {
-                this._moveSpeed.Set(0, 0);
+                this.attribute.Set(Attribute_1.EAttr.MOVE_DIRECTION_X, 0);
+                this.attribute.Set(Attribute_1.EAttr.MOVE_DIRECTION_Y, 0);
+                this.attribute.Set(Attribute_1.EAttr.MOVE_VECTOR_X, 0);
+                this.attribute.Set(Attribute_1.EAttr.MOVE_VECTOR_Y, 0);
             }
             else {
-                if (this.canTurn) {
-                    this.direction.CopyFrom(direction);
-                }
-                this._moveSpeed.CopyFrom(FVec2_1.FVec2.MulN(direction, this.attribute.Get(Attribute_1.EAttr.MOVE_SPEED)));
+                this.attribute.Set(Attribute_1.EAttr.MOVE_DIRECTION_X, direction.x);
+                this.attribute.Set(Attribute_1.EAttr.MOVE_DIRECTION_Y, direction.y);
+                const v = FVec2_1.FVec2.MulN(direction, this.attribute.Get(Attribute_1.EAttr.MOVE_SPEED));
+                this.attribute.Set(Attribute_1.EAttr.MOVE_VECTOR_X, v.x);
+                this.attribute.Set(Attribute_1.EAttr.MOVE_VECTOR_Y, v.y);
             }
         }
         MoveStep(dt) {
-            if (this._moveSpeed.SqrMagnitude() < FMathUtils_1.FMathUtils.EPSILON) {
-                this._fsm.ChangeState(StateEnums_1.StateType.Idle);
-                return;
-            }
+            let mx = 0;
+            let my = 0;
             if (this.canMove) {
-                const moveDelta = FVec2_1.FVec2.MulN(this._moveSpeed, FMathUtils_1.FMathUtils.Mul(0.001, dt));
-                const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
-                const radius = this.attribute.Get(Attribute_1.EAttr.RADIUS);
-                pos.x = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.xMin, radius), pos.x);
-                pos.x = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.xMax, radius), pos.x);
-                pos.y = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.yMin, radius), pos.y);
-                pos.y = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.yMax, radius), pos.y);
-                this.position.CopyFrom(pos);
+                mx = this.attribute.Get(Attribute_1.EAttr.MOVE_VECTOR_X);
+                my = this.attribute.Get(Attribute_1.EAttr.MOVE_VECTOR_Y);
+            }
+            if (mx == 0 && my == 0) {
+                this._fsm.ChangeState(StateEnums_1.StateType.Idle);
+            }
+            else {
+                if (this.canTurn) {
+                    this.direction.Set(this.attribute.Get(Attribute_1.EAttr.MOVE_DIRECTION_X), this.attribute.Get(Attribute_1.EAttr.MOVE_DIRECTION_Y));
+                }
                 this._fsm.ChangeState(StateEnums_1.StateType.Move);
             }
+            const ix = this.attribute.Get(Attribute_1.EAttr.INTERSET_VECTOR_X);
+            const iy = this.attribute.Get(Attribute_1.EAttr.INTERSET_VECTOR_Y);
+            const moveVector = new FVec2_1.FVec2(FMathUtils_1.FMathUtils.Add(mx, ix), FMathUtils_1.FMathUtils.Add(my, iy));
+            const sqrtDis = moveVector.SqrMagnitude();
+            if (sqrtDis < FMathUtils_1.FMathUtils.EPSILON) {
+                this.attribute.Set(Attribute_1.EAttr.VELOCITY, 0);
+                return;
+            }
+            this.attribute.Set(Attribute_1.EAttr.VELOCITY, FMathUtils_1.FMathUtils.Sqrt(sqrtDis));
+            const moveDelta = FVec2_1.FVec2.MulN(moveVector, FMathUtils_1.FMathUtils.Mul(0.001, dt));
+            const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
+            const radius = this.attribute.Get(Attribute_1.EAttr.RADIUS);
+            pos.x = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.xMin, radius), pos.x);
+            pos.x = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.xMax, radius), pos.x);
+            pos.y = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.yMin, radius), pos.y);
+            pos.y = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.yMax, radius), pos.y);
+            this.position.CopyFrom(pos);
+        }
+        DetectIntersetions(others) {
+            const intersectVector = FVec2_1.FVec2.zero;
+            for (const other of others) {
+                if (other == this ||
+                    (this.attribute.Get(Attribute_1.EAttr.MOVE_VECTOR_X) == 0 && this.attribute.Get(Attribute_1.EAttr.MOVE_VECTOR_Y) == 0)) {
+                    continue;
+                }
+                const d = FVec2_1.FVec2.Sub(this.position, other.position);
+                const magnitude = d.Magnitude();
+                const r = FMathUtils_1.FMathUtils.Add(this.attribute.Get(Attribute_1.EAttr.RADIUS), other.attribute.Get(Attribute_1.EAttr.RADIUS));
+                if (magnitude >= r)
+                    continue;
+                const delta = r - magnitude;
+                const deltaFactor = FMathUtils_1.FMathUtils.Mul(this.attribute.Get(Attribute_1.EAttr.VELOCITY), 0.15);
+                const direction = d.DivN(magnitude);
+                intersectVector.Add(FVec2_1.FVec2.MulN(direction, FMathUtils_1.FMathUtils.Mul(delta, deltaFactor)));
+            }
+            this.attribute.Set(Attribute_1.EAttr.INTERSET_VECTOR_X, intersectVector.x);
+            this.attribute.Set(Attribute_1.EAttr.INTERSET_VECTOR_Y, intersectVector.y);
         }
         UseSkill(sid) {
             if (!this.canUseSkill)
@@ -136,7 +173,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             let str = super.Dump();
             str += `team:${this._team}\n`;
             str += `name:${this._name}\n`;
-            str += `move speed${this._moveSpeed}\n`;
             str += `skill count${this._skills.length}\n`;
             str += this._fsm.Dump();
             return str;

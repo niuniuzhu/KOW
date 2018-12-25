@@ -11,6 +11,13 @@ define(["require", "exports", "../../RC/FMath/FMathUtils"], function (require, e
         EAttr[EAttr["ATK"] = 5] = "ATK";
         EAttr[EAttr["DEF"] = 6] = "DEF";
         EAttr[EAttr["MOVE_SPEED"] = 7] = "MOVE_SPEED";
+        EAttr[EAttr["MOVE_DIRECTION_X"] = 8] = "MOVE_DIRECTION_X";
+        EAttr[EAttr["MOVE_DIRECTION_Y"] = 9] = "MOVE_DIRECTION_Y";
+        EAttr[EAttr["MOVE_VECTOR_X"] = 10] = "MOVE_VECTOR_X";
+        EAttr[EAttr["MOVE_VECTOR_Y"] = 11] = "MOVE_VECTOR_Y";
+        EAttr[EAttr["INTERSET_VECTOR_X"] = 12] = "INTERSET_VECTOR_X";
+        EAttr[EAttr["INTERSET_VECTOR_Y"] = 13] = "INTERSET_VECTOR_Y";
+        EAttr[EAttr["VELOCITY"] = 14] = "VELOCITY";
         EAttr[EAttr["S_DISABLE_MOVE"] = 500] = "S_DISABLE_MOVE";
         EAttr[EAttr["S_DISABLE_TURN"] = 501] = "S_DISABLE_TURN";
         EAttr[EAttr["S_DISABLE_SKILL"] = 502] = "S_DISABLE_SKILL";
@@ -32,6 +39,13 @@ define(["require", "exports", "../../RC/FMath/FMathUtils"], function (require, e
     exports.DEFAULT_ATTR_VALUES.set(EAttr.ATK, 0);
     exports.DEFAULT_ATTR_VALUES.set(EAttr.DEF, 0);
     exports.DEFAULT_ATTR_VALUES.set(EAttr.MOVE_SPEED, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.MOVE_DIRECTION_X, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.MOVE_DIRECTION_Y, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.MOVE_VECTOR_X, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.MOVE_VECTOR_Y, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.INTERSET_VECTOR_X, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.INTERSET_VECTOR_Y, 0);
+    exports.DEFAULT_ATTR_VALUES.set(EAttr.VELOCITY, 0);
     exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_MOVE, 0);
     exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_TURN, 0);
     exports.DEFAULT_ATTR_VALUES.set(EAttr.S_DISABLE_SKILL, 0);

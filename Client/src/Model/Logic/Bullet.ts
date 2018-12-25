@@ -7,6 +7,7 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Entity, EntityInitParams } from "./Entity";
 import Long = require("../../Libs/long");
 import { Champion } from "./Champion";
+import { EAttr } from "./Attribute";
 
 enum BulletMoveType {
 	Linear,
@@ -31,7 +32,7 @@ enum AttrFilter {
 	Mp,
 	Atk,
 	Def,
-	Speed
+	Velocity
 }
 
 enum AttrFilterOP {
@@ -130,6 +131,10 @@ export class Bullet extends Entity implements ISnapshotable {
 	public Update(dt: number): void {
 		super.Update(dt);
 		this.MoveStep(dt);
+		this.SelectTargets();
+
+		this._targets0.splice(0);
+		this._targets1.splice(0);
 
 		this._time += dt;
 		switch (this._destroyType) {
@@ -200,11 +205,14 @@ export class Bullet extends Entity implements ISnapshotable {
 				this._targets0.push(caster);
 				break;
 		}
-
 		//没有找到目标
-		if (this._targets0.length == 0)
+		if (this._targets0.length == 0) {
 			return;
-
+		}
+		//没有属性过滤则直接添加
+		if (this._attrTypes == null || this._attrTypes.length == 0) {
+			this._targets1.concat(this._targets0);
+		}
 		//过滤属性
 		const count = this._attrTypes.length;
 		for (let i = 0; i < count; ++i) {
@@ -213,23 +221,38 @@ export class Bullet extends Entity implements ISnapshotable {
 			const compareValue = this._attrCompareValues[i];
 			switch (attrType) {
 				case AttrFilter.Distence:
-					this.FilterDistance(caster, attrType, attrOp, compareValue);
+					this.FilterDistance(caster, attrOp, compareValue);
 					break;
 				case AttrFilter.Hp:
+					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
+						return t.attribute.Get(EAttr.HP);
+					}, v => v, v => v);
 					break;
 				case AttrFilter.Mp:
+					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
+						return t.attribute.Get(EAttr.MP);
+					}, v => v, v => v);
 					break;
 				case AttrFilter.Atk:
+					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
+						return t.attribute.Get(EAttr.ATK);
+					}, v => v, v => v);
 					break;
 				case AttrFilter.Def:
+					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
+						return t.attribute.Get(EAttr.DEF);
+					}, v => v, v => v);
 					break;
-				case AttrFilter.Speed:
+				case AttrFilter.Velocity:
+					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
+						return t.attribute.Get(EAttr.VELOCITY);
+					}, v => v, v => v);
 					break;
 			}
 		}
 	}
 
-	private FilterDistance(caster: Champion, attrType: AttrFilter, attrOp: AttrFilterOP, compareValue: number): void {
+	private FilterDistance(caster: Champion, attrOp: AttrFilterOP, compareValue: number): void {
 		switch (attrOp) {
 			case AttrFilterOP.Max: {
 				if (this._targets0.length == 1) {
@@ -325,6 +348,114 @@ export class Bullet extends Entity implements ISnapshotable {
 				for (const target of this._targets0) {
 					const distanceSqr = caster.position.DistanceSquared(target.position);
 					if (distanceSqr >= FMathUtils.Mul(compareValue, compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+		}
+	}
+
+	private FilterAttr(caster: Champion, attrOp: AttrFilterOP, compareValue: number,
+		getFunc: (c: Champion, t: Champion) => number, compValFunc: (v: number) => number, targetValFunc: (v: number) => number): void {
+		switch (attrOp) {
+			case AttrFilterOP.Max: {
+				if (this._targets0.length == 1) {
+					this._targets1.push(this._targets0[0]);
+				}
+				else {
+					let maxValue = 0;
+					let meet: Champion;
+					for (const target of this._targets0) {
+						const attrValue = getFunc(caster, target);
+						if (targetValFunc(attrValue) > compValFunc(maxValue)) {
+							maxValue = attrValue;
+							meet = target;
+						}
+					}
+					this._targets1.push(meet);
+				}
+				break;
+			}
+
+			case AttrFilterOP.Min: {
+				if (this._targets0.length == 1) {
+					this._targets1.push(this._targets0[0]);
+				}
+				else {
+					let minValue = FMathUtils.MAX_VALUE;
+					let meet: Champion;
+					for (const target of this._targets0) {
+						const attrValue = getFunc(caster, target);
+						if (targetValFunc(attrValue) < compValFunc(minValue)) {
+							minValue = attrValue;
+							meet = target;
+						}
+					}
+					this._targets1.push(meet);
+				}
+				break;
+			}
+
+			case AttrFilterOP.Equal: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const attrValue = getFunc(caster, target);
+					if (targetValFunc(attrValue) == compValFunc(compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+
+			case AttrFilterOP.Greater: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const attrValue = getFunc(caster, target);
+					if (targetValFunc(attrValue) > compValFunc(compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+
+			case AttrFilterOP.GreaterEqual: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const attrValue = getFunc(caster, target);
+					if (targetValFunc(attrValue) >= compValFunc(compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+
+			case AttrFilterOP.Less: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const attrValue = getFunc(caster, target);
+					if (targetValFunc(attrValue) < compValFunc(compareValue)) {
+						meet = target;
+					}
+				}
+				if (meet != null)
+					this._targets1.push(meet);
+				break;
+			}
+
+			case AttrFilterOP.LessEqual: {
+				let meet: Champion;
+				for (const target of this._targets0) {
+					const attrValue = getFunc(caster, target);
+					if (targetValFunc(attrValue) <= compValFunc(compareValue)) {
 						meet = target;
 					}
 				}

@@ -23,7 +23,7 @@ namespace Core.Net
             this._socket.SetSocketOption( optionLevel, optionName, optionValue );
 
         public void BeginAuthenticate( X509Certificate2 certificate, AsyncCallback callback ) =>
-            this._sslStream.BeginAuthenticateAsServer( certificate, false, SslProtocols.Tls, false, callback, this );
+            this._sslStream.BeginAuthenticateAsServer( certificate, false, SslProtocols.None, false, callback, this );
 
         public void EndAuthenticate( IAsyncResult ar ) =>
             this._sslStream.EndAuthenticateAsServer( ar );

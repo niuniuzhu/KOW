@@ -7,7 +7,7 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";
-import Long = require("../../Libs/long");
+import * as Long from "../../Libs/long";
 import { Logger } from "../../RC/Utils/Logger";
 
 enum BulletMoveType {
@@ -95,6 +95,7 @@ export class Bullet extends Entity implements ISnapshotable {
 	}
 
 	protected OnInit(): void {
+		super.OnInit();
 		this._radius = Hashtable.GetNumber(this._defs, "radius");
 		this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
 		this._moveType = Hashtable.GetNumber(this._defs, "move_type");

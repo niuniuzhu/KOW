@@ -1,24 +1,22 @@
-import Decimal from "../../Libs/decimal";
 import Set from "../../RC/Collections/Set";
 import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ID_TO_STATE_ACTION } from "./StateEnums";
 export class EntityState extends FSMState {
-    constructor(type, owner) {
-        super(type);
-        this._time = new Decimal(0);
-        this._owner = owner;
-    }
     get owner() { return this._owner; }
     get time() { return this._time; }
     set time(value) {
-        if (this._time.equals(value))
+        if (this._time == value)
             return;
         this._time = value;
         this.OnStateTimeChanged();
     }
+    constructor(type, owner) {
+        super(type);
+        this._owner = owner;
+    }
     Init() {
-        const def = Hashtable.GetMap(Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
+        const def = Hashtable.GetMap(Hashtable.GetMap(this._owner.defs, "states"), this.type.toString());
         const actionsDef = Hashtable.GetMapArray(def, "actions");
         if (actionsDef != null) {
             for (const actionDef of actionsDef) {
@@ -40,19 +38,19 @@ export class EntityState extends FSMState {
         for (const action of this._actions) {
             action.EncodeSnapshot(writer);
         }
-        writer.float(this._time.toNumber());
+        writer.int32(this._time);
     }
     DecodeSnapshot(reader) {
         for (const action of this._actions) {
             action.DecodeSnapshot(reader);
         }
-        this._time = new Decimal(reader.float());
+        this._time = reader.int32();
     }
     OnEnter(param) {
-        this._time = new Decimal(0);
+        this._time = 0;
     }
     OnUpdate(dt) {
-        this._time = Decimal.add(this._time, dt);
+        this._time += dt;
     }
     OnStateTimeChanged() {
         for (const action of this._actions) {
@@ -61,5 +59,14 @@ export class EntityState extends FSMState {
     }
     IsStateAvailable(type) {
         return this._statesAvailable == null || this._statesAvailable.contains(type);
+    }
+    Dump() {
+        let str = "";
+        str += `action count:${this._actions.length}\n`;
+        for (const action of this._actions) {
+            str += action.Dump();
+        }
+        str += `time:${this._time}\n`;
+        return str;
     }
 }

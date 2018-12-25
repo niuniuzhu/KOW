@@ -14,4 +14,7 @@ export class IntrptBase {
         const state = this._action.state;
         state.owner.fsm.ChangeState(type, param, igroneIntrptList, force);
     }
+    Dump() {
+        return "";
+    }
 }

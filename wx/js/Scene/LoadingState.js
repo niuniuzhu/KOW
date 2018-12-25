@@ -35,6 +35,7 @@ export class LoadingState extends SceneState {
                 this._ui.OnLoginBSResut(resp.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
                 switch (resp.result) {
                     case Protos.Global.ECommon.Success:
+                        Global.battleManager.Start();
                         this._battleInfo.playerID = resp.playerID;
                         this._battleInfo.rndSeed = resp.rndSeed;
                         this._battleInfo.frameRate = resp.frameRate;

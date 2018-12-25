@@ -22,7 +22,7 @@ export class UIBattle {
         this._gestureState.joystick.radius = 100;
         this._gestureState.joystick.resetDuration = 60;
         this._gestureState.onChanged = this.HandleAxisInput.bind(this);
-        UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnEntityInit.bind(this));
+        UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
     }
     get root() { return this._root; }
     Dispose() {
@@ -48,9 +48,9 @@ export class UIBattle {
     }
     OnResize(e) {
     }
-    OnEntityInit(e) {
+    OnChampionInit(e) {
         if (e.b0) {
-            this._player = e.entity;
+            this._player = e.champion;
             this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
             this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
         }

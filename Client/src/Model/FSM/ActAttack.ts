@@ -2,7 +2,7 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { ISnapshotable } from "../ISnapshotable";
 import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";
-import Long = require("../../Libs/long");
+import * as Long from "../../Libs/long";
 
 /**
  * 攻击行为

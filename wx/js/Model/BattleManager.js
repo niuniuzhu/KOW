@@ -1,9 +1,9 @@
 import { Global } from "../Global";
-import Decimal from "../Libs/decimal";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import Queue from "../RC/Collections/Queue";
+import { FMathUtils } from "../RC/FMath/FMathUtils";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { FrameActionGroup } from "./FrameActionGroup";
@@ -13,25 +13,42 @@ export class BattleManager {
     get lBattle() { return this._lBattle; }
     get vBattle() { return this._vBattle; }
     Init() {
-        Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
-        Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
         this._lBattle = new Battle();
         this._vBattle = new VBattle();
     }
     Destroy() {
+        if (this._destroied)
+            return;
+        this._destroied = true;
+        this._init = false;
+        Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+        Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+        Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
         this._lBattle.Destroy();
         this._vBattle.Destroy();
-        this._init = false;
+    }
+    Start() {
+        Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+        Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+        Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+        this._destroied = false;
     }
     SetBattleInfo(battleInfo, completeHandler) {
         this._vBattle.SetBattleInfo(battleInfo);
         this._lBattle.SetBattleInfo(battleInfo);
         const curFrame = battleInfo.serverFrame;
-        this.RequestSnapshot(() => {
+        this.RequestSnapshot(success => {
+            if (this._destroied)
+                return;
+            if (!success) {
+                this._lBattle.CreatePlayers(battleInfo.playerInfos);
+            }
             const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
             request.from = this._lBattle.frame;
             request.to = curFrame;
             Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
+                if (this._destroied)
+                    return;
                 const ret = msg;
                 const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
                 this._lBattle.Chase(frameActionGroups, false, false);
@@ -45,7 +62,7 @@ export class BattleManager {
     Update(dt) {
         if (!this._init)
             return;
-        this._lBattle.Update(new Decimal(dt));
+        this._lBattle.Update(FMathUtils.ToFixed(dt));
         this._vBattle.Update(dt);
     }
     RequestSnapshot(callback) {
@@ -53,8 +70,13 @@ export class BattleManager {
         requestState.frame = -1;
         Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
             const ret = msg;
-            this._lBattle.HandleSnapShot(ret);
-            callback();
+            if (ret.snapshot.length == 0) {
+                callback(false);
+            }
+            else {
+                this._lBattle.HandleSnapShot(ret);
+                callback(true);
+            }
         });
     }
     HandleBattleEnd(message) {
@@ -67,9 +89,15 @@ export class BattleManager {
         const frameAction = message;
         this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
     }
+    HandleOutOfSync(message) {
+        const outOfSync = message;
+        this._lBattle.HandleOutOfSync(outOfSync);
+    }
     HandleRequestFrameActions(frames, actions) {
-        const frameActionGroups = new Queue();
         const count = frames.length;
+        if (count == 0)
+            return null;
+        const frameActionGroups = new Queue();
         for (let i = 0; i < count; ++i) {
             const frameActionGroup = new FrameActionGroup(frames[i]);
             frameActionGroup.Deserialize(actions[i]);

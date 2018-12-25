@@ -1,6 +1,6 @@
 {
 	"config": {
-		"ls_ip": "localhost",
+		"ls_ip": "www.kow2019.com",
 		"ls_port": 49996
 	},
 	"preloads": [

@@ -25,6 +25,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this._defs = Defs_1.Defs.GetEntity(this._id);
         }
         OnInit() {
+            super.OnInit();
             this._radius = Hashtable_1.Hashtable.GetNumber(this._defs, "radius");
             this._moveSpeed = Hashtable_1.Hashtable.GetNumber(this._defs, "move_speed");
             this._skills = [];
@@ -177,7 +178,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                 if (magnitude >= r)
                     continue;
                 const delta = r - magnitude;
-                const deltaFactor = FMathUtils_1.FMathUtils.Mul(this.velocity, 0.15);
+                const deltaFactor = FMathUtils_1.FMathUtils.Mul(this.velocity, 0.1);
                 const direction = d.DivN(magnitude);
                 this.intersectVector.Add(FVec2_1.FVec2.MulN(direction, FMathUtils_1.FMathUtils.Mul(delta, deltaFactor)));
             }

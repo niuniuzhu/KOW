@@ -42,7 +42,6 @@ export abstract class Entity implements ISnapshotable {
 		this._rid = params.rid;
 		this._id = params.id;
 		this._markToDestroy = false;
-		this.LoadDefs();
 		this.OnInit();
 	}
 
@@ -51,7 +50,9 @@ export abstract class Entity implements ISnapshotable {
 	/**
 	 * 在初始化后或解码快照时执行
 	 */
-	protected abstract OnInit(): void;
+	protected OnInit(): void {
+		this.LoadDefs();
+	}
 
 	public Destroy(): void {
 	}

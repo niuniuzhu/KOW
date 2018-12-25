@@ -6,7 +6,7 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Battle } from "./Battle";
 import { Champion } from "./Champion";
-import Long = require("../../Libs/long");
+import * as Long from "../../Libs/long";
 
 enum EmitType {
 	Center,

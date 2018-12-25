@@ -23,15 +23,15 @@ export class UIEvent extends BaseBattleEvent {
         e.Release();
     }
     Clear() {
-        this.entity = null;
+        this.champion = null;
     }
     Release() {
         UIEvent.Release(this);
     }
-    static EntityInit(entity, isSelf) {
+    static ChampionInit(champion, isSelf) {
         let e = this.Get();
         e._type = UIEvent.E_ENTITY_INIT;
-        e.entity = entity;
+        e.champion = champion;
         e.b0 = isSelf;
         this.Invoke(e);
     }

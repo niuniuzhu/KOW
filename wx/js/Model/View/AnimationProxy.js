@@ -1,4 +1,3 @@
-import { Consts } from "../../Consts";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 export var AnimationPlayMode;
 (function (AnimationPlayMode) {
@@ -14,15 +13,21 @@ export class AnimationProxy extends fairygui.GGraph {
         this._aniSettings = new Map();
         this._playingName = "";
     }
+    get available() { return this._aniSettings != null && this._animation != null; }
     get animation() { return this._animation; }
-    Init(actorID, def) {
+    Init(def) {
+        const model = Hashtable.GetString(def, "model");
+        if (model == null)
+            return;
         const aniDefs = Hashtable.GetMapArray(def, "animations");
+        if (aniDefs == null)
+            return;
         for (const aniDef of aniDefs) {
             const aniName = Hashtable.GetString(aniDef, "name");
             const length = Hashtable.GetNumber(aniDef, "length");
             const urls = [];
             for (let i = 0; i < length; ++i) {
-                urls.push((Consts.ASSETS_ENTITY_PREFIX + actorID) + "/" + aniName + i + ".png");
+                urls.push(`${model}/${aniName}${i}.png`);
             }
             Laya.Animation.createFrames(urls, aniName);
             const aniSetting = new AnimationSetting();
@@ -39,6 +44,8 @@ export class AnimationProxy extends fairygui.GGraph {
         this._animation = roleAni;
     }
     Play(name, startFrame, timeScale = 1, force = false) {
+        if (!this.available)
+            return;
         if (!force && this._playingName == name)
             return;
         this._playingName = name;
@@ -48,10 +55,13 @@ export class AnimationProxy extends fairygui.GGraph {
         this.setSize(this._animation.width, this._animation.height);
     }
     GetAnimationSetting(name) {
+        if (!this.available)
+            return null;
         return this._aniSettings.get(name);
     }
     dispose() {
-        this.animation.destroy();
+        if (this._animation != null)
+            this._animation.destroy();
         super.dispose();
     }
 }

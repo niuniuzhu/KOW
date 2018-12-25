@@ -1,8 +1,7 @@
-import Decimal from "../../Libs/decimal";
 import { Quat } from "./Quat";
 import { Vec2 } from "./Vec2";
 export class MathUtils {
-    static Random(min, max) {
+    static Random(min = 0, max = 1) {
         return Math.random() * (max - min) + min;
     }
     static RandomFloor(min, max) {
@@ -287,7 +286,7 @@ export class MathUtils {
 }
 MathUtils.EPSILON = 0.0001;
 MathUtils.MAX_VALUE = Number.MAX_VALUE;
-MathUtils.MIN_VALUE = Number.MIN_VALUE;
+MathUtils.MIN_VALUE = -MathUtils.MAX_VALUE;
 MathUtils.PI = Math.PI;
 MathUtils.PI2 = MathUtils.PI * 2;
 MathUtils.PI4 = MathUtils.PI * 4;
@@ -300,13 +299,3 @@ MathUtils.DEG_TO_RAD = MathUtils.PI / 180;
 MathUtils.RAD_TO_DEG = 180 / MathUtils.PI;
 MathUtils.INFINITY = Number.POSITIVE_INFINITY;
 MathUtils.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
-MathUtils.D_ZERO = new Decimal(0);
-MathUtils.D_ONE = new Decimal(1);
-MathUtils.D_TWO = new Decimal(2);
-MathUtils.D_THREE = new Decimal(3);
-MathUtils.D_FOUR = new Decimal(4);
-MathUtils.D_FIVE = new Decimal(5);
-MathUtils.D_HALF = new Decimal(0.5);
-MathUtils.D_N_ONE = new Decimal(-1);
-MathUtils.D_SMALL = new Decimal(0.01);
-MathUtils.D_SMALL1 = new Decimal(0.001);

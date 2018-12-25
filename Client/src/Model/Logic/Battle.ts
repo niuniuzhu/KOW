@@ -19,7 +19,7 @@ import { Bullet } from "./Bullet";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
-import Long = require("../../Libs/long");
+import * as Long from "../../Libs/long";
 import { Logger } from "../../RC/Utils/Logger";
 
 export class Battle implements ISnapshotable {

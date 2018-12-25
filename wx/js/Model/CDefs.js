@@ -5,6 +5,7 @@ export class CDefs {
         this._defs = json;
         this._mapMap = Hashtable.GetMap(this._defs, "map");
         this._entityMap = Hashtable.GetMap(this._defs, "entity");
+        this._bulletMap = Hashtable.GetMap(this._defs, "bullet");
     }
     static GetConfig() {
         return Hashtable.GetMap(this._defs, "config");
@@ -17,5 +18,8 @@ export class CDefs {
     }
     static GetEntity(id) {
         return Hashtable.GetMap(this._entityMap, Consts.ASSETS_ENTITY_PREFIX + id);
+    }
+    static GetBullet(id) {
+        return Hashtable.GetMap(this._bulletMap, Consts.ASSETS_BULLET_PREFIX + id);
     }
 }

@@ -1,3 +1,4 @@
+import { ActAttack } from "./ActAttack";
 import { ActEntityAttrs } from "./ActEntityAttrs";
 import { ActInterrupt } from "./ActInterrupt";
 import { ActVelocity } from "./ActVelocity";
@@ -17,9 +18,11 @@ export var ActionType;
     ActionType[ActionType["EntityAttrs"] = 1] = "EntityAttrs";
     ActionType[ActionType["Velocity"] = 2] = "Velocity";
     ActionType[ActionType["VelocityAcceleration"] = 3] = "VelocityAcceleration";
+    ActionType[ActionType["Attack"] = 4] = "Attack";
 })(ActionType || (ActionType = {}));
 export const ID_TO_STATE_ACTION = new Map();
 ID_TO_STATE_ACTION.set(ActionType.Interrupt, ActInterrupt);
 ID_TO_STATE_ACTION.set(ActionType.EntityAttrs, ActEntityAttrs);
 ID_TO_STATE_ACTION.set(ActionType.Velocity, ActVelocity);
 ID_TO_STATE_ACTION.set(ActionType.VelocityAcceleration, ActVelocityAcceleration);
+ID_TO_STATE_ACTION.set(ActionType.Attack, ActAttack);

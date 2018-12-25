@@ -25,6 +25,7 @@
 	},
 	"entity": {
 		"e0": {
+			"model": "e0",
 			"states": {
 				"0": {
 					"animation": "stand"
@@ -75,5 +76,8 @@
 				}
 			]
 		}
+	},
+	"bullet": {
+		"b0": {}
 	}
 }

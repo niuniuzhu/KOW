@@ -101,6 +101,7 @@ export class Champion extends Entity implements ISnapshotable {
 	 * 在初始化或解码快照后执行
 	 */
 	protected OnInit(): void {
+		super.OnInit();
 		this._radius = Hashtable.GetNumber(this._defs, "radius");
 		this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
 
@@ -311,7 +312,7 @@ export class Champion extends Entity implements ISnapshotable {
 				continue;
 			//相交深度
 			const delta = r - magnitude;
-			const deltaFactor = FMathUtils.Mul(this.velocity, 0.15);//因子
+			const deltaFactor = FMathUtils.Mul(this.velocity, 0.1);//因子
 			const direction = d.DivN(magnitude);//归一
 			//根据相交深度计算相交向量
 			this.intersectVector.Add(FVec2.MulN(direction, FMathUtils.Mul(delta, deltaFactor)));

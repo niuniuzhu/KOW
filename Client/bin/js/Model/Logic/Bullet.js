@@ -60,6 +60,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this._defs = Defs_1.Defs.GetBullet(this._id);
         }
         OnInit() {
+            super.OnInit();
             this._radius = Hashtable_1.Hashtable.GetNumber(this._defs, "radius");
             this._moveSpeed = Hashtable_1.Hashtable.GetNumber(this._defs, "move_speed");
             this._moveType = Hashtable_1.Hashtable.GetNumber(this._defs, "move_type");

@@ -33,7 +33,7 @@
 			"mhp": 1000,
 			"mmp": 100,
 			"move_speed": 200,
-			"radius": 80,
+			"radius": 60,
 			"skills": [
 				0,
 				1
@@ -111,13 +111,12 @@
 	"bullet": {
 		"b0": {
 			"move_type": 0,
-			"speed": 0,
+			"radius": 40,
+			"move_speed": 0,
 			"life_time": 100,
 			"destroy_type": 0,
 			"collision_start_time": 0,
 			"max_collision_count": 1,
-			"shape": 0,
-			"shape_radius": 40,
 			"target_type": 0,
 			"attr_types": [],
 			"attr_filter_ops": [],

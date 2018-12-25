@@ -176,15 +176,10 @@ export class Champion extends Entity implements ISnapshotable {
 		if (direction.SqrMagnitude() < FMathUtils.EPSILON) {
 			this.attribute.Set(EAttr.MOVE_DIRECTION_X, 0);
 			this.attribute.Set(EAttr.MOVE_DIRECTION_Y, 0);
-			this.attribute.Set(EAttr.MOVE_VECTOR_X, 0);
-			this.attribute.Set(EAttr.MOVE_VECTOR_Y, 0);
 		}
 		else {
 			this.attribute.Set(EAttr.MOVE_DIRECTION_X, direction.x);
 			this.attribute.Set(EAttr.MOVE_DIRECTION_Y, direction.y);
-			const v = FVec2.MulN(direction, this.attribute.Get(EAttr.MOVE_SPEED));
-			this.attribute.Set(EAttr.MOVE_VECTOR_X, v.x);
-			this.attribute.Set(EAttr.MOVE_VECTOR_Y, v.y);
 		}
 	}
 
@@ -192,8 +187,8 @@ export class Champion extends Entity implements ISnapshotable {
 		let mx = 0;
 		let my = 0;
 		if (this.canMove) {
-			mx = this.attribute.Get(EAttr.MOVE_VECTOR_X);
-			my = this.attribute.Get(EAttr.MOVE_VECTOR_Y);
+			mx = this.attribute.Get(EAttr.MOVE_DIRECTION_X);
+			my = this.attribute.Get(EAttr.MOVE_DIRECTION_Y);
 		}
 
 		if (mx == 0 && my == 0) {
@@ -202,6 +197,9 @@ export class Champion extends Entity implements ISnapshotable {
 			if (this.canTurn) {
 				this.direction.Set(this.attribute.Get(EAttr.MOVE_DIRECTION_X), this.attribute.Get(EAttr.MOVE_DIRECTION_Y));
 			}
+			const moveSpeed = this.attribute.Get(EAttr.MOVE_SPEED);
+			mx = FMathUtils.Mul(mx, moveSpeed);
+			my = FMathUtils.Mul(my, moveSpeed);
 			this._fsm.ChangeState(StateType.Move);
 		}
 
@@ -225,17 +223,15 @@ export class Champion extends Entity implements ISnapshotable {
 		this.position.CopyFrom(pos);
 	}
 
-	public DetectIntersetions(others: Champion[]): void {
+	public Intersect(others: Champion[]): void {
 		const intersectVector = FVec2.zero;
 		//todo 优化搜索范围
 		for (const other of others) {
-			if (other == this ||
-				(this.attribute.Get(EAttr.MOVE_VECTOR_X) == 0 && this.attribute.Get(EAttr.MOVE_VECTOR_Y) == 0)) {
+			if (other == this) {
 				continue;
 			}
 			//todo 优化,两两检测完成不再进行检测F
 			//圆圆相交性检测
-			//d<r^2
 			const d = FVec2.Sub(this.position, other.position);
 			const magnitude = d.Magnitude();
 			const r = FMathUtils.Add(this.attribute.Get(EAttr.RADIUS), other.attribute.Get(EAttr.RADIUS));
@@ -243,7 +239,7 @@ export class Champion extends Entity implements ISnapshotable {
 				continue;
 			//相交深度
 			const delta = r - magnitude;
-			const deltaFactor = FMathUtils.Mul(this.attribute.Get(EAttr.VELOCITY), 0.15);//相交因子
+			const deltaFactor = FMathUtils.Mul(this.attribute.Get(EAttr.VELOCITY), 0.15);//因子
 			const direction = d.DivN(magnitude);//归一
 			//根据相交深度计算相交向量
 			intersectVector.Add(FVec2.MulN(direction, FMathUtils.Mul(delta, deltaFactor)));

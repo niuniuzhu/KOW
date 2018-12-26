@@ -53,6 +53,11 @@ export class AnimationProxy extends fairygui.GGraph {
 		this.setSize(roleAni.width, roleAni.height);
 
 		this._animation = roleAni;
+
+		const dAnimation = Hashtable.GetString(def, "defaule_animation");
+		if (dAnimation != null) {
+			this.Play(dAnimation, 0);
+		}
 	}
 
 	public Play(name: string, startFrame: number, timeScale: number = 1, force: boolean = false): void {

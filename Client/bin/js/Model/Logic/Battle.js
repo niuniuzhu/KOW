@@ -226,7 +226,7 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
             }
         }
         MakeRid(id) {
-            const rnd = this._random.NextFloor(0, 0xffffffff);
+            const rnd = this._random.NextFloor(0, 0xfffff);
             return Long.fromBits(id, rnd);
         }
         CreatePlayers(playerInfos) {
@@ -309,6 +309,7 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
         CreateBullet(id, casterID, skillID, position, direction) {
             const params = new Entity_1.EntityInitParams();
             params.rid = this.MakeRid(id);
+            Logger_1.Logger.Log(params.rid);
             params.id = id;
             params.casterID = casterID;
             params.skillID = skillID;

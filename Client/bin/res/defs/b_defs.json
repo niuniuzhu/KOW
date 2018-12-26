@@ -1,6 +1,6 @@
 {
 	"config": {
-		"ls_ip": "www.kow2019.com",
+		"ls_ip": "localhost",
 		"ls_port": 49996
 	},
 	"preloads": [
@@ -74,7 +74,8 @@
 					"play_mode": 0,
 					"interval": 100
 				}
-			]
+			],
+			"defaule_animation": "stand"
 		}
 	},
 	"bullet": {

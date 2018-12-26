@@ -45,6 +45,10 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
             this.setNativeObject(roleAni);
             this.setSize(roleAni.width, roleAni.height);
             this._animation = roleAni;
+            const dAnimation = Hashtable_1.Hashtable.GetString(def, "defaule_animation");
+            if (dAnimation != null) {
+                this.Play(dAnimation, 0);
+            }
         }
         Play(name, startFrame, timeScale = 1, force = false) {
             if (!this.available)

@@ -1,4 +1,5 @@
 import { Global } from "../../Global";
+import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
 import { ProtoCreator } from "../../Net/ProtoHelper";
@@ -8,6 +9,7 @@ import { FRandom } from "../../RC/FMath/FRandom";
 import { FRect } from "../../RC/FMath/FRect";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { Logger } from "../../RC/Utils/Logger";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
 import { CDefs } from "../CDefs";
@@ -19,8 +21,6 @@ import { Bullet } from "./Bullet";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
-import * as Long from "../../Libs/long";
-import { Logger } from "../../RC/Utils/Logger";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -348,7 +348,7 @@ export class Battle implements ISnapshotable {
 	 * 给定指定id制作运行时id
 	 */
 	public MakeRid(id: number): Long {
-		const rnd = this._random.NextFloor(0, 0xffffffff);
+		const rnd = this._random.NextFloor(0, 0xfffff);
 		return Long.fromBits(id, rnd);
 	}
 

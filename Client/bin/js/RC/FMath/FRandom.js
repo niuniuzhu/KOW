@@ -6,12 +6,13 @@ define(["require", "exports", "./FMathUtils"], function (require, exports, FMath
             this._seed = seed || Math.random();
         }
         Next() {
-            this._seed = FMathUtils_1.FMathUtils.Mod(FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(this._seed, 9301), 49497), 233280);
-            return FMathUtils_1.FMathUtils.Div(this._seed, 233280);
+            this._seed = (this._seed + 49297) % 233280;
+            const result = FMathUtils_1.FMathUtils.Div(this._seed, 233280.0);
+            return result;
         }
         NextD(min, max) {
-            this._seed = FMathUtils_1.FMathUtils.Mod(FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(this._seed, 9301), 49497), 233280);
-            return FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(FMathUtils_1.FMathUtils.Div(this._seed, 233280), FMathUtils_1.FMathUtils.Sub(max, min)), min);
+            const r = this.Next();
+            return FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(r, FMathUtils_1.FMathUtils.Sub(max, min)), min);
         }
         NextFloor(min, max) {
             return FMathUtils_1.FMathUtils.Floor(this.NextD(min, max));

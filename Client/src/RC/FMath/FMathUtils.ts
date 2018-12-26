@@ -34,59 +34,101 @@ export class FMathUtils {
 	}
 
 	public static Add(v0: number, v1: number): number {
-		return (((v0 + v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = ((v0 + v1) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Sub(v0: number, v1: number): number {
-		return (((v0 - v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = ((v0 - v1) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Mul(v0: number, v1: number): number {
-		return (((v0 * v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = ((v0 * v1) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Div(v0: number, v1: number): number {
-		return (((v0 / v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = ((v0 / v1) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Mod(v0: number, v1: number): number {
-		return (((v0 % v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = ((v0 % v1) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Pow(v0: number, v1: number): number {
-		return ((Math.pow(v0, v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.pow(v0, v1) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Sqrt(v0: number): number {
-		return ((Math.sqrt(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.sqrt(v0) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Sin(v0: number): number {
-		return ((Math.sin(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.sin(v0) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Cos(v0: number): number {
-		return ((Math.cos(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.cos(v0) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Tan(v0: number): number {
-		return ((Math.tan(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.tan(v0) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Asin(v0: number): number {
-		return ((Math.asin(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.asin(v0) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Acos(v0: number): number {
-		return ((Math.acos(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.acos(v0) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Atan(v0: number): number {
-		return ((Math.atan(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.atan(v0) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Exp(v0: number): number {
-		return ((Math.exp(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+		const v = (Math.exp(v0) * FMathUtils.FRACTIONAL_PLACES);
+		if (v > 0xffffffff)
+			throw Error(`overflow:${v}`);
+		return (v >> 0) * FMathUtils.DIV_ONE;
 	}
 
 	public static Abs(v: number): number {

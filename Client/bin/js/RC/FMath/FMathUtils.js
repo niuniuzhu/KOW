@@ -18,46 +18,88 @@ define(["require", "exports"], function (require, exports) {
             return Math.min(v0, v1);
         }
         static Add(v0, v1) {
-            return (((v0 + v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = ((v0 + v1) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Sub(v0, v1) {
-            return (((v0 - v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = ((v0 - v1) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Mul(v0, v1) {
-            return (((v0 * v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = ((v0 * v1) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Div(v0, v1) {
-            return (((v0 / v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = ((v0 / v1) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Mod(v0, v1) {
-            return (((v0 % v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = ((v0 % v1) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Pow(v0, v1) {
-            return ((Math.pow(v0, v1) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.pow(v0, v1) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Sqrt(v0) {
-            return ((Math.sqrt(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.sqrt(v0) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Sin(v0) {
-            return ((Math.sin(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.sin(v0) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Cos(v0) {
-            return ((Math.cos(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.cos(v0) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Tan(v0) {
-            return ((Math.tan(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.tan(v0) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Asin(v0) {
-            return ((Math.asin(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.asin(v0) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Acos(v0) {
-            return ((Math.acos(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.acos(v0) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Atan(v0) {
-            return ((Math.atan(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.atan(v0) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Exp(v0) {
-            return ((Math.exp(v0) * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;
+            const v = (Math.exp(v0) * FMathUtils.FRACTIONAL_PLACES);
+            if (v > 0xffffffff)
+                throw Error(`overflow:${v}`);
+            return (v >> 0) * FMathUtils.DIV_ONE;
         }
         static Abs(v) {
             return Math.abs(v);

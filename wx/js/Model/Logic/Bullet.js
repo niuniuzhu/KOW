@@ -1,11 +1,10 @@
+import * as Long from "../../Libs/long";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
 import { Entity } from "./Entity";
-import * as Long from "../../Libs/long";
-import { Logger } from "../../RC/Utils/Logger";
 var BulletMoveType;
 (function (BulletMoveType) {
     BulletMoveType[BulletMoveType["Linear"] = 0] = "Linear";
@@ -133,7 +132,6 @@ export class Bullet extends Entity {
         for (const target of this._targets1) {
             const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
             if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
-                Logger.Log("hit");
             }
         }
         this._targets1.splice(0);

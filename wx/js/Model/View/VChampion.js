@@ -1,16 +1,21 @@
 import { FSM } from "../../RC/FSM/FSM";
+import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { VEntityState } from "../FSM/VEntityState";
 import { Skill } from "../Skill";
 import { VEntity } from "./VEntity";
-import { Vec2 } from "../../RC/Math/Vec2";
 export class VChampion extends VEntity {
     constructor() {
         super(...arguments);
         this._fsm = new FSM();
         this.moveDirection = Vec2.zero;
+        this.t_hp_add = 0;
+        this.t_mp_add = 0;
+        this.t_atk_add = 0;
+        this.t_def_add = 0;
+        this.t_speed_add = 0;
     }
     LoadDefs() {
         this._defs = Defs.GetEntity(this._id);
@@ -48,6 +53,11 @@ export class VChampion extends VEntity {
         this.supperArmor = reader.int32();
         this.invulnerAbility = reader.int32();
         this.moveDirection.Set(reader.double(), reader.double());
+        this.t_hp_add = reader.int32();
+        this.t_mp_add = reader.int32();
+        this.t_atk_add = reader.int32();
+        this.t_def_add = reader.int32();
+        this.t_speed_add = reader.int32();
         if (reader.bool()) {
             this._fsm.ChangeState(reader.int32(), null);
             this._fsm.currentState.time = reader.double();

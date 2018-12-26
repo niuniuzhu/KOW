@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Utils/Hashtable", "../CDefs", "../Defs", "../FSM/VEntityState", "../Skill", "./VEntity", "../../RC/Math/Vec2"], function (require, exports, FSM_1, Hashtable_1, CDefs_1, Defs_1, VEntityState_1, Skill_1, VEntity_1, Vec2_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../CDefs", "../Defs", "../FSM/VEntityState", "../Skill", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, CDefs_1, Defs_1, VEntityState_1, Skill_1, VEntity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VChampion extends VEntity_1.VEntity {
@@ -6,6 +6,11 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Utils/Hashtable", ".
             super(...arguments);
             this._fsm = new FSM_1.FSM();
             this.moveDirection = Vec2_1.Vec2.zero;
+            this.t_hp_add = 0;
+            this.t_mp_add = 0;
+            this.t_atk_add = 0;
+            this.t_def_add = 0;
+            this.t_speed_add = 0;
         }
         LoadDefs() {
             this._defs = Defs_1.Defs.GetEntity(this._id);
@@ -43,6 +48,11 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Utils/Hashtable", ".
             this.supperArmor = reader.int32();
             this.invulnerAbility = reader.int32();
             this.moveDirection.Set(reader.double(), reader.double());
+            this.t_hp_add = reader.int32();
+            this.t_mp_add = reader.int32();
+            this.t_atk_add = reader.int32();
+            this.t_def_add = reader.int32();
+            this.t_speed_add = reader.int32();
             if (reader.bool()) {
                 this._fsm.ChangeState(reader.int32(), null);
                 this._fsm.currentState.time = reader.double();

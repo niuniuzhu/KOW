@@ -8,6 +8,7 @@ import { EntityState } from "../FSM/EntityState";
 import { StateType } from "../FSM/StateEnums";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
+import { EAttr } from "./Attribute";
 import { Entity, EntityInitParams } from "./Entity";
 
 export class Champion extends Entity implements ISnapshotable {
@@ -87,6 +88,13 @@ export class Champion extends Entity implements ISnapshotable {
 	 */
 	public velocity: number;
 
+	//临时属性
+	public t_hp_add: number = 0;
+	public t_mp_add: number = 0;
+	public t_atk_add: number = 0;
+	public t_def_add: number = 0;
+	public t_speed_add: number = 0;
+
 	public Init(params: EntityInitParams): void {
 		super.Init(params);
 		this.team = params.team;
@@ -148,6 +156,11 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.int32(this.supperArmor);
 		writer.int32(this.invulnerAbility);
 		writer.double(this.moveDirection.x).double(this.moveDirection.y);
+		writer.int32(this.t_hp_add);
+		writer.int32(this.t_mp_add);
+		writer.int32(this.t_atk_add);
+		writer.int32(this.t_def_add);
+		writer.int32(this.t_speed_add);
 
 		//encode fsmstates
 		this._fsm.EncodeSnapshot(writer);
@@ -174,6 +187,11 @@ export class Champion extends Entity implements ISnapshotable {
 		this.supperArmor = reader.int32();
 		this.invulnerAbility = reader.int32();
 		this.moveDirection.Set(reader.double(), reader.double());
+		this.t_hp_add = reader.int32();
+		this.t_mp_add = reader.int32();
+		this.t_atk_add = reader.int32();
+		this.t_def_add = reader.int32();
+		this.t_speed_add = reader.int32();
 
 		//decode fsmstates
 		this._fsm.DecodeSnapshot(reader);
@@ -200,6 +218,11 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.int32(this.supperArmor);
 		writer.int32(this.invulnerAbility);
 		writer.double(this.moveDirection.x).double(this.moveDirection.y);
+		writer.int32(this.t_hp_add);
+		writer.int32(this.t_mp_add);
+		writer.int32(this.t_atk_add);
+		writer.int32(this.t_def_add);
+		writer.int32(this.t_speed_add);
 
 		//sync fsmstates
 		writer.bool(this._fsm.currentState != null);
@@ -246,6 +269,66 @@ export class Champion extends Entity implements ISnapshotable {
 	 */
 	public GetSkillAt(index: number): Skill {
 		return this._skills[index];
+	}
+
+	public SetAttr(attr: EAttr, value: any) {
+		switch (attr) {
+			case EAttr.S_DISABLE_MOVE:
+				this.disableMove = value;
+				break;
+			case EAttr.S_DISABLE_TURN:
+				this.disableTurn = value;
+				break;
+			case EAttr.S_DISABLE_SKILL:
+				this.disableSkill = value;
+				break;
+			case EAttr.S_SUPPER_ARMOR:
+				this.supperArmor = value;
+				break;
+			case EAttr.S_INVULNER_ABILITY:
+				this.invulnerAbility = value;
+				break;
+			case EAttr.S_HP_ADD:
+				this.t_hp_add = value;
+				break;
+			case EAttr.S_MP_ADD:
+				this.t_mp_add = value;
+				break;
+			case EAttr.S_ATK_ADD:
+				this.t_atk_add = value;
+				break;
+			case EAttr.S_DEF_ADD:
+				this.t_def_add = value;
+				break;
+			case EAttr.S_SPEED_ADD:
+				this.t_speed_add = value;
+				break;
+		}
+	}
+
+	public GetAttr(attr: EAttr): any {
+		switch (attr) {
+			case EAttr.S_DISABLE_MOVE:
+				return this.disableMove;
+			case EAttr.S_DISABLE_TURN:
+				return this.disableTurn;
+			case EAttr.S_DISABLE_SKILL:
+				return this.disableSkill;
+			case EAttr.S_SUPPER_ARMOR:
+				return this.supperArmor;
+			case EAttr.S_INVULNER_ABILITY:
+				return this.invulnerAbility;
+			case EAttr.S_HP_ADD:
+				return this.t_hp_add;
+			case EAttr.S_MP_ADD:
+				return this.t_mp_add;
+			case EAttr.S_ATK_ADD:
+				return this.t_atk_add;
+			case EAttr.S_DEF_ADD:
+				return this.t_def_add;
+			case EAttr.S_SPEED_ADD:
+				return this.t_speed_add;
+		}
 	}
 
 	/**

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../FSM/StateEnums", "../Skill", "./Entity"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, StateEnums_1, Skill_1, Entity_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../FSM/StateEnums", "../Skill", "./Attribute", "./Entity"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, StateEnums_1, Skill_1, Attribute_1, Entity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Champion extends Entity_1.Entity {
@@ -12,6 +12,11 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.invulnerAbility = 0;
             this.moveDirection = FVec2_1.FVec2.zero;
             this.intersectVector = FVec2_1.FVec2.zero;
+            this.t_hp_add = 0;
+            this.t_mp_add = 0;
+            this.t_atk_add = 0;
+            this.t_def_add = 0;
+            this.t_speed_add = 0;
         }
         get fsm() { return this._fsm; }
         get radius() { return this._radius; }
@@ -63,6 +68,11 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this.supperArmor);
             writer.int32(this.invulnerAbility);
             writer.double(this.moveDirection.x).double(this.moveDirection.y);
+            writer.int32(this.t_hp_add);
+            writer.int32(this.t_mp_add);
+            writer.int32(this.t_atk_add);
+            writer.int32(this.t_def_add);
+            writer.int32(this.t_speed_add);
             this._fsm.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
@@ -81,6 +91,11 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.supperArmor = reader.int32();
             this.invulnerAbility = reader.int32();
             this.moveDirection.Set(reader.double(), reader.double());
+            this.t_hp_add = reader.int32();
+            this.t_mp_add = reader.int32();
+            this.t_atk_add = reader.int32();
+            this.t_def_add = reader.int32();
+            this.t_speed_add = reader.int32();
             this._fsm.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {
@@ -99,6 +114,11 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this.supperArmor);
             writer.int32(this.invulnerAbility);
             writer.double(this.moveDirection.x).double(this.moveDirection.y);
+            writer.int32(this.t_hp_add);
+            writer.int32(this.t_mp_add);
+            writer.int32(this.t_atk_add);
+            writer.int32(this.t_def_add);
+            writer.int32(this.t_speed_add);
             writer.bool(this._fsm.currentState != null);
             if (this._fsm.currentState != null) {
                 writer.int32(this._fsm.currentState.type);
@@ -126,6 +146,64 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         }
         GetSkillAt(index) {
             return this._skills[index];
+        }
+        SetAttr(attr, value) {
+            switch (attr) {
+                case Attribute_1.EAttr.S_DISABLE_MOVE:
+                    this.disableMove = value;
+                    break;
+                case Attribute_1.EAttr.S_DISABLE_TURN:
+                    this.disableTurn = value;
+                    break;
+                case Attribute_1.EAttr.S_DISABLE_SKILL:
+                    this.disableSkill = value;
+                    break;
+                case Attribute_1.EAttr.S_SUPPER_ARMOR:
+                    this.supperArmor = value;
+                    break;
+                case Attribute_1.EAttr.S_INVULNER_ABILITY:
+                    this.invulnerAbility = value;
+                    break;
+                case Attribute_1.EAttr.S_HP_ADD:
+                    this.t_hp_add = value;
+                    break;
+                case Attribute_1.EAttr.S_MP_ADD:
+                    this.t_mp_add = value;
+                    break;
+                case Attribute_1.EAttr.S_ATK_ADD:
+                    this.t_atk_add = value;
+                    break;
+                case Attribute_1.EAttr.S_DEF_ADD:
+                    this.t_def_add = value;
+                    break;
+                case Attribute_1.EAttr.S_SPEED_ADD:
+                    this.t_speed_add = value;
+                    break;
+            }
+        }
+        GetAttr(attr) {
+            switch (attr) {
+                case Attribute_1.EAttr.S_DISABLE_MOVE:
+                    return this.disableMove;
+                case Attribute_1.EAttr.S_DISABLE_TURN:
+                    return this.disableTurn;
+                case Attribute_1.EAttr.S_DISABLE_SKILL:
+                    return this.disableSkill;
+                case Attribute_1.EAttr.S_SUPPER_ARMOR:
+                    return this.supperArmor;
+                case Attribute_1.EAttr.S_INVULNER_ABILITY:
+                    return this.invulnerAbility;
+                case Attribute_1.EAttr.S_HP_ADD:
+                    return this.t_hp_add;
+                case Attribute_1.EAttr.S_MP_ADD:
+                    return this.t_mp_add;
+                case Attribute_1.EAttr.S_ATK_ADD:
+                    return this.t_atk_add;
+                case Attribute_1.EAttr.S_DEF_ADD:
+                    return this.t_def_add;
+                case Attribute_1.EAttr.S_SPEED_ADD:
+                    return this.t_speed_add;
+            }
         }
         BeginMove(dx, dy) {
             const direction = new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(dx), FMathUtils_1.FMathUtils.ToFixed(dy));

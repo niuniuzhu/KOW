@@ -1,12 +1,12 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
+import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { VEntityState } from "../FSM/VEntityState";
 import { Skill } from "../Skill";
 import { VEntity } from "./VEntity";
-import { Vec2 } from "../../RC/Math/Vec2";
 
 export class VChampion extends VEntity {
 	//static properties
@@ -28,6 +28,12 @@ export class VChampion extends VEntity {
 	public supperArmor: number;
 	public invulnerAbility: number;
 	public readonly moveDirection: Vec2 = Vec2.zero;
+	//临时属性
+	public t_hp_add: number = 0;
+	public t_mp_add: number = 0;
+	public t_atk_add: number = 0;
+	public t_def_add: number = 0;
+	public t_speed_add: number = 0;
 
 	protected LoadDefs(): void {
 		this._defs = Defs.GetEntity(this._id);
@@ -69,6 +75,11 @@ export class VChampion extends VEntity {
 		this.supperArmor = reader.int32();
 		this.invulnerAbility = reader.int32();
 		this.moveDirection.Set(reader.double(), reader.double());
+		this.t_hp_add = reader.int32();
+		this.t_mp_add = reader.int32();
+		this.t_atk_add = reader.int32();
+		this.t_def_add = reader.int32();
+		this.t_speed_add = reader.int32();
 
 		//read fsmstates
 		if (reader.bool()) {

@@ -1056,7 +1056,7 @@ export namespace Protos {
         inputFlag?: (number|null);
         dx?: (number|null);
         dy?: (number|null);
-        sid?: (number|null);
+        press?: (boolean|null);
     }
 
     class GC2BS_FrameAction implements IGC2BS_FrameAction {
@@ -1065,7 +1065,7 @@ export namespace Protos {
         public inputFlag: number;
         public dx: number;
         public dy: number;
-        public sid: number;
+        public press: boolean;
         public static create(properties?: Protos.IGC2BS_FrameAction): Protos.GC2BS_FrameAction;
         public static encode(message: Protos.IGC2BS_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGC2BS_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;

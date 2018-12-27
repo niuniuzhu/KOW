@@ -12,8 +12,10 @@ export class UIBattle {
         fairygui.UIPackage.addPackage("res/ui/battle");
         fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick);
         this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
-        this._root.getChild("n0").onClick(this, this.OnSkillBtnClick);
-        this._root.getChild("n1").onClick(this, this.OnSkill2BtnClick);
+        this._root.getChild("n0").on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtnPress);
+        this._root.getChild("n0").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtnRelease);
+        this._root.getChild("n1").on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn2Press);
+        this._root.getChild("n1").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn2Release);
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._gestureState.joystick = this._root.getChild("joystick");
@@ -55,17 +57,25 @@ export class UIBattle {
             this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
         }
     }
-    OnSkillBtnClick() {
-        this._frameActionManager.SetInputSkill(this._root.getChild("n0").data);
+    OnSkillBtnPress() {
+        this._frameActionManager.SetS1(true);
     }
-    OnSkill2BtnClick() {
-        this._frameActionManager.SetInputSkill(this._root.getChild("n1").data);
+    OnSkillBtnRelease() {
+        this._frameActionManager.SetS2(false);
+    }
+    OnSkillBtn2Press() {
+        this._frameActionManager.SetS1(true);
+    }
+    OnSkillBtn2Release() {
+        this._frameActionManager.SetS2(false);
     }
     HandleAxisInput(value) {
         this._frameActionManager.SetInputDirection(value);
     }
     OnDragStart(e) {
         if (this._touchID != -1)
+            return;
+        if (e.stageX >= fairygui.GRoot.inst.width * 0.5)
             return;
         this._touchID = e.touchId;
         fairygui.GRoot.inst.on(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);

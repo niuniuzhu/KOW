@@ -3,24 +3,29 @@ import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
+import { FrameAction } from "../FrameAction";
 import { EntityFSM } from "../FSM/EntityFSM";
 import { EntityState } from "../FSM/EntityState";
-import { StateType } from "../FSM/StateEnums";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
 import { EAttr } from "./Attribute";
+import { Battle } from "./Battle";
 import { Entity, EntityInitParams } from "./Entity";
+import { InputAgent, InputType } from "./InputAagent";
 
 export class Champion extends Entity implements ISnapshotable {
 	public get fsm(): EntityFSM { return this._fsm; }
+	public get inputAgent(): InputAgent { return this._inputAgent; }
 	public get radius(): number { return this._radius; }
 	public get moveSpeed(): number { return this._moveSpeed; }
+	public get numSkills(): number { return this._skills.length; }
 
 	//static properties
 	private _radius: number;
 	private _moveSpeed: number;
-	private _skills: Skill[];
-	protected readonly _fsm = new EntityFSM();
+	private readonly _skills: Skill[] = [];
+	private readonly _fsm = new EntityFSM();
+	private readonly _inputAgent = new InputAgent();
 
 	//run time properties
 	/**
@@ -95,6 +100,11 @@ export class Champion extends Entity implements ISnapshotable {
 	public t_def_add: number = 0;
 	public t_speed_add: number = 0;
 
+	constructor(battle: Battle) {
+		super(battle);
+		this._inputAgent.handler = this.HandleInput.bind(this);
+	}
+
 	public Init(params: EntityInitParams): void {
 		super.Init(params);
 		this.team = params.team;
@@ -113,7 +123,6 @@ export class Champion extends Entity implements ISnapshotable {
 		this._radius = Hashtable.GetNumber(this._defs, "radius");
 		this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
 
-		this._skills = [];
 		const skillsDef = Hashtable.GetNumberArray(this._defs, "skills");
 		if (skillsDef != null) { }
 		for (const sid of skillsDef) {
@@ -164,6 +173,7 @@ export class Champion extends Entity implements ISnapshotable {
 
 		//encode fsmstates
 		this._fsm.EncodeSnapshot(writer);
+		this._inputAgent.EncodeSnapshot(writer);
 	}
 
 	/**
@@ -195,6 +205,7 @@ export class Champion extends Entity implements ISnapshotable {
 
 		//decode fsmstates
 		this._fsm.DecodeSnapshot(reader);
+		this._inputAgent.DecodeSnapshot(reader);
 	}
 
 	/**
@@ -331,35 +342,17 @@ export class Champion extends Entity implements ISnapshotable {
 		}
 	}
 
-	/**
-	 * 开始移动
-	 * @param dx x分量
-	 * @param dy y分量
-	 */
-	public BeginMove(dx: number, dy: number): void {
-		const direction = new FVec2(FMathUtils.ToFixed(dx), FMathUtils.ToFixed(dy));
-		if (direction.SqrMagnitude() < FMathUtils.EPSILON) {
-			this.moveDirection.Set(0, 0);
-		}
-		else {
-			this.moveDirection.CopyFrom(direction);
-		}
-	}
-
 	private MoveStep(dt: number): void {
 		const moveVector = FVec2.zero;
 		if (this.disableMove <= 0) {
 			moveVector.CopyFrom(this.moveDirection);
 		}
 
-		if (moveVector.x == 0 && moveVector.y == 0) {
-			this._fsm.ChangeState(StateType.Idle);
-		} else {
+		if (moveVector.x != 0 || moveVector.y != 0) {
 			if (this.disableTurn <= 0) {
 				this.direction.CopyFrom(this.moveDirection);
 			}
 			moveVector.MulN(this._moveSpeed);
-			this._fsm.ChangeState(StateType.Move);
 		}
 
 		moveVector.Add(this.intersectVector);
@@ -410,8 +403,16 @@ export class Champion extends Entity implements ISnapshotable {
 			return false;
 		if (!this.fsm.HasState(skill.connectedState))
 			return false;
-		this.fsm.ChangeState(skill.connectedState, [this.rid, skill.id]);
+		this.fsm.ChangeState(skill.connectedState);
 		return true;
+	}
+
+	public FrameAction(frameAction: FrameAction): void {
+		this._inputAgent.SetFromFrameAction(frameAction);
+	}
+
+	public HandleInput(type: InputType, press: boolean): void {
+		this._fsm.HandleInput(type, press);
 	}
 
 	public Dump(): string {

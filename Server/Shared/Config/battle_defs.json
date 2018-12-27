@@ -42,8 +42,77 @@
 			],
 			"default_state": 0,
 			"states": {
-				"0": {},
-				"1": {},
+				"0": {
+					"actions": [
+						{
+							"id": 0,
+							"interrupts": [
+								{
+									"id": 2,
+									"connect_state": 1,
+									"input_types": [
+										0
+									],
+									"trigger_types": [
+										0
+									]
+								},
+								{
+									"id": 2,
+									"connect_state": 1,
+									"input_types": [
+										0
+									],
+									"trigger_types": [
+										2
+									]
+								},
+								{
+									"id": 2,
+									"connect_state": 2,
+									"input_types": [
+										1
+									],
+									"trigger_types": [
+										1
+									]
+								},
+								{
+									"id": 2,
+									"connect_state": 2,
+									"input_types": [
+										2
+									],
+									"trigger_types": [
+										1
+									]
+								}
+							]
+						}
+					]
+				},
+				"1": {
+					"actions": [
+						{
+							"id": 0,
+							"interrupts": [
+								{
+									"id": 2,
+									"connect_state": 0,
+									"input_types": [
+										0
+									],
+									"trigger_types": [
+										1
+									]
+								}
+							]
+						},
+						{
+							"id": 5
+						}
+					]
+				},
 				"2": {
 					"states_available": [],
 					"actions": [

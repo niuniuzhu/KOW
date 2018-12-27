@@ -34,7 +34,7 @@ export class EntityStateAction extends FSMStateAction {
     }
     OnTrigger() {
     }
-    OnStateTimeChanged(time) {
+    HandlInput(type, press) {
     }
     Dump() {
         let str = "";

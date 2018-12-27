@@ -5,12 +5,7 @@ import { ID_TO_STATE_ACTION } from "./StateEnums";
 export class EntityState extends FSMState {
     get owner() { return this._owner; }
     get time() { return this._time; }
-    set time(value) {
-        if (this._time == value)
-            return;
-        this._time = value;
-        this.OnStateTimeChanged();
-    }
+    set time(value) { this._time = value; }
     constructor(type, owner) {
         super(type);
         this._owner = owner;
@@ -52,13 +47,13 @@ export class EntityState extends FSMState {
     OnUpdate(dt) {
         this._time += dt;
     }
-    OnStateTimeChanged() {
-        for (const action of this._actions) {
-            action.OnStateTimeChanged(this._time);
-        }
-    }
     IsStateAvailable(type) {
         return this._statesAvailable == null || this._statesAvailable.contains(type);
+    }
+    HandleInput(type, press) {
+        for (const action of this._actions) {
+            action.HandlInput(type, press);
+        }
     }
     Dump() {
         let str = "";

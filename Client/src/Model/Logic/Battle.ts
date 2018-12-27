@@ -528,12 +528,7 @@ export class Battle implements ISnapshotable {
 
 	private ApplyFrameAction(frameAction: FrameAction): void {
 		const champion = this.GetChampion(frameAction.gcNID);
-		if ((frameAction.inputFlag & FrameAction.InputFlag.Move) > 0) {
-			champion.BeginMove(frameAction.dx, frameAction.dy);
-		}
-		if ((frameAction.inputFlag & FrameAction.InputFlag.Skill) > 0) {
-			champion.UseSkill(frameAction.sid);
-		}
+		champion.FrameAction(frameAction);
 	}
 
 	/**

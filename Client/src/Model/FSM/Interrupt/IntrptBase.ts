@@ -1,6 +1,7 @@
 import * as $protobuf from "../../../Libs/protobufjs";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
+import { InputType } from "../../Logic/InputAagent";
 import { EntityState } from "../EntityState";
 import { EntityStateAction } from "../EntityStateAction";
 import { StateType } from "../StateEnums";
@@ -9,9 +10,15 @@ export abstract class IntrptBase implements ISnapshotable {
 	public readonly id: number;
 	protected _action: EntityStateAction;
 
+	/**
+	 * 默认连接状态
+	 */
+	protected _connectState: StateType = StateType.None;
+
 	constructor(action: EntityStateAction, def: Hashtable) {
 		this._action = action;
 		this.id = Hashtable.GetNumber(def, "id");
+		this._connectState = Hashtable.GetNumber(def, "connect_state");
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
@@ -21,6 +28,9 @@ export abstract class IntrptBase implements ISnapshotable {
 	}
 
 	public Update(dt: number): void {
+	}
+
+	public HandleInput(type: InputType, press: boolean): void {
 	}
 
 	/**

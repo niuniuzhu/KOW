@@ -4,15 +4,7 @@ import { IntrptBase } from "./IntrptBase";
 export class IntrptTimeup extends IntrptBase {
     constructor(action, def) {
         super(action, def);
-        this._connectState = StateType.None;
-        this._connectState = Hashtable.GetNumber(def, "connect_state");
         this._duration = Hashtable.GetNumber(def, "duration", -1);
-    }
-    EncodeSnapshot(writer) {
-        super.EncodeSnapshot(writer);
-    }
-    DecodeSnapshot(reader) {
-        super.DecodeSnapshot(reader);
     }
     Update(dt) {
         const state = this._action.state;

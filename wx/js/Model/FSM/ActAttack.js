@@ -1,10 +1,10 @@
-import { EntityStateAction } from "./EntityStateAction";
 import * as Long from "../../Libs/long";
+import { EntityStateAction } from "./EntityStateAction";
 export class ActAttack extends EntityStateAction {
     constructor() {
         super(...arguments);
         this._casterID = Long.ZERO;
-        this._skillID = 0;
+        this._skillID = -1;
     }
     EncodeSnapshot(writer) {
         super.EncodeSnapshot(writer);
@@ -18,14 +18,22 @@ export class ActAttack extends EntityStateAction {
     }
     OnEnter(param) {
         super.OnEnter(param);
-        this._casterID = param[0];
-        this._skillID = param[1];
+        const owner = this.state.owner;
+        this._casterID = owner.rid;
+        for (let i = 0; i < owner.numSkills; ++i) {
+            const skill = owner.GetSkillAt(i);
+            if (skill.connectedState == this.state.type) {
+                this._skillID = skill.id;
+            }
+        }
     }
     OnTrigger() {
         super.OnTrigger();
+        if (this._skillID == -1) {
+            return;
+        }
         const owner = this.state.owner;
-        const caster = owner.battle.GetChampion(this._casterID);
-        const skill = caster.GetSkill(this._skillID);
+        const skill = owner.GetSkill(this._skillID);
         owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
     }
     Dump() {

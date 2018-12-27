@@ -1,10 +1,12 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../FSM/StateEnums", "../Skill", "./Attribute", "./Entity"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, StateEnums_1, Skill_1, Attribute_1, Entity_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../Skill", "./Attribute", "./Entity", "./InputAagent"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, Skill_1, Attribute_1, Entity_1, InputAagent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Champion extends Entity_1.Entity {
-        constructor() {
-            super(...arguments);
+        constructor(battle) {
+            super(battle);
+            this._skills = [];
             this._fsm = new EntityFSM_1.EntityFSM();
+            this._inputAgent = new InputAagent_1.InputAgent();
             this.disableMove = 0;
             this.disableTurn = 0;
             this.disableSkill = 0;
@@ -17,10 +19,13 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.t_atk_add = 0;
             this.t_def_add = 0;
             this.t_speed_add = 0;
+            this._inputAgent.handler = this.HandleInput.bind(this);
         }
         get fsm() { return this._fsm; }
+        get inputAgent() { return this._inputAgent; }
         get radius() { return this._radius; }
         get moveSpeed() { return this._moveSpeed; }
+        get numSkills() { return this._skills.length; }
         Init(params) {
             super.Init(params);
             this.team = params.team;
@@ -33,7 +38,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             super.OnInit();
             this._radius = Hashtable_1.Hashtable.GetNumber(this._defs, "radius");
             this._moveSpeed = Hashtable_1.Hashtable.GetNumber(this._defs, "move_speed");
-            this._skills = [];
             const skillsDef = Hashtable_1.Hashtable.GetNumberArray(this._defs, "skills");
             if (skillsDef != null) { }
             for (const sid of skillsDef) {
@@ -74,6 +78,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this.t_def_add);
             writer.int32(this.t_speed_add);
             this._fsm.EncodeSnapshot(writer);
+            this._inputAgent.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
             super.DecodeSnapshot(reader);
@@ -97,6 +102,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.t_def_add = reader.int32();
             this.t_speed_add = reader.int32();
             this._fsm.DecodeSnapshot(reader);
+            this._inputAgent.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {
             super.EncodeSync(writer);
@@ -205,29 +211,16 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                     return this.t_speed_add;
             }
         }
-        BeginMove(dx, dy) {
-            const direction = new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(dx), FMathUtils_1.FMathUtils.ToFixed(dy));
-            if (direction.SqrMagnitude() < FMathUtils_1.FMathUtils.EPSILON) {
-                this.moveDirection.Set(0, 0);
-            }
-            else {
-                this.moveDirection.CopyFrom(direction);
-            }
-        }
         MoveStep(dt) {
             const moveVector = FVec2_1.FVec2.zero;
             if (this.disableMove <= 0) {
                 moveVector.CopyFrom(this.moveDirection);
             }
-            if (moveVector.x == 0 && moveVector.y == 0) {
-                this._fsm.ChangeState(StateEnums_1.StateType.Idle);
-            }
-            else {
+            if (moveVector.x != 0 || moveVector.y != 0) {
                 if (this.disableTurn <= 0) {
                     this.direction.CopyFrom(this.moveDirection);
                 }
                 moveVector.MulN(this._moveSpeed);
-                this._fsm.ChangeState(StateEnums_1.StateType.Move);
             }
             moveVector.Add(this.intersectVector);
             const sqrtDis = moveVector.SqrMagnitude();
@@ -269,8 +262,14 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                 return false;
             if (!this.fsm.HasState(skill.connectedState))
                 return false;
-            this.fsm.ChangeState(skill.connectedState, [this.rid, skill.id]);
+            this.fsm.ChangeState(skill.connectedState);
             return true;
+        }
+        FrameAction(frameAction) {
+            this._inputAgent.SetFromFrameAction(frameAction);
+        }
+        HandleInput(type, press) {
+            this._fsm.HandleInput(type, press);
         }
         Dump() {
             let str = super.Dump();

@@ -1,4 +1,5 @@
 import { Global } from "../../Global";
+import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
 import { ProtoCreator } from "../../Net/ProtoHelper";
@@ -8,17 +9,15 @@ import { FRandom } from "../../RC/FMath/FRandom";
 import { FRect } from "../../RC/FMath/FRect";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { Logger } from "../../RC/Utils/Logger";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
-import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
 import { Bullet } from "./Bullet";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
-import * as Long from "../../Libs/long";
-import { Logger } from "../../RC/Utils/Logger";
 export class Battle {
     constructor() {
         this._frameRate = 0;
@@ -244,7 +243,7 @@ export class Battle {
         }
     }
     MakeRid(id) {
-        const rnd = this._random.NextFloor(0, 0xffffffff);
+        const rnd = this._random.NextFloor(0, 0xfffff);
         return Long.fromBits(id, rnd);
     }
     CreatePlayers(playerInfos) {
@@ -359,12 +358,7 @@ export class Battle {
     }
     ApplyFrameAction(frameAction) {
         const champion = this.GetChampion(frameAction.gcNID);
-        if ((frameAction.inputFlag & FrameAction.InputFlag.Move) > 0) {
-            champion.BeginMove(frameAction.dx, frameAction.dy);
-        }
-        if ((frameAction.inputFlag & FrameAction.InputFlag.Skill) > 0) {
-            champion.UseSkill(frameAction.sid);
-        }
+        champion.FrameAction(frameAction);
     }
     HandleSnapShot(ret) {
         const reader = $protobuf.Reader.create(ret.snapshot);

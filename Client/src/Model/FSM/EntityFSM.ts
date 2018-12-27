@@ -1,6 +1,7 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
 import { ISnapshotable } from "../ISnapshotable";
+import { InputType } from "../Logic/InputAagent";
 import { EntityState } from "./EntityState";
 import { StateType } from "./StateEnums";
 
@@ -68,6 +69,10 @@ export class EntityFSM extends FSM implements ISnapshotable {
 
 		if (reader.bool())
 			this._previousState = this.GetState(reader.int32());
+	}
+
+	public HandleInput(type: InputType, press: boolean): void {
+		this.currentEntityState.HandleInput(type, press);
 	}
 
 	public Dump(): string {

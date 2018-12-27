@@ -3,10 +3,11 @@ import { FSMState } from "../../RC/FSM/FSMState";
 import { FSMStateAction } from "../../RC/FSM/FSMStateAction";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
+import { InputType } from "../Logic/InputAagent";
 import { EntityState } from "./EntityState";
 import { ActionType } from "./StateEnums";
 
-export class EntityStateAction extends FSMStateAction implements ISnapshotable {
+export abstract class EntityStateAction extends FSMStateAction implements ISnapshotable {
 	protected readonly _def: Hashtable;
 
 	private _triggerTime: number;
@@ -53,10 +54,11 @@ export class EntityStateAction extends FSMStateAction implements ISnapshotable {
 	}
 
 	/**
-	 * 当状态时间改变时调用
-	 * @param time 当前时间
+	 * 处理输入指令
+	 * @param inputFlag 输入标记
+	 * @param press 是按下还是弹起
 	 */
-	public OnStateTimeChanged(time: number): void {
+	public HandlInput(type: InputType, press: boolean): void {
 	}
 
 	public Dump(): string {

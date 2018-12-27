@@ -4,14 +4,16 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
 import { EntityFSM } from "../FSM/EntityFSM";
 import { EntityState } from "../FSM/EntityState";
-import { StateType } from "../FSM/StateEnums";
 import { Skill } from "../Skill";
 import { EAttr } from "./Attribute";
 import { Entity } from "./Entity";
+import { InputAgent } from "./InputAagent";
 export class Champion extends Entity {
-    constructor() {
-        super(...arguments);
+    constructor(battle) {
+        super(battle);
+        this._skills = [];
         this._fsm = new EntityFSM();
+        this._inputAgent = new InputAgent();
         this.disableMove = 0;
         this.disableTurn = 0;
         this.disableSkill = 0;
@@ -24,10 +26,13 @@ export class Champion extends Entity {
         this.t_atk_add = 0;
         this.t_def_add = 0;
         this.t_speed_add = 0;
+        this._inputAgent.handler = this.HandleInput.bind(this);
     }
     get fsm() { return this._fsm; }
+    get inputAgent() { return this._inputAgent; }
     get radius() { return this._radius; }
     get moveSpeed() { return this._moveSpeed; }
+    get numSkills() { return this._skills.length; }
     Init(params) {
         super.Init(params);
         this.team = params.team;
@@ -40,7 +45,6 @@ export class Champion extends Entity {
         super.OnInit();
         this._radius = Hashtable.GetNumber(this._defs, "radius");
         this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
-        this._skills = [];
         const skillsDef = Hashtable.GetNumberArray(this._defs, "skills");
         if (skillsDef != null) { }
         for (const sid of skillsDef) {
@@ -81,6 +85,7 @@ export class Champion extends Entity {
         writer.int32(this.t_def_add);
         writer.int32(this.t_speed_add);
         this._fsm.EncodeSnapshot(writer);
+        this._inputAgent.EncodeSnapshot(writer);
     }
     DecodeSnapshot(reader) {
         super.DecodeSnapshot(reader);
@@ -104,6 +109,7 @@ export class Champion extends Entity {
         this.t_def_add = reader.int32();
         this.t_speed_add = reader.int32();
         this._fsm.DecodeSnapshot(reader);
+        this._inputAgent.DecodeSnapshot(reader);
     }
     EncodeSync(writer) {
         super.EncodeSync(writer);
@@ -212,29 +218,16 @@ export class Champion extends Entity {
                 return this.t_speed_add;
         }
     }
-    BeginMove(dx, dy) {
-        const direction = new FVec2(FMathUtils.ToFixed(dx), FMathUtils.ToFixed(dy));
-        if (direction.SqrMagnitude() < FMathUtils.EPSILON) {
-            this.moveDirection.Set(0, 0);
-        }
-        else {
-            this.moveDirection.CopyFrom(direction);
-        }
-    }
     MoveStep(dt) {
         const moveVector = FVec2.zero;
         if (this.disableMove <= 0) {
             moveVector.CopyFrom(this.moveDirection);
         }
-        if (moveVector.x == 0 && moveVector.y == 0) {
-            this._fsm.ChangeState(StateType.Idle);
-        }
-        else {
+        if (moveVector.x != 0 || moveVector.y != 0) {
             if (this.disableTurn <= 0) {
                 this.direction.CopyFrom(this.moveDirection);
             }
             moveVector.MulN(this._moveSpeed);
-            this._fsm.ChangeState(StateType.Move);
         }
         moveVector.Add(this.intersectVector);
         const sqrtDis = moveVector.SqrMagnitude();
@@ -276,8 +269,14 @@ export class Champion extends Entity {
             return false;
         if (!this.fsm.HasState(skill.connectedState))
             return false;
-        this.fsm.ChangeState(skill.connectedState, [this.rid, skill.id]);
+        this.fsm.ChangeState(skill.connectedState);
         return true;
+    }
+    FrameAction(frameAction) {
+        this._inputAgent.SetFromFrameAction(frameAction);
+    }
+    HandleInput(type, press) {
+        this._fsm.HandleInput(type, press);
     }
     Dump() {
         let str = super.Dump();

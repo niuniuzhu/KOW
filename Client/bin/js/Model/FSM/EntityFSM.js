@@ -49,6 +49,9 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
             if (reader.bool())
                 this._previousState = this.GetState(reader.int32());
         }
+        HandleInput(type, press) {
+            this.currentEntityState.HandleInput(type, press);
+        }
         Dump() {
             let str = "";
             str += `state count:${this._states.length}\n`;

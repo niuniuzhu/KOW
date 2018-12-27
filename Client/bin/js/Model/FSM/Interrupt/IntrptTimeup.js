@@ -4,15 +4,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../StateEnums", ".
     class IntrptTimeup extends IntrptBase_1.IntrptBase {
         constructor(action, def) {
             super(action, def);
-            this._connectState = StateEnums_1.StateType.None;
-            this._connectState = Hashtable_1.Hashtable.GetNumber(def, "connect_state");
             this._duration = Hashtable_1.Hashtable.GetNumber(def, "duration", -1);
-        }
-        EncodeSnapshot(writer) {
-            super.EncodeSnapshot(writer);
-        }
-        DecodeSnapshot(reader) {
-            super.DecodeSnapshot(reader);
         }
         Update(dt) {
             const state = this._action.state;

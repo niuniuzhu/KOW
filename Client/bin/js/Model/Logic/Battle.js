@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameAction", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "../../Libs/long", "../../RC/Utils/Logger"], function (require, exports, Global_1, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, SyncEvent_1, CDefs_1, Defs_1, FrameAction_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, Long, Logger_1) {
+define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, CDefs_1, Defs_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -309,7 +309,6 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
         CreateBullet(id, casterID, skillID, position, direction) {
             const params = new Entity_1.EntityInitParams();
             params.rid = this.MakeRid(id);
-            Logger_1.Logger.Log(params.rid);
             params.id = id;
             params.casterID = casterID;
             params.skillID = skillID;
@@ -342,12 +341,7 @@ define(["require", "exports", "../../Global", "../../Libs/protobufjs", "../../Li
         }
         ApplyFrameAction(frameAction) {
             const champion = this.GetChampion(frameAction.gcNID);
-            if ((frameAction.inputFlag & FrameAction_1.FrameAction.InputFlag.Move) > 0) {
-                champion.BeginMove(frameAction.dx, frameAction.dy);
-            }
-            if ((frameAction.inputFlag & FrameAction_1.FrameAction.InputFlag.Skill) > 0) {
-                champion.UseSkill(frameAction.sid);
-            }
+            champion.FrameAction(frameAction);
         }
         HandleSnapShot(ret) {
             const reader = $protobuf.Reader.create(ret.snapshot);

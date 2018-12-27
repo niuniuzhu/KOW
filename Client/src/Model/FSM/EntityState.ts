@@ -4,6 +4,7 @@ import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "../Logic/Champion";
+import { InputType } from "../Logic/InputAagent";
 import { EntityStateAction } from "./EntityStateAction";
 import { ID_TO_STATE_ACTION, StateType } from "./StateEnums";
 
@@ -19,12 +20,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 	/**
 	 * 设置状态运行时间
 	 */
-	public set time(value: number) {
-		if (this._time == value)
-			return;
-		this._time = value;
-		this.OnStateTimeChanged();
-	}
+	public set time(value: number) { this._time = value; }
 
 	private _statesAvailable: Set<StateType>;
 	private _owner: Champion;
@@ -81,12 +77,6 @@ export class EntityState extends FSMState implements ISnapshotable {
 		this._time += dt;
 	}
 
-	protected OnStateTimeChanged(): void {
-		for (const action of this._actions) {
-			(<EntityStateAction>action).OnStateTimeChanged(this._time);
-		}
-	}
-
 	//todo 处理状态属性加成
 
 	/**
@@ -95,6 +85,12 @@ export class EntityState extends FSMState implements ISnapshotable {
 	 */
 	public IsStateAvailable(type: StateType): boolean {
 		return this._statesAvailable == null || this._statesAvailable.contains(type);
+	}
+
+	public HandleInput(type: InputType, press: boolean): void {
+		for (const action of this._actions) {
+			(<EntityStateAction>action).HandlInput(type, press);
+		}
 	}
 
 	public Dump(): string {

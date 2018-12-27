@@ -35,7 +35,7 @@ define(["require", "exports", "../../RC/FSM/FSMStateAction", "../../RC/Utils/Has
         }
         OnTrigger() {
         }
-        OnStateTimeChanged(time) {
+        HandlInput(type, press) {
         }
         Dump() {
             let str = "";

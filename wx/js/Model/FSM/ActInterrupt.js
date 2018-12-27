@@ -1,11 +1,8 @@
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { EntityStateAction } from "./EntityStateAction";
+import { IntrpInput } from "./Interrupt/IntrpInput";
 import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
-export var InterruptType;
-(function (InterruptType) {
-    InterruptType[InterruptType["Timeup"] = 0] = "Timeup";
-    InterruptType[InterruptType["Collision"] = 1] = "Collision";
-})(InterruptType || (InterruptType = {}));
+import { InterruptType } from "./StateEnums";
 export class ActInterrupt extends EntityStateAction {
     constructor(state, type, def) {
         super(state, type, def);
@@ -29,20 +26,29 @@ export class ActInterrupt extends EntityStateAction {
     }
     CreateInturrupt(def) {
         const id = Hashtable.GetNumber(def, "id");
+        let interrupt;
         switch (id) {
             case InterruptType.Timeup:
-                const interrupt = new IntrptTimeup(this, def);
-                this._interrupts.push(interrupt);
+                interrupt = new IntrptTimeup(this, def);
                 break;
             case InterruptType.Collision:
                 break;
+            case InterruptType.Input:
+                interrupt = new IntrpInput(this, def);
+                break;
         }
+        this._interrupts.push(interrupt);
     }
     OnUpdate(dt) {
         for (const interrupt of this._interrupts) {
             interrupt.Update(dt);
         }
         super.OnUpdate(dt);
+    }
+    HandlInput(type, press) {
+        for (const interrupt of this._interrupts) {
+            interrupt.HandleInput(type, press);
+        }
     }
     Dump() {
         let str = super.Dump();

@@ -1,15 +1,15 @@
+import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
 import { ISnapshotable } from "../ISnapshotable";
 import { EntityState } from "./EntityState";
 import { EntityStateAction } from "./EntityStateAction";
-import * as Long from "../../Libs/long";
 
 /**
  * 攻击行为
  */
 export class ActAttack extends EntityStateAction implements ISnapshotable {
 	private _casterID: Long = Long.ZERO;
-	private _skillID: number = 0;
+	private _skillID: number = -1;
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		super.EncodeSnapshot(writer);
@@ -25,22 +25,30 @@ export class ActAttack extends EntityStateAction implements ISnapshotable {
 
 	protected OnEnter(param: any): void {
 		super.OnEnter(param);
-		this._casterID = <Long>param[0];
-		this._skillID = <number>param[1];
+		const owner = (<EntityState>this.state).owner;
+		this._casterID = owner.rid;
+		for (let i = 0; i < owner.numSkills; ++i) {
+			const skill = owner.GetSkillAt(i);
+			if (skill.connectedState == this.state.type) {
+				this._skillID = skill.id;
+			}
+		}
 	}
 
 	protected OnTrigger(): void {
 		super.OnTrigger();
+		if (this._skillID == -1) {
+			return;
+		}
 		const owner = (<EntityState>this.state).owner;
-		const caster = owner.battle.GetChampion(this._casterID);
-		const skill = caster.GetSkill(this._skillID);
+		const skill = owner.GetSkill(this._skillID);
 		owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
 	}
 
 	public Dump(): string {
 		let str = super.Dump();
-		str +=`caster id:${this._casterID}\n`;
-		str +=`skill id:${this._skillID}\n`;
+		str += `caster id:${this._casterID}\n`;
+		str += `skill id:${this._skillID}\n`;
 		return str;
 	}
 }

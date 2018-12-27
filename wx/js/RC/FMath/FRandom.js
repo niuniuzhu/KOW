@@ -4,12 +4,13 @@ export class FRandom {
         this._seed = seed || Math.random();
     }
     Next() {
-        this._seed = FMathUtils.Mod(FMathUtils.Add(FMathUtils.Mul(this._seed, 9301), 49497), 233280);
-        return FMathUtils.Div(this._seed, 233280);
+        this._seed = (this._seed + 49297) % 233280;
+        const result = FMathUtils.Div(this._seed, 233280.0);
+        return result;
     }
     NextD(min, max) {
-        this._seed = FMathUtils.Mod(FMathUtils.Add(FMathUtils.Mul(this._seed, 9301), 49497), 233280);
-        return FMathUtils.Add(FMathUtils.Mul(FMathUtils.Div(this._seed, 233280), FMathUtils.Sub(max, min)), min);
+        const r = this.Next();
+        return FMathUtils.Add(FMathUtils.Mul(r, FMathUtils.Sub(max, min)), min);
     }
     NextFloor(min, max) {
         return FMathUtils.Floor(this.NextD(min, max));

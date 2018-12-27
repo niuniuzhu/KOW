@@ -1,11 +1,6 @@
-define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction", "./Interrupt/IntrptTimeup"], function (require, exports, Hashtable_1, EntityStateAction_1, IntrptTimeup_1) {
+define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction", "./Interrupt/IntrpInput", "./Interrupt/IntrptTimeup", "./StateEnums"], function (require, exports, Hashtable_1, EntityStateAction_1, IntrpInput_1, IntrptTimeup_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var InterruptType;
-    (function (InterruptType) {
-        InterruptType[InterruptType["Timeup"] = 0] = "Timeup";
-        InterruptType[InterruptType["Collision"] = 1] = "Collision";
-    })(InterruptType = exports.InterruptType || (exports.InterruptType = {}));
     class ActInterrupt extends EntityStateAction_1.EntityStateAction {
         constructor(state, type, def) {
             super(state, type, def);
@@ -29,20 +24,29 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction",
         }
         CreateInturrupt(def) {
             const id = Hashtable_1.Hashtable.GetNumber(def, "id");
+            let interrupt;
             switch (id) {
-                case InterruptType.Timeup:
-                    const interrupt = new IntrptTimeup_1.IntrptTimeup(this, def);
-                    this._interrupts.push(interrupt);
+                case StateEnums_1.InterruptType.Timeup:
+                    interrupt = new IntrptTimeup_1.IntrptTimeup(this, def);
                     break;
-                case InterruptType.Collision:
+                case StateEnums_1.InterruptType.Collision:
+                    break;
+                case StateEnums_1.InterruptType.Input:
+                    interrupt = new IntrpInput_1.IntrpInput(this, def);
                     break;
             }
+            this._interrupts.push(interrupt);
         }
         OnUpdate(dt) {
             for (const interrupt of this._interrupts) {
                 interrupt.Update(dt);
             }
             super.OnUpdate(dt);
+        }
+        HandlInput(type, press) {
+            for (const interrupt of this._interrupts) {
+                interrupt.HandleInput(type, press);
+            }
         }
         Dump() {
             let str = super.Dump();

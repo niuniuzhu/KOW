@@ -11,7 +11,8 @@ namespace BattleServer.Battle
         {
             None = 0,
             Move = 1 << 0,
-            Skill = 1 << 1
+            S1 = 1 << 1,
+            S2 = 1 << 2
         }
 
         public ulong gcNID { get; }
@@ -31,14 +32,14 @@ namespace BattleServer.Battle
         /// </summary>
         public Fix64 dy { get; private set; }
 
-        public int sid { get; private set; }
+        public bool press { get; private set; }
 
         /// <summary>
         /// 获取一个布尔值,指示该帧行为是否有效
         /// </summary>
         public bool isValid => this.inputFlag > 0;
 
-        public FrameAction(ulong gcNID)
+        public FrameAction( ulong gcNID )
         {
             this.gcNID = gcNID;
         }
@@ -49,36 +50,38 @@ namespace BattleServer.Battle
         /// 合并规则是:相同标志位的,后者覆盖前者,不同标志位则使用并操作
         /// 例如:在第n帧输入方向,n+1帧输入skill1,n+2帧再次输入方向,则最终结果是采用n+2帧的方向和skill1
         /// </summary>
-        public void MergeFromProto(Protos.GC2BS_FrameAction action)
+        public void MergeFromProto( Protos.GC2BS_FrameAction action )
         {
-            this.inputFlag = (InputFlag)action.InputFlag;
-            if ((this.inputFlag & InputFlag.Move) > 0)
+            this.inputFlag = ( InputFlag )action.InputFlag;
+            if ( ( this.inputFlag & InputFlag.Move ) > 0 )
             {
-                this.dx = (Fix64)action.Dx;
-                this.dy = (Fix64)action.Dy;
+                this.dx = ( Fix64 )action.Dx;
+                this.dy = ( Fix64 )action.Dy;
+                this.press = action.Press;
             }
-            if ((this.inputFlag & InputFlag.Skill) > 0)
-                this.sid = action.Sid;
+            if ( ( this.inputFlag & InputFlag.S1 ) > 0 || ( this.inputFlag & InputFlag.S2 ) > 0 )
+                this.press = action.Press;
         }
 
-        public void SerializeTo(StreamBuffer buffer)
+        public void SerializeTo( StreamBuffer buffer )
         {
-            buffer.Write(this.gcNID);
-            buffer.Write((byte)this.inputFlag);
-            if ((this.inputFlag & InputFlag.Move) > 0)
+            buffer.Write( this.gcNID );
+            buffer.Write( ( byte )this.inputFlag );
+            if ( ( this.inputFlag & InputFlag.Move ) > 0 )
             {
-                buffer.Write((float)this.dx);
-                buffer.Write((float)this.dy);
+                buffer.Write( ( float )this.dx );
+                buffer.Write( ( float )this.dy );
+                buffer.Write( this.press );
             }
-            if ((this.inputFlag & InputFlag.Skill) > 0)
-                buffer.Write((byte)this.sid);
+            if ( ( this.inputFlag & InputFlag.S1 ) > 0 || ( this.inputFlag & InputFlag.S2 ) > 0 )
+                buffer.Write( this.press );
         }
 
         public void Clear()
         {
             this.inputFlag = 0;
             this.dx = this.dy = Fix64.Zero;
-            this.sid = 0;
+            this.press = false;
         }
     }
 }

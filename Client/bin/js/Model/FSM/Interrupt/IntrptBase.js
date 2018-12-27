@@ -1,16 +1,20 @@
-define(["require", "exports", "../../../RC/Utils/Hashtable"], function (require, exports, Hashtable_1) {
+define(["require", "exports", "../../../RC/Utils/Hashtable", "../StateEnums"], function (require, exports, Hashtable_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class IntrptBase {
         constructor(action, def) {
+            this._connectState = StateEnums_1.StateType.None;
             this._action = action;
             this.id = Hashtable_1.Hashtable.GetNumber(def, "id");
+            this._connectState = Hashtable_1.Hashtable.GetNumber(def, "connect_state");
         }
         EncodeSnapshot(writer) {
         }
         DecodeSnapshot(reader) {
         }
         Update(dt) {
+        }
+        HandleInput(type, press) {
         }
         ChangeState(type, param = null, igroneIntrptList = false, force = false) {
             const state = this._action.state;

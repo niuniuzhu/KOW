@@ -89,6 +89,10 @@ export class Champion extends Entity implements ISnapshotable {
 	 */
 	public readonly intersectVector: FVec2 = FVec2.zero
 	/**
+	 * 物理速度
+	 */
+	public phyxSpeed: FVec2 = FVec2.zero;
+	/**
 	 * 当前速率
 	 */
 	public velocity: number;
@@ -165,6 +169,9 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.int32(this.supperArmor);
 		writer.int32(this.invulnerAbility);
 		writer.double(this.moveDirection.x).double(this.moveDirection.y);
+		writer.double(this.intersectVector.x).double(this.intersectVector.y);
+		writer.double(this.phyxSpeed.x).double(this.phyxSpeed.y);
+		writer.double(this.velocity);
 		writer.int32(this.t_hp_add);
 		writer.int32(this.t_mp_add);
 		writer.int32(this.t_atk_add);
@@ -197,6 +204,9 @@ export class Champion extends Entity implements ISnapshotable {
 		this.supperArmor = reader.int32();
 		this.invulnerAbility = reader.int32();
 		this.moveDirection.Set(reader.double(), reader.double());
+		this.intersectVector.Set(reader.double(), reader.double());
+		this.phyxSpeed.Set(reader.double(), reader.double());
+		this.velocity = reader.double();
 		this.t_hp_add = reader.int32();
 		this.t_mp_add = reader.int32();
 		this.t_atk_add = reader.int32();
@@ -348,14 +358,18 @@ export class Champion extends Entity implements ISnapshotable {
 			moveVector.CopyFrom(this.moveDirection);
 		}
 
-		if (moveVector.x != 0 || moveVector.y != 0) {
+		//根据移动方向旋转
+		if (moveVector.SqrMagnitude() >= FMathUtils.EPSILON) {
 			if (this.disableTurn <= 0) {
 				this.direction.CopyFrom(this.moveDirection);
 			}
 			moveVector.MulN(this._moveSpeed);
 		}
 
+		//合速度
 		moveVector.Add(this.intersectVector);
+		moveVector.Add(this.phyxSpeed);
+
 		const sqrtDis = moveVector.SqrMagnitude();
 		if (sqrtDis < FMathUtils.EPSILON) {
 			this.velocity = 0;

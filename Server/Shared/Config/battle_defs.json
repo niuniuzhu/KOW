@@ -42,77 +42,73 @@
 			],
 			"default_state": 0,
 			"states": {
+				/*休闲*/
 				"0": {
-					"actions": [
+					"actions": [],
+					"interrupts": [
 						{
-							"id": 0,
-							"interrupts": [
-								{
-									"id": 2,
-									"connect_state": 1,
-									"input_types": [
-										0
-									],
-									"trigger_types": [
-										0
-									]
-								},
-								{
-									"id": 2,
-									"connect_state": 1,
-									"input_types": [
-										0
-									],
-									"trigger_types": [
-										2
-									]
-								},
-								{
-									"id": 2,
-									"connect_state": 2,
-									"input_types": [
-										1
-									],
-									"trigger_types": [
-										1
-									]
-								},
-								{
-									"id": 2,
-									"connect_state": 2,
-									"input_types": [
-										2
-									],
-									"trigger_types": [
-										1
-									]
-								}
-							]
-						}
-					]
-				},
-				"1": {
-					"actions": [
-						{
-							"id": 0,
-							"interrupts": [
-								{
-									"id": 2,
-									"connect_state": 0,
-									"input_types": [
-										0
-									],
-									"trigger_types": [
-										1
-									]
-								}
+							"id": 2, /*按键中断*/
+							"connect_state": 1,
+							"input_types": [
+								0 /*方向键*/
+							],
+							"trigger_types": [
+								0 /*按下*/
 							]
 						},
 						{
-							"id": 5
+							"id": 2, /*按键中断*/
+							"connect_state": 1,
+							"input_types": [
+								0 /*方向键*/
+							],
+							"trigger_types": [
+								2 /*弹起*/
+							]
+						},
+						{
+							"id": 2, /*按键中断*/
+							"connect_state": 2,
+							"input_types": [
+								1 /*技能1*/
+							],
+							"trigger_types": [
+								1 /**弹起*/
+							]
+						},
+						{
+							"id": 2, /*按键中断*/
+							"connect_state": 3,
+							"input_types": [
+								2 /*技能2*/
+							],
+							"trigger_types": [
+								0 /*按下*/
+							]
 						}
 					]
 				},
+				/*跑*/
+				"1": {
+					"actions": [
+						{
+							"id": 5
+						}
+					],
+					"interrupts": [
+						{
+							"id": 2, /*按键中断*/
+							"connect_state": 0,
+							"input_types": [
+								0 /*方向键*/
+							],
+							"trigger_types": [
+								1 /*弹起*/
+							]
+						}
+					]
+				},
+				/*普攻*/
 				"2": {
 					"states_available": [],
 					"actions": [
@@ -132,20 +128,49 @@
 						{
 							"id": 4,
 							"trigger_time": 500
+						}
+					],
+					"interrupts": [
+						{
+							"id": 0, /*计时中断*/
+							"connect_state": 0,
+							"duration": 600
+						}
+					]
+				},
+				/*前摇*/
+				"3": {
+					"states_available": [],
+					"actions": [],
+					"interrupts": [
+						{
+							"id": 0, /*计时中断*/
+							"connect_state": 0,
+							"duration": 2000
 						},
 						{
-							"id": 0,
-							"interrupts": [
-								{
-									"id": 0,
-									"connect_state": 0,
-									"duration": 700
-								}
+							"id": 2, /*按键中断*/
+							"connect_state": 0,
+							"input_types": [
+								2 /*技能2*/
+							],
+							"trigger_types": [
+								1 /*弹起*/
 							]
 						}
 					]
 				},
-				"3": {}
+				/*冲刺*/
+				"4": {
+					"actions": [],
+					"interrupts": [
+						{
+							"id": 0, /*计时中断*/
+							"connect_state": 4,
+							"duration": 2000
+						}
+					]
+				}
 			}
 		}
 	},
@@ -157,7 +182,7 @@
 			"damage": 10
 		},
 		"s1": {
-			"connect_state": 2,
+			"connect_state": 3,
 			"emitter": 0,
 			"bullet": 0,
 			"damage": 10

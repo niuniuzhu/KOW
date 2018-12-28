@@ -39,15 +39,17 @@ export class VEntityState extends FSMState {
 		if (this.owner.animationProxy.available) {
 			const vDef = Hashtable.GetMap(Hashtable.GetMap(this.owner.cdefs, "states"), this.type.toString());
 			//播放动画
-			const aniName = Hashtable.GetString(vDef, "animation");
-			const scaleTime = Hashtable.GetBool(vDef, "auto_scale_time");
-			const duration = Hashtable.GetNumber(vDef, "duration");
-			let timeScale = 1;
-			if (scaleTime) {
-				const animationSetting = this.owner.animationProxy.GetAnimationSetting(aniName);
-				timeScale = duration / (animationSetting.length * animationSetting.interval);
+			const id = Hashtable.GetNumber(vDef, "animation", -1);
+			if (id >= 0) {
+				const scaleTime = Hashtable.GetBool(vDef, "auto_scale_time");
+				const duration = Hashtable.GetNumber(vDef, "duration");
+				let timeScale = 1;
+				if (scaleTime) {
+					const animationSetting = this.owner.animationProxy.GetAnimationSetting(id);
+					timeScale = duration / (animationSetting.length * animationSetting.interval);
+				}
+				this.owner.animationProxy.Play(id, 0, timeScale);
 			}
-			this.owner.PlayAnim(aniName, timeScale);
 		}
 		this._time = 0;
 	}

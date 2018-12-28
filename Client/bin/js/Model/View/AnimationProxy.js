@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, exports, Hashtable_1) {
+define(["require", "exports", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger"], function (require, exports, Hashtable_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var AnimationPlayMode;
@@ -14,30 +14,42 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
         constructor() {
             super(...arguments);
             this._aniSettings = new Map();
-            this._playingName = "";
+            this._playingID = -1;
         }
         get available() { return this._aniSettings != null && this._animation != null; }
         get animation() { return this._animation; }
         Init(def) {
             const model = Hashtable_1.Hashtable.GetString(def, "model");
-            if (model == null)
+            if (model == null) {
                 return;
+            }
             const aniDefs = Hashtable_1.Hashtable.GetMapArray(def, "animations");
-            if (aniDefs == null)
+            if (aniDefs == null) {
                 return;
+            }
             for (const aniDef of aniDefs) {
+                const id = Hashtable_1.Hashtable.GetNumber(aniDef, "id");
                 const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
-                const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
-                const urls = [];
-                for (let i = 0; i < length; ++i) {
-                    urls.push(`${model}/${aniName}${i}.png`);
+                const alias = `${model}_${id}`;
+                if (!AnimationProxy.TEMPLATE_CACHE.has(alias)) {
+                    Logger_1.Logger.Log(aniName);
+                    const startFrame = Hashtable_1.Hashtable.GetNumber(aniDef, "start_frame");
+                    const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
+                    const urls = [];
+                    for (let i = startFrame; i < length; ++i) {
+                        Logger_1.Logger.Log(`${model}/${aniName}${i}.png`);
+                        urls.push(`${model}/${aniName}${i}.png`);
+                    }
+                    Laya.Animation.createFrames(urls, alias);
+                    AnimationProxy.TEMPLATE_CACHE.add(alias);
                 }
-                Laya.Animation.createFrames(urls, aniName);
                 const aniSetting = new AnimationSetting();
+                aniSetting.id = id;
+                aniSetting.alias = alias;
                 aniSetting.playMode = Hashtable_1.Hashtable.GetNumber(aniDef, "play_mode");
                 aniSetting.length = length;
                 aniSetting.interval = Hashtable_1.Hashtable.GetNumber(aniDef, "interval");
-                this._aniSettings.set(aniName, aniSetting);
+                this._aniSettings.set(id, aniSetting);
             }
             const roleAni = new Laya.Animation();
             roleAni.autoSize = true;
@@ -45,26 +57,26 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
             this.setNativeObject(roleAni);
             this.setSize(roleAni.width, roleAni.height);
             this._animation = roleAni;
-            const dAnimation = Hashtable_1.Hashtable.GetString(def, "defaule_animation");
+            const dAnimation = Hashtable_1.Hashtable.GetNumber(def, "defaule_animation");
             if (dAnimation != null) {
                 this.Play(dAnimation, 0);
             }
         }
-        Play(name, startFrame, timeScale = 1, force = false) {
+        Play(id, startFrame, timeScale = 1, force = false) {
             if (!this.available)
                 return;
-            if (!force && this._playingName == name)
+            if (!force && this._playingID == id)
                 return;
-            this._playingName = name;
-            const aniSetting = this.GetAnimationSetting(name);
+            this._playingID = id;
+            const aniSetting = this.GetAnimationSetting(id);
             this._animation.interval = aniSetting.interval * timeScale;
-            this._animation.play(startFrame, aniSetting.playMode == AnimationPlayMode.Loop, name);
+            this._animation.play(startFrame, aniSetting.playMode == AnimationPlayMode.Loop, aniSetting.alias);
             this.setSize(this._animation.width, this._animation.height);
         }
-        GetAnimationSetting(name) {
+        GetAnimationSetting(id) {
             if (!this.available)
                 return null;
-            return this._aniSettings.get(name);
+            return this._aniSettings.get(id);
         }
         dispose() {
             if (this._animation != null)
@@ -72,6 +84,7 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
             super.dispose();
         }
     }
+    AnimationProxy.TEMPLATE_CACHE = new Set();
     exports.AnimationProxy = AnimationProxy;
 });
 //# sourceMappingURL=AnimationProxy.js.map

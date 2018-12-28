@@ -7,7 +7,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../StateEnums", ".
             this._duration = Hashtable_1.Hashtable.GetNumber(def, "duration", -1);
         }
         Update(dt) {
-            const state = this._action.state;
+            const state = this._state;
             if (this._connectState != StateEnums_1.StateType.None &&
                 this._duration >= 0 &&
                 state.time >= this._duration) {

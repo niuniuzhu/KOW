@@ -110,14 +110,4 @@ export abstract class VEntity {
 			this.rotation = this._logicRot;
 		}
 	}
-
-	/**
-	 * 播放动画
-	 * @param name 动画名称
-	 * @param timeScale 时间缩放
-	 * @param force 是否强制重新播放
-	 */
-	public PlayAnim(name: string, timeScale: number = 1, force: boolean = false): void {
-		this._animationProxy.Play(name, 0, timeScale, force);
-	}
 }

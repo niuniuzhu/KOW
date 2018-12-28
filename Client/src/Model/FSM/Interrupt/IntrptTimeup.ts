@@ -1,7 +1,6 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
 import { EntityState } from "../EntityState";
-import { EntityStateAction } from "../EntityStateAction";
 import { StateType } from "../StateEnums";
 import { IntrptBase } from "./IntrptBase";
 
@@ -14,13 +13,13 @@ export class IntrptTimeup extends IntrptBase implements ISnapshotable {
 	 */
 	private _duration: number;
 
-	constructor(action: EntityStateAction, def: Hashtable) {
+	constructor(action: EntityState, def: Hashtable) {
 		super(action, def);
 		this._duration = Hashtable.GetNumber(def, "duration", -1);
 	}
 
 	public Update(dt: number): void {
-		const state = (<EntityState>this._action.state);
+		const state = (<EntityState>this._state);
 		if (this._connectState != StateType.None &&
 			this._duration >= 0 &&
 			state.time >= this._duration) {

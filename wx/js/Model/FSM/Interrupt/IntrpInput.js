@@ -19,7 +19,7 @@ export class IntrpInput extends IntrptBase {
             const triggerType = this._triggerTypes[i];
             if (triggerType != InputTriggerType.Hold)
                 continue;
-            const inputAgent = this._action.state.owner.inputAgent;
+            const inputAgent = this._state.owner.inputAgent;
             if (inputAgent.GetInputState(inputType)) {
                 this.ChangeState(this._connectState, null, true, true);
             }

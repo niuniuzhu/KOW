@@ -58,10 +58,10 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._frameActionManager.SetS1(true);
         }
         OnSkillBtnRelease() {
-            this._frameActionManager.SetS2(false);
+            this._frameActionManager.SetS1(false);
         }
         OnSkillBtn2Press() {
-            this._frameActionManager.SetS1(true);
+            this._frameActionManager.SetS2(true);
         }
         OnSkillBtn2Release() {
             this._frameActionManager.SetS2(false);

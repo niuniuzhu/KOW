@@ -1,11 +1,11 @@
-define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Hashtable", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, Consts_1, Global_1, Long, $protobuf, Preloader_1, Hashtable_1, Logger_1, SceneManager_1) {
+define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, Consts_1, Global_1, Long, $protobuf, Preloader_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
         static get instance() { return Main._instance; }
         constructor(config) {
             Main._instance = this;
-            const cfgJson = JSON.parse(config);
+            const cfgJson = JsonHelper_1.JsonHelper.Parse(config);
             Global_1.Global.platform = Hashtable_1.Hashtable.GetNumber(cfgJson, "platform");
             Laya.MiniAdpter.init();
             Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);

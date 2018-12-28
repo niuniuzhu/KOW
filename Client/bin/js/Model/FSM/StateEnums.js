@@ -1,4 +1,4 @@
-define(["require", "exports", "./ActAttack", "./ActEntityAttrs", "./ActInterrupt", "./ActMove", "./ActVelocity", "./ActVelocityAcceleration"], function (require, exports, ActAttack_1, ActEntityAttrs_1, ActInterrupt_1, ActMove_1, ActVelocity_1, ActVelocityAcceleration_1) {
+define(["require", "exports", "./ActAttack", "./ActEntityAttrs", "./ActMove", "./ActVelocity", "./ActVelocityAcceleration"], function (require, exports, ActAttack_1, ActEntityAttrs_1, ActMove_1, ActVelocity_1, ActVelocityAcceleration_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;
@@ -13,7 +13,6 @@ define(["require", "exports", "./ActAttack", "./ActEntityAttrs", "./ActInterrupt
     var ActionType;
     (function (ActionType) {
         ActionType[ActionType["None"] = -1] = "None";
-        ActionType[ActionType["Interrupt"] = 0] = "Interrupt";
         ActionType[ActionType["EntityAttrs"] = 1] = "EntityAttrs";
         ActionType[ActionType["Velocity"] = 2] = "Velocity";
         ActionType[ActionType["VelocityAcceleration"] = 3] = "VelocityAcceleration";
@@ -27,7 +26,6 @@ define(["require", "exports", "./ActAttack", "./ActEntityAttrs", "./ActInterrupt
         InterruptType[InterruptType["Input"] = 2] = "Input";
     })(InterruptType = exports.InterruptType || (exports.InterruptType = {}));
     exports.ID_TO_STATE_ACTION = new Map();
-    exports.ID_TO_STATE_ACTION.set(ActionType.Interrupt, ActInterrupt_1.ActInterrupt);
     exports.ID_TO_STATE_ACTION.set(ActionType.EntityAttrs, ActEntityAttrs_1.ActEntityAttrs);
     exports.ID_TO_STATE_ACTION.set(ActionType.Velocity, ActVelocity_1.ActVelocity);
     exports.ID_TO_STATE_ACTION.set(ActionType.VelocityAcceleration, ActVelocityAcceleration_1.ActVelocityAcceleration);

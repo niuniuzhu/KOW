@@ -81,11 +81,11 @@ export class UIBattle implements IUIModule {
 	}
 
 	private OnSkillBtnRelease(): void {
-		this._frameActionManager.SetS2(false);
+		this._frameActionManager.SetS1(false);
 	}
 
 	private OnSkillBtn2Press(): void {
-		this._frameActionManager.SetS1(true);
+		this._frameActionManager.SetS2(true);
 	}
 
 	private OnSkillBtn2Release(): void {

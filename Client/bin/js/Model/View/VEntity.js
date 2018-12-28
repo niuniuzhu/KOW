@@ -78,9 +78,6 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
                 this.rotation = this._logicRot;
             }
         }
-        PlayAnim(name, timeScale = 1, force = false) {
-            this._animationProxy.Play(name, 0, timeScale, force);
-        }
     }
     exports.VEntity = VEntity;
 });

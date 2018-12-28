@@ -4,6 +4,7 @@ import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
 import { Hashtable } from "./RC/Utils/Hashtable";
+import { JsonHelper } from "./RC/Utils/JsonHelper";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
 
@@ -17,7 +18,7 @@ export class Main {
 	constructor(config: string) {
 		Main._instance = this;
 
-		const cfgJson = JSON.parse(config);
+		const cfgJson = JsonHelper.Parse(config);
 		Global.platform = Hashtable.GetNumber(cfgJson, "platform");
 
 		Laya.MiniAdpter.init();

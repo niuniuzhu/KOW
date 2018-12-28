@@ -2,33 +2,37 @@
 using Google.Protobuf;
 using System.Collections;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Shared.Battle
 {
-	public static class Defs
-	{
-		private const string DEFS_MAP_PREFIX = "m";
-		private const string DEFS_ENTITY_PREFIX = "e";
+    public static class Defs
+    {
+        private static readonly Regex REGEX = new Regex( @"/\*+[^\*]*\*+/" );
 
-		private static readonly Hashtable _defs = new Hashtable();
+        private const string DEFS_MAP_PREFIX = "m";
+        private const string DEFS_ENTITY_PREFIX = "e";
 
-		public static ByteString binary { get; private set; }
+        private static readonly Hashtable _defs = new Hashtable();
 
-		public static void Load( string json )
-		{
-			Hashtable defs = ( Hashtable )MiniJSON.JsonDecode( json );
-			_defs.Clear();
-			foreach ( DictionaryEntry de in defs )
-				_defs[de.Key] = de.Value;
-			binary = ByteString.CopyFrom( json, Encoding.UTF8 );
-		}
+        public static ByteString binary { get; private set; }
 
-		public static Hashtable GetMap( int id ) => _defs.GetMap( "map" ).GetMap( DEFS_MAP_PREFIX + id );
+        public static void Load( string json )
+        {
+            json = REGEX.Replace( json, string.Empty );
+            Hashtable defs = ( Hashtable )MiniJSON.JsonDecode( json );
+            _defs.Clear();
+            foreach ( DictionaryEntry de in defs )
+                _defs[de.Key] = de.Value;
+            binary = ByteString.CopyFrom( json, Encoding.UTF8 );
+        }
 
-		public static int GetMapCount() => _defs.GetMap( "map" ).Count;
+        public static Hashtable GetMap( int id ) => _defs.GetMap( "map" ).GetMap( DEFS_MAP_PREFIX + id );
 
-		public static Hashtable GetEntity( int id ) => _defs.GetMap( "entity" ).GetMap( DEFS_ENTITY_PREFIX + id );
+        public static int GetMapCount() => _defs.GetMap( "map" ).Count;
 
-		public static int GetEntityCount() => _defs.GetMap( "entity" ).Count;
-	}
+        public static Hashtable GetEntity( int id ) => _defs.GetMap( "entity" ).GetMap( DEFS_ENTITY_PREFIX + id );
+
+        public static int GetEntityCount() => _defs.GetMap( "entity" ).Count;
+    }
 }

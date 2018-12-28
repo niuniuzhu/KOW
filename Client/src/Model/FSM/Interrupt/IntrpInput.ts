@@ -1,9 +1,8 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
 import { InputType } from "../../Logic/InputAagent";
-import { EntityStateAction } from "../EntityStateAction";
-import { IntrptBase } from "./IntrptBase";
 import { EntityState } from "../EntityState";
+import { IntrptBase } from "./IntrptBase";
 
 enum InputTriggerType {
 	Press,
@@ -28,7 +27,7 @@ export class IntrpInput extends IntrptBase implements ISnapshotable {
 	 */
 	private _and: boolean;
 
-	constructor(action: EntityStateAction, def: Hashtable) {
+	constructor(action: EntityState, def: Hashtable) {
 		super(action, def);
 		this._inputTypes = Hashtable.GetNumberArray(def, "input_types");
 		this._triggerTypes = Hashtable.GetNumberArray(def, "trigger_types");
@@ -41,7 +40,7 @@ export class IntrpInput extends IntrptBase implements ISnapshotable {
 			const triggerType = this._triggerTypes[i];
 			if (triggerType != InputTriggerType.Hold)
 				continue;
-			const inputAgent = (<EntityState>this._action.state).owner.inputAgent;
+			const inputAgent = (<EntityState>this._state).owner.inputAgent;
 			//检测按键是否按下状态
 			if (inputAgent.GetInputState(inputType)) {
 				this.ChangeState(this._connectState, null, true, true);

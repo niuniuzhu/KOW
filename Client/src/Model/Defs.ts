@@ -9,7 +9,7 @@ export class Defs {
 	private static _emitterMap: Hashtable;
 	private static _bulletMap: Hashtable;
 
-	public static Init(json: JSON) {
+	public static Init(json: Hashtable) {
 		this._defs = json;
 		this._mapMap = Hashtable.GetMap(this._defs, "map");
 		this._entityMap = Hashtable.GetMap(this._defs, "entity");

@@ -14,6 +14,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.invulnerAbility = 0;
             this.moveDirection = FVec2_1.FVec2.zero;
             this.intersectVector = FVec2_1.FVec2.zero;
+            this.phyxSpeed = FVec2_1.FVec2.zero;
             this.t_hp_add = 0;
             this.t_mp_add = 0;
             this.t_atk_add = 0;
@@ -72,6 +73,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this.supperArmor);
             writer.int32(this.invulnerAbility);
             writer.double(this.moveDirection.x).double(this.moveDirection.y);
+            writer.double(this.intersectVector.x).double(this.intersectVector.y);
+            writer.double(this.phyxSpeed.x).double(this.phyxSpeed.y);
+            writer.double(this.velocity);
             writer.int32(this.t_hp_add);
             writer.int32(this.t_mp_add);
             writer.int32(this.t_atk_add);
@@ -96,6 +100,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.supperArmor = reader.int32();
             this.invulnerAbility = reader.int32();
             this.moveDirection.Set(reader.double(), reader.double());
+            this.intersectVector.Set(reader.double(), reader.double());
+            this.phyxSpeed.Set(reader.double(), reader.double());
+            this.velocity = reader.double();
             this.t_hp_add = reader.int32();
             this.t_mp_add = reader.int32();
             this.t_atk_add = reader.int32();
@@ -216,13 +223,14 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             if (this.disableMove <= 0) {
                 moveVector.CopyFrom(this.moveDirection);
             }
-            if (moveVector.x != 0 || moveVector.y != 0) {
+            if (moveVector.SqrMagnitude() >= FMathUtils_1.FMathUtils.EPSILON) {
                 if (this.disableTurn <= 0) {
                     this.direction.CopyFrom(this.moveDirection);
                 }
                 moveVector.MulN(this._moveSpeed);
             }
             moveVector.Add(this.intersectVector);
+            moveVector.Add(this.phyxSpeed);
             const sqrtDis = moveVector.SqrMagnitude();
             if (sqrtDis < FMathUtils_1.FMathUtils.EPSILON) {
                 this.velocity = 0;

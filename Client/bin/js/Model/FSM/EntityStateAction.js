@@ -5,13 +5,16 @@ define(["require", "exports", "../../RC/FSM/FSMStateAction", "../../RC/Utils/Has
         constructor(state, type, def) {
             super(state, type);
             this._def = def;
-            this._triggerTime = Hashtable_1.Hashtable.GetNumber(this._def, "trigger_time");
+            this.OnInit(this._def);
         }
         EncodeSnapshot(writer) {
             writer.bool(this._isTriggered);
         }
         DecodeSnapshot(reader) {
             this._isTriggered = reader.bool();
+        }
+        OnInit(def) {
+            this._triggerTime = Hashtable_1.Hashtable.GetNumber(def, "trigger_time");
         }
         OnEnter(param) {
             this._isTriggered = false;

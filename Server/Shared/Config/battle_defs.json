@@ -9,11 +9,11 @@
 			"born_pos": [
 				[
 					0,
-					100
+					1
 				],
 				[
 					0,
-					-100
+					-1
 				]
 			],
 			"born_dir": [
@@ -34,7 +34,7 @@
 			"mmp": 100,
 			"atk": 50,
 			"def": 0,
-			"move_speed": 200,
+			"move_speed": 2,
 			"radius": 70,
 			"skills": [
 				0,
@@ -92,6 +92,7 @@
 				"1": {
 					"actions": [
 						{
+							/*移动行为*/
 							"id": 5
 						}
 					],
@@ -145,12 +146,12 @@
 					"interrupts": [
 						{
 							"id": 0, /*计时中断*/
-							"connect_state": 0,
+							"connect_state": 4,
 							"duration": 2000
 						},
 						{
 							"id": 2, /*按键中断*/
-							"connect_state": 0,
+							"connect_state": 4,
 							"input_types": [
 								2 /*技能2*/
 							],
@@ -162,14 +163,26 @@
 				},
 				/*冲刺*/
 				"4": {
-					"actions": [],
+					"actions": [
+						{
+							/*匀速直线运动行为*/
+							"id": 2,
+							"speed": [
+								0,
+								30
+							]
+						}
+					],
 					"interrupts": [
 						{
 							"id": 0, /*计时中断*/
-							"connect_state": 4,
-							"duration": 2000
+							"connect_state": 0,
+							"duration": 200
 						}
 					]
+				},
+				"5":{
+
 				}
 			}
 		}
@@ -209,7 +222,7 @@
 			"move_type": 0,
 			"radius": 65,
 			"move_speed": 0,
-			"life_time": 100000,
+			"life_time": 500,
 			"destroy_type": 0,
 			"collision_start_time": 0,
 			"max_collision_count": -1,

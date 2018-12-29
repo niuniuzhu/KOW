@@ -5,6 +5,7 @@ import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { AnimationProxy } from "./AnimationProxy";
 import { VBattle } from "./VBattle";
+import { Consts } from "../../Consts";
 
 export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
@@ -99,7 +100,7 @@ export abstract class VEntity {
 		}
 		this._markToDestroy = reader.bool();
 
-		this._logicPos = new Vec2(reader.double(), reader.double());
+		this._logicPos = new Vec2(reader.double() * Consts.LOGIC_TO_PIXEL_RATIO, reader.double() * Consts.LOGIC_TO_PIXEL_RATIO);
 		const logicDir = new Vec2(reader.double(), reader.double());
 		this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
 		if (logicDir.x < 0) {

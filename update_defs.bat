@@ -1,0 +1,1 @@
+copy .\Server\Shared\Config\battle_defs.json .\Server\Bin\Config /y

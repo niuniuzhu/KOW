@@ -16,7 +16,7 @@ export abstract class EntityStateAction extends FSMStateAction implements ISnaps
 	constructor(state: FSMState, type: ActionType, def: Hashtable) {
 		super(state, type);
 		this._def = def;
-		this._triggerTime = Hashtable.GetNumber(this._def, "trigger_time");
+		this.OnInit(this._def);
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
@@ -25,6 +25,10 @@ export abstract class EntityStateAction extends FSMStateAction implements ISnaps
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._isTriggered = reader.bool();
+	}
+
+	protected OnInit(def: Hashtable): void {
+		this._triggerTime = Hashtable.GetNumber(def, "trigger_time");
 	}
 
 	protected OnEnter(param: any): void {

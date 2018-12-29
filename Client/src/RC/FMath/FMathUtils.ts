@@ -18,8 +18,8 @@ export class FMathUtils {
 	public static RadToDeg(rad: number): number {
 		return FMathUtils.Mul(rad, FMathUtils.RAD_TO_DEG);
 	}
-	private static readonly FRACTIONAL_PLACES = 1000;
-	private static readonly DIV_ONE = 0.001;
+	private static readonly FRACTIONAL_PLACES = 100;
+	private static readonly DIV_ONE = 0.01;
 
 	public static ToFixed(value: number): number {
 		return ((value * FMathUtils.FRACTIONAL_PLACES) >> 0) * FMathUtils.DIV_ONE;

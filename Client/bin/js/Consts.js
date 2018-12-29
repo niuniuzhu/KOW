@@ -11,6 +11,7 @@ define(["require", "exports"], function (require, exports) {
     Consts.ASSETS_SKILL_PREFIX = "s";
     Consts.ASSETS_EMITTER_PREFIX = "m";
     Consts.ASSETS_BULLET_PREFIX = "b";
+    Consts.LOGIC_TO_PIXEL_RATIO = 100;
     exports.Consts = Consts;
 });
 //# sourceMappingURL=Consts.js.map

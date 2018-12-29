@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "./AnimationProxy"], function (require, exports, Global_1, MathUtils_1, Vec2_1, AnimationProxy_1) {
+define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "./AnimationProxy", "../../Consts"], function (require, exports, Global_1, MathUtils_1, Vec2_1, AnimationProxy_1, Consts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -67,7 +67,7 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
                 this.OnInit();
             }
             this._markToDestroy = reader.bool();
-            this._logicPos = new Vec2_1.Vec2(reader.double(), reader.double());
+            this._logicPos = new Vec2_1.Vec2(reader.double() * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO, reader.double() * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO);
             const logicDir = new Vec2_1.Vec2(reader.double(), reader.double());
             this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
             if (logicDir.x < 0) {

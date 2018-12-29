@@ -91,7 +91,7 @@ export class Champion extends Entity implements ISnapshotable {
 	/**
 	 * 物理速度
 	 */
-	public phyxSpeed: FVec2 = FVec2.zero;
+	public readonly phyxSpeed: FVec2 = FVec2.zero;
 	/**
 	 * 当前速率
 	 */

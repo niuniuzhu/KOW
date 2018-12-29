@@ -17,12 +17,6 @@
 		"battle.bin,0",
 		"battle_atlas0.png,1"
 	],
-	"map": {
-		"m0": {
-			"width": 2000,
-			"height": 2000
-		}
-	},
 	"entity": {
 		"e0": {
 			"model": "e0",
@@ -39,7 +33,10 @@
 				"3": {
 					"animation": 3
 				},
-				"4": {}
+				"4": {},
+				"5":{
+					"animation": 4
+				}
 			},
 			"animations": [
 				{

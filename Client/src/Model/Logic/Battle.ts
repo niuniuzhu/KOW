@@ -45,7 +45,6 @@ export class Battle implements ISnapshotable {
 	private _realElapsed: number;
 	private _nextKeyFrame: number;
 	private _def: Hashtable;
-	private _cdef: Hashtable;
 	private _bounds: FRect;
 	private _destroied: boolean = false;
 
@@ -75,10 +74,9 @@ export class Battle implements ISnapshotable {
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
 
-		this._cdef = CDefs.GetMap(this._mapID);
 		this._def = Defs.GetMap(this._mapID);
-		const bWidth = Hashtable.GetNumber(this._cdef, "width");
-		const bHeight = Hashtable.GetNumber(this._cdef, "height");
+		const bWidth = Hashtable.GetNumber(this._def, "width");
+		const bHeight = Hashtable.GetNumber(this._def, "height");
 		this._bounds = new FRect(-FMathUtils.Floor(bWidth * 0.5),
 			-FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
 	}
@@ -91,7 +89,6 @@ export class Battle implements ISnapshotable {
 			return;
 		this._destroied = true;
 		this._def = null;
-		this._cdef = null;
 		this._bounds = null;
 		this._frameActionGroups.clear();
 

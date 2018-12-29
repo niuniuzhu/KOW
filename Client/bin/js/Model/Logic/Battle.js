@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../CDefs", "../Defs", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, CDefs_1, Defs_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1) {
+define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -39,10 +39,9 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._nextKeyFrame = 0;
             this._logicElapsed = 0;
             this._realElapsed = 0;
-            this._cdef = CDefs_1.CDefs.GetMap(this._mapID);
             this._def = Defs_1.Defs.GetMap(this._mapID);
-            const bWidth = Hashtable_1.Hashtable.GetNumber(this._cdef, "width");
-            const bHeight = Hashtable_1.Hashtable.GetNumber(this._cdef, "height");
+            const bWidth = Hashtable_1.Hashtable.GetNumber(this._def, "width");
+            const bHeight = Hashtable_1.Hashtable.GetNumber(this._def, "height");
             this._bounds = new FRect_1.FRect(-FMathUtils_1.FMathUtils.Floor(bWidth * 0.5), -FMathUtils_1.FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
         }
         Destroy() {
@@ -50,7 +49,6 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 return;
             this._destroied = true;
             this._def = null;
-            this._cdef = null;
             this._bounds = null;
             this._frameActionGroups.clear();
             for (let i = 0, count = this._bullets.length; i < count; i++)

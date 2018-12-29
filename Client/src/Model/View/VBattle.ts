@@ -9,7 +9,7 @@ import { CDefs } from "../CDefs";
 import { Camera } from "./Camera";
 import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
-import { Bullet } from "../Logic/Bullet";
+import { Defs } from "../Defs";
 
 export class VBattle {
 	private _mapID: number = 0;
@@ -41,9 +41,10 @@ export class VBattle {
 		this._destroied = false;
 		this._mapID = battleInfo.mapID
 		//加载配置
-		this._def = CDefs.GetMap(this._mapID);
+		this._def = Defs.GetMap(this._mapID);
 
-		this._camera.SetBounds(Hashtable.GetNumber(this._def, "width"), Hashtable.GetNumber(this._def, "height"));
+		this._camera.SetBounds(Hashtable.GetNumber(this._def, "width") * Consts.LOGIC_TO_PIXEL_RATIO,
+			Hashtable.GetNumber(this._def, "height") * Consts.LOGIC_TO_PIXEL_RATIO);
 
 		this._playerID = battleInfo.playerID;
 

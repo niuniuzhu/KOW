@@ -1,6 +1,8 @@
 {
 	"map": {
 		"m0": {
+			"width": 20,
+			"height": 20,
 			"frame_rate": 20,
 			"keyframe_step": 4,
 			"snapshot_step": 100,
@@ -35,7 +37,7 @@
 			"atk": 50,
 			"def": 0,
 			"move_speed": 2,
-			"radius": 70,
+			"radius": 0.7,
 			"skills": [
 				0,
 				1
@@ -114,11 +116,12 @@
 					"states_available": [],
 					"actions": [
 						{
+							/*改变实体属性行为*/
 							"id": 1,
 							"attrs": [
-								500,
-								501,
-								502
+								500, /*禁止移动*/
+								501, /*禁止转身*/
+								502 /*禁止使用技能*/
 							],
 							"values": [
 								1,
@@ -127,6 +130,7 @@
 							]
 						},
 						{
+							/*攻击行为*/
 							"id": 4,
 							"trigger_time": 500
 						}
@@ -142,12 +146,27 @@
 				/*前摇*/
 				"3": {
 					"states_available": [],
-					"actions": [],
+					"actions": [
+						{
+							/*改变实体属性行为*/
+							"id": 1,
+							"attrs": [
+								500, /*禁止移动*/
+								501, /*禁止转身*/
+								502 /*禁止使用技能*/
+							],
+							"values": [
+								1,
+								1,
+								1
+							]
+						}
+					],
 					"interrupts": [
 						{
 							"id": 0, /*计时中断*/
 							"connect_state": 4,
-							"duration": 2000
+							"duration": 3000
 						},
 						{
 							"id": 2, /*按键中断*/
@@ -165,6 +184,20 @@
 				"4": {
 					"actions": [
 						{
+							/*改变实体属性行为*/
+							"id": 1,
+							"attrs": [
+								500, /*禁止移动*/
+								501, /*禁止转身*/
+								502 /*禁止使用技能*/
+							],
+							"values": [
+								1,
+								1,
+								1
+							]
+						},
+						{
 							/*匀速直线运动行为*/
 							"id": 2,
 							"speed": [
@@ -176,13 +209,41 @@
 					"interrupts": [
 						{
 							"id": 0, /*计时中断*/
-							"connect_state": 0,
-							"duration": 200
+							"connect_state": 5,
+							"duration": 160
 						}
 					]
 				},
-				"5":{
-
+				/*绝招(冲刺完成)*/
+				"5": {
+					"actions": [
+						{
+							/*改变实体属性行为*/
+							"id": 1,
+							"attrs": [
+								500, /*禁止移动*/
+								501, /*禁止转身*/
+								502 /*禁止使用技能*/
+							],
+							"values": [
+								1,
+								1,
+								1
+							]
+						},
+						{
+							/*攻击行为*/
+							"id": 4,
+							"trigger_time": 400
+						}
+					],
+					"interrupts": [
+						{
+							"id": 0, /*计时中断*/
+							"connect_state": 0,
+							"duration": 500
+						}
+					]
 				}
 			}
 		}
@@ -195,10 +256,10 @@
 			"damage": 10
 		},
 		"s1": {
-			"connect_state": 3,
+			"connect_state": 5,
 			"emitter": 0,
 			"bullet": 0,
-			"damage": 10
+			"damage": 50
 		}
 	},
 	"emitter": {

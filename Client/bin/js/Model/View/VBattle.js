@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "../CDefs", "./Camera", "./VBullet", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, CDefs_1, Camera_1, VBullet_1, VChampion_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "./Camera", "./VBullet", "./VChampion", "../Defs"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, Camera_1, VBullet_1, VChampion_1, Defs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -16,8 +16,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
             this._destroied = false;
             this._mapID = battleInfo.mapID;
-            this._def = CDefs_1.CDefs.GetMap(this._mapID);
-            this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(this._def, "width"), Hashtable_1.Hashtable.GetNumber(this._def, "height"));
+            this._def = Defs_1.Defs.GetMap(this._mapID);
+            this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(this._def, "width") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO, Hashtable_1.Hashtable.GetNumber(this._def, "height") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO);
             this._playerID = battleInfo.playerID;
             this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
             this._root.touchable = false;

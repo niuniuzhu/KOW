@@ -27,14 +27,14 @@ export class IntrpInput extends IntrptBase implements ISnapshotable {
 	 */
 	private _and: boolean;
 
-	constructor(action: EntityState, def: Hashtable) {
-		super(action, def);
+	protected OnInit(def: Hashtable) {
+		super.OnInit(def);
 		this._inputTypes = Hashtable.GetNumberArray(def, "input_types");
 		this._triggerTypes = Hashtable.GetNumberArray(def, "trigger_types");
 		this._and = Hashtable.GetBool(def, "and");
 	}
 
-	public Update(dt: number): void {
+	protected OnUpdate(dt: number): void {
 		for (let i = 0; i < this._inputTypes.length; ++i) {
 			const inputType = this._inputTypes[i];
 			const triggerType = this._triggerTypes[i];
@@ -43,7 +43,7 @@ export class IntrpInput extends IntrptBase implements ISnapshotable {
 			const inputAgent = (<EntityState>this._state).owner.inputAgent;
 			//检测按键是否按下状态
 			if (inputAgent.GetInputState(inputType)) {
-				this.ChangeState(this._connectState, null, true, true);
+				this.ChangeState(true, true);
 			}
 		}
 	}
@@ -82,7 +82,7 @@ export class IntrpInput extends IntrptBase implements ISnapshotable {
 			}
 		}
 		if (meet) {
-			this.ChangeState(this._connectState, null, true, true);
+			this.ChangeState(true, true);
 		}
 	}
 }

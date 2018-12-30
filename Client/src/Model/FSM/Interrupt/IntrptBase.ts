@@ -6,27 +6,92 @@ import { EntityState } from "../EntityState";
 import { StateType } from "../StateEnums";
 
 export abstract class IntrptBase implements ISnapshotable {
-	public readonly id: number;
-	protected _state: EntityState;
+	public get id(): number { return this._id; }
+	/**
+	 * 获取总运行时间
+	 */
+	public get time(): number { return this._state.time; }
+	/**
+	 * 获取从开始到中断所使用的时间(如果延时为零,则和time一样)
+	 */
+	public get intrptTime(): number { return this._state.time - this._delay; }
 
+	private _id: number;
+	/**
+	 * 所属状态
+	 */
+	protected _state: EntityState;
 	/**
 	 * 默认连接状态
 	 */
-	protected _connectState: StateType = StateType.None;
+	private _connectState: StateType = StateType.Idle;
+	/**
+	 * 延时
+	 */
+	private _delay: number = 0;
+	/**
+	 * 是否已触发
+	 */
+	private _isTriggered: boolean = false;
 
-	constructor(action: EntityState, def: Hashtable) {
-		this._state = action;
-		this.id = Hashtable.GetNumber(def, "id");
-		this._connectState = Hashtable.GetNumber(def, "connect_state");
+	constructor(state: EntityState, def: Hashtable) {
+		this._state = state;
+		this.OnInit(def);
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		writer.bool(this._isTriggered);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._isTriggered = reader.bool();
+	}
+
+	protected OnInit(def: Hashtable): void {
+		this._id = Hashtable.GetNumber(def, "id");
+		this._connectState = Hashtable.GetNumber(def, "connect_state");
+		this._delay = Hashtable.GetNumber(def, "delay");
+	}
+
+	public Enter(): void {
+		this._isTriggered = false;
+		if (this._delay <= 0) {
+			this.Trigger();
+		}
+		this.OnEnter();
+	}
+
+	public Exit(): void {
+		this.OnExit();
 	}
 
 	public Update(dt: number): void {
+		const time = this._state.time;
+		if (!this._isTriggered) {
+			if (time >= this._delay) {
+				this.Trigger();
+			}
+		}
+		else {
+			this.OnUpdate(dt);
+		}
+	}
+
+	private Trigger(): void {
+		this._isTriggered = true;
+		this.OnTrigger();
+	}
+
+	protected OnEnter(): void {
+	}
+
+	protected OnExit(): void {
+	}
+
+	protected OnUpdate(dt: number): void {
+	}
+
+	protected OnTrigger(): void {
 	}
 
 	public HandleInput(type: InputType, press: boolean): void {
@@ -34,17 +99,17 @@ export abstract class IntrptBase implements ISnapshotable {
 
 	/**
 	 * 转换状态
-	 * @param type 转换类型
-	 * @param param 携带参数
 	 * @param igroneIntrptList 是否忽略中断列表
 	 * @param force 是否强制转换
 	 */
-	protected ChangeState(type: StateType, param: any = null, igroneIntrptList: boolean = false, force: boolean = false): void {
+	protected ChangeState(igroneIntrptList: boolean = false, force: boolean = false): void {
 		const state = (<EntityState>this._state);
-		state.owner.fsm.ChangeState(type, param, igroneIntrptList, force);
+		state.owner.fsm.ChangeState(this._connectState, this, igroneIntrptList, force);
 	}
 
 	public Dump(): string {
-		return "";
+		let str = "";
+		str += `istriggered:${this._isTriggered}\n`;
+		return str;
 	}
 }

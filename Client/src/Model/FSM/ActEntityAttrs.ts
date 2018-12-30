@@ -8,13 +8,19 @@ import { EntityStateAction } from "./EntityStateAction";
  * 设置实体属性行为
  */
 export class ActEntityAttrs extends EntityStateAction implements ISnapshotable {
+	private _attrs: EAttr[];
+	private _values: number[];
+
+	protected OnInit(def: Hashtable): void {
+		this._attrs = Hashtable.GetNumberArray(def, "attrs");
+		this._values = Hashtable.GetNumberArray(def, "values");
+	}
+
 	protected OnTrigger(): void {
 		super.OnTrigger();
-		const attrs = Hashtable.GetArray(this._def, "attrs");
-		const values = Hashtable.GetArray(this._def, "values");
-		const count = attrs.length;
+		const count = this._attrs.length;
 		for (let i = 0; i < count; ++i) {
-			this.ActiveAttr(attrs[i], values[i]);
+			this.ActiveAttr(this._attrs[i], this._values[i]);
 		}
 	}
 
@@ -30,11 +36,9 @@ export class ActEntityAttrs extends EntityStateAction implements ISnapshotable {
 
 	private DeactiveAttrs(): void {
 		const owner = (<EntityState>this.state).owner;
-		const attrs = Hashtable.GetArray(this._def, "attrs");
-		const values = Hashtable.GetArray(this._def, "values");
-		const count = attrs.length;
+		const count = this._attrs.length;
 		for (let i = 0; i < count; ++i) {
-			owner.SetAttr(attrs[i], owner.GetAttr(attrs[i]) - values[i]);
+			owner.SetAttr(this._attrs[i], owner.GetAttr(this._attrs[i]) - this._values[i]);
 		}
 	}
 }

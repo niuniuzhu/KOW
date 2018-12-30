@@ -8,7 +8,6 @@ import { ActVelocityAcceleration } from "./ActVelocityAcceleration";
 import { EntityStateAction } from "./EntityStateAction";
 
 export enum StateType {
-	None = -1,
 	Idle,
 	Move,
 	Attack,

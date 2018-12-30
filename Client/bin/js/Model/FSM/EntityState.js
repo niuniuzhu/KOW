@@ -1,15 +1,14 @@
-define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState", "../../RC/Utils/Hashtable", "./StateEnums", "./Interrupt/IntrptTimeup", "./Interrupt/IntrpInput"], function (require, exports, Set_1, FSMState_1, Hashtable_1, StateEnums_1, IntrptTimeup_1, IntrpInput_1) {
+define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState", "../../RC/Utils/Hashtable", "./Interrupt/IntrpInput", "./Interrupt/IntrptTimeup", "./StateEnums"], function (require, exports, Set_1, FSMState_1, Hashtable_1, IntrpInput_1, IntrptTimeup_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityState extends FSMState_1.FSMState {
         constructor(type, owner) {
             super(type);
+            this.time = 0;
             this._interrupts = [];
             this._owner = owner;
         }
         get owner() { return this._owner; }
-        get time() { return this._time; }
-        set time(value) { this._time = value; }
         Init() {
             const def = Hashtable_1.Hashtable.GetMap(Hashtable_1.Hashtable.GetMap(this._owner.defs, "states"), this.type.toString());
             const actionsDef = Hashtable_1.Hashtable.GetMapArray(def, "actions");
@@ -51,28 +50,36 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
             this._interrupts.push(interrupt);
         }
         EncodeSnapshot(writer) {
+            writer.int32(this.time);
             for (const action of this._actions) {
                 action.EncodeSnapshot(writer);
             }
-            writer.int32(this._time);
             for (const interrupt of this._interrupts) {
                 interrupt.EncodeSnapshot(writer);
             }
         }
         DecodeSnapshot(reader) {
+            this.time = reader.int32();
             for (const action of this._actions) {
                 action.DecodeSnapshot(reader);
             }
-            this._time = reader.int32();
             for (const interrupt of this._interrupts) {
                 interrupt.DecodeSnapshot(reader);
             }
         }
         OnEnter(param) {
-            this._time = 0;
+            this.time = 0;
+            for (const interrupt of this._interrupts) {
+                interrupt.Enter();
+            }
+        }
+        OnExit() {
+            for (const interrupt of this._interrupts) {
+                interrupt.Exit();
+            }
         }
         OnUpdate(dt) {
-            this._time += dt;
+            this.time += dt;
             for (const interrupt of this._interrupts) {
                 interrupt.Update(dt);
             }
@@ -81,11 +88,11 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
             return this._statesAvailable == null || this._statesAvailable.contains(type);
         }
         HandleInput(type, press) {
-            for (const interrupt of this._interrupts) {
-                interrupt.HandleInput(type, press);
-            }
             for (const action of this._actions) {
                 action.HandlInput(type, press);
+            }
+            for (const interrupt of this._interrupts) {
+                interrupt.HandleInput(type, press);
             }
         }
         Dump() {
@@ -98,7 +105,7 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
             for (const action of this._actions) {
                 str += action.Dump();
             }
-            str += `time:${this._time}\n`;
+            str += `time:${this.time}\n`;
             return str;
         }
     }

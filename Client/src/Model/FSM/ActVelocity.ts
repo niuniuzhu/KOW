@@ -14,7 +14,7 @@ export class ActVelocity extends EntityStateAction implements ISnapshotable {
 
 	protected OnInit(def: Hashtable): void {
 		super.OnInit(def);
-		this._speed = Hashtable.GetVec2(this._def, "speed");
+		this._speed = Hashtable.GetVec2(def, "speed");
 	}
 
 	protected OnExit(): void {

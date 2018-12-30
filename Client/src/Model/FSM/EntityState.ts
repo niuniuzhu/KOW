@@ -6,10 +6,10 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "../Logic/Champion";
 import { InputType } from "../Logic/InputAagent";
 import { EntityStateAction } from "./EntityStateAction";
-import { ID_TO_STATE_ACTION, StateType, InterruptType } from "./StateEnums";
+import { IntrpInput } from "./Interrupt/IntrpInput";
 import { IntrptBase } from "./Interrupt/IntrptBase";
 import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
-import { IntrpInput } from "./Interrupt/IntrpInput";
+import { ID_TO_STATE_ACTION, InterruptType, StateType } from "./StateEnums";
 
 export class EntityState extends FSMState implements ISnapshotable {
 	/**
@@ -17,18 +17,13 @@ export class EntityState extends FSMState implements ISnapshotable {
 	 */
 	public get owner(): Champion { return this._owner; }
 	/**
-	 * 获取状态运行时间
+	 * 获取或设置状态运行时间
 	 */
-	public get time(): number { return this._time; }
-	/**
-	 * 设置状态运行时间
-	 */
-	public set time(value: number) { this._time = value; }
+	public time: number = 0;
 
 	private readonly _interrupts: IntrptBase[] = [];
 	private _statesAvailable: Set<StateType>;
 	private _owner: Champion;
-	private _time: number;
 
 	constructor(type: number, owner: Champion) {
 		super(type);
@@ -91,31 +86,40 @@ export class EntityState extends FSMState implements ISnapshotable {
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		writer.int32(this.time);
 		for (const action of this._actions) {
 			(<EntityStateAction>action).EncodeSnapshot(writer);
 		}
-		writer.int32(this._time);
 		for (const interrupt of this._interrupts) {
 			interrupt.EncodeSnapshot(writer);
 		}
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this.time = reader.int32();
 		for (const action of this._actions) {
 			(<EntityStateAction>action).DecodeSnapshot(reader);
 		}
-		this._time = reader.int32();
 		for (const interrupt of this._interrupts) {
 			interrupt.DecodeSnapshot(reader);
 		}
 	}
 
 	protected OnEnter(param: any): void {
-		this._time = 0;
+		this.time = 0;
+		for (const interrupt of this._interrupts) {
+			interrupt.Enter();
+		}
+	}
+
+	protected OnExit(): void {
+		for (const interrupt of this._interrupts) {
+			interrupt.Exit();
+		}
 	}
 
 	protected OnUpdate(dt: number): void {
-		this._time += dt;
+		this.time += dt;
 		for (const interrupt of this._interrupts) {
 			interrupt.Update(dt);
 		}
@@ -132,11 +136,11 @@ export class EntityState extends FSMState implements ISnapshotable {
 	}
 
 	public HandleInput(type: InputType, press: boolean): void {
-		for (const interrupt of this._interrupts) {
-			interrupt.HandleInput(type, press);
-		}
 		for (const action of this._actions) {
 			(<EntityStateAction>action).HandlInput(type, press);
+		}
+		for (const interrupt of this._interrupts) {
+			interrupt.HandleInput(type, press);
 		}
 	}
 
@@ -150,7 +154,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 		for (const action of this._actions) {
 			str += (<EntityStateAction>action).Dump();
 		}
-		str += `time:${this._time}\n`;
+		str += `time:${this.time}\n`;
 		return str;
 	}
 }

@@ -3,7 +3,6 @@ define(["require", "exports", "./ActAttack", "./ActEntityAttrs", "./ActMove", ".
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;
     (function (StateType) {
-        StateType[StateType["None"] = -1] = "None";
         StateType[StateType["Idle"] = 0] = "Idle";
         StateType[StateType["Move"] = 1] = "Move";
         StateType[StateType["Attack"] = 2] = "Attack";

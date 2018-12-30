@@ -8,13 +8,13 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./IntrptBase"], fu
         InputTriggerType[InputTriggerType["Hold"] = 2] = "Hold";
     })(InputTriggerType || (InputTriggerType = {}));
     class IntrpInput extends IntrptBase_1.IntrptBase {
-        constructor(action, def) {
-            super(action, def);
+        OnInit(def) {
+            super.OnInit(def);
             this._inputTypes = Hashtable_1.Hashtable.GetNumberArray(def, "input_types");
             this._triggerTypes = Hashtable_1.Hashtable.GetNumberArray(def, "trigger_types");
             this._and = Hashtable_1.Hashtable.GetBool(def, "and");
         }
-        Update(dt) {
+        OnUpdate(dt) {
             for (let i = 0; i < this._inputTypes.length; ++i) {
                 const inputType = this._inputTypes[i];
                 const triggerType = this._triggerTypes[i];
@@ -22,7 +22,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./IntrptBase"], fu
                     continue;
                 const inputAgent = this._state.owner.inputAgent;
                 if (inputAgent.GetInputState(inputType)) {
-                    this.ChangeState(this._connectState, null, true, true);
+                    this.ChangeState(true, true);
                 }
             }
         }
@@ -60,7 +60,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./IntrptBase"], fu
                 }
             }
             if (meet) {
-                this.ChangeState(this._connectState, null, true, true);
+                this.ChangeState(true, true);
             }
         }
     }

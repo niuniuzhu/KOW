@@ -2,10 +2,11 @@ define(["require", "exports", "../../RC/FSM/FSMStateAction", "../../RC/Utils/Has
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityStateAction extends FSMStateAction_1.FSMStateAction {
+        get time() { return this.state.time; }
+        get intrptTime() { return this.state.time - this._triggerTime; }
         constructor(state, type, def) {
             super(state, type);
-            this._def = def;
-            this.OnInit(this._def);
+            this.OnInit(def);
         }
         EncodeSnapshot(writer) {
             writer.bool(this._isTriggered);

@@ -2,13 +2,15 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction"]
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActEntityAttrs extends EntityStateAction_1.EntityStateAction {
+        OnInit(def) {
+            this._attrs = Hashtable_1.Hashtable.GetNumberArray(def, "attrs");
+            this._values = Hashtable_1.Hashtable.GetNumberArray(def, "values");
+        }
         OnTrigger() {
             super.OnTrigger();
-            const attrs = Hashtable_1.Hashtable.GetArray(this._def, "attrs");
-            const values = Hashtable_1.Hashtable.GetArray(this._def, "values");
-            const count = attrs.length;
+            const count = this._attrs.length;
             for (let i = 0; i < count; ++i) {
-                this.ActiveAttr(attrs[i], values[i]);
+                this.ActiveAttr(this._attrs[i], this._values[i]);
             }
         }
         OnExit() {
@@ -21,11 +23,9 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction"]
         }
         DeactiveAttrs() {
             const owner = this.state.owner;
-            const attrs = Hashtable_1.Hashtable.GetArray(this._def, "attrs");
-            const values = Hashtable_1.Hashtable.GetArray(this._def, "values");
-            const count = attrs.length;
+            const count = this._attrs.length;
             for (let i = 0; i < count; ++i) {
-                owner.SetAttr(attrs[i], owner.GetAttr(attrs[i]) - values[i]);
+                owner.SetAttr(this._attrs[i], owner.GetAttr(this._attrs[i]) - this._values[i]);
             }
         }
     }

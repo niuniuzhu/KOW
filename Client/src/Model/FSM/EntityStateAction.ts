@@ -8,15 +8,21 @@ import { EntityState } from "./EntityState";
 import { ActionType } from "./StateEnums";
 
 export abstract class EntityStateAction extends FSMStateAction implements ISnapshotable {
-	protected readonly _def: Hashtable;
+	/**
+	 * 获取总运行时间
+	 */
+	public get time(): number { return (<EntityState>this.state).time; }
+	/**
+	 * 获取从触发到结束所使用的时间(如果触发时间为零,则和time一样)
+	 */
+	public get intrptTime(): number { return (<EntityState>this.state).time - this._triggerTime; }
 
 	private _triggerTime: number;
 	private _isTriggered: boolean;
 
 	constructor(state: FSMState, type: ActionType, def: Hashtable) {
 		super(state, type);
-		this._def = def;
-		this.OnInit(this._def);
+		this.OnInit(def);
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {

@@ -4,7 +4,7 @@ define(["require", "exports", "./EntityStateAction", "../../RC/FMath/FVec2", "..
     class ActVelocity extends EntityStateAction_1.EntityStateAction {
         OnInit(def) {
             super.OnInit(def);
-            this._speed = Hashtable_1.Hashtable.GetVec2(this._def, "speed");
+            this._speed = Hashtable_1.Hashtable.GetVec2(def, "speed");
         }
         OnExit() {
             super.OnExit();

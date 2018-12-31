@@ -10,17 +10,17 @@ export class IntrptTimeup extends IntrptBase implements ISnapshotable {
 	/**
 	 * 状态持续时长
 	 */
-	private _duration: number;
+	public duration: number;
 
 	protected OnInit(def: Hashtable) {
 		super.OnInit(def);
-		this._duration = Hashtable.GetNumber(def, "duration", -1);
+		this.duration = Hashtable.GetNumber(def, "duration", -1);
 	}
 
 	protected OnUpdate(dt: number): void {
 		const state = (<EntityState>this._state);
-		if (this._duration >= 0 &&
-			state.time >= this._duration) {
+		if (this.duration >= 0 &&
+			state.time >= this.duration) {
 			this.ChangeState(true, true);
 		}
 	}

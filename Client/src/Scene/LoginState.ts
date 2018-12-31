@@ -4,12 +4,12 @@ import { CDefs } from "../Model/CDefs";
 import { Defs } from "../Model/Defs";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { WSConnector } from "../Net/WSConnector";
+import { JsonHelper } from "../RC/Utils/JsonHelper";
 import { Logger } from "../RC/Utils/Logger";
-import { TextUtils } from "../RC/Utils/TextUtils";
+import { StringUtils } from "../RC/Utils/TextUtils";
 import { UILogin } from "../UI/UILogin";
 import { SceneManager } from "./SceneManager";
 import { SceneState } from "./SceneState";
-import { JsonHelper } from "../RC/Utils/JsonHelper";
 
 /**
  * 登陆状态
@@ -99,7 +99,7 @@ export class LoginState extends SceneState {
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
 						//处理定义文件
-						const json = JsonHelper.Parse(TextUtils.DecodeUTF8(resp.defs));
+						const json = JsonHelper.Parse(StringUtils.DecodeUTF8(resp.defs));
 						Defs.Init(json);
 						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
 							//玩家处于战场,重新连接到BS

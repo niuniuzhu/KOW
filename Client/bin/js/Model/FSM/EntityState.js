@@ -6,6 +6,7 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
             super(type);
             this.time = 0;
             this._interrupts = [];
+            this._typeToIntrerrupt = new Map();
             this._owner = owner;
         }
         get owner() { return this._owner; }
@@ -48,6 +49,17 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
                     break;
             }
             this._interrupts.push(interrupt);
+            this._typeToIntrerrupt.set(id, interrupt);
+        }
+        RemoveInterrupt(type) {
+            const interrupt = this._typeToIntrerrupt.get(type);
+            if (!interrupt == null)
+                return false;
+            this._typeToIntrerrupt.delete(type);
+            this._interrupts.splice(this._interrupts.indexOf(interrupt), 1);
+        }
+        GetInterrupt(id) {
+            return this._typeToIntrerrupt.get(id);
         }
         EncodeSnapshot(writer) {
             writer.int32(this.time);

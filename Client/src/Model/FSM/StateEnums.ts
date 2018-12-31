@@ -3,6 +3,7 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ActAttack } from "./ActAttack";
 import { ActEntityAttrs } from "./ActEntityAttrs";
 import { ActMove } from "./ActMove";
+import { ActSprint } from "./ActSprint";
 import { ActVelocity } from "./ActVelocity";
 import { ActVelocityAcceleration } from "./ActVelocityAcceleration";
 import { EntityStateAction } from "./EntityStateAction";
@@ -22,6 +23,7 @@ export enum ActionType {
 	VelocityAcceleration = 3,
 	Attack = 4,
 	Move = 5,
+	Sprint = 6
 }
 
 export enum InterruptType {
@@ -36,3 +38,4 @@ ID_TO_STATE_ACTION.set(ActionType.Velocity, ActVelocity);
 ID_TO_STATE_ACTION.set(ActionType.VelocityAcceleration, ActVelocityAcceleration);
 ID_TO_STATE_ACTION.set(ActionType.Attack, ActAttack);
 ID_TO_STATE_ACTION.set(ActionType.Move, ActMove);
+ID_TO_STATE_ACTION.set(ActionType.Sprint, ActSprint);

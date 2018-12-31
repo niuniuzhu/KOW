@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class TextUtils {
+    class StringUtils {
         static DecodeUTF8(arr) {
             let str = "";
             for (let i = 0; i < arr.length; i++) {
@@ -10,7 +10,13 @@ define(["require", "exports"], function (require, exports) {
             decodeURIComponent(escape(str));
             return str;
         }
+        static Format(format, ...args) {
+            for (let i = 0; i < args.length; ++i) {
+                format = format.replace(`{${i}}`, args[i]);
+            }
+            return format;
+        }
     }
-    exports.TextUtils = TextUtils;
+    exports.StringUtils = StringUtils;
 });
 //# sourceMappingURL=TextUtils.js.map

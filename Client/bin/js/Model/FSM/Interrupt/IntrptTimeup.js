@@ -4,12 +4,12 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./IntrptBase"], fu
     class IntrptTimeup extends IntrptBase_1.IntrptBase {
         OnInit(def) {
             super.OnInit(def);
-            this._duration = Hashtable_1.Hashtable.GetNumber(def, "duration", -1);
+            this.duration = Hashtable_1.Hashtable.GetNumber(def, "duration", -1);
         }
         OnUpdate(dt) {
             const state = this._state;
-            if (this._duration >= 0 &&
-                state.time >= this._duration) {
+            if (this.duration >= 0 &&
+                state.time >= this.duration) {
                 this.ChangeState(true, true);
             }
         }

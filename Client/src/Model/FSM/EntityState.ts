@@ -22,6 +22,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 	public time: number = 0;
 
 	private readonly _interrupts: IntrptBase[] = [];
+	private readonly _typeToIntrerrupt = new Map<number, IntrptBase>();
 	private _statesAvailable: Set<StateType>;
 	private _owner: Champion;
 
@@ -83,6 +84,19 @@ export class EntityState extends FSMState implements ISnapshotable {
 
 		}
 		this._interrupts.push(interrupt);
+		this._typeToIntrerrupt.set(id, interrupt);
+	}
+
+	public RemoveInterrupt(type: number): boolean {
+		const interrupt = this._typeToIntrerrupt.get(type);
+		if (!interrupt == null)
+			return false;
+		this._typeToIntrerrupt.delete(type);
+		this._interrupts.splice(this._interrupts.indexOf(interrupt), 1);
+	}
+
+	public GetInterrupt(id: number): IntrptBase {
+		return this._typeToIntrerrupt.get(id);
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {

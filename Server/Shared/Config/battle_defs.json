@@ -166,7 +166,7 @@
 						{
 							"id": 0, /*计时中断*/
 							"connect_state": 4,
-							"duration": 3000
+							"duration": 2500
 						},
 						{
 							"id": 2, /*按键中断*/
@@ -198,19 +198,20 @@
 							]
 						},
 						{
-							/*匀速直线运动行为*/
-							"id": 2,
+							/*冲刺*/
+							"id": 6,
 							"speed": [
 								0,
 								30
-							]
+							],
+							"formula": "50+{0}*0.06"
 						}
 					],
 					"interrupts": [
 						{
 							"id": 0, /*计时中断*/
 							"connect_state": 5,
-							"duration": 160
+							"duration": 200
 						}
 					]
 				},

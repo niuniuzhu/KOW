@@ -44,9 +44,17 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../StateEnums"], f
                 this.OnUpdate(dt);
             }
         }
+        UpdatePhysic(dt) {
+            if (!this._isTriggered) {
+                return;
+            }
+            this.OnUpdatePhysic(dt);
+        }
         Trigger() {
             this._isTriggered = true;
             this.OnTrigger();
+        }
+        OnTrigger() {
         }
         OnEnter() {
         }
@@ -54,11 +62,11 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../StateEnums"], f
         }
         OnUpdate(dt) {
         }
-        OnTrigger() {
+        OnUpdatePhysic(dt) {
         }
         HandleInput(type, press) {
         }
-        ChangeState(igroneIntrptList = false, force = false) {
+        ChangeState(igroneIntrptList = true, force = true) {
             const state = this._state;
             state.owner.fsm.ChangeState(this._connectState, this, igroneIntrptList, force);
         }

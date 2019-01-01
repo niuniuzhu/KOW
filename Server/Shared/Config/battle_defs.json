@@ -7,7 +7,7 @@
 			"keyframe_step": 4,
 			"snapshot_step": 100,
 			"timeout": 180000,
-			"max_players": 1,
+			"max_players": 2,
 			"born_pos": [
 				[
 					0,
@@ -37,7 +37,7 @@
 			"atk": 50,
 			"def": 0,
 			"move_speed": 2,
-			"radius": 0.7,
+			"radius": 0.8,
 			"skills": [
 				0,
 				1
@@ -212,6 +212,10 @@
 							"id": 0, /*计时中断*/
 							"connect_state": 5,
 							"duration": 200
+						},
+						{
+							"id": 1, /*碰撞中断*/
+							"target_type": 0 /*目标类型0-对手,1-队友,2-子弹*/
 						}
 					]
 				},

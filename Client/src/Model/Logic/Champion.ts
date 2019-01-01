@@ -6,6 +6,7 @@ import { Defs } from "../Defs";
 import { FrameAction } from "../FrameAction";
 import { EntityFSM } from "../FSM/EntityFSM";
 import { EntityState } from "../FSM/EntityState";
+import { IntersectInfo } from "../IntersectInfo";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
 import { EAttr } from "./Attribute";
@@ -103,6 +104,13 @@ export class Champion extends Entity implements ISnapshotable {
 	public t_atk_add: number = 0;
 	public t_def_add: number = 0;
 	public t_speed_add: number = 0;
+
+	/**
+	 * 当前帧下相交的实体ID
+	 */
+	private readonly _intersections: IntersectInfo[] = [];
+
+	public get intersections(): IntersectInfo[] { return this._intersections; }
 
 	constructor(battle: Battle) {
 		super(battle);
@@ -258,6 +266,7 @@ export class Champion extends Entity implements ISnapshotable {
 		super.Update(dt);
 		this._fsm.Update(dt);
 		this.MoveStep(dt);
+		this._intersections.splice(0);
 	}
 
 	/**
@@ -386,27 +395,44 @@ export class Champion extends Entity implements ISnapshotable {
 		this.position.CopyFrom(pos);
 	}
 
-	public Intersect(others: Champion[]): void {
-		this.intersectVector.Set(0, 0);
-		//todo 优化搜索范围
-		for (const other of others) {
-			if (other == this) {
-				continue;
-			}
-			//todo 优化,两两检测完成不再进行检测F
+	public IntersectionTest(others: Champion[], from: number): void {
+		for (let i = from; i < others.length; ++i) {
+			const other = others[i];
 			//圆圆相交性检测
 			const d = FVec2.Sub(this.position, other.position);
-			const magnitude = d.Magnitude();
+			const m = d.SqrMagnitude();
 			const r = FMathUtils.Add(this._radius, other._radius);
-			if (magnitude >= r)
+			if (m >= r * r)
 				continue;
+			const sqrtM = FMathUtils.Sqrt(m);
+
+			const intersectInfo0 = new IntersectInfo();
+			intersectInfo0.rid = other.rid;
+			intersectInfo0.distanceVector = d;
+			intersectInfo0.tRadius = r;
+			intersectInfo0.magnitude = sqrtM;
+			this._intersections.push(intersectInfo0);
+
+			const intersectInfo1 = new IntersectInfo();
+			intersectInfo1.rid = this.rid;
+			intersectInfo1.distanceVector = FVec2.Negate(d);
+			intersectInfo1.tRadius = r;
+			intersectInfo1.magnitude = sqrtM;
+			other._intersections.push(intersectInfo1);
+		}
+	}
+
+	public UpdatePhysic(dt: number): void {
+		this.intersectVector.Set(0, 0);
+		for (const intersectInfo of this._intersections) {
 			//相交深度
-			const delta = r - magnitude;
-			const deltaFactor = FMathUtils.Mul(this.velocity, 0.1);//因子
-			const direction = d.DivN(magnitude);//归一
+			const delta = intersectInfo.tRadius - intersectInfo.magnitude;
+			const deltaFactor = FMathUtils.Mul(this.velocity, 10);//因子
+			const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);//归一
 			//根据相交深度计算相交向量
 			this.intersectVector.Add(FVec2.MulN(direction, FMathUtils.Mul(delta, deltaFactor)));
 		}
+		this._fsm.UpdatePhysic(dt);
 	}
 
 	public UseSkill(sid: number): boolean {

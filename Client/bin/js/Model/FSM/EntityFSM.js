@@ -11,6 +11,12 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
                 entityFSM.Init();
             }
         }
+        UpdatePhysic(dt) {
+            for (const state of this._states) {
+                const entityFSM = state;
+                entityFSM.UpdatePhysic(dt);
+            }
+        }
         ChangeState(type, param = null, igroneIntrptList = false, force = false) {
             if (!igroneIntrptList) {
                 const state = this.currentState;

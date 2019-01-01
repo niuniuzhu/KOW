@@ -21,7 +21,7 @@ export class IntrptTimeup extends IntrptBase implements ISnapshotable {
 		const state = (<EntityState>this._state);
 		if (this.duration >= 0 &&
 			state.time >= this.duration) {
-			this.ChangeState(true, true);
+			this.ChangeState();
 		}
 	}
 }

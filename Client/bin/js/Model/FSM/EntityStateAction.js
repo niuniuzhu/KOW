@@ -33,6 +33,14 @@ define(["require", "exports", "../../RC/FSM/FSMStateAction", "../../RC/Utils/Has
             else
                 super.Update(dt);
         }
+        UpdatePhysic(dt) {
+            if (!this._isTriggered) {
+                return;
+            }
+            this.OnUpdatePhysic(dt);
+        }
+        OnUpdatePhysic(dt) {
+        }
         Trigger() {
             this._isTriggered = true;
             this.OnTrigger();

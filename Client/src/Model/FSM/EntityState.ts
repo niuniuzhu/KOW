@@ -6,10 +6,11 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "../Logic/Champion";
 import { InputType } from "../Logic/InputAagent";
 import { EntityStateAction } from "./EntityStateAction";
-import { IntrpInput } from "./Interrupt/IntrpInput";
+import { IntrptInput } from "./Interrupt/IntrptInput";
 import { IntrptBase } from "./Interrupt/IntrptBase";
 import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
 import { ID_TO_STATE_ACTION, InterruptType, StateType } from "./StateEnums";
+import { IntrptCollider } from "./Interrupt/IntrptCollider";
 
 export class EntityState extends FSMState implements ISnapshotable {
 	/**
@@ -75,11 +76,11 @@ export class EntityState extends FSMState implements ISnapshotable {
 				break;
 
 			case InterruptType.Collision:
-				//todo
+				interrupt = new IntrptCollider(this, def);
 				break;
 
 			case InterruptType.Input:
-				interrupt = new IntrpInput(this, def);
+				interrupt = new IntrptInput(this, def);
 				break;
 
 		}
@@ -136,6 +137,15 @@ export class EntityState extends FSMState implements ISnapshotable {
 		this.time += dt;
 		for (const interrupt of this._interrupts) {
 			interrupt.Update(dt);
+		}
+	}
+
+	public UpdatePhysic(dt: number): void {
+		for (const action of this._actions) {
+			(<EntityStateAction>action).UpdatePhysic(dt);
+		}
+		for (const interrupt of this._interrupts) {
+			interrupt.UpdatePhysic(dt);
 		}
 	}
 

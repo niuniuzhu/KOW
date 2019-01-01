@@ -10,7 +10,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./IntrptBase"], fu
             const state = this._state;
             if (this.duration >= 0 &&
                 state.time >= this.duration) {
-                this.ChangeState(true, true);
+                this.ChangeState();
             }
         }
     }

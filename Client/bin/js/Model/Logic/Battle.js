@@ -84,9 +84,13 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const champion = this._champions[i];
                 champion.Update(dt);
             }
+            for (let i = 0, count = this._champions.length - 1; i < count; i++) {
+                const champion = this._champions[i];
+                champion.IntersectionTest(this._champions, i + 1);
+            }
             for (let i = 0, count = this._champions.length; i < count; i++) {
                 const champion = this._champions[i];
-                champion.Intersect(this._champions);
+                champion.UpdatePhysic(dt);
             }
             for (let i = 0, count = this._emitters.length; i < count; i++) {
                 const emitter = this._emitters[i];

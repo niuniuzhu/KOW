@@ -1,4 +1,3 @@
-import { Consts } from "../../Consts";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Logger } from "../../RC/Utils/Logger";
 
@@ -42,7 +41,6 @@ export class AnimationProxy extends fairygui.GGraph {
 			const alias = `${model}_${id}`;
 
 			if (!AnimationProxy.TEMPLATE_CACHE.has(alias)) {
-				Logger.Log(aniName);
 				const startFrame = Hashtable.GetNumber(aniDef, "start_frame");
 				const length = Hashtable.GetNumber(aniDef, "length");
 				const urls: string[] = [];

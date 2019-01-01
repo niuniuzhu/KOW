@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState", "../../RC/Utils/Hashtable", "./Interrupt/IntrpInput", "./Interrupt/IntrptTimeup", "./StateEnums"], function (require, exports, Set_1, FSMState_1, Hashtable_1, IntrpInput_1, IntrptTimeup_1, StateEnums_1) {
+define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState", "../../RC/Utils/Hashtable", "./Interrupt/IntrptInput", "./Interrupt/IntrptTimeup", "./StateEnums", "./Interrupt/IntrptCollider"], function (require, exports, Set_1, FSMState_1, Hashtable_1, IntrptInput_1, IntrptTimeup_1, StateEnums_1, IntrptCollider_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityState extends FSMState_1.FSMState {
@@ -43,9 +43,10 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
                     interrupt = new IntrptTimeup_1.IntrptTimeup(this, def);
                     break;
                 case StateEnums_1.InterruptType.Collision:
+                    interrupt = new IntrptCollider_1.IntrptCollider(this, def);
                     break;
                 case StateEnums_1.InterruptType.Input:
-                    interrupt = new IntrpInput_1.IntrpInput(this, def);
+                    interrupt = new IntrptInput_1.IntrptInput(this, def);
                     break;
             }
             this._interrupts.push(interrupt);
@@ -94,6 +95,14 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
             this.time += dt;
             for (const interrupt of this._interrupts) {
                 interrupt.Update(dt);
+            }
+        }
+        UpdatePhysic(dt) {
+            for (const action of this._actions) {
+                action.UpdatePhysic(dt);
+            }
+            for (const interrupt of this._interrupts) {
+                interrupt.UpdatePhysic(dt);
             }
         }
         IsStateAvailable(type) {

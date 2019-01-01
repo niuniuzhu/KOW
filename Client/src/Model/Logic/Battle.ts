@@ -145,9 +145,13 @@ export class Battle implements ISnapshotable {
 		}
 
 		//detect champion's intersetions
+		for (let i = 0, count = this._champions.length - 1; i < count; i++) {
+			const champion = this._champions[i];
+			champion.IntersectionTest(this._champions, i + 1);
+		}
 		for (let i = 0, count = this._champions.length; i < count; i++) {
 			const champion = this._champions[i];
-			champion.Intersect(this._champions);
+			champion.UpdatePhysic(dt);
 		}
 
 		//update emitters

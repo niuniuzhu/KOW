@@ -13,7 +13,7 @@ enum InputTriggerType {
 /**
  * 按键中断
  */
-export class IntrpInput extends IntrptBase implements ISnapshotable {
+export class IntrptInput extends IntrptBase implements ISnapshotable {
 	/**
 	 * 按键标记
 	 */
@@ -35,6 +35,7 @@ export class IntrpInput extends IntrptBase implements ISnapshotable {
 	}
 
 	protected OnUpdate(dt: number): void {
+		super.OnUpdate(dt);
 		for (let i = 0; i < this._inputTypes.length; ++i) {
 			const inputType = this._inputTypes[i];
 			const triggerType = this._triggerTypes[i];
@@ -43,7 +44,7 @@ export class IntrpInput extends IntrptBase implements ISnapshotable {
 			const inputAgent = (<EntityState>this._state).owner.inputAgent;
 			//检测按键是否按下状态
 			if (inputAgent.GetInputState(inputType)) {
-				this.ChangeState(true, true);
+				this.ChangeState();
 			}
 		}
 	}
@@ -82,7 +83,7 @@ export class IntrpInput extends IntrptBase implements ISnapshotable {
 			}
 		}
 		if (meet) {
-			this.ChangeState(true, true);
+			this.ChangeState();
 		}
 	}
 }

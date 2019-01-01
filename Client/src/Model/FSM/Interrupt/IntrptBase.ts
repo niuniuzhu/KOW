@@ -77,9 +77,19 @@ export abstract class IntrptBase implements ISnapshotable {
 		}
 	}
 
+	public UpdatePhysic(dt: number): void {
+		if (!this._isTriggered) {
+			return;
+		}
+		this.OnUpdatePhysic(dt);
+	}
+
 	private Trigger(): void {
 		this._isTriggered = true;
 		this.OnTrigger();
+	}
+
+	protected OnTrigger(): void {
 	}
 
 	protected OnEnter(): void {
@@ -91,7 +101,7 @@ export abstract class IntrptBase implements ISnapshotable {
 	protected OnUpdate(dt: number): void {
 	}
 
-	protected OnTrigger(): void {
+	protected OnUpdatePhysic(dt: number): void {
 	}
 
 	public HandleInput(type: InputType, press: boolean): void {
@@ -102,7 +112,7 @@ export abstract class IntrptBase implements ISnapshotable {
 	 * @param igroneIntrptList 是否忽略中断列表
 	 * @param force 是否强制转换
 	 */
-	protected ChangeState(igroneIntrptList: boolean = false, force: boolean = false): void {
+	protected ChangeState(igroneIntrptList: boolean = true, force: boolean = true): void {
 		const state = (<EntityState>this._state);
 		state.owner.fsm.ChangeState(this._connectState, this, igroneIntrptList, force);
 	}

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../Skill", "./Attribute", "./Entity", "./InputAagent"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, Skill_1, Attribute_1, Entity_1, InputAagent_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../IntersectInfo", "../Skill", "./Attribute", "./Entity", "./InputAagent"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, IntersectInfo_1, Skill_1, Attribute_1, Entity_1, InputAagent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Champion extends Entity_1.Entity {
@@ -20,6 +20,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.t_atk_add = 0;
             this.t_def_add = 0;
             this.t_speed_add = 0;
+            this._intersections = [];
             this._inputAgent.handler = this.HandleInput.bind(this);
         }
         get fsm() { return this._fsm; }
@@ -27,6 +28,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         get radius() { return this._radius; }
         get moveSpeed() { return this._moveSpeed; }
         get numSkills() { return this._skills.length; }
+        get intersections() { return this._intersections; }
         Init(params) {
             super.Init(params);
             this.team = params.team;
@@ -142,6 +144,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             super.Update(dt);
             this._fsm.Update(dt);
             this.MoveStep(dt);
+            this._intersections.splice(0);
         }
         HasSkill(id) {
             for (const skill of this._skills) {
@@ -245,22 +248,38 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             pos.y = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
             this.position.CopyFrom(pos);
         }
-        Intersect(others) {
-            this.intersectVector.Set(0, 0);
-            for (const other of others) {
-                if (other == this) {
-                    continue;
-                }
+        IntersectionTest(others, from) {
+            for (let i = from; i < others.length; ++i) {
+                const other = others[i];
                 const d = FVec2_1.FVec2.Sub(this.position, other.position);
-                const magnitude = d.Magnitude();
+                const m = d.SqrMagnitude();
                 const r = FMathUtils_1.FMathUtils.Add(this._radius, other._radius);
-                if (magnitude >= r)
+                if (m >= r * r)
                     continue;
-                const delta = r - magnitude;
-                const deltaFactor = FMathUtils_1.FMathUtils.Mul(this.velocity, 0.1);
-                const direction = d.DivN(magnitude);
+                const sqrtM = FMathUtils_1.FMathUtils.Sqrt(m);
+                const intersectInfo0 = new IntersectInfo_1.IntersectInfo();
+                intersectInfo0.rid = other.rid;
+                intersectInfo0.distanceVector = d;
+                intersectInfo0.tRadius = r;
+                intersectInfo0.magnitude = sqrtM;
+                this._intersections.push(intersectInfo0);
+                const intersectInfo1 = new IntersectInfo_1.IntersectInfo();
+                intersectInfo1.rid = this.rid;
+                intersectInfo1.distanceVector = FVec2_1.FVec2.Negate(d);
+                intersectInfo1.tRadius = r;
+                intersectInfo1.magnitude = sqrtM;
+                other._intersections.push(intersectInfo1);
+            }
+        }
+        UpdatePhysic(dt) {
+            this.intersectVector.Set(0, 0);
+            for (const intersectInfo of this._intersections) {
+                const delta = intersectInfo.tRadius - intersectInfo.magnitude;
+                const deltaFactor = FMathUtils_1.FMathUtils.Mul(this.velocity, 10);
+                const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);
                 this.intersectVector.Add(FVec2_1.FVec2.MulN(direction, FMathUtils_1.FMathUtils.Mul(delta, deltaFactor)));
             }
+            this._fsm.UpdatePhysic(dt);
         }
         UseSkill(sid) {
             if (this.disableSkill > 0)

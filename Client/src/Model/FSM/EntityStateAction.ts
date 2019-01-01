@@ -9,8 +9,8 @@ import { ActionType } from "./StateEnums";
 
 export abstract class EntityStateAction extends FSMStateAction implements ISnapshotable {
 	/**
-	 * 获取总运行时间
-	 */
+ * 获取总运行时间
+ */
 	public get time(): number { return (<EntityState>this.state).time; }
 	/**
 	 * 获取从触发到结束所使用的时间(如果触发时间为零,则和time一样)
@@ -53,6 +53,16 @@ export abstract class EntityStateAction extends FSMStateAction implements ISnaps
 		}
 		else
 			super.Update(dt);
+	}
+
+	public UpdatePhysic(dt: number): void {
+		if (!this._isTriggered) {
+			return;
+		}
+		this.OnUpdatePhysic(dt);
+	}
+
+	protected OnUpdatePhysic(dt: number): void {
 	}
 
 	public Trigger(): void {

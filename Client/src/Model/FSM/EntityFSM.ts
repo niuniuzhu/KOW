@@ -17,6 +17,13 @@ export class EntityFSM extends FSM implements ISnapshotable {
 		}
 	}
 
+	public UpdatePhysic(dt: number): void {
+		for (const state of this._states) {
+			const entityFSM = <EntityState>state;
+			entityFSM.UpdatePhysic(dt);
+		}
+	}
+
 	/**
 	 * 转换状态
 	 * @param type 转换类型

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1) {
+define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../../RC/Utils/Logger"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -128,6 +128,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             for (const target of this._targets1) {
                 const intersectType = Intersection_1.Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
                 if (intersectType == Intersection_1.IntersectionType.Cling || intersectType == Intersection_1.IntersectionType.Inside) {
+                    Logger_1.Logger.Log("hit:" + target.rid);
                 }
             }
             this._targets1.splice(0);

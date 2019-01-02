@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger"], function (require, exports, Hashtable_1, Logger_1) {
+define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, exports, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var AnimationPlayMode;
@@ -32,12 +32,10 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger
                 const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
                 const alias = `${model}_${id}`;
                 if (!AnimationProxy.TEMPLATE_CACHE.has(alias)) {
-                    Logger_1.Logger.Log(aniName);
                     const startFrame = Hashtable_1.Hashtable.GetNumber(aniDef, "start_frame");
                     const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
                     const urls = [];
                     for (let i = startFrame; i < length; ++i) {
-                        Logger_1.Logger.Log(`${model}/${aniName}${i}.png`);
                         urls.push(`${model}/${aniName}${i}.png`);
                     }
                     Laya.Animation.createFrames(urls, alias);

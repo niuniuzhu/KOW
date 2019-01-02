@@ -18,10 +18,10 @@ export class EntityFSM extends FSM implements ISnapshotable {
 	}
 
 	public UpdatePhysic(dt: number): void {
-		for (const state of this._states) {
-			const entityFSM = <EntityState>state;
-			entityFSM.UpdatePhysic(dt);
-		}
+		if (this.globalEntityState != null)
+			this.globalEntityState.UpdatePhysic(dt);
+		if (this.currentEntityState != null)
+			this.currentEntityState.UpdatePhysic(dt);
 	}
 
 	/**

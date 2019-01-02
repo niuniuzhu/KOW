@@ -92,6 +92,10 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const champion = this._champions[i];
                 champion.UpdatePhysic(dt);
             }
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                champion.InternalUpdate(dt);
+            }
             for (let i = 0, count = this._emitters.length; i < count; i++) {
                 const emitter = this._emitters[i];
                 emitter.Update(dt);

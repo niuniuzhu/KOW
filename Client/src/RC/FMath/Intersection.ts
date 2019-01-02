@@ -40,8 +40,8 @@ export class Intersection {
 		const r = FMathUtils.Add(mRadius, sRadius);
 		const rSqrt = FMathUtils.Mul(r, r);
 		//距离小于半径和,已经相交了
-		if (e.SqrMagnitude() <= rSqrt)
-			return 0;
+		// if (e.SqrMagnitude() < rSqrt)
+		// 	return 0;
 		const edotd = e.Dot(direction);
 		const edote = e.Dot(e);
 		//用二次求根公式解t
@@ -51,6 +51,6 @@ export class Intersection {
 			return -1;
 		//解出t值为发生碰撞的时间
 		const t = FMathUtils.Sub(edotd, FMathUtils.Sqrt(s));
-		return t;
+		return t * 1000;
 	}
 }

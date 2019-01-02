@@ -15,25 +15,25 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./IntrptBase"], fu
         OnUpdatePhysic(dt) {
             super.OnUpdatePhysic(dt);
             const owner = this._state.owner;
-            if (owner.intersections.length == 0) {
+            if (owner.intersectionCache.length == 0) {
                 return;
             }
             switch (this._targetType) {
                 case IntrptColliderTargetType.Opponent: {
-                    for (const intersestion of owner.intersections) {
+                    for (const intersestion of owner.intersectionCache) {
                         const target = owner.battle.GetChampion(intersestion.rid);
                         if (target.team != owner.team) {
-                            this.ChangeState();
+                            this.DoCollision();
                             return;
                         }
                     }
                     break;
                 }
                 case IntrptColliderTargetType.Teamate: {
-                    for (const intersestion of owner.intersections) {
+                    for (const intersestion of owner.intersectionCache) {
                         const target = owner.battle.GetChampion(intersestion.rid);
                         if (target.team == owner.team) {
-                            this.ChangeState();
+                            this.DoCollision();
                             return;
                         }
                     }
@@ -43,6 +43,9 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./IntrptBase"], fu
                     break;
                 }
             }
+        }
+        DoCollision() {
+            this.ChangeState();
         }
     }
     exports.IntrptCollider = IntrptCollider;

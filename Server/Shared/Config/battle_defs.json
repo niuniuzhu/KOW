@@ -166,7 +166,7 @@
 						{
 							"id": 0, /*计时中断*/
 							"connect_state": 4,
-							"duration": 2500
+							"duration": 2000
 						},
 						{
 							"id": 2, /*按键中断*/
@@ -204,7 +204,7 @@
 								0,
 								30
 							],
-							"formula": "50+{0}*0.06"
+							"formula": "50+{0}*0.08"
 						}
 					],
 					"interrupts": [
@@ -215,6 +215,7 @@
 						},
 						{
 							"id": 1, /*碰撞中断*/
+							"connect_state": 5,
 							"target_type": 0 /*目标类型0-对手,1-队友,2-子弹*/
 						}
 					]
@@ -272,7 +273,7 @@
 			"radius": 0,
 			"offset": [
 				0,
-				75
+				0.75
 			],
 			"angle": 0,
 			"follow": false,
@@ -286,7 +287,7 @@
 	"bullet": {
 		"b0": {
 			"move_type": 0,
-			"radius": 65,
+			"radius": 0.65,
 			"move_speed": 0,
 			"life_time": 500,
 			"destroy_type": 0,

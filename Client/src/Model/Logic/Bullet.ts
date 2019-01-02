@@ -8,6 +8,7 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";
+import { Logger } from "../../RC/Utils/Logger";
 
 enum BulletMoveType {
 	Linear,
@@ -181,6 +182,7 @@ export class Bullet extends Entity implements ISnapshotable {
 		for (const target of this._targets1) {
 			const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
 			if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
+				Logger.Log("hit:" + target.rid);
 			}
 		}
 		this._targets1.splice(0);

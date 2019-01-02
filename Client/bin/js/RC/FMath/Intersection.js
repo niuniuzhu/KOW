@@ -22,15 +22,13 @@ define(["require", "exports", "./FMathUtils", "./FVec2"], function (require, exp
             const e = FVec2_1.FVec2.Sub(sCenter, mCenter);
             const r = FMathUtils_1.FMathUtils.Add(mRadius, sRadius);
             const rSqrt = FMathUtils_1.FMathUtils.Mul(r, r);
-            if (e.SqrMagnitude() <= rSqrt)
-                return 0;
             const edotd = e.Dot(direction);
             const edote = e.Dot(e);
             const s = FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Sub(FMathUtils_1.FMathUtils.Mul(edotd, edotd), edote), rSqrt);
             if (s < 0)
                 return -1;
             const t = FMathUtils_1.FMathUtils.Sub(edotd, FMathUtils_1.FMathUtils.Sqrt(s));
-            return t;
+            return t * 1000;
         }
     }
     exports.Intersection = Intersection;

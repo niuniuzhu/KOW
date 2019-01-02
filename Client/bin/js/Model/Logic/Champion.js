@@ -20,7 +20,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.t_atk_add = 0;
             this.t_def_add = 0;
             this.t_speed_add = 0;
-            this._intersections = [];
+            this._intersectionCache = [];
             this._inputAgent.handler = this.HandleInput.bind(this);
         }
         get fsm() { return this._fsm; }
@@ -28,7 +28,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         get radius() { return this._radius; }
         get moveSpeed() { return this._moveSpeed; }
         get numSkills() { return this._skills.length; }
-        get intersections() { return this._intersections; }
+        get intersectionCache() { return this._intersectionCache; }
         Init(params) {
             super.Init(params);
             this.team = params.team;
@@ -140,12 +140,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                 writer.double(this._fsm.currentState.time);
             }
         }
-        Update(dt) {
-            super.Update(dt);
-            this._fsm.Update(dt);
-            this.MoveStep(dt);
-            this._intersections.splice(0);
-        }
         HasSkill(id) {
             for (const skill of this._skills) {
                 if (skill.id == id)
@@ -162,6 +156,96 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         }
         GetSkillAt(index) {
             return this._skills[index];
+        }
+        Update(dt) {
+            super.Update(dt);
+            this._intersectionCache.splice(0);
+            this._fsm.Update(dt);
+        }
+        IntersectionTest(others, from) {
+            for (let i = from; i < others.length; ++i) {
+                const other = others[i];
+                const d = FVec2_1.FVec2.Sub(this.position, other.position);
+                const m = d.SqrMagnitude();
+                const r = FMathUtils_1.FMathUtils.Add(this._radius, other._radius);
+                if (m >= r * r)
+                    continue;
+                const sqrtM = FMathUtils_1.FMathUtils.Sqrt(m);
+                const intersectInfo0 = new IntersectInfo_1.IntersectInfo();
+                intersectInfo0.rid = other.rid;
+                intersectInfo0.distanceVector = d;
+                intersectInfo0.tRadius = r;
+                intersectInfo0.magnitude = sqrtM == 0 ? FMathUtils_1.FMathUtils.EPSILON : sqrtM;
+                this._intersectionCache.push(intersectInfo0);
+                const intersectInfo1 = new IntersectInfo_1.IntersectInfo();
+                intersectInfo1.rid = this.rid;
+                intersectInfo1.distanceVector = FVec2_1.FVec2.Negate(d);
+                intersectInfo1.tRadius = r;
+                intersectInfo1.magnitude = sqrtM == 0 ? FMathUtils_1.FMathUtils.EPSILON : sqrtM;
+                other._intersectionCache.push(intersectInfo1);
+            }
+        }
+        UpdatePhysic(dt) {
+            this._fsm.UpdatePhysic(dt);
+            this.intersectVector.Set(0, 0);
+            for (const intersectInfo of this._intersectionCache) {
+                const delta = FMathUtils_1.FMathUtils.Div(intersectInfo.tRadius, intersectInfo.magnitude);
+                const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);
+                this.intersectVector.Add(FVec2_1.FVec2.MulN(direction, delta));
+            }
+            const sqrMagnitude = this.intersectVector.SqrMagnitude();
+            if (sqrMagnitude > FMathUtils_1.FMathUtils.Mul(this._moveSpeed, this._moveSpeed)) {
+                this.intersectVector.DivN(FMathUtils_1.FMathUtils.Sqrt(sqrMagnitude));
+                this.intersectVector.MulN(this._moveSpeed);
+            }
+        }
+        InternalUpdate(dt) {
+            this.MoveStep(dt);
+        }
+        MoveStep(dt) {
+            const moveVector = FVec2_1.FVec2.zero;
+            if (this.disableMove <= 0) {
+                moveVector.CopyFrom(this.moveDirection);
+            }
+            let sqrtDis = moveVector.SqrMagnitude();
+            if (sqrtDis >= FMathUtils_1.FMathUtils.EPSILON) {
+                if (this.disableTurn <= 0) {
+                    this.direction.CopyFrom(this.moveDirection);
+                }
+                moveVector.MulN(this._moveSpeed);
+            }
+            moveVector.Add(this.intersectVector);
+            moveVector.Add(this.phyxSpeed);
+            sqrtDis = moveVector.SqrMagnitude();
+            if (sqrtDis < FMathUtils_1.FMathUtils.EPSILON) {
+                this.velocity = 0;
+                return;
+            }
+            this.velocity = FMathUtils_1.FMathUtils.Sqrt(sqrtDis);
+            const moveDelta = FVec2_1.FVec2.MulN(moveVector, FMathUtils_1.FMathUtils.Mul(0.001, dt));
+            const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
+            pos.x = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
+            pos.x = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
+            pos.y = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
+            pos.y = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
+            this.position.CopyFrom(pos);
+        }
+        UseSkill(sid) {
+            if (this.disableSkill > 0)
+                return false;
+            const skill = this.GetSkill(sid);
+            if (skill == null)
+                return false;
+            if (!this.fsm.HasState(skill.connectedState))
+                return false;
+            this.fsm.ChangeState(skill.connectedState);
+            return true;
+        }
+        FrameAction(frameAction) {
+            this._inputAgent.SetFromFrameAction(frameAction);
+        }
+        HandleInput(type, press) {
+            this._fsm.HandleInput(type, press);
         }
         SetAttr(attr, value) {
             switch (attr) {
@@ -220,83 +304,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                 case Attribute_1.EAttr.S_SPEED_ADD:
                     return this.t_speed_add;
             }
-        }
-        MoveStep(dt) {
-            const moveVector = FVec2_1.FVec2.zero;
-            if (this.disableMove <= 0) {
-                moveVector.CopyFrom(this.moveDirection);
-            }
-            if (moveVector.SqrMagnitude() >= FMathUtils_1.FMathUtils.EPSILON) {
-                if (this.disableTurn <= 0) {
-                    this.direction.CopyFrom(this.moveDirection);
-                }
-                moveVector.MulN(this._moveSpeed);
-            }
-            moveVector.Add(this.intersectVector);
-            moveVector.Add(this.phyxSpeed);
-            const sqrtDis = moveVector.SqrMagnitude();
-            if (sqrtDis < FMathUtils_1.FMathUtils.EPSILON) {
-                this.velocity = 0;
-                return;
-            }
-            this.velocity = FMathUtils_1.FMathUtils.Sqrt(sqrtDis);
-            const moveDelta = FVec2_1.FVec2.MulN(moveVector, FMathUtils_1.FMathUtils.Mul(0.001, dt));
-            const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
-            pos.x = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
-            pos.x = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
-            pos.y = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
-            pos.y = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
-            this.position.CopyFrom(pos);
-        }
-        IntersectionTest(others, from) {
-            for (let i = from; i < others.length; ++i) {
-                const other = others[i];
-                const d = FVec2_1.FVec2.Sub(this.position, other.position);
-                const m = d.SqrMagnitude();
-                const r = FMathUtils_1.FMathUtils.Add(this._radius, other._radius);
-                if (m >= r * r)
-                    continue;
-                const sqrtM = FMathUtils_1.FMathUtils.Sqrt(m);
-                const intersectInfo0 = new IntersectInfo_1.IntersectInfo();
-                intersectInfo0.rid = other.rid;
-                intersectInfo0.distanceVector = d;
-                intersectInfo0.tRadius = r;
-                intersectInfo0.magnitude = sqrtM;
-                this._intersections.push(intersectInfo0);
-                const intersectInfo1 = new IntersectInfo_1.IntersectInfo();
-                intersectInfo1.rid = this.rid;
-                intersectInfo1.distanceVector = FVec2_1.FVec2.Negate(d);
-                intersectInfo1.tRadius = r;
-                intersectInfo1.magnitude = sqrtM;
-                other._intersections.push(intersectInfo1);
-            }
-        }
-        UpdatePhysic(dt) {
-            this.intersectVector.Set(0, 0);
-            for (const intersectInfo of this._intersections) {
-                const delta = intersectInfo.tRadius - intersectInfo.magnitude;
-                const deltaFactor = FMathUtils_1.FMathUtils.Mul(this.velocity, 10);
-                const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);
-                this.intersectVector.Add(FVec2_1.FVec2.MulN(direction, FMathUtils_1.FMathUtils.Mul(delta, deltaFactor)));
-            }
-            this._fsm.UpdatePhysic(dt);
-        }
-        UseSkill(sid) {
-            if (this.disableSkill > 0)
-                return false;
-            const skill = this.GetSkill(sid);
-            if (skill == null)
-                return false;
-            if (!this.fsm.HasState(skill.connectedState))
-                return false;
-            this.fsm.ChangeState(skill.connectedState);
-            return true;
-        }
-        FrameAction(frameAction) {
-            this._inputAgent.SetFromFrameAction(frameAction);
-        }
-        HandleInput(type, press) {
-            this._fsm.HandleInput(type, press);
         }
         Dump() {
             let str = super.Dump();

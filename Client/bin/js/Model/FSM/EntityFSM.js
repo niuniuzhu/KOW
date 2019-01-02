@@ -12,10 +12,10 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
             }
         }
         UpdatePhysic(dt) {
-            for (const state of this._states) {
-                const entityFSM = state;
-                entityFSM.UpdatePhysic(dt);
-            }
+            if (this.globalEntityState != null)
+                this.globalEntityState.UpdatePhysic(dt);
+            if (this.currentEntityState != null)
+                this.currentEntityState.UpdatePhysic(dt);
         }
         ChangeState(type, param = null, igroneIntrptList = false, force = false) {
             if (!igroneIntrptList) {

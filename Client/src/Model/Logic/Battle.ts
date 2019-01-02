@@ -143,7 +143,6 @@ export class Battle implements ISnapshotable {
 			const champion = this._champions[i];
 			champion.Update(dt);
 		}
-
 		//detect champion's intersetions
 		for (let i = 0, count = this._champions.length - 1; i < count; i++) {
 			const champion = this._champions[i];
@@ -152,6 +151,11 @@ export class Battle implements ISnapshotable {
 		for (let i = 0, count = this._champions.length; i < count; i++) {
 			const champion = this._champions[i];
 			champion.UpdatePhysic(dt);
+		}
+		//now update the position
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			champion.InternalUpdate(dt);
 		}
 
 		//update emitters

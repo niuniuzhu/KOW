@@ -1,7 +1,7 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
-import { IntrptBase } from "./IntrptBase";
 import { EntityState } from "../EntityState";
+import { IntrptBase } from "./IntrptBase";
 
 enum IntrptColliderTargetType {
 	Opponent,
@@ -23,15 +23,15 @@ export class IntrptCollider extends IntrptBase implements ISnapshotable {
 	protected OnUpdatePhysic(dt: number): void {
 		super.OnUpdatePhysic(dt);
 		const owner = (<EntityState>this._state).owner;
-		if (owner.intersections.length == 0) {
+		if (owner.intersectionCache.length == 0) {
 			return;
 		}
 		switch (this._targetType) {
 			case IntrptColliderTargetType.Opponent: {
-				for (const intersestion of owner.intersections) {
+				for (const intersestion of owner.intersectionCache) {
 					const target = owner.battle.GetChampion(intersestion.rid);
 					if (target.team != owner.team) {
-						this.ChangeState();
+						this.DoCollision();
 						return;
 					}
 				}
@@ -39,10 +39,10 @@ export class IntrptCollider extends IntrptBase implements ISnapshotable {
 			}
 
 			case IntrptColliderTargetType.Teamate: {
-				for (const intersestion of owner.intersections) {
+				for (const intersestion of owner.intersectionCache) {
 					const target = owner.battle.GetChampion(intersestion.rid);
 					if (target.team == owner.team) {
-						this.ChangeState();
+						this.DoCollision();
 						return;
 					}
 				}
@@ -54,5 +54,23 @@ export class IntrptCollider extends IntrptBase implements ISnapshotable {
 				break;
 			}
 		}
+	}
+
+	private DoCollision(): void {
+		// const owner = (<EntityState>this._state).owner;
+		// if (owner.intersectionCache.length > 0) {
+		// 	const offset = FVec2.zero;
+
+		// 	for (const intersectInfo of owner.intersectionCache) {
+		// 		//相交深度
+		// 		const delta = intersectInfo.tRadius - intersectInfo.magnitude;
+		// 		const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);//归一
+		// 		offset.Add(FVec2.MulN(direction, delta));
+		// 	}
+		// 	owner.intersectVector.Set(0, 0);
+		// 	Logger.Log("reset v");
+		// 	owner.position.Add(offset);
+		// }
+		this.ChangeState();
 	}
 }

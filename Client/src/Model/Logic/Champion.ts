@@ -106,11 +106,11 @@ export class Champion extends Entity implements ISnapshotable {
 	public t_speed_add: number = 0;
 
 	/**
-	 * 当前帧下相交的实体ID
+	 * 当前帧下相交信息缓存
 	 */
-	private readonly _intersections: IntersectInfo[] = [];
+	private readonly _intersectionCache: IntersectInfo[] = [];
 
-	public get intersections(): IntersectInfo[] { return this._intersections; }
+	public get intersectionCache(): IntersectInfo[] { return this._intersectionCache; }
 
 	constructor(battle: Battle) {
 		super(battle);
@@ -261,14 +261,6 @@ export class Champion extends Entity implements ISnapshotable {
 		}
 	}
 
-
-	public Update(dt: number): void {
-		super.Update(dt);
-		this._fsm.Update(dt);
-		this.MoveStep(dt);
-		this._intersections.splice(0);
-	}
-
 	/**
 	 * 是否存在指定id的技能
 	 * @param id 技能id
@@ -299,6 +291,131 @@ export class Champion extends Entity implements ISnapshotable {
 	 */
 	public GetSkillAt(index: number): Skill {
 		return this._skills[index];
+	}
+
+	public Update(dt: number): void {
+		super.Update(dt);
+		this._intersectionCache.splice(0);
+		this._fsm.Update(dt);
+	}
+
+	public IntersectionTest(others: Champion[], from: number): void {
+		for (let i = from; i < others.length; ++i) {
+			const other = others[i];
+			//圆圆相交性检测
+			const d = FVec2.Sub(this.position, other.position);
+			const m = d.SqrMagnitude();
+			const r = FMathUtils.Add(this._radius, other._radius);
+			if (m >= r * r)
+				continue;
+			const sqrtM = FMathUtils.Sqrt(m);
+
+			const intersectInfo0 = new IntersectInfo();
+			intersectInfo0.rid = other.rid;
+			intersectInfo0.distanceVector = d;
+			intersectInfo0.tRadius = r;
+			intersectInfo0.magnitude = sqrtM == 0 ? FMathUtils.EPSILON : sqrtM;
+			this._intersectionCache.push(intersectInfo0);
+
+			const intersectInfo1 = new IntersectInfo();
+			intersectInfo1.rid = this.rid;
+			intersectInfo1.distanceVector = FVec2.Negate(d);
+			intersectInfo1.tRadius = r;
+			intersectInfo1.magnitude = sqrtM == 0 ? FMathUtils.EPSILON : sqrtM;
+			other._intersectionCache.push(intersectInfo1);
+		}
+	}
+
+	public UpdatePhysic(dt: number): void {
+		this._fsm.UpdatePhysic(dt);
+		this.intersectVector.Set(0, 0);
+		for (const intersectInfo of this._intersectionCache) {
+			//相交深度
+			const delta = FMathUtils.Div(intersectInfo.tRadius, intersectInfo.magnitude);
+			const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);//归一
+			//计算侧向力
+			this.intersectVector.Add(FVec2.MulN(direction, delta));
+		}
+		//限制侧向力
+		const sqrMagnitude = this.intersectVector.SqrMagnitude();
+		if (sqrMagnitude > FMathUtils.Mul(this._moveSpeed, this._moveSpeed)) {
+			this.intersectVector.DivN(FMathUtils.Sqrt(sqrMagnitude))//归一
+			this.intersectVector.MulN(this._moveSpeed);
+		}
+	}
+
+	public InternalUpdate(dt: number): void {
+		this.MoveStep(dt);
+	}
+
+	private MoveStep(dt: number): void {
+		const moveVector = FVec2.zero;
+		if (this.disableMove <= 0) {
+			moveVector.CopyFrom(this.moveDirection);
+		}
+
+		//根据移动方向旋转
+		let sqrtDis = moveVector.SqrMagnitude();
+		if (sqrtDis >= FMathUtils.EPSILON) {
+			if (this.disableTurn <= 0) {
+				this.direction.CopyFrom(this.moveDirection);
+			}
+			moveVector.MulN(this._moveSpeed);
+		}
+
+		//合速度
+		moveVector.Add(this.intersectVector);
+		moveVector.Add(this.phyxSpeed);
+
+		sqrtDis = moveVector.SqrMagnitude();
+		if (sqrtDis < FMathUtils.EPSILON) {
+			this.velocity = 0;
+			return;
+		}
+		this.velocity = FMathUtils.Sqrt(sqrtDis);
+		//查找在dt时间段内最快碰到的实体
+		// let time = dt;
+		// let touch = null;
+		// const others = this._battle.GetChampions();
+		// for (const other of others) {
+		// 	if (other == this)
+		// 		continue;
+		// 	const t = Intersection.IntersectsMovingCC(this.position, this.radius, other.position, other.radius, moveVector);
+		// 	if (t >= 0 && t < time) {
+		// 		time = t;
+		// 		touch = other;
+		// 	}
+		// }
+		// const moveDelta = FVec2.MulN(moveVector, FMathUtils.Mul(0.001, time));
+		const moveDelta = FVec2.MulN(moveVector, FMathUtils.Mul(0.001, dt));
+
+		const pos = FVec2.Add(this.position, moveDelta);
+		//限制活动范围
+		pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
+		pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
+		pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
+		pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
+		this.position.CopyFrom(pos);
+	}
+
+	public UseSkill(sid: number): boolean {
+		if (this.disableSkill > 0)
+			return false;
+		const skill = this.GetSkill(sid);
+		if (skill == null)
+			return false;
+		if (!this.fsm.HasState(skill.connectedState))
+			return false;
+		this.fsm.ChangeState(skill.connectedState);
+		return true;
+	}
+
+	public FrameAction(frameAction: FrameAction): void {
+		this._inputAgent.SetFromFrameAction(frameAction);
+	}
+
+	public HandleInput(type: InputType, press: boolean): void {
+		this._fsm.HandleInput(type, press);
 	}
 
 	public SetAttr(attr: EAttr, value: any) {
@@ -359,100 +476,6 @@ export class Champion extends Entity implements ISnapshotable {
 			case EAttr.S_SPEED_ADD:
 				return this.t_speed_add;
 		}
-	}
-
-	private MoveStep(dt: number): void {
-		const moveVector = FVec2.zero;
-		if (this.disableMove <= 0) {
-			moveVector.CopyFrom(this.moveDirection);
-		}
-
-		//根据移动方向旋转
-		if (moveVector.SqrMagnitude() >= FMathUtils.EPSILON) {
-			if (this.disableTurn <= 0) {
-				this.direction.CopyFrom(this.moveDirection);
-			}
-			moveVector.MulN(this._moveSpeed);
-		}
-
-		//合速度
-		moveVector.Add(this.intersectVector);
-		moveVector.Add(this.phyxSpeed);
-
-		const sqrtDis = moveVector.SqrMagnitude();
-		if (sqrtDis < FMathUtils.EPSILON) {
-			this.velocity = 0;
-			return;
-		}
-		this.velocity = FMathUtils.Sqrt(sqrtDis);
-		const moveDelta = FVec2.MulN(moveVector, FMathUtils.Mul(0.001, dt));
-		const pos = FVec2.Add(this.position, moveDelta);
-		//限制活动范围
-		pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
-		pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
-		pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
-		pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
-		this.position.CopyFrom(pos);
-	}
-
-	public IntersectionTest(others: Champion[], from: number): void {
-		for (let i = from; i < others.length; ++i) {
-			const other = others[i];
-			//圆圆相交性检测
-			const d = FVec2.Sub(this.position, other.position);
-			const m = d.SqrMagnitude();
-			const r = FMathUtils.Add(this._radius, other._radius);
-			if (m >= r * r)
-				continue;
-			const sqrtM = FMathUtils.Sqrt(m);
-
-			const intersectInfo0 = new IntersectInfo();
-			intersectInfo0.rid = other.rid;
-			intersectInfo0.distanceVector = d;
-			intersectInfo0.tRadius = r;
-			intersectInfo0.magnitude = sqrtM;
-			this._intersections.push(intersectInfo0);
-
-			const intersectInfo1 = new IntersectInfo();
-			intersectInfo1.rid = this.rid;
-			intersectInfo1.distanceVector = FVec2.Negate(d);
-			intersectInfo1.tRadius = r;
-			intersectInfo1.magnitude = sqrtM;
-			other._intersections.push(intersectInfo1);
-		}
-	}
-
-	public UpdatePhysic(dt: number): void {
-		this.intersectVector.Set(0, 0);
-		for (const intersectInfo of this._intersections) {
-			//相交深度
-			const delta = intersectInfo.tRadius - intersectInfo.magnitude;
-			const deltaFactor = FMathUtils.Mul(this.velocity, 10);//因子
-			const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);//归一
-			//根据相交深度计算相交向量
-			this.intersectVector.Add(FVec2.MulN(direction, FMathUtils.Mul(delta, deltaFactor)));
-		}
-		this._fsm.UpdatePhysic(dt);
-	}
-
-	public UseSkill(sid: number): boolean {
-		if (this.disableSkill > 0)
-			return false;
-		const skill = this.GetSkill(sid);
-		if (skill == null)
-			return false;
-		if (!this.fsm.HasState(skill.connectedState))
-			return false;
-		this.fsm.ChangeState(skill.connectedState);
-		return true;
-	}
-
-	public FrameAction(frameAction: FrameAction): void {
-		this._inputAgent.SetFromFrameAction(frameAction);
-	}
-
-	public HandleInput(type: InputType, press: boolean): void {
-		this._fsm.HandleInput(type, press);
 	}
 
 	public Dump(): string {

@@ -1,5 +1,4 @@
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Logger } from "../../RC/Utils/Logger";
 
 export enum AnimationPlayMode {
 	Loop,
@@ -45,7 +44,6 @@ export class AnimationProxy extends fairygui.GGraph {
 				const length = Hashtable.GetNumber(aniDef, "length");
 				const urls: string[] = [];
 				for (let i = startFrame; i < length; ++i) {
-					Logger.Log(`${model}/${aniName}${i}.png`);
 					urls.push(`${model}/${aniName}${i}.png`);
 				}
 				//创建动画模板

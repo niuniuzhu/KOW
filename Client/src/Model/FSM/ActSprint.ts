@@ -8,8 +8,8 @@ import { EntityState } from "./EntityState";
 import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
 
 export class ActSprint extends ActVelocity implements ISnapshotable {
-	private _ee: ExpressionEvaluator;
 	private _formula: string;
+	private _ee: ExpressionEvaluator;
 
 	protected OnInit(def: Hashtable): void {
 		super.OnInit(def);

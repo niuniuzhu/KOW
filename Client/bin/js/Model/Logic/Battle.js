@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1) {
+define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "./HitManager"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, HitManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -17,6 +17,8 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._idToEmitter = new Map();
             this._bullets = [];
             this._idToBullet = new Map();
+            this._hitManager = new HitManager_1.HitManager();
+            this._hitManager.Init(this);
         }
         get frameRate() { return this._frameRate; }
         get keyframeStep() { return this._keyframeStep; }
@@ -26,6 +28,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         get frame() { return this._frame; }
         get bounds() { return this._bounds; }
         get random() { return this._random; }
+        get hitManager() { return this._hitManager; }
         SetBattleInfo(battleInfo) {
             this._destroied = false;
             this._frameRate = battleInfo.frameRate;
@@ -51,6 +54,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._def = null;
             this._bounds = null;
             this._frameActionGroups.clear();
+            this._hitManager.Destroy();
             for (let i = 0, count = this._bullets.length; i < count; i++)
                 this._bullets[i].Destroy();
             this._bullets.splice(0);
@@ -108,6 +112,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const bullet = this._bullets[i];
                 bullet.Intersect();
             }
+            this._hitManager.Update();
             if (updateView) {
                 this.SyncToView();
             }
@@ -165,6 +170,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const bullet = this._bullets[i];
                 bullet.EncodeSnapshot(writer);
             }
+            this._hitManager.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
@@ -189,6 +195,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 this._bullets.push(bullet);
                 this._idToBullet.set(bullet.rid.toString(), bullet);
             }
+            this._hitManager.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {
             writer.int32(this._frame);

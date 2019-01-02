@@ -12,7 +12,6 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Logger } from "../../RC/Utils/Logger";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
-import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
@@ -21,6 +20,7 @@ import { Bullet } from "./Bullet";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
+import { HitManager } from "./HitManager";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -39,6 +39,7 @@ export class Battle implements ISnapshotable {
 	public get frame(): number { return this._frame; }
 	public get bounds(): FRect { return this._bounds; }
 	public get random(): FRandom { return this._random; }
+	public get hitManager(): HitManager { return this._hitManager; }
 
 	private _msPerFrame: number;
 	private _logicElapsed: number;
@@ -55,6 +56,11 @@ export class Battle implements ISnapshotable {
 	private readonly _idToEmitter: Map<string, Emitter> = new Map<string, Emitter>();
 	private readonly _bullets: Bullet[] = [];
 	private readonly _idToBullet: Map<string, Bullet> = new Map<string, Bullet>();
+	private readonly _hitManager: HitManager = new HitManager();
+
+	constructor() {
+		this._hitManager.Init(this);
+	}
 
 	/**
 	 * 设置战场信息
@@ -91,6 +97,7 @@ export class Battle implements ISnapshotable {
 		this._def = null;
 		this._bounds = null;
 		this._frameActionGroups.clear();
+		this._hitManager.Destroy();
 
 		for (let i = 0, count = this._bullets.length; i < count; i++)
 			this._bullets[i].Destroy();
@@ -176,6 +183,8 @@ export class Battle implements ISnapshotable {
 			bullet.Intersect();
 		}
 
+		this._hitManager.Update();
+
 		//sync to view
 		if (updateView) {
 			this.SyncToView();
@@ -253,6 +262,8 @@ export class Battle implements ISnapshotable {
 			const bullet = this._bullets[i];
 			bullet.EncodeSnapshot(writer);
 		}
+
+		this._hitManager.EncodeSnapshot(writer);
 	}
 
 	/**
@@ -286,6 +297,8 @@ export class Battle implements ISnapshotable {
 			this._bullets.push(bullet);
 			this._idToBullet.set(bullet.rid.toString(), bullet);
 		}
+
+		this._hitManager.DecodeSnapshot(reader);
 	}
 
 	/**

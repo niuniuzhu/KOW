@@ -182,7 +182,8 @@ export class Bullet extends Entity implements ISnapshotable {
 		for (const target of this._targets1) {
 			const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
 			if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
-				Logger.Log("hit:" + target.rid);
+				//添加受击单元
+				this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
 			}
 		}
 		this._targets1.splice(0);

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../IntersectInfo", "../Skill", "./Attribute", "./Entity", "./InputAagent"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, IntersectInfo_1, Skill_1, Attribute_1, Entity_1, InputAagent_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../FSM/EntityFSM", "../FSM/EntityState", "../IntersectInfo", "../Skill", "./Attribute", "./Entity", "./InputAagent", "../FSM/StateEnums"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityFSM_1, EntityState_1, IntersectInfo_1, Skill_1, Attribute_1, Entity_1, InputAagent_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Champion extends Entity_1.Entity {
@@ -229,6 +229,11 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             pos.y = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
             pos.y = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
             this.position.CopyFrom(pos);
+        }
+        UpdateAfterHit() {
+            if (this.hp <= 0) {
+                this._fsm.ChangeState(StateEnums_1.StateType.Die, null, true, true);
+            }
         }
         UseSkill(sid) {
             if (this.disableSkill > 0)

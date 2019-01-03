@@ -12,8 +12,7 @@ export enum StateType {
 	Idle,
 	Move,
 	Attack,
-	Die,
-	Energia
+	Die = 6
 }
 
 export enum ActionType {

@@ -185,6 +185,12 @@ export class Battle implements ISnapshotable {
 
 		this._hitManager.Update();
 
+		//update after hit
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			champion.UpdateAfterHit();
+		}
+
 		//sync to view
 		if (updateView) {
 			this.SyncToView();

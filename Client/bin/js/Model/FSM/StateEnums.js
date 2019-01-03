@@ -6,8 +6,7 @@ define(["require", "exports", "./ActAttack", "./ActEntityAttrs", "./ActMove", ".
         StateType[StateType["Idle"] = 0] = "Idle";
         StateType[StateType["Move"] = 1] = "Move";
         StateType[StateType["Attack"] = 2] = "Attack";
-        StateType[StateType["Die"] = 3] = "Die";
-        StateType[StateType["Energia"] = 4] = "Energia";
+        StateType[StateType["Die"] = 6] = "Die";
     })(StateType = exports.StateType || (exports.StateType = {}));
     var ActionType;
     (function (ActionType) {

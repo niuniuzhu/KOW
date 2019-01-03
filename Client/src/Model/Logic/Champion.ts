@@ -13,6 +13,7 @@ import { EAttr } from "./Attribute";
 import { Battle } from "./Battle";
 import { Entity, EntityInitParams } from "./Entity";
 import { InputAgent, InputType } from "./InputAagent";
+import { StateType } from "../FSM/StateEnums";
 
 export class Champion extends Entity implements ISnapshotable {
 	public get fsm(): EntityFSM { return this._fsm; }
@@ -396,6 +397,12 @@ export class Champion extends Entity implements ISnapshotable {
 		pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
 		pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
 		this.position.CopyFrom(pos);
+	}
+
+	public UpdateAfterHit(): void {
+		if (this.hp <= 0) {
+			this._fsm.ChangeState(StateType.Die, null, true, true);
+		}
 	}
 
 	public UseSkill(sid: number): boolean {

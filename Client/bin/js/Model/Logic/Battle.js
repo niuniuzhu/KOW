@@ -113,6 +113,10 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 bullet.Intersect();
             }
             this._hitManager.Update();
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                champion.UpdateAfterHit();
+            }
             if (updateView) {
                 this.SyncToView();
             }

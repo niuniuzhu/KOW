@@ -1,4 +1,4 @@
-define(["require", "exports", "../Scene/SceneManager", "../Global"], function (require, exports, SceneManager_1, Global_1) {
+define(["require", "exports", "../Global", "../Scene/SceneManager"], function (require, exports, Global_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {

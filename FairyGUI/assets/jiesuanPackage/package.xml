@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="c0jnorne" jpegQuality="80" compressPNG="true">
+  <resources>
+    <component id="g7on0" name="Victory.xml" path="/" exported="true"/>
+    <image id="g7on2" name="jinbi02.png" path="/" exported="true"/>
+    <image id="g7on3" name="shenli.png" path="/" exported="true"/>
+    <image id="g7on4" name="shibai.png" path="/" exported="true"/>
+    <image id="g7on5" name="zailaiyiju.png" path="/" exported="true"/>
+    <image id="g7on8" name="fanhuizhuye.png" path="/" exported="true"/>
+    <image id="g7on9" name="huode.png" path="/" exported="true"/>
+    <image id="g7ona" name="jiesuandi.png" path="/" exported="true"/>
+    <component id="g7onb" name="backButton.xml" path="/" exported="true"/>
+    <component id="g7onc" name="againButton.xml" path="/" exported="true"/>
+    <sound id="g7ond" name="victorymusic.mp3" path="/" exported="true"/>
+    <sound id="h2k1f" name="failmusic.mp3" path="/" exported="true"/>
+    <component id="109i3j" name="Fail.xml" path="/" exported="true"/>
+    <image id="sul23k" name="honner.png" path="/" exported="true"/>
+  </resources>
+  <publish name="结算页面"/>
+</packageDescription>

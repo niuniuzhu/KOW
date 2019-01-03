@@ -6,16 +6,16 @@
 			"frame_rate": 20,
 			"keyframe_step": 4,
 			"snapshot_step": 100,
-			"timeout": 180000,
-			"max_players": 2,
+			"timeout": 120000,
+			"max_players": 1,
 			"born_pos": [
 				[
 					0,
-					1
+					2
 				],
 				[
 					0,
-					-1
+					-2
 				]
 			],
 			"born_dir": [

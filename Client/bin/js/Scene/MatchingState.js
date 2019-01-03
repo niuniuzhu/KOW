@@ -8,6 +8,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
         }
         OnEnter(param) {
             super.OnEnter(param);
@@ -25,9 +26,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         OnPlayerJoint(message) {
             const playerJoin = message;
             this._ui.OnPlayerJoin(playerJoin.playerInfos);
-            if (this._players.length == this._maxPlayers) {
-                this._ui.HandleFullPlayer(() => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading));
-            }
         }
         OnPlayerLeave(message) {
             const playerLeave = message;
@@ -57,6 +55,16 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                         break;
                 }
             });
+        }
+        OnEnterBattle(message) {
+            const enterBattle = message;
+            if (enterBattle.result != protos_1.Protos.CS2GC_EnterBattle.Result.Success) {
+                this._ui.OnEnterBattleResult(enterBattle.result, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
+            }
+            else {
+                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading);
+                Global_1.Global.sceneManager.loading.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+            }
         }
     }
     exports.MatchingState = MatchingState;

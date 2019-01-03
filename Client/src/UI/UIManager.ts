@@ -23,6 +23,7 @@ export class UIManager {
 		fairygui.UIPackage.addPackage("res/ui/global");
 		fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
 		fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
+		fairygui.UIConfig.defaultFont = "Microsoft YaHei, SimHei";
 		// fairygui.UIConfig.buttonSound = fairygui.UIPackage.getItemURL("global", "click");
 
 		this._main = new UIMain();

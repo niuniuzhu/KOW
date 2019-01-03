@@ -12,7 +12,7 @@ export class Main {
 	private static _instance: Main;
 	public static get instance(): Main { return Main._instance; }
 
-	private _fadeInComplete: boolean;
+	private _aniComplete: boolean;
 	private _preloadComplete: boolean;
 
 	constructor(config: string) {
@@ -47,7 +47,7 @@ export class Main {
 			fairygui.GRoot.inst.addChild(logoRoot);
 
 			logoRoot.getTransition("t0").play(Laya.Handler.create(this, () => {
-				this._fadeInComplete = true;
+				this._aniComplete = true;
 				this.CheckPreloadComplete();
 			}), 1, 0, 0, -1);
 
@@ -59,7 +59,7 @@ export class Main {
 	}
 
 	private CheckPreloadComplete(): void {
-		if (this._fadeInComplete && this._preloadComplete) {
+		if (this._aniComplete && this._preloadComplete) {
 			const logoRoot = fairygui.GRoot.inst.getChild("logoRoot").asCom;
 			logoRoot.getTransition("t1").play(Laya.Handler.create(this, () => {
 				logoRoot.dispose();

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="187,65" pivot="0.5,0.5" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <image id="n0_g7on" name="n0" src="g7on6" fileName="anniu01.png" xy="0,0" pkg="pft3q87u">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_g7on" name="n1" src="g7on8" fileName="fanhuizhuye.png" xy="32,16">
+      <relation target="n0_g7on" sidePair="left-left,top-top"/>
+    </image>
+  </displayList>
+  <Button sound="ui://pft3q87upgxug" downEffect="scale" downEffectValue="0.80"/>
+</component>

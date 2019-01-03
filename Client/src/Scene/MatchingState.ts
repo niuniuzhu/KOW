@@ -25,6 +25,7 @@ export class MatchingState extends SceneState {
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
 	}
 
 	protected OnEnter(param: any): void {
@@ -48,10 +49,10 @@ export class MatchingState extends SceneState {
 	private OnPlayerJoint(message: any): void {
 		const playerJoin: Protos.CS2GC_PlayerJoin = <Protos.CS2GC_PlayerJoin>message;
 		this._ui.OnPlayerJoin(playerJoin.playerInfos);
-		if (this._players.length == this._maxPlayers) {
-			//满员后切换到加载资源状态
-			this._ui.HandleFullPlayer(() => Global.sceneManager.ChangeState(SceneManager.State.Loading));
-		}
+		// if (this._players.length == this._maxPlayers) {
+		// 	//满员后切换到加载资源状态
+		// 	this._ui.HandleFullPlayer(() => Global.sceneManager.ChangeState(SceneManager.State.Loading));
+		// }
 	}
 
 	private OnPlayerLeave(message: any): void {
@@ -87,5 +88,20 @@ export class MatchingState extends SceneState {
 					break;
 			}
 		});
+	}
+
+	/**
+	 * 服务端已准备好战场,客户端连接BS获取战场信息,并载入资源,获取快照,初始化战场
+	 * @param message 协议
+	 */
+	private OnEnterBattle(message: any): void {
+		const enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
+		if (enterBattle.result != Protos.CS2GC_EnterBattle.Result.Success) {
+			this._ui.OnEnterBattleResult(enterBattle.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+		}
+		else {
+			Global.sceneManager.ChangeState(SceneManager.State.Loading);
+			Global.sceneManager.loading.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+		}
 	}
 }

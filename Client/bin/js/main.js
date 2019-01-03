@@ -29,7 +29,7 @@ define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/pro
                 logoRoot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
                 fairygui.GRoot.inst.addChild(logoRoot);
                 logoRoot.getTransition("t0").play(Laya.Handler.create(this, () => {
-                    this._fadeInComplete = true;
+                    this._aniComplete = true;
                     this.CheckPreloadComplete();
                 }), 1, 0, 0, -1);
                 Preloader_1.Preloader.Load(() => {
@@ -39,7 +39,7 @@ define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/pro
             }));
         }
         CheckPreloadComplete() {
-            if (this._fadeInComplete && this._preloadComplete) {
+            if (this._aniComplete && this._preloadComplete) {
                 const logoRoot = fairygui.GRoot.inst.getChild("logoRoot").asCom;
                 logoRoot.getTransition("t1").play(Laya.Handler.create(this, () => {
                     logoRoot.dispose();

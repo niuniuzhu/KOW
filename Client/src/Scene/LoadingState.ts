@@ -2,7 +2,6 @@ import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { BattleInfo } from "../Model/BattleInfo";
-import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Logger } from "../RC/Utils/Logger";
 import { UILoading } from "../UI/UILoading";
@@ -25,21 +24,6 @@ export class LoadingState extends SceneState {
 		this.__ui = this._ui = Global.uiManager.loading;
 		this._battleInfo = new BattleInfo();
 
-		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
-	}
-
-	/**
-	 * 服务端已准备好战场,客户端连接BS获取战场信息,并载入资源,获取快照,初始化战场
-	 * @param message 协议
-	 */
-	private OnEnterBattle(message: any): void {
-		const enterBattle: Protos.CS2GC_EnterBattle = <Protos.CS2GC_EnterBattle>message;
-		if (enterBattle.result != Protos.CS2GC_EnterBattle.Result.Success) {
-			this._ui.OnEnterBattleResult(enterBattle.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
-		}
-		else {
-			this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
-		}
 	}
 
 	/**
@@ -79,7 +63,6 @@ export class LoadingState extends SceneState {
 				}
 			});
 		}
-		//todo 这里最好用kcp连接
 		if (Global.platform == Global.Platform.Editor) {
 			connector.Connect("localhost", port);
 		}
@@ -108,6 +91,7 @@ export class LoadingState extends SceneState {
 			urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
 			urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
 			Laya.loader.load(urls, Laya.Handler.create(this, () => {
+				this._ui.OnLoadComplete();
 				fairygui.UIPackage.addPackage("res/ui/assets");
 				this._assetsLoadComplete = true;
 				this.InitBattle();

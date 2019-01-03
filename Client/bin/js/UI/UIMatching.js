@@ -1,4 +1,4 @@
-define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneManager", "../Global"], function (require, exports, protos_1, UIAlert_1, SceneManager_1, Global_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Scene/SceneManager", "./UIAlert"], function (require, exports, Global_1, protos_1, SceneManager_1, UIAlert_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMatching {
@@ -46,14 +46,22 @@ define(["require", "exports", "../Libs/protos", "./UIAlert", "../Scene/SceneMana
                 UIAlert_1.UIAlert.Show(error, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
             }
         }
+        OnEnterBattleResult(result, onConfirm) {
+            switch (result) {
+                case protos_1.Protos.CS2GC_EnterBattle.Result.Success:
+                    break;
+                case protos_1.Protos.CS2GC_EnterBattle.Result.BSLost:
+                case protos_1.Protos.CS2GC_EnterBattle.Result.BSNotFound:
+                case protos_1.Protos.CS2GC_EnterBattle.Result.BattleCreateFailed:
+                    UIAlert_1.UIAlert.Show("登录战场失败", onConfirm);
+                    break;
+            }
+        }
         UpdateRoomInfo(roomInfo) {
         }
         OnPlayerJoin(player) {
         }
         OnPlayerLeave(player) {
-        }
-        HandleFullPlayer(completeHandler) {
-            completeHandler();
         }
     }
     exports.UIMatching = UIMatching;

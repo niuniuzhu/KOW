@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Model/BattleInfo", "../Net/Connector", "../Net/ProtoHelper", "../RC/Utils/Logger", "./SceneManager", "./SceneState"], function (require, exports, Consts_1, Global_1, protos_1, BattleInfo_1, Connector_1, ProtoHelper_1, Logger_1, SceneManager_1, SceneState_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Model/BattleInfo", "../Net/ProtoHelper", "../RC/Utils/Logger", "./SceneManager", "./SceneState"], function (require, exports, Consts_1, Global_1, protos_1, BattleInfo_1, ProtoHelper_1, Logger_1, SceneManager_1, SceneState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoadingState extends SceneState_1.SceneState {
@@ -6,16 +6,6 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Mo
             super(type);
             this.__ui = this._ui = Global_1.Global.uiManager.loading;
             this._battleInfo = new BattleInfo_1.BattleInfo();
-            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
-        }
-        OnEnterBattle(message) {
-            const enterBattle = message;
-            if (enterBattle.result != protos_1.Protos.CS2GC_EnterBattle.Result.Success) {
-                this._ui.OnEnterBattleResult(enterBattle.result, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
-            }
-            else {
-                this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
-            }
         }
         ConnectToBS(gcNID, ip, port) {
             const connector = Global_1.Global.connector.bsConnector;
@@ -65,6 +55,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Mo
                 urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
                 urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
                 Laya.loader.load(urls, Laya.Handler.create(this, () => {
+                    this._ui.OnLoadComplete();
                     fairygui.UIPackage.addPackage("res/ui/assets");
                     this._assetsLoadComplete = true;
                     this.InitBattle();

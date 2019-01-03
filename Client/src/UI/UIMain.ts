@@ -1,6 +1,6 @@
-import { IUIModule } from "./IUIModule";
-import { SceneManager } from "../Scene/SceneManager";
 import { Global } from "../Global";
+import { SceneManager } from "../Scene/SceneManager";
+import { IUIModule } from "./IUIModule";
 
 export class UIMain implements IUIModule {
 	private readonly _root: fairygui.GComponent;

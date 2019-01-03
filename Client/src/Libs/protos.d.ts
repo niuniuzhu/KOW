@@ -1051,21 +1051,39 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
+    interface IGC2BS_FrameActionInfo {
+        frame?: (number|null);
+        inputFlag?: (number|null);
+        v0?: (number|null);
+        v1?: (number|null);
+    }
+
+    class GC2BS_FrameActionInfo implements IGC2BS_FrameActionInfo {
+        constructor(properties?: Protos.IGC2BS_FrameActionInfo);
+        public frame: number;
+        public inputFlag: number;
+        public v0: number;
+        public v1: number;
+        public static create(properties?: Protos.IGC2BS_FrameActionInfo): Protos.GC2BS_FrameActionInfo;
+        public static encode(message: Protos.IGC2BS_FrameActionInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2BS_FrameActionInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2BS_FrameActionInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2BS_FrameActionInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2BS_FrameActionInfo;
+        public static toObject(message: Protos.GC2BS_FrameActionInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
     interface IGC2BS_FrameAction {
         opts?: (Protos.IMsgOpts|null);
-        inputFlag?: (number|null);
-        dx?: (number|null);
-        dy?: (number|null);
-        press?: (boolean|null);
+        infos?: (Protos.IGC2BS_FrameActionInfo[]|null);
     }
 
     class GC2BS_FrameAction implements IGC2BS_FrameAction {
         constructor(properties?: Protos.IGC2BS_FrameAction);
         public opts?: (Protos.IMsgOpts|null);
-        public inputFlag: number;
-        public dx: number;
-        public dy: number;
-        public press: boolean;
+        public infos: Protos.IGC2BS_FrameActionInfo[];
         public static create(properties?: Protos.IGC2BS_FrameAction): Protos.GC2BS_FrameAction;
         public static encode(message: Protos.IGC2BS_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGC2BS_FrameAction, writer?: $protobuf.Writer): $protobuf.Writer;

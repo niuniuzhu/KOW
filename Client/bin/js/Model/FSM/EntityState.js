@@ -92,10 +92,10 @@ define(["require", "exports", "../../RC/Collections/Set", "../../RC/FSM/FSMState
             }
         }
         OnUpdate(dt) {
-            this.time += dt;
             for (const interrupt of this._interrupts) {
                 interrupt.Update(dt);
             }
+            this.time += dt;
         }
         UpdatePhysic(dt) {
             for (const action of this._actions) {

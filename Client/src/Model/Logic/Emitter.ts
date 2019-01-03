@@ -152,8 +152,6 @@ export class Emitter implements ISnapshotable {
 	}
 
 	public Update(dt: number): void {
-		this._time += dt;
-
 		switch (this._destroyType) {
 			case DestroyType.Life:
 				if (this._time >= this._lifeTime) {
@@ -181,6 +179,7 @@ export class Emitter implements ISnapshotable {
 				++this._bulletCount;
 			}
 		}
+		this._time += dt;
 	}
 
 	private UpdatePosition(caster?: Champion): void {

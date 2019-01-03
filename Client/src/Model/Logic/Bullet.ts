@@ -128,8 +128,6 @@ export class Bullet extends Entity implements ISnapshotable {
 	public Update(dt: number): void {
 		super.Update(dt);
 		this.MoveStep(dt);
-
-		this._time += dt;
 		switch (this._destroyType) {
 			case DestroyType.Life:
 				if (this._time >= this._lifeTime) {
@@ -149,6 +147,7 @@ export class Bullet extends Entity implements ISnapshotable {
 				//todo
 				break;
 		}
+		this._time += dt;
 	}
 
 	private MoveStep(dt: number): void {

@@ -90,7 +90,6 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
         Update(dt) {
             super.Update(dt);
             this.MoveStep(dt);
-            this._time += dt;
             switch (this._destroyType) {
                 case DestroyType.Life:
                     if (this._time >= this._lifeTime) {
@@ -104,6 +103,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                 case DestroyType.Collsion:
                     break;
             }
+            this._time += dt;
         }
         MoveStep(dt) {
             if (this._moveSpeed == 0) {

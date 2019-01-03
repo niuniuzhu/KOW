@@ -67,9 +67,7 @@ namespace BattleServer.Battle
 				foreach ( KeyValuePair<ulong, FrameAction> kv in this._gcNIDToAction )
 				{
 					FrameAction frameAction = kv.Value;
-					if ( !frameAction.isValid )
-						continue;
-					frameAction.SerializeTo( this._frameBuffer );
+					frameAction.Serialize( this._frameBuffer );
 					frameAction.Clear();
 					++count;
 				}
@@ -89,7 +87,7 @@ namespace BattleServer.Battle
 			lock ( this._gcNIDToAction )
 			{
 				FrameAction frameAction = this._gcNIDToAction[gcNID];
-				frameAction.MergeFromProto( action );
+				frameAction.AddAction( action );
 			}
 		}
 

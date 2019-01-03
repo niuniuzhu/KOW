@@ -29,20 +29,22 @@ namespace Protos {
             "c3Npb25JRBgCIAEoBCIwCg9HQzJCU19LZWVwQWxpdmUSHQoEb3B0cxgBIAEo",
             "CzIPLlByb3Rvcy5Nc2dPcHRzIkUKFUdDMkJTX1JlcXVlc3RTbmFwc2hvdBId",
             "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiABKAUi",
-            "bAoRR0MyQlNfRnJhbWVBY3Rpb24SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5N",
-            "c2dPcHRzEhEKCWlucHV0RmxhZxgCIAEoBRIKCgJkeBgDIAEoAhIKCgJkeRgE",
-            "IAEoAhINCgVwcmVzcxgFIAEoCCJUChlHQzJCU19SZXF1ZXN0RnJhbWVBY3Rp",
-            "b25zEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIMCgRmcm9tGAIg",
-            "ASgFEgoKAnRvGAMgASgFIlIKFEdDMkJTX0NvbW1pdFNuYXBzaG90Eh0KBG9w",
-            "dHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVmcmFtZRgCIAEoBRIMCgRk",
-            "YXRhGAMgASgMYgZwcm90bzM="));
+            "UQoVR0MyQlNfRnJhbWVBY3Rpb25JbmZvEg0KBWZyYW1lGAEgASgFEhEKCWlu",
+            "cHV0RmxhZxgCIAEoBRIKCgJ2MBgDIAEoAhIKCgJ2MRgEIAEoAiJgChFHQzJC",
+            "U19GcmFtZUFjdGlvbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMS",
+            "LAoFaW5mb3MYAiADKAsyHS5Qcm90b3MuR0MyQlNfRnJhbWVBY3Rpb25JbmZv",
+            "IlQKGUdDMkJTX1JlcXVlc3RGcmFtZUFjdGlvbnMSHQoEb3B0cxgBIAEoCzIP",
+            "LlByb3Rvcy5Nc2dPcHRzEgwKBGZyb20YAiABKAUSCgoCdG8YAyABKAUiUgoU",
+            "R0MyQlNfQ29tbWl0U25hcHNob3QSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5N",
+            "c2dPcHRzEg0KBWZyYW1lGAIgASgFEgwKBGRhdGEYAyABKAxiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_AskLogin), global::Protos.GC2BS_AskLogin.Parser, new[]{ "Opts", "SessionID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_KeepAlive), global::Protos.GC2BS_KeepAlive.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestSnapshot), global::Protos.GC2BS_RequestSnapshot.Parser, new[]{ "Opts", "Frame" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_FrameAction), global::Protos.GC2BS_FrameAction.Parser, new[]{ "Opts", "InputFlag", "Dx", "Dy", "Press" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_FrameActionInfo), global::Protos.GC2BS_FrameActionInfo.Parser, new[]{ "Frame", "InputFlag", "V0", "V1" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_FrameAction), global::Protos.GC2BS_FrameAction.Parser, new[]{ "Opts", "Infos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestFrameActions), global::Protos.GC2BS_RequestFrameActions.Parser, new[]{ "Opts", "From", "To" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_CommitSnapshot), global::Protos.GC2BS_CommitSnapshot.Parser, new[]{ "Opts", "Frame", "Data" }, null, null, null)
           }));
@@ -515,6 +517,219 @@ namespace Protos {
 
   }
 
+  public sealed partial class GC2BS_FrameActionInfo : pb::IMessage<GC2BS_FrameActionInfo> {
+    private static readonly pb::MessageParser<GC2BS_FrameActionInfo> _parser = new pb::MessageParser<GC2BS_FrameActionInfo>(() => new GC2BS_FrameActionInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GC2BS_FrameActionInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_FrameActionInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_FrameActionInfo(GC2BS_FrameActionInfo other) : this() {
+      frame_ = other.frame_;
+      inputFlag_ = other.inputFlag_;
+      v0_ = other.v0_;
+      v1_ = other.v1_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GC2BS_FrameActionInfo Clone() {
+      return new GC2BS_FrameActionInfo(this);
+    }
+
+    /// <summary>Field number for the "frame" field.</summary>
+    public const int FrameFieldNumber = 1;
+    private int frame_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Frame {
+      get { return frame_; }
+      set {
+        frame_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "inputFlag" field.</summary>
+    public const int InputFlagFieldNumber = 2;
+    private int inputFlag_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int InputFlag {
+      get { return inputFlag_; }
+      set {
+        inputFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "v0" field.</summary>
+    public const int V0FieldNumber = 3;
+    private float v0_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float V0 {
+      get { return v0_; }
+      set {
+        v0_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "v1" field.</summary>
+    public const int V1FieldNumber = 4;
+    private float v1_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float V1 {
+      get { return v1_; }
+      set {
+        v1_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GC2BS_FrameActionInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GC2BS_FrameActionInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Frame != other.Frame) return false;
+      if (InputFlag != other.InputFlag) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(V0, other.V0)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(V1, other.V1)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Frame != 0) hash ^= Frame.GetHashCode();
+      if (InputFlag != 0) hash ^= InputFlag.GetHashCode();
+      if (V0 != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(V0);
+      if (V1 != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(V1);
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Frame != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Frame);
+      }
+      if (InputFlag != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(InputFlag);
+      }
+      if (V0 != 0F) {
+        output.WriteRawTag(29);
+        output.WriteFloat(V0);
+      }
+      if (V1 != 0F) {
+        output.WriteRawTag(37);
+        output.WriteFloat(V1);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Frame != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Frame);
+      }
+      if (InputFlag != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InputFlag);
+      }
+      if (V0 != 0F) {
+        size += 1 + 4;
+      }
+      if (V1 != 0F) {
+        size += 1 + 4;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GC2BS_FrameActionInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Frame != 0) {
+        Frame = other.Frame;
+      }
+      if (other.InputFlag != 0) {
+        InputFlag = other.InputFlag;
+      }
+      if (other.V0 != 0F) {
+        V0 = other.V0;
+      }
+      if (other.V1 != 0F) {
+        V1 = other.V1;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Frame = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            InputFlag = input.ReadInt32();
+            break;
+          }
+          case 29: {
+            V0 = input.ReadFloat();
+            break;
+          }
+          case 37: {
+            V1 = input.ReadFloat();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   /// <summary>
   ///帧行为
   /// </summary>
@@ -526,7 +741,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -544,10 +759,7 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GC2BS_FrameAction(GC2BS_FrameAction other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      inputFlag_ = other.inputFlag_;
-      dx_ = other.dx_;
-      dy_ = other.dy_;
-      press_ = other.press_;
+      infos_ = other.infos_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -567,48 +779,14 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "inputFlag" field.</summary>
-    public const int InputFlagFieldNumber = 2;
-    private int inputFlag_;
+    /// <summary>Field number for the "infos" field.</summary>
+    public const int InfosFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::Protos.GC2BS_FrameActionInfo> _repeated_infos_codec
+        = pb::FieldCodec.ForMessage(18, global::Protos.GC2BS_FrameActionInfo.Parser);
+    private readonly pbc::RepeatedField<global::Protos.GC2BS_FrameActionInfo> infos_ = new pbc::RepeatedField<global::Protos.GC2BS_FrameActionInfo>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int InputFlag {
-      get { return inputFlag_; }
-      set {
-        inputFlag_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "dx" field.</summary>
-    public const int DxFieldNumber = 3;
-    private float dx_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public float Dx {
-      get { return dx_; }
-      set {
-        dx_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "dy" field.</summary>
-    public const int DyFieldNumber = 4;
-    private float dy_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public float Dy {
-      get { return dy_; }
-      set {
-        dy_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "press" field.</summary>
-    public const int PressFieldNumber = 5;
-    private bool press_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Press {
-      get { return press_; }
-      set {
-        press_ = value;
-      }
+    public pbc::RepeatedField<global::Protos.GC2BS_FrameActionInfo> Infos {
+      get { return infos_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -625,10 +803,7 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
-      if (InputFlag != other.InputFlag) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Dx, other.Dx)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Dy, other.Dy)) return false;
-      if (Press != other.Press) return false;
+      if(!infos_.Equals(other.infos_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -636,10 +811,7 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (InputFlag != 0) hash ^= InputFlag.GetHashCode();
-      if (Dx != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Dx);
-      if (Dy != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Dy);
-      if (Press != false) hash ^= Press.GetHashCode();
+      hash ^= infos_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -657,22 +829,7 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (InputFlag != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(InputFlag);
-      }
-      if (Dx != 0F) {
-        output.WriteRawTag(29);
-        output.WriteFloat(Dx);
-      }
-      if (Dy != 0F) {
-        output.WriteRawTag(37);
-        output.WriteFloat(Dy);
-      }
-      if (Press != false) {
-        output.WriteRawTag(40);
-        output.WriteBool(Press);
-      }
+      infos_.WriteTo(output, _repeated_infos_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -684,18 +841,7 @@ namespace Protos {
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
-      if (InputFlag != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InputFlag);
-      }
-      if (Dx != 0F) {
-        size += 1 + 4;
-      }
-      if (Dy != 0F) {
-        size += 1 + 4;
-      }
-      if (Press != false) {
-        size += 1 + 1;
-      }
+      size += infos_.CalculateSize(_repeated_infos_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -713,18 +859,7 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
-      if (other.InputFlag != 0) {
-        InputFlag = other.InputFlag;
-      }
-      if (other.Dx != 0F) {
-        Dx = other.Dx;
-      }
-      if (other.Dy != 0F) {
-        Dy = other.Dy;
-      }
-      if (other.Press != false) {
-        Press = other.Press;
-      }
+      infos_.Add(other.infos_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -743,20 +878,8 @@ namespace Protos {
             input.ReadMessage(opts_);
             break;
           }
-          case 16: {
-            InputFlag = input.ReadInt32();
-            break;
-          }
-          case 29: {
-            Dx = input.ReadFloat();
-            break;
-          }
-          case 37: {
-            Dy = input.ReadFloat();
-            break;
-          }
-          case 40: {
-            Press = input.ReadBool();
+          case 18: {
+            infos_.AddEntriesFrom(input, _repeated_infos_codec);
             break;
           }
         }
@@ -776,7 +899,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -976,7 +1099,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Protos.GC2BSReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

@@ -18,13 +18,17 @@ message GC2BS_RequestSnapshot {
 	int32 frame = 2;
 }
 
+message GC2BS_FrameActionInfo {
+	int32 frame = 1;
+	int32 inputFlag = 2;
+	float v0 = 3;
+	float v1 = 4;
+}
+
 //帧行为
 message GC2BS_FrameAction {
 	MsgOpts opts = 1;
-	int32 inputFlag = 2;
-	float dx = 3;
-	float dy = 4;
-	bool press = 5;
+	repeated GC2BS_FrameActionInfo infos = 2;
 }
 
 //请求帧行为记录

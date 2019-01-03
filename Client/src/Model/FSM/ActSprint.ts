@@ -1,6 +1,5 @@
 import { ExpressionEvaluator } from "../../RC/Utils/ExpressionEvaluator";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Logger } from "../../RC/Utils/Logger";
 import { StringUtils } from "../../RC/Utils/TextUtils";
 import { ISnapshotable } from "../ISnapshotable";
 import { ActVelocity } from "./ActVelocity";

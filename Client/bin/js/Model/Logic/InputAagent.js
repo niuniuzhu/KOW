@@ -19,26 +19,30 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../FrameAction", "..
             return this._inputValue.get(type);
         }
         SetFromFrameAction(frameAction) {
-            if ((frameAction.inputFlag & FrameAction_1.InputFlag.Move) > 0) {
-                const dx = FMathUtils_1.FMathUtils.ToFixed(frameAction.dx);
-                const dy = FMathUtils_1.FMathUtils.ToFixed(frameAction.dy);
-                const direction = new FVec2_1.FVec2(dx, dy);
-                const press = direction.SqrMagnitude() > FMathUtils_1.FMathUtils.EPSILON;
-                this._inputState.set(InputType.Move, press);
-                this._inputValue.set(InputType.Move, direction);
-                this.NotifyChange(InputType.Move, press);
-            }
-            if ((frameAction.inputFlag & FrameAction_1.InputFlag.S1) > 0) {
-                const s1 = frameAction.press ? 1 : 0;
-                this._inputState.set(InputType.S1, frameAction.press);
-                this._inputValue.set(InputType.S1, s1);
-                this.NotifyChange(InputType.S1, frameAction.press);
-            }
-            if ((frameAction.inputFlag & FrameAction_1.InputFlag.S2) > 0) {
-                const s2 = frameAction.press ? 1 : 0;
-                this._inputState.set(InputType.S2, frameAction.press);
-                this._inputValue.set(InputType.S2, s2);
-                this.NotifyChange(InputType.S2, frameAction.press);
+            for (const info of frameAction.infos) {
+                if ((info.inputFlag & FrameAction_1.InputFlag.Move) > 0) {
+                    const v0 = FMathUtils_1.FMathUtils.ToFixed(info.v0);
+                    const v1 = FMathUtils_1.FMathUtils.ToFixed(info.v1);
+                    const direction = new FVec2_1.FVec2(v0, v1);
+                    const press = direction.SqrMagnitude() > FMathUtils_1.FMathUtils.EPSILON;
+                    this._inputState.set(InputType.Move, press);
+                    this._inputValue.set(InputType.Move, direction);
+                    this.NotifyChange(InputType.Move, press);
+                }
+                if ((info.inputFlag & FrameAction_1.InputFlag.S1) > 0) {
+                    const s1 = info.v0;
+                    const press = s1 > 0 ? true : false;
+                    this._inputState.set(InputType.S1, press);
+                    this._inputValue.set(InputType.S1, s1);
+                    this.NotifyChange(InputType.S1, press);
+                }
+                if ((info.inputFlag & FrameAction_1.InputFlag.S2) > 0) {
+                    const s2 = info.v0;
+                    const press = s2 > 0 ? true : false;
+                    this._inputState.set(InputType.S2, press);
+                    this._inputValue.set(InputType.S2, s2);
+                    this.NotifyChange(InputType.S2, press);
+                }
             }
         }
         NotifyChange(type, press) {

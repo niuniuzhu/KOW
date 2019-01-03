@@ -4,7 +4,6 @@ import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Vec2 } from "../RC/Math/Vec2";
 import { Timer } from "../RC/Utils/Timer";
-import { MathUtils } from "../RC/Math/MathUtils";
 
 enum InputFlag {
 	None = 0,
@@ -14,58 +13,56 @@ enum InputFlag {
 }
 
 export class FrameAciontManager {
+	private static readonly MAX_ACTIONS = 16;
 	public static readonly InputFlag = InputFlag;
 
-	public get direction(): Vec2 { return this._direction; }
-	public get inputFlag(): InputFlag { return this._inputFlag; }
+	private readonly _infos: Protos.GC2BS_FrameActionInfo[] = []
 
-	private _direction: Vec2 = Vec2.zero;
-	private _press: boolean;
-	private _inputFlag: InputFlag = InputFlag.None;
 	private _nextFrameActionSendTime: number = 0;
-	private _changed: boolean = false;
-
-	constructor() {
-	}
 
 	public Reset(): void {
 		this._nextFrameActionSendTime = 0;
-		this._direction.Set(0, 0);
-		this._inputFlag = InputFlag.None;
-		this._changed = false;
+		this._infos.splice(0);
 	}
 
 	public SetInputDirection(direction: Vec2): void {
-		this._direction.CopyFrom(direction);
-		this._inputFlag |= InputFlag.Move;
-		this._press = direction.SqrMagnitude() > MathUtils.EPSILON;
-		this._changed = true;
+		if (this._infos.length == FrameAciontManager.MAX_ACTIONS)
+			return;
+		const info = new Protos.GC2BS_FrameActionInfo();
+		info.frame = 0;//todo
+		info.inputFlag = InputFlag.Move;
+		info.v0 = direction.x;
+		info.v1 = direction.y;
+		this._infos.push(info);
 	}
 
 	public SetS1(press: boolean): void {
-		this._inputFlag |= InputFlag.S1;
-		this._press = press;
-		this._changed = true;
+		if (this._infos.length == FrameAciontManager.MAX_ACTIONS)
+			return;
+		const info = new Protos.GC2BS_FrameActionInfo();
+		info.frame = 0;//todo
+		info.inputFlag = InputFlag.S1;
+		info.v0 = press ? 1 : 0;
+		this._infos.push(info);
 	}
 
 	public SetS2(press: boolean): void {
-		this._inputFlag |= InputFlag.S2;
-		this._press = press;
-		this._changed = true;
+		if (this._infos.length == FrameAciontManager.MAX_ACTIONS)
+			return;
+		const info = new Protos.GC2BS_FrameActionInfo();
+		info.frame = 0;//todo
+		info.inputFlag = InputFlag.S2;
+		info.v0 = press ? 1 : 0;
+		this._infos.push(info);
 	}
 
 	public Update(dt: number): void {
-		if (this._changed && Timer.utcTime >= this._nextFrameActionSendTime) {
+		if (this._infos.length > 0 && Timer.utcTime >= this._nextFrameActionSendTime) {
 			this._nextFrameActionSendTime = Timer.utcTime + Consts.FRAME_ACTION_SEND_INTERVAL;
 			const frameAction = ProtoCreator.Q_GC2BS_FrameAction();
-			frameAction.inputFlag = this.inputFlag;
-			if ((this.inputFlag & InputFlag.Move) > 0) {
-				frameAction.dx = this.direction.x;
-				frameAction.dy = this.direction.y;
-				frameAction.press = this._press;
-			}
-			if ((this.inputFlag & InputFlag.S1) > 0 || (this.inputFlag & InputFlag.S2) > 0) {
-				frameAction.press = this._press;
+			const count = this._infos.length;
+			for (let i = 0; i < count; ++i) {
+				frameAction.infos.push(this._infos[i]);
 			}
 			Global.connector.bsConnector.Send(Protos.GC2BS_FrameAction, frameAction);
 			this.Reset();

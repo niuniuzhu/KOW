@@ -5688,9 +5688,140 @@ export const Protos = $root.Protos = (() => {
         return GC2BS_RequestSnapshot;
     })();
 
+    Protos.GC2BS_FrameActionInfo = (function() {
+
+        function GC2BS_FrameActionInfo(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2BS_FrameActionInfo.prototype.frame = 0;
+        GC2BS_FrameActionInfo.prototype.inputFlag = 0;
+        GC2BS_FrameActionInfo.prototype.v0 = 0;
+        GC2BS_FrameActionInfo.prototype.v1 = 0;
+
+        GC2BS_FrameActionInfo.create = function create(properties) {
+            return new GC2BS_FrameActionInfo(properties);
+        };
+
+        GC2BS_FrameActionInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                writer.uint32(8).int32(message.frame);
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                writer.uint32(16).int32(message.inputFlag);
+            if (message.v0 != null && message.hasOwnProperty("v0"))
+                writer.uint32(29).float(message.v0);
+            if (message.v1 != null && message.hasOwnProperty("v1"))
+                writer.uint32(37).float(message.v1);
+            return writer;
+        };
+
+        GC2BS_FrameActionInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2BS_FrameActionInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_FrameActionInfo();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.frame = reader.int32();
+                    break;
+                case 2:
+                    message.inputFlag = reader.int32();
+                    break;
+                case 3:
+                    message.v0 = reader.float();
+                    break;
+                case 4:
+                    message.v1 = reader.float();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2BS_FrameActionInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2BS_FrameActionInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                if (!$util.isInteger(message.frame))
+                    return "frame: integer expected";
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                if (!$util.isInteger(message.inputFlag))
+                    return "inputFlag: integer expected";
+            if (message.v0 != null && message.hasOwnProperty("v0"))
+                if (typeof message.v0 !== "number")
+                    return "v0: number expected";
+            if (message.v1 != null && message.hasOwnProperty("v1"))
+                if (typeof message.v1 !== "number")
+                    return "v1: number expected";
+            return null;
+        };
+
+        GC2BS_FrameActionInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2BS_FrameActionInfo)
+                return object;
+            let message = new $root.Protos.GC2BS_FrameActionInfo();
+            if (object.frame != null)
+                message.frame = object.frame | 0;
+            if (object.inputFlag != null)
+                message.inputFlag = object.inputFlag | 0;
+            if (object.v0 != null)
+                message.v0 = Number(object.v0);
+            if (object.v1 != null)
+                message.v1 = Number(object.v1);
+            return message;
+        };
+
+        GC2BS_FrameActionInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.frame = 0;
+                object.inputFlag = 0;
+                object.v0 = 0;
+                object.v1 = 0;
+            }
+            if (message.frame != null && message.hasOwnProperty("frame"))
+                object.frame = message.frame;
+            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
+                object.inputFlag = message.inputFlag;
+            if (message.v0 != null && message.hasOwnProperty("v0"))
+                object.v0 = options.json && !isFinite(message.v0) ? String(message.v0) : message.v0;
+            if (message.v1 != null && message.hasOwnProperty("v1"))
+                object.v1 = options.json && !isFinite(message.v1) ? String(message.v1) : message.v1;
+            return object;
+        };
+
+        GC2BS_FrameActionInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GC2BS_FrameActionInfo;
+    })();
+
     Protos.GC2BS_FrameAction = (function() {
 
         function GC2BS_FrameAction(properties) {
+            this.infos = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -5698,10 +5829,7 @@ export const Protos = $root.Protos = (() => {
         }
 
         GC2BS_FrameAction.prototype.opts = null;
-        GC2BS_FrameAction.prototype.inputFlag = 0;
-        GC2BS_FrameAction.prototype.dx = 0;
-        GC2BS_FrameAction.prototype.dy = 0;
-        GC2BS_FrameAction.prototype.press = false;
+        GC2BS_FrameAction.prototype.infos = $util.emptyArray;
 
         GC2BS_FrameAction.create = function create(properties) {
             return new GC2BS_FrameAction(properties);
@@ -5712,14 +5840,9 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
-                writer.uint32(16).int32(message.inputFlag);
-            if (message.dx != null && message.hasOwnProperty("dx"))
-                writer.uint32(29).float(message.dx);
-            if (message.dy != null && message.hasOwnProperty("dy"))
-                writer.uint32(37).float(message.dy);
-            if (message.press != null && message.hasOwnProperty("press"))
-                writer.uint32(40).bool(message.press);
+            if (message.infos != null && message.infos.length)
+                for (let i = 0; i < message.infos.length; ++i)
+                    $root.Protos.GC2BS_FrameActionInfo.encode(message.infos[i], writer.uint32(18).fork()).ldelim();
             return writer;
         };
 
@@ -5738,16 +5861,9 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.inputFlag = reader.int32();
-                    break;
-                case 3:
-                    message.dx = reader.float();
-                    break;
-                case 4:
-                    message.dy = reader.float();
-                    break;
-                case 5:
-                    message.press = reader.bool();
+                    if (!(message.infos && message.infos.length))
+                        message.infos = [];
+                    message.infos.push($root.Protos.GC2BS_FrameActionInfo.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -5771,18 +5887,15 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
-            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
-                if (!$util.isInteger(message.inputFlag))
-                    return "inputFlag: integer expected";
-            if (message.dx != null && message.hasOwnProperty("dx"))
-                if (typeof message.dx !== "number")
-                    return "dx: number expected";
-            if (message.dy != null && message.hasOwnProperty("dy"))
-                if (typeof message.dy !== "number")
-                    return "dy: number expected";
-            if (message.press != null && message.hasOwnProperty("press"))
-                if (typeof message.press !== "boolean")
-                    return "press: boolean expected";
+            if (message.infos != null && message.hasOwnProperty("infos")) {
+                if (!Array.isArray(message.infos))
+                    return "infos: array expected";
+                for (let i = 0; i < message.infos.length; ++i) {
+                    let error = $root.Protos.GC2BS_FrameActionInfo.verify(message.infos[i]);
+                    if (error)
+                        return "infos." + error;
+                }
+            }
             return null;
         };
 
@@ -5795,14 +5908,16 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.GC2BS_FrameAction.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
-            if (object.inputFlag != null)
-                message.inputFlag = object.inputFlag | 0;
-            if (object.dx != null)
-                message.dx = Number(object.dx);
-            if (object.dy != null)
-                message.dy = Number(object.dy);
-            if (object.press != null)
-                message.press = Boolean(object.press);
+            if (object.infos) {
+                if (!Array.isArray(object.infos))
+                    throw TypeError(".Protos.GC2BS_FrameAction.infos: array expected");
+                message.infos = [];
+                for (let i = 0; i < object.infos.length; ++i) {
+                    if (typeof object.infos[i] !== "object")
+                        throw TypeError(".Protos.GC2BS_FrameAction.infos: object expected");
+                    message.infos[i] = $root.Protos.GC2BS_FrameActionInfo.fromObject(object.infos[i]);
+                }
+            }
             return message;
         };
 
@@ -5810,23 +5925,17 @@ export const Protos = $root.Protos = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.defaults) {
+            if (options.arrays || options.defaults)
+                object.infos = [];
+            if (options.defaults)
                 object.opts = null;
-                object.inputFlag = 0;
-                object.dx = 0;
-                object.dy = 0;
-                object.press = false;
-            }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
-                object.inputFlag = message.inputFlag;
-            if (message.dx != null && message.hasOwnProperty("dx"))
-                object.dx = options.json && !isFinite(message.dx) ? String(message.dx) : message.dx;
-            if (message.dy != null && message.hasOwnProperty("dy"))
-                object.dy = options.json && !isFinite(message.dy) ? String(message.dy) : message.dy;
-            if (message.press != null && message.hasOwnProperty("press"))
-                object.press = message.press;
+            if (message.infos && message.infos.length) {
+                object.infos = [];
+                for (let j = 0; j < message.infos.length; ++j)
+                    object.infos[j] = $root.Protos.GC2BS_FrameActionInfo.toObject(message.infos[j], options);
+            }
             return object;
         };
 

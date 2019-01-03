@@ -134,10 +134,10 @@ export class EntityState extends FSMState implements ISnapshotable {
 	}
 
 	protected OnUpdate(dt: number): void {
-		this.time += dt;
 		for (const interrupt of this._interrupts) {
 			interrupt.Update(dt);
 		}
+		this.time += dt;
 	}
 
 	public UpdatePhysic(dt: number): void {

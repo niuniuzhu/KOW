@@ -2,11 +2,13 @@ export class Graphic {
 	private _battleRoot: fairygui.GComponent;
 	private _mapRoot: fairygui.GComponent;
 	private _entityRoot: fairygui.GComponent;
+	private _hudRoot: fairygui.GComponent;
 	private _uiRoot: fairygui.GComponent;
 
 	public get battleRoot(): fairygui.GComponent { return this._battleRoot; }
 	public get mapRoot(): fairygui.GComponent { return this._mapRoot; }
 	public get entityRoot(): fairygui.GComponent { return this._entityRoot; }
+	public get hudRoot(): fairygui.GComponent { return this._hudRoot; }
 	public get uiRoot(): fairygui.GComponent { return this._uiRoot; }
 
 	public Init(): void {
@@ -31,6 +33,11 @@ export class Graphic {
 		this._entityRoot.name = "entity_root";
 		this._entityRoot.setSize(0, 0);
 		this._battleRoot.addChild(this._entityRoot);
+
+		this._hudRoot = new fairygui.GComponent();
+		this._hudRoot.name = "hud_root";
+		this._hudRoot.setSize(0, 0);
+		this._battleRoot.addChild(this._hudRoot);
 
 		this._uiRoot = new fairygui.GComponent();
 		this._uiRoot.name = "ui_root";

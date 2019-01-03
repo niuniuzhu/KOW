@@ -6,11 +6,14 @@ import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { VEntityState } from "../FSM/VEntityState";
 import { Skill } from "../Skill";
+import { HUD } from "./HUD";
+import { VBattle } from "./VBattle";
 import { VEntity } from "./VEntity";
 
 export class VChampion extends VEntity {
 	//static properties
-	private _skills: Skill[];
+	private readonly _hud;
+	private readonly _skills: Skill[] = [];
 	private readonly _fsm: FSM = new FSM();
 
 	//runtime properties
@@ -35,6 +38,11 @@ export class VChampion extends VEntity {
 	public t_def_add: number = 0;
 	public t_speed_add: number = 0;
 
+	constructor(battle: VBattle) {
+		super(battle);
+		this._hud = new HUD(this);
+	}
+
 	protected LoadDefs(): void {
 		this._defs = Defs.GetEntity(this._id);
 		this._cdefs = CDefs.GetEntity(this._id);
@@ -43,7 +51,6 @@ export class VChampion extends VEntity {
 	protected OnInit(): void {
 		super.OnInit();
 
-		this._skills = [];
 		const skillsDef = Hashtable.GetNumberArray(this._defs, "skills");
 		for (const sid of skillsDef) {
 			const skill = new Skill();
@@ -57,6 +64,11 @@ export class VChampion extends VEntity {
 				this._fsm.AddState(new VEntityState(Number.parseInt(type), this));
 			}
 		}
+	}
+
+	public Update(dt: number): void {
+		super.Update(dt);
+		this._hud.Update(dt);
 	}
 
 	public DecodeSync(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader, isNew: boolean): void {

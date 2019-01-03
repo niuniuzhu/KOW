@@ -19,13 +19,15 @@ namespace CentralServer.Biz
 			//通知客户端战场结束
 			Protos.CS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_CS2GC_BattleEnd();
 			List<CSUser> users = CS.instance.battleStaging.GetUsers( session.logicID );
-			int count = users.Count;
-			for ( int i = 0; i < count; i++ )
+			if ( users != null )
 			{
-				CSUser user = users[i];
-				CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
+				int count = users.Count;
+				for ( int i = 0; i < count; i++ )
+				{
+					CSUser user = users[i];
+					CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
+				}
 			}
-
 			//踢出所有连接到该BS的玩家
 			CS.instance.battleStaging.Remove( session.logicID );
 

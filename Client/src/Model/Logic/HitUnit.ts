@@ -1,6 +1,7 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { ISnapshotable } from "../ISnapshotable";
 import { HitManager } from "./HitManager";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
 
 /**
  * 受击单元
@@ -34,6 +35,8 @@ export class HitUnit implements ISnapshotable {
 		//minus hp
 		target.hp -= totalDmg;
 		target.hp = target.hp < 0 ? 0 : target.hp
+
+		SyncEvent.Hit(target.rid, totalDmg);
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {

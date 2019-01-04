@@ -12,9 +12,12 @@ import { VEntity } from "./VEntity";
 
 export class VChampion extends VEntity {
 	//static properties
-	private readonly _hud;
+	private readonly _hud: HUD;
 	private readonly _skills: Skill[] = [];
 	private readonly _fsm: FSM = new FSM();
+
+	public get hud(): HUD { return this._hud; }
+	public get fsm(): FSM { return this._fsm; }
 
 	//runtime properties
 	public team: number;

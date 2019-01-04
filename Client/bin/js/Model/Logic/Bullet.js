@@ -48,6 +48,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._casterID = Long.ZERO;
             this._skillID = 0;
             this._time = 0;
+            this._nextCollisionTime = 0;
         }
         Init(params) {
             super.Init(params);
@@ -68,24 +69,29 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._angleRadius = Hashtable_1.Hashtable.GetNumber(this._defs, "angle_radius");
             this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._defs, "life_time", -1);
             this._destroyType = Hashtable_1.Hashtable.GetNumber(this._defs, "destroy_type");
-            this._collisionStartTime = Hashtable_1.Hashtable.GetNumber(this._defs, "collision_start_time");
-            this._maxCollisionCount = Hashtable_1.Hashtable.GetNumber(this._defs, "max_collision_count", -1);
+            this._delay = Hashtable_1.Hashtable.GetNumber(this._defs, "delay");
+            this._frequency = Hashtable_1.Hashtable.GetNumber(this._defs, "frequency");
+            this._maxCollisionPerTarget = Hashtable_1.Hashtable.GetNumber(this._defs, "max_collision_per_target", -1);
+            this._maxCollision = Hashtable_1.Hashtable.GetNumber(this._defs, "max_collision", -1);
             this._targetType = Hashtable_1.Hashtable.GetNumber(this._defs, "target_type");
             this._attrTypes = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_types");
             this._attrFilterOPs = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
             this._attrCompareValues = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_compare_values");
+            this._nextCollisionTime = this._delay;
         }
         EncodeSnapshot(writer) {
             super.EncodeSnapshot(writer);
             writer.uint64(this._casterID);
             writer.int32(this._skillID);
             writer.int32(this._time);
+            writer.int32(this._nextCollisionTime);
         }
         DecodeSnapshot(reader) {
             super.DecodeSnapshot(reader);
             this._casterID = reader.uint64();
             this._skillID = reader.int32();
             this._time = reader.int32();
+            this._nextCollisionTime = reader.int32();
         }
         Update(dt) {
             super.Update(dt);
@@ -124,6 +130,8 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             }
         }
         Intersect() {
+            if (this._time < this._nextCollisionTime)
+                return;
             this.SelectTargets();
             for (const target of this._targets1) {
                 const intersectType = Intersection_1.Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
@@ -133,6 +141,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             }
             this._targets1.splice(0);
             this._targets2.splice(0);
+            this._nextCollisionTime = this._time + this._frequency;
         }
         SelectTargets() {
             const champions = this._battle.GetChampions();

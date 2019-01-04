@@ -57,8 +57,10 @@ export class Bullet extends Entity implements ISnapshotable {
 	private _angleRadius: number;
 	private _lifeTime: number;
 	private _destroyType: DestroyType;
-	private _collisionStartTime: number;
-	private _maxCollisionCount: number;
+	private _delay: number;
+	private _frequency: number;
+	private _maxCollisionPerTarget: number;
+	private _maxCollision: number;
 	private _targetType: TargetType;
 	private _attrTypes: AttrFilter[];
 	private _attrFilterOPs: AttrFilterOP[];
@@ -81,6 +83,10 @@ export class Bullet extends Entity implements ISnapshotable {
 	 * 子弹运行时间
 	 */
 	private _time: number = 0;
+	/**
+	 * 下次碰撞检测的时间
+	 */
+	private _nextCollisionTime: number = 0;
 
 	public Init(params: EntityInitParams): void {
 		super.Init(params);
@@ -103,12 +109,15 @@ export class Bullet extends Entity implements ISnapshotable {
 		this._angleRadius = Hashtable.GetNumber(this._defs, "angle_radius");
 		this._lifeTime = Hashtable.GetNumber(this._defs, "life_time", -1);
 		this._destroyType = Hashtable.GetNumber(this._defs, "destroy_type");
-		this._collisionStartTime = Hashtable.GetNumber(this._defs, "collision_start_time");
-		this._maxCollisionCount = Hashtable.GetNumber(this._defs, "max_collision_count", -1);
+		this._delay = Hashtable.GetNumber(this._defs, "delay");
+		this._frequency = Hashtable.GetNumber(this._defs, "frequency");
+		this._maxCollisionPerTarget = Hashtable.GetNumber(this._defs, "max_collision_per_target", -1);
+		this._maxCollision = Hashtable.GetNumber(this._defs, "max_collision", -1);
 		this._targetType = Hashtable.GetNumber(this._defs, "target_type");
 		this._attrTypes = Hashtable.GetNumberArray(this._defs, "attr_types");
 		this._attrFilterOPs = Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
 		this._attrCompareValues = Hashtable.GetNumberArray(this._defs, "attr_compare_values");
+		this._nextCollisionTime = this._delay;
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
@@ -116,6 +125,7 @@ export class Bullet extends Entity implements ISnapshotable {
 		writer.uint64(this._casterID);
 		writer.int32(this._skillID);
 		writer.int32(this._time);
+		writer.int32(this._nextCollisionTime);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -123,6 +133,7 @@ export class Bullet extends Entity implements ISnapshotable {
 		this._casterID = <Long>reader.uint64();
 		this._skillID = reader.int32();
 		this._time = reader.int32();
+		this._nextCollisionTime = reader.int32();
 	}
 
 	public Update(dt: number): void {
@@ -177,6 +188,9 @@ export class Bullet extends Entity implements ISnapshotable {
 	 * 相交性检测
 	 */
 	public Intersect(): void {
+		//检测碰撞频率
+		if (this._time < this._nextCollisionTime)
+			return;
 		this.SelectTargets();
 		for (const target of this._targets1) {
 			const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
@@ -187,6 +201,7 @@ export class Bullet extends Entity implements ISnapshotable {
 		}
 		this._targets1.splice(0);
 		this._targets2.splice(0);
+		this._nextCollisionTime = this._time + this._frequency;
 	}
 
 	private SelectTargets(): void {

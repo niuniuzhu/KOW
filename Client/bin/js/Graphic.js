@@ -5,6 +5,7 @@ define(["require", "exports"], function (require, exports) {
         get battleRoot() { return this._battleRoot; }
         get mapRoot() { return this._mapRoot; }
         get entityRoot() { return this._entityRoot; }
+        get hudRoot() { return this._hudRoot; }
         get uiRoot() { return this._uiRoot; }
         Init() {
             const pivot = new fairygui.GComponent();
@@ -25,6 +26,10 @@ define(["require", "exports"], function (require, exports) {
             this._entityRoot.name = "entity_root";
             this._entityRoot.setSize(0, 0);
             this._battleRoot.addChild(this._entityRoot);
+            this._hudRoot = new fairygui.GComponent();
+            this._hudRoot.name = "hud_root";
+            this._hudRoot.setSize(0, 0);
+            this._battleRoot.addChild(this._hudRoot);
             this._uiRoot = new fairygui.GComponent();
             this._uiRoot.name = "ui_root";
             this._uiRoot.setSize(fairygui.GRoot.inst.width, fairygui.GRoot.inst.height);

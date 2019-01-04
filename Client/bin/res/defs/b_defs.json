@@ -35,7 +35,10 @@
 				},
 				"4": {},
 				"5":{
-					"animation": 4
+					"animation": 5
+				},
+				"6": {
+					"animation": 6
 				}
 			},
 			"animations": [
@@ -68,7 +71,7 @@
 					"interval": 100
 				},
 				{
-					"id": 4,
+					"id": 5,
 					"name": "b",
 					"start_frame": 1,
 					"length": 5,
@@ -76,7 +79,7 @@
 					"interval": 100
 				},
 				{
-					"id": 5,
+					"id": 6,
 					"name": "die",
 					"length": 1,
 					"play_mode": 1,

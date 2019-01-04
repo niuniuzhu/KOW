@@ -7,7 +7,7 @@
 			"keyframe_step": 4,
 			"snapshot_step": 100,
 			"timeout": 120000,
-			"max_players": 1,
+			"max_players": 2,
 			"born_pos": [
 				[
 					0,
@@ -204,7 +204,7 @@
 								0,
 								30
 							],
-							"formula": "50+{0}*0.05"
+							"formula": "50+{0}*0.05"/*冲刺时间公式*/
 						}
 					],
 					"interrupts": [
@@ -292,7 +292,7 @@
 			"radius": 0,
 			"offset": [
 				0,
-				0.75
+				0.8
 			],
 			"angle": 0,
 			"follow": false,
@@ -310,8 +310,10 @@
 			"move_speed": 0,
 			"life_time": 500,
 			"destroy_type": 0,
-			"collision_start_time": 0,
-			"max_collision_count": -1,
+			"delay": 0,
+			"frequency": 100,/*碰撞频率,单位毫秒*/
+			"max_collision_per_target": -1,/*与每个目标最大碰撞次数*/
+			"max_collision": -1,/*总碰撞次数*/
 			"target_type": 0,
 			"attr_types": [],
 			"attr_filter_ops": [],

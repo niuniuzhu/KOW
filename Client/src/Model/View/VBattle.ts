@@ -5,11 +5,11 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { UIEvent } from "../BattleEvent/UIEvent";
 import { BattleInfo } from "../BattleInfo";
-import { CDefs } from "../CDefs";
+import { Defs } from "../Defs";
 import { Camera } from "./Camera";
+import { PopTextType } from "./HUD";
 import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
-import { Defs } from "../Defs";
 
 export class VBattle {
 	private _mapID: number = 0;
@@ -37,6 +37,7 @@ export class VBattle {
 	public SetBattleInfo(battleInfo: BattleInfo): void {
 		SyncEvent.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
 		SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_HIT, this.OnHit.bind(this));
 
 		this._destroied = false;
 		this._mapID = battleInfo.mapID
@@ -63,6 +64,7 @@ export class VBattle {
 
 		SyncEvent.RemoveListener(SyncEvent.E_BATTLE_INIT);
 		SyncEvent.RemoveListener(SyncEvent.E_SNAPSHOT);
+		SyncEvent.RemoveListener(SyncEvent.E_HIT);
 
 		for (let i = 0, count = this._bullets.length; i < count; ++i) {
 			this._bullets[i].Destroy();
@@ -221,5 +223,10 @@ export class VBattle {
 	private OnSnapshot(e: SyncEvent): void {
 		const reader = $protobuf.Reader.create(e.data);
 		this.DecodeSync(reader);
+	}
+
+	private OnHit(e: SyncEvent): void {
+		const target = this.GetChampion(e.rid);
+		target.hud.PopText(PopTextType.Hurt, e.v0);
 	}
 }

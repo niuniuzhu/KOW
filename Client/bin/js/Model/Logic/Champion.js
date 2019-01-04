@@ -58,6 +58,8 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             }
             this.hp = this.mhp = Hashtable_1.Hashtable.GetNumber(this._defs, "mhp");
             this.mp = this.mmp = Hashtable_1.Hashtable.GetNumber(this._defs, "mmp");
+            this.atk = Hashtable_1.Hashtable.GetNumber(this._defs, "atk");
+            this.def = Hashtable_1.Hashtable.GetNumber(this._defs, "def");
         }
         EncodeSnapshot(writer) {
             super.EncodeSnapshot(writer);

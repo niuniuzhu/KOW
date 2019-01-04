@@ -41,9 +41,17 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
             e.data = data;
             this.Invoke(e);
         }
+        static Hit(targetID, value) {
+            let e = this.Get();
+            e._type = SyncEvent.E_HIT;
+            e.rid = targetID;
+            e.v0 = value;
+            this.Invoke(e);
+        }
     }
     SyncEvent.E_BATTLE_INIT = 100;
     SyncEvent.E_SNAPSHOT = 101;
+    SyncEvent.E_HIT = 200;
     SyncEvent.POOL = new Stack_1.default();
     SyncEvent.HANDLERS = new Map();
     exports.SyncEvent = SyncEvent;

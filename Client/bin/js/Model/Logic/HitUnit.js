@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "../BattleEvent/SyncEvent"], function (require, exports, SyncEvent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class HitUnit {
@@ -19,6 +19,7 @@ define(["require", "exports"], function (require, exports) {
             const totalDmg = commonDmg + skill.damage;
             target.hp -= totalDmg;
             target.hp = target.hp < 0 ? 0 : target.hp;
+            SyncEvent_1.SyncEvent.Hit(target.rid, totalDmg);
         }
         EncodeSnapshot(writer) {
             writer.uint64(this._casterID);

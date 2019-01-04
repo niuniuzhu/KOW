@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "./Camera", "./VBullet", "./VChampion", "../Defs"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, Camera_1, VBullet_1, VChampion_1, Defs_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "../Defs", "./Camera", "./HUD", "./VBullet", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, Defs_1, Camera_1, HUD_1, VBullet_1, VChampion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -14,6 +14,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         SetBattleInfo(battleInfo) {
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_HIT, this.OnHit.bind(this));
             this._destroied = false;
             this._mapID = battleInfo.mapID;
             this._def = Defs_1.Defs.GetMap(this._mapID);
@@ -29,6 +30,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._destroied = true;
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
+            SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_HIT);
             for (let i = 0, count = this._bullets.length; i < count; ++i) {
                 this._bullets[i].Destroy();
             }
@@ -142,6 +144,10 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         OnSnapshot(e) {
             const reader = $protobuf.Reader.create(e.data);
             this.DecodeSync(reader);
+        }
+        OnHit(e) {
+            const target = this.GetChampion(e.rid);
+            target.hud.PopText(HUD_1.PopTextType.Hurt, e.v0);
         }
     }
     exports.VBattle = VBattle;

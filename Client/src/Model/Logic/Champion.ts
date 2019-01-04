@@ -155,6 +155,8 @@ export class Champion extends Entity implements ISnapshotable {
 
 		this.hp = this.mhp = Hashtable.GetNumber(this._defs, "mhp");
 		this.mp = this.mmp = Hashtable.GetNumber(this._defs, "mmp");
+		this.atk = Hashtable.GetNumber(this._defs, "atk");
+		this.def = Hashtable.GetNumber(this._defs, "def");
 	}
 
 	/**

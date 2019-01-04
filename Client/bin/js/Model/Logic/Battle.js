@@ -17,8 +17,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._idToEmitter = new Map();
             this._bullets = [];
             this._idToBullet = new Map();
-            this._hitManager = new HitManager_1.HitManager();
-            this._hitManager.Init(this);
+            this._hitManager = new HitManager_1.HitManager(this);
         }
         get frameRate() { return this._frameRate; }
         get keyframeStep() { return this._keyframeStep; }

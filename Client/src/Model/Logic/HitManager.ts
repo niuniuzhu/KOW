@@ -7,17 +7,16 @@ import { HitUnit } from "./HitUnit";
  * 受击管理器
  */
 export class HitManager implements ISnapshotable {
-	private _battle: Battle;
+	private readonly _battle: Battle;
 	private readonly _hitUnits: HitUnit[] = [];
 
 	public get battle(): Battle { return this._battle; }
 
-	public Init(battle: Battle): void {
+	constructor(battle: Battle) {
 		this._battle = battle;
 	}
 
 	public Destroy(): void {
-		this._battle = null;
 		this._hitUnits.splice(0);
 	}
 

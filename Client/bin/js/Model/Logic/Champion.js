@@ -10,6 +10,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.disableMove = 0;
             this.disableTurn = 0;
             this.disableSkill = 0;
+            this.disableCollision = 0;
             this.supperArmor = 0;
             this.invulnerAbility = 0;
             this.moveDirection = FVec2_1.FVec2.zero;
@@ -74,12 +75,14 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this.disableMove);
             writer.int32(this.disableTurn);
             writer.int32(this.disableSkill);
+            writer.int32(this.disableCollision);
             writer.int32(this.supperArmor);
             writer.int32(this.invulnerAbility);
             writer.double(this.moveDirection.x).double(this.moveDirection.y);
             writer.double(this.intersectVector.x).double(this.intersectVector.y);
             writer.double(this.phyxSpeed.x).double(this.phyxSpeed.y);
             writer.double(this.velocity);
+            writer.bool(this.isDead);
             writer.int32(this.t_hp_add);
             writer.int32(this.t_mp_add);
             writer.int32(this.t_atk_add);
@@ -101,12 +104,14 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.disableMove = reader.int32();
             this.disableTurn = reader.int32();
             this.disableSkill = reader.int32();
+            this.disableCollision = reader.int32();
             this.supperArmor = reader.int32();
             this.invulnerAbility = reader.int32();
             this.moveDirection.Set(reader.double(), reader.double());
             this.intersectVector.Set(reader.double(), reader.double());
             this.phyxSpeed.Set(reader.double(), reader.double());
             this.velocity = reader.double();
+            this.isDead = reader.bool();
             this.t_hp_add = reader.int32();
             this.t_mp_add = reader.int32();
             this.t_atk_add = reader.int32();
@@ -128,6 +133,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this.disableMove);
             writer.int32(this.disableTurn);
             writer.int32(this.disableSkill);
+            writer.int32(this.disableCollision);
             writer.int32(this.supperArmor);
             writer.int32(this.invulnerAbility);
             writer.double(this.moveDirection.x).double(this.moveDirection.y);
@@ -165,8 +171,12 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this._fsm.Update(dt);
         }
         IntersectionTest(others, from) {
+            if (this.disableCollision > 0)
+                return;
             for (let i = from; i < others.length; ++i) {
                 const other = others[i];
+                if (other.disableCollision > 0)
+                    continue;
                 const d = FVec2_1.FVec2.Sub(this.position, other.position);
                 const m = d.SqrMagnitude();
                 const r = FMathUtils_1.FMathUtils.Add(this._radius, other._radius);
@@ -234,8 +244,12 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         }
         UpdateAfterHit() {
             if (this.hp <= 0) {
-                this._fsm.ChangeState(StateEnums_1.StateType.Die, null, true, true);
+                this.Die();
             }
+        }
+        Die() {
+            this.isDead = true;
+            this._fsm.ChangeState(StateEnums_1.StateType.Die, null, true, true);
         }
         UseSkill(sid) {
             if (this.disableSkill > 0)
@@ -264,6 +278,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                     break;
                 case Attribute_1.EAttr.S_DISABLE_SKILL:
                     this.disableSkill = value;
+                    break;
+                case Attribute_1.EAttr.S_DISABLE_COLLISION:
+                    this.disableCollision = value;
                     break;
                 case Attribute_1.EAttr.S_SUPPER_ARMOR:
                     this.supperArmor = value;
@@ -296,6 +313,8 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                     return this.disableTurn;
                 case Attribute_1.EAttr.S_DISABLE_SKILL:
                     return this.disableSkill;
+                case Attribute_1.EAttr.S_DISABLE_COLLISION:
+                    return this.disableCollision;
                 case Attribute_1.EAttr.S_SUPPER_ARMOR:
                     return this.supperArmor;
                 case Attribute_1.EAttr.S_INVULNER_ABILITY:

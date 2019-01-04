@@ -56,10 +56,10 @@ export class Battle implements ISnapshotable {
 	private readonly _idToEmitter: Map<string, Emitter> = new Map<string, Emitter>();
 	private readonly _bullets: Bullet[] = [];
 	private readonly _idToBullet: Map<string, Bullet> = new Map<string, Bullet>();
-	private readonly _hitManager: HitManager = new HitManager();
-
+	private readonly _hitManager: HitManager;
+	
 	constructor() {
-		this._hitManager.Init(this);
+		this._hitManager = new HitManager(this);
 	}
 
 	/**

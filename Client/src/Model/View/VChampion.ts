@@ -31,6 +31,7 @@ export class VChampion extends VEntity {
 	public disableMove: number;
 	public disableTurn: number;
 	public disableSkill: number;
+	public disableCollision: number;
 	public supperArmor: number;
 	public invulnerAbility: number;
 	public readonly moveDirection: Vec2 = Vec2.zero;
@@ -87,6 +88,7 @@ export class VChampion extends VEntity {
 		this.disableMove = reader.int32();
 		this.disableTurn = reader.int32();
 		this.disableSkill = reader.int32();
+		this.disableCollision = reader.int32();
 		this.supperArmor = reader.int32();
 		this.invulnerAbility = reader.int32();
 		this.moveDirection.Set(reader.double(), reader.double());

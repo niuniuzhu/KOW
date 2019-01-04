@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1) {
+define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../../RC/Utils/Logger"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -36,19 +36,20 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
     (function (DestroyType) {
         DestroyType[DestroyType["Life"] = 0] = "Life";
         DestroyType[DestroyType["Collsion"] = 1] = "Collsion";
-        DestroyType[DestroyType["Caster"] = 2] = "Caster";
-        DestroyType[DestroyType["Emitter"] = 3] = "Emitter";
+        DestroyType[DestroyType["Emitter"] = 2] = "Emitter";
+        DestroyType[DestroyType["Caster"] = 3] = "Caster";
     })(DestroyType || (DestroyType = {}));
     class Bullet extends Entity_1.Entity {
         constructor() {
             super(...arguments);
-            this._targets0 = [];
             this._targets1 = [];
             this._targets2 = [];
             this._casterID = Long.ZERO;
             this._skillID = 0;
             this._time = 0;
             this._nextCollisionTime = 0;
+            this._collisionCount = 0;
+            this._targetToCollisionCount = new Map();
         }
         Init(params) {
             super.Init(params);
@@ -74,6 +75,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._maxCollisionPerTarget = Hashtable_1.Hashtable.GetNumber(this._defs, "max_collision_per_target", -1);
             this._maxCollision = Hashtable_1.Hashtable.GetNumber(this._defs, "max_collision", -1);
             this._targetType = Hashtable_1.Hashtable.GetNumber(this._defs, "target_type");
+            this._whipping = Hashtable_1.Hashtable.GetBool(this._defs, "whipping");
             this._attrTypes = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_types");
             this._attrFilterOPs = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
             this._attrCompareValues = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_compare_values");
@@ -85,6 +87,13 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             writer.int32(this._skillID);
             writer.int32(this._time);
             writer.int32(this._nextCollisionTime);
+            writer.int32(this._collisionCount);
+            const count = this._targetToCollisionCount.size;
+            writer.int32(count);
+            for (const rid in this._targetToCollisionCount) {
+                writer.uint64(rid);
+                writer.int32(this._targetToCollisionCount[rid]);
+            }
         }
         DecodeSnapshot(reader) {
             super.DecodeSnapshot(reader);
@@ -92,6 +101,11 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._skillID = reader.int32();
             this._time = reader.int32();
             this._nextCollisionTime = reader.int32();
+            this._collisionCount = reader.int32();
+            const count = reader.int32();
+            for (let i = 0; i < count; ++i) {
+                this._targetToCollisionCount.set(reader.uint64(), reader.int32());
+            }
         }
         Update(dt) {
             super.Update(dt);
@@ -130,18 +144,35 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             }
         }
         Intersect() {
-            if (this._time < this._nextCollisionTime)
+            if (this._time < this._nextCollisionTime ||
+                (this._maxCollision >= 0 && this._collisionCount == this._maxCollision))
                 return;
+            let hit = false;
             this.SelectTargets();
             for (const target of this._targets1) {
+                if (!this._whipping && target.isDead)
+                    continue;
                 const intersectType = Intersection_1.Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
+                Logger_1.Logger.Log(this.position.ToString() + "," + this._radius);
                 if (intersectType == Intersection_1.IntersectionType.Cling || intersectType == Intersection_1.IntersectionType.Inside) {
+                    let count = 0;
+                    if (this._targetToCollisionCount.has(target.rid))
+                        count = this._targetToCollisionCount.get(target.rid);
+                    if (this._maxCollisionPerTarget >= 0 &&
+                        count == this._maxCollisionPerTarget)
+                        continue;
                     this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
+                    hit = true;
+                    ++this._collisionCount;
+                    this._targetToCollisionCount.set(target.rid, ++count);
                 }
             }
             this._targets1.splice(0);
             this._targets2.splice(0);
             this._nextCollisionTime = this._time + this._frequency;
+            if (hit && this._destroyType == DestroyType.Collsion) {
+                this._markToDestroy = true;
+            }
         }
         SelectTargets() {
             const champions = this._battle.GetChampions();

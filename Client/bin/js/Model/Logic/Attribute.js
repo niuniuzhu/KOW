@@ -17,8 +17,9 @@ define(["require", "exports"], function (require, exports) {
         EAttr[EAttr["S_DISABLE_MOVE"] = 500] = "S_DISABLE_MOVE";
         EAttr[EAttr["S_DISABLE_TURN"] = 501] = "S_DISABLE_TURN";
         EAttr[EAttr["S_DISABLE_SKILL"] = 502] = "S_DISABLE_SKILL";
-        EAttr[EAttr["S_SUPPER_ARMOR"] = 503] = "S_SUPPER_ARMOR";
-        EAttr[EAttr["S_INVULNER_ABILITY"] = 504] = "S_INVULNER_ABILITY";
+        EAttr[EAttr["S_DISABLE_COLLISION"] = 503] = "S_DISABLE_COLLISION";
+        EAttr[EAttr["S_SUPPER_ARMOR"] = 550] = "S_SUPPER_ARMOR";
+        EAttr[EAttr["S_INVULNER_ABILITY"] = 551] = "S_INVULNER_ABILITY";
         EAttr[EAttr["S_HP_ADD"] = 600] = "S_HP_ADD";
         EAttr[EAttr["S_MP_ADD"] = 601] = "S_MP_ADD";
         EAttr[EAttr["S_ATK_ADD"] = 602] = "S_ATK_ADD";

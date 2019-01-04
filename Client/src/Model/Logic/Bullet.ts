@@ -44,8 +44,8 @@ enum AttrFilterOP {
 enum DestroyType {
 	Life,
 	Collsion,
-	Caster,
-	Emitter
+	Emitter,
+	Caster
 }
 
 export class Bullet extends Entity implements ISnapshotable {
@@ -62,12 +62,12 @@ export class Bullet extends Entity implements ISnapshotable {
 	private _maxCollisionPerTarget: number;
 	private _maxCollision: number;
 	private _targetType: TargetType;
+	private _whipping: boolean;
 	private _attrTypes: AttrFilter[];
 	private _attrFilterOPs: AttrFilterOP[];
 	private _attrCompareValues: number[];
 
 	//runtie properties
-	private readonly _targets0: Champion[] = [];
 	private readonly _targets1: Champion[] = [];
 	private readonly _targets2: Champion[] = [];
 
@@ -87,6 +87,14 @@ export class Bullet extends Entity implements ISnapshotable {
 	 * 下次碰撞检测的时间
 	 */
 	private _nextCollisionTime: number = 0;
+	/**
+	 * 记录碰撞次数
+	 */
+	private _collisionCount: number = 0;
+	/**
+	 * 记录每个目标的碰撞次数
+	 */
+	private readonly _targetToCollisionCount = new Map<Long, number>();//todo 无序?
 
 	public Init(params: EntityInitParams): void {
 		super.Init(params);
@@ -114,6 +122,7 @@ export class Bullet extends Entity implements ISnapshotable {
 		this._maxCollisionPerTarget = Hashtable.GetNumber(this._defs, "max_collision_per_target", -1);
 		this._maxCollision = Hashtable.GetNumber(this._defs, "max_collision", -1);
 		this._targetType = Hashtable.GetNumber(this._defs, "target_type");
+		this._whipping = Hashtable.GetBool(this._defs, "whipping");
 		this._attrTypes = Hashtable.GetNumberArray(this._defs, "attr_types");
 		this._attrFilterOPs = Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
 		this._attrCompareValues = Hashtable.GetNumberArray(this._defs, "attr_compare_values");
@@ -126,6 +135,13 @@ export class Bullet extends Entity implements ISnapshotable {
 		writer.int32(this._skillID);
 		writer.int32(this._time);
 		writer.int32(this._nextCollisionTime);
+		writer.int32(this._collisionCount);
+		const count = this._targetToCollisionCount.size;
+		writer.int32(count);
+		for (const rid in this._targetToCollisionCount) {
+			writer.uint64(rid);
+			writer.int32(this._targetToCollisionCount[rid]);
+		}
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -134,6 +150,11 @@ export class Bullet extends Entity implements ISnapshotable {
 		this._skillID = reader.int32();
 		this._time = reader.int32();
 		this._nextCollisionTime = reader.int32();
+		this._collisionCount = reader.int32();
+		const count = reader.int32();
+		for (let i = 0; i < count; ++i) {
+			this._targetToCollisionCount.set(<Long>reader.uint64(), reader.int32());
+		}
 	}
 
 	public Update(dt: number): void {
@@ -189,19 +210,38 @@ export class Bullet extends Entity implements ISnapshotable {
 	 */
 	public Intersect(): void {
 		//检测碰撞频率
-		if (this._time < this._nextCollisionTime)
+		if (this._time < this._nextCollisionTime ||
+			(this._maxCollision >= 0 && this._collisionCount == this._maxCollision))
 			return;
+		let hit = false;
 		this.SelectTargets();
 		for (const target of this._targets1) {
+			if (!this._whipping && target.isDead)
+				continue;
 			const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
+			Logger.Log(this.position.ToString() + "," + this._radius);
 			if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
+				//获取目标的碰撞次数
+				let count = 0;
+				if (this._targetToCollisionCount.has(target.rid))
+					count = this._targetToCollisionCount.get(target.rid);
+				//超过单个目标手机次数
+				if (this._maxCollisionPerTarget >= 0 &&
+					count == this._maxCollisionPerTarget)
+					continue;
 				//添加受击单元
 				this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
+				hit = true;
+				++this._collisionCount;
+				this._targetToCollisionCount.set(target.rid, ++count);
 			}
 		}
 		this._targets1.splice(0);
 		this._targets2.splice(0);
 		this._nextCollisionTime = this._time + this._frequency;
+		if (hit && this._destroyType == DestroyType.Collsion) {
+			this._markToDestroy = true;
+		}
 	}
 
 	private SelectTargets(): void {

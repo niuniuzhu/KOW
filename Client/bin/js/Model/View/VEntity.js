@@ -44,7 +44,7 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
         }
         Update(dt) {
             this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
-            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.008);
+            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
         }
         OnPositionChanged(delta) {
             this._root.setXY(this._position.x, this._position.y);

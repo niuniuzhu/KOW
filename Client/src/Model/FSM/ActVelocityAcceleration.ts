@@ -8,8 +8,10 @@ import { EntityStateAction } from "./EntityStateAction";
 export class ActVelocityAcceleration extends EntityStateAction implements ISnapshotable {
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		super.EncodeSnapshot(writer);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		super.DecodeSnapshot(reader);
 	}
 }

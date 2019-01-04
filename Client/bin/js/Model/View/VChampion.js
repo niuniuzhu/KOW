@@ -52,6 +52,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             this.disableMove = reader.int32();
             this.disableTurn = reader.int32();
             this.disableSkill = reader.int32();
+            this.disableCollision = reader.int32();
             this.supperArmor = reader.int32();
             this.invulnerAbility = reader.int32();
             this.moveDirection.Set(reader.double(), reader.double());

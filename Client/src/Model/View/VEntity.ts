@@ -65,7 +65,7 @@ export abstract class VEntity {
 
 	public Update(dt: number): void {
 		this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
-		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.008);
+		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
 	}
 
 	private OnPositionChanged(delta: Vec2): void {

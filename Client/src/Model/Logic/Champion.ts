@@ -75,6 +75,10 @@ export class Champion extends Entity implements ISnapshotable {
 	 */
 	public disableSkill: number = 0;
 	/**
+	 * 进制碰撞
+	 */
+	public disableCollision: number = 0;
+	/**
 	 * 霸体
 	 */
 	public supperArmor: number = 0;
@@ -98,6 +102,10 @@ export class Champion extends Entity implements ISnapshotable {
 	 * 当前速率
 	 */
 	public velocity: number;
+	/**
+	 * 是否已死亡
+	 */
+	public isDead: boolean;
 
 	//临时属性
 	public t_hp_add: number = 0;
@@ -177,12 +185,14 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.int32(this.disableMove);
 		writer.int32(this.disableTurn);
 		writer.int32(this.disableSkill);
+		writer.int32(this.disableCollision);
 		writer.int32(this.supperArmor);
 		writer.int32(this.invulnerAbility);
 		writer.double(this.moveDirection.x).double(this.moveDirection.y);
 		writer.double(this.intersectVector.x).double(this.intersectVector.y);
 		writer.double(this.phyxSpeed.x).double(this.phyxSpeed.y);
 		writer.double(this.velocity);
+		writer.bool(this.isDead);
 		writer.int32(this.t_hp_add);
 		writer.int32(this.t_mp_add);
 		writer.int32(this.t_atk_add);
@@ -212,12 +222,14 @@ export class Champion extends Entity implements ISnapshotable {
 		this.disableMove = reader.int32();
 		this.disableTurn = reader.int32();
 		this.disableSkill = reader.int32();
+		this.disableCollision = reader.int32();
 		this.supperArmor = reader.int32();
 		this.invulnerAbility = reader.int32();
 		this.moveDirection.Set(reader.double(), reader.double());
 		this.intersectVector.Set(reader.double(), reader.double());
 		this.phyxSpeed.Set(reader.double(), reader.double());
 		this.velocity = reader.double();
+		this.isDead = reader.bool();
 		this.t_hp_add = reader.int32();
 		this.t_mp_add = reader.int32();
 		this.t_atk_add = reader.int32();
@@ -247,6 +259,7 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.int32(this.disableMove);
 		writer.int32(this.disableTurn);
 		writer.int32(this.disableSkill);
+		writer.int32(this.disableCollision);
 		writer.int32(this.supperArmor);
 		writer.int32(this.invulnerAbility);
 		writer.double(this.moveDirection.x).double(this.moveDirection.y);
@@ -303,8 +316,12 @@ export class Champion extends Entity implements ISnapshotable {
 	}
 
 	public IntersectionTest(others: Champion[], from: number): void {
+		if (this.disableCollision > 0)
+			return;
 		for (let i = from; i < others.length; ++i) {
 			const other = others[i];
+			if (other.disableCollision > 0)
+				continue;
 			//圆圆相交性检测
 			const d = FVec2.Sub(this.position, other.position);
 			const m = d.SqrMagnitude();
@@ -403,8 +420,13 @@ export class Champion extends Entity implements ISnapshotable {
 
 	public UpdateAfterHit(): void {
 		if (this.hp <= 0) {
-			this._fsm.ChangeState(StateType.Die, null, true, true);
+			this.Die();
 		}
+	}
+
+	public Die(): void {
+		this.isDead = true;
+		this._fsm.ChangeState(StateType.Die, null, true, true);
 	}
 
 	public UseSkill(sid: number): boolean {
@@ -438,6 +460,9 @@ export class Champion extends Entity implements ISnapshotable {
 			case EAttr.S_DISABLE_SKILL:
 				this.disableSkill = value;
 				break;
+			case EAttr.S_DISABLE_COLLISION:
+				this.disableCollision = value;
+				break;
 			case EAttr.S_SUPPER_ARMOR:
 				this.supperArmor = value;
 				break;
@@ -470,6 +495,8 @@ export class Champion extends Entity implements ISnapshotable {
 				return this.disableTurn;
 			case EAttr.S_DISABLE_SKILL:
 				return this.disableSkill;
+			case EAttr.S_DISABLE_COLLISION:
+				return this.disableCollision;
 			case EAttr.S_SUPPER_ARMOR:
 				return this.supperArmor;
 			case EAttr.S_INVULNER_ABILITY:

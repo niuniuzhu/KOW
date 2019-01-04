@@ -2,15 +2,12 @@ define(["require", "exports", "./HitUnit"], function (require, exports, HitUnit_
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class HitManager {
-        constructor() {
+        constructor(battle) {
             this._hitUnits = [];
-        }
-        get battle() { return this._battle; }
-        Init(battle) {
             this._battle = battle;
         }
+        get battle() { return this._battle; }
         Destroy() {
-            this._battle = null;
             this._hitUnits.splice(0);
         }
         AddHitUnit(casterID, targetID, skillID) {

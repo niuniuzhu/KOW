@@ -12,6 +12,7 @@ export class ActEntityAttrs extends EntityStateAction implements ISnapshotable {
 	private _values: number[];
 
 	protected OnInit(def: Hashtable): void {
+		super.OnInit(def);
 		this._attrs = Hashtable.GetNumberArray(def, "attrs");
 		this._values = Hashtable.GetNumberArray(def, "values");
 	}

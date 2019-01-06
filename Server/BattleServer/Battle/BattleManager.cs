@@ -105,17 +105,29 @@ namespace BattleServer.Battle
 		/// 销毁战场
 		/// 主线程调用
 		/// </summary>
-		private void DestroyBattle( int index )
+		private void EndBattle( Battle battle )
 		{
-			Battle battle = this._workingBattles[index];
-			this._workingBattles.RemoveAt( index );
-
+			int count = battle.numPlayers;
 			//通知CS战场结束
 			Protos.BS2CS_BattleEnd battleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
 			battleEnd.Bid = battle.id;
+			for ( int i = 0; i < count; ++i )
+			{
+				Player player = battle.GetPlayerAt( i );
+				var info = new Protos.BS2CS_BattleEndInfo();
+				info.Win = player.win;
+				info.Damage = player.damage;
+				info.Hurt = player.hurt;
+				info.Heal = player.heal;
+				info.OccupyTime = player.occupyTime;
+				info.Skill0Used = player.skill0Used;
+				info.Skill0Damage = player.skill0Damage;
+				info.Skill1Used = player.skill1Used;
+				info.Skill1Damage = player.skill1Damage;
+				battleEnd.Infos.Add( player.user.gcNID, info );
+			}
 			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd );
 
-			int count = battle.numPlayers;
 			for ( int i = 0; i < count; i++ )
 			{
 				Player player = battle.GetPlayerAt( i );
@@ -129,9 +141,10 @@ namespace BattleServer.Battle
 				//销毁玩家
 				BS.instance.userMgr.DestroyUser( player.user );
 			}
-
 			//处理战场的身后事
 			battle.End();
+
+			this._workingBattles.Remove( battle );
 			POOL.Push( battle );
 		}
 
@@ -155,7 +168,7 @@ namespace BattleServer.Battle
 				if ( battle.finished )
 				{
 					//处理战场结束
-					this.DestroyBattle( i );
+					this.EndBattle( battle );
 					--i;
 					--count;
 					Logger.Log( $"battle:{battle.id} destroied" );
@@ -204,6 +217,14 @@ namespace BattleServer.Battle
 		/// <param name="data">快照数据</param>
 		internal void HandleCommitSnapshot( Battle battle, ulong gcNID, int frame, Google.Protobuf.ByteString data ) =>
 			battle.HandleCommitSnapshot( gcNID, frame, data );
+
+		public void HandleBattleEnd( Battle battle, ulong gcNID, Protos.GC2BS_EndBattle endBattle )
+		{
+			if ( !battle.HandleBattleEnd( gcNID, endBattle ) )
+				return;
+			//all user notify battle end
+			this.EndBattle( battle );
+		}
 
 		/// <summary>
 		/// 获取指定索引的战场

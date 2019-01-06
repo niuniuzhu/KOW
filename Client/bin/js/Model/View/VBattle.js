@@ -19,7 +19,6 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._mapID = battleInfo.mapID;
             this._def = Defs_1.Defs.GetMap(this._mapID);
             this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(this._def, "width") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO, Hashtable_1.Hashtable.GetNumber(this._def, "height") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO);
-            this._playerID = battleInfo.playerID;
             this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
             this._root.touchable = false;
             Global_1.Global.graphic.mapRoot.addChild(this._root);
@@ -84,11 +83,11 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                     champion.DecodeSync(rid, reader, true);
                     this._champions.push(champion);
                     this._idToChampion.set(champion.rid.toString(), champion);
-                    const isSelf = champion.rid.equals(this._playerID);
+                    const isSelf = champion.rid.equals(Global_1.Global.battleManager.playerID);
                     if (isSelf) {
                         this._camera.lookAt = champion;
                     }
-                    UIEvent_1.UIEvent.ChampionInit(champion, isSelf);
+                    UIEvent_1.UIEvent.ChampionInit(champion);
                 }
                 else {
                     champion.DecodeSync(rid, reader, false);

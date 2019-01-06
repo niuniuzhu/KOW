@@ -60,8 +60,14 @@ message CS2GC_EnterBattle {
 	Result result = 5;
 }
 
+//丢失bs
+message CS2GC_BSLose {
+	MsgOpts opts = 1;
+}
+
 //战场结束
 message CS2GC_BattleEnd {
 	MsgOpts opts = 1;
-	//todo result
+	bool win = 2;
+	int32 honour = 3;
 }

@@ -1,3 +1,4 @@
+import { UIEvent } from "./BattleEvent/UIEvent";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
@@ -23,9 +24,11 @@ export class BattleManager {
 	 * 表现战场
 	 */
 	private _vBattle: VBattle;
+	private _playerID: Long;
 	private _init: boolean;
 	private _destroied: boolean;
 
+	public get playerID(): Long { return this._playerID; }
 	public get lBattle(): Battle { return this._lBattle; }
 	public get vBattle(): VBattle { return this._vBattle; }
 
@@ -46,15 +49,17 @@ export class BattleManager {
 
 		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+		Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
 		Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 
 		this._lBattle.Destroy();
 		this._vBattle.Destroy();
 	}
 
-	public Start():void{
+	public Start(): void {
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBSLose.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 		this._destroied = false;
 	}
@@ -64,6 +69,7 @@ export class BattleManager {
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo, completeHandler: () => void): void {
+		this._playerID = battleInfo.playerID;
 
 		this._vBattle.SetBattleInfo(battleInfo);
 		this._lBattle.SetBattleInfo(battleInfo);
@@ -126,14 +132,25 @@ export class BattleManager {
 	}
 
 	/**
-	 * 战场结束回调
+	 * 处理BS丢失
+	 * @param message 协议
+	 */
+	private HandleBSLose(message: any): void {
+		Logger.Log("bs lose");
+		this.Destroy();
+		Global.sceneManager.ChangeState(SceneManager.State.Main);
+	}
+
+	/**
+	 * 处理战场结束
 	 * @param message 协议
 	 */
 	private HandleBattleEnd(message: any): void {
-		Logger.Log("battle end");
-		const battleEnd = <Protos.CS2GC_BattleEnd>message;
-		this.Destroy();
-		Global.sceneManager.ChangeState(SceneManager.State.Main);
+		const msg = <Protos.CS2GC_BattleEnd>message;
+		UIEvent.EndBattle(msg.win, msg.honour, () => {
+			this.Destroy();
+			Global.sceneManager.ChangeState(SceneManager.State.Main);
+		});
 	}
 
 	/**

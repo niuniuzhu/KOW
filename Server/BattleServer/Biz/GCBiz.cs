@@ -121,5 +121,16 @@ namespace BattleServer.Biz
 			}
 			return ErrorCode.Success;
 		}
+
+		public ErrorCode OnGc2BsEndBattle( NetSessionBase session, Google.Protobuf.IMessage message )
+		{
+			BSUser user = BS.instance.userMgr.GetUser( session.id );
+			if ( user != null )
+			{
+				Protos.GC2BS_EndBattle request = ( Protos.GC2BS_EndBattle )message;
+				BS.instance.battleManager.HandleBattleEnd( user.battle, user.gcNID, request );
+			}
+			return ErrorCode.Success;
+		}
 	}
 }

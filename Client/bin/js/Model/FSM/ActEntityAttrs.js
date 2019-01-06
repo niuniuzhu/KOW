@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction", "../../RC/Utils/Logger"], function (require, exports, Hashtable_1, EntityStateAction_1, Logger_1) {
+define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction"], function (require, exports, Hashtable_1, EntityStateAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActEntityAttrs extends EntityStateAction_1.EntityStateAction {
@@ -21,7 +21,6 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction",
         ActiveAttr(attr, value) {
             const owner = this.state.owner;
             owner.SetAttr(attr, owner.GetAttr(attr) + value);
-            Logger_1.Logger.Log("active");
         }
         DeactiveAttrs() {
             const owner = this.state.owner;
@@ -29,7 +28,6 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "./EntityStateAction",
             for (let i = 0; i < count; ++i) {
                 owner.SetAttr(this._attrs[i], owner.GetAttr(this._attrs[i]) - this._values[i]);
             }
-            Logger_1.Logger.Log("deactive");
         }
     }
     exports.ActEntityAttrs = ActEntityAttrs;

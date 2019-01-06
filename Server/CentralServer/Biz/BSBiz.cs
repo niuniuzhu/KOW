@@ -75,21 +75,21 @@ namespace CentralServer.Biz
 		public ErrorCode OnBs2CsBattleEnd( NetSessionBase session, IMessage message )
 		{
 			Protos.BS2CS_BattleEnd battleEnd = ( Protos.BS2CS_BattleEnd )message;
-
 			//通知客户端战场结束
 			Protos.CS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_CS2GC_BattleEnd();
-			List<CSUser> users = CS.instance.battleStaging.GetUsers( session.logicID, battleEnd.Bid );
-			int count = users.Count;
-			for ( int i = 0; i < count; i++ )
+			foreach ( var kv in battleEnd.Infos )
 			{
-				CSUser user = users[i];
+				CSUser user = CS.instance.battleStaging.GetUser( kv.Key );
+				gcBattleEnd.Win = kv.Value.Win;
+				const int honour = 15;
+				//todo elo算法计算得分
+				//todo 记录到数据库
+				gcBattleEnd.Honour = honour;
 				CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
 			}
 
 			//移除指定BS里指定战场里的所有玩家
 			CS.instance.battleStaging.Remove( session.logicID, battleEnd.Bid );
-			//todo 战斗结算
-
 			return ErrorCode.Success;
 		}
 

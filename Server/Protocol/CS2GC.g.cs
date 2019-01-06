@@ -44,8 +44,10 @@ namespace Protos {
             "AmlwGAMgASgJEgwKBHBvcnQYBCABKAUSMAoGcmVzdWx0GAUgASgOMiAuUHJv",
             "dG9zLkNTMkdDX0VudGVyQmF0dGxlLlJlc3VsdCJJCgZSZXN1bHQSCwoHU3Vj",
             "Y2VzcxAAEg4KCkJTTm90Rm91bmQQARIKCgZCU0xvc3QQAhIWChJCYXR0bGVD",
-            "cmVhdGVGYWlsZWQQAyIwCg9DUzJHQ19CYXR0bGVFbmQSHQoEb3B0cxgBIAEo",
-            "CzIPLlByb3Rvcy5Nc2dPcHRzYgZwcm90bzM="));
+            "cmVhdGVGYWlsZWQQAyItCgxDUzJHQ19CU0xvc2USHQoEb3B0cxgBIAEoCzIP",
+            "LlByb3Rvcy5Nc2dPcHRzIk0KD0NTMkdDX0JhdHRsZUVuZBIdCgRvcHRzGAEg",
+            "ASgLMg8uUHJvdG9zLk1zZ09wdHMSCwoDd2luGAIgASgIEg4KBmhvbm91chgD",
+            "IAEoBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -55,7 +57,8 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerLeave), global::Protos.CS2GC_PlayerLeave.Parser, new[]{ "Opts", "GcNID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RoomInfo), global::Protos.CS2GC_RoomInfo.Parser, new[]{ "Opts", "PlayerInfos", "Progresses" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_EnterBattle), global::Protos.CS2GC_EnterBattle.Parser, new[]{ "Opts", "GcNID", "Ip", "Port", "Result" }, null, new[]{ typeof(global::Protos.CS2GC_EnterBattle.Types.Result) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BattleEnd), global::Protos.CS2GC_BattleEnd.Parser, new[]{ "Opts" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BSLose), global::Protos.CS2GC_BSLose.Parser, new[]{ "Opts" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BattleEnd), global::Protos.CS2GC_BattleEnd.Parser, new[]{ "Opts", "Win", "Honour" }, null, null, null)
           }));
     }
     #endregion
@@ -1388,13 +1391,13 @@ namespace Protos {
   }
 
   /// <summary>
-  ///战场结束
+  ///丢失bs
   /// </summary>
-  public sealed partial class CS2GC_BattleEnd : pb::IMessage<CS2GC_BattleEnd> {
-    private static readonly pb::MessageParser<CS2GC_BattleEnd> _parser = new pb::MessageParser<CS2GC_BattleEnd>(() => new CS2GC_BattleEnd());
+  public sealed partial class CS2GC_BSLose : pb::IMessage<CS2GC_BSLose> {
+    private static readonly pb::MessageParser<CS2GC_BSLose> _parser = new pb::MessageParser<CS2GC_BSLose>(() => new CS2GC_BSLose());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<CS2GC_BattleEnd> Parser { get { return _parser; } }
+    public static pb::MessageParser<CS2GC_BSLose> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -1407,29 +1410,26 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS2GC_BattleEnd() {
+    public CS2GC_BSLose() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS2GC_BattleEnd(CS2GC_BattleEnd other) : this() {
+    public CS2GC_BSLose(CS2GC_BSLose other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CS2GC_BattleEnd Clone() {
-      return new CS2GC_BattleEnd(this);
+    public CS2GC_BSLose Clone() {
+      return new CS2GC_BSLose(this);
     }
 
     /// <summary>Field number for the "opts" field.</summary>
     public const int OptsFieldNumber = 1;
     private global::Protos.MsgOpts opts_;
-    /// <summary>
-    ///todo result
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Protos.MsgOpts Opts {
       get { return opts_; }
@@ -1440,11 +1440,11 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as CS2GC_BattleEnd);
+      return Equals(other as CS2GC_BSLose);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(CS2GC_BattleEnd other) {
+    public bool Equals(CS2GC_BSLose other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1494,7 +1494,7 @@ namespace Protos {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(CS2GC_BattleEnd other) {
+    public void MergeFrom(CS2GC_BSLose other) {
       if (other == null) {
         return;
       }
@@ -1520,6 +1520,200 @@ namespace Protos {
               opts_ = new global::Protos.MsgOpts();
             }
             input.ReadMessage(opts_);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///战场结束
+  /// </summary>
+  public sealed partial class CS2GC_BattleEnd : pb::IMessage<CS2GC_BattleEnd> {
+    private static readonly pb::MessageParser<CS2GC_BattleEnd> _parser = new pb::MessageParser<CS2GC_BattleEnd>(() => new CS2GC_BattleEnd());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2GC_BattleEnd> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[7]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_BattleEnd() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_BattleEnd(CS2GC_BattleEnd other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      win_ = other.win_;
+      honour_ = other.honour_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_BattleEnd Clone() {
+      return new CS2GC_BattleEnd(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "win" field.</summary>
+    public const int WinFieldNumber = 2;
+    private bool win_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Win {
+      get { return win_; }
+      set {
+        win_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "honour" field.</summary>
+    public const int HonourFieldNumber = 3;
+    private int honour_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Honour {
+      get { return honour_; }
+      set {
+        honour_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2GC_BattleEnd);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2GC_BattleEnd other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Win != other.Win) return false;
+      if (Honour != other.Honour) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Win != false) hash ^= Win.GetHashCode();
+      if (Honour != 0) hash ^= Honour.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Win != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(Win);
+      }
+      if (Honour != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Honour);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Win != false) {
+        size += 1 + 1;
+      }
+      if (Honour != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Honour);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2GC_BattleEnd other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Win != false) {
+        Win = other.Win;
+      }
+      if (other.Honour != 0) {
+        Honour = other.Honour;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            Win = input.ReadBool();
+            break;
+          }
+          case 24: {
+            Honour = input.ReadInt32();
             break;
           }
         }

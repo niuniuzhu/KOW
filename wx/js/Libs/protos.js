@@ -417,9 +417,210 @@ export const Protos = $root.Protos = (() => {
         return BS2CS_BattleInfoRet;
     })();
 
+    Protos.BS2CS_BattleEndInfo = (function() {
+
+        function BS2CS_BattleEndInfo(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        BS2CS_BattleEndInfo.prototype.win = false;
+        BS2CS_BattleEndInfo.prototype.damage = 0;
+        BS2CS_BattleEndInfo.prototype.hurt = 0;
+        BS2CS_BattleEndInfo.prototype.heal = 0;
+        BS2CS_BattleEndInfo.prototype.occupyTime = 0;
+        BS2CS_BattleEndInfo.prototype.skill0Used = 0;
+        BS2CS_BattleEndInfo.prototype.skill1Used = 0;
+        BS2CS_BattleEndInfo.prototype.skill0Damage = 0;
+        BS2CS_BattleEndInfo.prototype.skill1Damage = 0;
+
+        BS2CS_BattleEndInfo.create = function create(properties) {
+            return new BS2CS_BattleEndInfo(properties);
+        };
+
+        BS2CS_BattleEndInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.win != null && message.hasOwnProperty("win"))
+                writer.uint32(16).bool(message.win);
+            if (message.damage != null && message.hasOwnProperty("damage"))
+                writer.uint32(24).uint32(message.damage);
+            if (message.hurt != null && message.hasOwnProperty("hurt"))
+                writer.uint32(32).uint32(message.hurt);
+            if (message.heal != null && message.hasOwnProperty("heal"))
+                writer.uint32(40).uint32(message.heal);
+            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
+                writer.uint32(48).uint32(message.occupyTime);
+            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
+                writer.uint32(56).uint32(message.skill0Used);
+            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
+                writer.uint32(64).uint32(message.skill1Used);
+            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
+                writer.uint32(72).uint32(message.skill0Damage);
+            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
+                writer.uint32(80).uint32(message.skill1Damage);
+            return writer;
+        };
+
+        BS2CS_BattleEndInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        BS2CS_BattleEndInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleEndInfo();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 2:
+                    message.win = reader.bool();
+                    break;
+                case 3:
+                    message.damage = reader.uint32();
+                    break;
+                case 4:
+                    message.hurt = reader.uint32();
+                    break;
+                case 5:
+                    message.heal = reader.uint32();
+                    break;
+                case 6:
+                    message.occupyTime = reader.uint32();
+                    break;
+                case 7:
+                    message.skill0Used = reader.uint32();
+                    break;
+                case 8:
+                    message.skill1Used = reader.uint32();
+                    break;
+                case 9:
+                    message.skill0Damage = reader.uint32();
+                    break;
+                case 10:
+                    message.skill1Damage = reader.uint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        BS2CS_BattleEndInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        BS2CS_BattleEndInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.win != null && message.hasOwnProperty("win"))
+                if (typeof message.win !== "boolean")
+                    return "win: boolean expected";
+            if (message.damage != null && message.hasOwnProperty("damage"))
+                if (!$util.isInteger(message.damage))
+                    return "damage: integer expected";
+            if (message.hurt != null && message.hasOwnProperty("hurt"))
+                if (!$util.isInteger(message.hurt))
+                    return "hurt: integer expected";
+            if (message.heal != null && message.hasOwnProperty("heal"))
+                if (!$util.isInteger(message.heal))
+                    return "heal: integer expected";
+            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
+                if (!$util.isInteger(message.occupyTime))
+                    return "occupyTime: integer expected";
+            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
+                if (!$util.isInteger(message.skill0Used))
+                    return "skill0Used: integer expected";
+            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
+                if (!$util.isInteger(message.skill1Used))
+                    return "skill1Used: integer expected";
+            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
+                if (!$util.isInteger(message.skill0Damage))
+                    return "skill0Damage: integer expected";
+            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
+                if (!$util.isInteger(message.skill1Damage))
+                    return "skill1Damage: integer expected";
+            return null;
+        };
+
+        BS2CS_BattleEndInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.BS2CS_BattleEndInfo)
+                return object;
+            let message = new $root.Protos.BS2CS_BattleEndInfo();
+            if (object.win != null)
+                message.win = Boolean(object.win);
+            if (object.damage != null)
+                message.damage = object.damage >>> 0;
+            if (object.hurt != null)
+                message.hurt = object.hurt >>> 0;
+            if (object.heal != null)
+                message.heal = object.heal >>> 0;
+            if (object.occupyTime != null)
+                message.occupyTime = object.occupyTime >>> 0;
+            if (object.skill0Used != null)
+                message.skill0Used = object.skill0Used >>> 0;
+            if (object.skill1Used != null)
+                message.skill1Used = object.skill1Used >>> 0;
+            if (object.skill0Damage != null)
+                message.skill0Damage = object.skill0Damage >>> 0;
+            if (object.skill1Damage != null)
+                message.skill1Damage = object.skill1Damage >>> 0;
+            return message;
+        };
+
+        BS2CS_BattleEndInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.win = false;
+                object.damage = 0;
+                object.hurt = 0;
+                object.heal = 0;
+                object.occupyTime = 0;
+                object.skill0Used = 0;
+                object.skill1Used = 0;
+                object.skill0Damage = 0;
+                object.skill1Damage = 0;
+            }
+            if (message.win != null && message.hasOwnProperty("win"))
+                object.win = message.win;
+            if (message.damage != null && message.hasOwnProperty("damage"))
+                object.damage = message.damage;
+            if (message.hurt != null && message.hasOwnProperty("hurt"))
+                object.hurt = message.hurt;
+            if (message.heal != null && message.hasOwnProperty("heal"))
+                object.heal = message.heal;
+            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
+                object.occupyTime = message.occupyTime;
+            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
+                object.skill0Used = message.skill0Used;
+            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
+                object.skill1Used = message.skill1Used;
+            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
+                object.skill0Damage = message.skill0Damage;
+            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
+                object.skill1Damage = message.skill1Damage;
+            return object;
+        };
+
+        BS2CS_BattleEndInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return BS2CS_BattleEndInfo;
+    })();
+
     Protos.BS2CS_BattleEnd = (function() {
 
         function BS2CS_BattleEnd(properties) {
+            this.infos = {};
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -428,6 +629,7 @@ export const Protos = $root.Protos = (() => {
 
         BS2CS_BattleEnd.prototype.opts = null;
         BS2CS_BattleEnd.prototype.bid = 0;
+        BS2CS_BattleEnd.prototype.infos = $util.emptyObject;
 
         BS2CS_BattleEnd.create = function create(properties) {
             return new BS2CS_BattleEnd(properties);
@@ -440,6 +642,11 @@ export const Protos = $root.Protos = (() => {
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.bid != null && message.hasOwnProperty("bid"))
                 writer.uint32(16).uint32(message.bid);
+            if (message.infos != null && message.hasOwnProperty("infos"))
+                for (let keys = Object.keys(message.infos), i = 0; i < keys.length; ++i) {
+                    writer.uint32(26).fork().uint32(8).uint64(keys[i]);
+                    $root.Protos.BS2CS_BattleEndInfo.encode(message.infos[keys[i]], writer.uint32(18).fork()).ldelim().ldelim();
+                }
             return writer;
         };
 
@@ -450,7 +657,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEnd.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleEnd();
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleEnd(), key;
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
@@ -459,6 +666,14 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 2:
                     message.bid = reader.uint32();
+                    break;
+                case 3:
+                    reader.skip().pos++;
+                    if (message.infos === $util.emptyObject)
+                        message.infos = {};
+                    key = reader.uint64();
+                    reader.pos++;
+                    message.infos[typeof key === "object" ? $util.longToHash(key) : key] = $root.Protos.BS2CS_BattleEndInfo.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -485,6 +700,20 @@ export const Protos = $root.Protos = (() => {
             if (message.bid != null && message.hasOwnProperty("bid"))
                 if (!$util.isInteger(message.bid))
                     return "bid: integer expected";
+            if (message.infos != null && message.hasOwnProperty("infos")) {
+                if (!$util.isObject(message.infos))
+                    return "infos: object expected";
+                let key = Object.keys(message.infos);
+                for (let i = 0; i < key.length; ++i) {
+                    if (!$util.key64Re.test(key[i]))
+                        return "infos: integer|Long key{k:uint64} expected";
+                    {
+                        let error = $root.Protos.BS2CS_BattleEndInfo.verify(message.infos[key[i]]);
+                        if (error)
+                            return "infos." + error;
+                    }
+                }
+            }
             return null;
         };
 
@@ -499,6 +728,16 @@ export const Protos = $root.Protos = (() => {
             }
             if (object.bid != null)
                 message.bid = object.bid >>> 0;
+            if (object.infos) {
+                if (typeof object.infos !== "object")
+                    throw TypeError(".Protos.BS2CS_BattleEnd.infos: object expected");
+                message.infos = {};
+                for (let keys = Object.keys(object.infos), i = 0; i < keys.length; ++i) {
+                    if (typeof object.infos[keys[i]] !== "object")
+                        throw TypeError(".Protos.BS2CS_BattleEnd.infos: object expected");
+                    message.infos[keys[i]] = $root.Protos.BS2CS_BattleEndInfo.fromObject(object.infos[keys[i]]);
+                }
+            }
             return message;
         };
 
@@ -506,6 +745,8 @@ export const Protos = $root.Protos = (() => {
             if (!options)
                 options = {};
             let object = {};
+            if (options.objects || options.defaults)
+                object.infos = {};
             if (options.defaults) {
                 object.opts = null;
                 object.bid = 0;
@@ -514,6 +755,12 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.bid != null && message.hasOwnProperty("bid"))
                 object.bid = message.bid;
+            let keys2;
+            if (message.infos && (keys2 = Object.keys(message.infos)).length) {
+                object.infos = {};
+                for (let j = 0; j < keys2.length; ++j)
+                    object.infos[keys2[j]] = $root.Protos.BS2CS_BattleEndInfo.toObject(message.infos[keys2[j]], options);
+            }
             return object;
         };
 
@@ -689,6 +936,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[1203] = "eGC2BS_FrameAction"] = 1203;
         values[valuesById[1204] = "eGC2BS_RequestFrameActions"] = 1204;
         values[valuesById[1205] = "eGC2BS_CommitSnapshot"] = 1205;
+        values[valuesById[1206] = "eGC2BS_EndBattle"] = 1206;
         values[valuesById[1300] = "eGC2CS_BeginMatch"] = 1300;
         values[valuesById[2000] = "eLS2GC_GSInfo"] = 2000;
         values[valuesById[2001] = "eLS2GC_AskRegRet"] = 2001;
@@ -725,6 +973,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[5303] = "eCS2GC_RoomInfo"] = 5303;
         values[valuesById[5304] = "eCS2GC_EnterBattle"] = 5304;
         values[valuesById[5305] = "eCS2GC_BattleEnd"] = 5305;
+        values[valuesById[5306] = "eCS2GC_BSLose"] = 5306;
         values[valuesById[8000] = "eDB2LS_QueryAccountRet"] = 8000;
         values[valuesById[8001] = "eDB2LS_QueryLoginRet"] = 8001;
         values[valuesById[8002] = "eDB2LS_ExecRet"] = 8002;
@@ -3423,6 +3672,98 @@ export const Protos = $root.Protos = (() => {
         return CS2GC_EnterBattle;
     })();
 
+    Protos.CS2GC_BSLose = (function() {
+
+        function CS2GC_BSLose(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_BSLose.prototype.opts = null;
+
+        CS2GC_BSLose.create = function create(properties) {
+            return new CS2GC_BSLose(properties);
+        };
+
+        CS2GC_BSLose.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            return writer;
+        };
+
+        CS2GC_BSLose.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_BSLose.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BSLose();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_BSLose.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_BSLose.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            return null;
+        };
+
+        CS2GC_BSLose.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_BSLose)
+                return object;
+            let message = new $root.Protos.CS2GC_BSLose();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2GC_BSLose.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            return message;
+        };
+
+        CS2GC_BSLose.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            return object;
+        };
+
+        CS2GC_BSLose.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2GC_BSLose;
+    })();
+
     Protos.CS2GC_BattleEnd = (function() {
 
         function CS2GC_BattleEnd(properties) {
@@ -3433,6 +3774,8 @@ export const Protos = $root.Protos = (() => {
         }
 
         CS2GC_BattleEnd.prototype.opts = null;
+        CS2GC_BattleEnd.prototype.win = false;
+        CS2GC_BattleEnd.prototype.honour = 0;
 
         CS2GC_BattleEnd.create = function create(properties) {
             return new CS2GC_BattleEnd(properties);
@@ -3443,6 +3786,10 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.win != null && message.hasOwnProperty("win"))
+                writer.uint32(16).bool(message.win);
+            if (message.honour != null && message.hasOwnProperty("honour"))
+                writer.uint32(24).int32(message.honour);
             return writer;
         };
 
@@ -3459,6 +3806,12 @@ export const Protos = $root.Protos = (() => {
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.win = reader.bool();
+                    break;
+                case 3:
+                    message.honour = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -3482,6 +3835,12 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
+            if (message.win != null && message.hasOwnProperty("win"))
+                if (typeof message.win !== "boolean")
+                    return "win: boolean expected";
+            if (message.honour != null && message.hasOwnProperty("honour"))
+                if (!$util.isInteger(message.honour))
+                    return "honour: integer expected";
             return null;
         };
 
@@ -3494,6 +3853,10 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.CS2GC_BattleEnd.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
+            if (object.win != null)
+                message.win = Boolean(object.win);
+            if (object.honour != null)
+                message.honour = object.honour | 0;
             return message;
         };
 
@@ -3501,10 +3864,17 @@ export const Protos = $root.Protos = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.defaults)
+            if (options.defaults) {
                 object.opts = null;
+                object.win = false;
+                object.honour = 0;
+            }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.win != null && message.hasOwnProperty("win"))
+                object.win = message.win;
+            if (message.honour != null && message.hasOwnProperty("honour"))
+                object.honour = message.honour;
             return object;
         };
 
@@ -6195,6 +6565,225 @@ export const Protos = $root.Protos = (() => {
         };
 
         return GC2BS_CommitSnapshot;
+    })();
+
+    Protos.GC2BS_EndBattle = (function() {
+
+        function GC2BS_EndBattle(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2BS_EndBattle.prototype.opts = null;
+        GC2BS_EndBattle.prototype.winTeam = 0;
+        GC2BS_EndBattle.prototype.damage = 0;
+        GC2BS_EndBattle.prototype.hurt = 0;
+        GC2BS_EndBattle.prototype.heal = 0;
+        GC2BS_EndBattle.prototype.occupyTime = 0;
+        GC2BS_EndBattle.prototype.skill0Used = 0;
+        GC2BS_EndBattle.prototype.skill1Used = 0;
+        GC2BS_EndBattle.prototype.skill0Damage = 0;
+        GC2BS_EndBattle.prototype.skill1Damage = 0;
+
+        GC2BS_EndBattle.create = function create(properties) {
+            return new GC2BS_EndBattle(properties);
+        };
+
+        GC2BS_EndBattle.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.winTeam != null && message.hasOwnProperty("winTeam"))
+                writer.uint32(16).uint32(message.winTeam);
+            if (message.damage != null && message.hasOwnProperty("damage"))
+                writer.uint32(24).uint32(message.damage);
+            if (message.hurt != null && message.hasOwnProperty("hurt"))
+                writer.uint32(32).uint32(message.hurt);
+            if (message.heal != null && message.hasOwnProperty("heal"))
+                writer.uint32(40).uint32(message.heal);
+            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
+                writer.uint32(48).uint32(message.occupyTime);
+            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
+                writer.uint32(56).uint32(message.skill0Used);
+            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
+                writer.uint32(64).uint32(message.skill1Used);
+            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
+                writer.uint32(72).uint32(message.skill0Damage);
+            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
+                writer.uint32(80).uint32(message.skill1Damage);
+            return writer;
+        };
+
+        GC2BS_EndBattle.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2BS_EndBattle.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_EndBattle();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.winTeam = reader.uint32();
+                    break;
+                case 3:
+                    message.damage = reader.uint32();
+                    break;
+                case 4:
+                    message.hurt = reader.uint32();
+                    break;
+                case 5:
+                    message.heal = reader.uint32();
+                    break;
+                case 6:
+                    message.occupyTime = reader.uint32();
+                    break;
+                case 7:
+                    message.skill0Used = reader.uint32();
+                    break;
+                case 8:
+                    message.skill1Used = reader.uint32();
+                    break;
+                case 9:
+                    message.skill0Damage = reader.uint32();
+                    break;
+                case 10:
+                    message.skill1Damage = reader.uint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2BS_EndBattle.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2BS_EndBattle.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.winTeam != null && message.hasOwnProperty("winTeam"))
+                if (!$util.isInteger(message.winTeam))
+                    return "winTeam: integer expected";
+            if (message.damage != null && message.hasOwnProperty("damage"))
+                if (!$util.isInteger(message.damage))
+                    return "damage: integer expected";
+            if (message.hurt != null && message.hasOwnProperty("hurt"))
+                if (!$util.isInteger(message.hurt))
+                    return "hurt: integer expected";
+            if (message.heal != null && message.hasOwnProperty("heal"))
+                if (!$util.isInteger(message.heal))
+                    return "heal: integer expected";
+            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
+                if (!$util.isInteger(message.occupyTime))
+                    return "occupyTime: integer expected";
+            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
+                if (!$util.isInteger(message.skill0Used))
+                    return "skill0Used: integer expected";
+            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
+                if (!$util.isInteger(message.skill1Used))
+                    return "skill1Used: integer expected";
+            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
+                if (!$util.isInteger(message.skill0Damage))
+                    return "skill0Damage: integer expected";
+            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
+                if (!$util.isInteger(message.skill1Damage))
+                    return "skill1Damage: integer expected";
+            return null;
+        };
+
+        GC2BS_EndBattle.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2BS_EndBattle)
+                return object;
+            let message = new $root.Protos.GC2BS_EndBattle();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.GC2BS_EndBattle.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.winTeam != null)
+                message.winTeam = object.winTeam >>> 0;
+            if (object.damage != null)
+                message.damage = object.damage >>> 0;
+            if (object.hurt != null)
+                message.hurt = object.hurt >>> 0;
+            if (object.heal != null)
+                message.heal = object.heal >>> 0;
+            if (object.occupyTime != null)
+                message.occupyTime = object.occupyTime >>> 0;
+            if (object.skill0Used != null)
+                message.skill0Used = object.skill0Used >>> 0;
+            if (object.skill1Used != null)
+                message.skill1Used = object.skill1Used >>> 0;
+            if (object.skill0Damage != null)
+                message.skill0Damage = object.skill0Damage >>> 0;
+            if (object.skill1Damage != null)
+                message.skill1Damage = object.skill1Damage >>> 0;
+            return message;
+        };
+
+        GC2BS_EndBattle.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.winTeam = 0;
+                object.damage = 0;
+                object.hurt = 0;
+                object.heal = 0;
+                object.occupyTime = 0;
+                object.skill0Used = 0;
+                object.skill1Used = 0;
+                object.skill0Damage = 0;
+                object.skill1Damage = 0;
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.winTeam != null && message.hasOwnProperty("winTeam"))
+                object.winTeam = message.winTeam;
+            if (message.damage != null && message.hasOwnProperty("damage"))
+                object.damage = message.damage;
+            if (message.hurt != null && message.hasOwnProperty("hurt"))
+                object.hurt = message.hurt;
+            if (message.heal != null && message.hasOwnProperty("heal"))
+                object.heal = message.heal;
+            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
+                object.occupyTime = message.occupyTime;
+            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
+                object.skill0Used = message.skill0Used;
+            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
+                object.skill1Used = message.skill1Used;
+            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
+                object.skill0Damage = message.skill0Damage;
+            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
+                object.skill1Damage = message.skill1Damage;
+            return object;
+        };
+
+        GC2BS_EndBattle.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GC2BS_EndBattle;
     })();
 
     Protos.GC2CS_BeginMatch = (function() {

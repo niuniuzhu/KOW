@@ -77,15 +77,51 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
+    interface IBS2CS_BattleEndInfo {
+        win?: (boolean|null);
+        damage?: (number|null);
+        hurt?: (number|null);
+        heal?: (number|null);
+        occupyTime?: (number|null);
+        skill0Used?: (number|null);
+        skill1Used?: (number|null);
+        skill0Damage?: (number|null);
+        skill1Damage?: (number|null);
+    }
+
+    class BS2CS_BattleEndInfo implements IBS2CS_BattleEndInfo {
+        constructor(properties?: Protos.IBS2CS_BattleEndInfo);
+        public win: boolean;
+        public damage: number;
+        public hurt: number;
+        public heal: number;
+        public occupyTime: number;
+        public skill0Used: number;
+        public skill1Used: number;
+        public skill0Damage: number;
+        public skill1Damage: number;
+        public static create(properties?: Protos.IBS2CS_BattleEndInfo): Protos.BS2CS_BattleEndInfo;
+        public static encode(message: Protos.IBS2CS_BattleEndInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IBS2CS_BattleEndInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.BS2CS_BattleEndInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.BS2CS_BattleEndInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.BS2CS_BattleEndInfo;
+        public static toObject(message: Protos.BS2CS_BattleEndInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
     interface IBS2CS_BattleEnd {
         opts?: (Protos.IMsgOpts|null);
         bid?: (number|null);
+        infos?: ({ [k: string]: Protos.IBS2CS_BattleEndInfo }|null);
     }
 
     class BS2CS_BattleEnd implements IBS2CS_BattleEnd {
         constructor(properties?: Protos.IBS2CS_BattleEnd);
         public opts?: (Protos.IMsgOpts|null);
         public bid: number;
+        public infos: { [k: string]: Protos.IBS2CS_BattleEndInfo };
         public static create(properties?: Protos.IBS2CS_BattleEnd): Protos.BS2CS_BattleEnd;
         public static encode(message: Protos.IBS2CS_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2CS_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -141,6 +177,7 @@ export namespace Protos {
         eGC2BS_FrameAction = 1203,
         eGC2BS_RequestFrameActions = 1204,
         eGC2BS_CommitSnapshot = 1205,
+        eGC2BS_EndBattle = 1206,
         eGC2CS_BeginMatch = 1300,
         eLS2GC_GSInfo = 2000,
         eLS2GC_AskRegRet = 2001,
@@ -177,6 +214,7 @@ export namespace Protos {
         eCS2GC_RoomInfo = 5303,
         eCS2GC_EnterBattle = 5304,
         eCS2GC_BattleEnd = 5305,
+        eCS2GC_BSLose = 5306,
         eDB2LS_QueryAccountRet = 8000,
         eDB2LS_QueryLoginRet = 8001,
         eDB2LS_ExecRet = 8002
@@ -643,13 +681,35 @@ export namespace Protos {
         }
     }
 
+    interface ICS2GC_BSLose {
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    class CS2GC_BSLose implements ICS2GC_BSLose {
+        constructor(properties?: Protos.ICS2GC_BSLose);
+        public opts?: (Protos.IMsgOpts|null);
+        public static create(properties?: Protos.ICS2GC_BSLose): Protos.CS2GC_BSLose;
+        public static encode(message: Protos.ICS2GC_BSLose, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_BSLose, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_BSLose;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_BSLose;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_BSLose;
+        public static toObject(message: Protos.CS2GC_BSLose, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
     interface ICS2GC_BattleEnd {
         opts?: (Protos.IMsgOpts|null);
+        win?: (boolean|null);
+        honour?: (number|null);
     }
 
     class CS2GC_BattleEnd implements ICS2GC_BattleEnd {
         constructor(properties?: Protos.ICS2GC_BattleEnd);
         public opts?: (Protos.IMsgOpts|null);
+        public win: boolean;
+        public honour: number;
         public static create(properties?: Protos.ICS2GC_BattleEnd): Protos.CS2GC_BattleEnd;
         public static encode(message: Protos.ICS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1136,6 +1196,42 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GC2BS_CommitSnapshot;
         public static toObject(message: Protos.GC2BS_CommitSnapshot, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2BS_EndBattle {
+        opts?: (Protos.IMsgOpts|null);
+        winTeam?: (number|null);
+        damage?: (number|null);
+        hurt?: (number|null);
+        heal?: (number|null);
+        occupyTime?: (number|null);
+        skill0Used?: (number|null);
+        skill1Used?: (number|null);
+        skill0Damage?: (number|null);
+        skill1Damage?: (number|null);
+    }
+
+    class GC2BS_EndBattle implements IGC2BS_EndBattle {
+        constructor(properties?: Protos.IGC2BS_EndBattle);
+        public opts?: (Protos.IMsgOpts|null);
+        public winTeam: number;
+        public damage: number;
+        public hurt: number;
+        public heal: number;
+        public occupyTime: number;
+        public skill0Used: number;
+        public skill1Used: number;
+        public skill0Damage: number;
+        public skill1Damage: number;
+        public static create(properties?: Protos.IGC2BS_EndBattle): Protos.GC2BS_EndBattle;
+        public static encode(message: Protos.IGC2BS_EndBattle, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2BS_EndBattle, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2BS_EndBattle;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2BS_EndBattle;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2BS_EndBattle;
+        public static toObject(message: Protos.GC2BS_EndBattle, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

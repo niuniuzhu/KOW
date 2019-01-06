@@ -276,7 +276,7 @@ namespace CentralServer.Match
 		}
 
 		/// <summary>
-		/// 通知BS创建战场
+		/// 处理回应
 		/// </summary>
 		private static void OnBattleInfoRet( NetSessionBase session_, IMessage ret, object[] args )
 		{

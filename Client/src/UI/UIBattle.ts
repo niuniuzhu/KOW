@@ -11,6 +11,7 @@ export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
 
 	private readonly _root: fairygui.GComponent;
+	private readonly _endBattle: fairygui.GComponent;
 	private readonly _gestureState: GestureState = new GestureState();
 	private readonly _frameActionManager: FrameAciontManager = new FrameAciontManager();
 
@@ -19,6 +20,7 @@ export class UIBattle implements IUIModule {
 
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/battle");
+		fairygui.UIPackage.addPackage("res/ui/endlevel");
 		fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick);
 
 		this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
@@ -29,6 +31,8 @@ export class UIBattle implements IUIModule {
 		this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
 
+		this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
+
 		this._gestureState.joystick = <Joystick>this._root.getChild("joystick");
 		this._gestureState.joystick.core = this._root.getChild("joystick").asCom.getChild("n1").asCom;
 		this._gestureState.joystick.cen = new Vec2(100, 100);
@@ -37,6 +41,7 @@ export class UIBattle implements IUIModule {
 		this._gestureState.onChanged = this.HandleAxisInput.bind(this);
 
 		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
+		UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
 	}
 
 	public Dispose(): void {
@@ -56,7 +61,12 @@ export class UIBattle implements IUIModule {
 		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
 		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
 		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
-		Global.graphic.uiRoot.removeChild(this._root);
+		this._root.removeFromParent();
+		if (this._endBattle.parent != null) {
+			this._endBattle.removeFromParent();
+		}
+		this._player = null;
+		this._touchID = -1;
 	}
 
 	public Update(dt: number): void {
@@ -74,6 +84,21 @@ export class UIBattle implements IUIModule {
 			this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
 			this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
 		}
+	}
+
+	private OnBattleEnd(e: UIEvent): void {
+		Global.graphic.uiRoot.addChild(this._endBattle);
+		const isWin = e.b0;
+		const honer = e.v1;
+		let com: fairygui.GComponent;
+		if (isWin) {
+			com = this._endBattle.getChild("n0").asCom;
+		}
+		else {
+			com = this._endBattle.getChild("n1").asCom;
+		}
+		com.getChild("confirm").onClick(this, () => e.callback);
+		com.getChild("n7").asTextField.text = "" + honer;
 	}
 
 	private OnSkillBtnPress(): void {

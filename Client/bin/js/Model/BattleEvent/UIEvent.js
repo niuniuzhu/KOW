@@ -25,19 +25,28 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
         }
         Clear() {
             this.champion = null;
+            this.callback = null;
         }
         Release() {
             UIEvent.Release(this);
         }
-        static ChampionInit(champion, isSelf) {
+        static ChampionInit(champion) {
             let e = this.Get();
             e._type = UIEvent.E_ENTITY_INIT;
             e.champion = champion;
-            e.b0 = isSelf;
+            this.Invoke(e);
+        }
+        static EndBattle(win, honer, callback) {
+            let e = this.Get();
+            e._type = UIEvent.E_END_BATTLE;
+            e.b0 = win;
+            e.v1 = honer;
+            e.callback = callback;
             this.Invoke(e);
         }
     }
     UIEvent.E_ENTITY_INIT = 101;
+    UIEvent.E_END_BATTLE = 101;
     UIEvent.POOL = new Stack_1.default();
     UIEvent.HANDLERS = new Map();
     exports.UIEvent = UIEvent;

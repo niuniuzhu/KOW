@@ -6,8 +6,8 @@
 			"frame_rate": 20,
 			"keyframe_step": 4,
 			"snapshot_step": 100,
-			"timeout": 120000,
-			"max_players": 2,
+			"timeout": 30000,
+			"max_players": 1,
 			"born_pos": [
 				[
 					0,
@@ -32,7 +32,7 @@
 	},
 	"entity": {
 		"e0": {
-			"mhp": 1000,
+			"mhp": 60,
 			"mmp": 100,
 			"atk": 50,
 			"def": 0,

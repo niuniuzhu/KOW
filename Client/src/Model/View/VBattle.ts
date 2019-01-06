@@ -13,7 +13,6 @@ import { VChampion } from "./VChampion";
 
 export class VBattle {
 	private _mapID: number = 0;
-	private _playerID: Long;
 	private readonly _camera: Camera;
 
 	private readonly _champions: VChampion[] = [];
@@ -46,8 +45,6 @@ export class VBattle {
 
 		this._camera.SetBounds(Hashtable.GetNumber(this._def, "width") * Consts.LOGIC_TO_PIXEL_RATIO,
 			Hashtable.GetNumber(this._def, "height") * Consts.LOGIC_TO_PIXEL_RATIO);
-
-		this._playerID = battleInfo.playerID;
 
 		this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
 		this._root.touchable = false;
@@ -136,12 +133,12 @@ export class VBattle {
 				champion.DecodeSync(rid, reader, true);
 				this._champions.push(champion);
 				this._idToChampion.set(champion.rid.toString(), champion);
-				const isSelf = champion.rid.equals(this._playerID);
+				const isSelf = champion.rid.equals(Global.battleManager.playerID);
 				if (isSelf) {
 					this._camera.lookAt = champion;
 				}
 				//通知UI创建实体
-				UIEvent.ChampionInit(champion, isSelf);
+				UIEvent.ChampionInit(champion);
 			} else {
 				champion.DecodeSync(rid, reader, false);
 			}

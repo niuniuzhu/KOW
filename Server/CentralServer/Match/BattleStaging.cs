@@ -15,7 +15,7 @@ namespace CentralServer.Match
 		/// BS逻辑ID和战场ID的组合对应的玩家
 		/// BS逻辑ID和战场ID可组合成唯一ID
 		/// </summary>
-		private readonly Dictionary<ulong, List<CSUser>> _lbIDToUser = new Dictionary<ulong, List<CSUser>>();
+		private readonly Dictionary<ulong, List<CSUser>> _lbIDToUsers = new Dictionary<ulong, List<CSUser>>();
 		/// <summary>
 		/// BS逻辑ID对应的所有战场ID
 		/// </summary>
@@ -24,6 +24,12 @@ namespace CentralServer.Match
 		public void OnBattleCreated( uint lid, uint bid ) => this._lidToBID.AddToList( lid, bid );
 
 		public void OnBattleDestory( uint lid, uint bid ) => this._lidToBID.RemoveFromList( lid, bid );
+
+		public CSUser GetUser( ulong bsgcNID )
+		{
+			uint ukey = ( uint )( bsgcNID & uint.MaxValue );
+			return CS.instance.userMgr.GetUser( ukey );
+		}
 
 		/// <summary>
 		/// 把玩家添加到暂存区
@@ -37,7 +43,7 @@ namespace CentralServer.Match
 			System.Diagnostics.Debug.Assert( !user.isInBattle, $"user:{user.gcNID} already in battle staging" );
 			//记录BS sessionID
 			user.EnterBattle( sid, lid, bid );
-			this._lbIDToUser.AddToList( lid | ( ulong )bid << 32, user );
+			this._lbIDToUsers.AddToList( lid | ( ulong )bid << 32, user );
 			Logger.Log( $"user:{user.gcNID} join staging. lid:{lid}, bid:{bid}" );
 		}
 
@@ -46,8 +52,7 @@ namespace CentralServer.Match
 		/// </summary>
 		internal void Remove( ulong bsgcNID )
 		{
-			uint ukey = ( uint )( bsgcNID & uint.MaxValue );
-			CSUser user = CS.instance.userMgr.GetUser( ukey );
+			CSUser user = this.GetUser( bsgcNID );
 			if ( user == null )
 				return;
 			ulong lbID = user.bsLID | ( ulong )user.bid << 32;
@@ -56,7 +61,7 @@ namespace CentralServer.Match
 			//检查GC是否已断线
 			if ( !user.isConnected )
 				CS.instance.userMgr.DestroyUser( user );
-			this._lbIDToUser.Remove( lbID );
+			this._lbIDToUsers.Remove( lbID );
 		}
 
 		/// <summary>
@@ -67,7 +72,7 @@ namespace CentralServer.Match
 		internal void Remove( uint lid, uint bid )
 		{
 			ulong lbID = lid | ( ulong )bid << 32;
-			List<CSUser> users = this._lbIDToUser[lbID];
+			List<CSUser> users = this._lbIDToUsers[lbID];
 			int c2 = users.Count;
 			for ( int i = 0; i < c2; i++ )
 			{
@@ -79,7 +84,7 @@ namespace CentralServer.Match
 				if ( !user.isConnected )
 					CS.instance.userMgr.DestroyUser( user );
 			}
-			this._lbIDToUser.Remove( lbID );
+			this._lbIDToUsers.Remove( lbID );
 			this.OnBattleDestory( lid, bid );
 		}
 
@@ -101,7 +106,7 @@ namespace CentralServer.Match
 		{
 			List<uint> sids = new List<uint>();
 			ulong lbID = lid | ( ulong )bid << 32;
-			List<CSUser> users = this._lbIDToUser[lbID];
+			List<CSUser> users = this._lbIDToUsers[lbID];
 			int c2 = users.Count;
 			for ( int i = 0; i < c2; i++ )
 			{
@@ -120,7 +125,7 @@ namespace CentralServer.Match
 		{
 			List<CSUser> users = new List<CSUser>();
 			ulong lbID = lid | ( ulong )bid << 32;
-			users.AddRange( this._lbIDToUser[lbID] );
+			users.AddRange( this._lbIDToUsers[lbID] );
 			return users;
 		}
 
@@ -138,7 +143,7 @@ namespace CentralServer.Match
 			for ( int i = 0; i < count; i++ )
 			{
 				ulong lbID = lid | ( ulong )bids[i] << 32;
-				List<CSUser> users = this._lbIDToUser[lbID];
+				List<CSUser> users = this._lbIDToUsers[lbID];
 				int c2 = users.Count;
 				for ( int j = 0; j < c2; j++ )
 				{
@@ -165,7 +170,7 @@ namespace CentralServer.Match
 			for ( int i = 0; i < count; i++ )
 			{
 				ulong lbID = lid | ( ulong )bids[i] << 32;
-				users.AddRange( this._lbIDToUser[lbID] );
+				users.AddRange( this._lbIDToUsers[lbID] );
 			}
 			return users;
 		}
@@ -176,7 +181,7 @@ namespace CentralServer.Match
 		public string ListALLLBIDToUser()
 		{
 			StringBuilder sb = new StringBuilder();
-			foreach ( var kv in this._lbIDToUser )
+			foreach ( var kv in this._lbIDToUsers )
 			{
 				sb.AppendLine( kv.Key.ToString() );
 				List<CSUser> users = kv.Value;
@@ -192,7 +197,7 @@ namespace CentralServer.Match
 		public string ListLBIDToUser( uint lid, uint bid )
 		{
 			ulong lbID = lid | ( ulong )bid << 32;
-			if ( !this._lbIDToUser.TryGetValue( lbID, out List<CSUser> users ) )
+			if ( !this._lbIDToUsers.TryGetValue( lbID, out List<CSUser> users ) )
 				return string.Empty;
 			StringBuilder sb = new StringBuilder();
 			foreach ( CSUser user in users )
@@ -206,7 +211,7 @@ namespace CentralServer.Match
 		public int GetNumUsersByLBID( uint lid, uint bid )
 		{
 			ulong lbID = lid | ( ulong )bid << 32;
-			if ( !this._lbIDToUser.TryGetValue( lbID, out List<CSUser> users ) )
+			if ( !this._lbIDToUsers.TryGetValue( lbID, out List<CSUser> users ) )
 				return -1;
 			return users.Count;
 		}

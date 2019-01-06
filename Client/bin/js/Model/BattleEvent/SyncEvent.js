@@ -48,10 +48,18 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
             e.v0 = value;
             this.Invoke(e);
         }
+        static EndBattle(winTeam, honer) {
+            let e = this.Get();
+            e._type = SyncEvent.E_END_BATTLE;
+            e.v0 = winTeam;
+            e.v1 = honer;
+            this.Invoke(e);
+        }
     }
     SyncEvent.E_BATTLE_INIT = 100;
     SyncEvent.E_SNAPSHOT = 101;
     SyncEvent.E_HIT = 200;
+    SyncEvent.E_END_BATTLE = 201;
     SyncEvent.POOL = new Stack_1.default();
     SyncEvent.HANDLERS = new Map();
     exports.SyncEvent = SyncEvent;

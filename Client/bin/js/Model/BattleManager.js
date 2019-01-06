@@ -1,7 +1,8 @@
-define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Collections/Queue", "../RC/FMath/FMathUtils", "../RC/Utils/Logger", "../Scene/SceneManager", "./FrameActionGroup", "./Logic/Battle", "./View/VBattle"], function (require, exports, Global_1, protos_1, Connector_1, ProtoHelper_1, Queue_1, FMathUtils_1, Logger_1, SceneManager_1, FrameActionGroup_1, Battle_1, VBattle_1) {
+define(["require", "exports", "./BattleEvent/UIEvent", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Collections/Queue", "../RC/FMath/FMathUtils", "../RC/Utils/Logger", "../Scene/SceneManager", "./FrameActionGroup", "./Logic/Battle", "./View/VBattle"], function (require, exports, UIEvent_1, Global_1, protos_1, Connector_1, ProtoHelper_1, Queue_1, FMathUtils_1, Logger_1, SceneManager_1, FrameActionGroup_1, Battle_1, VBattle_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleManager {
+        get playerID() { return this._playerID; }
         get lBattle() { return this._lBattle; }
         get vBattle() { return this._vBattle; }
         Init() {
@@ -15,6 +16,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             this._init = false;
             Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
             Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+            Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
             Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
             this._lBattle.Destroy();
             this._vBattle.Destroy();
@@ -22,10 +24,12 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         Start() {
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBSLose.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
             this._destroied = false;
         }
         SetBattleInfo(battleInfo, completeHandler) {
+            this._playerID = battleInfo.playerID;
             this._vBattle.SetBattleInfo(battleInfo);
             this._lBattle.SetBattleInfo(battleInfo);
             const curFrame = battleInfo.serverFrame;
@@ -71,11 +75,17 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                 }
             });
         }
-        HandleBattleEnd(message) {
-            Logger_1.Logger.Log("battle end");
-            const battleEnd = message;
+        HandleBSLose(message) {
+            Logger_1.Logger.Log("bs lose");
             this.Destroy();
             Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
+        }
+        HandleBattleEnd(message) {
+            const msg = message;
+            UIEvent_1.UIEvent.EndBattle(msg.win, msg.honour, () => {
+                this.Destroy();
+                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
+            });
         }
         HandleFrameAction(message) {
             const frameAction = message;

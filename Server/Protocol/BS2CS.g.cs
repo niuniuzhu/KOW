@@ -32,18 +32,26 @@ namespace Protos {
             "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvImkKE0JTMkNTX0JhdHRs",
             "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiYKBnJl",
             "c3VsdBgCIAEoDjIWLlByb3Rvcy5HbG9iYWwuRUNvbW1vbhILCgNiaWQYAyAB",
-            "KA0iPQoPQlMyQ1NfQmF0dGxlRW5kEh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
-            "TXNnT3B0cxILCgNiaWQYAiABKA0ihgEKDkJTMkNTX0tpY2tVc2VyEh0KBG9w",
-            "dHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVnY05JRBgCIAEoBBItCgZy",
-            "ZWFzb24YAyABKA4yHS5Qcm90b3MuQlMyQ1NfS2lja1VzZXIuUmVhc29uIhcK",
-            "BlJlYXNvbhINCglPdXRPZlN5bmMQAGIGcHJvdG8z"));
+            "KA0itgEKE0JTMkNTX0JhdHRsZUVuZEluZm8SCwoDd2luGAIgASgIEg4KBmRh",
+            "bWFnZRgDIAEoDRIMCgRodXJ0GAQgASgNEgwKBGhlYWwYBSABKA0SEgoKb2Nj",
+            "dXB5VGltZRgGIAEoDRISCgpza2lsbDBVc2VkGAcgASgNEhIKCnNraWxsMVVz",
+            "ZWQYCCABKA0SFAoMc2tpbGwwRGFtYWdlGAkgASgNEhQKDHNraWxsMURhbWFn",
+            "ZRgKIAEoDSK7AQoPQlMyQ1NfQmF0dGxlRW5kEh0KBG9wdHMYASABKAsyDy5Q",
+            "cm90b3MuTXNnT3B0cxILCgNiaWQYAiABKA0SMQoFaW5mb3MYAyADKAsyIi5Q",
+            "cm90b3MuQlMyQ1NfQmF0dGxlRW5kLkluZm9zRW50cnkaSQoKSW5mb3NFbnRy",
+            "eRILCgNrZXkYASABKAQSKgoFdmFsdWUYAiABKAsyGy5Qcm90b3MuQlMyQ1Nf",
+            "QmF0dGxlRW5kSW5mbzoCOAEihgEKDkJTMkNTX0tpY2tVc2VyEh0KBG9wdHMY",
+            "ASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVnY05JRBgCIAEoBBItCgZyZWFz",
+            "b24YAyABKA4yHS5Qcm90b3MuQlMyQ1NfS2lja1VzZXIuUmVhc29uIhcKBlJl",
+            "YXNvbhINCglPdXRPZlN5bmMQAGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BSInfo), global::Protos.BSInfo.Parser, new[]{ "Id", "Ip", "Port", "State" }, null, new[]{ typeof(global::Protos.BSInfo.Types.State) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_ReportState), global::Protos.BS2CS_ReportState.Parser, new[]{ "Opts", "BsInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts", "Result", "Bid" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEnd), global::Protos.BS2CS_BattleEnd.Parser, new[]{ "Opts", "Bid" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEndInfo), global::Protos.BS2CS_BattleEndInfo.Parser, new[]{ "Win", "Damage", "Hurt", "Heal", "OccupyTime", "Skill0Used", "Skill1Used", "Skill0Damage", "Skill1Damage" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEnd), global::Protos.BS2CS_BattleEnd.Parser, new[]{ "Opts", "Bid", "Infos" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_KickUser), global::Protos.BS2CS_KickUser.Parser, new[]{ "Opts", "GcNID", "Reason" }, null, new[]{ typeof(global::Protos.BS2CS_KickUser.Types.Reason) }, null)
           }));
     }
@@ -650,6 +658,359 @@ namespace Protos {
 
   }
 
+  public sealed partial class BS2CS_BattleEndInfo : pb::IMessage<BS2CS_BattleEndInfo> {
+    private static readonly pb::MessageParser<BS2CS_BattleEndInfo> _parser = new pb::MessageParser<BS2CS_BattleEndInfo>(() => new BS2CS_BattleEndInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BS2CS_BattleEndInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleEndInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleEndInfo(BS2CS_BattleEndInfo other) : this() {
+      win_ = other.win_;
+      damage_ = other.damage_;
+      hurt_ = other.hurt_;
+      heal_ = other.heal_;
+      occupyTime_ = other.occupyTime_;
+      skill0Used_ = other.skill0Used_;
+      skill1Used_ = other.skill1Used_;
+      skill0Damage_ = other.skill0Damage_;
+      skill1Damage_ = other.skill1Damage_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BS2CS_BattleEndInfo Clone() {
+      return new BS2CS_BattleEndInfo(this);
+    }
+
+    /// <summary>Field number for the "win" field.</summary>
+    public const int WinFieldNumber = 2;
+    private bool win_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Win {
+      get { return win_; }
+      set {
+        win_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "damage" field.</summary>
+    public const int DamageFieldNumber = 3;
+    private uint damage_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Damage {
+      get { return damage_; }
+      set {
+        damage_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "hurt" field.</summary>
+    public const int HurtFieldNumber = 4;
+    private uint hurt_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Hurt {
+      get { return hurt_; }
+      set {
+        hurt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "heal" field.</summary>
+    public const int HealFieldNumber = 5;
+    private uint heal_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Heal {
+      get { return heal_; }
+      set {
+        heal_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "occupyTime" field.</summary>
+    public const int OccupyTimeFieldNumber = 6;
+    private uint occupyTime_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint OccupyTime {
+      get { return occupyTime_; }
+      set {
+        occupyTime_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "skill0Used" field.</summary>
+    public const int Skill0UsedFieldNumber = 7;
+    private uint skill0Used_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Skill0Used {
+      get { return skill0Used_; }
+      set {
+        skill0Used_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "skill1Used" field.</summary>
+    public const int Skill1UsedFieldNumber = 8;
+    private uint skill1Used_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Skill1Used {
+      get { return skill1Used_; }
+      set {
+        skill1Used_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "skill0Damage" field.</summary>
+    public const int Skill0DamageFieldNumber = 9;
+    private uint skill0Damage_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Skill0Damage {
+      get { return skill0Damage_; }
+      set {
+        skill0Damage_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "skill1Damage" field.</summary>
+    public const int Skill1DamageFieldNumber = 10;
+    private uint skill1Damage_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Skill1Damage {
+      get { return skill1Damage_; }
+      set {
+        skill1Damage_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BS2CS_BattleEndInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BS2CS_BattleEndInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Win != other.Win) return false;
+      if (Damage != other.Damage) return false;
+      if (Hurt != other.Hurt) return false;
+      if (Heal != other.Heal) return false;
+      if (OccupyTime != other.OccupyTime) return false;
+      if (Skill0Used != other.Skill0Used) return false;
+      if (Skill1Used != other.Skill1Used) return false;
+      if (Skill0Damage != other.Skill0Damage) return false;
+      if (Skill1Damage != other.Skill1Damage) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Win != false) hash ^= Win.GetHashCode();
+      if (Damage != 0) hash ^= Damage.GetHashCode();
+      if (Hurt != 0) hash ^= Hurt.GetHashCode();
+      if (Heal != 0) hash ^= Heal.GetHashCode();
+      if (OccupyTime != 0) hash ^= OccupyTime.GetHashCode();
+      if (Skill0Used != 0) hash ^= Skill0Used.GetHashCode();
+      if (Skill1Used != 0) hash ^= Skill1Used.GetHashCode();
+      if (Skill0Damage != 0) hash ^= Skill0Damage.GetHashCode();
+      if (Skill1Damage != 0) hash ^= Skill1Damage.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Win != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(Win);
+      }
+      if (Damage != 0) {
+        output.WriteRawTag(24);
+        output.WriteUInt32(Damage);
+      }
+      if (Hurt != 0) {
+        output.WriteRawTag(32);
+        output.WriteUInt32(Hurt);
+      }
+      if (Heal != 0) {
+        output.WriteRawTag(40);
+        output.WriteUInt32(Heal);
+      }
+      if (OccupyTime != 0) {
+        output.WriteRawTag(48);
+        output.WriteUInt32(OccupyTime);
+      }
+      if (Skill0Used != 0) {
+        output.WriteRawTag(56);
+        output.WriteUInt32(Skill0Used);
+      }
+      if (Skill1Used != 0) {
+        output.WriteRawTag(64);
+        output.WriteUInt32(Skill1Used);
+      }
+      if (Skill0Damage != 0) {
+        output.WriteRawTag(72);
+        output.WriteUInt32(Skill0Damage);
+      }
+      if (Skill1Damage != 0) {
+        output.WriteRawTag(80);
+        output.WriteUInt32(Skill1Damage);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Win != false) {
+        size += 1 + 1;
+      }
+      if (Damage != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Damage);
+      }
+      if (Hurt != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Hurt);
+      }
+      if (Heal != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Heal);
+      }
+      if (OccupyTime != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(OccupyTime);
+      }
+      if (Skill0Used != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill0Used);
+      }
+      if (Skill1Used != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill1Used);
+      }
+      if (Skill0Damage != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill0Damage);
+      }
+      if (Skill1Damage != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill1Damage);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BS2CS_BattleEndInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Win != false) {
+        Win = other.Win;
+      }
+      if (other.Damage != 0) {
+        Damage = other.Damage;
+      }
+      if (other.Hurt != 0) {
+        Hurt = other.Hurt;
+      }
+      if (other.Heal != 0) {
+        Heal = other.Heal;
+      }
+      if (other.OccupyTime != 0) {
+        OccupyTime = other.OccupyTime;
+      }
+      if (other.Skill0Used != 0) {
+        Skill0Used = other.Skill0Used;
+      }
+      if (other.Skill1Used != 0) {
+        Skill1Used = other.Skill1Used;
+      }
+      if (other.Skill0Damage != 0) {
+        Skill0Damage = other.Skill0Damage;
+      }
+      if (other.Skill1Damage != 0) {
+        Skill1Damage = other.Skill1Damage;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 16: {
+            Win = input.ReadBool();
+            break;
+          }
+          case 24: {
+            Damage = input.ReadUInt32();
+            break;
+          }
+          case 32: {
+            Hurt = input.ReadUInt32();
+            break;
+          }
+          case 40: {
+            Heal = input.ReadUInt32();
+            break;
+          }
+          case 48: {
+            OccupyTime = input.ReadUInt32();
+            break;
+          }
+          case 56: {
+            Skill0Used = input.ReadUInt32();
+            break;
+          }
+          case 64: {
+            Skill1Used = input.ReadUInt32();
+            break;
+          }
+          case 72: {
+            Skill0Damage = input.ReadUInt32();
+            break;
+          }
+          case 80: {
+            Skill1Damage = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   /// <summary>
   ///战场结束
   /// </summary>
@@ -661,7 +1022,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -680,6 +1041,7 @@ namespace Protos {
     public BS2CS_BattleEnd(BS2CS_BattleEnd other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       bid_ = other.bid_;
+      infos_ = other.infos_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -713,6 +1075,16 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "infos" field.</summary>
+    public const int InfosFieldNumber = 3;
+    private static readonly pbc::MapField<ulong, global::Protos.BS2CS_BattleEndInfo>.Codec _map_infos_codec
+        = new pbc::MapField<ulong, global::Protos.BS2CS_BattleEndInfo>.Codec(pb::FieldCodec.ForUInt64(8), pb::FieldCodec.ForMessage(18, global::Protos.BS2CS_BattleEndInfo.Parser), 26);
+    private readonly pbc::MapField<ulong, global::Protos.BS2CS_BattleEndInfo> infos_ = new pbc::MapField<ulong, global::Protos.BS2CS_BattleEndInfo>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::MapField<ulong, global::Protos.BS2CS_BattleEndInfo> Infos {
+      get { return infos_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as BS2CS_BattleEnd);
@@ -728,6 +1100,7 @@ namespace Protos {
       }
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Bid != other.Bid) return false;
+      if (!Infos.Equals(other.Infos)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -736,6 +1109,7 @@ namespace Protos {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Bid != 0) hash ^= Bid.GetHashCode();
+      hash ^= Infos.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -757,6 +1131,7 @@ namespace Protos {
         output.WriteRawTag(16);
         output.WriteUInt32(Bid);
       }
+      infos_.WriteTo(output, _map_infos_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -771,6 +1146,7 @@ namespace Protos {
       if (Bid != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Bid);
       }
+      size += infos_.CalculateSize(_map_infos_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -791,6 +1167,7 @@ namespace Protos {
       if (other.Bid != 0) {
         Bid = other.Bid;
       }
+      infos_.Add(other.infos_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -813,6 +1190,10 @@ namespace Protos {
             Bid = input.ReadUInt32();
             break;
           }
+          case 26: {
+            infos_.AddEntriesFrom(input, _map_infos_codec);
+            break;
+          }
         }
       }
     }
@@ -830,7 +1211,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Protos.BS2CSReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

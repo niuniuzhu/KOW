@@ -57,7 +57,7 @@ export class Battle implements ISnapshotable {
 	private readonly _bullets: Bullet[] = [];
 	private readonly _idToBullet: Map<string, Bullet> = new Map<string, Bullet>();
 	private readonly _hitManager: HitManager;
-	
+
 	constructor() {
 		this._hitManager = new HitManager(this);
 	}
@@ -225,6 +225,9 @@ export class Battle implements ISnapshotable {
 				--count;
 			}
 		}
+
+		//判断战场是否结束
+		this.CheckBattleEnd();
 
 		//判断是否需要提交快照数据
 		if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
@@ -553,6 +556,40 @@ export class Battle implements ISnapshotable {
 	private ApplyFrameAction(frameAction: FrameAction): void {
 		const champion = this.GetChampion(frameAction.gcNID);
 		champion.FrameAction(frameAction);
+	}
+
+	/**
+	 * 检查战场是否结束
+	 */
+	private CheckBattleEnd(): void {
+		let team0Win = true;
+		let team1Win = true;
+		for (const champion of this._champions) {
+			if (champion.team == 0 && !champion.isDead) {
+				team1Win = false;
+			}
+			if (champion.team == 1 && !champion.isDead) {
+				team0Win = false;
+			}
+		}
+		let winTeam = 0;
+		if (team0Win && !team1Win) {//team0 win
+			winTeam = 1 << 0;
+		}
+		else if (!team0Win && team1Win) {//team1 win
+			winTeam = 1 << 1;
+
+		}
+		else if (team0Win && team1Win) {//both win
+			winTeam = (1 << 0) | (1 << 1);
+		}
+		if (winTeam != 0) {
+			//通知服务端战场结束
+			const msg = ProtoCreator.Q_GC2BS_EndBattle();
+			msg.winTeam = winTeam;
+			//发送协议
+			Global.connector.bsConnector.Send(Protos.GC2BS_EndBattle, msg);
+		}
 	}
 
 	/**

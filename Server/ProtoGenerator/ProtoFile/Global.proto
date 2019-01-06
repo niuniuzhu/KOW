@@ -21,6 +21,7 @@ enum MsgID {
 	eGC2BS_FrameAction = 1203;
 	eGC2BS_RequestFrameActions = 1204;
 	eGC2BS_CommitSnapshot = 1205;
+	eGC2BS_EndBattle = 1206;
 
 	eGC2CS_BeginMatch = 1300;
 	
@@ -73,6 +74,7 @@ enum MsgID {
 	eCS2GC_RoomInfo = 5303;
 	eCS2GC_EnterBattle = 5304;
 	eCS2GC_BattleEnd = 5305;
+	eCS2GC_BSLose = 5306;
 
 	//db
 	eDB2LS_QueryAccountRet = 8000;

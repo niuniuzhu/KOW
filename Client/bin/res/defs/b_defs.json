@@ -15,7 +15,9 @@
 		"loading.bin,0",
 		"loading_atlas0.png,1",
 		"battle.bin,0",
-		"battle_atlas0.png,1"
+		"battle_atlas0.png,1",
+		"endlevel.bin,0",
+		"endlevel_atlas0.png,1"
 	],
 	"entity": {
 		"e0": {

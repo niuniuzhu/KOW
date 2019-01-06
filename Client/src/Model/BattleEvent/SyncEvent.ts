@@ -6,6 +6,7 @@ export class SyncEvent extends BaseBattleEvent {
 	public static readonly E_SNAPSHOT: number = 101;
 
 	public static readonly E_HIT: number = 200;
+	public static readonly E_END_BATTLE: number = 201;
 
 	private static readonly POOL: Stack<SyncEvent> = new Stack<SyncEvent>();
 	private static readonly HANDLERS: Map<number, (e: SyncEvent) => void> = new Map<number, (e: SyncEvent) => void>();
@@ -69,8 +70,17 @@ export class SyncEvent extends BaseBattleEvent {
 		this.Invoke(e);
 	}
 
+	public static EndBattle(winTeam: number, honer: number): void {
+		let e = this.Get();
+		e._type = SyncEvent.E_END_BATTLE;
+		e.v0 = winTeam;//按位标记胜利队伍
+		e.v1 = honer;
+		this.Invoke(e);
+	}
+
 	public data: Uint8Array;
 	public rid: Long;
 	public v0: number;
+	public v1: number;
 	public b0: boolean;
 }

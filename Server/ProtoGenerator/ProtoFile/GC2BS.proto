@@ -49,12 +49,5 @@ message GC2BS_CommitSnapshot {
 message GC2BS_EndBattle {
 	MsgOpts opts = 1;
 	uint32 winTeam = 2;
-	uint32 damage = 3;
-	uint32 hurt = 4;
-	uint32 heal = 5;
-	uint32 occupyTime = 6;
-	uint32 skill0Used = 7;
-	uint32 skill1Used = 8;
-	uint32 skill0Damage = 9;
-	uint32 skill1Damage = 10;
+	bytes snapshot = 3;
 }

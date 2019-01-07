@@ -1,4 +1,4 @@
-define(["require", "exports", "./BattleEvent/UIEvent", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Collections/Queue", "../RC/FMath/FMathUtils", "../RC/Utils/Logger", "../Scene/SceneManager", "./FrameActionGroup", "./Logic/Battle", "./View/VBattle"], function (require, exports, UIEvent_1, Global_1, protos_1, Connector_1, ProtoHelper_1, Queue_1, FMathUtils_1, Logger_1, SceneManager_1, FrameActionGroup_1, Battle_1, VBattle_1) {
+define(["require", "exports", "./BattleEvent/UIEvent", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Collections/Queue", "../RC/FMath/FMathUtils", "../RC/Utils/Logger", "../Scene/SceneManager", "./FrameActionGroup", "./Logic/Battle", "./View/VBattle", "./BattleEvent/SyncEvent"], function (require, exports, UIEvent_1, Global_1, protos_1, Connector_1, ProtoHelper_1, Queue_1, FMathUtils_1, Logger_1, SceneManager_1, FrameActionGroup_1, Battle_1, VBattle_1, SyncEvent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleManager {
@@ -24,7 +24,7 @@ define(["require", "exports", "./BattleEvent/UIEvent", "../Global", "../Libs/pro
         Start() {
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
-            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBSLose.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
             this._destroied = false;
         }
@@ -59,6 +59,7 @@ define(["require", "exports", "./BattleEvent/UIEvent", "../Global", "../Libs/pro
             if (!this._init)
                 return;
             this._lBattle.Update(FMathUtils_1.FMathUtils.ToFixed(dt));
+            SyncEvent_1.SyncEvent.Update();
             this._vBattle.Update(dt);
         }
         RequestSnapshot(callback) {

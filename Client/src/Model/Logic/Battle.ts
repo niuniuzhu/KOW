@@ -48,6 +48,7 @@ export class Battle implements ISnapshotable {
 	private _def: Hashtable;
 	private _bounds: FRect;
 	private _destroied: boolean = false;
+	private _markToEnd: boolean = false;
 
 	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
 	private readonly _champions: Champion[] = [];
@@ -79,6 +80,7 @@ export class Battle implements ISnapshotable {
 		this._nextKeyFrame = 0;
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
+		this._markToEnd = false;
 
 		this._def = Defs.GetMap(this._mapID);
 		const bWidth = Hashtable.GetNumber(this._def, "width");
@@ -227,7 +229,10 @@ export class Battle implements ISnapshotable {
 		}
 
 		//判断战场是否结束
-		this.CheckBattleEnd();
+		if (!this._markToEnd) {
+			this._markToEnd = true;
+			this.CheckBattleEnd();
+		}
 
 		//判断是否需要提交快照数据
 		if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
@@ -247,6 +252,7 @@ export class Battle implements ISnapshotable {
 	 */
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.int32(this._frame);
+		writer.bool(this._markToEnd);
 
 		//champions
 		let count = this._champions.length;
@@ -280,6 +286,7 @@ export class Battle implements ISnapshotable {
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._frame = reader.int32();
+		this._markToEnd = reader.bool();
 		//champions
 		let count = reader.int32();
 		for (let i = 0; i < count; i++) {
@@ -562,6 +569,8 @@ export class Battle implements ISnapshotable {
 	 * 检查战场是否结束
 	 */
 	private CheckBattleEnd(): void {
+		if (this._champions.length < 2)
+			return;
 		let team0Win = true;
 		let team1Win = true;
 		for (const champion of this._champions) {
@@ -584,9 +593,16 @@ export class Battle implements ISnapshotable {
 			winTeam = (1 << 0) | (1 << 1);
 		}
 		if (winTeam != 0) {
+			//记录一次快照
+			const writer = $protobuf.Writer.create();
+			this.EncodeSnapshot(writer);
+			const data = writer.finish();
+
 			//通知服务端战场结束
 			const msg = ProtoCreator.Q_GC2BS_EndBattle();
 			msg.winTeam = winTeam;
+			msg.snapshot = data;
+
 			//发送协议
 			Global.connector.bsConnector.Send(Protos.GC2BS_EndBattle, msg);
 		}

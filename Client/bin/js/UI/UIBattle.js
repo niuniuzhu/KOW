@@ -6,6 +6,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._gestureState = new GestureState_1.GestureState();
             this._frameActionManager = new FrameActionManager_1.FrameAciontManager();
             this._touchID = -1;
+            this._markToEnd = false;
             fairygui.UIPackage.addPackage("res/ui/battle");
             fairygui.UIPackage.addPackage("res/ui/endlevel");
             fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick_1.Joystick);
@@ -23,8 +24,6 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._gestureState.joystick.radius = 100;
             this._gestureState.joystick.resetDuration = 60;
             this._gestureState.onChanged = this.HandleAxisInput.bind(this);
-            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
-            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
         }
         get root() { return this._root; }
         Dispose() {
@@ -33,11 +32,16 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
         }
         Enter(param) {
             this._touchID = -1;
+            this._markToEnd = false;
             Global_1.Global.graphic.uiRoot.addChild(this._root);
             fairygui.GRoot.inst.on(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
             this._frameActionManager.Reset();
+            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
+            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
         }
         Exit() {
+            UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ENTITY_INIT);
+            UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_END_BATTLE);
             this._gestureState.OnTouchEnd();
             fairygui.GRoot.inst.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
             fairygui.GRoot.inst.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
@@ -63,32 +67,50 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             }
         }
         OnBattleEnd(e) {
+            this._markToEnd = true;
             Global_1.Global.graphic.uiRoot.addChild(this._endBattle);
             const isWin = e.b0;
             const honer = e.v1;
+            const callback = e.callback;
             let com;
             if (isWin) {
                 com = this._endBattle.getChild("n0").asCom;
+                this._endBattle.getController("c1").selectedIndex = 0;
             }
             else {
                 com = this._endBattle.getChild("n1").asCom;
+                this._endBattle.getController("c1").selectedIndex = 1;
             }
-            com.getChild("confirm").onClick(this, () => e.callback);
+            const confirmBtn = com.getChild("confirm");
+            confirmBtn.onClick(this, () => {
+                callback();
+                confirmBtn.offClick(this, callback);
+            });
             com.getChild("n7").asTextField.text = "" + honer;
         }
         OnSkillBtnPress() {
+            if (this._markToEnd)
+                return;
             this._frameActionManager.SetS1(true);
         }
         OnSkillBtnRelease() {
+            if (this._markToEnd)
+                return;
             this._frameActionManager.SetS1(false);
         }
         OnSkillBtn2Press() {
+            if (this._markToEnd)
+                return;
             this._frameActionManager.SetS2(true);
         }
         OnSkillBtn2Release() {
+            if (this._markToEnd)
+                return;
             this._frameActionManager.SetS2(false);
         }
         HandleAxisInput(value) {
+            if (this._markToEnd)
+                return;
             this._frameActionManager.SetInputDirection(value);
         }
         OnDragStart(e) {

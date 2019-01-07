@@ -16,8 +16,8 @@ namespace CentralServer.Biz
 			CS.instance.lIDToBSInfos.Remove( session.logicID );
 			CS.instance.UpdateAppropriateBSInfo();
 
-			//通知客户端战场结束
-			Protos.CS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_CS2GC_BattleEnd();
+			//通知客户端丢失bs
+			Protos.CS2GC_BSLose gcBattleEnd = ProtoCreator.Q_CS2GC_BSLose();
 			List<CSUser> users = CS.instance.battleStaging.GetUsers( session.logicID );
 			if ( users != null )
 			{

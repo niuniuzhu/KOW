@@ -87,7 +87,7 @@ namespace BattleServer.Battle.Snapshot
 			//判断是否所有玩家都提交了快照
 			if ( playerSnapshots.Count < this._numPlayers )
 				return;
-			//检查crc是否一致
+			//检查crc一致性
 			//先找出crc多数一致的组
 			var group = playerSnapshots.GroupBy( s => s.crc );
 			//如果只有一个分组,则代表全部玩家的crc值一致
@@ -136,7 +136,7 @@ namespace BattleServer.Battle.Snapshot
 		private static string PrintSnapshot( ByteString data ) => BitConverter.ToString( data.ToByteArray() );
 	}
 
-	class PlayerSnapshot
+	public class PlayerSnapshot
 	{
 		public ulong gcNID;
 		public ByteString data;

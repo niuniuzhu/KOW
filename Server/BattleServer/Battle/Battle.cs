@@ -116,6 +116,11 @@ namespace BattleServer.Battle
 		private readonly FrameActionMgr _frameActionMgr = new FrameActionMgr();
 
 		/// <summary>
+		/// 战场结束处理器
+		/// </summary>
+		private readonly BattleEndProcessor _battleEndProcessor = new BattleEndProcessor();
+
+		/// <summary>
 		/// 用于广播的临时SID表
 		/// </summary>
 		private readonly List<uint> _tempSIDs = new List<uint>();
@@ -139,6 +144,10 @@ namespace BattleServer.Battle
 		/// </summary>
 		internal bool Init( BattleEntry battleEntry )
 		{
+			this.frame = 0;
+			this.finished = false;
+			this._lastUpdateTime = 0;
+
 			this.battleEntry = battleEntry;
 			this.rndSeed = battleEntry.rndSeed;
 			this.mapID = battleEntry.mapID;
@@ -158,6 +167,8 @@ namespace BattleServer.Battle
 			this._frameActionMgr.Init( this );
 			//初始化锁步器
 			this._stepLocker.Init( this, this.frameRate, this.keyframeStep );
+			//初始化战场结束处理器
+			this._battleEndProcessor.Init( this );
 			return true;
 		}
 
@@ -217,28 +228,31 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 清理战场
 		/// </summary>
-		internal void End()
+		private void Stop()
 		{
+			this.finished = true;
 			if ( this._task != null )
 			{
 				this._task.Wait();
 				this._task = null;
 			}
-			this.finished = false;
-			this.frame = 0;
+			this._sw.Stop();
+			this._sw.Reset();
+			this._stepLocker.Clear();
+		}
+
+		internal void End()
+		{
+			this._players = null;
 			int count = this._entities.Count;
 			for ( int i = 0; i < count; i++ )
 				this._entities[i].Dispose();
-			this._players = null;
 			this._entities.Clear();
 			this._idToEntity.Clear();
 			this._frameActionMgr.Clear();
 			this._snapshotMgr.Clear();
+			this._battleEndProcessor.Clear();
 			this._tempSIDs.Clear();
-			this._lastUpdateTime = 0;
-			this._stepLocker.Clear();
-			this._sw.Stop();
-			this._sw.Reset();
 		}
 
 		/// <summary>
@@ -248,7 +262,7 @@ namespace BattleServer.Battle
 		{
 			if ( this.finished )
 				return;
-			this.finished = true;
+			this.Stop();
 		}
 
 		/// <summary>
@@ -375,12 +389,20 @@ namespace BattleServer.Battle
 		/// <param name="dt">流逝时间</param>
 		internal void OnKeyframe( int frame, int dt )
 		{
-			this._frameActionMgr.Save( frame );
-			//把玩家的操作指令广播到所有玩家
-			Protos.BS2GC_FrameAction action = ProtoCreator.Q_BS2GC_FrameAction();
-			action.Frame = frame;
-			action.Action = this._frameActionMgr.latestHistory;
-			this.Broadcast( action );
+			if ( this._battleEndProcessor.vaild )
+			{
+				this._battleEndProcessor.Process();
+				this.Stop();
+			}
+			else
+			{
+				this._frameActionMgr.Save( frame );
+				//把玩家的操作指令广播到所有玩家
+				Protos.BS2GC_FrameAction action = ProtoCreator.Q_BS2GC_FrameAction();
+				action.Frame = frame;
+				action.Action = this._frameActionMgr.latestHistory;
+				this.Broadcast( action );
+			}
 		}
 
 		/// <summary>
@@ -485,27 +507,6 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 处理战场结束
 		/// </summary>
-		public bool HandleBattleEnd( ulong gcNID, Protos.GC2BS_EndBattle endBattle )
-		{
-			Player player = this.GetPlayer( gcNID );
-			player.battleEndFlag = true;
-			player.win = player.team == endBattle.WinTeam;
-			player.damage = endBattle.Damage;
-			player.hurt = endBattle.Hurt;
-			player.heal = endBattle.Heal;
-			player.occupyTime = endBattle.OccupyTime;
-			player.skill0Used = endBattle.Skill0Used;
-			player.skill1Used = endBattle.Skill1Used;
-			player.skill0Damage = endBattle.Skill0Damage;
-			player.skill1Damage = endBattle.Skill1Damage;
-
-			int count = this._players.Length;
-			for ( int i = 0; i < count; i++ )
-			{
-				if ( !this._players[i].battleEndFlag )
-					return false;
-			}
-			return true;
-		}
+		public void HandleBattleEnd( ulong gcNID, Protos.GC2BS_EndBattle endBattle ) => this._battleEndProcessor.Add( gcNID, endBattle );
 	}
 }

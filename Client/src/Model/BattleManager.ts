@@ -11,6 +11,7 @@ import { BattleInfo } from "./BattleInfo";
 import { FrameActionGroup } from "./FrameActionGroup";
 import { Battle } from "./Logic/Battle";
 import { VBattle } from "./View/VBattle";
+import { SyncEvent } from "./BattleEvent/SyncEvent";
 
 /**
  * 战场管理器
@@ -59,7 +60,7 @@ export class BattleManager {
 	public Start(): void {
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBSLose.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 		this._destroied = false;
 	}
@@ -110,6 +111,7 @@ export class BattleManager {
 		if (!this._init)
 			return;
 		this._lBattle.Update(FMathUtils.ToFixed(dt));
+		SyncEvent.Update();
 		this._vBattle.Update(dt);
 	}
 

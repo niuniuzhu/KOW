@@ -10,6 +10,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._mapID = 0;
             this._frame = 0;
             this._destroied = false;
+            this._markToEnd = false;
             this._frameActionGroups = new Queue_1.default();
             this._champions = [];
             this._idToChampion = new Map();
@@ -41,6 +42,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._nextKeyFrame = 0;
             this._logicElapsed = 0;
             this._realElapsed = 0;
+            this._markToEnd = false;
             this._def = Defs_1.Defs.GetMap(this._mapID);
             const bWidth = Hashtable_1.Hashtable.GetNumber(this._def, "width");
             const bHeight = Hashtable_1.Hashtable.GetNumber(this._def, "height");
@@ -143,7 +145,10 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                     --count;
                 }
             }
-            this.CheckBattleEnd();
+            if (!this._markToEnd) {
+                this._markToEnd = true;
+                this.CheckBattleEnd();
+            }
             if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
                 const writer = $protobuf.Writer.create();
                 this.EncodeSnapshot(writer);
@@ -156,6 +161,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         }
         EncodeSnapshot(writer) {
             writer.int32(this._frame);
+            writer.bool(this._markToEnd);
             let count = this._champions.length;
             writer.int32(count);
             for (let i = 0; i < count; i++) {
@@ -178,6 +184,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         }
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
+            this._markToEnd = reader.bool();
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const champion = new Champion_1.Champion(this);
@@ -361,6 +368,8 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             champion.FrameAction(frameAction);
         }
         CheckBattleEnd() {
+            if (this._champions.length < 2)
+                return;
             let team0Win = true;
             let team1Win = true;
             for (const champion of this._champions) {
@@ -382,8 +391,12 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 winTeam = (1 << 0) | (1 << 1);
             }
             if (winTeam != 0) {
+                const writer = $protobuf.Writer.create();
+                this.EncodeSnapshot(writer);
+                const data = writer.finish();
                 const msg = ProtoHelper_1.ProtoCreator.Q_GC2BS_EndBattle();
                 msg.winTeam = winTeam;
+                msg.snapshot = data;
                 Global_1.Global.connector.bsConnector.Send(protos_1.Protos.GC2BS_EndBattle, msg);
             }
         }

@@ -1202,28 +1202,14 @@ export namespace Protos {
     interface IGC2BS_EndBattle {
         opts?: (Protos.IMsgOpts|null);
         winTeam?: (number|null);
-        damage?: (number|null);
-        hurt?: (number|null);
-        heal?: (number|null);
-        occupyTime?: (number|null);
-        skill0Used?: (number|null);
-        skill1Used?: (number|null);
-        skill0Damage?: (number|null);
-        skill1Damage?: (number|null);
+        snapshot?: (Uint8Array|null);
     }
 
     class GC2BS_EndBattle implements IGC2BS_EndBattle {
         constructor(properties?: Protos.IGC2BS_EndBattle);
         public opts?: (Protos.IMsgOpts|null);
         public winTeam: number;
-        public damage: number;
-        public hurt: number;
-        public heal: number;
-        public occupyTime: number;
-        public skill0Used: number;
-        public skill1Used: number;
-        public skill0Damage: number;
-        public skill1Damage: number;
+        public snapshot: Uint8Array;
         public static create(properties?: Protos.IGC2BS_EndBattle): Protos.GC2BS_EndBattle;
         public static encode(message: Protos.IGC2BS_EndBattle, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGC2BS_EndBattle, writer?: $protobuf.Writer): $protobuf.Writer;

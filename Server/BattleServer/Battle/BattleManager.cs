@@ -218,13 +218,8 @@ namespace BattleServer.Battle
 		internal void HandleCommitSnapshot( Battle battle, ulong gcNID, int frame, Google.Protobuf.ByteString data ) =>
 			battle.HandleCommitSnapshot( gcNID, frame, data );
 
-		public void HandleBattleEnd( Battle battle, ulong gcNID, Protos.GC2BS_EndBattle endBattle )
-		{
-			if ( !battle.HandleBattleEnd( gcNID, endBattle ) )
-				return;
-			//all user notify battle end
-			this.EndBattle( battle );
-		}
+		public void HandleBattleEnd( Battle battle, ulong gcNID, Protos.GC2BS_EndBattle endBattle ) =>
+			battle.HandleBattleEnd( gcNID, endBattle );
 
 		/// <summary>
 		/// 获取指定索引的战场

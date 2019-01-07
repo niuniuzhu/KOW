@@ -17,11 +17,17 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
         static RemoveListener(type) {
             this.HANDLERS.delete(type);
         }
-        static Invoke(e) {
-            if (!this.HANDLERS.has(e.type))
-                return;
-            this.HANDLERS.get(e.type)(e);
-            e.Release();
+        static BeginInvoke(e) {
+            this.EVENTS.push(e);
+        }
+        static Update() {
+            for (const e of this.EVENTS) {
+                if (!this.HANDLERS.has(e.type))
+                    continue;
+                this.HANDLERS.get(e.type)(e);
+                e.Release();
+            }
+            this.EVENTS.splice(0);
         }
         Clear() {
             this.data = null;
@@ -33,35 +39,28 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
             let e = this.Get();
             e._type = SyncEvent.E_BATTLE_INIT;
             e.data = data;
-            this.Invoke(e);
+            this.BeginInvoke(e);
         }
         static Snapshot(data) {
             let e = this.Get();
             e._type = SyncEvent.E_SNAPSHOT;
             e.data = data;
-            this.Invoke(e);
+            this.BeginInvoke(e);
         }
         static Hit(targetID, value) {
             let e = this.Get();
             e._type = SyncEvent.E_HIT;
             e.rid = targetID;
             e.v0 = value;
-            this.Invoke(e);
-        }
-        static EndBattle(winTeam, honer) {
-            let e = this.Get();
-            e._type = SyncEvent.E_END_BATTLE;
-            e.v0 = winTeam;
-            e.v1 = honer;
-            this.Invoke(e);
+            this.BeginInvoke(e);
         }
     }
     SyncEvent.E_BATTLE_INIT = 100;
     SyncEvent.E_SNAPSHOT = 101;
     SyncEvent.E_HIT = 200;
-    SyncEvent.E_END_BATTLE = 201;
     SyncEvent.POOL = new Stack_1.default();
     SyncEvent.HANDLERS = new Map();
+    SyncEvent.EVENTS = [];
     exports.SyncEvent = SyncEvent;
 });
 //# sourceMappingURL=SyncEvent.js.map

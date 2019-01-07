@@ -6,10 +6,10 @@ export class SyncEvent extends BaseBattleEvent {
 	public static readonly E_SNAPSHOT: number = 101;
 
 	public static readonly E_HIT: number = 200;
-	public static readonly E_END_BATTLE: number = 201;
 
 	private static readonly POOL: Stack<SyncEvent> = new Stack<SyncEvent>();
 	private static readonly HANDLERS: Map<number, (e: SyncEvent) => void> = new Map<number, (e: SyncEvent) => void>();
+	private static readonly EVENTS: SyncEvent[] = [];
 
 	private static Get(): SyncEvent {
 		if (SyncEvent.POOL.size() > 0)
@@ -30,11 +30,18 @@ export class SyncEvent extends BaseBattleEvent {
 		this.HANDLERS.delete(type);
 	}
 
-	private static Invoke(e: SyncEvent): void {
-		if (!this.HANDLERS.has(e.type))
-			return;
-		this.HANDLERS.get(e.type)(e);
-		e.Release();
+	private static BeginInvoke(e: SyncEvent): void {
+		this.EVENTS.push(e);
+	}
+
+	public static Update(): void {
+		for (const e of this.EVENTS) {
+			if (!this.HANDLERS.has(e.type))
+				continue;
+			this.HANDLERS.get(e.type)(e);
+			e.Release();
+		}
+		this.EVENTS.splice(0);
 	}
 
 	private Clear(): void {
@@ -52,14 +59,14 @@ export class SyncEvent extends BaseBattleEvent {
 		let e = this.Get();
 		e._type = SyncEvent.E_BATTLE_INIT;
 		e.data = data;
-		this.Invoke(e);
+		this.BeginInvoke(e);
 	}
 
 	public static Snapshot(data: Uint8Array): void {
 		let e = this.Get();
 		e._type = SyncEvent.E_SNAPSHOT;
 		e.data = data;
-		this.Invoke(e);
+		this.BeginInvoke(e);
 	}
 
 	public static Hit(targetID: Long, value: number): void {
@@ -67,15 +74,7 @@ export class SyncEvent extends BaseBattleEvent {
 		e._type = SyncEvent.E_HIT;
 		e.rid = targetID;
 		e.v0 = value;
-		this.Invoke(e);
-	}
-
-	public static EndBattle(winTeam: number, honer: number): void {
-		let e = this.Get();
-		e._type = SyncEvent.E_END_BATTLE;
-		e.v0 = winTeam;//按位标记胜利队伍
-		e.v1 = honer;
-		this.Invoke(e);
+		this.BeginInvoke(e);
 	}
 
 	public data: Uint8Array;

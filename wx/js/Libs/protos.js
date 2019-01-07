@@ -6578,14 +6578,7 @@ export const Protos = $root.Protos = (() => {
 
         GC2BS_EndBattle.prototype.opts = null;
         GC2BS_EndBattle.prototype.winTeam = 0;
-        GC2BS_EndBattle.prototype.damage = 0;
-        GC2BS_EndBattle.prototype.hurt = 0;
-        GC2BS_EndBattle.prototype.heal = 0;
-        GC2BS_EndBattle.prototype.occupyTime = 0;
-        GC2BS_EndBattle.prototype.skill0Used = 0;
-        GC2BS_EndBattle.prototype.skill1Used = 0;
-        GC2BS_EndBattle.prototype.skill0Damage = 0;
-        GC2BS_EndBattle.prototype.skill1Damage = 0;
+        GC2BS_EndBattle.prototype.snapshot = $util.newBuffer([]);
 
         GC2BS_EndBattle.create = function create(properties) {
             return new GC2BS_EndBattle(properties);
@@ -6598,22 +6591,8 @@ export const Protos = $root.Protos = (() => {
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.winTeam != null && message.hasOwnProperty("winTeam"))
                 writer.uint32(16).uint32(message.winTeam);
-            if (message.damage != null && message.hasOwnProperty("damage"))
-                writer.uint32(24).uint32(message.damage);
-            if (message.hurt != null && message.hasOwnProperty("hurt"))
-                writer.uint32(32).uint32(message.hurt);
-            if (message.heal != null && message.hasOwnProperty("heal"))
-                writer.uint32(40).uint32(message.heal);
-            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
-                writer.uint32(48).uint32(message.occupyTime);
-            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
-                writer.uint32(56).uint32(message.skill0Used);
-            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
-                writer.uint32(64).uint32(message.skill1Used);
-            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
-                writer.uint32(72).uint32(message.skill0Damage);
-            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
-                writer.uint32(80).uint32(message.skill1Damage);
+            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
+                writer.uint32(26).bytes(message.snapshot);
             return writer;
         };
 
@@ -6635,28 +6614,7 @@ export const Protos = $root.Protos = (() => {
                     message.winTeam = reader.uint32();
                     break;
                 case 3:
-                    message.damage = reader.uint32();
-                    break;
-                case 4:
-                    message.hurt = reader.uint32();
-                    break;
-                case 5:
-                    message.heal = reader.uint32();
-                    break;
-                case 6:
-                    message.occupyTime = reader.uint32();
-                    break;
-                case 7:
-                    message.skill0Used = reader.uint32();
-                    break;
-                case 8:
-                    message.skill1Used = reader.uint32();
-                    break;
-                case 9:
-                    message.skill0Damage = reader.uint32();
-                    break;
-                case 10:
-                    message.skill1Damage = reader.uint32();
+                    message.snapshot = reader.bytes();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -6683,30 +6641,9 @@ export const Protos = $root.Protos = (() => {
             if (message.winTeam != null && message.hasOwnProperty("winTeam"))
                 if (!$util.isInteger(message.winTeam))
                     return "winTeam: integer expected";
-            if (message.damage != null && message.hasOwnProperty("damage"))
-                if (!$util.isInteger(message.damage))
-                    return "damage: integer expected";
-            if (message.hurt != null && message.hasOwnProperty("hurt"))
-                if (!$util.isInteger(message.hurt))
-                    return "hurt: integer expected";
-            if (message.heal != null && message.hasOwnProperty("heal"))
-                if (!$util.isInteger(message.heal))
-                    return "heal: integer expected";
-            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
-                if (!$util.isInteger(message.occupyTime))
-                    return "occupyTime: integer expected";
-            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
-                if (!$util.isInteger(message.skill0Used))
-                    return "skill0Used: integer expected";
-            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
-                if (!$util.isInteger(message.skill1Used))
-                    return "skill1Used: integer expected";
-            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
-                if (!$util.isInteger(message.skill0Damage))
-                    return "skill0Damage: integer expected";
-            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
-                if (!$util.isInteger(message.skill1Damage))
-                    return "skill1Damage: integer expected";
+            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
+                if (!(message.snapshot && typeof message.snapshot.length === "number" || $util.isString(message.snapshot)))
+                    return "snapshot: buffer expected";
             return null;
         };
 
@@ -6721,22 +6658,11 @@ export const Protos = $root.Protos = (() => {
             }
             if (object.winTeam != null)
                 message.winTeam = object.winTeam >>> 0;
-            if (object.damage != null)
-                message.damage = object.damage >>> 0;
-            if (object.hurt != null)
-                message.hurt = object.hurt >>> 0;
-            if (object.heal != null)
-                message.heal = object.heal >>> 0;
-            if (object.occupyTime != null)
-                message.occupyTime = object.occupyTime >>> 0;
-            if (object.skill0Used != null)
-                message.skill0Used = object.skill0Used >>> 0;
-            if (object.skill1Used != null)
-                message.skill1Used = object.skill1Used >>> 0;
-            if (object.skill0Damage != null)
-                message.skill0Damage = object.skill0Damage >>> 0;
-            if (object.skill1Damage != null)
-                message.skill1Damage = object.skill1Damage >>> 0;
+            if (object.snapshot != null)
+                if (typeof object.snapshot === "string")
+                    $util.base64.decode(object.snapshot, message.snapshot = $util.newBuffer($util.base64.length(object.snapshot)), 0);
+                else if (object.snapshot.length)
+                    message.snapshot = object.snapshot;
             return message;
         };
 
@@ -6747,35 +6673,20 @@ export const Protos = $root.Protos = (() => {
             if (options.defaults) {
                 object.opts = null;
                 object.winTeam = 0;
-                object.damage = 0;
-                object.hurt = 0;
-                object.heal = 0;
-                object.occupyTime = 0;
-                object.skill0Used = 0;
-                object.skill1Used = 0;
-                object.skill0Damage = 0;
-                object.skill1Damage = 0;
+                if (options.bytes === String)
+                    object.snapshot = "";
+                else {
+                    object.snapshot = [];
+                    if (options.bytes !== Array)
+                        object.snapshot = $util.newBuffer(object.snapshot);
+                }
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.winTeam != null && message.hasOwnProperty("winTeam"))
                 object.winTeam = message.winTeam;
-            if (message.damage != null && message.hasOwnProperty("damage"))
-                object.damage = message.damage;
-            if (message.hurt != null && message.hasOwnProperty("hurt"))
-                object.hurt = message.hurt;
-            if (message.heal != null && message.hasOwnProperty("heal"))
-                object.heal = message.heal;
-            if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
-                object.occupyTime = message.occupyTime;
-            if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
-                object.skill0Used = message.skill0Used;
-            if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
-                object.skill1Used = message.skill1Used;
-            if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
-                object.skill0Damage = message.skill0Damage;
-            if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
-                object.skill1Damage = message.skill1Damage;
+            if (message.snapshot != null && message.hasOwnProperty("snapshot"))
+                object.snapshot = options.bytes === String ? $util.base64.encode(message.snapshot, 0, message.snapshot.length) : options.bytes === Array ? Array.prototype.slice.call(message.snapshot) : message.snapshot;
             return object;
         };
 

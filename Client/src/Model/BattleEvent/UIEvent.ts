@@ -4,8 +4,7 @@ import { BaseBattleEvent } from "./BaseBattleEvent";
 
 export class UIEvent extends BaseBattleEvent {
 	public static readonly E_ENTITY_INIT: number = 101;
-
-	public static readonly E_END_BATTLE: number = 101;
+	public static readonly E_END_BATTLE: number = 102;
 
 	private static readonly POOL: Stack<UIEvent> = new Stack<UIEvent>();
 	private static readonly HANDLERS: Map<number, (e: UIEvent) => void> = new Map<number, (e: UIEvent) => void>();

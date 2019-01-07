@@ -36,12 +36,9 @@ namespace Protos {
             "IlQKGUdDMkJTX1JlcXVlc3RGcmFtZUFjdGlvbnMSHQoEb3B0cxgBIAEoCzIP",
             "LlByb3Rvcy5Nc2dPcHRzEgwKBGZyb20YAiABKAUSCgoCdG8YAyABKAUiUgoU",
             "R0MyQlNfQ29tbWl0U25hcHNob3QSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5N",
-            "c2dPcHRzEg0KBWZyYW1lGAIgASgFEgwKBGRhdGEYAyABKAwi1QEKD0dDMkJT",
-            "X0VuZEJhdHRsZRIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDwoH",
-            "d2luVGVhbRgCIAEoDRIOCgZkYW1hZ2UYAyABKA0SDAoEaHVydBgEIAEoDRIM",
-            "CgRoZWFsGAUgASgNEhIKCm9jY3VweVRpbWUYBiABKA0SEgoKc2tpbGwwVXNl",
-            "ZBgHIAEoDRISCgpza2lsbDFVc2VkGAggASgNEhQKDHNraWxsMERhbWFnZRgJ",
-            "IAEoDRIUCgxza2lsbDFEYW1hZ2UYCiABKA1iBnByb3RvMw=="));
+            "c2dPcHRzEg0KBWZyYW1lGAIgASgFEgwKBGRhdGEYAyABKAwiUwoPR0MyQlNf",
+            "RW5kQmF0dGxlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIPCgd3",
+            "aW5UZWFtGAIgASgNEhAKCHNuYXBzaG90GAMgASgMYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -52,7 +49,7 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_FrameAction), global::Protos.GC2BS_FrameAction.Parser, new[]{ "Opts", "Infos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_RequestFrameActions), global::Protos.GC2BS_RequestFrameActions.Parser, new[]{ "Opts", "From", "To" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_CommitSnapshot), global::Protos.GC2BS_CommitSnapshot.Parser, new[]{ "Opts", "Frame", "Data" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_EndBattle), global::Protos.GC2BS_EndBattle.Parser, new[]{ "Opts", "WinTeam", "Damage", "Hurt", "Heal", "OccupyTime", "Skill0Used", "Skill1Used", "Skill0Damage", "Skill1Damage" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2BS_EndBattle), global::Protos.GC2BS_EndBattle.Parser, new[]{ "Opts", "WinTeam", "Snapshot" }, null, null, null)
           }));
     }
     #endregion
@@ -1318,14 +1315,7 @@ namespace Protos {
     public GC2BS_EndBattle(GC2BS_EndBattle other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       winTeam_ = other.winTeam_;
-      damage_ = other.damage_;
-      hurt_ = other.hurt_;
-      heal_ = other.heal_;
-      occupyTime_ = other.occupyTime_;
-      skill0Used_ = other.skill0Used_;
-      skill1Used_ = other.skill1Used_;
-      skill0Damage_ = other.skill0Damage_;
-      skill1Damage_ = other.skill1Damage_;
+      snapshot_ = other.snapshot_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1356,91 +1346,14 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "damage" field.</summary>
-    public const int DamageFieldNumber = 3;
-    private uint damage_;
+    /// <summary>Field number for the "snapshot" field.</summary>
+    public const int SnapshotFieldNumber = 3;
+    private pb::ByteString snapshot_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Damage {
-      get { return damage_; }
+    public pb::ByteString Snapshot {
+      get { return snapshot_; }
       set {
-        damage_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "hurt" field.</summary>
-    public const int HurtFieldNumber = 4;
-    private uint hurt_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Hurt {
-      get { return hurt_; }
-      set {
-        hurt_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "heal" field.</summary>
-    public const int HealFieldNumber = 5;
-    private uint heal_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Heal {
-      get { return heal_; }
-      set {
-        heal_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "occupyTime" field.</summary>
-    public const int OccupyTimeFieldNumber = 6;
-    private uint occupyTime_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint OccupyTime {
-      get { return occupyTime_; }
-      set {
-        occupyTime_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "skill0Used" field.</summary>
-    public const int Skill0UsedFieldNumber = 7;
-    private uint skill0Used_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Skill0Used {
-      get { return skill0Used_; }
-      set {
-        skill0Used_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "skill1Used" field.</summary>
-    public const int Skill1UsedFieldNumber = 8;
-    private uint skill1Used_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Skill1Used {
-      get { return skill1Used_; }
-      set {
-        skill1Used_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "skill0Damage" field.</summary>
-    public const int Skill0DamageFieldNumber = 9;
-    private uint skill0Damage_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Skill0Damage {
-      get { return skill0Damage_; }
-      set {
-        skill0Damage_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "skill1Damage" field.</summary>
-    public const int Skill1DamageFieldNumber = 10;
-    private uint skill1Damage_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Skill1Damage {
-      get { return skill1Damage_; }
-      set {
-        skill1Damage_ = value;
+        snapshot_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -1459,14 +1372,7 @@ namespace Protos {
       }
       if (!object.Equals(Opts, other.Opts)) return false;
       if (WinTeam != other.WinTeam) return false;
-      if (Damage != other.Damage) return false;
-      if (Hurt != other.Hurt) return false;
-      if (Heal != other.Heal) return false;
-      if (OccupyTime != other.OccupyTime) return false;
-      if (Skill0Used != other.Skill0Used) return false;
-      if (Skill1Used != other.Skill1Used) return false;
-      if (Skill0Damage != other.Skill0Damage) return false;
-      if (Skill1Damage != other.Skill1Damage) return false;
+      if (Snapshot != other.Snapshot) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1475,14 +1381,7 @@ namespace Protos {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (WinTeam != 0) hash ^= WinTeam.GetHashCode();
-      if (Damage != 0) hash ^= Damage.GetHashCode();
-      if (Hurt != 0) hash ^= Hurt.GetHashCode();
-      if (Heal != 0) hash ^= Heal.GetHashCode();
-      if (OccupyTime != 0) hash ^= OccupyTime.GetHashCode();
-      if (Skill0Used != 0) hash ^= Skill0Used.GetHashCode();
-      if (Skill1Used != 0) hash ^= Skill1Used.GetHashCode();
-      if (Skill0Damage != 0) hash ^= Skill0Damage.GetHashCode();
-      if (Skill1Damage != 0) hash ^= Skill1Damage.GetHashCode();
+      if (Snapshot.Length != 0) hash ^= Snapshot.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1504,37 +1403,9 @@ namespace Protos {
         output.WriteRawTag(16);
         output.WriteUInt32(WinTeam);
       }
-      if (Damage != 0) {
-        output.WriteRawTag(24);
-        output.WriteUInt32(Damage);
-      }
-      if (Hurt != 0) {
-        output.WriteRawTag(32);
-        output.WriteUInt32(Hurt);
-      }
-      if (Heal != 0) {
-        output.WriteRawTag(40);
-        output.WriteUInt32(Heal);
-      }
-      if (OccupyTime != 0) {
-        output.WriteRawTag(48);
-        output.WriteUInt32(OccupyTime);
-      }
-      if (Skill0Used != 0) {
-        output.WriteRawTag(56);
-        output.WriteUInt32(Skill0Used);
-      }
-      if (Skill1Used != 0) {
-        output.WriteRawTag(64);
-        output.WriteUInt32(Skill1Used);
-      }
-      if (Skill0Damage != 0) {
-        output.WriteRawTag(72);
-        output.WriteUInt32(Skill0Damage);
-      }
-      if (Skill1Damage != 0) {
-        output.WriteRawTag(80);
-        output.WriteUInt32(Skill1Damage);
+      if (Snapshot.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteBytes(Snapshot);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1550,29 +1421,8 @@ namespace Protos {
       if (WinTeam != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(WinTeam);
       }
-      if (Damage != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Damage);
-      }
-      if (Hurt != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Hurt);
-      }
-      if (Heal != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Heal);
-      }
-      if (OccupyTime != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(OccupyTime);
-      }
-      if (Skill0Used != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill0Used);
-      }
-      if (Skill1Used != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill1Used);
-      }
-      if (Skill0Damage != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill0Damage);
-      }
-      if (Skill1Damage != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill1Damage);
+      if (Snapshot.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Snapshot);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1594,29 +1444,8 @@ namespace Protos {
       if (other.WinTeam != 0) {
         WinTeam = other.WinTeam;
       }
-      if (other.Damage != 0) {
-        Damage = other.Damage;
-      }
-      if (other.Hurt != 0) {
-        Hurt = other.Hurt;
-      }
-      if (other.Heal != 0) {
-        Heal = other.Heal;
-      }
-      if (other.OccupyTime != 0) {
-        OccupyTime = other.OccupyTime;
-      }
-      if (other.Skill0Used != 0) {
-        Skill0Used = other.Skill0Used;
-      }
-      if (other.Skill1Used != 0) {
-        Skill1Used = other.Skill1Used;
-      }
-      if (other.Skill0Damage != 0) {
-        Skill0Damage = other.Skill0Damage;
-      }
-      if (other.Skill1Damage != 0) {
-        Skill1Damage = other.Skill1Damage;
+      if (other.Snapshot.Length != 0) {
+        Snapshot = other.Snapshot;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1640,36 +1469,8 @@ namespace Protos {
             WinTeam = input.ReadUInt32();
             break;
           }
-          case 24: {
-            Damage = input.ReadUInt32();
-            break;
-          }
-          case 32: {
-            Hurt = input.ReadUInt32();
-            break;
-          }
-          case 40: {
-            Heal = input.ReadUInt32();
-            break;
-          }
-          case 48: {
-            OccupyTime = input.ReadUInt32();
-            break;
-          }
-          case 56: {
-            Skill0Used = input.ReadUInt32();
-            break;
-          }
-          case 64: {
-            Skill1Used = input.ReadUInt32();
-            break;
-          }
-          case 72: {
-            Skill0Damage = input.ReadUInt32();
-            break;
-          }
-          case 80: {
-            Skill1Damage = input.ReadUInt32();
+          case 26: {
+            Snapshot = input.ReadBytes();
             break;
           }
         }

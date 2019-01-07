@@ -17,6 +17,7 @@ export class UIBattle implements IUIModule {
 
 	private _player: VChampion;
 	private _touchID: number = -1;
+	private _markToEnd: boolean = false;
 
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/battle");
@@ -39,9 +40,6 @@ export class UIBattle implements IUIModule {
 		this._gestureState.joystick.radius = 100;
 		this._gestureState.joystick.resetDuration = 60;
 		this._gestureState.onChanged = this.HandleAxisInput.bind(this);
-
-		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
-		UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
 	}
 
 	public Dispose(): void {
@@ -51,12 +49,20 @@ export class UIBattle implements IUIModule {
 
 	public Enter(param: any): void {
 		this._touchID = -1;
+		this._markToEnd = false;
+
 		Global.graphic.uiRoot.addChild(this._root);
 		fairygui.GRoot.inst.on(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
 		this._frameActionManager.Reset();
+
+		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
+		UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
 	}
 
 	public Exit(): void {
+		UIEvent.RemoveListener(UIEvent.E_ENTITY_INIT);
+		UIEvent.RemoveListener(UIEvent.E_END_BATTLE);
+
 		this._gestureState.OnTouchEnd();
 		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
 		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
@@ -87,37 +93,55 @@ export class UIBattle implements IUIModule {
 	}
 
 	private OnBattleEnd(e: UIEvent): void {
+		this._markToEnd = true;
 		Global.graphic.uiRoot.addChild(this._endBattle);
 		const isWin = e.b0;
 		const honer = e.v1;
+		const callback = e.callback;
 		let com: fairygui.GComponent;
 		if (isWin) {
 			com = this._endBattle.getChild("n0").asCom;
+			this._endBattle.getController("c1").selectedIndex = 0;
 		}
 		else {
 			com = this._endBattle.getChild("n1").asCom;
+			this._endBattle.getController("c1").selectedIndex = 1;
 		}
-		com.getChild("confirm").onClick(this, () => e.callback);
+		const confirmBtn = com.getChild("confirm");
+		confirmBtn.onClick(this, () => {
+			callback();
+			confirmBtn.offClick(this, callback);
+		});
 		com.getChild("n7").asTextField.text = "" + honer;
 	}
 
 	private OnSkillBtnPress(): void {
+		if (this._markToEnd)
+			return;
 		this._frameActionManager.SetS1(true);
 	}
 
 	private OnSkillBtnRelease(): void {
+		if (this._markToEnd)
+			return;
 		this._frameActionManager.SetS1(false);
 	}
 
 	private OnSkillBtn2Press(): void {
+		if (this._markToEnd)
+			return;
 		this._frameActionManager.SetS2(true);
 	}
 
 	private OnSkillBtn2Release(): void {
+		if (this._markToEnd)
+			return;
 		this._frameActionManager.SetS2(false);
 	}
 
 	private HandleAxisInput(value: Vec2): void {
+		if (this._markToEnd)
+			return;
 		this._frameActionManager.SetInputDirection(value);
 	}
 

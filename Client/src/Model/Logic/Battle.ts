@@ -229,10 +229,7 @@ export class Battle implements ISnapshotable {
 		}
 
 		//判断战场是否结束
-		if (!this._markToEnd) {
-			this._markToEnd = true;
-			this.CheckBattleEnd();
-		}
+		this.CheckBattleEnd();
 
 		//判断是否需要提交快照数据
 		if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
@@ -569,6 +566,8 @@ export class Battle implements ISnapshotable {
 	 * 检查战场是否结束
 	 */
 	private CheckBattleEnd(): void {
+		if (this._markToEnd)
+			return;
 		if (this._champions.length < 2)
 			return;
 		let team0Win = true;
@@ -605,6 +604,8 @@ export class Battle implements ISnapshotable {
 
 			//发送协议
 			Global.connector.bsConnector.Send(Protos.GC2BS_EndBattle, msg);
+
+			this._markToEnd = true;
 		}
 	}
 

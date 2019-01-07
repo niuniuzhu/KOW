@@ -145,10 +145,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                     --count;
                 }
             }
-            if (!this._markToEnd) {
-                this._markToEnd = true;
-                this.CheckBattleEnd();
-            }
+            this.CheckBattleEnd();
             if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
                 const writer = $protobuf.Writer.create();
                 this.EncodeSnapshot(writer);
@@ -368,6 +365,8 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             champion.FrameAction(frameAction);
         }
         CheckBattleEnd() {
+            if (this._markToEnd)
+                return;
             if (this._champions.length < 2)
                 return;
             let team0Win = true;
@@ -398,6 +397,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 msg.winTeam = winTeam;
                 msg.snapshot = data;
                 Global_1.Global.connector.bsConnector.Send(protos_1.Protos.GC2BS_EndBattle, msg);
+                this._markToEnd = true;
             }
         }
         HandleSnapShot(ret) {

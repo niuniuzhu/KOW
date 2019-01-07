@@ -48,6 +48,7 @@ namespace BattleServer.Battle
 					success = false;
 					break;
 				}
+				crc = playerSnapshot.crc;
 				playerSnapshots.Add( playerSnapshot );
 			}
 

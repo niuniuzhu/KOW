@@ -21,7 +21,6 @@ namespace BattleServer
 			typeof( BSUserMgr ),
 			typeof( Entity ),
 			typeof( Champion ),
-			typeof( Player ),
 			typeof( SnapshotMgr ),
 			typeof( FrameActionMgr ),
 			typeof( Battle.Battle ),

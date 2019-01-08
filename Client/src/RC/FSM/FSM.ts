@@ -3,6 +3,7 @@ import { FSMState } from "./FSMState";
 export class FSM {
 	protected readonly _typeToState: Map<number, FSMState> = new Map<number, FSMState>();
 	protected readonly _states: FSMState[] = [];
+	
 	protected _currentState: FSMState;
 	protected _previousState: FSMState;
 

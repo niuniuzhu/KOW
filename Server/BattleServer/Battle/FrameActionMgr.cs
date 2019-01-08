@@ -35,7 +35,7 @@ namespace BattleServer.Battle
 			int count = battle.numPlayers;
 			for ( int i = 0; i < count; i++ )
 			{
-				ulong id = battle.GetPlayerAt( i ).id;
+				ulong id = battle.GetChampionAt( i ).rid;
 				this._gcNIDToAction[id] = new FrameAction( id );
 			}
 		}

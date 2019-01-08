@@ -20,26 +20,6 @@ namespace XLua.CSObjectWrap
         public static void __Register(RealStatePtr L)
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			System.Type type = typeof(BattleServer.Battle.Model.Player);
-			Utils.BeginObjectRegister(type, L, translator, 0, 0, 1, 0);
-			
-			
-			
-			Utils.RegisterFunc(L, Utils.GETTER_IDX, "user", _g_get_user);
-            
-			
-			
-			Utils.EndObjectRegister(type, L, translator, null, null,
-			    null, null, null);
-
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 1, 0, 0);
-			
-			
-            
-			
-			
-			
-			Utils.EndClassRegister(type, L, translator);
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -51,8 +31,6 @@ namespace XLua.CSObjectWrap
 				if(LuaAPI.lua_gettop(L) == 1)
 				{
 					
-					BattleServer.Battle.Model.Player __cl_gen_ret = new BattleServer.Battle.Model.Player();
-					translator.Push(L, __cl_gen_ret);
                     
 					return 1;
 				}
@@ -81,8 +59,6 @@ namespace XLua.CSObjectWrap
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
-                BattleServer.Battle.Model.Player __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Player)translator.FastGetCSObj(L, 1);
-                translator.Push(L, __cl_gen_to_be_invoked.user);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }

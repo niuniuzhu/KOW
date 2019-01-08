@@ -83,14 +83,6 @@ namespace BattleServer.Battle
 				return ErrorCode.Failed;
 			}
 
-			//创建玩家
-			count = battle.numPlayers;
-			for ( int i = 0; i < count; i++ )
-			{
-				Player player = battle.GetPlayerAt( i );
-				player.user = BS.instance.userMgr.CreateUser( player.id, battle );
-			}
-
 			//把战场加入工作列表
 			this._workingBattles.Add( battle );
 
@@ -113,33 +105,33 @@ namespace BattleServer.Battle
 			battleEnd.Bid = battle.id;
 			for ( int i = 0; i < count; ++i )
 			{
-				Player player = battle.GetPlayerAt( i );
+				Champion champion = battle.GetChampionAt( i );
 				var info = new Protos.BS2CS_BattleEndInfo();
-				info.Win = player.win;
-				info.Damage = player.damage;
-				info.Hurt = player.hurt;
-				info.Heal = player.heal;
-				info.OccupyTime = player.occupyTime;
-				info.Skill0Used = player.skill0Used;
-				info.Skill0Damage = player.skill0Damage;
-				info.Skill1Used = player.skill1Used;
-				info.Skill1Damage = player.skill1Damage;
-				battleEnd.Infos.Add( player.user.gcNID, info );
+				info.Win = champion.win;
+				info.Damage = champion.damage;
+				info.Hurt = champion.hurt;
+				info.Heal = champion.heal;
+				info.OccupyTime = champion.occupyTime;
+				info.Skill0Used = champion.skill0Used;
+				info.Skill0Damage = champion.skill0Damage;
+				info.Skill1Used = champion.skill1Used;
+				info.Skill1Damage = champion.skill1Damage;
+				battleEnd.Infos.Add( champion.user.gcNID, info );
 			}
 			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd );
 
 			for ( int i = 0; i < count; i++ )
 			{
-				Player player = battle.GetPlayerAt( i );
-				if ( player.user.isOnline )
+				Champion champion = battle.GetChampionAt( i );
+				if ( champion.user.isOnline )
 				{
 					//断开玩家连接
-					BS.instance.netSessionMgr.DelayCloseSession( player.user.gcSID, 100, "battle_end" );
+					BS.instance.netSessionMgr.DelayCloseSession( champion.user.gcSID, 100, "battle_end" );
 					//玩家下线
-					BS.instance.userMgr.Offline( player.user );
+					BS.instance.userMgr.Offline( champion.user );
 				}
 				//销毁玩家
-				BS.instance.userMgr.DestroyUser( player.user );
+				BS.instance.userMgr.DestroyUser( champion.user );
 			}
 			//处理战场的身后事
 			battle.End();

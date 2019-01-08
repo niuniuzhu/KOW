@@ -46,8 +46,6 @@ namespace XLua
 				
 				translator.DelayWrapLoader(typeof(BattleServer.Battle.Model.Champion), BattleServerBattleModelChampionWrap.__Register);
 				
-				translator.DelayWrapLoader(typeof(BattleServer.Battle.Model.Player), BattleServerBattleModelPlayerWrap.__Register);
-				
 				translator.DelayWrapLoader(typeof(BattleServer.Battle.Snapshot.SnapshotMgr), BattleServerBattleSnapshotSnapshotMgrWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(BattleServer.Battle.FrameActionMgr), BattleServerBattleFrameActionMgrWrap.__Register);

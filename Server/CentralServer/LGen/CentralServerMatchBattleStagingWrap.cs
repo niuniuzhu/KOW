@@ -21,10 +21,11 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(CentralServer.Match.BattleStaging);
-			Utils.BeginObjectRegister(type, L, translator, 0, 8, 0, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 9, 0, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnBattleCreated", _m_OnBattleCreated);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnBattleDestory", _m_OnBattleDestory);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetUser", _m_GetUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListALLLBIDToUser", _m_ListALLLBIDToUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListLBIDToUser", _m_ListLBIDToUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetNumUsersByLBID", _m_GetNumUsersByLBID);
@@ -129,6 +130,35 @@ namespace XLua.CSObjectWrap
                     
                     
                     return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_GetUser(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                CentralServer.Match.BattleStaging __cl_gen_to_be_invoked = (CentralServer.Match.BattleStaging)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    ulong bsgcNID = LuaAPI.lua_touint64(L, 2);
+                    
+                        CentralServer.User.CSUser __cl_gen_ret = __cl_gen_to_be_invoked.GetUser( bsgcNID );
+                        translator.Push(L, __cl_gen_ret);
+                    
+                    
+                    
+                    return 1;
                 }
                 
             } catch(System.Exception __gen_e) {

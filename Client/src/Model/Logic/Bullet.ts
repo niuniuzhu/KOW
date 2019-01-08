@@ -8,7 +8,6 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";
-import { Logger } from "../../RC/Utils/Logger";
 
 enum BulletMoveType {
 	Linear,
@@ -219,7 +218,6 @@ export class Bullet extends Entity implements ISnapshotable {
 			if (!this._whipping && target.isDead)
 				continue;
 			const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
-			Logger.Log(this.position.ToString() + "," + this._radius);
 			if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
 				//获取目标的碰撞次数
 				let count = 0;

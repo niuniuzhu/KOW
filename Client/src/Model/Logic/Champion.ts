@@ -93,7 +93,7 @@ export class Champion extends Entity implements ISnapshotable {
 	/**
 	 * 相交向量
 	 */
-	public readonly intersectVector: FVec2 = FVec2.zero
+	public readonly intersectVector: FVec2 = FVec2.zero;
 	/**
 	 * 物理速度
 	 */
@@ -201,7 +201,11 @@ export class Champion extends Entity implements ISnapshotable {
 
 		//encode fsmstates
 		this._fsm.EncodeSnapshot(writer);
+
+		//encode input
+		writer.fork();
 		this._inputAgent.EncodeSnapshot(writer);
+		writer.ldelim();
 	}
 
 	/**
@@ -238,6 +242,9 @@ export class Champion extends Entity implements ISnapshotable {
 
 		//decode fsmstates
 		this._fsm.DecodeSnapshot(reader);
+
+		//decode input
+		reader.int32();
 		this._inputAgent.DecodeSnapshot(reader);
 	}
 

@@ -28,6 +28,7 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
             return super.ChangeState(type, param, force);
         }
         EncodeSnapshot(writer) {
+            writer.fork();
             for (const state of this._states) {
                 const entityFSM = state;
                 entityFSM.EncodeSnapshot(writer);
@@ -35,6 +36,7 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
             if (this.globalEntityState != null) {
                 this.globalEntityState.EncodeSnapshot(writer);
             }
+            writer.ldelim();
             writer.bool(this.currentEntityState != null);
             if (this.currentEntityState != null)
                 writer.int32(this.currentEntityState.type);
@@ -43,6 +45,7 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
                 writer.int32(this.previousEntityState.type);
         }
         DecodeSnapshot(reader) {
+            reader.int32();
             for (const state of this._states) {
                 const entityFSM = state;
                 entityFSM.DecodeSnapshot(reader);
@@ -50,10 +53,12 @@ define(["require", "exports", "../../RC/FSM/FSM"], function (require, exports, F
             if (this.globalEntityState != null) {
                 this.globalEntityState.DecodeSnapshot(reader);
             }
-            if (reader.bool())
+            if (reader.bool()) {
                 this._currentState = this.GetState(reader.int32());
-            if (reader.bool())
+            }
+            if (reader.bool()) {
                 this._previousState = this.GetState(reader.int32());
+            }
         }
         HandleInput(type, press) {
             this.currentEntityState.HandleInput(type, press);

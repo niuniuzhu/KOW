@@ -4,19 +4,22 @@ namespace Core.FiniteStateMachine
 {
 	public class FSM
 	{
-		private readonly Dictionary<int, FSMState> _stateMap = new Dictionary<int, FSMState>();
-		public FSMState currentState { get; private set; }
-		public FSMState previousState { get; private set; }
-		public FSMState globalState { get; set; }
+		protected readonly Dictionary<int, FSMState> _typeToState = new Dictionary<int, FSMState>();
+		protected readonly List<FSMState> _states = new List<FSMState>();
+
+		public FSMState currentState { get; protected set; }
+		public FSMState previousState { get; protected set; }
+		public FSMState globalState { get; protected set; }
 
 		/// <summary>
 		/// 添加状态
 		/// </summary>
 		public bool AddState( FSMState state )
 		{
-			if ( this._stateMap.ContainsKey( state.type ) )
+			if ( this._typeToState.ContainsKey( state.type ) )
 				return false;
-			this._stateMap[state.type] = state;
+			this._typeToState[state.type] = state;
+			this._states.Add( state );
 			return true;
 		}
 
@@ -25,15 +28,24 @@ namespace Core.FiniteStateMachine
 		/// </summary>
 		public bool RemoveState( int type )
 		{
-			return this._stateMap.Remove( type );
+			if ( !this._typeToState.TryGetValue( type, out FSMState state ) )
+			{
+				return false;
+			}
+			this._states.Remove( state );
+			this._typeToState.Remove( type );
+			return true;
 		}
-		
+
 		/// <summary>
 		/// 是否存在指定类型的状态
 		/// </summary>
-		public bool HasState( int type )
+		public bool HasState( int type ) => this._typeToState.ContainsKey( type );
+
+		public FSMState GetState( int type )
 		{
-			return this._stateMap.ContainsKey( type );
+			this._typeToState.TryGetValue( type, out FSMState state );
+			return state;
 		}
 
 		/// <summary>
@@ -41,7 +53,7 @@ namespace Core.FiniteStateMachine
 		/// </summary>
 		public bool ExitState( int type )
 		{
-			if ( !this._stateMap.TryGetValue( type, out FSMState state ) )
+			if ( !this._typeToState.TryGetValue( type, out FSMState state ) )
 				return false;
 			state.Exit();
 			return true;
@@ -56,7 +68,7 @@ namespace Core.FiniteStateMachine
 		/// <returns>是否成功转换状态</returns>
 		public bool ChangeState( int type, object param = null, bool force = false )
 		{
-			if ( !this._stateMap.TryGetValue( type, out FSMState state ) )
+			if ( !this._typeToState.TryGetValue( type, out FSMState state ) )
 				return false;
 
 			if ( this.currentState != null )
@@ -75,10 +87,8 @@ namespace Core.FiniteStateMachine
 
 		public void Update( long dt )
 		{
-			if ( this.globalState != null )
-				this.globalState.Update( dt );
-			if ( this.currentState != null )
-				this.currentState.Update( dt );
+			this.globalState?.Update( dt );
+			this.currentState?.Update( dt );
 		}
 	}
 }

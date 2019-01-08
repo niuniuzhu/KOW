@@ -21,15 +21,14 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.Battle.Battle);
-			Utils.BeginObjectRegister(type, L, translator, 0, 7, 15, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 6, 14, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Clear", _m_Clear);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "LoadDefs", _m_LoadDefs);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetEntity", _m_GetEntity);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "HasEntity", _m_HasEntity);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetPlayerAt", _m_GetPlayerAt);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListEntities", _m_ListEntities);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "EncodeSnapshot", _m_EncodeSnapshot);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetChampion", _m_GetChampion);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetChampionAt", _m_GetChampionAt);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListChampions", _m_ListChampions);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "HandleBattleEnd", _m_HandleBattleEnd);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "id", _g_get_id);
@@ -46,7 +45,6 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "numPlayers", _g_get_numPlayers);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "numEntities", _g_get_numEntities);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "battleEntry", _g_get_battleEntry);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "battleResult", _g_get_battleResult);
             
 			
 			
@@ -149,7 +147,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_GetEntity(RealStatePtr L)
+        static int _m_GetChampion(RealStatePtr L)
         {
 		    try {
             
@@ -163,7 +161,7 @@ namespace XLua.CSObjectWrap
                 {
                     ulong id = LuaAPI.lua_touint64(L, 2);
                     
-                        BattleServer.Battle.Model.Entity __cl_gen_ret = __cl_gen_to_be_invoked.GetEntity( id );
+                        BattleServer.Battle.Model.Champion __cl_gen_ret = __cl_gen_to_be_invoked.GetChampion( id );
                         translator.Push(L, __cl_gen_ret);
                     
                     
@@ -178,36 +176,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_HasEntity(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                BattleServer.Battle.Battle __cl_gen_to_be_invoked = (BattleServer.Battle.Battle)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    ulong id = LuaAPI.lua_touint64(L, 2);
-                    
-                        bool __cl_gen_ret = __cl_gen_to_be_invoked.HasEntity( id );
-                        LuaAPI.lua_pushboolean(L, __cl_gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_GetPlayerAt(RealStatePtr L)
+        static int _m_GetChampionAt(RealStatePtr L)
         {
 		    try {
             
@@ -221,7 +190,7 @@ namespace XLua.CSObjectWrap
                 {
                     int index = LuaAPI.xlua_tointeger(L, 2);
                     
-                        BattleServer.Battle.Model.Player __cl_gen_ret = __cl_gen_to_be_invoked.GetPlayerAt( index );
+                        BattleServer.Battle.Model.Champion __cl_gen_ret = __cl_gen_to_be_invoked.GetChampionAt( index );
                         translator.Push(L, __cl_gen_ret);
                     
                     
@@ -236,7 +205,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_ListEntities(RealStatePtr L)
+        static int _m_ListChampions(RealStatePtr L)
         {
 		    try {
             
@@ -249,7 +218,7 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                        string __cl_gen_ret = __cl_gen_to_be_invoked.ListEntities(  );
+                        string __cl_gen_ret = __cl_gen_to_be_invoked.ListChampions(  );
                         LuaAPI.lua_pushstring(L, __cl_gen_ret);
                     
                     
@@ -264,7 +233,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_EncodeSnapshot(RealStatePtr L)
+        static int _m_HandleBattleEnd(RealStatePtr L)
         {
 		    try {
             
@@ -276,9 +245,10 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    Google.Protobuf.CodedOutputStream writer = (Google.Protobuf.CodedOutputStream)translator.GetObject(L, 2, typeof(Google.Protobuf.CodedOutputStream));
+                    ulong gcNID = LuaAPI.lua_touint64(L, 2);
+                    Protos.GC2BS_EndBattle endBattle = (Protos.GC2BS_EndBattle)translator.GetObject(L, 3, typeof(Protos.GC2BS_EndBattle));
                     
-                    __cl_gen_to_be_invoked.EncodeSnapshot( writer );
+                    __cl_gen_to_be_invoked.HandleBattleEnd( gcNID, endBattle );
                     
                     
                     
@@ -484,19 +454,6 @@ namespace XLua.CSObjectWrap
 			
                 BattleServer.Battle.Battle __cl_gen_to_be_invoked = (BattleServer.Battle.Battle)translator.FastGetCSObj(L, 1);
                 translator.Push(L, __cl_gen_to_be_invoked.battleEntry);
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            return 1;
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_battleResult(RealStatePtr L)
-        {
-		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			
-                BattleServer.Battle.Battle __cl_gen_to_be_invoked = (BattleServer.Battle.Battle)translator.FastGetCSObj(L, 1);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }

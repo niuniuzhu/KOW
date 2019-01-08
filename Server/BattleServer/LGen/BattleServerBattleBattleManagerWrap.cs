@@ -21,11 +21,12 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.Battle.BattleManager);
-			Utils.BeginObjectRegister(type, L, translator, 0, 5, 1, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 6, 1, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetValidedBattle", _m_GetValidedBattle);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "CreateBattle", _m_CreateBattle);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "StopAllBattles", _m_StopAllBattles);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "HandleBattleEnd", _m_HandleBattleEnd);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetBattleAt", _m_GetBattleAt);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListBids", _m_ListBids);
 			
@@ -153,6 +154,36 @@ namespace XLua.CSObjectWrap
                 {
                     
                     __cl_gen_to_be_invoked.StopAllBattles(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_HandleBattleEnd(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                BattleServer.Battle.BattleManager __cl_gen_to_be_invoked = (BattleServer.Battle.BattleManager)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    BattleServer.Battle.Battle battle = (BattleServer.Battle.Battle)translator.GetObject(L, 2, typeof(BattleServer.Battle.Battle));
+                    ulong gcNID = LuaAPI.lua_touint64(L, 3);
+                    Protos.GC2BS_EndBattle endBattle = (Protos.GC2BS_EndBattle)translator.GetObject(L, 4, typeof(Protos.GC2BS_EndBattle));
+                    
+                    __cl_gen_to_be_invoked.HandleBattleEnd( battle, gcNID, endBattle );
                     
                     
                     

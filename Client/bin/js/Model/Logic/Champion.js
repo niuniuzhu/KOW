@@ -89,7 +89,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.int32(this.t_def_add);
             writer.int32(this.t_speed_add);
             this._fsm.EncodeSnapshot(writer);
+            writer.fork();
             this._inputAgent.EncodeSnapshot(writer);
+            writer.ldelim();
         }
         DecodeSnapshot(reader) {
             super.DecodeSnapshot(reader);
@@ -118,6 +120,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.t_def_add = reader.int32();
             this.t_speed_add = reader.int32();
             this._fsm.DecodeSnapshot(reader);
+            reader.int32();
             this._inputAgent.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {

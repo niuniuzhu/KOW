@@ -10,16 +10,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 #endregion
 
 namespace BattleServer.Battle
 {
-	public class Battle : IPoolObject, ISnapshotable
+	public class Battle : IPoolObject
 	{
 		private static uint _gid;
 
@@ -71,29 +69,24 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 玩家数量
 		/// </summary>
-		public int numPlayers => this._players.Length;
+		public int numPlayers => this._champions.Count;
 
 		/// <summary>
 		/// 实体数量
 		/// </summary>
-		public int numEntities => this._entities.Count;
+		public int numEntities => this._champions.Count;
 
 		public BattleEntry battleEntry { get; private set; }
 
 		/// <summary>
-		/// 所有玩家列表
-		/// </summary>
-		private Player[] _players;
-
-		/// <summary>
 		/// 所有实体列表
 		/// </summary>
-		private readonly List<Entity> _entities = new List<Entity>();
+		private readonly List<Champion> _champions = new List<Champion>();
 
 		/// <summary>
 		/// 实体ID到实体的映射
 		/// </summary>
-		private readonly SortedDictionary<ulong, Entity> _idToEntity = new SortedDictionary<ulong, Entity>();
+		private readonly SortedDictionary<ulong, Champion> _idToChampion = new SortedDictionary<ulong, Champion>();
 
 		/// <summary>
 		/// 计时器
@@ -156,13 +149,17 @@ namespace BattleServer.Battle
 			if ( !this.LoadDefs() )
 				return false;
 
-			//创建玩家
-			if ( !this.CreatePlayers( battleEntry.players ) )
-				return false;
+			//create champions
+			foreach ( var player in battleEntry.players )
+			{
+				Champion champion = new Champion( this );
+				champion.rid = player.gcNID;
+				champion.user = BS.instance.userMgr.CreateUser( player.gcNID, this );
+				this._champions.Add( champion );
+				this._idToChampion[champion.rid] = champion;
+			}
 
 			this._snapshotMgr.Init( battleEntry.players.Length, this.OnOutOfSync );
-			//创建初始化快照
-			//this.MakeInitSnapshot();
 			//初始化帧行为管理器
 			this._frameActionMgr.Init( this );
 			//初始化锁步器
@@ -243,12 +240,11 @@ namespace BattleServer.Battle
 
 		internal void End()
 		{
-			this._players = null;
-			int count = this._entities.Count;
+			int count = this._champions.Count;
 			for ( int i = 0; i < count; i++ )
-				this._entities[i].Dispose();
-			this._entities.Clear();
-			this._idToEntity.Clear();
+				this._champions[i].Dispose();
+			this._champions.Clear();
+			this._idToChampion.Clear();
 			this._frameActionMgr.Clear();
 			this._snapshotMgr.Clear();
 			this._battleEndProcessor.Clear();
@@ -265,80 +261,49 @@ namespace BattleServer.Battle
 			this.Stop();
 		}
 
-		/// <summary>
-		/// 创建玩家
-		/// </summary>
-		private bool CreatePlayers( BattleEntry.Player[] battleEntryPlayers )
+		private void DecodeSnapshot( Google.Protobuf.ByteString data )
 		{
-			int count = battleEntryPlayers.Length;
-			this._players = new Player[count];
+			Google.Protobuf.CodedInputStream reader = new Google.Protobuf.CodedInputStream( data.ToByteArray() );
+			reader.ReadInt32();//frame
+			reader.ReadBool();//marktoend
+
+			int count = reader.ReadInt32();//champions
 			for ( int i = 0; i < count; i++ )
 			{
-				Player player = new Player();
-				if ( !player.Init( battleEntryPlayers[i] ) )
-					return false;
-
-				if ( player.team >= this.bornPoses.Length ||
-					 player.team >= this.bornDirs.Length )
-				{
-					Logger.Error( $"invalid team:{player.team}, player:{player.id}" );
-					return false;
-				}
-
-				player.position = this.bornPoses[player.team];
-				player.direction = this.bornDirs[player.team];
-
-				this._players[i] = player;
-				this._entities.Add( player );
-				this._idToEntity[player.id] = player;
+				ulong rid = reader.ReadUInt64();
+				Champion champion = this.GetChampion( rid );
+				champion.DecodeSnapshot( rid, false, reader );
 			}
-			return true;
 		}
 
 		/// <summary>
 		/// 获取指定id实体
 		/// </summary>
-		public Entity GetEntity( ulong id )
+		public Champion GetChampion( ulong id )
 		{
-			this._idToEntity.TryGetValue( id, out Entity entity );
-			return entity;
-		}
-
-		/// <summary>
-		/// 是否存在指定id实体
-		/// </summary>
-		public bool HasEntity( ulong id ) => this._idToEntity.ContainsKey( id );
-
-		public Player GetPlayer( ulong gcNID )
-		{
-			int count = this._players.Length;
-			for ( int i = 0; i < count; i++ )
-			{
-				if ( this._players[i].user.gcNID == gcNID )
-					return this._players[i];
-			}
-			return null;
+			this._idToChampion.TryGetValue( id, out Champion champion );
+			return champion;
 		}
 
 		/// <summary>
 		/// 获取指定索引的玩家
 		/// 该函数是线程安全的
 		/// </summary>
-		public Player GetPlayerAt( int index )
+		public Champion GetChampionAt( int index )
 		{
-			if ( index < 0 || index >= this._players.Length )
+			if ( index < 0 || index >= this._champions.Count )
 				return null;
-			return this._players[index];
+			return this._champions[index];
 		}
 
 		/// <summary>
 		/// 以字符串形式列出所有实体信息
 		/// </summary>
-		public string ListEntities()
+		public string ListChampions()
 		{
 			StringBuilder sb = new StringBuilder();
-			foreach ( Entity entity in this._entities )
-				sb.AppendLine( entity.ToString() );
+			foreach ( Champion champion in this._champions )
+				sb.AppendLine( champion.ToString() );
 			return sb.ToString();
 		}
 
@@ -372,9 +337,9 @@ namespace BattleServer.Battle
 			int count = this.numPlayers;
 			for ( int i = 0; i < count; i++ )
 			{
-				BSUser user = this.GetPlayerAt( i ).user;
+				BSUser user = this.GetChampionAt( i ).user;
 				//未连接的不广播
-				if ( !user.isOnline )
+				if ( user == null || !user.isOnline )
 					continue;
 				this._tempSIDs.Add( user.gcSID );
 			}
@@ -420,38 +385,6 @@ namespace BattleServer.Battle
 		/// </summary>
 		/// <param name="frame">指定帧数下的快速,-1表示最近的快照</param>
 		internal FrameSnapshot GetSnapshot( int frame ) => this._snapshotMgr.Get( frame );
-
-		/// <summary>
-		/// 制作初始化快照
-		/// </summary>
-		private void MakeInitSnapshot()
-		{
-			using ( MemoryStream ms = new MemoryStream() )
-			{
-				Google.Protobuf.CodedOutputStream writer = new Google.Protobuf.CodedOutputStream( ms );
-				this.EncodeSnapshot( writer );
-				writer.Flush();
-				Google.Protobuf.ByteString data = Google.Protobuf.ByteString.CopyFrom( ms.GetBuffer(), 0, ( int )ms.Length );
-				FrameSnapshot snapshot = new FrameSnapshot
-				{
-					frame = this.frame,
-					data = data
-				};
-				this._snapshotMgr.Set( snapshot );
-			}
-		}
-
-		/// <summary>
-		/// 制作快照
-		/// </summary>
-		public void EncodeSnapshot( Google.Protobuf.CodedOutputStream writer )
-		{
-			writer.WriteInt32( this.frame );
-			int count = this._idToEntity.Count;
-			writer.WriteInt32( count );
-			foreach ( KeyValuePair<ulong, Entity> kv in this._idToEntity )
-				kv.Value.EncodeSnapshot( writer );
-		}
 
 		/// <summary>
 		/// 数据不同步的回调函数
@@ -501,8 +434,11 @@ namespace BattleServer.Battle
 		/// <param name="gcNID">玩家ID</param>
 		/// <param name="frame">快照的所在的帧数</param>
 		/// <param name="data">快照数据</param>
-		internal void HandleCommitSnapshot( ulong gcNID, int frame, Google.Protobuf.ByteString data ) =>
+		internal void HandleCommitSnapshot( ulong gcNID, int frame, Google.Protobuf.ByteString data )
+		{
+			this.DecodeSnapshot( data );
 			this._snapshotMgr.Commit( gcNID, frame, data );
+		}
 
 		/// <summary>
 		/// 处理战场结束

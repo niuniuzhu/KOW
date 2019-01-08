@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(Core.FMath.FVec2);
-			Utils.BeginObjectRegister(type, L, translator, 6, 16, 2, 2);
+			Utils.BeginObjectRegister(type, L, translator, 6, 17, 2, 2);
 			Utils.RegisterFunc(L, Utils.OBJ_META_IDX, "__add", __AddMeta);
             Utils.RegisterFunc(L, Utils.OBJ_META_IDX, "__sub", __SubMeta);
             Utils.RegisterFunc(L, Utils.OBJ_META_IDX, "__unm", __UnmMeta);
@@ -32,6 +32,7 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Equals", _m_Equals);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ToString", _m_ToString);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetHashCode", _m_GetHashCode);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Set", _m_Set);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ClampMagnitude", _m_ClampMagnitude);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Magnitude", _m_Magnitude);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SqrMagnitude", _m_SqrMagnitude);
@@ -534,6 +535,53 @@ namespace XLua.CSObjectWrap
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_Set(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Core.FMath.FVec2 __cl_gen_to_be_invoked;translator.Get(L, 1, out __cl_gen_to_be_invoked);
+            
+            
+			    int __gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(__gen_param_count == 2&& translator.Assignable<Core.FMath.FVec2>(L, 2)) 
+                {
+                    Core.FMath.FVec2 v;translator.Get(L, 2, out v);
+                    
+                    __cl_gen_to_be_invoked.Set( v );
+                    
+                    
+                        translator.Update(L, 1, __cl_gen_to_be_invoked);
+                    
+                    
+                    return 0;
+                }
+                if(__gen_param_count == 3&& translator.Assignable<Core.FMath.Fix64>(L, 2)&& translator.Assignable<Core.FMath.Fix64>(L, 3)) 
+                {
+                    Core.FMath.Fix64 x;translator.Get(L, 2, out x);
+                    Core.FMath.Fix64 y;translator.Get(L, 3, out y);
+                    
+                    __cl_gen_to_be_invoked.Set( x, y );
+                    
+                    
+                        translator.Update(L, 1, __cl_gen_to_be_invoked);
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to Core.FMath.FVec2.Set!");
             
         }
         

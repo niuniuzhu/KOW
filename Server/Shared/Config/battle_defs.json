@@ -7,7 +7,7 @@
 			"keyframe_step": 4,
 			"snapshot_step": 100,
 			"timeout": 30000,
-			"max_players": 2,
+			"max_players": 1,
 			"born_pos": [
 				[
 					0,

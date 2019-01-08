@@ -226,6 +226,18 @@ namespace Core.FMath
 
 		#region Methods
 
+		public void Set( Fix64 x, Fix64 y )
+		{
+			this.x = x;
+			this.y = y;
+		}
+
+		public void Set( FVec2 v )
+		{
+			this.x = v.x;
+			this.y = v.y;
+		}
+
 		public void ClampMagnitude( Fix64 maxLength )
 		{
 			Fix64 sqrMagnitude = this.SqrMagnitude();

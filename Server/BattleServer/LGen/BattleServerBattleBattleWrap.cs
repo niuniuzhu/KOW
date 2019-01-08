@@ -133,12 +133,11 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                        bool __cl_gen_ret = __cl_gen_to_be_invoked.LoadDefs(  );
-                        LuaAPI.lua_pushboolean(L, __cl_gen_ret);
+                    __cl_gen_to_be_invoked.LoadDefs(  );
                     
                     
                     
-                    return 1;
+                    return 0;
                 }
                 
             } catch(System.Exception __gen_e) {

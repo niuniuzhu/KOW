@@ -2,7 +2,6 @@
 using BattleServer.Battle.Snapshot;
 using BattleServer.User;
 using Core.Misc;
-using Shared;
 using Shared.Net;
 using System;
 using System.Collections.Generic;
@@ -29,7 +28,7 @@ namespace BattleServer.Battle
 		public int numBattles => this._workingBattles.Count;
 
 		/// <summary>
-		/// 检查指定玩家ID所在的战场是否有效(存在?结束?)
+		/// 检查指定玩家ID所在的战场是否有效
 		/// </summary>
 		public Battle GetValidedBattle( ulong gcNID )
 		{
@@ -48,10 +47,9 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 创建战场
 		/// </summary>
-		public ErrorCode CreateBattle( Protos.CS2BS_BattleInfo battleInfo, out uint bid )
+		internal void CreateBattle( Protos.CS2BS_BattleInfo battleInfo, Action<uint, bool> callback )
 		{
-			bid = 0;
-			//初始化战场描述
+			//创建战场描述
 			BattleEntry battleEntry;
 			battleEntry.rndSeed = this._random.Next();
 			battleEntry.mapID = battleInfo.MapID;
@@ -60,10 +58,13 @@ namespace BattleServer.Battle
 			for ( int i = 0; i < count; i++ )
 			{
 				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfos[i];
-
+				//检查玩家是否在别的战场
 				if ( BS.instance.userMgr.HasUser( playerInfo.GcNID ) )
-					return ErrorCode.Failed;
-
+				{
+					callback( 0, false );
+					return;
+				}
+				//创建玩家
 				BattleEntry.Player player = new BattleEntry.Player
 				{
 					gcNID = playerInfo.GcNID,
@@ -76,21 +77,17 @@ namespace BattleServer.Battle
 
 			//初始化战场
 			Battle battle = POOL.Pop();
-			bid = battle.id;
-			if ( !battle.Init( battleEntry ) )
-			{
-				POOL.Push( battle );
-				return ErrorCode.Failed;
-			}
+			battle.Init( battleEntry );
+
+			//回调函数,通知GC创建战场成功
+			callback( battle.id, true );
 
 			//把战场加入工作列表
 			this._workingBattles.Add( battle );
-
+			//战场开始
 			battle.Start();
 
 			Logger.Log( $"battle:{battle.id} created" );
-
-			return ErrorCode.Success;
 		}
 
 		/// <summary>
@@ -140,7 +137,7 @@ namespace BattleServer.Battle
 			POOL.Push( battle );
 		}
 
-		public void StopAllBattles()
+		internal void StopAllBattles()
 		{
 			int count = this._workingBattles.Count;
 			for ( int i = 0; i < count; i++ )

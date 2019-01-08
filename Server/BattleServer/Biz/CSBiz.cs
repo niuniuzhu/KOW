@@ -19,14 +19,16 @@ namespace BattleServer.Biz
 		{
 			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo )message;
 
-			ErrorCode errorCode = BS.instance.battleManager.CreateBattle( battleInfo, out uint bid );
+			BS.instance.battleManager.CreateBattle( battleInfo, ( bid, success ) =>
+			{
+				Protos.BS2CS_BattleInfoRet battleInfoRet = ProtoCreator.R_CS2BS_BattleInfo( battleInfo.Opts.Pid );
+				battleInfoRet.Bid = bid;
+				battleInfoRet.Result = success
+										   ? Protos.Global.Types.ECommon.Success
+										   : Protos.Global.Types.ECommon.Failed;
+				session.Send( battleInfoRet );
+			} );
 
-			Protos.BS2CS_BattleInfoRet battleInfoRet = ProtoCreator.R_CS2BS_BattleInfo( battleInfo.Opts.Pid );
-			battleInfoRet.Bid = bid;
-			battleInfoRet.Result = errorCode == ErrorCode.Success
-									   ? Protos.Global.Types.ECommon.Success
-									   : Protos.Global.Types.ECommon.Failed;
-			session.Send( battleInfoRet );
 			return ErrorCode.Success;
 		}
 
@@ -39,10 +41,10 @@ namespace BattleServer.Biz
 
 		private static void OnGSAskPingRet( NetSessionBase session, Google.Protobuf.IMessage message, object[] args )
 		{
-			long currTime = TimeUtils.utcTime;
-			Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
-			long lag = ( long )( ( currTime - askPingRet.Stime ) * 0.5 );
-			long timeDiff = askPingRet.Time + lag - currTime;
+			//long currTime = TimeUtils.utcTime;
+			//Protos.G_AskPingRet askPingRet = ( Protos.G_AskPingRet )message;
+			//long lag = ( long )( ( currTime - askPingRet.Stime ) * 0.5 );
+			//long timeDiff = askPingRet.Time + lag - currTime;
 			//Logger.Log( $"cs ping ret, lag:{lag}, timediff:{timeDiff}" );
 		}
 

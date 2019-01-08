@@ -6,6 +6,7 @@ import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
+import { Logger } from "../RC/Utils/Logger";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
@@ -25,6 +26,7 @@ export class UIBattle implements IUIModule {
 		fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick);
 
 		this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
+		this._root.name = "battle_main";
 		this._root.getChild("n0").on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtnPress);
 		this._root.getChild("n0").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtnRelease);
 		this._root.getChild("n1").on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn2Press);
@@ -54,7 +56,7 @@ export class UIBattle implements IUIModule {
 		this._markToEnd = false;
 
 		Global.graphic.uiRoot.addChild(this._root);
-		fairygui.GRoot.inst.on(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
+		this._root.on(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
 		this._frameActionManager.Reset();
 
 		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
@@ -66,9 +68,9 @@ export class UIBattle implements IUIModule {
 		UIEvent.RemoveListener(UIEvent.E_END_BATTLE);
 
 		this._gestureState.OnTouchEnd();
-		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
-		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
-		fairygui.GRoot.inst.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
+		this._root.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
+		this._root.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
+		this._root.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
 		this._root.removeFromParent();
 		if (this._endBattle.parent != null) {
 			this._endBattle.removeFromParent();
@@ -148,13 +150,13 @@ export class UIBattle implements IUIModule {
 	}
 
 	private OnDragStart(e: laya.events.Event): void {
-		if (this._touchID != -1)
-			return;
-		if (e.stageX >= fairygui.GRoot.inst.width * 0.5)
+		Logger.Log(fairygui.GComponent.cast(e.currentTarget).name);
+		Logger.Log(this._root.name);
+		if (this._touchID != -1 || fairygui.GComponent.cast(e.currentTarget) != this._root)
 			return;
 		this._touchID = e.touchId;
-		fairygui.GRoot.inst.on(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
-		fairygui.GRoot.inst.on(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
+		this._root.on(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
+		this._root.on(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
 		this._gestureState.OnTouchBegin(e.stageX, e.stageY);
 	}
 
@@ -162,12 +164,13 @@ export class UIBattle implements IUIModule {
 		if (e.touchId == this._touchID) {
 			this._touchID = -1;
 			this._gestureState.OnTouchEnd();
-			fairygui.GRoot.inst.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
-			fairygui.GRoot.inst.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
+			this._root.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
+			this._root.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
 		}
 	}
 
 	private OnDrag(e: laya.events.Event): void {
+		Logger.Log(e.currentTarget);
 		if (e.touchId == this._touchID) {
 			this._gestureState.OnDrag(e.stageX, e.stageY);
 		}

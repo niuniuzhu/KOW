@@ -135,7 +135,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 初始化
 		/// </summary>
-		internal bool Init( BattleEntry battleEntry )
+		internal void Init( BattleEntry battleEntry )
 		{
 			this.frame = 0;
 			this.finished = false;
@@ -146,8 +146,7 @@ namespace BattleServer.Battle
 			this.mapID = battleEntry.mapID;
 
 			//加载战场配置
-			if ( !this.LoadDefs() )
-				return false;
+			this.LoadDefs();
 
 			//create champions
 			foreach ( var player in battleEntry.players )
@@ -166,7 +165,6 @@ namespace BattleServer.Battle
 			this._stepLocker.Init( this, this.frameRate, this.keyframeStep );
 			//初始化战场结束处理器
 			this._battleEndProcessor.Init( this );
-			return true;
 		}
 
 		/// <summary>
@@ -181,45 +179,31 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 加载战场配置
 		/// </summary>
-		public bool LoadDefs()
+		public void LoadDefs()
 		{
 			Hashtable mapDef = Defs.GetMap( this.mapID );
-			if ( mapDef == null )
-			{
-				Logger.Error( $"invalid mapID:{this.mapID}" );
-				return false;
-			}
-			try
-			{
-				this.frameRate = mapDef.GetInt( "frame_rate" );
-				this.keyframeStep = mapDef.GetInt( "keyframe_step" );
-				this.snapshotStep = mapDef.GetInt( "snapshot_step" );
-				this.battleTime = mapDef.GetInt( "timeout" );
+			this.frameRate = mapDef.GetInt( "frame_rate" );
+			this.keyframeStep = mapDef.GetInt( "keyframe_step" );
+			this.snapshotStep = mapDef.GetInt( "snapshot_step" );
+			this.battleTime = mapDef.GetInt( "timeout" );
 
-				ArrayList arr = ( ArrayList )mapDef["born_pos"];
-				int count = arr.Count;
-				this.bornPoses = new FVec2[count];
-				for ( int i = 0; i < count; i++ )
-				{
-					ArrayList pi = ( ArrayList )arr[i];
-					this.bornPoses[i] = new FVec2( Convert.ToInt32( pi[0] ), Convert.ToInt32( pi[1] ) );
-				}
-
-				arr = ( ArrayList )mapDef["born_dir"];
-				count = arr.Count;
-				this.bornDirs = new FVec2[count];
-				for ( int i = 0; i < count; i++ )
-				{
-					ArrayList pi = ( ArrayList )arr[i];
-					this.bornDirs[i] = new FVec2( Convert.ToInt32( pi[0] ), Convert.ToInt32( pi[1] ) );
-				}
-			}
-			catch ( Exception e )
+			ArrayList arr = ( ArrayList )mapDef["born_pos"];
+			int count = arr.Count;
+			this.bornPoses = new FVec2[count];
+			for ( int i = 0; i < count; i++ )
 			{
-				Logger.Error( $"battle:{this.mapID} load def error:{e}" );
-				return false;
+				ArrayList pi = ( ArrayList )arr[i];
+				this.bornPoses[i] = new FVec2( Convert.ToInt32( pi[0] ), Convert.ToInt32( pi[1] ) );
 			}
-			return true;
+
+			arr = ( ArrayList )mapDef["born_dir"];
+			count = arr.Count;
+			this.bornDirs = new FVec2[count];
+			for ( int i = 0; i < count; i++ )
+			{
+				ArrayList pi = ( ArrayList )arr[i];
+				this.bornDirs[i] = new FVec2( Convert.ToInt32( pi[0] ), Convert.ToInt32( pi[1] ) );
+			}
 		}
 
 		/// <summary>

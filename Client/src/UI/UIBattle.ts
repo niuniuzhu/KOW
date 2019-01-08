@@ -1,7 +1,6 @@
 import { Global } from "../Global";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { FrameAciontManager } from "../Model/FrameActionManager";
-import { VChampion } from "../Model/View/VChampion";
 import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
 import { IUIModule } from "./IUIModule";

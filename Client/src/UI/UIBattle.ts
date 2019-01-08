@@ -6,7 +6,6 @@ import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
-import { Logger } from "../RC/Utils/Logger";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
@@ -16,7 +15,6 @@ export class UIBattle implements IUIModule {
 	private readonly _gestureState: GestureState = new GestureState();
 	private readonly _frameActionManager: FrameAciontManager = new FrameAciontManager();
 
-	private _player: VChampion;
 	private _touchID: number = -1;
 	private _markToEnd: boolean = false;
 
@@ -67,15 +65,19 @@ export class UIBattle implements IUIModule {
 		UIEvent.RemoveListener(UIEvent.E_ENTITY_INIT);
 		UIEvent.RemoveListener(UIEvent.E_END_BATTLE);
 
+		this.GestureOff();
+
+		if (this._endBattle.parent != null) {
+			this._endBattle.removeFromParent();
+		}
+	}
+
+	private GestureOff(): void {
 		this._gestureState.OnTouchEnd();
 		this._root.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
 		this._root.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
 		this._root.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
 		this._root.removeFromParent();
-		if (this._endBattle.parent != null) {
-			this._endBattle.removeFromParent();
-		}
-		this._player = null;
 		this._touchID = -1;
 	}
 
@@ -90,15 +92,16 @@ export class UIBattle implements IUIModule {
 	private OnChampionInit(e: UIEvent): void {
 		//检查是否玩家自己
 		if (e.b0) {
-			this._player = e.champion;
-			this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
-			this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
+			this._root.getChild("n0").data = e.champion.GetSkillAt(0).id;
+			this._root.getChild("n1").data = e.champion.GetSkillAt(1).id;
 		}
 	}
 
 	private OnBattleEnd(e: UIEvent): void {
 		this._markToEnd = true;
+		this.GestureOff();
 		Global.graphic.uiRoot.addChild(this._endBattle);
+
 		const isWin = e.b0;
 		const honer = e.v1;
 		const callback = e.callback;
@@ -111,6 +114,7 @@ export class UIBattle implements IUIModule {
 			com = this._endBattle.getChild("n1").asCom;
 			this._endBattle.getController("c1").selectedIndex = 1;
 		}
+
 		const confirmBtn = com.getChild("confirm");
 		confirmBtn.onClick(this, () => {
 			callback();
@@ -119,27 +123,31 @@ export class UIBattle implements IUIModule {
 		com.getChild("n7").asTextField.text = "" + honer;
 	}
 
-	private OnSkillBtnPress(): void {
+	private OnSkillBtnPress(e: laya.events.Event): void {
 		if (this._markToEnd)
 			return;
+		e.stopPropagation();
 		this._frameActionManager.SetS1(true);
 	}
 
-	private OnSkillBtnRelease(): void {
+	private OnSkillBtnRelease(e: laya.events.Event): void {
 		if (this._markToEnd)
 			return;
+		e.stopPropagation();
 		this._frameActionManager.SetS1(false);
 	}
 
-	private OnSkillBtn2Press(): void {
+	private OnSkillBtn2Press(e: laya.events.Event): void {
 		if (this._markToEnd)
 			return;
+		e.stopPropagation();
 		this._frameActionManager.SetS2(true);
 	}
 
-	private OnSkillBtn2Release(): void {
+	private OnSkillBtn2Release(e: laya.events.Event): void {
 		if (this._markToEnd)
 			return;
+		e.stopPropagation();
 		this._frameActionManager.SetS2(false);
 	}
 
@@ -150,9 +158,8 @@ export class UIBattle implements IUIModule {
 	}
 
 	private OnDragStart(e: laya.events.Event): void {
-		Logger.Log(fairygui.GComponent.cast(e.currentTarget).name);
-		Logger.Log(this._root.name);
-		if (this._touchID != -1 || fairygui.GComponent.cast(e.currentTarget) != this._root)
+		if (this._touchID != -1 ||
+			fairygui.GComponent.cast(e.currentTarget) != this._root)
 			return;
 		this._touchID = e.touchId;
 		this._root.on(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
@@ -170,7 +177,6 @@ export class UIBattle implements IUIModule {
 	}
 
 	private OnDrag(e: laya.events.Event): void {
-		Logger.Log(e.currentTarget);
 		if (e.touchId == this._touchID) {
 			this._gestureState.OnDrag(e.stageX, e.stageY);
 		}

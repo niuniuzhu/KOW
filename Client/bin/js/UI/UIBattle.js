@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/FrameActionManager", "../RC/Math/Vec2", "./GestureState", "./Joystick", "../RC/Utils/Logger"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Vec2_1, GestureState_1, Joystick_1, Logger_1) {
+define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/FrameActionManager", "../RC/Math/Vec2", "./GestureState", "./Joystick"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Vec2_1, GestureState_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
@@ -45,15 +45,17 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
         Exit() {
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ENTITY_INIT);
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_END_BATTLE);
+            this.GestureOff();
+            if (this._endBattle.parent != null) {
+                this._endBattle.removeFromParent();
+            }
+        }
+        GestureOff() {
             this._gestureState.OnTouchEnd();
             this._root.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
             this._root.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
             this._root.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
             this._root.removeFromParent();
-            if (this._endBattle.parent != null) {
-                this._endBattle.removeFromParent();
-            }
-            this._player = null;
             this._touchID = -1;
         }
         Update(dt) {
@@ -64,13 +66,13 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
         }
         OnChampionInit(e) {
             if (e.b0) {
-                this._player = e.champion;
-                this._root.getChild("n0").data = this._player.GetSkillAt(0).id;
-                this._root.getChild("n1").data = this._player.GetSkillAt(1).id;
+                this._root.getChild("n0").data = e.champion.GetSkillAt(0).id;
+                this._root.getChild("n1").data = e.champion.GetSkillAt(1).id;
             }
         }
         OnBattleEnd(e) {
             this._markToEnd = true;
+            this.GestureOff();
             Global_1.Global.graphic.uiRoot.addChild(this._endBattle);
             const isWin = e.b0;
             const honer = e.v1;
@@ -91,24 +93,28 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             });
             com.getChild("n7").asTextField.text = "" + honer;
         }
-        OnSkillBtnPress() {
+        OnSkillBtnPress(e) {
             if (this._markToEnd)
                 return;
+            e.stopPropagation();
             this._frameActionManager.SetS1(true);
         }
-        OnSkillBtnRelease() {
+        OnSkillBtnRelease(e) {
             if (this._markToEnd)
                 return;
+            e.stopPropagation();
             this._frameActionManager.SetS1(false);
         }
-        OnSkillBtn2Press() {
+        OnSkillBtn2Press(e) {
             if (this._markToEnd)
                 return;
+            e.stopPropagation();
             this._frameActionManager.SetS2(true);
         }
-        OnSkillBtn2Release() {
+        OnSkillBtn2Release(e) {
             if (this._markToEnd)
                 return;
+            e.stopPropagation();
             this._frameActionManager.SetS2(false);
         }
         HandleAxisInput(value) {
@@ -117,9 +123,8 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._frameActionManager.SetInputDirection(value);
         }
         OnDragStart(e) {
-            Logger_1.Logger.Log(fairygui.GComponent.cast(e.currentTarget).name);
-            Logger_1.Logger.Log(this._root.name);
-            if (this._touchID != -1 || fairygui.GComponent.cast(e.currentTarget) != this._root)
+            if (this._touchID != -1 ||
+                fairygui.GComponent.cast(e.currentTarget) != this._root)
                 return;
             this._touchID = e.touchId;
             this._root.on(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
@@ -135,7 +140,6 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             }
         }
         OnDrag(e) {
-            Logger_1.Logger.Log(e.currentTarget);
             if (e.touchId == this._touchID) {
                 this._gestureState.OnDrag(e.stageX, e.stageY);
             }

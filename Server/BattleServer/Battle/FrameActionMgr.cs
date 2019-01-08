@@ -32,7 +32,7 @@ namespace BattleServer.Battle
 		internal void Init( Battle battle )
 		{
 			this._battle = battle;
-			int count = battle.numPlayers;
+			int count = battle.numChampions;
 			for ( int i = 0; i < count; i++ )
 			{
 				ulong id = battle.GetChampionAt( i ).rid;

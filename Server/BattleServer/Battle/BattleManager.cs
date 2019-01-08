@@ -99,7 +99,7 @@ namespace BattleServer.Battle
 		/// </summary>
 		private void EndBattle( Battle battle )
 		{
-			int count = battle.numPlayers;
+			int count = battle.numChampions;
 			//通知CS战场结束
 			Protos.BS2CS_BattleEnd battleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
 			battleEnd.Bid = battle.id;

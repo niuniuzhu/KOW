@@ -33,6 +33,8 @@ export class UIBattle implements IUIModule {
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
 
 		this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
+		this._endBattle.setSize(this._root.width, this._root.height);
+		this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
 
 		this._gestureState.joystick = <Joystick>this._root.getChild("joystick");
 		this._gestureState.joystick.core = this._root.getChild("joystick").asCom.getChild("n1").asCom;

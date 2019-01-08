@@ -45,13 +45,13 @@ namespace BattleServer
 			HelpText = "Exposed gate server port." )]
 		public int externalPort { get; set; }
 
-	    [Option("secret",
-	        Default = "Config/secret.json",
-	        SetName = "bysetting",
-	        HelpText = "Certificate path.")]
-	    public string secret { get; set; }
+		[Option( "secret",
+			Default = "Config/secret.json",
+			SetName = "bysetting",
+			HelpText = "Certificate path." )]
+		public string secret { get; set; }
 
-        [Option( "cs_ip",
+		[Option( "cs_ip",
 			Default = "127.0.0.1",
 			SetName = "bysetting",
 			HelpText = "IPaddress of central server." )]
@@ -86,5 +86,11 @@ namespace BattleServer
 			SetName = "bysetting",
 			HelpText = "gate client live time." )]
 		public long gcLive { get; set; }
+
+		[Option( "wait_user_commit_SS_timeout",
+			Default = 2000,
+			SetName = "bysetting",
+			HelpText = "how long the battle waiting for user to commit the snapshot of the battle_end." )]
+		public long waitUserCommitSSTimeout { get; set; }
 	}
 }

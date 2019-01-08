@@ -25,6 +25,7 @@ namespace BattleServer
 		public long pingInterval;
 		public long gcLive;
 		public string defPath;
+		public long waitUserCommitSSTimeout;
 
 		public void CopyFromJson( Hashtable json )
 		{
@@ -37,10 +38,11 @@ namespace BattleServer
 			this.reportInterval = json.GetLong( "reportInterval" );
 			this.pingInterval = json.GetLong( "pingInterval" );
 			this.gcLive = json.GetLong( "gcLive" );
-		    Hashtable secretDef = (Hashtable)MiniJSON.JsonDecode(File.ReadAllText(json.GetString("secret")));
-		    this.certPath = secretDef.GetString("certPath");
-		    this.certPass = secretDef.GetString("certPass");
-        }
+			this.waitUserCommitSSTimeout = json.GetLong( "waitUserCommitSSTimeout" );
+			Hashtable secretDef = ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( json.GetString( "secret" ) ) );
+			this.certPath = secretDef.GetString( "certPath" );
+			this.certPass = secretDef.GetString( "certPass" );
+		}
 
 		public void CopyFromCLIOptions( Options opts )
 		{
@@ -53,9 +55,10 @@ namespace BattleServer
 			this.reportInterval = opts.reportInterval;
 			this.pingInterval = opts.pingInterval;
 			this.gcLive = opts.gcLive;
-		    Hashtable secretDef = (Hashtable)MiniJSON.JsonDecode(File.ReadAllText(opts.secret));
-		    this.certPath = secretDef.GetString("certPath");
-		    this.certPass = secretDef.GetString("certPass");
-        }
+			this.waitUserCommitSSTimeout = opts.waitUserCommitSSTimeout;
+			Hashtable secretDef = ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.secret ) );
+			this.certPath = secretDef.GetString( "certPath" );
+			this.certPass = secretDef.GetString( "certPass" );
+		}
 	}
 }

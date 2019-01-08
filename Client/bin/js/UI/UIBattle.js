@@ -18,6 +18,8 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
             this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
             this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
+            this._endBattle.setSize(this._root.width, this._root.height);
+            this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
             this._gestureState.joystick = this._root.getChild("joystick");
             this._gestureState.joystick.core = this._root.getChild("joystick").asCom.getChild("n1").asCom;
             this._gestureState.joystick.cen = new Vec2_1.Vec2(100, 100);

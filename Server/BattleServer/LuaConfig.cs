@@ -23,6 +23,7 @@ namespace BattleServer
 			typeof( Champion ),
 			typeof( SnapshotMgr ),
 			typeof( FrameActionMgr ),
+			typeof( BattleEndProcessor ),
 			typeof( Battle.Battle ),
 			typeof( BattleManager ),
 		};

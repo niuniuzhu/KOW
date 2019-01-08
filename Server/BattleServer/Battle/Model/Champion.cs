@@ -161,5 +161,17 @@ namespace BattleServer.Battle.Model
 			this.fsm.DecodeSnapshot( reader );
 			reader.ReadBytes();
 		}
+
+		public override string Dump()
+		{
+			string str = base.Dump();
+			str += $"team:{ this.team}\n";
+			str += $"name:{ this.name}\n";
+			str += $"moveDirection:{ this.moveDirection}\n";
+			str += $"phyxSpeed:{ this.phyxSpeed}\n";
+			str += $"intersectVector:{ this.intersectVector}\n";
+			str += $"velocity:{ this.velocity}\n";
+			return str;
+		}
 	}
 }

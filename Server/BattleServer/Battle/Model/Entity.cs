@@ -49,5 +49,16 @@ namespace BattleServer.Battle.Model
 			this.position = new FVec2( ( Fix64 )reader.ReadDouble(), ( Fix64 )reader.ReadDouble() );
 			this.direction = new FVec2( ( Fix64 )reader.ReadDouble(), ( Fix64 )reader.ReadDouble() );
 		}
+
+		public virtual string Dump()
+		{
+			string str = string.Empty;
+			str += $"rid:{ this.rid}\n";
+			str += $"id:{ this.id}\n";
+			str += $"markToDestroy:{ this.markToDestroy}\n";
+			str += $"position:{ this.position}\n";
+			str += $"direction:{ this.direction}\n";
+			return str;
+		}
 	}
 }

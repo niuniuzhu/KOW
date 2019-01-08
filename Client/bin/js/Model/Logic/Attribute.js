@@ -14,6 +14,7 @@ define(["require", "exports"], function (require, exports) {
         EAttr[EAttr["INTERSET_VECTOR_X"] = 8] = "INTERSET_VECTOR_X";
         EAttr[EAttr["INTERSET_VECTOR_Y"] = 9] = "INTERSET_VECTOR_Y";
         EAttr[EAttr["VELOCITY"] = 10] = "VELOCITY";
+        EAttr[EAttr["GLADIATOR_TIME"] = 11] = "GLADIATOR_TIME";
         EAttr[EAttr["S_DISABLE_MOVE"] = 500] = "S_DISABLE_MOVE";
         EAttr[EAttr["S_DISABLE_TURN"] = 501] = "S_DISABLE_TURN";
         EAttr[EAttr["S_DISABLE_SKILL"] = 502] = "S_DISABLE_SKILL";

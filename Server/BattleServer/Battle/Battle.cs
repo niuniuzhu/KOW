@@ -58,13 +58,17 @@ namespace BattleServer.Battle
 		/// </summary>
 		public int battleTime { get; private set; }
 		/// <summary>
-		/// 队伍的出生点
+		/// 禁区超时时间
 		/// </summary>
-		public FVec2[] bornPoses { get; private set; }
+		public int gladiatorTimeout { get; private set; }
 		/// <summary>
-		/// 队伍的出生朝向
+		/// 禁区坐标
 		/// </summary>
-		public FVec2[] bornDirs { get; private set; }
+		public FVec2 gladiatorPos { get; private set; }
+		/// <summary>
+		/// 禁区半径
+		/// </summary>
+		public int gladiatorRadius { get; private set; }
 
 		/// <summary>
 		/// 玩家数量
@@ -186,24 +190,10 @@ namespace BattleServer.Battle
 			this.keyframeStep = mapDef.GetInt( "keyframe_step" );
 			this.snapshotStep = mapDef.GetInt( "snapshot_step" );
 			this.battleTime = mapDef.GetInt( "timeout" );
-
-			ArrayList arr = ( ArrayList )mapDef["born_pos"];
-			int count = arr.Count;
-			this.bornPoses = new FVec2[count];
-			for ( int i = 0; i < count; i++ )
-			{
-				ArrayList pi = ( ArrayList )arr[i];
-				this.bornPoses[i] = new FVec2( Convert.ToInt32( pi[0] ), Convert.ToInt32( pi[1] ) );
-			}
-
-			arr = ( ArrayList )mapDef["born_dir"];
-			count = arr.Count;
-			this.bornDirs = new FVec2[count];
-			for ( int i = 0; i < count; i++ )
-			{
-				ArrayList pi = ( ArrayList )arr[i];
-				this.bornDirs[i] = new FVec2( Convert.ToInt32( pi[0] ), Convert.ToInt32( pi[1] ) );
-			}
+			this.gladiatorTimeout = mapDef.GetInt( "gladiator_timeout" );
+			float[] arr = mapDef.GetFloatArray( "gladiator_pos" );
+			this.gladiatorPos = new FVec2( Convert.ToSingle( arr[0] ), Convert.ToSingle( arr[1] ) );
+			this.gladiatorRadius = mapDef.GetInt( "gladiator_radius" );
 		}
 
 		/// <summary>
@@ -340,20 +330,41 @@ namespace BattleServer.Battle
 		private void ProcessResult()
 		{
 			//胜利检查
-			bool team0Win = true;
-			bool team1Win = true;
+			bool team0Win = false;
+			bool team1Win = false;
+			//检查禁区情况
 			int count = this.numChampions;
 			for ( int i = 0; i < count; i++ )
 			{
 				Champion champion = this.GetChampionAt( i );
-				if ( champion.team == 0 &&
-					 !champion.isDead )
-					team1Win = false;
-				if ( champion.team == 1 &&
-					 !champion.isDead )
-					team0Win = false;
+				if ( champion.gladiatorTime >= this.gladiatorTimeout )
+				{
+					if ( champion.team == 0 )
+						team0Win = true;
+					else
+						team1Win = true;
+				}
 			}
+			//如果以上检测没有胜利队伍
+			if ( !team0Win &&
+				 !team1Win &&
+				 this._champions.Count > 1 )
+			{
+				//检查全员死亡
+				team0Win = true;
+				team1Win = true;
 
+				for ( int i = 0; i < count; i++ )
+				{
+					Champion champion = this.GetChampionAt( i );
+					if ( champion.team == 0 &&
+						 !champion.isDead )
+						team1Win = false;
+					if ( champion.team == 1 &&
+						 !champion.isDead )
+						team0Win = false;
+				}
+			}
 			//标记胜利玩家
 			for ( int i = 0; i < count; i++ )
 			{

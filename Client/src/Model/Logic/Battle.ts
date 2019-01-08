@@ -38,6 +38,9 @@ export class Battle implements ISnapshotable {
 	public get mapID(): number { return this._mapID; }
 	public get frame(): number { return this._frame; }
 	public get bounds(): FRect { return this._bounds; }
+	public get gladiatorTimeout(): number { return this._gladiatorTimeout; }
+	public get gladiatorPos(): FVec2 { return this._gladiatorPos; }
+	public get gladiatorRadius(): number { return this._gladiatorRadius; }
 	public get random(): FRandom { return this._random; }
 	public get hitManager(): HitManager { return this._hitManager; }
 
@@ -47,6 +50,9 @@ export class Battle implements ISnapshotable {
 	private _nextKeyFrame: number;
 	private _def: Hashtable;
 	private _bounds: FRect;
+	private _gladiatorTimeout: number;
+	private _gladiatorPos: FVec2;
+	private _gladiatorRadius: number;
 	private _destroied: boolean = false;
 	private _markToEnd: boolean = false;
 
@@ -87,6 +93,9 @@ export class Battle implements ISnapshotable {
 		const bHeight = Hashtable.GetNumber(this._def, "height");
 		this._bounds = new FRect(-FMathUtils.Floor(bWidth * 0.5),
 			-FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
+		this._gladiatorTimeout = Hashtable.GetNumber(this._def, "gladiator_timeout");
+		this._gladiatorPos = Hashtable.GetFVec2(this._def, "gladiator_pos");
+		this._gladiatorRadius = Hashtable.GetNumber(this._def, "gladiator_radius");
 	}
 
 	/**
@@ -164,7 +173,7 @@ export class Battle implements ISnapshotable {
 		//now update the position
 		for (let i = 0, count = this._champions.length; i < count; i++) {
 			const champion = this._champions[i];
-			champion.InternalUpdate(dt);
+			champion.AfterUpdate(dt);
 		}
 
 		//update emitters
@@ -568,16 +577,29 @@ export class Battle implements ISnapshotable {
 	private CheckBattleEnd(): void {
 		if (this._markToEnd)
 			return;
-		if (this._champions.length < 2)
-			return;
-		let team0Win = true;
-		let team1Win = true;
+		let team0Win = false;
+		let team1Win = false;
+		//检查禁区情况
 		for (const champion of this._champions) {
-			if (champion.team == 0 && !champion.isDead) {
-				team1Win = false;
+			if (champion.gladiatorTime >= this._gladiatorTimeout) {
+				if (champion.team == 0)
+					team0Win = true;
+				else
+					team1Win = true;
 			}
-			if (champion.team == 1 && !champion.isDead) {
-				team0Win = false;
+		}
+		//如果以上检测没有胜利队伍
+		if (!team0Win && !team1Win && this._champions.length > 1) {
+			//检查全员死亡
+			team0Win = true;
+			team1Win = true;
+			for (const champion of this._champions) {
+				if (champion.team == 0 && !champion.isDead) {
+					team1Win = false;
+				}
+				if (champion.team == 1 && !champion.isDead) {
+					team0Win = false;
+				}
 			}
 		}
 		let winTeam = 0;
@@ -592,6 +614,7 @@ export class Battle implements ISnapshotable {
 			winTeam = (1 << 0) | (1 << 1);
 		}
 		if (winTeam != 0) {
+			Logger.Log("w:" + winTeam);
 			//记录一次快照
 			const writer = $protobuf.Writer.create();
 			this.EncodeSnapshot(writer);

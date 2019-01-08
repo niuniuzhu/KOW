@@ -6,6 +6,7 @@ import { Defs } from "../Defs";
 import { FrameAction } from "../FrameAction";
 import { EntityFSM } from "../FSM/EntityFSM";
 import { EntityState } from "../FSM/EntityState";
+import { StateType } from "../FSM/StateEnums";
 import { IntersectInfo } from "../IntersectInfo";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
@@ -13,7 +14,6 @@ import { EAttr } from "./Attribute";
 import { Battle } from "./Battle";
 import { Entity, EntityInitParams } from "./Entity";
 import { InputAgent, InputType } from "./InputAagent";
-import { StateType } from "../FSM/StateEnums";
 
 export class Champion extends Entity implements ISnapshotable {
 	public get fsm(): EntityFSM { return this._fsm; }
@@ -106,6 +106,10 @@ export class Champion extends Entity implements ISnapshotable {
 	 * 是否已死亡
 	 */
 	public isDead: boolean;
+	/**
+	 * 停留在禁区的时间
+	 */
+	public gladiatorTime: number = -1;
 
 	//临时属性
 	public t_hp_add: number = 0;
@@ -193,6 +197,7 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.double(this.phyxSpeed.x).double(this.phyxSpeed.y);
 		writer.double(this.velocity);
 		writer.bool(this.isDead);
+		writer.int32(this.gladiatorTime);
 		writer.int32(this.t_hp_add);
 		writer.int32(this.t_mp_add);
 		writer.int32(this.t_atk_add);
@@ -234,6 +239,7 @@ export class Champion extends Entity implements ISnapshotable {
 		this.phyxSpeed.Set(reader.double(), reader.double());
 		this.velocity = reader.double();
 		this.isDead = reader.bool();
+		this.gladiatorTime = reader.int32();
 		this.t_hp_add = reader.int32();
 		this.t_mp_add = reader.int32();
 		this.t_atk_add = reader.int32();
@@ -270,6 +276,7 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.int32(this.supperArmor);
 		writer.int32(this.invulnerAbility);
 		writer.double(this.moveDirection.x).double(this.moveDirection.y);
+		writer.int32(this.gladiatorTime);
 		writer.int32(this.t_hp_add);
 		writer.int32(this.t_mp_add);
 		writer.int32(this.t_atk_add);
@@ -371,8 +378,9 @@ export class Champion extends Entity implements ISnapshotable {
 		}
 	}
 
-	public InternalUpdate(dt: number): void {
+	public AfterUpdate(dt: number): void {
 		this.MoveStep(dt);
+		this.ProcessGladiator(dt);
 	}
 
 	private MoveStep(dt: number): void {
@@ -423,6 +431,27 @@ export class Champion extends Entity implements ISnapshotable {
 		pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
 		pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
 		this.position.CopyFrom(pos);
+	}
+
+	private ProcessGladiator(dt: number): void {
+		const isInGladiator = FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius);
+		if (this.gladiatorTime == -1 && isInGladiator) {
+			this.OnEnterGladiator();
+		}
+		if (this.gladiatorTime >= 0 && !isInGladiator) {
+			this.OnExitGladiator();
+		}
+		if (isInGladiator) {
+			this.gladiatorTime += dt;
+		}
+	}
+
+	private OnEnterGladiator(): void {
+		this.gladiatorTime = 0;
+	}
+
+	private OnExitGladiator(): void {
+		this.gladiatorTime = -1;
 	}
 
 	public UpdateAfterHit(): void {
@@ -476,6 +505,9 @@ export class Champion extends Entity implements ISnapshotable {
 			case EAttr.S_INVULNER_ABILITY:
 				this.invulnerAbility = value;
 				break;
+			case EAttr.GLADIATOR_TIME:
+				this.gladiatorTime = value;
+				break;
 			case EAttr.S_HP_ADD:
 				this.t_hp_add = value;
 				break;
@@ -508,6 +540,8 @@ export class Champion extends Entity implements ISnapshotable {
 				return this.supperArmor;
 			case EAttr.S_INVULNER_ABILITY:
 				return this.invulnerAbility;
+			case EAttr.GLADIATOR_TIME:
+				return this.gladiatorTime;
 			case EAttr.S_HP_ADD:
 				return this.t_hp_add;
 			case EAttr.S_MP_ADD:

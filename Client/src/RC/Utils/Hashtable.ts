@@ -1,3 +1,4 @@
+import { FVec2 } from "../FMath/FVec2";
 import { Vec2 } from "../Math/Vec2";
 import { Vec3 } from "../Math/Vec3";
 import { Vec4 } from "../Math/Vec4";
@@ -110,5 +111,12 @@ export class Hashtable {
 		if (arr == null)
 			return null;
 		return new Vec4(arr[0], arr[1], arr[2], arr[3]);
+	}
+
+	public static GetFVec2(map: pair, key: string): FVec2 | null {
+		let arr: any[] = this.GetArray(map, key);
+		if (arr == null)
+			return null;
+		return new FVec2(arr[0], arr[1]);
 	}
 }

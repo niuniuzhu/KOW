@@ -56,6 +56,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             this.supperArmor = reader.int32();
             this.invulnerAbility = reader.int32();
             this.moveDirection.Set(reader.double(), reader.double());
+            this.gladiatorTime = reader.int32();
             this.t_hp_add = reader.int32();
             this.t_mp_add = reader.int32();
             this.t_atk_add = reader.int32();

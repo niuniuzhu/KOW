@@ -27,6 +27,9 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         get mapID() { return this._mapID; }
         get frame() { return this._frame; }
         get bounds() { return this._bounds; }
+        get gladiatorTimeout() { return this._gladiatorTimeout; }
+        get gladiatorPos() { return this._gladiatorPos; }
+        get gladiatorRadius() { return this._gladiatorRadius; }
         get random() { return this._random; }
         get hitManager() { return this._hitManager; }
         SetBattleInfo(battleInfo) {
@@ -47,6 +50,9 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             const bWidth = Hashtable_1.Hashtable.GetNumber(this._def, "width");
             const bHeight = Hashtable_1.Hashtable.GetNumber(this._def, "height");
             this._bounds = new FRect_1.FRect(-FMathUtils_1.FMathUtils.Floor(bWidth * 0.5), -FMathUtils_1.FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
+            this._gladiatorTimeout = Hashtable_1.Hashtable.GetNumber(this._def, "gladiator_timeout");
+            this._gladiatorPos = Hashtable_1.Hashtable.GetFVec2(this._def, "gladiator_pos");
+            this._gladiatorRadius = Hashtable_1.Hashtable.GetNumber(this._def, "gladiator_radius");
         }
         Destroy() {
             if (this._destroied)
@@ -99,7 +105,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             }
             for (let i = 0, count = this._champions.length; i < count; i++) {
                 const champion = this._champions[i];
-                champion.InternalUpdate(dt);
+                champion.AfterUpdate(dt);
             }
             for (let i = 0, count = this._emitters.length; i < count; i++) {
                 const emitter = this._emitters[i];
@@ -367,16 +373,26 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         CheckBattleEnd() {
             if (this._markToEnd)
                 return;
-            if (this._champions.length < 2)
-                return;
-            let team0Win = true;
-            let team1Win = true;
+            let team0Win = false;
+            let team1Win = false;
             for (const champion of this._champions) {
-                if (champion.team == 0 && !champion.isDead) {
-                    team1Win = false;
+                if (champion.gladiatorTime >= this._gladiatorTimeout) {
+                    if (champion.team == 0)
+                        team0Win = true;
+                    else
+                        team1Win = true;
                 }
-                if (champion.team == 1 && !champion.isDead) {
-                    team0Win = false;
+            }
+            if (!team0Win && !team1Win && this._champions.length > 1) {
+                team0Win = true;
+                team1Win = true;
+                for (const champion of this._champions) {
+                    if (champion.team == 0 && !champion.isDead) {
+                        team1Win = false;
+                    }
+                    if (champion.team == 1 && !champion.isDead) {
+                        team0Win = false;
+                    }
                 }
             }
             let winTeam = 0;
@@ -390,6 +406,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 winTeam = (1 << 0) | (1 << 1);
             }
             if (winTeam != 0) {
+                Logger_1.Logger.Log("w:" + winTeam);
                 const writer = $protobuf.Writer.create();
                 this.EncodeSnapshot(writer);
                 const data = writer.finish();

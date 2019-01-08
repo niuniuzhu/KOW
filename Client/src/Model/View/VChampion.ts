@@ -35,6 +35,7 @@ export class VChampion extends VEntity {
 	public supperArmor: number;
 	public invulnerAbility: number;
 	public readonly moveDirection: Vec2 = Vec2.zero;
+	public gladiatorTime: number;
 	//临时属性
 	public t_hp_add: number = 0;
 	public t_mp_add: number = 0;
@@ -92,6 +93,7 @@ export class VChampion extends VEntity {
 		this.supperArmor = reader.int32();
 		this.invulnerAbility = reader.int32();
 		this.moveDirection.Set(reader.double(), reader.double());
+		this.gladiatorTime = reader.int32();
 		this.t_hp_add = reader.int32();
 		this.t_mp_add = reader.int32();
 		this.t_atk_add = reader.int32();

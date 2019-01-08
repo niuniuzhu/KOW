@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.Battle.Battle);
-			Utils.BeginObjectRegister(type, L, translator, 0, 7, 14, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 7, 15, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Clear", _m_Clear);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "LoadDefs", _m_LoadDefs);
@@ -41,8 +41,9 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "rndSeed", _g_get_rndSeed);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "frame", _g_get_frame);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "battleTime", _g_get_battleTime);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "bornPoses", _g_get_bornPoses);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "bornDirs", _g_get_bornDirs);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "gladiatorTimeout", _g_get_gladiatorTimeout);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "gladiatorPos", _g_get_gladiatorPos);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "gladiatorRadius", _g_get_gladiatorRadius);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "numChampions", _g_get_numChampions);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "numEntities", _g_get_numEntities);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "battleEntry", _g_get_battleEntry);
@@ -419,13 +420,13 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_bornPoses(RealStatePtr L)
+        static int _g_get_gladiatorTimeout(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 BattleServer.Battle.Battle __cl_gen_to_be_invoked = (BattleServer.Battle.Battle)translator.FastGetCSObj(L, 1);
-                translator.Push(L, __cl_gen_to_be_invoked.bornPoses);
+                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.gladiatorTimeout);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }
@@ -433,13 +434,27 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_bornDirs(RealStatePtr L)
+        static int _g_get_gladiatorPos(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 BattleServer.Battle.Battle __cl_gen_to_be_invoked = (BattleServer.Battle.Battle)translator.FastGetCSObj(L, 1);
-                translator.Push(L, __cl_gen_to_be_invoked.bornDirs);
+                translator.Push(L, __cl_gen_to_be_invoked.gladiatorPos);
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_gladiatorRadius(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                BattleServer.Battle.Battle __cl_gen_to_be_invoked = (BattleServer.Battle.Battle)translator.FastGetCSObj(L, 1);
+                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.gladiatorRadius);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }

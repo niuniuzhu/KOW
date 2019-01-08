@@ -1,4 +1,4 @@
-define(["require", "exports", "../Math/Vec2", "../Math/Vec3", "../Math/Vec4"], function (require, exports, Vec2_1, Vec3_1, Vec4_1) {
+define(["require", "exports", "../FMath/FVec2", "../Math/Vec2", "../Math/Vec3", "../Math/Vec4"], function (require, exports, FVec2_1, Vec2_1, Vec3_1, Vec4_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Hashtable {
@@ -92,6 +92,12 @@ define(["require", "exports", "../Math/Vec2", "../Math/Vec3", "../Math/Vec4"], f
             if (arr == null)
                 return null;
             return new Vec4_1.Vec4(arr[0], arr[1], arr[2], arr[3]);
+        }
+        static GetFVec2(map, key) {
+            let arr = this.GetArray(map, key);
+            if (arr == null)
+                return null;
+            return new FVec2_1.FVec2(arr[0], arr[1]);
         }
     }
     exports.Hashtable = Hashtable;

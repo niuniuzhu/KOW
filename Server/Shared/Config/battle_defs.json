@@ -6,7 +6,13 @@
 			"frame_rate": 20,
 			"keyframe_step": 4,
 			"snapshot_step": 100,
-			"timeout": 30000,
+			"timeout": 180000,
+			"gladiator_timeout": 10000,
+			"gladiator_pos": [
+				0,
+				0
+			],
+			"gladiator_radius": 1.2, /*禁区半径*/
 			"max_players": 1,
 			"born_pos": [
 				[

@@ -13,7 +13,7 @@
 				0
 			],
 			"gladiator_radius": 1.2, /*禁区半径*/
-			"max_players": 2,
+			"max_players": 1,
 			"born_pos": [
 				[
 					0,

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../BattleEvent/UIEvent", "../CDefs", "../Defs", "../FSM/VEntityState", "../Logic/Attribute", "../Skill", "./HUD", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, UIEvent_1, CDefs_1, Defs_1, VEntityState_1, Attribute_1, Skill_1, HUD_1, VEntity_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../BattleEvent/UIEvent", "../CDefs", "../Defs", "../Logic/Attribute", "./FSM/VEntityState", "../Skill", "./HUD", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, UIEvent_1, CDefs_1, Defs_1, Attribute_1, VEntityState_1, Skill_1, HUD_1, VEntity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VChampion extends VEntity_1.VEntity {
@@ -85,10 +85,12 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
                 skill.Init(sid);
                 this._skills.push(skill);
             }
-            const statesDef = Hashtable_1.Hashtable.GetMap(this._defs, "states");
+            const statesDef = Hashtable_1.Hashtable.GetMap(this._cdefs, "states");
             if (statesDef != null) {
                 for (const type in statesDef) {
-                    this._fsm.AddState(new VEntityState_1.VEntityState(Number.parseInt(type), this));
+                    const state = new VEntityState_1.VEntityState(Number.parseInt(type), this);
+                    this._fsm.AddState(state);
+                    state.Init(statesDef);
                 }
             }
         }
@@ -123,8 +125,8 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             this.t_def_add = reader.int32();
             this.t_speed_add = reader.int32();
             if (reader.bool()) {
-                this._fsm.ChangeState(reader.int32(), null);
-                this._fsm.currentState.time = reader.double();
+                const stateType = reader.int32();
+                this._fsm.ChangeState(stateType, null);
             }
         }
         HasSkill(id) {

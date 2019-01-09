@@ -4,6 +4,7 @@ define(["require", "exports"], function (require, exports) {
     class Graphic {
         get battleRoot() { return this._battleRoot; }
         get mapRoot() { return this._mapRoot; }
+        get decalRoot() { return this._decalRoot; }
         get entityRoot() { return this._entityRoot; }
         get hudRoot() { return this._hudRoot; }
         get uiRoot() { return this._uiRoot; }
@@ -22,6 +23,10 @@ define(["require", "exports"], function (require, exports) {
             this._mapRoot.name = "map_root";
             this._mapRoot.setSize(0, 0);
             this._battleRoot.addChild(this._mapRoot);
+            this._decalRoot = new fairygui.GComponent();
+            this._decalRoot.name = "decal_root";
+            this._decalRoot.setSize(0, 0);
+            this._battleRoot.addChild(this._decalRoot);
             this._entityRoot = new fairygui.GComponent();
             this._entityRoot.name = "entity_root";
             this._entityRoot.setSize(0, 0);

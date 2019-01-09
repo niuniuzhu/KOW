@@ -4,15 +4,15 @@ import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
 import { FrameAction } from "../FrameAction";
-import { EntityFSM } from "../FSM/EntityFSM";
-import { EntityState } from "../FSM/EntityState";
-import { StateType } from "../FSM/StateEnums";
 import { IntersectInfo } from "../IntersectInfo";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
 import { EAttr } from "./Attribute";
 import { Battle } from "./Battle";
 import { Entity, EntityInitParams } from "./Entity";
+import { EntityFSM } from "./FSM/EntityFSM";
+import { EntityState } from "./FSM/EntityState";
+import { StateType } from "../StateEnums";
 import { InputAgent, InputType } from "./InputAagent";
 
 export class Champion extends Entity implements ISnapshotable {

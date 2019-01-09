@@ -24,28 +24,58 @@
 			"model": "e0",
 			"states": {
 				"0": {
-					"animation": 0
-				},
-				"1": {
-					"animation": 1
-				},
-				"2": {
-					"animation": 2
-				},
-				"3": {
-					"animation": 3,
 					"actions": [
 						{
-							"id": 3
+							"id": 0,
+							"animation": 0,
+							"auto_scale_time": false,
+							"duration": 0
+						}
+					]
+				},
+				"1": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 1
+						}
+					]
+				},
+				"2": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 2
+						}
+					]
+				},
+				"3": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 3
+						},
+						{
+							"id": 4
 						}
 					]
 				},
 				"4": {},
 				"5": {
-					"animation": 5
+					"actions": [
+						{
+							"id": 0,
+							"animation": 5
+						}
+					]
 				},
 				"6": {
-					"animation": 6
+					"actions": [
+						{
+							"id": 0,
+							"animation": 6
+						}
+					]
 				}
 			},
 			"animations": [

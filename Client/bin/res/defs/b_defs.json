@@ -64,6 +64,20 @@
 					"length": 1,
 					"play_mode": 1,
 					"interval": 100
+				},
+				{
+					"id": 7,
+					"name": "zhuaji",
+					"length": 6,
+					"play_mode": 1,
+					"interval": 100
+				},
+				{
+					"id": 8,
+					"name": "dazhao",
+					"length": 6,
+					"play_mode": 1,
+					"interval": 100
 				}
 			]
 		}
@@ -133,27 +147,31 @@
 		"b0": {
 			"hit_effect": 0,
 			"hit_fx_delay": 0,
-			"hit_fx_follow_type": 0,
-			"hit_fx_destroy_type": 0
+			"hit_fx_attach_type": 2,
+			"hit_fx_posrot_type": 1,
+			"hit_fx_destroy_type": 0,
+			"hit_fx_follow_pos": false,
+			"hit_fx_follow_rot": false
 		},
 		"b1": {
 			"hit_hit_effect": 1,
 			"hit_fx_delay": 0,
-			"hit_fx_follow_type": 0,
-			"hit_fx_destroy_type": 0
+			"hit_fx_attach_type": 2,
+			"hit_fx_posrot_type": 1,
+			"hit_fx_destroy_type": 0,
+			"hit_fx_follow_pos": false,
+			"hit_fx_follow_rot": false
 		}
 	},
 	"effect": {
 		"fx0": {
 			"model": 0,
-			"name": "zhuaji",
-			"length": 6,
+			"animation": 7,
 			"layer": 1
 		},
 		"fx1": {
 			"model": 0,
-			"name": "dazhao",
-			"length": 6,
+			"animation": 8,
 			"layer": 1
 		}
 	}

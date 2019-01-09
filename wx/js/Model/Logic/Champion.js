@@ -2,11 +2,13 @@ import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
-import { EntityFSM } from "../FSM/EntityFSM";
-import { EntityState } from "../FSM/EntityState";
+import { IntersectInfo } from "../IntersectInfo";
 import { Skill } from "../Skill";
 import { EAttr } from "./Attribute";
 import { Entity } from "./Entity";
+import { EntityFSM } from "./FSM/EntityFSM";
+import { EntityState } from "./FSM/EntityState";
+import { StateType } from "../StateEnums";
 import { InputAgent } from "./InputAagent";
 export class Champion extends Entity {
     constructor(battle) {
@@ -17,15 +19,19 @@ export class Champion extends Entity {
         this.disableMove = 0;
         this.disableTurn = 0;
         this.disableSkill = 0;
+        this.disableCollision = 0;
         this.supperArmor = 0;
         this.invulnerAbility = 0;
         this.moveDirection = FVec2.zero;
         this.intersectVector = FVec2.zero;
+        this.phyxSpeed = FVec2.zero;
+        this.gladiatorTime = -1;
         this.t_hp_add = 0;
         this.t_mp_add = 0;
         this.t_atk_add = 0;
         this.t_def_add = 0;
         this.t_speed_add = 0;
+        this._intersectionCache = [];
         this._inputAgent.handler = this.HandleInput.bind(this);
     }
     get fsm() { return this._fsm; }
@@ -33,35 +39,35 @@ export class Champion extends Entity {
     get radius() { return this._radius; }
     get moveSpeed() { return this._moveSpeed; }
     get numSkills() { return this._skills.length; }
+    get intersectionCache() { return this._intersectionCache; }
     Init(params) {
         super.Init(params);
         this.team = params.team;
         this.name = params.name;
     }
     LoadDefs() {
-        this._defs = Defs.GetEntity(this._id);
-    }
-    OnInit() {
-        super.OnInit();
-        this._radius = Hashtable.GetNumber(this._defs, "radius");
-        this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
-        const skillsDef = Hashtable.GetNumberArray(this._defs, "skills");
+        const defs = Defs.GetEntity(this._id);
+        this._radius = Hashtable.GetNumber(defs, "radius");
+        this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
+        const skillsDef = Hashtable.GetNumberArray(defs, "skills");
         if (skillsDef != null) { }
         for (const sid of skillsDef) {
             const skill = new Skill();
             skill.Init(sid);
             this._skills.push(skill);
         }
-        const statesDef = Hashtable.GetMap(this._defs, "states");
+        const statesDef = Hashtable.GetMap(defs, "states");
         if (statesDef != null) {
             for (const type in statesDef) {
                 this._fsm.AddState(new EntityState(Number.parseInt(type), this));
             }
-            this._fsm.Init();
-            this._fsm.ChangeState(Hashtable.GetNumber(this._defs, "default_state"));
+            this._fsm.Init(statesDef);
+            this._fsm.ChangeState(Hashtable.GetNumber(defs, "default_state"));
         }
-        this.hp = this.mhp = Hashtable.GetNumber(this._defs, "mhp");
-        this.mp = this.mmp = Hashtable.GetNumber(this._defs, "mmp");
+        this.hp = this.mhp = Hashtable.GetNumber(defs, "mhp");
+        this.mp = this.mmp = Hashtable.GetNumber(defs, "mmp");
+        this.atk = Hashtable.GetNumber(defs, "atk");
+        this.def = Hashtable.GetNumber(defs, "def");
     }
     EncodeSnapshot(writer) {
         super.EncodeSnapshot(writer);
@@ -76,16 +82,24 @@ export class Champion extends Entity {
         writer.int32(this.disableMove);
         writer.int32(this.disableTurn);
         writer.int32(this.disableSkill);
+        writer.int32(this.disableCollision);
         writer.int32(this.supperArmor);
         writer.int32(this.invulnerAbility);
         writer.double(this.moveDirection.x).double(this.moveDirection.y);
+        writer.double(this.intersectVector.x).double(this.intersectVector.y);
+        writer.double(this.phyxSpeed.x).double(this.phyxSpeed.y);
+        writer.double(this.velocity);
+        writer.bool(this.isDead);
+        writer.int32(this.gladiatorTime);
         writer.int32(this.t_hp_add);
         writer.int32(this.t_mp_add);
         writer.int32(this.t_atk_add);
         writer.int32(this.t_def_add);
         writer.int32(this.t_speed_add);
         this._fsm.EncodeSnapshot(writer);
+        writer.fork();
         this._inputAgent.EncodeSnapshot(writer);
+        writer.ldelim();
     }
     DecodeSnapshot(reader) {
         super.DecodeSnapshot(reader);
@@ -100,15 +114,22 @@ export class Champion extends Entity {
         this.disableMove = reader.int32();
         this.disableTurn = reader.int32();
         this.disableSkill = reader.int32();
+        this.disableCollision = reader.int32();
         this.supperArmor = reader.int32();
         this.invulnerAbility = reader.int32();
         this.moveDirection.Set(reader.double(), reader.double());
+        this.intersectVector.Set(reader.double(), reader.double());
+        this.phyxSpeed.Set(reader.double(), reader.double());
+        this.velocity = reader.double();
+        this.isDead = reader.bool();
+        this.gladiatorTime = reader.int32();
         this.t_hp_add = reader.int32();
         this.t_mp_add = reader.int32();
         this.t_atk_add = reader.int32();
         this.t_def_add = reader.int32();
         this.t_speed_add = reader.int32();
         this._fsm.DecodeSnapshot(reader);
+        reader.int32();
         this._inputAgent.DecodeSnapshot(reader);
     }
     EncodeSync(writer) {
@@ -124,9 +145,11 @@ export class Champion extends Entity {
         writer.int32(this.disableMove);
         writer.int32(this.disableTurn);
         writer.int32(this.disableSkill);
+        writer.int32(this.disableCollision);
         writer.int32(this.supperArmor);
         writer.int32(this.invulnerAbility);
         writer.double(this.moveDirection.x).double(this.moveDirection.y);
+        writer.int32(this.gladiatorTime);
         writer.int32(this.t_hp_add);
         writer.int32(this.t_mp_add);
         writer.int32(this.t_atk_add);
@@ -137,11 +160,6 @@ export class Champion extends Entity {
             writer.int32(this._fsm.currentState.type);
             writer.double(this._fsm.currentState.time);
         }
-    }
-    Update(dt) {
-        super.Update(dt);
-        this._fsm.Update(dt);
-        this.MoveStep(dt);
     }
     HasSkill(id) {
         for (const skill of this._skills) {
@@ -160,6 +178,128 @@ export class Champion extends Entity {
     GetSkillAt(index) {
         return this._skills[index];
     }
+    Update(dt) {
+        super.Update(dt);
+        this._intersectionCache.splice(0);
+        this._fsm.Update(dt);
+    }
+    IntersectionTest(others, from) {
+        if (this.disableCollision > 0)
+            return;
+        for (let i = from; i < others.length; ++i) {
+            const other = others[i];
+            if (other.disableCollision > 0)
+                continue;
+            const d = FVec2.Sub(this.position, other.position);
+            const m = d.SqrMagnitude();
+            const r = FMathUtils.Add(this._radius, other._radius);
+            if (m >= r * r)
+                continue;
+            const sqrtM = FMathUtils.Sqrt(m);
+            const intersectInfo0 = new IntersectInfo();
+            intersectInfo0.rid = other.rid;
+            intersectInfo0.distanceVector = d;
+            intersectInfo0.tRadius = r;
+            intersectInfo0.magnitude = sqrtM == 0 ? FMathUtils.EPSILON : sqrtM;
+            this._intersectionCache.push(intersectInfo0);
+            const intersectInfo1 = new IntersectInfo();
+            intersectInfo1.rid = this.rid;
+            intersectInfo1.distanceVector = FVec2.Negate(d);
+            intersectInfo1.tRadius = r;
+            intersectInfo1.magnitude = sqrtM == 0 ? FMathUtils.EPSILON : sqrtM;
+            other._intersectionCache.push(intersectInfo1);
+        }
+    }
+    UpdatePhysic(dt) {
+        this._fsm.UpdatePhysic(dt);
+        this.intersectVector.Set(0, 0);
+        for (const intersectInfo of this._intersectionCache) {
+            const delta = FMathUtils.Div(intersectInfo.tRadius, intersectInfo.magnitude);
+            const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);
+            this.intersectVector.Add(FVec2.MulN(direction, delta));
+        }
+        const sqrMagnitude = this.intersectVector.SqrMagnitude();
+        if (sqrMagnitude > FMathUtils.Mul(this._moveSpeed, this._moveSpeed)) {
+            this.intersectVector.DivN(FMathUtils.Sqrt(sqrMagnitude));
+            this.intersectVector.MulN(this._moveSpeed);
+        }
+    }
+    AfterUpdate(dt) {
+        this.MoveStep(dt);
+        this.ProcessGladiator(dt);
+    }
+    MoveStep(dt) {
+        const moveVector = FVec2.zero;
+        if (this.disableMove <= 0) {
+            moveVector.CopyFrom(this.moveDirection);
+        }
+        let sqrtDis = moveVector.SqrMagnitude();
+        if (sqrtDis >= FMathUtils.EPSILON) {
+            if (this.disableTurn <= 0) {
+                this.direction.CopyFrom(this.moveDirection);
+            }
+            moveVector.MulN(this._moveSpeed);
+        }
+        moveVector.Add(this.intersectVector);
+        moveVector.Add(this.phyxSpeed);
+        sqrtDis = moveVector.SqrMagnitude();
+        if (sqrtDis < FMathUtils.EPSILON) {
+            this.velocity = 0;
+            return;
+        }
+        this.velocity = FMathUtils.Sqrt(sqrtDis);
+        const moveDelta = FVec2.MulN(moveVector, FMathUtils.Mul(0.001, dt));
+        const pos = FVec2.Add(this.position, moveDelta);
+        pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
+        pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
+        pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
+        pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
+        this.position.CopyFrom(pos);
+    }
+    ProcessGladiator(dt) {
+        const isInGladiator = FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius);
+        if (this.gladiatorTime == -1 && isInGladiator) {
+            this.OnEnterGladiator();
+        }
+        if (this.gladiatorTime >= 0 && !isInGladiator) {
+            this.OnExitGladiator();
+        }
+        if (isInGladiator) {
+            this.gladiatorTime += dt;
+        }
+    }
+    OnEnterGladiator() {
+        this.gladiatorTime = 0;
+    }
+    OnExitGladiator() {
+        this.gladiatorTime = -1;
+    }
+    UpdateAfterHit() {
+        if (this.hp <= 0) {
+            this.Die();
+        }
+    }
+    Die() {
+        this.isDead = true;
+        this._fsm.ChangeState(StateType.Die, null, true, true);
+    }
+    UseSkill(sid) {
+        if (this.disableSkill > 0)
+            return false;
+        const skill = this.GetSkill(sid);
+        if (skill == null)
+            return false;
+        if (!this.fsm.HasState(skill.connectedState))
+            return false;
+        this.fsm.ChangeState(skill.connectedState);
+        return true;
+    }
+    FrameAction(frameAction) {
+        this._inputAgent.SetFromFrameAction(frameAction);
+    }
+    HandleInput(type, press) {
+        this._fsm.HandleInput(type, press);
+    }
     SetAttr(attr, value) {
         switch (attr) {
             case EAttr.S_DISABLE_MOVE:
@@ -171,11 +311,17 @@ export class Champion extends Entity {
             case EAttr.S_DISABLE_SKILL:
                 this.disableSkill = value;
                 break;
+            case EAttr.S_DISABLE_COLLISION:
+                this.disableCollision = value;
+                break;
             case EAttr.S_SUPPER_ARMOR:
                 this.supperArmor = value;
                 break;
             case EAttr.S_INVULNER_ABILITY:
                 this.invulnerAbility = value;
+                break;
+            case EAttr.GLADIATOR_TIME:
+                this.gladiatorTime = value;
                 break;
             case EAttr.S_HP_ADD:
                 this.t_hp_add = value;
@@ -202,10 +348,14 @@ export class Champion extends Entity {
                 return this.disableTurn;
             case EAttr.S_DISABLE_SKILL:
                 return this.disableSkill;
+            case EAttr.S_DISABLE_COLLISION:
+                return this.disableCollision;
             case EAttr.S_SUPPER_ARMOR:
                 return this.supperArmor;
             case EAttr.S_INVULNER_ABILITY:
                 return this.invulnerAbility;
+            case EAttr.GLADIATOR_TIME:
+                return this.gladiatorTime;
             case EAttr.S_HP_ADD:
                 return this.t_hp_add;
             case EAttr.S_MP_ADD:
@@ -218,70 +368,14 @@ export class Champion extends Entity {
                 return this.t_speed_add;
         }
     }
-    MoveStep(dt) {
-        const moveVector = FVec2.zero;
-        if (this.disableMove <= 0) {
-            moveVector.CopyFrom(this.moveDirection);
-        }
-        if (moveVector.x != 0 || moveVector.y != 0) {
-            if (this.disableTurn <= 0) {
-                this.direction.CopyFrom(this.moveDirection);
-            }
-            moveVector.MulN(this._moveSpeed);
-        }
-        moveVector.Add(this.intersectVector);
-        const sqrtDis = moveVector.SqrMagnitude();
-        if (sqrtDis < FMathUtils.EPSILON) {
-            this.velocity = 0;
-            return;
-        }
-        this.velocity = FMathUtils.Sqrt(sqrtDis);
-        const moveDelta = FVec2.MulN(moveVector, FMathUtils.Mul(0.001, dt));
-        const pos = FVec2.Add(this.position, moveDelta);
-        pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
-        pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
-        pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
-        pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
-        this.position.CopyFrom(pos);
-    }
-    Intersect(others) {
-        this.intersectVector.Set(0, 0);
-        for (const other of others) {
-            if (other == this) {
-                continue;
-            }
-            const d = FVec2.Sub(this.position, other.position);
-            const magnitude = d.Magnitude();
-            const r = FMathUtils.Add(this._radius, other._radius);
-            if (magnitude >= r)
-                continue;
-            const delta = r - magnitude;
-            const deltaFactor = FMathUtils.Mul(this.velocity, 0.1);
-            const direction = d.DivN(magnitude);
-            this.intersectVector.Add(FVec2.MulN(direction, FMathUtils.Mul(delta, deltaFactor)));
-        }
-    }
-    UseSkill(sid) {
-        if (this.disableSkill > 0)
-            return false;
-        const skill = this.GetSkill(sid);
-        if (skill == null)
-            return false;
-        if (!this.fsm.HasState(skill.connectedState))
-            return false;
-        this.fsm.ChangeState(skill.connectedState);
-        return true;
-    }
-    FrameAction(frameAction) {
-        this._inputAgent.SetFromFrameAction(frameAction);
-    }
-    HandleInput(type, press) {
-        this._fsm.HandleInput(type, press);
-    }
     Dump() {
         let str = super.Dump();
         str += `team:${this.team}\n`;
         str += `name:${this.name}\n`;
+        str += `position:${this.position.ToString()}\n`;
+        str += `moveDirection:${this.moveDirection.ToString()}\n`;
+        str += `phyxSpeed:${this.phyxSpeed.ToString()}\n`;
+        str += `velocity:${this.velocity}\n`;
         str += `skill count${this._skills.length}\n`;
         str += this._fsm.Dump();
         return str;

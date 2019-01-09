@@ -1,83 +1,178 @@
 {
 	"config": {
-		"ls_ip": "www.kow2019.com",
+		"ls_ip": "localhost",
 		"ls_port": 49996
 	},
 	"preloads": [
-		"global.bin,0",
-		"global_atlas0.png,1",
-		"login.bin,0",
-		"login_atlas0.png,1",
-		"main.bin,0",
-		"main_atlas0.png,1",
-		"matching.bin,0",
-		"matching_atlas0.png,1",
-		"loading.bin,0",
-		"loading_atlas0.png,1",
-		"battle.bin,0",
-		"battle_atlas0.png,1"
+		"global.bin,3",
+		"global_atlas0.png,4",
+		"login.bin,3",
+		"login_atlas0.png,4",
+		"main.bin,3",
+		"main_atlas0.png,4",
+		"matching.bin,3",
+		"matching_atlas0.png,4",
+		"loading.bin,3",
+		"loading_atlas0.png,4",
+		"battle.bin,3",
+		"battle_atlas0.png,4",
+		"endlevel.bin,3",
+		"endlevel_atlas0.png,4"
 	],
-	"map": {
+	"model": {
 		"m0": {
-			"width": 2000,
-			"height": 2000
-		}
-	},
-	"entity": {
-		"e0": {
-			"model": "e0",
-			"states": {
-				"0": {
-					"animation": "stand"
-				},
-				"1": {
-					"animation": "run"
-				},
-				"2": {
-					"animation": "attack"
-				},
-				"3": {
-					"animation": "die"
-				},
-				"4": {
-					"animation": "b"
-				}
-			},
 			"animations": [
 				{
+					"id": 0,
 					"name": "stand",
 					"length": 6,
 					"play_mode": 0,
 					"interval": 100
 				},
 				{
-					"name": "attack",
+					"id": 1,
+					"name": "run",
 					"length": 7,
+					"play_mode": 0,
+					"interval": 100
+				},
+				{
+					"id": 2,
+					"name": "attack",
+					"length": 6,
 					"play_mode": 1,
 					"interval": 100
 				},
 				{
+					"id": 3,
 					"name": "b",
+					"length": 1,
+					"play_mode": 1,
+					"interval": 100
+				},
+				{
+					"id": 5,
+					"name": "b",
+					"start_frame": 1,
 					"length": 5,
 					"play_mode": 1,
 					"interval": 100
 				},
 				{
+					"id": 6,
 					"name": "die",
 					"length": 1,
 					"play_mode": 1,
 					"interval": 100
 				},
 				{
-					"name": "run",
-					"length": 7,
-					"play_mode": 0,
+					"id": 7,
+					"name": "zhuaji",
+					"length": 6,
+					"play_mode": 1,
+					"interval": 100
+				},
+				{
+					"id": 8,
+					"name": "dazhao",
+					"length": 6,
+					"play_mode": 1,
 					"interval": 100
 				}
 			]
 		}
 	},
+	"entity": {
+		"e0": {
+			"model": 0,
+			"states": {
+				"0": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 0,
+							"auto_scale_time": false,
+							"duration": 0
+						}
+					]
+				},
+				"1": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 1
+						}
+					]
+				},
+				"2": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 2
+						}
+					]
+				},
+				"3": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 3
+						},
+						{
+							"id": 4
+						}
+					]
+				},
+				"4": {},
+				"5": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 5
+						}
+					]
+				},
+				"6": {
+					"actions": [
+						{
+							"id": 0,
+							"animation": 6
+						}
+					]
+				}
+			}
+		}
+	},
 	"bullet": {
-		"b0": {}
+		"b0": {
+			"hit_effect": 0,
+			"hit_fx_delay": 0,
+			"hit_fx_attach_type": 2,
+			"hit_fx_posrot_type": 1,
+			"hit_fx_destroy_type": 0,
+			"hit_fx_follow_pos": false,
+			"hit_fx_follow_rot": false
+		},
+		"b1": {
+			"hit_hit_effect": 1,
+			"hit_fx_delay": 0,
+			"hit_fx_attach_type": 2,
+			"hit_fx_posrot_type": 1,
+			"hit_fx_destroy_type": 0,
+			"hit_fx_follow_pos": false,
+			"hit_fx_follow_rot": false
+		}
+	},
+	"effect": {
+		"fx0": {
+			"model": 0,
+			"animation": 7,
+			"layer": 1
+		},
+		"fx1": {
+			"model": 0,
+			"animation": 8,
+			"layer": 1
+		}
 	}
 }

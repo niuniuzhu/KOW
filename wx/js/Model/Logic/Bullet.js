@@ -5,6 +5,7 @@ import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
 import { Entity } from "./Entity";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
 var BulletMoveType;
 (function (BulletMoveType) {
     BulletMoveType[BulletMoveType["Linear"] = 0] = "Linear";
@@ -40,18 +41,20 @@ var DestroyType;
 (function (DestroyType) {
     DestroyType[DestroyType["Life"] = 0] = "Life";
     DestroyType[DestroyType["Collsion"] = 1] = "Collsion";
-    DestroyType[DestroyType["Caster"] = 2] = "Caster";
-    DestroyType[DestroyType["Emitter"] = 3] = "Emitter";
+    DestroyType[DestroyType["Emitter"] = 2] = "Emitter";
+    DestroyType[DestroyType["Caster"] = 3] = "Caster";
 })(DestroyType || (DestroyType = {}));
 export class Bullet extends Entity {
     constructor() {
         super(...arguments);
-        this._targets0 = [];
         this._targets1 = [];
         this._targets2 = [];
         this._casterID = Long.ZERO;
         this._skillID = 0;
         this._time = 0;
+        this._nextCollisionTime = 0;
+        this._collisionCount = 0;
+        this._targetToCollisionCount = new Map();
     }
     Init(params) {
         super.Init(params);
@@ -61,40 +64,54 @@ export class Bullet extends Entity {
         this.direction.CopyFrom(params.direction);
     }
     LoadDefs() {
-        this._defs = Defs.GetBullet(this._id);
-    }
-    OnInit() {
-        super.OnInit();
-        this._radius = Hashtable.GetNumber(this._defs, "radius");
-        this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
-        this._moveType = Hashtable.GetNumber(this._defs, "move_type");
-        this._angleSpeed = Hashtable.GetNumber(this._defs, "angle_speed");
-        this._angleRadius = Hashtable.GetNumber(this._defs, "angle_radius");
-        this._lifeTime = Hashtable.GetNumber(this._defs, "life_time", -1);
-        this._destroyType = Hashtable.GetNumber(this._defs, "destroy_type");
-        this._collisionStartTime = Hashtable.GetNumber(this._defs, "collision_start_time");
-        this._maxCollisionCount = Hashtable.GetNumber(this._defs, "max_collision_count", -1);
-        this._targetType = Hashtable.GetNumber(this._defs, "target_type");
-        this._attrTypes = Hashtable.GetNumberArray(this._defs, "attr_types");
-        this._attrFilterOPs = Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
-        this._attrCompareValues = Hashtable.GetNumberArray(this._defs, "attr_compare_values");
+        const defs = Defs.GetBullet(this._id);
+        this._radius = Hashtable.GetNumber(defs, "radius");
+        this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
+        this._moveType = Hashtable.GetNumber(defs, "move_type");
+        this._angleSpeed = Hashtable.GetNumber(defs, "angle_speed");
+        this._angleRadius = Hashtable.GetNumber(defs, "angle_radius");
+        this._lifeTime = Hashtable.GetNumber(defs, "life_time", -1);
+        this._destroyType = Hashtable.GetNumber(defs, "destroy_type");
+        this._delay = Hashtable.GetNumber(defs, "delay");
+        this._frequency = Hashtable.GetNumber(defs, "frequency");
+        this._maxCollisionPerTarget = Hashtable.GetNumber(defs, "max_collision_per_target", -1);
+        this._maxCollision = Hashtable.GetNumber(defs, "max_collision", -1);
+        this._targetType = Hashtable.GetNumber(defs, "target_type");
+        this._whipping = Hashtable.GetBool(defs, "whipping");
+        this._attrTypes = Hashtable.GetNumberArray(defs, "attr_types");
+        this._attrFilterOPs = Hashtable.GetNumberArray(defs, "attr_filter_ops");
+        this._attrCompareValues = Hashtable.GetNumberArray(defs, "attr_compare_values");
+        this._nextCollisionTime = this._delay;
     }
     EncodeSnapshot(writer) {
         super.EncodeSnapshot(writer);
         writer.uint64(this._casterID);
         writer.int32(this._skillID);
         writer.int32(this._time);
+        writer.int32(this._nextCollisionTime);
+        writer.int32(this._collisionCount);
+        const count = this._targetToCollisionCount.size;
+        writer.int32(count);
+        for (const rid in this._targetToCollisionCount) {
+            writer.uint64(rid);
+            writer.int32(this._targetToCollisionCount[rid]);
+        }
     }
     DecodeSnapshot(reader) {
         super.DecodeSnapshot(reader);
         this._casterID = reader.uint64();
         this._skillID = reader.int32();
         this._time = reader.int32();
+        this._nextCollisionTime = reader.int32();
+        this._collisionCount = reader.int32();
+        const count = reader.int32();
+        for (let i = 0; i < count; ++i) {
+            this._targetToCollisionCount.set(reader.uint64(), reader.int32());
+        }
     }
     Update(dt) {
         super.Update(dt);
         this.MoveStep(dt);
-        this._time += dt;
         switch (this._destroyType) {
             case DestroyType.Life:
                 if (this._time >= this._lifeTime) {
@@ -108,6 +125,7 @@ export class Bullet extends Entity {
             case DestroyType.Collsion:
                 break;
         }
+        this._time += dt;
     }
     MoveStep(dt) {
         if (this._moveSpeed == 0) {
@@ -128,14 +146,35 @@ export class Bullet extends Entity {
         }
     }
     Intersect() {
+        if (this._time < this._nextCollisionTime ||
+            (this._maxCollision >= 0 && this._collisionCount == this._maxCollision))
+            return;
+        let hit = false;
         this.SelectTargets();
         for (const target of this._targets1) {
+            if (!this._whipping && target.isDead)
+                continue;
             const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
             if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
+                let count = 0;
+                if (this._targetToCollisionCount.has(target.rid))
+                    count = this._targetToCollisionCount.get(target.rid);
+                if (this._maxCollisionPerTarget >= 0 &&
+                    count == this._maxCollisionPerTarget)
+                    continue;
+                SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
+                this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
+                hit = true;
+                ++this._collisionCount;
+                this._targetToCollisionCount.set(target.rid, ++count);
             }
         }
         this._targets1.splice(0);
         this._targets2.splice(0);
+        this._nextCollisionTime = this._time + this._frequency;
+        if (hit && this._destroyType == DestroyType.Collsion) {
+            this._markToDestroy = true;
+        }
     }
     SelectTargets() {
         const champions = this._battle.GetChampions();

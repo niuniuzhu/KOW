@@ -7,20 +7,22 @@ import { UIEvent } from "../BattleEvent/UIEvent";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
 import { Camera } from "./Camera";
-import { GraphicManager } from "./GraphicManager";
+import { EffectPool } from "./EffectPool";
 import { PopTextType } from "./HUD";
 import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
+import { VEffect } from "./VEffect";
 
 export class VBattle {
 	private _mapID: number = 0;
 	private readonly _camera: Camera = new Camera();
-	private readonly _graphicManager: GraphicManager = new GraphicManager();
+	private readonly _effectPool: EffectPool;
 
 	private readonly _champions: VChampion[] = [];
 	private readonly _idToChampion: Map<string, VChampion> = new Map<string, VChampion>();
 	private readonly _bullets: VBullet[] = [];
 	private readonly _idToBullet: Map<string, VBullet> = new Map<string, VBullet>();
+	private readonly _effects: VEffect[] = [];
 
 	private _root: fairygui.GComponent;
 	private _logicFrame: number;
@@ -28,8 +30,10 @@ export class VBattle {
 
 	public get mapID(): number { return this._mapID; }
 	public get camera(): Camera { return this._camera; }
-	public get graphicManager(): GraphicManager { return this._graphicManager; }
 
+	constructor() {
+		this._effectPool = new EffectPool(this);
+	}
 
 	/**
 	 * 设置战场信息
@@ -39,6 +43,7 @@ export class VBattle {
 		SyncEvent.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
 		SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
 		SyncEvent.AddListener(SyncEvent.E_HIT, this.OnHit.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
 
 		this._destroied = false;
 		this._mapID = battleInfo.mapID
@@ -64,20 +69,28 @@ export class VBattle {
 		SyncEvent.RemoveListener(SyncEvent.E_BATTLE_INIT);
 		SyncEvent.RemoveListener(SyncEvent.E_SNAPSHOT);
 		SyncEvent.RemoveListener(SyncEvent.E_HIT);
+		SyncEvent.RemoveListener(SyncEvent.E_BULLET_COLLISION);
 
-		for (let i = 0, count = this._bullets.length; i < count; ++i) {
-			this._bullets[i].Destroy();
-		}
-		this._bullets.splice(0);
-		this._idToBullet.clear();
-
+		//destroy champions
 		for (let i = 0, count = this._champions.length; i < count; ++i) {
 			this._champions[i].Destroy();
 		}
 		this._champions.splice(0);
 		this._idToChampion.clear();
 
-		this._graphicManager.Dispose();
+		//destroy bullets
+		for (let i = 0, count = this._bullets.length; i < count; ++i) {
+			this._bullets[i].Destroy();
+		}
+		this._bullets.splice(0);
+		this._idToBullet.clear();
+
+		//destroy effects
+		for (let i = 0, count = this._effects.length; i < count; ++i) {
+			this._effectPool.Release(this._effects[i]);
+		}
+		this._effects.splice(0);
+		this._effectPool.Dispose();
 
 		this._root.dispose();
 		this._root = null;
@@ -87,6 +100,12 @@ export class VBattle {
 	public Update(dt: number): void {
 		//更新摄像机
 		this._camera.Update(dt);
+
+		//update effects
+		for (let i = 0, count = this._effects.length; i < count; i++) {
+			const effect = this._effects[i];
+			effect.Update(dt);
+		}
 
 		//update champions
 		for (let i = 0, count = this._champions.length; i < count; i++) {
@@ -100,6 +119,16 @@ export class VBattle {
 			bullet.Update(dt);
 		}
 
+		//destroy champions
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			if (champion.markToDestroy) {
+				this.DestroyChampionAt(i);
+				--i;
+				--count;
+			}
+		}
+
 		//destroy bullets
 		for (let i = 0, count = this._bullets.length; i < count; i++) {
 			const bullet = this._bullets[i];
@@ -110,11 +139,11 @@ export class VBattle {
 			}
 		}
 
-		//destroy champions
-		for (let i = 0, count = this._champions.length; i < count; i++) {
-			const champion = this._champions[i];
-			if (champion.markToDestroy) {
-				this.DestroyChampionAt(i);
+		//destroy effects
+		for (let i = 0, count = this._effects.length; i < count; i++) {
+			const effect = this._effects[i];
+			if (effect.markToDestroy) {
+				this.DespawnEffectAt(i);
 				--i;
 				--count;
 			}
@@ -215,6 +244,23 @@ export class VBattle {
 		return this._idToBullet.get(rid.toString());
 	}
 
+	public SpawnEffect(id: number): VEffect {
+		const effect = this._effectPool.Get(id);
+		this._effects.push(effect);
+		return effect;
+	}
+
+	public DespawnEffect(fx: VEffect): void {
+		this._effects.splice(this._effects.indexOf(fx), 1);
+		this._effectPool.Release(fx);
+	}
+
+	public DespawnEffectAt(index: number): void {
+		const fx = this._effects[index];
+		this._effects.splice(index, 1);
+		this._effectPool.Release(fx);
+	}
+
 	private OnBattleInit(e: SyncEvent): void {
 		const reader = $protobuf.Reader.create(e.data);
 		this.DecodeSync(reader);
@@ -226,7 +272,14 @@ export class VBattle {
 	}
 
 	private OnHit(e: SyncEvent): void {
-		const target = this.GetChampion(e.rid);
+		const target = this.GetChampion(e.rid0);
 		target.hud.PopText(PopTextType.Hurt, e.v0);
+	}
+
+	private OnBulletCollision(e: SyncEvent): void {
+		const bullet = this.GetBullet(e.rid0);
+		const caster = this.GetChampion(e.rid1);
+		const target = this.GetChampion(e.rid2);
+		bullet.OnCollision(caster, target);
 	}
 }

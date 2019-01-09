@@ -37,12 +37,12 @@ export class AnimationProxy extends fairygui.GGraph {
 		for (const aniDef of aniDefs) {
 			//创建图形
 			const id = Hashtable.GetNumber(aniDef, "id");
-			const aniName = Hashtable.GetString(aniDef, "name");
 			const alias = `${model}_${id}`;
+			const aniName = Hashtable.GetString(aniDef, "name");
+			const length = Hashtable.GetNumber(aniDef, "length");
 
 			if (!AnimationProxy.TEMPLATE_CACHE.has(alias)) {
 				const startFrame = Hashtable.GetNumber(aniDef, "start_frame");
-				const length = Hashtable.GetNumber(aniDef, "length");
 				const urls: string[] = [];
 				for (let i = startFrame; i < length; ++i) {
 					urls.push(`${model}/${aniName}${i}.png`);
@@ -67,6 +67,10 @@ export class AnimationProxy extends fairygui.GGraph {
 		this.setPivot(0.5, 0.5, true);
 		this.setNativeObject(this._animation);
 		this.setSize(this._animation.width, this._animation.height);
+	}
+
+	public GetSetting(id: number): AnimationSetting {
+		return this._aniSettings.get(id);
 	}
 
 	/**

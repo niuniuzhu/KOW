@@ -1,4 +1,4 @@
-export class TextUtils {
+export class StringUtils {
     static DecodeUTF8(arr) {
         let str = "";
         for (let i = 0; i < arr.length; i++) {
@@ -6,5 +6,11 @@ export class TextUtils {
         }
         decodeURIComponent(escape(str));
         return str;
+    }
+    static Format(format, ...args) {
+        for (let i = 0; i < args.length; ++i) {
+            format = format.replace(`{${i}}`, args[i]);
+        }
+        return format;
     }
 }

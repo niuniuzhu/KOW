@@ -84,7 +84,6 @@ export class Emitter {
         this._direction.Set(reader.double(), reader.double());
     }
     Update(dt) {
-        this._time += dt;
         switch (this._destroyType) {
             case DestroyType.Life:
                 if (this._time >= this._lifeTime) {
@@ -106,6 +105,7 @@ export class Emitter {
                 ++this._bulletCount;
             }
         }
+        this._time += dt;
     }
     UpdatePosition(caster) {
         if (caster == null) {

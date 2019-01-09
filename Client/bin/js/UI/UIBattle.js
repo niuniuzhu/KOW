@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/FrameActionManager", "../RC/Math/Vec2", "./GestureState", "./Joystick", "../Model/Logic/Attribute", "../RC/Utils/Logger"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Vec2_1, GestureState_1, Joystick_1, Attribute_1, Logger_1) {
+define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/FrameActionManager", "../Model/Logic/Attribute", "../RC/Math/Vec2", "./GestureState", "./Joystick"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Attribute_1, Vec2_1, GestureState_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
@@ -112,7 +112,6 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
                     const tf = target.team == 0 ? this._time0 : this._time1;
                     const t = target.gladiatorTime < 0 ? 0 : target.gladiatorTime;
                     tf.text = "" + Math.floor(t * 0.001);
-                    Logger_1.Logger.Log(tf.text);
                     break;
             }
         }

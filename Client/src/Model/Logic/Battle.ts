@@ -123,20 +123,20 @@ export class Battle implements ISnapshotable {
 		this._frameActionGroups.clear();
 		this._hitManager.Destroy();
 
-		for (let i = 0, count = this._bullets.length; i < count; i++)
-			this._bullets[i].Destroy();
-		this._bullets.splice(0);
-		this._idToBullet.clear();
+		for (let i = 0, count = this._champions.length; i < count; i++)
+			this._champions[i].Destroy();
+		this._champions.splice(0);
+		this._idToChampion.clear();
 
 		for (let i = 0, count = this._emitters.length; i < count; i++)
 			this._emitters[i].Destroy();
 		this._emitters.splice(0);
 		this._idToEmitter.clear();
 
-		for (let i = 0, count = this._champions.length; i < count; i++)
-			this._champions[i].Destroy();
-		this._champions.splice(0);
-		this._idToChampion.clear();
+		for (let i = 0, count = this._bullets.length; i < count; i++)
+			this._bullets[i].Destroy();
+		this._bullets.splice(0);
+		this._idToBullet.clear();
 	}
 
 	/**
@@ -201,6 +201,11 @@ export class Battle implements ISnapshotable {
 			bullet.Update(dt);
 		}
 
+		//sync to view
+		if (updateView) {
+			this.SyncToView();
+		}
+
 		//handle bullet's intersections
 		for (let i = 0, count = this._bullets.length; i < count; i++) {
 			const bullet = this._bullets[i];
@@ -215,9 +220,14 @@ export class Battle implements ISnapshotable {
 			champion.UpdateAfterHit();
 		}
 
-		//sync to view
-		if (updateView) {
-			this.SyncToView();
+		//destroy champions
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			if (champion.markToDestroy) {
+				this.DestroyChampionAt(i);
+				--i;
+				--count;
+			}
 		}
 
 		//destroy bullets
@@ -235,16 +245,6 @@ export class Battle implements ISnapshotable {
 			const emitter = this._emitters[i];
 			if (emitter.markToDestroy) {
 				this.DestroyEmitterAt(i);
-				--i;
-				--count;
-			}
-		}
-
-		//destroy champions
-		for (let i = 0, count = this._champions.length; i < count; i++) {
-			const champion = this._champions[i];
-			if (champion.markToDestroy) {
-				this.DestroyChampionAt(i);
 				--i;
 				--count;
 			}

@@ -1,7 +1,7 @@
+import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
-import { AnimationProxy } from "./AnimationProxy";
 export class VEntity {
     constructor(battle) {
         this._position = Vec2.zero;
@@ -10,7 +10,7 @@ export class VEntity {
         this._logicPos = Vec2.zero;
         this._logicRot = 0;
         this._root = new fairygui.GComponent();
-        this._animationProxy = new AnimationProxy();
+        this._animationProxy = null;
         this._battle = battle;
         this._root.setSize(0, 0);
         this._root.setPivot(0.5, 0.5, true);
@@ -18,8 +18,6 @@ export class VEntity {
     }
     get rid() { return this._rid; }
     get id() { return this._id; }
-    get defs() { return this._defs; }
-    get cdefs() { return this._cdefs; }
     get root() { return this._root; }
     get animationProxy() { return this._animationProxy; }
     get markToDestroy() { return this._markToDestroy; }
@@ -41,34 +39,20 @@ export class VEntity {
     }
     get worldPosition() { return this._worldPosition; }
     Destroy() {
+        if (this._animationProxy != null) {
+            this._animationProxy.dispose();
+            this._animationProxy = null;
+        }
         this._root.dispose();
-    }
-    Update(dt) {
-        this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
-        this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.008);
-    }
-    OnPositionChanged(delta) {
-        this._root.setXY(this._position.x, this._position.y);
-        let point = new Laya.Point();
-        this._root.localToGlobal(0, 0, point);
-        this._worldPosition.Set(point.x, point.y);
-    }
-    OnRatationChanged(delta) {
-        this._root.rotation = this._rotation;
-    }
-    OnInit() {
-        this._animationProxy.Init(this._cdefs);
-        this._root.addChild(this._animationProxy);
     }
     DecodeSync(rid, reader, isNew) {
         this._rid = rid;
         this._id = reader.int32();
         if (isNew) {
             this.LoadDefs();
-            this.OnInit();
         }
         this._markToDestroy = reader.bool();
-        this._logicPos = new Vec2(reader.double(), reader.double());
+        this._logicPos = new Vec2(reader.double() * Consts.LOGIC_TO_PIXEL_RATIO, reader.double() * Consts.LOGIC_TO_PIXEL_RATIO);
         const logicDir = new Vec2(reader.double(), reader.double());
         this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
         if (logicDir.x < 0) {
@@ -79,7 +63,17 @@ export class VEntity {
             this.rotation = this._logicRot;
         }
     }
-    PlayAnim(name, timeScale = 1, force = false) {
-        this._animationProxy.Play(name, 0, timeScale, force);
+    Update(dt) {
+        this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
+        this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
+    }
+    OnPositionChanged(delta) {
+        this._root.setXY(this._position.x, this._position.y);
+        let point = new Laya.Point();
+        this._root.localToGlobal(0, 0, point);
+        this._worldPosition.Set(point.x, point.y);
+    }
+    OnRatationChanged(delta) {
+        this._root.rotation = this._rotation;
     }
 }

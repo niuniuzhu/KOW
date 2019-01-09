@@ -75,18 +75,18 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._bounds = null;
             this._frameActionGroups.clear();
             this._hitManager.Destroy();
-            for (let i = 0, count = this._bullets.length; i < count; i++)
-                this._bullets[i].Destroy();
-            this._bullets.splice(0);
-            this._idToBullet.clear();
-            for (let i = 0, count = this._emitters.length; i < count; i++)
-                this._emitters[i].Destroy();
-            this._emitters.splice(0);
-            this._idToEmitter.clear();
             for (let i = 0, count = this._champions.length; i < count; i++)
                 this._champions[i].Destroy();
             this._champions.splice(0);
             this._idToChampion.clear();
+            for (let i = 0, count = this._emitters.length; i < count; i++)
+                this._emitters[i].Destroy();
+            this._emitters.splice(0);
+            this._idToEmitter.clear();
+            for (let i = 0, count = this._bullets.length; i < count; i++)
+                this._bullets[i].Destroy();
+            this._bullets.splice(0);
+            this._idToBullet.clear();
         }
         Update(dt) {
             this.Chase(this._frameActionGroups, true, true);
@@ -128,6 +128,9 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const bullet = this._bullets[i];
                 bullet.Update(dt);
             }
+            if (updateView) {
+                this.SyncToView();
+            }
             for (let i = 0, count = this._bullets.length; i < count; i++) {
                 const bullet = this._bullets[i];
                 bullet.Intersect();
@@ -137,8 +140,13 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const champion = this._champions[i];
                 champion.UpdateAfterHit();
             }
-            if (updateView) {
-                this.SyncToView();
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                if (champion.markToDestroy) {
+                    this.DestroyChampionAt(i);
+                    --i;
+                    --count;
+                }
             }
             for (let i = 0, count = this._bullets.length; i < count; i++) {
                 const bullet = this._bullets[i];
@@ -152,14 +160,6 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const emitter = this._emitters[i];
                 if (emitter.markToDestroy) {
                     this.DestroyEmitterAt(i);
-                    --i;
-                    --count;
-                }
-            }
-            for (let i = 0, count = this._champions.length; i < count; i++) {
-                const champion = this._champions[i];
-                if (champion.markToDestroy) {
-                    this.DestroyChampionAt(i);
                     --i;
                     --count;
                 }
@@ -405,7 +405,6 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 winTeam = (1 << 0) | (1 << 1);
             }
             if (winTeam != 0) {
-                Logger_1.Logger.Log("w:" + winTeam);
                 const writer = $protobuf.Writer.create();
                 this.EncodeSnapshot(writer);
                 const data = writer.finish();

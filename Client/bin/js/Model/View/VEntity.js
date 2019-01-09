@@ -38,21 +38,11 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/Mat
         }
         get worldPosition() { return this._worldPosition; }
         Destroy() {
-            this._animationProxy = null;
+            if (this._animationProxy != null) {
+                this._animationProxy.dispose();
+                this._animationProxy = null;
+            }
             this._root.dispose();
-        }
-        Update(dt) {
-            this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
-            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
-        }
-        OnPositionChanged(delta) {
-            this._root.setXY(this._position.x, this._position.y);
-            let point = new Laya.Point();
-            this._root.localToGlobal(0, 0, point);
-            this._worldPosition.Set(point.x, point.y);
-        }
-        OnRatationChanged(delta) {
-            this._root.rotation = this._rotation;
         }
         DecodeSync(rid, reader, isNew) {
             this._rid = rid;
@@ -71,6 +61,19 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/Mat
                 this.position = this._logicPos.Clone();
                 this.rotation = this._logicRot;
             }
+        }
+        Update(dt) {
+            this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
+            this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
+        }
+        OnPositionChanged(delta) {
+            this._root.setXY(this._position.x, this._position.y);
+            let point = new Laya.Point();
+            this._root.localToGlobal(0, 0, point);
+            this._worldPosition.Set(point.x, point.y);
+        }
+        OnRatationChanged(delta) {
+            this._root.rotation = this._rotation;
         }
     }
     exports.VEntity = VEntity;

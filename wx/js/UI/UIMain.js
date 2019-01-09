@@ -1,5 +1,5 @@
-import { SceneManager } from "../Scene/SceneManager";
 import { Global } from "../Global";
+import { SceneManager } from "../Scene/SceneManager";
 export class UIMain {
     get root() { return this._root; }
     constructor() {

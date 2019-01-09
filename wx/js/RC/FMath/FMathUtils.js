@@ -181,5 +181,5 @@ FMathUtils.MIN_VALUE = -FMathUtils.MAX_VALUE;
 FMathUtils.PI = 3.142;
 FMathUtils.DEG_TO_RAD = FMathUtils.Div(FMathUtils.PI, 180);
 FMathUtils.RAD_TO_DEG = FMathUtils.Div(180, FMathUtils.PI);
-FMathUtils.FRACTIONAL_PLACES = 1000;
-FMathUtils.DIV_ONE = 0.001;
+FMathUtils.FRACTIONAL_PLACES = 100;
+FMathUtils.DIV_ONE = 0.01;

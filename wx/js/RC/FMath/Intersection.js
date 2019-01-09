@@ -21,14 +21,12 @@ export class Intersection {
         const e = FVec2.Sub(sCenter, mCenter);
         const r = FMathUtils.Add(mRadius, sRadius);
         const rSqrt = FMathUtils.Mul(r, r);
-        if (e.SqrMagnitude() <= rSqrt)
-            return 0;
         const edotd = e.Dot(direction);
         const edote = e.Dot(e);
         const s = FMathUtils.Add(FMathUtils.Sub(FMathUtils.Mul(edotd, edotd), edote), rSqrt);
         if (s < 0)
             return -1;
         const t = FMathUtils.Sub(edotd, FMathUtils.Sqrt(s));
-        return t;
+        return t * 1000;
     }
 }

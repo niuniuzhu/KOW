@@ -6,6 +6,7 @@ export class SyncEvent extends BaseBattleEvent {
 	public static readonly E_SNAPSHOT: number = 101;
 
 	public static readonly E_HIT: number = 200;
+	public static readonly E_BULLET_COLLISION: number = 201;
 
 	private static readonly POOL: Stack<SyncEvent> = new Stack<SyncEvent>();
 	private static readonly HANDLERS: Map<number, (e: SyncEvent) => void> = new Map<number, (e: SyncEvent) => void>();
@@ -72,13 +73,24 @@ export class SyncEvent extends BaseBattleEvent {
 	public static Hit(targetID: Long, value: number): void {
 		let e = this.Get();
 		e._type = SyncEvent.E_HIT;
-		e.rid = targetID;
+		e.rid0 = targetID;
 		e.v0 = value;
 		this.BeginInvoke(e);
 	}
 
+	public static BulletCollision(bulletID: Long, casterID: Long, targetID: Long): void {
+		let e = this.Get();
+		e._type = SyncEvent.E_BULLET_COLLISION;
+		e.rid0 = bulletID;
+		e.rid1 = casterID;
+		e.rid2 = targetID;
+		this.BeginInvoke(e);
+	}
+
 	public data: Uint8Array;
-	public rid: Long;
+	public rid0: Long;
+	public rid1: Long;
+	public rid2: Long;
 	public v0: number;
 	public v1: number;
 	public b0: boolean;

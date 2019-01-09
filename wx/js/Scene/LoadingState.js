@@ -1,8 +1,8 @@
+import { AssetsManager, AssetType } from "../AssetsManager";
 import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { BattleInfo } from "../Model/BattleInfo";
-import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
@@ -12,16 +12,6 @@ export class LoadingState extends SceneState {
         super(type);
         this.__ui = this._ui = Global.uiManager.loading;
         this._battleInfo = new BattleInfo();
-        Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
-    }
-    OnEnterBattle(message) {
-        const enterBattle = message;
-        if (enterBattle.result != Protos.CS2GC_EnterBattle.Result.Success) {
-            this._ui.OnEnterBattleResult(enterBattle.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
-        }
-        else {
-            this.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
-        }
     }
     ConnectToBS(gcNID, ip, port) {
         const connector = Global.connector.bsConnector;
@@ -58,26 +48,21 @@ export class LoadingState extends SceneState {
         }
     }
     LoadAssets(battleInfo) {
-        if (this._assetsLoadComplete) {
+        const urls = [];
+        const count = battleInfo.playerInfos.length;
+        for (let i = 0; i < count; ++i) {
+            const playerInfo = battleInfo.playerInfos[i];
+            urls.push({ url: "res/roles/" + Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
+        }
+        urls.push({ url: "res/ui/assets.bin", type: AssetType.Binary });
+        urls.push({ url: "res/ui/assets_atlas0.png", type: AssetType.Image });
+        AssetsManager.LoadBatch(urls, this, () => {
+            this._ui.OnLoadComplete();
+            fairygui.UIPackage.addPackage("res/ui/assets");
             this.InitBattle();
-        }
-        else {
-            const urls = [];
-            const count = battleInfo.playerInfos.length;
-            for (let i = 0; i < count; ++i) {
-                const playerInfo = battleInfo.playerInfos[i];
-                urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: Laya.Loader.ATLAS });
-            }
-            urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
-            urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
-            Laya.loader.load(urls, Laya.Handler.create(this, () => {
-                fairygui.UIPackage.addPackage("res/ui/assets");
-                this._assetsLoadComplete = true;
-                this.InitBattle();
-            }), new laya.utils.Handler(this, p => {
-                this._ui.OnLoadProgress(p);
-            }));
-        }
+        }, p => {
+            this._ui.OnLoadProgress(p);
+        });
     }
     InitBattle() {
         Global.battleManager.SetBattleInfo(this._battleInfo, () => {

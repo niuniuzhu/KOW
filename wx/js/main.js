@@ -1,16 +1,18 @@
+import { AssetsManager } from "./AssetsManager";
 import { Consts } from "./Consts";
 import { Global } from "./Global";
 import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
 import { Hashtable } from "./RC/Utils/Hashtable";
+import { JsonHelper } from "./RC/Utils/JsonHelper";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
 export class Main {
     static get instance() { return Main._instance; }
     constructor(config) {
         Main._instance = this;
-        const cfgJson = JSON.parse(config);
+        const cfgJson = JsonHelper.Parse(config);
         Global.platform = Hashtable.GetNumber(cfgJson, "platform");
         Laya.MiniAdpter.init();
         Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
@@ -22,10 +24,7 @@ export class Main {
         this.ShowLogo();
     }
     ShowLogo() {
-        const urls = [];
-        urls.push({ url: "res/ui/logo.bin", type: Laya.Loader.BUFFER });
-        urls.push({ url: "res/ui/logo_atlas0.png", type: Laya.Loader.IMAGE });
-        Laya.loader.load(urls, Laya.Handler.create(this, () => {
+        AssetsManager.LoadUIPacket("logo", 1, this, () => {
             Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
             fairygui.UIPackage.addPackage("res/ui/logo");
             const logoRoot = fairygui.UIPackage.createObject("logo", "Main").asCom;
@@ -34,17 +33,17 @@ export class Main {
             logoRoot.addRelation(fairygui.GRoot.inst, fairygui.RelationType.Size);
             fairygui.GRoot.inst.addChild(logoRoot);
             logoRoot.getTransition("t0").play(Laya.Handler.create(this, () => {
-                this._fadeInComplete = true;
+                this._aniComplete = true;
                 this.CheckPreloadComplete();
             }), 1, 0, 0, -1);
-            Preloader.Load(() => {
+            Preloader.Load(this, () => {
                 this._preloadComplete = true;
                 this.CheckPreloadComplete();
             });
-        }));
+        });
     }
     CheckPreloadComplete() {
-        if (this._fadeInComplete && this._preloadComplete) {
+        if (this._aniComplete && this._preloadComplete) {
             const logoRoot = fairygui.GRoot.inst.getChild("logoRoot").asCom;
             logoRoot.getTransition("t1").play(Laya.Handler.create(this, () => {
                 logoRoot.dispose();

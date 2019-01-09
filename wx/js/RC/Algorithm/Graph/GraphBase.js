@@ -1,8 +1,7 @@
 import { GraphNode } from "./GraphNode";
-import { Dictionary } from "../../Collections/Index";
 export class GraphBase {
     constructor(size) {
-        this._idToNodes = new Dictionary();
+        this._idToNodes = new Map();
         let ns = [];
         for (let i = 0; i < size; i++)
             ns[i] = new GraphNode(i);
@@ -13,11 +12,11 @@ export class GraphBase {
         this._nodes = value;
         this._idToNodes.clear();
         for (let node of this._nodes) {
-            this._idToNodes.setValue(node.index, node);
+            this._idToNodes.set(node.index, node);
         }
     }
     GetNodeAt(index) {
-        return this._idToNodes.getValue(index);
+        return this._idToNodes.get(index);
     }
     Foreach(loopFunc) {
         for (let node of this._nodes)

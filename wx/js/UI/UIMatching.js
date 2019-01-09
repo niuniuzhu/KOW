@@ -1,7 +1,7 @@
-import { Protos } from "../Libs/protos";
-import { UIAlert } from "./UIAlert";
-import { SceneManager } from "../Scene/SceneManager";
 import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
+import { SceneManager } from "../Scene/SceneManager";
+import { UIAlert } from "./UIAlert";
 export class UIMatching {
     get root() { return this._root; }
     constructor() {
@@ -47,13 +47,21 @@ export class UIMatching {
             UIAlert.Show(error, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
         }
     }
+    OnEnterBattleResult(result, onConfirm) {
+        switch (result) {
+            case Protos.CS2GC_EnterBattle.Result.Success:
+                break;
+            case Protos.CS2GC_EnterBattle.Result.BSLost:
+            case Protos.CS2GC_EnterBattle.Result.BSNotFound:
+            case Protos.CS2GC_EnterBattle.Result.BattleCreateFailed:
+                UIAlert.Show("登录战场失败", onConfirm);
+                break;
+        }
+    }
     UpdateRoomInfo(roomInfo) {
     }
     OnPlayerJoin(player) {
     }
     OnPlayerLeave(player) {
-    }
-    HandleFullPlayer(completeHandler) {
-        completeHandler();
     }
 }

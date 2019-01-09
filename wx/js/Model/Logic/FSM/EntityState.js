@@ -1,109 +1,136 @@
-import Decimal from "../../../Libs/decimal";
+import Set from "../../../RC/Collections/Set";
 import { FSMState } from "../../../RC/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { EventTreeBase } from "../../EventTree/EventTreeBase";
-var Type;
-(function (Type) {
-    Type[Type["None"] = -1] = "None";
-    Type[Type["Idle"] = 0] = "Idle";
-    Type[Type["Move"] = 1] = "Move";
-    Type[Type["Attack"] = 2] = "Attack";
-    Type[Type["Die"] = 3] = "Die";
-})(Type || (Type = {}));
-var Op;
-(function (Op) {
-    Op[Op["Equal"] = 0] = "Equal";
-    Op[Op["Add"] = 1] = "Add";
-    Op[Op["Mul"] = 2] = "Mul";
-    Op[Op["Mod"] = 3] = "Mod";
-    Op[Op["Pow"] = 4] = "Pow";
-    Op[Op["Exp"] = 5] = "Exp";
-})(Op || (Op = {}));
-var StateAttr;
-(function (StateAttr) {
-    StateAttr[StateAttr["DisableMove"] = 1] = "DisableMove";
-    StateAttr[StateAttr["DisableTurn"] = 2] = "DisableTurn";
-    StateAttr[StateAttr["SuperArmor"] = 4] = "SuperArmor";
-    StateAttr[StateAttr["Invulnerability"] = 8] = "Invulnerability";
-    StateAttr[StateAttr["ClearLastBullets"] = 16] = "ClearLastBullets";
-})(StateAttr || (StateAttr = {}));
+import { IntrptCollider } from "./Interrupt/IntrptCollider";
+import { IntrptInput } from "./Interrupt/IntrptInput";
+import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
+import { ID_TO_STATE_ACTION, InterruptType } from "../../StateEnums";
 export class EntityState extends FSMState {
     constructor(type, owner) {
         super(type);
-        this._defaultConnectState = Type.None;
-        this._stateAttr = 0;
-        this._duration = new Decimal(0);
-        this._rootEvent = new EventTreeBase();
-        this._time = new Decimal(0);
+        this.time = 0;
+        this._interrupts = [];
+        this._typeToIntrerrupt = new Map();
         this._owner = owner;
     }
     get owner() { return this._owner; }
-    get time() { return this._time; }
-    set time(value) {
-        if (this._time.equals(value))
-            return;
-        this._time = value;
-        this.OnStateTimeChanged();
-    }
-    OnEnter(param) {
-        if (this._def == null) {
-            this._def = Hashtable.GetMap(Hashtable.GetMap(this._owner.def, "states"), this.type.toString());
-            const eventDef = Hashtable.GetArray(this._def, "events");
-            this._rootEvent.Set(eventDef);
-        }
-        this.HandleAttrs();
-        this.HandleEvents();
-    }
-    OnExit() {
-        this._time = new Decimal(0);
-    }
-    OnUpdate(dt) {
-        if (this._time.greaterThanOrEqualTo(this._duration)) {
-            if (this._defaultConnectState != Type.None) {
-                this._owner.fsm.ChangeState(this._defaultConnectState, null, true);
+    Init(statesDef) {
+        const def = Hashtable.GetMap(statesDef, this.type.toString());
+        const actionsDef = Hashtable.GetMapArray(def, "actions");
+        if (actionsDef != null) {
+            for (const actionDef of actionsDef) {
+                const type = Hashtable.GetNumber(actionDef, "id");
+                const ctr = ID_TO_STATE_ACTION.get(type);
+                const action = new ctr(this, type, actionDef);
+                this.AddAction(action);
             }
         }
-        this._time = this._time.add(dt);
-        this._rootEvent.Update(dt);
-    }
-    OnStateTimeChanged() {
-    }
-    HandleAttrs() {
-        const attrs = Hashtable.GetArray(this._def, "attrs");
-        const ops = Hashtable.GetArray(this._def, "ops");
-        const values = Hashtable.GetArray(this._def, "values");
-        const count = attrs.length;
-        for (let i = 0; i < count; ++i) {
-            this.ActiveAttr(attrs[i], ops[i], new Decimal(values[i]));
+        const sa = Hashtable.GetNumberArray(def, "states_available");
+        if (sa != null) {
+            this._statesAvailable = new Set();
+            for (const type of sa) {
+                this._statesAvailable.add(type);
+            }
+        }
+        const interruptDefs = Hashtable.GetMapArray(def, "interrupts");
+        if (interruptDefs) {
+            for (const interruptDef of interruptDefs) {
+                this.CreateInturrupt(interruptDef);
+            }
         }
     }
-    ActiveAttr(attr, op, value) {
-        switch (op) {
-            case Op.Equal:
-                this.owner.attribute.Set(attr, value);
+    CreateInturrupt(def) {
+        const id = Hashtable.GetNumber(def, "id");
+        let interrupt;
+        switch (id) {
+            case InterruptType.Timeup:
+                interrupt = new IntrptTimeup(this, def);
                 break;
-            case Op.Add:
-                this.owner.attribute.Add(attr, value);
+            case InterruptType.Collision:
+                interrupt = new IntrptCollider(this, def);
                 break;
-            case Op.Mul:
-                this.owner.attribute.Mul(attr, value);
-                break;
-            case Op.Mod:
-                this.owner.attribute.Mod(attr, value);
-                break;
-            case Op.Pow:
-                this.owner.attribute.Pow(attr, value);
-                break;
-            case Op.Exp:
-                this.owner.attribute.Exp(attr);
+            case InterruptType.Input:
+                interrupt = new IntrptInput(this, def);
                 break;
         }
+        this._interrupts.push(interrupt);
+        this._typeToIntrerrupt.set(id, interrupt);
     }
-    DeactiveAttr(attr, op, value) {
+    RemoveInterrupt(type) {
+        const interrupt = this._typeToIntrerrupt.get(type);
+        if (!interrupt == null)
+            return false;
+        this._typeToIntrerrupt.delete(type);
+        this._interrupts.splice(this._interrupts.indexOf(interrupt), 1);
     }
-    HandleEvents() {
+    GetInterrupt(id) {
+        return this._typeToIntrerrupt.get(id);
+    }
+    EncodeSnapshot(writer) {
+        writer.int32(this.time);
+        for (const action of this._actions) {
+            action.EncodeSnapshot(writer);
+        }
+        for (const interrupt of this._interrupts) {
+            interrupt.EncodeSnapshot(writer);
+        }
+    }
+    DecodeSnapshot(reader) {
+        this.time = reader.int32();
+        for (const action of this._actions) {
+            action.DecodeSnapshot(reader);
+        }
+        for (const interrupt of this._interrupts) {
+            interrupt.DecodeSnapshot(reader);
+        }
+    }
+    OnEnter(param) {
+        this.time = 0;
+        for (const interrupt of this._interrupts) {
+            interrupt.Enter();
+        }
+    }
+    OnExit() {
+        for (const interrupt of this._interrupts) {
+            interrupt.Exit();
+        }
+    }
+    OnUpdate(dt) {
+        for (const interrupt of this._interrupts) {
+            interrupt.Update(dt);
+        }
+        this.time += dt;
+    }
+    UpdatePhysic(dt) {
+        for (const action of this._actions) {
+            action.UpdatePhysic(dt);
+        }
+        for (const interrupt of this._interrupts) {
+            interrupt.UpdatePhysic(dt);
+        }
+    }
+    IsStateAvailable(type) {
+        return this._statesAvailable == null || this._statesAvailable.contains(type);
+    }
+    HandleInput(type, press) {
+        for (const action of this._actions) {
+            action.HandlInput(type, press);
+        }
+        for (const interrupt of this._interrupts) {
+            interrupt.HandleInput(type, press);
+        }
+    }
+    Dump() {
+        let str = "";
+        str += `interrupt count:${this._interrupts.length}\n`;
+        for (const interrupt of this._interrupts) {
+            str += interrupt.Dump();
+        }
+        str += `action count:${this._actions.length}\n`;
+        for (const action of this._actions) {
+            str += action.Dump();
+        }
+        str += `time:${this.time}\n`;
+        return str;
     }
 }
-EntityState.Type = Type;
-EntityState.Op = Op;
-EntityState.StateAttr = StateAttr;

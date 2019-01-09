@@ -1,3 +1,4 @@
+import { UIEvent } from "./BattleEvent/UIEvent";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
@@ -9,7 +10,9 @@ import { SceneManager } from "../Scene/SceneManager";
 import { FrameActionGroup } from "./FrameActionGroup";
 import { Battle } from "./Logic/Battle";
 import { VBattle } from "./View/VBattle";
+import { SyncEvent } from "./BattleEvent/SyncEvent";
 export class BattleManager {
+    get playerID() { return this._playerID; }
     get lBattle() { return this._lBattle; }
     get vBattle() { return this._vBattle; }
     Init() {
@@ -23,6 +26,7 @@ export class BattleManager {
         this._init = false;
         Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
         Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+        Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
         Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
         this._lBattle.Destroy();
         this._vBattle.Destroy();
@@ -30,10 +34,12 @@ export class BattleManager {
     Start() {
         Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
         Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+        Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
         this._destroied = false;
     }
     SetBattleInfo(battleInfo, completeHandler) {
+        this._playerID = battleInfo.playerID;
         this._vBattle.SetBattleInfo(battleInfo);
         this._lBattle.SetBattleInfo(battleInfo);
         const curFrame = battleInfo.serverFrame;
@@ -63,6 +69,7 @@ export class BattleManager {
         if (!this._init)
             return;
         this._lBattle.Update(FMathUtils.ToFixed(dt));
+        SyncEvent.Update();
         this._vBattle.Update(dt);
     }
     RequestSnapshot(callback) {
@@ -79,11 +86,17 @@ export class BattleManager {
             }
         });
     }
-    HandleBattleEnd(message) {
-        Logger.Log("battle end");
-        const battleEnd = message;
+    HandleBSLose(message) {
+        Logger.Log("bs lose");
         this.Destroy();
         Global.sceneManager.ChangeState(SceneManager.State.Main);
+    }
+    HandleBattleEnd(message) {
+        const msg = message;
+        UIEvent.EndBattle(msg.win, msg.honour, () => {
+            this.Destroy();
+            Global.sceneManager.ChangeState(SceneManager.State.Main);
+        });
     }
     HandleFrameAction(message) {
         const frameAction = message;

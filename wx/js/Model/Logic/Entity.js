@@ -10,15 +10,11 @@ export class Entity {
     get battle() { return this._battle; }
     get id() { return this._id; }
     get rid() { return this._rid; }
-    get defs() { return this._defs; }
     get markToDestroy() { return this._markToDestroy; }
     Init(params) {
         this._rid = params.rid;
         this._id = params.id;
         this._markToDestroy = false;
-        this.OnInit();
-    }
-    OnInit() {
         this.LoadDefs();
     }
     Destroy() {
@@ -33,7 +29,7 @@ export class Entity {
     DecodeSnapshot(reader) {
         this._rid = reader.uint64();
         this._id = reader.int32();
-        this.OnInit();
+        this.LoadDefs();
         this._markToDestroy = reader.bool();
         this.position.Set(reader.double(), reader.double());
         this.direction.Set(reader.double(), reader.double());

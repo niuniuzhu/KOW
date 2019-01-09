@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1) {
+define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../BattleEvent/SyncEvent"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1, SyncEvent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -157,6 +157,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                     if (this._maxCollisionPerTarget >= 0 &&
                         count == this._maxCollisionPerTarget)
                         continue;
+                    SyncEvent_1.SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
                     this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
                     hit = true;
                     ++this._collisionCount;

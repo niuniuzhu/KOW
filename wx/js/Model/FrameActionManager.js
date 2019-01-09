@@ -2,9 +2,7 @@ import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
-import { Vec2 } from "../RC/Math/Vec2";
 import { Timer } from "../RC/Utils/Timer";
-import { MathUtils } from "../RC/Math/MathUtils";
 var InputFlag;
 (function (InputFlag) {
     InputFlag[InputFlag["None"] = 0] = "None";
@@ -14,51 +12,53 @@ var InputFlag;
 })(InputFlag || (InputFlag = {}));
 export class FrameAciontManager {
     constructor() {
-        this._direction = Vec2.zero;
-        this._inputFlag = InputFlag.None;
+        this._infos = [];
         this._nextFrameActionSendTime = 0;
-        this._changed = false;
     }
-    get direction() { return this._direction; }
-    get inputFlag() { return this._inputFlag; }
     Reset() {
         this._nextFrameActionSendTime = 0;
-        this._direction.Set(0, 0);
-        this._inputFlag = InputFlag.None;
-        this._changed = false;
+        this._infos.splice(0);
     }
     SetInputDirection(direction) {
-        this._direction.CopyFrom(direction);
-        this._inputFlag |= InputFlag.Move;
-        this._press = direction.SqrMagnitude() > MathUtils.EPSILON;
-        this._changed = true;
+        if (this._infos.length == FrameAciontManager.MAX_ACTIONS)
+            return;
+        const info = new Protos.GC2BS_FrameActionInfo();
+        info.frame = 0;
+        info.inputFlag = InputFlag.Move;
+        info.v0 = direction.x;
+        info.v1 = direction.y;
+        this._infos.push(info);
     }
     SetS1(press) {
-        this._inputFlag |= InputFlag.S1;
-        this._press = press;
-        this._changed = true;
+        if (this._infos.length == FrameAciontManager.MAX_ACTIONS)
+            return;
+        const info = new Protos.GC2BS_FrameActionInfo();
+        info.frame = 0;
+        info.inputFlag = InputFlag.S1;
+        info.v0 = press ? 1 : 0;
+        this._infos.push(info);
     }
     SetS2(press) {
-        this._inputFlag |= InputFlag.S2;
-        this._press = press;
-        this._changed = true;
+        if (this._infos.length == FrameAciontManager.MAX_ACTIONS)
+            return;
+        const info = new Protos.GC2BS_FrameActionInfo();
+        info.frame = 0;
+        info.inputFlag = InputFlag.S2;
+        info.v0 = press ? 1 : 0;
+        this._infos.push(info);
     }
     Update(dt) {
-        if (this._changed && Timer.utcTime >= this._nextFrameActionSendTime) {
+        if (this._infos.length > 0 && Timer.utcTime >= this._nextFrameActionSendTime) {
             this._nextFrameActionSendTime = Timer.utcTime + Consts.FRAME_ACTION_SEND_INTERVAL;
             const frameAction = ProtoCreator.Q_GC2BS_FrameAction();
-            frameAction.inputFlag = this.inputFlag;
-            if ((this.inputFlag & InputFlag.Move) > 0) {
-                frameAction.dx = this.direction.x;
-                frameAction.dy = this.direction.y;
-                frameAction.press = this._press;
-            }
-            if ((this.inputFlag & InputFlag.S1) > 0 || (this.inputFlag & InputFlag.S2) > 0) {
-                frameAction.press = this._press;
+            const count = this._infos.length;
+            for (let i = 0; i < count; ++i) {
+                frameAction.infos.push(this._infos[i]);
             }
             Global.connector.bsConnector.Send(Protos.GC2BS_FrameAction, frameAction);
             this.Reset();
         }
     }
 }
+FrameAciontManager.MAX_ACTIONS = 16;
 FrameAciontManager.InputFlag = InputFlag;

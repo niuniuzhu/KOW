@@ -1,17 +1,7 @@
 import { FSMState } from "../../../RC/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-var Type;
-(function (Type) {
-    Type[Type["Idle"] = 0] = "Idle";
-    Type[Type["Move"] = 1] = "Move";
-    Type[Type["Attack"] = 2] = "Attack";
-    Type[Type["Die"] = 3] = "Die";
-})(Type || (Type = {}));
+import { V_ID_TO_STATE_ACTION } from "../../StateEnums";
 export class VEntityState extends FSMState {
-    constructor(type, owner) {
-        super(type);
-        this._owner = owner;
-    }
     get owner() { return this._owner; }
     get time() { return this._time; }
     set time(value) {
@@ -20,12 +10,28 @@ export class VEntityState extends FSMState {
         this._time = value;
         this.OnStateTimeChanged();
     }
+    constructor(type, owner) {
+        super(type);
+        this._owner = owner;
+    }
+    Init(statesDef) {
+        const def = Hashtable.GetMap(statesDef, this.type.toString());
+        const actionsDef = Hashtable.GetMapArray(def, "actions");
+        if (actionsDef != null) {
+            for (const actionDef of actionsDef) {
+                const type = Hashtable.GetNumber(actionDef, "id");
+                const ctr = V_ID_TO_STATE_ACTION.get(type);
+                const action = new ctr(this, type, actionDef);
+                this.AddAction(action);
+            }
+        }
+    }
     OnEnter(param) {
-        const def = Hashtable.GetMap(Hashtable.GetMap(this.owner.def, "states"), this.type.toString());
-        const aniName = Hashtable.GetString(def, "animation");
-        this.owner.PlayAnim(aniName);
+        this._time = 0;
+    }
+    OnUpdate(dt) {
+        this._time += dt;
     }
     OnStateTimeChanged() {
     }
 }
-VEntityState.Type = Type;

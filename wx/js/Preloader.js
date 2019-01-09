@@ -1,36 +1,25 @@
+import { AssetsManager, AssetType } from "./AssetsManager";
 import { CDefs } from "./Model/CDefs";
 import { Logger } from "./RC/Utils/Logger";
 export class Preloader {
     static get complete() { return this._complete; }
-    static Load(completeHandler) {
+    static Load(caller, completeHandler) {
         Logger.Log("loading defs...");
-        Laya.loader.load("res/defs/b_defs.json", Laya.Handler.create(this, () => {
+        AssetsManager.Load("res/defs/b_defs.json", AssetType.Json, null, () => {
             const json = Laya.loader.getRes("res/defs/b_defs.json");
             CDefs.Init(json);
-            this.LoadUIRes(completeHandler);
-        }), undefined, Laya.Loader.JSON);
+            this.LoadUIRes(caller, completeHandler);
+        }, null);
     }
-    static LoadUIRes(completeHandler) {
+    static LoadUIRes(caller, completeHandler) {
         Logger.Log("loading res...");
         const preloads = CDefs.GetPreloads();
         const urls = [];
         for (const u of preloads) {
             const ss = u.split(",");
-            let loadType;
-            switch (ss[1]) {
-                case "1":
-                    loadType = Laya.Loader.IMAGE;
-                    break;
-                case "2":
-                    loadType = Laya.Loader.SOUND;
-                    break;
-                default:
-                    loadType = Laya.Loader.BUFFER;
-                    break;
-            }
-            urls.push({ url: "res/ui/" + ss[0], type: loadType });
+            urls.push({ url: "res/ui/" + ss[0], type: ss[1] });
         }
-        Laya.loader.load(urls, Laya.Handler.create(this, completeHandler));
+        AssetsManager.LoadBatch(urls, caller, completeHandler);
     }
 }
 Preloader._complete = false;

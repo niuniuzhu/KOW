@@ -50,14 +50,23 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
         static Hit(targetID, value) {
             let e = this.Get();
             e._type = SyncEvent.E_HIT;
-            e.rid = targetID;
+            e.rid0 = targetID;
             e.v0 = value;
+            this.BeginInvoke(e);
+        }
+        static BulletCollision(bulletID, casterID, targetID) {
+            let e = this.Get();
+            e._type = SyncEvent.E_BULLET_COLLISION;
+            e.rid0 = bulletID;
+            e.rid1 = casterID;
+            e.rid2 = targetID;
             this.BeginInvoke(e);
         }
     }
     SyncEvent.E_BATTLE_INIT = 100;
     SyncEvent.E_SNAPSHOT = 101;
     SyncEvent.E_HIT = 200;
+    SyncEvent.E_BULLET_COLLISION = 201;
     SyncEvent.POOL = new Stack_1.default();
     SyncEvent.HANDLERS = new Map();
     SyncEvent.EVENTS = [];

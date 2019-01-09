@@ -8,6 +8,7 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
 
 enum BulletMoveType {
 	Linear,
@@ -223,6 +224,8 @@ export class Bullet extends Entity implements ISnapshotable {
 				if (this._maxCollisionPerTarget >= 0 &&
 					count == this._maxCollisionPerTarget)
 					continue;
+				//派发子弹碰撞通知
+				SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
 				//添加受击单元
 				this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
 				hit = true;

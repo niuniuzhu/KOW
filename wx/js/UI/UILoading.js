@@ -1,6 +1,6 @@
+import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
-import { Global } from "../Global";
 export class UILoading {
     get root() { return this._root; }
     constructor() {
@@ -8,9 +8,9 @@ export class UILoading {
         this._root = fairygui.UIPackage.createObject("loading", "Main").asCom;
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
-        this._progressBar = this._root.getChild("n0").asProgress;
+        this._progressBar = this._root.getChild("progress").asProgress;
         this._progressBar.max = 100;
-        this._progressBar.value = 10;
+        this._progressBar.value = 0;
     }
     Dispose() {
         this._root.dispose();
@@ -24,17 +24,6 @@ export class UILoading {
     Update(dt) {
     }
     OnResize(e) {
-    }
-    OnEnterBattleResult(result, onConfirm) {
-        switch (result) {
-            case Protos.CS2GC_EnterBattle.Result.Success:
-                break;
-            case Protos.CS2GC_EnterBattle.Result.BSLost:
-            case Protos.CS2GC_EnterBattle.Result.BSNotFound:
-            case Protos.CS2GC_EnterBattle.Result.BattleCreateFailed:
-                UIAlert.Show("登录战场失败", onConfirm);
-                break;
-        }
     }
     OnConnectToBSError(e, onConfirm) {
         UIAlert.Show("无法连接服务器[" + e.toString() + "]", onConfirm);
@@ -50,5 +39,8 @@ export class UILoading {
     }
     OnLoadProgress(p) {
         this._progressBar.value = 10 + p * 90;
+    }
+    OnLoadComplete() {
+        this._progressBar.value = 100;
     }
 }

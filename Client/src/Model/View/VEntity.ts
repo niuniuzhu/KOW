@@ -55,24 +55,11 @@ export abstract class VEntity {
 	}
 
 	public Destroy(): void {
-		this._animationProxy = null;
+		if (this._animationProxy != null) {
+			this._animationProxy.dispose();
+			this._animationProxy = null;
+		}
 		this._root.dispose();
-	}
-
-	public Update(dt: number): void {
-		this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
-		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
-	}
-
-	private OnPositionChanged(delta: Vec2): void {
-		this._root.setXY(this._position.x, this._position.y);
-		let point = new Laya.Point();
-		this._root.localToGlobal(0, 0, point);
-		this._worldPosition.Set(point.x, point.y);
-	}
-
-	private OnRatationChanged(delta: number): void {
-		this._root.rotation = this._rotation;
 	}
 
 	protected abstract LoadDefs(): void;
@@ -99,5 +86,21 @@ export abstract class VEntity {
 			this.position = this._logicPos.Clone();
 			this.rotation = this._logicRot;
 		}
+	}
+
+	public Update(dt: number): void {
+		this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
+		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
+	}
+
+	private OnPositionChanged(delta: Vec2): void {
+		this._root.setXY(this._position.x, this._position.y);
+		let point = new Laya.Point();
+		this._root.localToGlobal(0, 0, point);
+		this._worldPosition.Set(point.x, point.y);
+	}
+
+	private OnRatationChanged(delta: number): void {
+		this._root.rotation = this._rotation;
 	}
 }

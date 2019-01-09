@@ -1,6 +1,6 @@
-import { GraphEdge } from "./GraphEdge";
+import { PriorityQueue } from "../../Collections/index";
 import { MathUtils } from "../../Math/MathUtils";
-import { Dictionary, PriorityQueue } from "../../Collections/index";
+import { GraphEdge } from "./GraphEdge";
 export class GraphSearcher {
     static MazeSearch(graph, start, maxStep, rndFunc) {
         let visitedNodes = [];
@@ -48,32 +48,32 @@ export class GraphSearcher {
         return shortestPathPredecessors;
     }
     static AStarSearch(graph, start, end) {
-        let shortestPathPredecessors = new Dictionary();
-        let frontierPredecessors = new Dictionary();
+        let shortestPathPredecessors = new Map();
+        let frontierPredecessors = new Map();
         let nodeQueue = new PriorityQueue(NumberPair.NumberCompare);
-        let costToNode = new Dictionary();
-        costToNode.setValue(start, 0);
-        frontierPredecessors.setValue(start, null);
+        let costToNode = new Map();
+        costToNode.set(start, 0);
+        frontierPredecessors.set(start, null);
         nodeQueue.enqueue(new NumberPair(start, 0));
         while (nodeQueue.size() > 0) {
             let nextClosestNode = nodeQueue.dequeue();
-            let predecessor = frontierPredecessors.getValue(nextClosestNode.first);
-            shortestPathPredecessors.setValue(nextClosestNode.first, predecessor);
+            let predecessor = frontierPredecessors.get(nextClosestNode.first);
+            shortestPathPredecessors.set(nextClosestNode.first, predecessor);
             if (end == nextClosestNode.first)
                 break;
             let edages = graph.GetNodeAt(nextClosestNode.first).edges;
             for (let edge of edages) {
-                let totalCost = costToNode.getValue(nextClosestNode.first) + edge.cost;
+                let totalCost = costToNode.get(nextClosestNode.first) + edge.cost;
                 let estimatedTotalCostViaNode = totalCost + 0;
-                if (!frontierPredecessors.containsKey(edge.to)) {
-                    costToNode.setValue(edge.to, totalCost);
-                    frontierPredecessors.setValue(edge.to, edge);
+                if (!frontierPredecessors.has(edge.to)) {
+                    costToNode.set(edge.to, totalCost);
+                    frontierPredecessors.set(edge.to, edge);
                     nodeQueue.enqueue(new NumberPair(edge.to, estimatedTotalCostViaNode));
                 }
-                else if (totalCost < costToNode.getValue(edge.to) &&
-                    !shortestPathPredecessors.containsKey(edge.to)) {
-                    costToNode.setValue(edge.to, totalCost);
-                    frontierPredecessors.setValue(edge.to, edge);
+                else if (totalCost < costToNode.get(edge.to) &&
+                    !shortestPathPredecessors.has(edge.to)) {
+                    costToNode.set(edge.to, totalCost);
+                    frontierPredecessors.set(edge.to, edge);
                     nodeQueue.forEach((element) => {
                         if (element.first == edge.to) {
                             element.second = estimatedTotalCostViaNode;
@@ -85,7 +85,7 @@ export class GraphSearcher {
             }
         }
         let pathList = [];
-        for (let node = end; shortestPathPredecessors.getValue(node) != null; node = shortestPathPredecessors.getValue(node).from)
+        for (let node = end; shortestPathPredecessors.get(node) != null; node = shortestPathPredecessors.get(node).from)
             pathList.push(node);
         pathList.push(start);
         pathList.reverse();

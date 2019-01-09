@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../BattleEvent/UIEvent", "../CDefs", "../Defs", "../Logic/Attribute", "./FSM/VEntityState", "../Skill", "./HUD", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, UIEvent_1, CDefs_1, Defs_1, Attribute_1, VEntityState_1, Skill_1, HUD_1, VEntity_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../BattleEvent/UIEvent", "../CDefs", "../Defs", "../Logic/Attribute", "../Skill", "./AnimationProxy", "./FSM/VEntityState", "./HUD", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, UIEvent_1, CDefs_1, Defs_1, Attribute_1, Skill_1, AnimationProxy_1, VEntityState_1, HUD_1, VEntity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VChampion extends VEntity_1.VEntity {
@@ -78,7 +78,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             const cdefs = CDefs_1.CDefs.GetEntity(this._id);
             const modelID = Hashtable_1.Hashtable.GetNumber(cdefs, "model", -1);
             if (modelID >= 0) {
-                this._animationProxy = this._battle.graphicManager.Get(modelID);
+                this._animationProxy = new AnimationProxy_1.AnimationProxy(modelID);
                 this._root.addChild(this._animationProxy);
             }
             const skillsDef = Hashtable_1.Hashtable.GetNumberArray(defs, "skills");
@@ -129,6 +129,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             if (reader.bool()) {
                 const stateType = reader.int32();
                 this._fsm.ChangeState(stateType, null);
+                this._fsm.currentState.time = reader.double();
             }
         }
         HasSkill(id) {

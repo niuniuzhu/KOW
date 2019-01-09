@@ -6,8 +6,9 @@ import { UIEvent } from "../BattleEvent/UIEvent";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { EAttr } from "../Logic/Attribute";
-import { VEntityState } from "./FSM/VEntityState";
 import { Skill } from "../Skill";
+import { AnimationProxy } from "./AnimationProxy";
+import { VEntityState } from "./FSM/VEntityState";
 import { HUD } from "./HUD";
 import { VBattle } from "./VBattle";
 import { VEntity } from "./VEntity";
@@ -97,7 +98,7 @@ export class VChampion extends VEntity {
 		//加载动画数据
 		const modelID = Hashtable.GetNumber(cdefs, "model", -1);
 		if (modelID >= 0) {
-			this._animationProxy = this._battle.graphicManager.Get(modelID);
+			this._animationProxy = new AnimationProxy(modelID);
 			this._root.addChild(this._animationProxy);
 		}
 
@@ -155,6 +156,7 @@ export class VChampion extends VEntity {
 		if (reader.bool()) {
 			const stateType = reader.int32();
 			this._fsm.ChangeState(stateType, null);
+			(<VEntityState>this._fsm.currentState).time = reader.double();
 		}
 	}
 

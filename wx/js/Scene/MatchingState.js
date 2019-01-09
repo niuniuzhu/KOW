@@ -12,6 +12,7 @@ export class MatchingState extends SceneState {
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_RoomInfo, this.OnUpdateRoomInfo.bind(this));
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerJoin, this.OnPlayerJoint.bind(this));
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_PlayerLeave, this.OnPlayerLeave.bind(this));
+        Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_EnterBattle, this.OnEnterBattle.bind(this));
     }
     OnEnter(param) {
         super.OnEnter(param);
@@ -29,9 +30,6 @@ export class MatchingState extends SceneState {
     OnPlayerJoint(message) {
         const playerJoin = message;
         this._ui.OnPlayerJoin(playerJoin.playerInfos);
-        if (this._players.length == this._maxPlayers) {
-            this._ui.HandleFullPlayer(() => Global.sceneManager.ChangeState(SceneManager.State.Loading));
-        }
     }
     OnPlayerLeave(message) {
         const playerLeave = message;
@@ -61,5 +59,15 @@ export class MatchingState extends SceneState {
                     break;
             }
         });
+    }
+    OnEnterBattle(message) {
+        const enterBattle = message;
+        if (enterBattle.result != Protos.CS2GC_EnterBattle.Result.Success) {
+            this._ui.OnEnterBattleResult(enterBattle.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+        }
+        else {
+            Global.sceneManager.ChangeState(SceneManager.State.Loading);
+            Global.sceneManager.loading.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+        }
     }
 }

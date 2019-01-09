@@ -23,11 +23,11 @@ define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable", "../CD
             }
             for (const aniDef of aniDefs) {
                 const id = Hashtable_1.Hashtable.GetNumber(aniDef, "id");
-                const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
                 const alias = `${model}_${id}`;
+                const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
+                const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
                 if (!AnimationProxy.TEMPLATE_CACHE.has(alias)) {
                     const startFrame = Hashtable_1.Hashtable.GetNumber(aniDef, "start_frame");
-                    const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
                     const urls = [];
                     for (let i = startFrame; i < length; ++i) {
                         urls.push(`${model}/${aniName}${i}.png`);
@@ -51,6 +51,9 @@ define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable", "../CD
         }
         get available() { return this._aniSettings != null && this._animation != null; }
         get animation() { return this._animation; }
+        GetSetting(id) {
+            return this._aniSettings.get(id);
+        }
         Play(id, startFrame, timeScale = 1, force = false) {
             if (!this.available)
                 return;

@@ -161,7 +161,7 @@ export class Champion extends Entity implements ISnapshotable {
 			for (const type in statesDef) {
 				this._fsm.AddState(new EntityState(Number.parseInt(type), this));
 			}
-			this._fsm.Init();
+			this._fsm.Init(statesDef);
 			this._fsm.ChangeState(Hashtable.GetNumber(this._defs, "default_state"));
 		}
 

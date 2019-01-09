@@ -1,14 +1,13 @@
 import { FSMState } from "./FSMState";
-import { ActionType } from "../../Model/FSM/StateEnums";
 
 export class FSMStateAction {
-	public get type(): ActionType { return this._type; }
+	public get type(): number { return this._type; }
 	public get state(): FSMState { return this._state; }
 
 	private _state: FSMState;
-	private _type: ActionType;
+	private _type: number;
 
-	constructor(state: FSMState, type: ActionType) {
+	constructor(state: FSMState, type: number) {
 		this._state = state;
 		this._type = type;
 	}

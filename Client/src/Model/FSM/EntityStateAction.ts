@@ -7,10 +7,10 @@ import { InputType } from "../Logic/InputAagent";
 import { EntityState } from "./EntityState";
 import { ActionType } from "./StateEnums";
 
-export abstract class EntityStateAction extends FSMStateAction implements ISnapshotable {
+export class EntityStateAction extends FSMStateAction implements ISnapshotable {
 	/**
- * 获取总运行时间
- */
+	 * 获取总运行时间
+	 */
 	public get time(): number { return (<EntityState>this.state).time; }
 	/**
 	 * 获取从触发到结束所使用的时间(如果触发时间为零,则和time一样)
@@ -23,14 +23,6 @@ export abstract class EntityStateAction extends FSMStateAction implements ISnaps
 	constructor(state: FSMState, type: ActionType, def: Hashtable) {
 		super(state, type);
 		this.OnInit(def);
-	}
-
-	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
-		writer.bool(this._isTriggered);
-	}
-
-	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
-		this._isTriggered = reader.bool();
 	}
 
 	protected OnInit(def: Hashtable): void {
@@ -79,6 +71,14 @@ export abstract class EntityStateAction extends FSMStateAction implements ISnaps
 	 * @param press 是按下还是弹起
 	 */
 	public HandlInput(type: InputType, press: boolean): void {
+	}
+
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		writer.bool(this._isTriggered);
+	}
+
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._isTriggered = reader.bool();
 	}
 
 	public Dump(): string {

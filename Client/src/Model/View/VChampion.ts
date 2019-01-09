@@ -105,10 +105,12 @@ export class VChampion extends VEntity {
 			this._skills.push(skill);
 		}
 
-		const statesDef = Hashtable.GetMap(this._defs, "states");
+		const statesDef = Hashtable.GetMap(this._cdefs, "states");
 		if (statesDef != null) {
 			for (const type in statesDef) {
-				this._fsm.AddState(new VEntityState(Number.parseInt(type), this));
+				const state = new VEntityState(Number.parseInt(type), this);
+				this._fsm.AddState(state);
+				state.Init(statesDef);
 			}
 		}
 	}
@@ -148,8 +150,8 @@ export class VChampion extends VEntity {
 
 		//read fsmstates
 		if (reader.bool()) {
-			this._fsm.ChangeState(reader.int32(), null);
-			(<VEntityState>this._fsm.currentState).time = reader.double();
+			const stateType = reader.int32();
+			this._fsm.ChangeState(stateType, null);
 		}
 	}
 

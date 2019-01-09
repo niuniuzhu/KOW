@@ -1,5 +1,6 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
+import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
 import { InputType } from "../Logic/InputAagent";
 import { EntityState } from "./EntityState";
@@ -10,10 +11,10 @@ export class EntityFSM extends FSM implements ISnapshotable {
 	public get previousEntityState(): EntityState { return <EntityState>this.previousState; }
 	public get globalEntityState(): EntityState { return <EntityState>this.globalState; }
 
-	public Init() {
+	public Init(statesDef: Hashtable) {
 		for (const state of this._states) {
 			const entityFSM = <EntityState>state;
-			entityFSM.Init();
+			entityFSM.Init(statesDef);
 		}
 	}
 

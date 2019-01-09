@@ -32,8 +32,8 @@ export class EntityState extends FSMState implements ISnapshotable {
 		this._owner = owner;
 	}
 
-	public Init(): void {
-		const def = Hashtable.GetMap(Hashtable.GetMap(this._owner.defs, "states"), this.type.toString());
+	public Init(statesDef: Hashtable): void {
+		const def = Hashtable.GetMap(statesDef, this.type.toString());
 
 		//初始化状态行为
 		const actionsDef = Hashtable.GetMapArray(def, "actions");

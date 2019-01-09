@@ -1,6 +1,7 @@
 import { FSMState } from "../../RC/FSM/FSMState";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { VEntity } from "../View/VEntity";
+import { V_ID_TO_STATE_ACTION } from "./StateEnums";
 
 export class VEntityState extends FSMState {
 	/**
@@ -33,6 +34,21 @@ export class VEntityState extends FSMState {
 	constructor(type: number, owner: VEntity) {
 		super(type);
 		this._owner = owner;
+	}
+
+	public Init(statesDef: Hashtable): void {
+		const def = Hashtable.GetMap(statesDef, this.type.toString());
+
+		//初始化状态行为
+		const actionsDef = Hashtable.GetMapArray(def, "actions");
+		if (actionsDef != null) {
+			for (const actionDef of actionsDef) {
+				const type = Hashtable.GetNumber(actionDef, "id");
+				const ctr = V_ID_TO_STATE_ACTION.get(type);
+				const action = new ctr(this, type, actionDef);
+				this.AddAction(action);
+			}
+		}
 	}
 
 	protected OnEnter(param: any): void {

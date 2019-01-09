@@ -33,10 +33,15 @@
 					"animation": 2
 				},
 				"3": {
-					"animation": 3
+					"animation": 3,
+					"actions": [
+						{
+							"id": 3
+						}
+					]
 				},
 				"4": {},
-				"5":{
+				"5": {
 					"animation": 5
 				},
 				"6": {

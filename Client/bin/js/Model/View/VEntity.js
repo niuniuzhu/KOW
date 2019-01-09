@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "./AnimationProxy", "../../Consts"], function (require, exports, Global_1, MathUtils_1, Vec2_1, AnimationProxy_1, Consts_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2"], function (require, exports, Consts_1, Global_1, MathUtils_1, Vec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -9,11 +9,10 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
             this._logicPos = Vec2_1.Vec2.zero;
             this._logicRot = 0;
             this._root = new fairygui.GComponent();
-            this._animationProxy = new AnimationProxy_1.AnimationProxy();
+            this._animationProxy = null;
             this._battle = battle;
             this._root.setSize(0, 0);
             this._root.setPivot(0.5, 0.5, true);
-            this._root.addChild(this._animationProxy);
             Global_1.Global.graphic.entityRoot.addChild(this._root);
         }
         get rid() { return this._rid; }
@@ -39,6 +38,7 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
         }
         get worldPosition() { return this._worldPosition; }
         Destroy() {
+            this._animationProxy = null;
             this._root.dispose();
         }
         Update(dt) {

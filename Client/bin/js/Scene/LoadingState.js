@@ -46,7 +46,7 @@ define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../
             const count = battleInfo.playerInfos.length;
             for (let i = 0; i < count; ++i) {
                 const playerInfo = battleInfo.playerInfos[i];
-                urls.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: AssetsManager_1.AssetType.Atlas });
+                urls.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetsManager_1.AssetType.Atlas });
             }
             urls.push({ url: "res/ui/assets.bin", type: AssetsManager_1.AssetType.Binary });
             urls.push({ url: "res/ui/assets_atlas0.png", type: AssetsManager_1.AssetType.Image });

@@ -104,27 +104,23 @@ export class Bullet extends Entity implements ISnapshotable {
 	}
 
 	protected LoadDefs(): void {
-		this._defs = Defs.GetBullet(this._id);
-	}
-
-	protected OnInit(): void {
-		super.OnInit();
-		this._radius = Hashtable.GetNumber(this._defs, "radius");
-		this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
-		this._moveType = Hashtable.GetNumber(this._defs, "move_type");
-		this._angleSpeed = Hashtable.GetNumber(this._defs, "angle_speed");
-		this._angleRadius = Hashtable.GetNumber(this._defs, "angle_radius");
-		this._lifeTime = Hashtable.GetNumber(this._defs, "life_time", -1);
-		this._destroyType = Hashtable.GetNumber(this._defs, "destroy_type");
-		this._delay = Hashtable.GetNumber(this._defs, "delay");
-		this._frequency = Hashtable.GetNumber(this._defs, "frequency");
-		this._maxCollisionPerTarget = Hashtable.GetNumber(this._defs, "max_collision_per_target", -1);
-		this._maxCollision = Hashtable.GetNumber(this._defs, "max_collision", -1);
-		this._targetType = Hashtable.GetNumber(this._defs, "target_type");
-		this._whipping = Hashtable.GetBool(this._defs, "whipping");
-		this._attrTypes = Hashtable.GetNumberArray(this._defs, "attr_types");
-		this._attrFilterOPs = Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
-		this._attrCompareValues = Hashtable.GetNumberArray(this._defs, "attr_compare_values");
+		const defs = Defs.GetBullet(this._id);
+		this._radius = Hashtable.GetNumber(defs, "radius");
+		this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
+		this._moveType = Hashtable.GetNumber(defs, "move_type");
+		this._angleSpeed = Hashtable.GetNumber(defs, "angle_speed");
+		this._angleRadius = Hashtable.GetNumber(defs, "angle_radius");
+		this._lifeTime = Hashtable.GetNumber(defs, "life_time", -1);
+		this._destroyType = Hashtable.GetNumber(defs, "destroy_type");
+		this._delay = Hashtable.GetNumber(defs, "delay");
+		this._frequency = Hashtable.GetNumber(defs, "frequency");
+		this._maxCollisionPerTarget = Hashtable.GetNumber(defs, "max_collision_per_target", -1);
+		this._maxCollision = Hashtable.GetNumber(defs, "max_collision", -1);
+		this._targetType = Hashtable.GetNumber(defs, "target_type");
+		this._whipping = Hashtable.GetBool(defs, "whipping");
+		this._attrTypes = Hashtable.GetNumberArray(defs, "attr_types");
+		this._attrFilterOPs = Hashtable.GetNumberArray(defs, "attr_filter_ops");
+		this._attrCompareValues = Hashtable.GetNumberArray(defs, "attr_compare_values");
 		this._nextCollisionTime = this._delay;
 	}
 

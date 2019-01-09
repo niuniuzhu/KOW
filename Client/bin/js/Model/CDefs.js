@@ -4,6 +4,7 @@ define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (r
     class CDefs {
         static Init(json) {
             this._defs = json;
+            this._modelMap = Hashtable_1.Hashtable.GetMap(this._defs, "model");
             this._entityMap = Hashtable_1.Hashtable.GetMap(this._defs, "entity");
             this._bulletMap = Hashtable_1.Hashtable.GetMap(this._defs, "bullet");
             this._fxMap = Hashtable_1.Hashtable.GetMap(this._defs, "effect");
@@ -13,6 +14,9 @@ define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (r
         }
         static GetPreloads() {
             return Hashtable_1.Hashtable.GetArray(this._defs, "preloads");
+        }
+        static GetModel(id) {
+            return Hashtable_1.Hashtable.GetMap(this._modelMap, Consts_1.Consts.ASSETS_MODEL_PREFIX + id);
         }
         static GetEntity(id) {
             return Hashtable_1.Hashtable.GetMap(this._entityMap, Consts_1.Consts.ASSETS_ENTITY_PREFIX + id);

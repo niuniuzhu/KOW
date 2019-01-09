@@ -80,9 +80,8 @@ export class LoadingState extends SceneState {
 		for (let i = 0; i < count; ++i) {
 			const playerInfo = battleInfo.playerInfos[i];
 			//压入角色资源
-			urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
+			urls.push({ url: "res/roles/" + Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
 		}
-
 		//压入地图资源
 		urls.push({ url: "res/ui/assets.bin", type: AssetType.Binary });
 		urls.push({ url: "res/ui/assets_atlas0.png", type: AssetType.Image });

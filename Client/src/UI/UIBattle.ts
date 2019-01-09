@@ -1,13 +1,12 @@
 import { Global } from "../Global";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { FrameAciontManager } from "../Model/FrameActionManager";
+import { EAttr } from "../Model/Logic/Attribute";
+import { VChampion } from "../Model/View/VChampion";
 import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
-import { EAttr } from "../Model/Logic/Attribute";
-import { Logger } from "../RC/Utils/Logger";
-import { VChampion } from "../Model/View/VChampion";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
@@ -149,7 +148,6 @@ export class UIBattle implements IUIModule {
 				const tf = target.team == 0 ? this._time0 : this._time1;
 				const t = target.gladiatorTime < 0 ? 0 : target.gladiatorTime;
 				tf.text = "" + Math.floor(t * 0.001);
-				Logger.Log(tf.text);
 				break;
 		}
 	}

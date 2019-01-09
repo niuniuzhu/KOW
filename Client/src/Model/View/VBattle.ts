@@ -7,13 +7,15 @@ import { UIEvent } from "../BattleEvent/UIEvent";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
 import { Camera } from "./Camera";
+import { GraphicManager } from "./GraphicManager";
 import { PopTextType } from "./HUD";
 import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
 
 export class VBattle {
 	private _mapID: number = 0;
-	private readonly _camera: Camera;
+	private readonly _camera: Camera = new Camera();
+	private readonly _graphicManager: GraphicManager = new GraphicManager();
 
 	private readonly _champions: VChampion[] = [];
 	private readonly _idToChampion: Map<string, VChampion> = new Map<string, VChampion>();
@@ -22,12 +24,12 @@ export class VBattle {
 
 	private _root: fairygui.GComponent;
 	private _logicFrame: number;
-	private _def: Hashtable;
 	private _destroied: boolean = false;
 
-	constructor() {
-		this._camera = new Camera();
-	}
+	public get mapID(): number { return this._mapID; }
+	public get camera(): Camera { return this._camera; }
+	public get graphicManager(): GraphicManager { return this._graphicManager; }
+
 
 	/**
 	 * 设置战场信息
@@ -41,10 +43,10 @@ export class VBattle {
 		this._destroied = false;
 		this._mapID = battleInfo.mapID
 		//加载配置
-		this._def = Defs.GetMap(this._mapID);
+		const def = Defs.GetMap(this._mapID);
 
-		this._camera.SetBounds(Hashtable.GetNumber(this._def, "width") * Consts.LOGIC_TO_PIXEL_RATIO,
-			Hashtable.GetNumber(this._def, "height") * Consts.LOGIC_TO_PIXEL_RATIO);
+		this._camera.SetBounds(Hashtable.GetNumber(def, "width") * Consts.LOGIC_TO_PIXEL_RATIO,
+			Hashtable.GetNumber(def, "height") * Consts.LOGIC_TO_PIXEL_RATIO);
 
 		this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
 		this._root.touchable = false;
@@ -75,9 +77,10 @@ export class VBattle {
 		this._champions.splice(0);
 		this._idToChampion.clear();
 
+		this._graphicManager.Dispose();
+
 		this._root.dispose();
 		this._root = null;
-		this._def = null;
 		this._logicFrame = 0;
 	}
 

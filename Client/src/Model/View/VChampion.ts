@@ -95,7 +95,11 @@ export class VChampion extends VEntity {
 		const cdefs = CDefs.GetEntity(this._id);
 
 		//加载动画数据
-		this._animationProxy.Init(cdefs);
+		const modelID = Hashtable.GetNumber(cdefs, "model", -1);
+		if (modelID >= 0) {
+			this._animationProxy = this._battle.graphicManager.Get(modelID);
+			this._root.addChild(this._animationProxy);
+		}
 
 		const skillsDef = Hashtable.GetNumberArray(defs, "skills");
 		for (const sid of skillsDef) {

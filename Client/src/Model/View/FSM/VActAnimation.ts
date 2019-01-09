@@ -16,7 +16,7 @@ export class VActAnimation extends VEntityStateAction {
 	protected OnEnter(param: any): void {
 		super.OnEnter(param);
 		const owner = (<VEntityState>this.state).owner;
-		if (owner.animationProxy.available) {
+		if (owner.animationProxy != null && owner.animationProxy.available) {
 			//播放动画
 			if (this._animationID >= 0) {
 				let timeScale = 1;

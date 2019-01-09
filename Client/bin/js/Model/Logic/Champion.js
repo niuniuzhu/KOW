@@ -37,31 +37,28 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.name = params.name;
         }
         LoadDefs() {
-            this._defs = Defs_1.Defs.GetEntity(this._id);
-        }
-        OnInit() {
-            super.OnInit();
-            this._radius = Hashtable_1.Hashtable.GetNumber(this._defs, "radius");
-            this._moveSpeed = Hashtable_1.Hashtable.GetNumber(this._defs, "move_speed");
-            const skillsDef = Hashtable_1.Hashtable.GetNumberArray(this._defs, "skills");
+            const defs = Defs_1.Defs.GetEntity(this._id);
+            this._radius = Hashtable_1.Hashtable.GetNumber(defs, "radius");
+            this._moveSpeed = Hashtable_1.Hashtable.GetNumber(defs, "move_speed");
+            const skillsDef = Hashtable_1.Hashtable.GetNumberArray(defs, "skills");
             if (skillsDef != null) { }
             for (const sid of skillsDef) {
                 const skill = new Skill_1.Skill();
                 skill.Init(sid);
                 this._skills.push(skill);
             }
-            const statesDef = Hashtable_1.Hashtable.GetMap(this._defs, "states");
+            const statesDef = Hashtable_1.Hashtable.GetMap(defs, "states");
             if (statesDef != null) {
                 for (const type in statesDef) {
                     this._fsm.AddState(new EntityState_1.EntityState(Number.parseInt(type), this));
                 }
                 this._fsm.Init(statesDef);
-                this._fsm.ChangeState(Hashtable_1.Hashtable.GetNumber(this._defs, "default_state"));
+                this._fsm.ChangeState(Hashtable_1.Hashtable.GetNumber(defs, "default_state"));
             }
-            this.hp = this.mhp = Hashtable_1.Hashtable.GetNumber(this._defs, "mhp");
-            this.mp = this.mmp = Hashtable_1.Hashtable.GetNumber(this._defs, "mmp");
-            this.atk = Hashtable_1.Hashtable.GetNumber(this._defs, "atk");
-            this.def = Hashtable_1.Hashtable.GetNumber(this._defs, "def");
+            this.hp = this.mhp = Hashtable_1.Hashtable.GetNumber(defs, "mhp");
+            this.mp = this.mmp = Hashtable_1.Hashtable.GetNumber(defs, "mmp");
+            this.atk = Hashtable_1.Hashtable.GetNumber(defs, "atk");
+            this.def = Hashtable_1.Hashtable.GetNumber(defs, "def");
         }
         EncodeSnapshot(writer) {
             super.EncodeSnapshot(writer);

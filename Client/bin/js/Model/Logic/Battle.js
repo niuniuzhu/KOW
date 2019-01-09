@@ -9,6 +9,8 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._timeout = 0;
             this._mapID = 0;
             this._frame = 0;
+            this._bornPoses = [];
+            this._bornDirs = [];
             this._destroied = false;
             this._markToEnd = false;
             this._frameActionGroups = new Queue_1.default();
@@ -46,19 +48,30 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._logicElapsed = 0;
             this._realElapsed = 0;
             this._markToEnd = false;
-            this._def = Defs_1.Defs.GetMap(this._mapID);
-            const bWidth = Hashtable_1.Hashtable.GetNumber(this._def, "width");
-            const bHeight = Hashtable_1.Hashtable.GetNumber(this._def, "height");
+            const defs = Defs_1.Defs.GetMap(this._mapID);
+            let arr = Hashtable_1.Hashtable.GetArray(defs, "born_pos");
+            let count = arr.length;
+            for (let i = 0; i < count; i++) {
+                const pi = arr[i];
+                this._bornPoses.push(new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(pi[0]), FMathUtils_1.FMathUtils.ToFixed(pi[1])));
+            }
+            arr = Hashtable_1.Hashtable.GetArray(defs, "born_dir");
+            count = arr.length;
+            for (let i = 0; i < count; i++) {
+                const pi = arr[i];
+                this._bornDirs.push(new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(pi[0]), FMathUtils_1.FMathUtils.ToFixed(pi[1])));
+            }
+            const bWidth = Hashtable_1.Hashtable.GetNumber(defs, "width");
+            const bHeight = Hashtable_1.Hashtable.GetNumber(defs, "height");
             this._bounds = new FRect_1.FRect(-FMathUtils_1.FMathUtils.Floor(bWidth * 0.5), -FMathUtils_1.FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
-            this._gladiatorTimeout = Hashtable_1.Hashtable.GetNumber(this._def, "gladiator_timeout");
-            this._gladiatorPos = Hashtable_1.Hashtable.GetFVec2(this._def, "gladiator_pos");
-            this._gladiatorRadius = Hashtable_1.Hashtable.GetNumber(this._def, "gladiator_radius");
+            this._gladiatorTimeout = Hashtable_1.Hashtable.GetNumber(defs, "gladiator_timeout");
+            this._gladiatorPos = Hashtable_1.Hashtable.GetFVec2(defs, "gladiator_pos");
+            this._gladiatorRadius = Hashtable_1.Hashtable.GetNumber(defs, "gladiator_radius");
         }
         Destroy() {
             if (this._destroied)
                 return;
             this._destroied = true;
-            this._def = null;
             this._bounds = null;
             this._frameActionGroups.clear();
             this._hitManager.Destroy();
@@ -257,22 +270,8 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             return Long.fromBits(id, rnd);
         }
         CreatePlayers(playerInfos) {
-            let arr = Hashtable_1.Hashtable.GetArray(this._def, "born_pos");
-            let count = arr.length;
-            const bornPoses = [];
-            for (let i = 0; i < count; i++) {
-                const pi = arr[i];
-                bornPoses.push(new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(pi[0]), FMathUtils_1.FMathUtils.ToFixed(pi[1])));
-            }
-            arr = Hashtable_1.Hashtable.GetArray(this._def, "born_dir");
-            count = arr.length;
-            const bornDirs = [];
-            for (let i = 0; i < count; i++) {
-                const pi = arr[i];
-                bornDirs.push(new FVec2_1.FVec2(FMathUtils_1.FMathUtils.ToFixed(pi[0]), FMathUtils_1.FMathUtils.ToFixed(pi[1])));
-            }
             const params = new Entity_1.EntityInitParams();
-            count = playerInfos.length;
+            const count = playerInfos.length;
             for (let i = 0; i < count; ++i) {
                 const playerInfo = playerInfos[i];
                 params.rid = playerInfo.gcNID;
@@ -280,12 +279,12 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 params.team = playerInfo.team;
                 params.name = playerInfo.name;
                 const player = this.CreateChampion(params);
-                if (player.team >= bornPoses.length ||
-                    player.team >= bornDirs.length) {
+                if (player.team >= this._bornPoses.length ||
+                    player.team >= this._bornDirs.length) {
                     throw new Error("invalid team:" + player.team + ", player:" + player.rid);
                 }
-                player.position.CopyFrom(bornPoses[player.team]);
-                player.direction.CopyFrom(bornDirs[player.team]);
+                player.position.CopyFrom(this._bornPoses[player.team]);
+                player.direction.CopyFrom(this._bornDirs[player.team]);
             }
         }
         CreateChampion(params) {

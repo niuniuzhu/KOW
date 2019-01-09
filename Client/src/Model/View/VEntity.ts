@@ -1,11 +1,10 @@
+import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
-import { Hashtable } from "../../RC/Utils/Hashtable";
 import { AnimationProxy } from "./AnimationProxy";
 import { VBattle } from "./VBattle";
-import { Consts } from "../../Consts";
 
 export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
@@ -45,18 +44,18 @@ export abstract class VEntity {
 	private _logicRot: number = 0;
 	private _markToDestroy: boolean;
 
-	private readonly _root = new fairygui.GComponent();
-	protected readonly _animationProxy: AnimationProxy = new AnimationProxy();
+	protected readonly _root = new fairygui.GComponent();
+	protected _animationProxy: AnimationProxy = null;
 
 	constructor(battle: VBattle) {
 		this._battle = battle;
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
-		this._root.addChild(this._animationProxy);
 		Global.graphic.entityRoot.addChild(this._root);
 	}
 
 	public Destroy(): void {
+		this._animationProxy = null;
 		this._root.dispose();
 	}
 

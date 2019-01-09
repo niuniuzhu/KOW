@@ -135,20 +135,15 @@ export class Champion extends Entity implements ISnapshotable {
 		this.team = params.team;
 		this.name = params.name;
 	}
-
-	protected LoadDefs(): void {
-		this._defs = Defs.GetEntity(this._id);
-	}
-
 	/**
 	 * 在初始化或解码快照后执行
 	 */
-	protected OnInit(): void {
-		super.OnInit();
-		this._radius = Hashtable.GetNumber(this._defs, "radius");
-		this._moveSpeed = Hashtable.GetNumber(this._defs, "move_speed");
+	protected LoadDefs(): void {
+		const defs = Defs.GetEntity(this._id);
+		this._radius = Hashtable.GetNumber(defs, "radius");
+		this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
 
-		const skillsDef = Hashtable.GetNumberArray(this._defs, "skills");
+		const skillsDef = Hashtable.GetNumberArray(defs, "skills");
 		if (skillsDef != null) { }
 		for (const sid of skillsDef) {
 			const skill = new Skill();
@@ -156,19 +151,19 @@ export class Champion extends Entity implements ISnapshotable {
 			this._skills.push(skill);
 		}
 
-		const statesDef = Hashtable.GetMap(this._defs, "states");
+		const statesDef = Hashtable.GetMap(defs, "states");
 		if (statesDef != null) {
 			for (const type in statesDef) {
 				this._fsm.AddState(new EntityState(Number.parseInt(type), this));
 			}
 			this._fsm.Init(statesDef);
-			this._fsm.ChangeState(Hashtable.GetNumber(this._defs, "default_state"));
+			this._fsm.ChangeState(Hashtable.GetNumber(defs, "default_state"));
 		}
 
-		this.hp = this.mhp = Hashtable.GetNumber(this._defs, "mhp");
-		this.mp = this.mmp = Hashtable.GetNumber(this._defs, "mmp");
-		this.atk = Hashtable.GetNumber(this._defs, "atk");
-		this.def = Hashtable.GetNumber(this._defs, "def");
+		this.hp = this.mhp = Hashtable.GetNumber(defs, "mhp");
+		this.mp = this.mmp = Hashtable.GetNumber(defs, "mmp");
+		this.atk = Hashtable.GetNumber(defs, "atk");
+		this.def = Hashtable.GetNumber(defs, "def");
 	}
 
 	/**

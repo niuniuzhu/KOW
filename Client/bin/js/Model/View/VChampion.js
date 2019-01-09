@@ -76,7 +76,11 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
         LoadDefs() {
             const defs = Defs_1.Defs.GetEntity(this._id);
             const cdefs = CDefs_1.CDefs.GetEntity(this._id);
-            this._animationProxy.Init(cdefs);
+            const modelID = Hashtable_1.Hashtable.GetNumber(cdefs, "model", -1);
+            if (modelID >= 0) {
+                this._animationProxy = this._battle.graphicManager.Get(modelID);
+                this._root.addChild(this._animationProxy);
+            }
             const skillsDef = Hashtable_1.Hashtable.GetNumberArray(defs, "skills");
             for (const sid of skillsDef) {
                 const skill = new Skill_1.Skill();

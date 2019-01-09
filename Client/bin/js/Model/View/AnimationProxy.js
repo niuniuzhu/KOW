@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, exports, Hashtable_1) {
+define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable", "../CDefs"], function (require, exports, Consts_1, Hashtable_1, CDefs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var AnimationPlayMode;
@@ -11,18 +11,12 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
     }
     exports.AnimationSetting = AnimationSetting;
     class AnimationProxy extends fairygui.GGraph {
-        constructor() {
-            super(...arguments);
+        constructor(id) {
+            super();
             this._aniSettings = new Map();
             this._playingID = -1;
-        }
-        get available() { return this._aniSettings != null && this._animation != null; }
-        get animation() { return this._animation; }
-        Init(def) {
-            const model = Hashtable_1.Hashtable.GetString(def, "model");
-            if (model == null) {
-                return;
-            }
+            const def = CDefs_1.CDefs.GetModel(id);
+            const model = Consts_1.Consts.ASSETS_MODEL_PREFIX + id;
             const aniDefs = Hashtable_1.Hashtable.GetMapArray(def, "animations");
             if (aniDefs == null) {
                 return;
@@ -49,17 +43,14 @@ define(["require", "exports", "../../RC/Utils/Hashtable"], function (require, ex
                 aniSetting.interval = Hashtable_1.Hashtable.GetNumber(aniDef, "interval");
                 this._aniSettings.set(id, aniSetting);
             }
-            const roleAni = new Laya.Animation();
-            roleAni.autoSize = true;
+            this._animation = new Laya.Animation();
+            this._animation.autoSize = true;
             this.setPivot(0.5, 0.5, true);
-            this.setNativeObject(roleAni);
-            this.setSize(roleAni.width, roleAni.height);
-            this._animation = roleAni;
-            const dAnimation = Hashtable_1.Hashtable.GetNumber(def, "defaule_animation");
-            if (dAnimation != null) {
-                this.Play(dAnimation, 0);
-            }
+            this.setNativeObject(this._animation);
+            this.setSize(this._animation.width, this._animation.height);
         }
+        get available() { return this._aniSettings != null && this._animation != null; }
+        get animation() { return this._animation; }
         Play(id, startFrame, timeScale = 1, force = false) {
             if (!this.available)
                 return;

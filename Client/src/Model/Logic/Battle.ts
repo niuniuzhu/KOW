@@ -48,7 +48,8 @@ export class Battle implements ISnapshotable {
 	private _logicElapsed: number;
 	private _realElapsed: number;
 	private _nextKeyFrame: number;
-	private _def: Hashtable;
+	private _bornPoses: FVec2[] = [];
+	private _bornDirs: FVec2[] = [];
 	private _bounds: FRect;
 	private _gladiatorTimeout: number;
 	private _gladiatorPos: FVec2;
@@ -88,14 +89,27 @@ export class Battle implements ISnapshotable {
 		this._realElapsed = 0;
 		this._markToEnd = false;
 
-		this._def = Defs.GetMap(this._mapID);
-		const bWidth = Hashtable.GetNumber(this._def, "width");
-		const bHeight = Hashtable.GetNumber(this._def, "height");
+		const defs = Defs.GetMap(this._mapID);
+		let arr = Hashtable.GetArray(defs, "born_pos");
+		let count = arr.length;
+		for (let i = 0; i < count; i++) {
+			const pi = <number[]>arr[i];
+			this._bornPoses.push(new FVec2(FMathUtils.ToFixed(pi[0]), FMathUtils.ToFixed(pi[1])));
+		}
+
+		arr = Hashtable.GetArray(defs, "born_dir");
+		count = arr.length;
+		for (let i = 0; i < count; i++) {
+			const pi = <number[]>arr[i];
+			this._bornDirs.push(new FVec2(FMathUtils.ToFixed(pi[0]), FMathUtils.ToFixed(pi[1])));
+		}
+		const bWidth = Hashtable.GetNumber(defs, "width");
+		const bHeight = Hashtable.GetNumber(defs, "height");
 		this._bounds = new FRect(-FMathUtils.Floor(bWidth * 0.5),
 			-FMathUtils.Floor(bHeight * 0.5), bWidth, bHeight);
-		this._gladiatorTimeout = Hashtable.GetNumber(this._def, "gladiator_timeout");
-		this._gladiatorPos = Hashtable.GetFVec2(this._def, "gladiator_pos");
-		this._gladiatorRadius = Hashtable.GetNumber(this._def, "gladiator_radius");
+		this._gladiatorTimeout = Hashtable.GetNumber(defs, "gladiator_timeout");
+		this._gladiatorPos = Hashtable.GetFVec2(defs, "gladiator_pos");
+		this._gladiatorRadius = Hashtable.GetNumber(defs, "gladiator_radius");
 	}
 
 	/**
@@ -105,7 +119,6 @@ export class Battle implements ISnapshotable {
 		if (this._destroied)
 			return;
 		this._destroied = true;
-		this._def = null;
 		this._bounds = null;
 		this._frameActionGroups.clear();
 		this._hitManager.Destroy();
@@ -397,24 +410,8 @@ export class Battle implements ISnapshotable {
 	 * @param playerInfos 玩家信息
 	 */
 	public CreatePlayers(playerInfos: Protos.ICS2BS_PlayerInfo[]): void {
-		let arr = Hashtable.GetArray(this._def, "born_pos");
-		let count = arr.length;
-		const bornPoses: FVec2[] = [];
-		for (let i = 0; i < count; i++) {
-			const pi = <number[]>arr[i];
-			bornPoses.push(new FVec2(FMathUtils.ToFixed(pi[0]), FMathUtils.ToFixed(pi[1])));
-		}
-
-		arr = Hashtable.GetArray(this._def, "born_dir");
-		count = arr.length;
-		const bornDirs: FVec2[] = [];
-		for (let i = 0; i < count; i++) {
-			const pi = <number[]>arr[i];
-			bornDirs.push(new FVec2(FMathUtils.ToFixed(pi[0]), FMathUtils.ToFixed(pi[1])));
-		}
-
 		const params = new EntityInitParams();
-		count = playerInfos.length;
+		const count = playerInfos.length;
 		for (let i = 0; i < count; ++i) {
 			const playerInfo = playerInfos[i];
 			params.rid = playerInfo.gcNID;
@@ -422,12 +419,12 @@ export class Battle implements ISnapshotable {
 			params.team = playerInfo.team;
 			params.name = playerInfo.name;
 			const player = this.CreateChampion(params);
-			if (player.team >= bornPoses.length ||
-				player.team >= bornDirs.length) {
+			if (player.team >= this._bornPoses.length ||
+				player.team >= this._bornDirs.length) {
 				throw new Error("invalid team:" + player.team + ", player:" + player.rid);
 			}
-			player.position.CopyFrom(bornPoses[player.team]);
-			player.direction.CopyFrom(bornDirs[player.team]);
+			player.position.CopyFrom(this._bornPoses[player.team]);
+			player.direction.CopyFrom(this._bornDirs[player.team]);
 		}
 	}
 
@@ -614,7 +611,6 @@ export class Battle implements ISnapshotable {
 			winTeam = (1 << 0) | (1 << 1);
 		}
 		if (winTeam != 0) {
-			Logger.Log("w:" + winTeam);
 			//记录一次快照
 			const writer = $protobuf.Writer.create();
 			this.EncodeSnapshot(writer);

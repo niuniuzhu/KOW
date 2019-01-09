@@ -10,7 +10,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateActi
         OnEnter(param) {
             super.OnEnter(param);
             const owner = this.state.owner;
-            if (owner.animationProxy.available) {
+            if (owner.animationProxy != null && owner.animationProxy.available) {
                 if (this._animationID >= 0) {
                     let timeScale = 1;
                     if (this._autoScaleTime) {

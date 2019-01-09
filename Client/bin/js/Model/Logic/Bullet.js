@@ -59,26 +59,23 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this.direction.CopyFrom(params.direction);
         }
         LoadDefs() {
-            this._defs = Defs_1.Defs.GetBullet(this._id);
-        }
-        OnInit() {
-            super.OnInit();
-            this._radius = Hashtable_1.Hashtable.GetNumber(this._defs, "radius");
-            this._moveSpeed = Hashtable_1.Hashtable.GetNumber(this._defs, "move_speed");
-            this._moveType = Hashtable_1.Hashtable.GetNumber(this._defs, "move_type");
-            this._angleSpeed = Hashtable_1.Hashtable.GetNumber(this._defs, "angle_speed");
-            this._angleRadius = Hashtable_1.Hashtable.GetNumber(this._defs, "angle_radius");
-            this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._defs, "life_time", -1);
-            this._destroyType = Hashtable_1.Hashtable.GetNumber(this._defs, "destroy_type");
-            this._delay = Hashtable_1.Hashtable.GetNumber(this._defs, "delay");
-            this._frequency = Hashtable_1.Hashtable.GetNumber(this._defs, "frequency");
-            this._maxCollisionPerTarget = Hashtable_1.Hashtable.GetNumber(this._defs, "max_collision_per_target", -1);
-            this._maxCollision = Hashtable_1.Hashtable.GetNumber(this._defs, "max_collision", -1);
-            this._targetType = Hashtable_1.Hashtable.GetNumber(this._defs, "target_type");
-            this._whipping = Hashtable_1.Hashtable.GetBool(this._defs, "whipping");
-            this._attrTypes = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_types");
-            this._attrFilterOPs = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_filter_ops");
-            this._attrCompareValues = Hashtable_1.Hashtable.GetNumberArray(this._defs, "attr_compare_values");
+            const defs = Defs_1.Defs.GetBullet(this._id);
+            this._radius = Hashtable_1.Hashtable.GetNumber(defs, "radius");
+            this._moveSpeed = Hashtable_1.Hashtable.GetNumber(defs, "move_speed");
+            this._moveType = Hashtable_1.Hashtable.GetNumber(defs, "move_type");
+            this._angleSpeed = Hashtable_1.Hashtable.GetNumber(defs, "angle_speed");
+            this._angleRadius = Hashtable_1.Hashtable.GetNumber(defs, "angle_radius");
+            this._lifeTime = Hashtable_1.Hashtable.GetNumber(defs, "life_time", -1);
+            this._destroyType = Hashtable_1.Hashtable.GetNumber(defs, "destroy_type");
+            this._delay = Hashtable_1.Hashtable.GetNumber(defs, "delay");
+            this._frequency = Hashtable_1.Hashtable.GetNumber(defs, "frequency");
+            this._maxCollisionPerTarget = Hashtable_1.Hashtable.GetNumber(defs, "max_collision_per_target", -1);
+            this._maxCollision = Hashtable_1.Hashtable.GetNumber(defs, "max_collision", -1);
+            this._targetType = Hashtable_1.Hashtable.GetNumber(defs, "target_type");
+            this._whipping = Hashtable_1.Hashtable.GetBool(defs, "whipping");
+            this._attrTypes = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_types");
+            this._attrFilterOPs = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_filter_ops");
+            this._attrCompareValues = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_compare_values");
             this._nextCollisionTime = this._delay;
         }
         EncodeSnapshot(writer) {

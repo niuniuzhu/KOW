@@ -1,7 +1,7 @@
+import { PriorityQueue } from "../../Collections/index";
+import { MathUtils } from "../../Math/MathUtils";
 import { GraphBase } from "./GraphBase";
 import { GraphEdge } from "./GraphEdge";
-import { MathUtils } from "../../Math/MathUtils";
-import { Dictionary, PriorityQueue } from "../../Collections/index";
 
 export class GraphSearcher {
 	public static MazeSearch(graph: GraphBase, start: number, maxStep: number, rndFunc: (min: number, max: number) => number): number[] {
@@ -66,13 +66,13 @@ export class GraphSearcher {
 	}
 
 	public static AStarSearch(graph: GraphBase, start: number, end: number): number[] {
-		let shortestPathPredecessors = new Dictionary<number, GraphEdge>();
-		let frontierPredecessors = new Dictionary<number, GraphEdge>();
+		let shortestPathPredecessors = new Map<number, GraphEdge>();
+		let frontierPredecessors = new Map<number, GraphEdge>();
 		let nodeQueue = new PriorityQueue<NumberPair>(NumberPair.NumberCompare);
-		let costToNode = new Dictionary<number, number>();
+		let costToNode = new Map<number, number>();
 
-		costToNode.setValue(start, 0);
-		frontierPredecessors.setValue(start, null);
+		costToNode.set(start, 0);
+		frontierPredecessors.set(start, null);
 
 		// Create an indexed priority queue of nodes. The nodes with the
 		// lowest estimated total cost to target via the node are positioned at the front.
@@ -85,8 +85,8 @@ export class GraphSearcher {
 			let nextClosestNode = nodeQueue.dequeue();
 
 			// move this node from the frontier to the spanning tree
-			let predecessor: GraphEdge = frontierPredecessors.getValue(nextClosestNode.first);
-			shortestPathPredecessors.setValue(nextClosestNode.first, predecessor);
+			let predecessor: GraphEdge = frontierPredecessors.get(nextClosestNode.first);
+			shortestPathPredecessors.set(nextClosestNode.first, predecessor);
 
 			// If the target has been found, return
 			if (end == nextClosestNode.first)
@@ -95,23 +95,23 @@ export class GraphSearcher {
 			// Now to test all the edges attached to this node
 			let edages = graph.GetNodeAt(nextClosestNode.first).edges;
 			for (let edge of edages) {
-				let totalCost = costToNode.getValue(nextClosestNode.first) + edge.cost;
+				let totalCost = costToNode.get(nextClosestNode.first) + edge.cost;
 				let estimatedTotalCostViaNode = totalCost + 0;// todo
 
 				// if the node has not been added to the frontier, add it and update the costs
-				if (!frontierPredecessors.containsKey(edge.to)) {
-					costToNode.setValue(edge.to, totalCost);
-					frontierPredecessors.setValue(edge.to, edge);
+				if (!frontierPredecessors.has(edge.to)) {
+					costToNode.set(edge.to, totalCost);
+					frontierPredecessors.set(edge.to, edge);
 					nodeQueue.enqueue(new NumberPair(edge.to, estimatedTotalCostViaNode));
 				}
 
 				// if this node is already on the frontier but the cost to get here
 				// is cheaper than has been found previously, update the node
 				// costs and frontier accordingly.
-				else if (totalCost < costToNode.getValue(edge.to) &&
-					!shortestPathPredecessors.containsKey(edge.to)) {
-					costToNode.setValue(edge.to, totalCost);
-					frontierPredecessors.setValue(edge.to, edge);
+				else if (totalCost < costToNode.get(edge.to) &&
+					!shortestPathPredecessors.has(edge.to)) {
+					costToNode.set(edge.to, totalCost);
+					frontierPredecessors.set(edge.to, edge);
 					nodeQueue.forEach((element) => {
 						if (element.first == edge.to) {
 							element.second = estimatedTotalCostViaNode;
@@ -125,8 +125,8 @@ export class GraphSearcher {
 
 		let pathList: number[] = [];
 		for (let node = end;
-			shortestPathPredecessors.getValue(node) != null;
-			node = shortestPathPredecessors.getValue(node).from)
+			shortestPathPredecessors.get(node) != null;
+			node = shortestPathPredecessors.get(node).from)
 			pathList.push(node);
 		pathList.push(start);
 		pathList.reverse();

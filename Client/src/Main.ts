@@ -1,3 +1,4 @@
+import { AssetsManager } from "./AssetsManager";
 import { Consts } from "./Consts";
 import { Global } from "./Global";
 import * as Long from "./Libs/long";
@@ -34,10 +35,7 @@ export class Main {
 	}
 
 	private ShowLogo(): void {
-		const urls = [];
-		urls.push({ url: "res/ui/logo.bin", type: Laya.Loader.BUFFER });
-		urls.push({ url: "res/ui/logo_atlas0.png", type: Laya.Loader.IMAGE });
-		Laya.loader.load(urls, Laya.Handler.create(this, () => {
+		AssetsManager.LoadUIPacket("logo", 1, this, () => {
 			Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
 			fairygui.UIPackage.addPackage("res/ui/logo");
 			const logoRoot = fairygui.UIPackage.createObject("logo", "Main").asCom;
@@ -51,11 +49,11 @@ export class Main {
 				this.CheckPreloadComplete();
 			}), 1, 0, 0, -1);
 
-			Preloader.Load(() => {
+			Preloader.Load(this, () => {
 				this._preloadComplete = true;
 				this.CheckPreloadComplete();
 			});
-		}));
+		});
 	}
 
 	private CheckPreloadComplete(): void {

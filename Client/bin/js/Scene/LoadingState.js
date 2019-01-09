@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Model/BattleInfo", "../Net/ProtoHelper", "../RC/Utils/Logger", "./SceneManager", "./SceneState"], function (require, exports, Consts_1, Global_1, protos_1, BattleInfo_1, ProtoHelper_1, Logger_1, SceneManager_1, SceneState_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Model/BattleInfo", "../Net/ProtoHelper", "../RC/Utils/Logger", "./SceneManager", "./SceneState", "../AssetsManager"], function (require, exports, Consts_1, Global_1, protos_1, BattleInfo_1, ProtoHelper_1, Logger_1, SceneManager_1, SceneState_1, AssetsManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoadingState extends SceneState_1.SceneState {
@@ -50,18 +50,18 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Mo
                 const count = battleInfo.playerInfos.length;
                 for (let i = 0; i < count; ++i) {
                     const playerInfo = battleInfo.playerInfos[i];
-                    urls.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: Laya.Loader.ATLAS });
+                    urls.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: AssetsManager_1.AssetType.Atlas });
                 }
-                urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
-                urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
-                Laya.loader.load(urls, Laya.Handler.create(this, () => {
+                urls.push({ url: "res/ui/assets.bin", type: AssetsManager_1.AssetType.Binary });
+                urls.push({ url: "res/ui/assets_atlas0.png", type: AssetsManager_1.AssetType.Image });
+                AssetsManager_1.AssetsManager.LoadBatch(urls, this, () => {
                     this._ui.OnLoadComplete();
                     fairygui.UIPackage.addPackage("res/ui/assets");
                     this._assetsLoadComplete = true;
                     this.InitBattle();
-                }), new laya.utils.Handler(this, p => {
+                }, p => {
                     this._ui.OnLoadProgress(p);
-                }));
+                });
             }
         }
         InitBattle() {

@@ -1,3 +1,4 @@
+import { AssetsManager, AssetType } from "../AssetsManager";
 import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
@@ -84,20 +85,20 @@ export class LoadingState extends SceneState {
 			for (let i = 0; i < count; ++i) {
 				const playerInfo = battleInfo.playerInfos[i];
 				//压入角色资源
-				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: Laya.Loader.ATLAS });
+				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
 			}
 
 			//压入地图资源
-			urls.push({ url: "res/ui/assets.bin", type: Laya.Loader.BUFFER });
-			urls.push({ url: "res/ui/assets_atlas0.png", type: Laya.Loader.IMAGE });
-			Laya.loader.load(urls, Laya.Handler.create(this, () => {
+			urls.push({ url: "res/ui/assets.bin", type: AssetType.Binary });
+			urls.push({ url: "res/ui/assets_atlas0.png", type: AssetType.Image });
+			AssetsManager.LoadBatch(urls, this, () => {
 				this._ui.OnLoadComplete();
 				fairygui.UIPackage.addPackage("res/ui/assets");
 				this._assetsLoadComplete = true;
 				this.InitBattle();
-			}), new laya.utils.Handler(this, p => {
+			}, p => {
 				this._ui.OnLoadProgress(p);
-			}));
+			});
 		}
 	}
 

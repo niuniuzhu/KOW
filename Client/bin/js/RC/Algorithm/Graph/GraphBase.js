@@ -1,9 +1,9 @@
-define(["require", "exports", "./GraphNode", "../../Collections/Index"], function (require, exports, GraphNode_1, Index_1) {
+define(["require", "exports", "./GraphNode"], function (require, exports, GraphNode_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class GraphBase {
         constructor(size) {
-            this._idToNodes = new Index_1.Dictionary();
+            this._idToNodes = new Map();
             let ns = [];
             for (let i = 0; i < size; i++)
                 ns[i] = new GraphNode_1.GraphNode(i);
@@ -14,11 +14,11 @@ define(["require", "exports", "./GraphNode", "../../Collections/Index"], functio
             this._nodes = value;
             this._idToNodes.clear();
             for (let node of this._nodes) {
-                this._idToNodes.setValue(node.index, node);
+                this._idToNodes.set(node.index, node);
             }
         }
         GetNodeAt(index) {
-            return this._idToNodes.getValue(index);
+            return this._idToNodes.get(index);
         }
         Foreach(loopFunc) {
             for (let node of this._nodes)

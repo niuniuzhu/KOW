@@ -1,9 +1,8 @@
 import { GraphNode } from "./GraphNode";
-import { Dictionary } from "../../Collections/Index";
 
 export class GraphBase {
 	private _nodes: GraphNode[];
-	private readonly _idToNodes = new Dictionary<number, GraphNode>();
+	private readonly _idToNodes = new Map<number, GraphNode>();
 
 	public get size(): number { return this._nodes.length; }
 
@@ -11,7 +10,7 @@ export class GraphBase {
 		this._nodes = value;
 		this._idToNodes.clear();
 		for (let node of this._nodes) {
-			this._idToNodes.setValue(node.index, node);
+			this._idToNodes.set(node.index, node);
 		}
 	}
 
@@ -23,7 +22,7 @@ export class GraphBase {
 	}
 
 	public GetNodeAt(index: number): GraphNode {
-		return this._idToNodes.getValue(index);
+		return this._idToNodes.get(index);
 	}
 
 	public Foreach(loopFunc: (node: GraphNode) => void): void {

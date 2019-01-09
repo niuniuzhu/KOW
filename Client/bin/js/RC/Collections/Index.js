@@ -17,4 +17,4 @@ define(["require", "exports", "./arrays", "./Bag", "./BSTree", "./Dictionary", "
     exports.Stack = Stack_1.default;
     exports.util = _util;
 });
-//# sourceMappingURL=Index.js.map
+//# sourceMappingURL=index.js.map

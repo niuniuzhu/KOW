@@ -1,4 +1,4 @@
-define(["require", "exports", "./GraphEdge", "../../Math/MathUtils", "../../Collections/index"], function (require, exports, GraphEdge_1, MathUtils_1, index_1) {
+define(["require", "exports", "../../Collections/index", "../../Math/MathUtils", "./GraphEdge"], function (require, exports, index_1, MathUtils_1, GraphEdge_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class GraphSearcher {
@@ -48,32 +48,32 @@ define(["require", "exports", "./GraphEdge", "../../Math/MathUtils", "../../Coll
             return shortestPathPredecessors;
         }
         static AStarSearch(graph, start, end) {
-            let shortestPathPredecessors = new index_1.Dictionary();
-            let frontierPredecessors = new index_1.Dictionary();
+            let shortestPathPredecessors = new Map();
+            let frontierPredecessors = new Map();
             let nodeQueue = new index_1.PriorityQueue(NumberPair.NumberCompare);
-            let costToNode = new index_1.Dictionary();
-            costToNode.setValue(start, 0);
-            frontierPredecessors.setValue(start, null);
+            let costToNode = new Map();
+            costToNode.set(start, 0);
+            frontierPredecessors.set(start, null);
             nodeQueue.enqueue(new NumberPair(start, 0));
             while (nodeQueue.size() > 0) {
                 let nextClosestNode = nodeQueue.dequeue();
-                let predecessor = frontierPredecessors.getValue(nextClosestNode.first);
-                shortestPathPredecessors.setValue(nextClosestNode.first, predecessor);
+                let predecessor = frontierPredecessors.get(nextClosestNode.first);
+                shortestPathPredecessors.set(nextClosestNode.first, predecessor);
                 if (end == nextClosestNode.first)
                     break;
                 let edages = graph.GetNodeAt(nextClosestNode.first).edges;
                 for (let edge of edages) {
-                    let totalCost = costToNode.getValue(nextClosestNode.first) + edge.cost;
+                    let totalCost = costToNode.get(nextClosestNode.first) + edge.cost;
                     let estimatedTotalCostViaNode = totalCost + 0;
-                    if (!frontierPredecessors.containsKey(edge.to)) {
-                        costToNode.setValue(edge.to, totalCost);
-                        frontierPredecessors.setValue(edge.to, edge);
+                    if (!frontierPredecessors.has(edge.to)) {
+                        costToNode.set(edge.to, totalCost);
+                        frontierPredecessors.set(edge.to, edge);
                         nodeQueue.enqueue(new NumberPair(edge.to, estimatedTotalCostViaNode));
                     }
-                    else if (totalCost < costToNode.getValue(edge.to) &&
-                        !shortestPathPredecessors.containsKey(edge.to)) {
-                        costToNode.setValue(edge.to, totalCost);
-                        frontierPredecessors.setValue(edge.to, edge);
+                    else if (totalCost < costToNode.get(edge.to) &&
+                        !shortestPathPredecessors.has(edge.to)) {
+                        costToNode.set(edge.to, totalCost);
+                        frontierPredecessors.set(edge.to, edge);
                         nodeQueue.forEach((element) => {
                             if (element.first == edge.to) {
                                 element.second = estimatedTotalCostViaNode;
@@ -85,7 +85,7 @@ define(["require", "exports", "./GraphEdge", "../../Math/MathUtils", "../../Coll
                 }
             }
             let pathList = [];
-            for (let node = end; shortestPathPredecessors.getValue(node) != null; node = shortestPathPredecessors.getValue(node).from)
+            for (let node = end; shortestPathPredecessors.get(node) != null; node = shortestPathPredecessors.get(node).from)
                 pathList.push(node);
             pathList.push(start);
             pathList.reverse();

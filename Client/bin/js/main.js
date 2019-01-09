@@ -1,4 +1,4 @@
-define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, Consts_1, Global_1, Long, $protobuf, Preloader_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1) {
+define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, Preloader_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
@@ -17,10 +17,7 @@ define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/pro
             this.ShowLogo();
         }
         ShowLogo() {
-            const urls = [];
-            urls.push({ url: "res/ui/logo.bin", type: Laya.Loader.BUFFER });
-            urls.push({ url: "res/ui/logo_atlas0.png", type: Laya.Loader.IMAGE });
-            Laya.loader.load(urls, Laya.Handler.create(this, () => {
+            AssetsManager_1.AssetsManager.LoadUIPacket("logo", 1, this, () => {
                 Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
                 fairygui.UIPackage.addPackage("res/ui/logo");
                 const logoRoot = fairygui.UIPackage.createObject("logo", "Main").asCom;
@@ -32,11 +29,11 @@ define(["require", "exports", "./Consts", "./Global", "./Libs/long", "./Libs/pro
                     this._aniComplete = true;
                     this.CheckPreloadComplete();
                 }), 1, 0, 0, -1);
-                Preloader_1.Preloader.Load(() => {
+                Preloader_1.Preloader.Load(this, () => {
                     this._preloadComplete = true;
                     this.CheckPreloadComplete();
                 });
-            }));
+            });
         }
         CheckPreloadComplete() {
             if (this._aniComplete && this._preloadComplete) {

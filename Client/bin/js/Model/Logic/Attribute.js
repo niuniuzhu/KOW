@@ -9,12 +9,9 @@ define(["require", "exports"], function (require, exports) {
         EAttr[EAttr["MP"] = 3] = "MP";
         EAttr[EAttr["ATK"] = 4] = "ATK";
         EAttr[EAttr["DEF"] = 5] = "DEF";
-        EAttr[EAttr["MOVE_DIRECTION_X"] = 6] = "MOVE_DIRECTION_X";
-        EAttr[EAttr["MOVE_DIRECTION_Y"] = 7] = "MOVE_DIRECTION_Y";
-        EAttr[EAttr["INTERSET_VECTOR_X"] = 8] = "INTERSET_VECTOR_X";
-        EAttr[EAttr["INTERSET_VECTOR_Y"] = 9] = "INTERSET_VECTOR_Y";
-        EAttr[EAttr["VELOCITY"] = 10] = "VELOCITY";
-        EAttr[EAttr["GLADIATOR_TIME"] = 11] = "GLADIATOR_TIME";
+        EAttr[EAttr["MOVE_DIRECTION"] = 6] = "MOVE_DIRECTION";
+        EAttr[EAttr["VELOCITY"] = 7] = "VELOCITY";
+        EAttr[EAttr["GLADIATOR_TIME"] = 8] = "GLADIATOR_TIME";
         EAttr[EAttr["S_DISABLE_MOVE"] = 500] = "S_DISABLE_MOVE";
         EAttr[EAttr["S_DISABLE_TURN"] = 501] = "S_DISABLE_TURN";
         EAttr[EAttr["S_DISABLE_SKILL"] = 502] = "S_DISABLE_SKILL";

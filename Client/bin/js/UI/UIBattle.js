@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/FrameActionManager", "../RC/Math/Vec2", "./GestureState", "./Joystick"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Vec2_1, GestureState_1, Joystick_1) {
+define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/FrameActionManager", "../RC/Math/Vec2", "./GestureState", "./Joystick", "../Model/Logic/Attribute", "../RC/Utils/Logger"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Vec2_1, GestureState_1, Joystick_1, Attribute_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
@@ -18,6 +18,9 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._root.getChild("n1").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn2Release);
             this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
             this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
+            this._hpbar = this._root.getChild("n00").asProgress;
+            this._time0 = this._root.getChild("s00").asTextField;
+            this._time1 = this._root.getChild("s10").asTextField;
             this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
             this._endBattle.setSize(this._root.width, this._root.height);
             this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
@@ -41,22 +44,24 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._frameActionManager.Reset();
             UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
             UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
+            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));
         }
         Exit() {
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ENTITY_INIT);
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_END_BATTLE);
+            UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ATTR_CHANGE);
             this.GestureOff();
             if (this._endBattle.parent != null) {
                 this._endBattle.removeFromParent();
             }
+            this._root.removeFromParent();
         }
         GestureOff() {
             this._gestureState.OnTouchEnd();
+            this._touchID = -1;
             this._root.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
             this._root.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
             this._root.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
-            this._root.removeFromParent();
-            this._touchID = -1;
         }
         Update(dt) {
             this._gestureState.Update(dt);
@@ -65,7 +70,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
         OnResize(e) {
         }
         OnChampionInit(e) {
-            if (e.b0) {
+            if (this.IsSelf(e.champion)) {
                 this._root.getChild("n0").data = e.champion.GetSkillAt(0).id;
                 this._root.getChild("n1").data = e.champion.GetSkillAt(1).id;
             }
@@ -92,6 +97,27 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
                 confirmBtn.offClick(this, callback);
             });
             com.getChild("n7").asTextField.text = "" + honer;
+        }
+        OnAttrChange(e) {
+            const target = e.champion;
+            switch (e.attr) {
+                case Attribute_1.EAttr.HP:
+                case Attribute_1.EAttr.MHP:
+                    if (this.IsSelf(target)) {
+                        this._hpbar.max = target.mhp;
+                        this._hpbar.value = target.hp;
+                    }
+                    break;
+                case Attribute_1.EAttr.GLADIATOR_TIME:
+                    const tf = target.team == 0 ? this._time0 : this._time1;
+                    const t = target.gladiatorTime < 0 ? 0 : target.gladiatorTime;
+                    tf.text = "" + Math.floor(t * 0.001);
+                    Logger_1.Logger.Log(tf.text);
+                    break;
+            }
+        }
+        IsSelf(champion) {
+            return champion.rid.equals(Global_1.Global.battleManager.playerID);
         }
         OnSkillBtnPress(e) {
             if (this._markToEnd)

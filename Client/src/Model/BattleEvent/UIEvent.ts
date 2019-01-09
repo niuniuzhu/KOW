@@ -1,10 +1,12 @@
 import Stack from "../../RC/Collections/Stack";
 import { VChampion } from "../View/VChampion";
 import { BaseBattleEvent } from "./BaseBattleEvent";
+import { EAttr } from "../Logic/Attribute";
 
 export class UIEvent extends BaseBattleEvent {
 	public static readonly E_ENTITY_INIT: number = 101;
 	public static readonly E_END_BATTLE: number = 102;
+	public static readonly E_ATTR_CHANGE: number = 103;
 
 	private static readonly POOL: Stack<UIEvent> = new Stack<UIEvent>();
 	private static readonly HANDLERS: Map<number, (e: UIEvent) => void> = new Map<number, (e: UIEvent) => void>();
@@ -63,9 +65,20 @@ export class UIEvent extends BaseBattleEvent {
 		this.Invoke(e);
 	}
 
+	public static AttrChange(champion: VChampion, attr: EAttr, value: any): void {
+		let e = this.Get();
+		e._type = UIEvent.E_ATTR_CHANGE;
+		e.champion = champion;
+		e.attr = attr;
+		e.value = value;
+		this.Invoke(e);
+	}
+
 	public champion: VChampion;
 	public v0: number;
 	public v1: number;
 	public b0: boolean;
+	public attr: EAttr;
+	public value: any; s
 	public callback: () => void;
 }

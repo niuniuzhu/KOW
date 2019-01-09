@@ -2,9 +2,11 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/FSM/FSM";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { UIEvent } from "../BattleEvent/UIEvent";
 import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { VEntityState } from "../FSM/VEntityState";
+import { EAttr } from "../Logic/Attribute";
 import { Skill } from "../Skill";
 import { HUD } from "./HUD";
 import { VBattle } from "./VBattle";
@@ -22,26 +24,66 @@ export class VChampion extends VEntity {
 	//runtime properties
 	public team: number;
 	public name: string;
-	public hp: number;
-	public mhp: number;
-	public mp: number;
-	public mmp: number;
-	public atk: number;
-	public def: number;
-	public disableMove: number;
-	public disableTurn: number;
-	public disableSkill: number;
-	public disableCollision: number;
-	public supperArmor: number;
-	public invulnerAbility: number;
-	public readonly moveDirection: Vec2 = Vec2.zero;
-	public gladiatorTime: number;
+	private _hp: number;
+	private _mhp: number;
+	private _mp: number;
+	private _mmp: number;
+	private _atk: number;
+	private _def: number;
+	private _disableMove: number;
+	private _disableTurn: number;
+	private _disableSkill: number;
+	private _disableCollision: number;
+	private _supperArmor: number;
+	private _invulnerAbility: number;
+	private readonly _moveDirection: Vec2 = Vec2.zero;
+	private _gladiatorTime: number;
 	//临时属性
-	public t_hp_add: number = 0;
-	public t_mp_add: number = 0;
-	public t_atk_add: number = 0;
-	public t_def_add: number = 0;
-	public t_speed_add: number = 0;
+	private _t_hp_add: number = 0;
+	private _t_mp_add: number = 0;
+	private _t_atk_add: number = 0;
+	private _t_def_add: number = 0;
+	private _t_speed_add: number = 0;
+
+	public get hp(): number { return this._hp; }
+	public get mhp(): number { return this._mhp; }
+	public get mp(): number { return this._mp; }
+	public get mmp(): number { return this._mmp; }
+	public get atk(): number { return this._atk; }
+	public get def(): number { return this._def; }
+	public get disableMove(): number { return this._disableMove; }
+	public get disableTurn(): number { return this._disableTurn; }
+	public get disableSkill(): number { return this._disableSkill; }
+	public get disableCollision(): number { return this._disableCollision; }
+	public get supperArmor(): number { return this._supperArmor; }
+	public get invulnerAbility(): number { return this._invulnerAbility; }
+	public get moveDirection(): Vec2 { return this._moveDirection; }
+	public get gladiatorTime(): number { return this._gladiatorTime; }
+	public get t_hp_add(): number { return this._t_hp_add; }
+	public get t_mp_add(): number { return this._t_mp_add; }
+	public get t_atk_add(): number { return this._t_atk_add; }
+	public get t_def_add(): number { return this._t_def_add; }
+	public get t_speed_add(): number { return this._t_speed_add; }
+
+	public set hp(value: number) { if (this._hp == value) return; this._hp = value; this.OnAttrChange(EAttr.HP, value); }
+	public set mhp(value: number) { if (this._mhp == value) return; this._mhp = value; this.OnAttrChange(EAttr.MHP, value); }
+	public set mp(value: number) { if (this._mp == value) return; this._mp = value; this.OnAttrChange(EAttr.MP, value); }
+	public set mmp(value: number) { if (this._mmp == value) return; this._mmp = value; this.OnAttrChange(EAttr.MMP, value); }
+	public set atk(value: number) { if (this._atk == value) return; this._atk = value; this.OnAttrChange(EAttr.ATK, value); }
+	public set def(value: number) { if (this._def == value) return; this._def = value; this.OnAttrChange(EAttr.DEF, value); }
+	public set disableMove(value: number) { if (this._disableMove == value) return; this._disableMove = value; this.OnAttrChange(EAttr.S_DISABLE_MOVE, value); }
+	public set disableTurn(value: number) { if (this._disableTurn == value) return; this._disableTurn = value; this.OnAttrChange(EAttr.S_DISABLE_TURN, value); }
+	public set disableSkill(value: number) { if (this._disableSkill == value) return; this._disableSkill = value; this.OnAttrChange(EAttr.S_DISABLE_SKILL, value); }
+	public set disableCollision(value: number) { if (this._disableCollision == value) return; this._disableCollision = value; this.OnAttrChange(EAttr.S_DISABLE_COLLISION, value); }
+	public set supperArmor(value: number) { if (this._supperArmor == value) return; this._supperArmor = value; this.OnAttrChange(EAttr.S_SUPPER_ARMOR, value); }
+	public set invulnerAbility(value: number) { if (this._invulnerAbility == value) return; this._invulnerAbility = value; this.OnAttrChange(EAttr.S_INVULNER_ABILITY, value); }
+	public set moveDirection(value: Vec2) { if (this._moveDirection.EqualsTo(value)) return; this._moveDirection.CopyFrom(value); this.OnAttrChange(EAttr.MOVE_DIRECTION, value); }
+	public set gladiatorTime(value: number) { if (this._gladiatorTime == value) return; this._gladiatorTime = value; this.OnAttrChange(EAttr.GLADIATOR_TIME, value); }
+	public set t_hp_add(value: number) { if (this._t_hp_add == value) return; this._t_hp_add = value; this.OnAttrChange(EAttr.S_HP_ADD, value); }
+	public set t_mp_add(value: number) { if (this._t_mp_add == value) return; this._t_mp_add = value; this.OnAttrChange(EAttr.S_MP_ADD, value); }
+	public set t_atk_add(value: number) { if (this._t_atk_add == value) return; this._t_atk_add = value; this.OnAttrChange(EAttr.S_ATK_ADD, value); }
+	public set t_def_add(value: number) { if (this._t_def_add == value) return; this._t_def_add = value; this.OnAttrChange(EAttr.S_DEF_ADD, value); }
+	public set t_speed_add(value: number) { if (this._t_speed_add == value) return; this._t_speed_add = value; this.OnAttrChange(EAttr.S_SPEED_ADD, value); }
 
 	constructor(battle: VBattle) {
 		super(battle);
@@ -71,6 +113,10 @@ export class VChampion extends VEntity {
 		}
 	}
 
+	private OnAttrChange(attr: EAttr, value: any): void {
+		UIEvent.AttrChange(this, attr, value);
+	}
+
 	public Update(dt: number): void {
 		super.Update(dt);
 		this._hud.Update(dt);
@@ -92,7 +138,7 @@ export class VChampion extends VEntity {
 		this.disableCollision = reader.int32();
 		this.supperArmor = reader.int32();
 		this.invulnerAbility = reader.int32();
-		this.moveDirection.Set(reader.double(), reader.double());
+		this.moveDirection = new Vec2(reader.double(), reader.double());
 		this.gladiatorTime = reader.int32();
 		this.t_hp_add = reader.int32();
 		this.t_mp_add = reader.int32();

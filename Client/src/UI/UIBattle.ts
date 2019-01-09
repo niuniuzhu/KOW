@@ -5,11 +5,17 @@ import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
+import { EAttr } from "../Model/Logic/Attribute";
+import { Logger } from "../RC/Utils/Logger";
+import { VChampion } from "../Model/View/VChampion";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
 
 	private readonly _root: fairygui.GComponent;
+	private readonly _hpbar: fairygui.GProgressBar;
+	private readonly _time0: fairygui.GTextField;
+	private readonly _time1: fairygui.GTextField;
 	private readonly _endBattle: fairygui.GComponent;
 	private readonly _gestureState: GestureState = new GestureState();
 	private readonly _frameActionManager: FrameAciontManager = new FrameAciontManager();
@@ -30,6 +36,10 @@ export class UIBattle implements IUIModule {
 		this._root.getChild("n1").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn2Release);
 		this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
+
+		this._hpbar = this._root.getChild("n00").asProgress;
+		this._time0 = this._root.getChild("s00").asTextField;
+		this._time1 = this._root.getChild("s10").asTextField;
 
 		this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
 		this._endBattle.setSize(this._root.width, this._root.height);
@@ -58,26 +68,28 @@ export class UIBattle implements IUIModule {
 
 		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
 		UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
+		UIEvent.AddListener(UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));
 	}
 
 	public Exit(): void {
 		UIEvent.RemoveListener(UIEvent.E_ENTITY_INIT);
 		UIEvent.RemoveListener(UIEvent.E_END_BATTLE);
+		UIEvent.RemoveListener(UIEvent.E_ATTR_CHANGE);
 
 		this.GestureOff();
 
 		if (this._endBattle.parent != null) {
 			this._endBattle.removeFromParent();
 		}
+		this._root.removeFromParent();
 	}
 
 	private GestureOff(): void {
 		this._gestureState.OnTouchEnd();
+		this._touchID = -1;
 		this._root.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
 		this._root.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
 		this._root.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
-		this._root.removeFromParent();
-		this._touchID = -1;
 	}
 
 	public Update(dt: number): void {
@@ -90,7 +102,7 @@ export class UIBattle implements IUIModule {
 
 	private OnChampionInit(e: UIEvent): void {
 		//检查是否玩家自己
-		if (e.b0) {
+		if (this.IsSelf(e.champion)) {
 			this._root.getChild("n0").data = e.champion.GetSkillAt(0).id;
 			this._root.getChild("n1").data = e.champion.GetSkillAt(1).id;
 		}
@@ -120,6 +132,30 @@ export class UIBattle implements IUIModule {
 			confirmBtn.offClick(this, callback);
 		});
 		com.getChild("n7").asTextField.text = "" + honer;
+	}
+
+	private OnAttrChange(e: UIEvent): void {
+		const target = e.champion;
+		switch (e.attr) {
+			case EAttr.HP:
+			case EAttr.MHP:
+				if (this.IsSelf(target)) {
+					this._hpbar.max = target.mhp;
+					this._hpbar.value = target.hp;
+				}
+				break;
+
+			case EAttr.GLADIATOR_TIME:
+				const tf = target.team == 0 ? this._time0 : this._time1;
+				const t = target.gladiatorTime < 0 ? 0 : target.gladiatorTime;
+				tf.text = "" + Math.floor(t * 0.001);
+				Logger.Log(tf.text);
+				break;
+		}
+	}
+
+	private IsSelf(champion: VChampion): boolean {
+		return champion.rid.equals(Global.battleManager.playerID);
 	}
 
 	private OnSkillBtnPress(e: laya.events.Event): void {

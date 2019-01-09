@@ -44,9 +44,18 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
             e.callback = callback;
             this.Invoke(e);
         }
+        static AttrChange(champion, attr, value) {
+            let e = this.Get();
+            e._type = UIEvent.E_ATTR_CHANGE;
+            e.champion = champion;
+            e.attr = attr;
+            e.value = value;
+            this.Invoke(e);
+        }
     }
     UIEvent.E_ENTITY_INIT = 101;
     UIEvent.E_END_BATTLE = 102;
+    UIEvent.E_ATTR_CHANGE = 103;
     UIEvent.POOL = new Stack_1.default();
     UIEvent.HANDLERS = new Map();
     exports.UIEvent = UIEvent;

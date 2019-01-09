@@ -1,15 +1,17 @@
 export class Graphic {
 	private _battleRoot: fairygui.GComponent;
 	private _mapRoot: fairygui.GComponent;
-	private _decalRoot: fairygui.GComponent;
+	private _lowEffectRoot: fairygui.GComponent;
 	private _entityRoot: fairygui.GComponent;
+	private _highEffectRoot: fairygui.GComponent;
 	private _hudRoot: fairygui.GComponent;
 	private _uiRoot: fairygui.GComponent;
 
 	public get battleRoot(): fairygui.GComponent { return this._battleRoot; }
 	public get mapRoot(): fairygui.GComponent { return this._mapRoot; }
-	public get decalRoot(): fairygui.GComponent { return this._decalRoot; }
+	public get lowEffectRoot(): fairygui.GComponent { return this._lowEffectRoot; }
 	public get entityRoot(): fairygui.GComponent { return this._entityRoot; }
+	public get highEffectRoot(): fairygui.GComponent { return this._highEffectRoot; }
 	public get hudRoot(): fairygui.GComponent { return this._hudRoot; }
 	public get uiRoot(): fairygui.GComponent { return this._uiRoot; }
 
@@ -31,15 +33,20 @@ export class Graphic {
 		this._mapRoot.setSize(0, 0);
 		this._battleRoot.addChild(this._mapRoot);
 
-		this._decalRoot = new fairygui.GComponent();
-		this._decalRoot.name = "decal_root";
-		this._decalRoot.setSize(0, 0);
-		this._battleRoot.addChild(this._decalRoot);
+		this._lowEffectRoot = new fairygui.GComponent();
+		this._lowEffectRoot.name = "low_effect_root";
+		this._lowEffectRoot.setSize(0, 0);
+		this._battleRoot.addChild(this._lowEffectRoot);
 
 		this._entityRoot = new fairygui.GComponent();
 		this._entityRoot.name = "entity_root";
 		this._entityRoot.setSize(0, 0);
 		this._battleRoot.addChild(this._entityRoot);
+
+		this._highEffectRoot = new fairygui.GComponent();
+		this._highEffectRoot.name = "high_effect_root";
+		this._highEffectRoot.setSize(0, 0);
+		this._battleRoot.addChild(this._highEffectRoot);
 
 		this._hudRoot = new fairygui.GComponent();
 		this._hudRoot.name = "hud_root";

@@ -325,6 +325,22 @@
 			"attr_types": [],
 			"attr_filter_ops": [],
 			"attr_compare_values": []
+		},
+		"b1": {
+			"move_type": 0,
+			"radius": 0.7,
+			"move_speed": 0,
+			"life_time": 100,
+			"destroy_type": 0,
+			"delay": 0,
+			"frequency": 1000, /*碰撞频率,单位毫秒*/
+			"max_collision_per_target": -1, /*与每个目标最大碰撞次数*/
+			"max_collision": -1, /*总碰撞次数*/
+			"target_type": 0,
+			"whipping": false, /*是否鞭尸*/
+			"attr_types": [],
+			"attr_filter_ops": [],
+			"attr_compare_values": []
 		}
 	}
 }

@@ -74,18 +74,16 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
         set t_speed_add(value) { if (this._t_speed_add == value)
             return; this._t_speed_add = value; this.OnAttrChange(Attribute_1.EAttr.S_SPEED_ADD, value); }
         LoadDefs() {
-            this._defs = Defs_1.Defs.GetEntity(this._id);
-            this._cdefs = CDefs_1.CDefs.GetEntity(this._id);
-        }
-        OnInit() {
-            super.OnInit();
-            const skillsDef = Hashtable_1.Hashtable.GetNumberArray(this._defs, "skills");
+            const defs = Defs_1.Defs.GetEntity(this._id);
+            const cdefs = CDefs_1.CDefs.GetEntity(this._id);
+            this._animationProxy.Init(cdefs);
+            const skillsDef = Hashtable_1.Hashtable.GetNumberArray(defs, "skills");
             for (const sid of skillsDef) {
                 const skill = new Skill_1.Skill();
                 skill.Init(sid);
                 this._skills.push(skill);
             }
-            const statesDef = Hashtable_1.Hashtable.GetMap(this._cdefs, "states");
+            const statesDef = Hashtable_1.Hashtable.GetMap(cdefs, "states");
             if (statesDef != null) {
                 for (const type in statesDef) {
                     const state = new VEntityState_1.VEntityState(Number.parseInt(type), this);

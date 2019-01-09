@@ -91,21 +91,20 @@ export class VChampion extends VEntity {
 	}
 
 	protected LoadDefs(): void {
-		this._defs = Defs.GetEntity(this._id);
-		this._cdefs = CDefs.GetEntity(this._id);
-	}
+		const defs = Defs.GetEntity(this._id);
+		const cdefs = CDefs.GetEntity(this._id);
 
-	protected OnInit(): void {
-		super.OnInit();
+		//加载动画数据
+		this._animationProxy.Init(cdefs);
 
-		const skillsDef = Hashtable.GetNumberArray(this._defs, "skills");
+		const skillsDef = Hashtable.GetNumberArray(defs, "skills");
 		for (const sid of skillsDef) {
 			const skill = new Skill();
 			skill.Init(sid);
 			this._skills.push(skill);
 		}
 
-		const statesDef = Hashtable.GetMap(this._cdefs, "states");
+		const statesDef = Hashtable.GetMap(cdefs, "states");
 		if (statesDef != null) {
 			for (const type in statesDef) {
 				const state = new VEntityState(Number.parseInt(type), this);

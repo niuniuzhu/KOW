@@ -127,6 +127,29 @@
 		}
 	},
 	"bullet": {
-		"b0": {}
+		"b0": {
+			"hit_effect": 0,
+			"hit_fx_delay": 0,
+			"hit_fx_follow_type": 0,
+			"hit_fx_destroy_type": 0
+		},
+		"b1": {
+			"hit_hit_effect": 1,
+			"hit_fx_delay": 0,
+			"hit_fx_follow_type": 0,
+			"hit_fx_destroy_type": 0
+		}
+	},
+	"effect": {
+		"fx0": {
+			"name": "zhuaji",
+			"length": 6,
+			"layer": 1
+		},
+		"fx1": {
+			"name": "dazhao",
+			"length": 6,
+			"layer": 1
+		}
 	}
 }

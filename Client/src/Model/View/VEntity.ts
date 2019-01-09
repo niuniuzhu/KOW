@@ -10,8 +10,6 @@ import { Consts } from "../../Consts";
 export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
 	public get id(): number { return this._id; }
-	public get defs(): Hashtable { return this._defs; }
-	public get cdefs(): Hashtable { return this._cdefs; }
 	public get root(): fairygui.GComponent { return this._root; }
 	public get animationProxy(): AnimationProxy { return this._animationProxy; }
 	public get markToDestroy(): boolean { return this._markToDestroy; }
@@ -39,8 +37,6 @@ export abstract class VEntity {
 	protected readonly _battle: VBattle;
 	protected _rid: Long;
 	protected _id: number;
-	protected _defs: Hashtable;
-	protected _cdefs: Hashtable;
 
 	private readonly _position: Vec2 = Vec2.zero;
 	private readonly _worldPosition: Vec2 = Vec2.zero;
@@ -50,12 +46,13 @@ export abstract class VEntity {
 	private _markToDestroy: boolean;
 
 	private readonly _root = new fairygui.GComponent();
-	private readonly _animationProxy: AnimationProxy = new AnimationProxy();
+	protected readonly _animationProxy: AnimationProxy = new AnimationProxy();
 
 	constructor(battle: VBattle) {
 		this._battle = battle;
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
+		this._root.addChild(this._animationProxy);
 		Global.graphic.entityRoot.addChild(this._root);
 	}
 
@@ -81,12 +78,6 @@ export abstract class VEntity {
 
 	protected abstract LoadDefs(): void;
 
-	protected OnInit(): void {
-		//加载动画数据
-		this._animationProxy.Init(this._cdefs);
-		this._root.addChild(this._animationProxy);
-	}
-
 	/**
 	 * 解码快照
 	 */
@@ -96,7 +87,6 @@ export abstract class VEntity {
 		this._id = reader.int32();
 		if (isNew) {
 			this.LoadDefs();
-			this.OnInit();
 		}
 		this._markToDestroy = reader.bool();
 

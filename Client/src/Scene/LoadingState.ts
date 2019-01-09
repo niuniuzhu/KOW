@@ -15,7 +15,6 @@ import { SceneState } from "./SceneState";
 export class LoadingState extends SceneState {
 	private readonly _ui: UILoading;
 	private readonly _battleInfo: BattleInfo;
-	private _assetsLoadComplete: boolean;
 
 	/**
 	 * 构造函数
@@ -76,30 +75,24 @@ export class LoadingState extends SceneState {
 	 * 读取资源载入内存
 	 */
 	private LoadAssets(battleInfo: BattleInfo): void {
-		if (this._assetsLoadComplete) {
-			this.InitBattle();
+		const urls = [];
+		const count = battleInfo.playerInfos.length;
+		for (let i = 0; i < count; ++i) {
+			const playerInfo = battleInfo.playerInfos[i];
+			//压入角色资源
+			urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
 		}
-		else {
-			const urls = [];
-			const count = battleInfo.playerInfos.length;
-			for (let i = 0; i < count; ++i) {
-				const playerInfo = battleInfo.playerInfos[i];
-				//压入角色资源
-				urls.push({ url: "res/roles/" + Consts.ASSETS_ENTITY_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
-			}
 
-			//压入地图资源
-			urls.push({ url: "res/ui/assets.bin", type: AssetType.Binary });
-			urls.push({ url: "res/ui/assets_atlas0.png", type: AssetType.Image });
-			AssetsManager.LoadBatch(urls, this, () => {
-				this._ui.OnLoadComplete();
-				fairygui.UIPackage.addPackage("res/ui/assets");
-				this._assetsLoadComplete = true;
-				this.InitBattle();
-			}, p => {
-				this._ui.OnLoadProgress(p);
-			});
-		}
+		//压入地图资源
+		urls.push({ url: "res/ui/assets.bin", type: AssetType.Binary });
+		urls.push({ url: "res/ui/assets_atlas0.png", type: AssetType.Image });
+		AssetsManager.LoadBatch(urls, this, () => {
+			this._ui.OnLoadComplete();
+			fairygui.UIPackage.addPackage("res/ui/assets");
+			this.InitBattle();
+		}, p => {
+			this._ui.OnLoadProgress(p);
+		});
 	}
 
 	/**

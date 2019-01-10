@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../BattleEvent/SyncEvent"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1, SyncEvent_1) {
+define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../BattleEvent/SyncEvent", "../../RC/Utils/Logger"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1, SyncEvent_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -84,6 +84,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             writer.int32(this._skillID);
             writer.int32(this._time);
             writer.int32(this._nextCollisionTime);
+            Logger_1.Logger.Log("encode:" + this._nextCollisionTime);
             writer.int32(this._collisionCount);
             const count = this._targetToCollisionCount.size;
             writer.int32(count);
@@ -98,6 +99,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._skillID = reader.int32();
             this._time = reader.int32();
             this._nextCollisionTime = reader.int32();
+            Logger_1.Logger.Log("decode:" + this._nextCollisionTime);
             this._collisionCount = reader.int32();
             const count = reader.int32();
             for (let i = 0; i < count; ++i) {
@@ -105,12 +107,11 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             }
         }
         Update(dt) {
-            super.Update(dt);
-            this.MoveStep(dt);
             switch (this._destroyType) {
                 case DestroyType.Life:
                     if (this._time >= this._lifeTime) {
                         this._markToDestroy = true;
+                        return;
                     }
                     break;
                 case DestroyType.Caster:
@@ -120,6 +121,8 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                 case DestroyType.Collsion:
                     break;
             }
+            super.Update(dt);
+            this.MoveStep(dt);
             this._time += dt;
         }
         MoveStep(dt) {
@@ -157,7 +160,9 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                     if (this._maxCollisionPerTarget >= 0 &&
                         count == this._maxCollisionPerTarget)
                         continue;
-                    SyncEvent_1.SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
+                    if (!target.battle.chase) {
+                        SyncEvent_1.SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
+                    }
                     this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
                     hit = true;
                     ++this._collisionCount;
@@ -166,7 +171,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             }
             this._targets1.splice(0);
             this._targets2.splice(0);
-            this._nextCollisionTime = this._time + this._frequency;
+            this._nextCollisionTime = this._time + this._frequency - (this._time - this._nextCollisionTime);
             if (hit && this._destroyType == DestroyType.Collsion) {
                 this._markToDestroy = true;
             }

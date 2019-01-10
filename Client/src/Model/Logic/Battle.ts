@@ -44,6 +44,8 @@ export class Battle implements ISnapshotable {
 	public get random(): FRandom { return this._random; }
 	public get hitManager(): HitManager { return this._hitManager; }
 
+	public chase: boolean = false;
+
 	private _msPerFrame: number;
 	private _logicElapsed: number;
 	private _realElapsed: number;
@@ -145,7 +147,7 @@ export class Battle implements ISnapshotable {
 	 */
 	public Update(dt: number): void {
 		//追帧
-		this.Chase(this._frameActionGroups, true, true);
+		this.Chase(this._frameActionGroups);
 
 		this._realElapsed = FMathUtils.Add(this._realElapsed, dt);
 		if (this.frame < this._nextKeyFrame) {
@@ -155,7 +157,7 @@ export class Battle implements ISnapshotable {
 				if (this.frame >= this._nextKeyFrame)
 					break;
 
-				this.UpdateLogic(this._msPerFrame, true, true);
+				this.UpdateLogic(this._msPerFrame);
 				this._realElapsed = 0;
 				this._logicElapsed = FMathUtils.Sub(this._logicElapsed, this._msPerFrame);
 			}
@@ -166,7 +168,7 @@ export class Battle implements ISnapshotable {
 	 * 更新逻辑帧
 	 * @param dt 上一帧到当前帧流逝的时间
 	 */
-	private UpdateLogic(dt: number, updateView: boolean, commitSnapshot: boolean): void {
+	private UpdateLogic(dt: number): void {
 		++this._frame;
 
 		//update champions
@@ -202,7 +204,7 @@ export class Battle implements ISnapshotable {
 		}
 
 		//sync to view
-		if (updateView) {
+		if (!this.chase) {
 			this.SyncToView();
 		}
 
@@ -254,7 +256,7 @@ export class Battle implements ISnapshotable {
 		this.CheckBattleEnd();
 
 		//判断是否需要提交快照数据
-		if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
+		if (!this.chase && (this._frame % this._snapshotStep) == 0) {
 			const writer = $protobuf.Writer.create();
 			this.EncodeSnapshot(writer);
 			const data = writer.finish();
@@ -382,14 +384,14 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 追赶服务端帧数
 	 */
-	public Chase(frameActionGroups: Queue<FrameActionGroup>, updateView: boolean, commitSnapshot: boolean): void {
+	public Chase(frameActionGroups: Queue<FrameActionGroup>): void {
 		if (frameActionGroups == null)
 			return;
 		while (!frameActionGroups.isEmpty()) {
 			const frameActionGroup = frameActionGroups.dequeue();
 			let length = frameActionGroup.frame - this.frame;
 			while (length > 0) {
-				this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
+				this.UpdateLogic(this._msPerFrame);
 				--length;
 			}
 			this.ApplyFrameActionGroup(frameActionGroup);

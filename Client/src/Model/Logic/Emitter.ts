@@ -1,3 +1,4 @@
+import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
@@ -6,7 +7,6 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { Battle } from "./Battle";
 import { Champion } from "./Champion";
-import * as Long from "../../Libs/long";
 
 enum EmitType {
 	Center,
@@ -156,6 +156,7 @@ export class Emitter implements ISnapshotable {
 			case DestroyType.Life:
 				if (this._time >= this._lifeTime) {
 					this._markToDestroy = true;
+					return;
 				}
 				break;
 
@@ -170,7 +171,7 @@ export class Emitter implements ISnapshotable {
 		if (this._follow) {
 			this.UpdatePosition();
 		}
-		if (this._time > this._nextEmitTime) {
+		if (this._time >= this._nextEmitTime) {
 			//更新下次发射的时间,需补偿此次多出的时间
 			this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
 			//发射子弹

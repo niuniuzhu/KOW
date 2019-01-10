@@ -94,8 +94,11 @@ export class BattleManager {
 				const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
 				//处理历史记录
 				const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
+				//标记追帧状态
+				this._lBattle.chase = true;
 				//追赶服务端帧数
-				this._lBattle.Chase(frameActionGroups, false, false);
+				this._lBattle.Chase(frameActionGroups);
+				this._lBattle.chase = false;
 				//同步到表现层
 				this._lBattle.SyncInitToView();
 

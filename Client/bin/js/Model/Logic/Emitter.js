@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Defs", "../../Libs/long"], function (require, exports, FVec2_1, MathUtils_1, Hashtable_1, Defs_1, Long) {
+define(["require", "exports", "../../Libs/long", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils", "../../RC/Utils/Hashtable", "../Defs"], function (require, exports, Long, FVec2_1, MathUtils_1, Hashtable_1, Defs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var EmitType;
@@ -86,6 +86,7 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils",
                 case DestroyType.Life:
                     if (this._time >= this._lifeTime) {
                         this._markToDestroy = true;
+                        return;
                     }
                     break;
                 case DestroyType.Caster:
@@ -96,7 +97,7 @@ define(["require", "exports", "../../RC/FMath/FVec2", "../../RC/Math/MathUtils",
             if (this._follow) {
                 this.UpdatePosition();
             }
-            if (this._time > this._nextEmitTime) {
+            if (this._time >= this._nextEmitTime) {
                 this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
                 if (this._bulletCount < this._maxBulletCount) {
                     this.Emit();

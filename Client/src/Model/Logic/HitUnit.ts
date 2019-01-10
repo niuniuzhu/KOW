@@ -36,7 +36,9 @@ export class HitUnit implements ISnapshotable {
 		target.hp -= totalDmg;
 		target.hp = target.hp < 0 ? 0 : target.hp
 
-		SyncEvent.Hit(target.rid, totalDmg);
+		if (!caster.battle.chase) {
+			SyncEvent.Hit(target.rid, totalDmg);
+		}
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {

@@ -19,7 +19,9 @@ define(["require", "exports", "../BattleEvent/SyncEvent"], function (require, ex
             const totalDmg = commonDmg + skill.damage;
             target.hp -= totalDmg;
             target.hp = target.hp < 0 ? 0 : target.hp;
-            SyncEvent_1.SyncEvent.Hit(target.rid, totalDmg);
+            if (!caster.battle.chase) {
+                SyncEvent_1.SyncEvent.Hit(target.rid, totalDmg);
+            }
         }
         EncodeSnapshot(writer) {
             writer.uint64(this._casterID);

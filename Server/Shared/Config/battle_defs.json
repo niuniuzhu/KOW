@@ -12,7 +12,7 @@
 				0,
 				0
 			],
-			"gladiator_radius": 1.2, /*禁区半径*/
+			"gladiator_radius": 1.5, /*禁区半径*/
 			"max_players": 2,
 			"born_pos": [
 				[
@@ -38,7 +38,7 @@
 	},
 	"entity": {
 		"e0": {
-			"mhp": 100,
+			"mhp": 1000,
 			"mmp": 100,
 			"atk": 50,
 			"def": 0,

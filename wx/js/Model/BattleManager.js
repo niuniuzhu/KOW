@@ -57,7 +57,9 @@ export class BattleManager {
                     return;
                 const ret = msg;
                 const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
-                this._lBattle.Chase(frameActionGroups, false, false);
+                this._lBattle.chase = true;
+                this._lBattle.Chase(frameActionGroups);
+                this._lBattle.chase = false;
                 this._lBattle.SyncInitToView();
                 this._init = true;
                 Logger.Log("battle inited");

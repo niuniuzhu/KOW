@@ -23,6 +23,7 @@ export class UIBattle {
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._hpbar = this._root.getChild("n00").asProgress;
+        this._mpBar = this._root.getChild("n1").asCom.getChild("n3").asProgress;
         this._time0 = this._root.getChild("s00").asTextField;
         this._time1 = this._root.getChild("s10").asTextField;
         this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
@@ -110,6 +111,13 @@ export class UIBattle {
                 if (this.IsSelf(target)) {
                     this._hpbar.max = target.mhp;
                     this._hpbar.value = target.hp;
+                }
+                break;
+            case EAttr.MP:
+            case EAttr.MMP:
+                if (this.IsSelf(target)) {
+                    this._mpBar.max = target.mmp;
+                    this._mpBar.value = target.mp;
                 }
                 break;
             case EAttr.GLADIATOR_TIME:

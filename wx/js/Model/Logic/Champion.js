@@ -65,7 +65,9 @@ export class Champion extends Entity {
             this._fsm.ChangeState(Hashtable.GetNumber(defs, "default_state"));
         }
         this.hp = this.mhp = Hashtable.GetNumber(defs, "mhp");
-        this.mp = this.mmp = Hashtable.GetNumber(defs, "mmp");
+        this.mmp = Hashtable.GetNumber(defs, "mmp");
+        this.mp = 0;
+        this.mpRecover = Hashtable.GetNumber(defs, "mp_recover");
         this.atk = Hashtable.GetNumber(defs, "atk");
         this.def = Hashtable.GetNumber(defs, "def");
     }
@@ -75,8 +77,9 @@ export class Champion extends Entity {
         writer.string(this.name);
         writer.int32(this.hp);
         writer.int32(this.mhp);
-        writer.int32(this.mp);
+        writer.double(this.mp);
         writer.int32(this.mmp);
+        writer.int32(this.mpRecover);
         writer.int32(this.atk);
         writer.int32(this.def);
         writer.int32(this.disableMove);
@@ -107,8 +110,9 @@ export class Champion extends Entity {
         this.name = reader.string();
         this.hp = reader.int32();
         this.mhp = reader.int32();
-        this.mp = reader.int32();
+        this.mp = reader.double();
         this.mmp = reader.int32();
+        this.mpRecover = reader.int32();
         this.atk = reader.int32();
         this.def = reader.int32();
         this.disableMove = reader.int32();
@@ -138,8 +142,9 @@ export class Champion extends Entity {
         writer.string(this.name);
         writer.int32(this.hp);
         writer.int32(this.mhp);
-        writer.int32(this.mp);
+        writer.double(this.mp);
         writer.int32(this.mmp);
+        writer.int32(this.mpRecover);
         writer.int32(this.atk);
         writer.int32(this.def);
         writer.int32(this.disableMove);
@@ -180,6 +185,9 @@ export class Champion extends Entity {
     }
     Update(dt) {
         super.Update(dt);
+        let v = FMathUtils.Add(this.mp, FMathUtils.Mul(this.mpRecover, FMathUtils.Mul(0.001, dt)));
+        v = FMathUtils.Min(v, this.mmp);
+        this.SetAttr(EAttr.MP, v);
         this._intersectionCache.splice(0);
         this._fsm.Update(dt);
     }
@@ -266,6 +274,8 @@ export class Champion extends Entity {
         }
         if (isInGladiator) {
             this.gladiatorTime += dt;
+            if (this.gladiatorTime > this._battle.gladiatorTimeout)
+                this.gladiatorTime = this._battle.gladiatorTimeout;
         }
     }
     OnEnterGladiator() {
@@ -302,6 +312,24 @@ export class Champion extends Entity {
     }
     SetAttr(attr, value) {
         switch (attr) {
+            case EAttr.HP:
+                this.hp = value;
+                break;
+            case EAttr.MHP:
+                this.mhp = value;
+                break;
+            case EAttr.MP:
+                this.mp = value;
+                break;
+            case EAttr.MMP:
+                this.mmp = value;
+                break;
+            case EAttr.ATK:
+                this.atk = value;
+                break;
+            case EAttr.DEF:
+                this.def = value;
+                break;
             case EAttr.S_DISABLE_MOVE:
                 this.disableMove = value;
                 break;
@@ -342,6 +370,18 @@ export class Champion extends Entity {
     }
     GetAttr(attr) {
         switch (attr) {
+            case EAttr.HP:
+                return this.hp;
+            case EAttr.MHP:
+                return this.mhp;
+            case EAttr.MP:
+                return this.mp;
+            case EAttr.MMP:
+                return this.mmp;
+            case EAttr.ATK:
+                return this.atk;
+            case EAttr.DEF:
+                return this.def;
             case EAttr.S_DISABLE_MOVE:
                 return this.disableMove;
             case EAttr.S_DISABLE_TURN:

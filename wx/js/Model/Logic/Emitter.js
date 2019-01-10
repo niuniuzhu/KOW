@@ -1,8 +1,8 @@
+import * as Long from "../../Libs/long";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
-import * as Long from "../../Libs/long";
 var EmitType;
 (function (EmitType) {
     EmitType[EmitType["Center"] = 0] = "Center";
@@ -88,6 +88,7 @@ export class Emitter {
             case DestroyType.Life:
                 if (this._time >= this._lifeTime) {
                     this._markToDestroy = true;
+                    return;
                 }
                 break;
             case DestroyType.Caster:
@@ -98,7 +99,7 @@ export class Emitter {
         if (this._follow) {
             this.UpdatePosition();
         }
-        if (this._time > this._nextEmitTime) {
+        if (this._time >= this._nextEmitTime) {
             this._nextEmitTime = this._time + this._frequency - (this._time - this._nextEmitTime);
             if (this._bulletCount < this._maxBulletCount) {
                 this.Emit();

@@ -26,6 +26,7 @@ export class Battle {
         this._timeout = 0;
         this._mapID = 0;
         this._frame = 0;
+        this.chase = false;
         this._bornPoses = [];
         this._bornDirs = [];
         this._destroied = false;
@@ -106,20 +107,20 @@ export class Battle {
         this._idToBullet.clear();
     }
     Update(dt) {
-        this.Chase(this._frameActionGroups, true, true);
+        this.Chase(this._frameActionGroups);
         this._realElapsed = FMathUtils.Add(this._realElapsed, dt);
         if (this.frame < this._nextKeyFrame) {
             this._logicElapsed = FMathUtils.Add(this._logicElapsed, dt);
             while (this._logicElapsed >= this._msPerFrame) {
                 if (this.frame >= this._nextKeyFrame)
                     break;
-                this.UpdateLogic(this._msPerFrame, true, true);
+                this.UpdateLogic(this._msPerFrame);
                 this._realElapsed = 0;
                 this._logicElapsed = FMathUtils.Sub(this._logicElapsed, this._msPerFrame);
             }
         }
     }
-    UpdateLogic(dt, updateView, commitSnapshot) {
+    UpdateLogic(dt) {
         ++this._frame;
         for (let i = 0, count = this._champions.length; i < count; i++) {
             const champion = this._champions[i];
@@ -145,7 +146,7 @@ export class Battle {
             const bullet = this._bullets[i];
             bullet.Update(dt);
         }
-        if (updateView) {
+        if (!this.chase) {
             this.SyncToView();
         }
         for (let i = 0, count = this._bullets.length; i < count; i++) {
@@ -182,7 +183,7 @@ export class Battle {
             }
         }
         this.CheckBattleEnd();
-        if (commitSnapshot && (this._frame % this._snapshotStep) == 0) {
+        if (!this.chase && (this._frame % this._snapshotStep) == 0) {
             const writer = $protobuf.Writer.create();
             this.EncodeSnapshot(writer);
             const data = writer.finish();
@@ -268,14 +269,14 @@ export class Battle {
         const data = writer.finish();
         SyncEvent.Snapshot(data);
     }
-    Chase(frameActionGroups, updateView, commitSnapshot) {
+    Chase(frameActionGroups) {
         if (frameActionGroups == null)
             return;
         while (!frameActionGroups.isEmpty()) {
             const frameActionGroup = frameActionGroups.dequeue();
             let length = frameActionGroup.frame - this.frame;
             while (length > 0) {
-                this.UpdateLogic(this._msPerFrame, updateView, commitSnapshot);
+                this.UpdateLogic(this._msPerFrame);
                 --length;
             }
             this.ApplyFrameActionGroup(frameActionGroup);

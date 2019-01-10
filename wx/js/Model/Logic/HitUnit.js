@@ -1,4 +1,5 @@
 import { SyncEvent } from "../BattleEvent/SyncEvent";
+import { EAttr } from "./Attribute";
 export class HitUnit {
     constructor(manager) {
         this._manager = manager;
@@ -15,9 +16,13 @@ export class HitUnit {
         let commonDmg = caster.atk - target.def;
         commonDmg = commonDmg < 0 ? 0 : commonDmg;
         const totalDmg = commonDmg + skill.damage;
-        target.hp -= totalDmg;
-        target.hp = target.hp < 0 ? 0 : target.hp;
-        SyncEvent.Hit(target.rid, totalDmg);
+        let hp = target.GetAttr(EAttr.HP);
+        hp -= totalDmg;
+        hp = hp < 0 ? 0 : hp;
+        target.SetAttr(EAttr.HP, hp);
+        if (!caster.battle.chase) {
+            SyncEvent.Hit(target.rid, totalDmg);
+        }
     }
     EncodeSnapshot(writer) {
         writer.uint64(this._casterID);

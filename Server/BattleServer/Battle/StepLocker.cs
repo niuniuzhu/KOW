@@ -36,7 +36,7 @@
 				this._elapsed -= this._msPerFrame;
 
 				if ( this._frame % this.keyframeStep == 0 )
-					this._battle.OnKeyframe( this._frame, this._msPerFrame );
+					this._battle.OnKeyframe( this._frame, this._msPerFrame * this.keyframeStep );
 
 				this._battle.UpdateLogic( this._frame, this._msPerFrame );
 

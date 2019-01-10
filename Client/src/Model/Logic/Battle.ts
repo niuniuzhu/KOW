@@ -625,7 +625,7 @@ export class Battle implements ISnapshotable {
 
 			//发送协议
 			Global.connector.bsConnector.Send(Protos.GC2BS_EndBattle, msg);
-
+			
 			this._markToEnd = true;
 		}
 	}

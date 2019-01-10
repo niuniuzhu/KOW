@@ -438,6 +438,8 @@ export class Champion extends Entity implements ISnapshotable {
 		}
 		if (isInGladiator) {
 			this.gladiatorTime += dt;
+			if (this.gladiatorTime > this._battle.gladiatorTimeout)
+				this.gladiatorTime = this._battle.gladiatorTimeout;
 		}
 	}
 

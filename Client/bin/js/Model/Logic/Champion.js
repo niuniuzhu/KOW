@@ -257,6 +257,8 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             }
             if (isInGladiator) {
                 this.gladiatorTime += dt;
+                if (this.gladiatorTime > this._battle.gladiatorTimeout)
+                    this.gladiatorTime = this._battle.gladiatorTimeout;
             }
         }
         OnEnterGladiator() {

@@ -19,6 +19,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
             this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
             this._hpbar = this._root.getChild("n00").asProgress;
+            this._mpBar = this._root.getChild("n1").asCom.getChild("n3").asProgress;
             this._time0 = this._root.getChild("s00").asTextField;
             this._time1 = this._root.getChild("s10").asTextField;
             this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
@@ -106,6 +107,13 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
                     if (this.IsSelf(target)) {
                         this._hpbar.max = target.mhp;
                         this._hpbar.value = target.hp;
+                    }
+                    break;
+                case Attribute_1.EAttr.MP:
+                case Attribute_1.EAttr.MMP:
+                    if (this.IsSelf(target)) {
+                        this._mpBar.max = target.mmp;
+                        this._mpBar.value = target.mp;
                     }
                     break;
                 case Attribute_1.EAttr.GLADIATOR_TIME:

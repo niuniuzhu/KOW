@@ -10,6 +10,7 @@ import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { Logger } from "../../RC/Utils/Logger";
+import { EAttr } from "./Attribute";
 
 enum BulletMoveType {
 	Linear,
@@ -291,7 +292,7 @@ export class Bullet extends Entity implements ISnapshotable {
 					break;
 				case AttrFilter.Hp:
 					this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-						return t.hp;
+						return t.GetAttr(EAttr.HP);
 					}, v => v, v => v);
 					break;
 				case AttrFilter.Mp:

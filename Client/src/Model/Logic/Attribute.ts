@@ -3,6 +3,7 @@ export enum EAttr {
 	HP,
 	MMP,
 	MP,
+	MP_RECOVER,
 	ATK,
 	DEF,
 	MOVE_DIRECTION,

@@ -29,6 +29,7 @@ export class VChampion extends VEntity {
 	private _mhp: number;
 	private _mp: number;
 	private _mmp: number;
+	private _mpRecover: number;
 	private _atk: number;
 	private _def: number;
 	private _disableMove: number;
@@ -50,6 +51,7 @@ export class VChampion extends VEntity {
 	public get mhp(): number { return this._mhp; }
 	public get mp(): number { return this._mp; }
 	public get mmp(): number { return this._mmp; }
+	public get mpRecover(): number { return this._mpRecover; }
 	public get atk(): number { return this._atk; }
 	public get def(): number { return this._def; }
 	public get disableMove(): number { return this._disableMove; }
@@ -70,6 +72,7 @@ export class VChampion extends VEntity {
 	public set mhp(value: number) { if (this._mhp == value) return; this._mhp = value; this.OnAttrChange(EAttr.MHP, value); }
 	public set mp(value: number) { if (this._mp == value) return; this._mp = value; this.OnAttrChange(EAttr.MP, value); }
 	public set mmp(value: number) { if (this._mmp == value) return; this._mmp = value; this.OnAttrChange(EAttr.MMP, value); }
+	public set mpRecover(value: number) { if (this._mpRecover == value) return; this._mpRecover = value; this.OnAttrChange(EAttr.MP_RECOVER, value); }
 	public set atk(value: number) { if (this._atk == value) return; this._atk = value; this.OnAttrChange(EAttr.ATK, value); }
 	public set def(value: number) { if (this._def == value) return; this._def = value; this.OnAttrChange(EAttr.DEF, value); }
 	public set disableMove(value: number) { if (this._disableMove == value) return; this._disableMove = value; this.OnAttrChange(EAttr.S_DISABLE_MOVE, value); }
@@ -134,8 +137,9 @@ export class VChampion extends VEntity {
 		this.name = reader.string();
 		this.hp = reader.int32();
 		this.mhp = reader.int32();
-		this.mp = reader.int32();
+		this.mp = reader.double();
 		this.mmp = reader.int32();
+		this.mpRecover = reader.int32();
 		this.atk = reader.int32();
 		this.def = reader.int32();
 		this.disableMove = reader.int32();

@@ -1,4 +1,4 @@
-define(["require", "exports", "../BattleEvent/SyncEvent"], function (require, exports, SyncEvent_1) {
+define(["require", "exports", "../BattleEvent/SyncEvent", "./Attribute"], function (require, exports, SyncEvent_1, Attribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class HitUnit {
@@ -17,8 +17,10 @@ define(["require", "exports", "../BattleEvent/SyncEvent"], function (require, ex
             let commonDmg = caster.atk - target.def;
             commonDmg = commonDmg < 0 ? 0 : commonDmg;
             const totalDmg = commonDmg + skill.damage;
-            target.hp -= totalDmg;
-            target.hp = target.hp < 0 ? 0 : target.hp;
+            let hp = target.GetAttr(Attribute_1.EAttr.HP);
+            hp -= totalDmg;
+            hp = hp < 0 ? 0 : hp;
+            target.SetAttr(Attribute_1.EAttr.HP, hp);
             if (!caster.battle.chase) {
                 SyncEvent_1.SyncEvent.Hit(target.rid, totalDmg);
             }

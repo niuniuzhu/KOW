@@ -13,6 +13,7 @@ export class UIBattle implements IUIModule {
 
 	private readonly _root: fairygui.GComponent;
 	private readonly _hpbar: fairygui.GProgressBar;
+	private readonly _mpBar: fairygui.GProgressBar;
 	private readonly _time0: fairygui.GTextField;
 	private readonly _time1: fairygui.GTextField;
 	private readonly _endBattle: fairygui.GComponent;
@@ -37,6 +38,7 @@ export class UIBattle implements IUIModule {
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
 
 		this._hpbar = this._root.getChild("n00").asProgress;
+		this._mpBar = this._root.getChild("n1").asCom.getChild("n3").asProgress;
 		this._time0 = this._root.getChild("s00").asTextField;
 		this._time1 = this._root.getChild("s10").asTextField;
 
@@ -141,6 +143,14 @@ export class UIBattle implements IUIModule {
 				if (this.IsSelf(target)) {
 					this._hpbar.max = target.mhp;
 					this._hpbar.value = target.hp;
+				}
+				break;
+
+			case EAttr.MP:
+			case EAttr.MMP:
+				if (this.IsSelf(target)) {
+					this._mpBar.max = target.mmp;
+					this._mpBar.value = target.mp;
 				}
 				break;
 

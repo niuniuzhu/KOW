@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../BattleEvent/SyncEvent", "../../RC/Utils/Logger"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1, SyncEvent_1, Logger_1) {
+define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../Defs", "./Entity", "../BattleEvent/SyncEvent", "../../RC/Utils/Logger", "./Attribute"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, Defs_1, Entity_1, SyncEvent_1, Logger_1, Attribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -213,7 +213,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                         break;
                     case AttrFilter.Hp:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-                            return t.hp;
+                            return t.GetAttr(Attribute_1.EAttr.HP);
                         }, v => v, v => v);
                         break;
                     case AttrFilter.Mp:

@@ -30,11 +30,15 @@ namespace BattleServer.Battle.Model
 		///<summary>
 		/// 当前怒气
 		/// </summary>
-		public int mp;
+		public Fix64 mp;
 		///<summary>
 		/// 最大怒气
 		/// </summary>
 		public int mmp;
+		///<summary>
+		/// 怒气恢复值
+		/// </summary>
+		public int mpRecover;
 		///<summary>
 		/// 攻击力
 		/// </summary>
@@ -141,8 +145,9 @@ namespace BattleServer.Battle.Model
 			this.name = reader.ReadString();
 			this.hp = reader.ReadInt32();
 			this.mhp = reader.ReadInt32();
-			this.mp = reader.ReadInt32();
+			this.mp = ( Fix64 )reader.ReadDouble();
 			this.mmp = reader.ReadInt32();
+			this.mpRecover = reader.ReadInt32();
 			this.atk = reader.ReadInt32();
 			this.def = reader.ReadInt32();
 			this.disableMove = reader.ReadInt32();

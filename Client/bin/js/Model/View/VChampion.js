@@ -20,6 +20,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
         get mhp() { return this._mhp; }
         get mp() { return this._mp; }
         get mmp() { return this._mmp; }
+        get mpRecover() { return this._mpRecover; }
         get atk() { return this._atk; }
         get def() { return this._def; }
         get disableMove() { return this._disableMove; }
@@ -43,6 +44,8 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             return; this._mp = value; this.OnAttrChange(Attribute_1.EAttr.MP, value); }
         set mmp(value) { if (this._mmp == value)
             return; this._mmp = value; this.OnAttrChange(Attribute_1.EAttr.MMP, value); }
+        set mpRecover(value) { if (this._mpRecover == value)
+            return; this._mpRecover = value; this.OnAttrChange(Attribute_1.EAttr.MP_RECOVER, value); }
         set atk(value) { if (this._atk == value)
             return; this._atk = value; this.OnAttrChange(Attribute_1.EAttr.ATK, value); }
         set def(value) { if (this._def == value)
@@ -109,8 +112,9 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             this.name = reader.string();
             this.hp = reader.int32();
             this.mhp = reader.int32();
-            this.mp = reader.int32();
+            this.mp = reader.double();
             this.mmp = reader.int32();
+            this.mpRecover = reader.int32();
             this.atk = reader.int32();
             this.def = reader.int32();
             this.disableMove = reader.int32();

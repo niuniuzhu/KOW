@@ -2,6 +2,7 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { ISnapshotable } from "../ISnapshotable";
 import { HitManager } from "./HitManager";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
+import { EAttr } from "./Attribute";
 
 /**
  * 受击单元
@@ -33,8 +34,10 @@ export class HitUnit implements ISnapshotable {
 		const totalDmg = commonDmg + skill.damage;
 
 		//minus hp
-		target.hp -= totalDmg;
-		target.hp = target.hp < 0 ? 0 : target.hp
+		let hp = target.GetAttr(EAttr.HP);
+		hp -= totalDmg;
+		hp = hp < 0 ? 0 : hp
+		target.SetAttr(EAttr.HP, hp);
 
 		if (!caster.battle.chase) {
 			SyncEvent.Hit(target.rid, totalDmg);

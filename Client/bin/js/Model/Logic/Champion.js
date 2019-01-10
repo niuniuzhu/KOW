@@ -56,7 +56,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                 this._fsm.ChangeState(Hashtable_1.Hashtable.GetNumber(defs, "default_state"));
             }
             this.hp = this.mhp = Hashtable_1.Hashtable.GetNumber(defs, "mhp");
-            this.mp = this.mmp = Hashtable_1.Hashtable.GetNumber(defs, "mmp");
+            this.mmp = Hashtable_1.Hashtable.GetNumber(defs, "mmp");
+            this.mp = 0;
+            this.mpRecover = Hashtable_1.Hashtable.GetNumber(defs, "mp_recover");
             this.atk = Hashtable_1.Hashtable.GetNumber(defs, "atk");
             this.def = Hashtable_1.Hashtable.GetNumber(defs, "def");
         }
@@ -66,8 +68,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.string(this.name);
             writer.int32(this.hp);
             writer.int32(this.mhp);
-            writer.int32(this.mp);
+            writer.double(this.mp);
             writer.int32(this.mmp);
+            writer.int32(this.mpRecover);
             writer.int32(this.atk);
             writer.int32(this.def);
             writer.int32(this.disableMove);
@@ -98,8 +101,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.name = reader.string();
             this.hp = reader.int32();
             this.mhp = reader.int32();
-            this.mp = reader.int32();
+            this.mp = reader.double();
             this.mmp = reader.int32();
+            this.mpRecover = reader.int32();
             this.atk = reader.int32();
             this.def = reader.int32();
             this.disableMove = reader.int32();
@@ -129,8 +133,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             writer.string(this.name);
             writer.int32(this.hp);
             writer.int32(this.mhp);
-            writer.int32(this.mp);
+            writer.double(this.mp);
             writer.int32(this.mmp);
+            writer.int32(this.mpRecover);
             writer.int32(this.atk);
             writer.int32(this.def);
             writer.int32(this.disableMove);
@@ -171,6 +176,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         }
         Update(dt) {
             super.Update(dt);
+            let v = FMathUtils_1.FMathUtils.Add(this.mp, FMathUtils_1.FMathUtils.Mul(this.mpRecover, FMathUtils_1.FMathUtils.Mul(0.001, dt)));
+            v = FMathUtils_1.FMathUtils.Min(v, this.mmp);
+            this.SetAttr(Attribute_1.EAttr.MP, v);
             this._intersectionCache.splice(0);
             this._fsm.Update(dt);
         }
@@ -295,6 +303,24 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         }
         SetAttr(attr, value) {
             switch (attr) {
+                case Attribute_1.EAttr.HP:
+                    this.hp = value;
+                    break;
+                case Attribute_1.EAttr.MHP:
+                    this.mhp = value;
+                    break;
+                case Attribute_1.EAttr.MP:
+                    this.mp = value;
+                    break;
+                case Attribute_1.EAttr.MMP:
+                    this.mmp = value;
+                    break;
+                case Attribute_1.EAttr.ATK:
+                    this.atk = value;
+                    break;
+                case Attribute_1.EAttr.DEF:
+                    this.def = value;
+                    break;
                 case Attribute_1.EAttr.S_DISABLE_MOVE:
                     this.disableMove = value;
                     break;
@@ -335,6 +361,18 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         }
         GetAttr(attr) {
             switch (attr) {
+                case Attribute_1.EAttr.HP:
+                    return this.hp;
+                case Attribute_1.EAttr.MHP:
+                    return this.mhp;
+                case Attribute_1.EAttr.MP:
+                    return this.mp;
+                case Attribute_1.EAttr.MMP:
+                    return this.mmp;
+                case Attribute_1.EAttr.ATK:
+                    return this.atk;
+                case Attribute_1.EAttr.DEF:
+                    return this.def;
                 case Attribute_1.EAttr.S_DISABLE_MOVE:
                     return this.disableMove;
                 case Attribute_1.EAttr.S_DISABLE_TURN:

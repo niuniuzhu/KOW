@@ -14,9 +14,6 @@ define(["require", "exports", "../../../RC/Utils/ExpressionEvaluator", "../../..
             const intrpt = this.state.GetInterrupt(0);
             intrpt.duration = this._ee.evaluate(formula);
         }
-        OnUpdate(dt) {
-            super.OnUpdate(dt);
-        }
     }
     exports.ActSprint = ActSprint;
 });

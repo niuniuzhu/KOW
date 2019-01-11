@@ -7,6 +7,7 @@ import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
+import { Skill } from "../Model/Skill";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
@@ -14,6 +15,8 @@ export class UIBattle implements IUIModule {
 	private readonly _root: fairygui.GComponent;
 	private readonly _hpbar: fairygui.GProgressBar;
 	private readonly _mpBar: fairygui.GProgressBar;
+	private readonly _skillBtn0: fairygui.GComponent;
+	private readonly _skillBtn1: fairygui.GComponent;
 	private readonly _time0: fairygui.GTextField;
 	private readonly _time1: fairygui.GTextField;
 	private readonly _endBattle: fairygui.GComponent;
@@ -30,10 +33,12 @@ export class UIBattle implements IUIModule {
 
 		this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
 		this._root.name = "battle_main";
-		this._root.getChild("n0").on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtnPress);
-		this._root.getChild("n0").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtnRelease);
-		this._root.getChild("n1").on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn2Press);
-		this._root.getChild("n1").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn2Release);
+		this._skillBtn0 = this._root.getChild("n0").asCom;
+		this._skillBtn1 = this._root.getChild("n1").asCom;
+		this._skillBtn0.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn0Press);
+		this._skillBtn0.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn0Release);
+		this._skillBtn1.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn1Press);
+		this._skillBtn1.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn1Release);
 		this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
 
@@ -104,8 +109,8 @@ export class UIBattle implements IUIModule {
 	private OnChampionInit(e: UIEvent): void {
 		//检查是否玩家自己
 		if (this.IsSelf(e.champion)) {
-			this._root.getChild("n0").data = e.champion.GetSkillAt(0).id;
-			this._root.getChild("n1").data = e.champion.GetSkillAt(1).id;
+			this._skillBtn0.data = e.champion.GetSkillAt(0);
+			this._skillBtn1.data = e.champion.GetSkillAt(1);
 		}
 	}
 
@@ -151,6 +156,13 @@ export class UIBattle implements IUIModule {
 				if (this.IsSelf(target)) {
 					this._mpBar.max = target.mmp;
 					this._mpBar.value = target.mp;
+					//check mp
+					const skill0 = <Skill>this._skillBtn0.data;
+					this._skillBtn0.getChild("n2").grayed = target.mp < skill0.mpCost;
+					this._skillBtn0.touchable = target.mp >= skill0.mpCost;
+					const skill1 = <Skill>this._skillBtn1.data;
+					this._skillBtn1.getChild("n2").grayed = target.mp < skill1.mpCost;
+					this._skillBtn1.touchable = target.mp >= skill1.mpCost;
 				}
 				break;
 
@@ -166,28 +178,28 @@ export class UIBattle implements IUIModule {
 		return champion.rid.equals(Global.battleManager.playerID);
 	}
 
-	private OnSkillBtnPress(e: laya.events.Event): void {
+	private OnSkillBtn0Press(e: laya.events.Event): void {
 		if (this._markToEnd)
 			return;
 		e.stopPropagation();
 		this._frameActionManager.SetS1(true);
 	}
 
-	private OnSkillBtnRelease(e: laya.events.Event): void {
+	private OnSkillBtn0Release(e: laya.events.Event): void {
 		if (this._markToEnd)
 			return;
 		e.stopPropagation();
 		this._frameActionManager.SetS1(false);
 	}
 
-	private OnSkillBtn2Press(e: laya.events.Event): void {
+	private OnSkillBtn1Press(e: laya.events.Event): void {
 		if (this._markToEnd)
 			return;
 		e.stopPropagation();
 		this._frameActionManager.SetS2(true);
 	}
 
-	private OnSkillBtn2Release(e: laya.events.Event): void {
+	private OnSkillBtn1Release(e: laya.events.Event): void {
 		if (this._markToEnd)
 			return;
 		e.stopPropagation();

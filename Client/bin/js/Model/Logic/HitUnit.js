@@ -1,4 +1,4 @@
-define(["require", "exports", "../BattleEvent/SyncEvent", "./Attribute"], function (require, exports, SyncEvent_1, Attribute_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../BattleEvent/SyncEvent", "./Attribute"], function (require, exports, FMathUtils_1, SyncEvent_1, Attribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class HitUnit {
@@ -14,13 +14,14 @@ define(["require", "exports", "../BattleEvent/SyncEvent", "./Attribute"], functi
             const caster = this._manager.battle.GetChampion(this._casterID);
             const target = this._manager.battle.GetChampion(this._targetID);
             const skill = caster.GetSkill(this._skillID);
-            let commonDmg = caster.atk - target.def;
+            let commonDmg = FMathUtils_1.FMathUtils.Sub(caster.atk, target.def);
             commonDmg = commonDmg < 0 ? 0 : commonDmg;
-            const totalDmg = commonDmg + skill.damage;
+            const totalDmg = FMathUtils_1.FMathUtils.Add(commonDmg, skill.damage);
             let hp = target.GetAttr(Attribute_1.EAttr.HP);
             hp -= totalDmg;
             hp = hp < 0 ? 0 : hp;
             target.SetAttr(Attribute_1.EAttr.HP, hp);
+            target.SetAttr(Attribute_1.EAttr.MP, FMathUtils_1.FMathUtils.Add(target.mp, skill.mpAdd));
             if (!caster.battle.chase) {
                 SyncEvent_1.SyncEvent.Hit(target.rid, totalDmg);
             }

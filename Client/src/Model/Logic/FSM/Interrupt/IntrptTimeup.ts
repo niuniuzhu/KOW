@@ -20,7 +20,8 @@ export class IntrptTimeup extends IntrptBase implements ISnapshotable {
 	protected OnUpdate(dt: number): void {
 		const state = (<EntityState>this._state);
 		if (this.duration >= 0 &&
-			state.time >= this.duration) {
+			state.time >= this.duration &&
+			this.CheckFilter()) {
 			this.ChangeState();
 		}
 	}

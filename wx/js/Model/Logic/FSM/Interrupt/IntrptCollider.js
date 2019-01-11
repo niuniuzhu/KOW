@@ -44,6 +44,8 @@ export class IntrptCollider extends IntrptBase {
         }
     }
     DoCollision() {
-        this.ChangeState();
+        if (this.CheckFilter()) {
+            this.ChangeState();
+        }
     }
 }

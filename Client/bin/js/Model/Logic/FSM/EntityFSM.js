@@ -1,7 +1,11 @@
-define(["require", "exports", "../../../RC/FSM/FSM"], function (require, exports, FSM_1) {
+define(["require", "exports", "../../../RC/FSM/FSM", "./EntityStateContext"], function (require, exports, FSM_1, EntityStateContext_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityFSM extends FSM_1.FSM {
+        constructor() {
+            super(...arguments);
+            this.context = new EntityStateContext_1.EntityStateContext();
+        }
         get currentEntityState() { return this.currentState; }
         get previousEntityState() { return this.previousState; }
         get globalEntityState() { return this.globalState; }

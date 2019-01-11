@@ -1,3 +1,4 @@
+import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { EAttr } from "./Attribute";
 export class HitUnit {
@@ -13,13 +14,14 @@ export class HitUnit {
         const caster = this._manager.battle.GetChampion(this._casterID);
         const target = this._manager.battle.GetChampion(this._targetID);
         const skill = caster.GetSkill(this._skillID);
-        let commonDmg = caster.atk - target.def;
+        let commonDmg = FMathUtils.Sub(caster.atk, target.def);
         commonDmg = commonDmg < 0 ? 0 : commonDmg;
-        const totalDmg = commonDmg + skill.damage;
+        const totalDmg = FMathUtils.Add(commonDmg, skill.damage);
         let hp = target.GetAttr(EAttr.HP);
         hp -= totalDmg;
         hp = hp < 0 ? 0 : hp;
         target.SetAttr(EAttr.HP, hp);
+        target.SetAttr(EAttr.MP, FMathUtils.Add(target.mp, skill.mpAdd));
         if (!caster.battle.chase) {
             SyncEvent.Hit(target.rid, totalDmg);
         }

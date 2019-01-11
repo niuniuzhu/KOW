@@ -9,7 +9,8 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "./IntrptBase"],
         OnUpdate(dt) {
             const state = this._state;
             if (this.duration >= 0 &&
-                state.time >= this.duration) {
+                state.time >= this.duration &&
+                this.CheckFilter()) {
                 this.ChangeState();
             }
         }

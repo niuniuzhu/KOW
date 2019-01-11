@@ -35,7 +35,6 @@ export class IntrptInput extends IntrptBase implements ISnapshotable {
 	}
 
 	protected OnUpdate(dt: number): void {
-		super.OnUpdate(dt);
 		for (let i = 0; i < this._inputTypes.length; ++i) {
 			const inputType = this._inputTypes[i];
 			const triggerType = this._triggerTypes[i];
@@ -43,13 +42,13 @@ export class IntrptInput extends IntrptBase implements ISnapshotable {
 				continue;
 			const inputAgent = (<EntityState>this._state).owner.inputAgent;
 			//检测按键是否按下状态
-			if (inputAgent.GetInputState(inputType)) {
+			if (inputAgent.GetInputState(inputType) && this.CheckFilter()) {
 				this.ChangeState();
 			}
 		}
 	}
 
-	public HandleInput(type: InputType, press: boolean): void {
+	protected OnInput(type: InputType, press: boolean): void {
 		let meet = false;
 		if (this._and) {
 			for (let i = 0; i < this._inputTypes.length; ++i) {
@@ -82,7 +81,7 @@ export class IntrptInput extends IntrptBase implements ISnapshotable {
 				}
 			}
 		}
-		if (meet) {
+		if (meet && this.CheckFilter()) {
 			this.ChangeState();
 		}
 	}

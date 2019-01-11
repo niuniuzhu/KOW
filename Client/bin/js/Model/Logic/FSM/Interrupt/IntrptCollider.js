@@ -45,7 +45,9 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "./IntrptBase"],
             }
         }
         DoCollision() {
-            this.ChangeState();
+            if (this.CheckFilter()) {
+                this.ChangeState();
+            }
         }
     }
     exports.IntrptCollider = IntrptCollider;

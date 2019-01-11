@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.Battle.Model.Champion);
-			Utils.BeginObjectRegister(type, L, translator, 0, 2, 36, 34);
+			Utils.BeginObjectRegister(type, L, translator, 0, 2, 37, 35);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "DecodeSnapshot", _m_DecodeSnapshot);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Dump", _m_Dump);
@@ -34,6 +34,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "mhp", _g_get_mhp);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "mp", _g_get_mp);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "mmp", _g_get_mmp);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "mpRecover", _g_get_mpRecover);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "atk", _g_get_atk);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "def", _g_get_def);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "disableMove", _g_get_disableMove);
@@ -70,6 +71,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "mhp", _s_set_mhp);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "mp", _s_set_mp);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "mmp", _s_set_mmp);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "mpRecover", _s_set_mpRecover);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "atk", _s_set_atk);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "def", _s_set_def);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "disableMove", _s_set_disableMove);
@@ -282,7 +284,7 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
-                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.mp);
+                translator.Push(L, __cl_gen_to_be_invoked.mp);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }
@@ -297,6 +299,20 @@ namespace XLua.CSObjectWrap
 			
                 BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
                 LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.mmp);
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_mpRecover(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
+                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.mpRecover);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }
@@ -778,7 +794,8 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
-                __cl_gen_to_be_invoked.mp = LuaAPI.xlua_tointeger(L, 2);
+                Core.FMath.Fix64 __cl_gen_value;translator.Get(L, 2, out __cl_gen_value);
+				__cl_gen_to_be_invoked.mp = __cl_gen_value;
             
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
@@ -794,6 +811,21 @@ namespace XLua.CSObjectWrap
 			
                 BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
                 __cl_gen_to_be_invoked.mmp = LuaAPI.xlua_tointeger(L, 2);
+            
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_mpRecover(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
+                __cl_gen_to_be_invoked.mpRecover = LuaAPI.xlua_tointeger(L, 2);
             
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);

@@ -288,11 +288,11 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             if (this.disableSkill > 0)
                 return false;
             const skill = this.GetSkill(sid);
-            if (skill == null)
+            if (skill == null || this.mp < skill.mpCost)
                 return false;
-            if (!this.fsm.HasState(skill.connectedState))
+            if (!this.fsm.HasState(skill.connectState))
                 return false;
-            this.fsm.ChangeState(skill.connectedState);
+            this.fsm.ChangeState(skill.connectState);
             return true;
         }
         FrameAction(frameAction) {

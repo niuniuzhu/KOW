@@ -3,7 +3,6 @@ import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
-import { UIEvent } from "../BattleEvent/UIEvent";
 import { Defs } from "../Defs";
 import { Camera } from "./Camera";
 import { EffectPool } from "./EffectPool";
@@ -118,7 +117,6 @@ export class VBattle {
                 if (isSelf) {
                     this._camera.lookAt = champion;
                 }
-                UIEvent.ChampionInit(champion);
             }
             else {
                 champion.DecodeSync(rid, reader, false);

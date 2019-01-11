@@ -1,4 +1,8 @@
 import * as Long from "../../../Libs/long";
+import { FMathUtils } from "../../../RC/FMath/FMathUtils";
+import { Logger } from "../../../RC/Utils/Logger";
+import { StateType } from "../../StateEnums";
+import { EAttr } from "../Attribute";
 import { EntityStateAction } from "./EntityStateAction";
 export class ActAttack extends EntityStateAction {
     constructor() {
@@ -20,20 +24,18 @@ export class ActAttack extends EntityStateAction {
         super.OnEnter(param);
         const owner = this.state.owner;
         this._casterID = owner.rid;
-        for (let i = 0; i < owner.numSkills; ++i) {
-            const skill = owner.GetSkillAt(i);
-            if (skill.connectedState == this.state.type) {
-                this._skillID = skill.id;
-            }
+        this._skillID = owner.fsm.context.skillID;
+        const skill = owner.GetSkill(this._skillID);
+        if (skill == null) {
+            Logger.Warn(`can not find skill:${this._skillID}`);
+            owner.fsm.ChangeState(StateType.Idle);
         }
     }
     OnTrigger() {
         super.OnTrigger();
-        if (this._skillID == -1) {
-            return;
-        }
         const owner = this.state.owner;
         const skill = owner.GetSkill(this._skillID);
+        owner.SetAttr(EAttr.MP, FMathUtils.Sub(owner.mp, skill.mpCost));
         owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
     }
     Dump() {

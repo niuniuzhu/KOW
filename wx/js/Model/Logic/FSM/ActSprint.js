@@ -15,7 +15,4 @@ export class ActSprint extends ActVelocity {
         const intrpt = this.state.GetInterrupt(0);
         intrpt.duration = this._ee.evaluate(formula);
     }
-    OnUpdate(dt) {
-        super.OnUpdate(dt);
-    }
 }

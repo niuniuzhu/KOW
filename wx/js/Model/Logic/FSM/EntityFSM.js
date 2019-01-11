@@ -1,5 +1,10 @@
 import { FSM } from "../../../RC/FSM/FSM";
+import { EntityStateContext } from "./EntityStateContext";
 export class EntityFSM extends FSM {
+    constructor() {
+        super(...arguments);
+        this.context = new EntityStateContext();
+    }
     get currentEntityState() { return this.currentState; }
     get previousEntityState() { return this.previousState; }
     get globalEntityState() { return this.globalState; }

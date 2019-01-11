@@ -71,6 +71,8 @@ export class IntrptCollider extends IntrptBase implements ISnapshotable {
 		// 	Logger.Log("reset v");
 		// 	owner.position.Add(offset);
 		// }
-		this.ChangeState();
+		if (this.CheckFilter()) {
+			this.ChangeState();
+		}
 	}
 }

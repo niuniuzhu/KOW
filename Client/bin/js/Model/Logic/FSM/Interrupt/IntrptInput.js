@@ -15,19 +15,18 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "./IntrptBase"],
             this._and = Hashtable_1.Hashtable.GetBool(def, "and");
         }
         OnUpdate(dt) {
-            super.OnUpdate(dt);
             for (let i = 0; i < this._inputTypes.length; ++i) {
                 const inputType = this._inputTypes[i];
                 const triggerType = this._triggerTypes[i];
                 if (triggerType != InputTriggerType.Hold)
                     continue;
                 const inputAgent = this._state.owner.inputAgent;
-                if (inputAgent.GetInputState(inputType)) {
+                if (inputAgent.GetInputState(inputType) && this.CheckFilter()) {
                     this.ChangeState();
                 }
             }
         }
-        HandleInput(type, press) {
+        OnInput(type, press) {
             let meet = false;
             if (this._and) {
                 for (let i = 0; i < this._inputTypes.length; ++i) {
@@ -60,7 +59,7 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "./IntrptBase"],
                     }
                 }
             }
-            if (meet) {
+            if (meet && this.CheckFilter()) {
                 this.ChangeState();
             }
         }

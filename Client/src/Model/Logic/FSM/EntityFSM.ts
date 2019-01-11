@@ -2,11 +2,13 @@ import * as $protobuf from "../../../Libs/protobufjs";
 import { FSM } from "../../../RC/FSM/FSM";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
+import { StateType } from "../../StateEnums";
 import { InputType } from "../InputAagent";
 import { EntityState } from "./EntityState";
-import { StateType } from "../../StateEnums";
+import { EntityStateContext } from "./EntityStateContext";
 
 export class EntityFSM extends FSM implements ISnapshotable {
+	public readonly context: EntityStateContext = new EntityStateContext();
 	public get currentEntityState(): EntityState { return <EntityState>this.currentState; }
 	public get previousEntityState(): EntityState { return <EntityState>this.previousState; }
 	public get globalEntityState(): EntityState { return <EntityState>this.globalState; }

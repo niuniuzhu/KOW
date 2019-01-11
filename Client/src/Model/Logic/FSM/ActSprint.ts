@@ -25,9 +25,4 @@ export class ActSprint extends ActVelocity implements ISnapshotable {
 		const intrpt = <IntrptTimeup>(<EntityState>this.state).GetInterrupt(0);
 		intrpt.duration = this._ee.evaluate(formula);
 	}
-
-
-	protected OnUpdate(dt: number): void {
-		super.OnUpdate(dt);
-	}
 }

@@ -108,6 +108,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
         }
         DecodeSync(rid, reader, isNew) {
             super.DecodeSync(rid, reader, isNew);
+            UIEvent_1.UIEvent.ChampionInit(this);
             this.team = reader.int32();
             this.name = reader.string();
             this.hp = reader.int32();

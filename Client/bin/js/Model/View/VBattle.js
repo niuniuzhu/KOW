@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../BattleEvent/UIEvent", "../Defs", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, UIEvent_1, Defs_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -109,7 +109,6 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                     if (isSelf) {
                         this._camera.lookAt = champion;
                     }
-                    UIEvent_1.UIEvent.ChampionInit(champion);
                 }
                 else {
                     champion.DecodeSync(rid, reader, false);

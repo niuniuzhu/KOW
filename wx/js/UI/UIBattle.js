@@ -16,10 +16,12 @@ export class UIBattle {
         fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick);
         this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
         this._root.name = "battle_main";
-        this._root.getChild("n0").on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtnPress);
-        this._root.getChild("n0").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtnRelease);
-        this._root.getChild("n1").on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn2Press);
-        this._root.getChild("n1").on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn2Release);
+        this._skillBtn0 = this._root.getChild("n0").asCom;
+        this._skillBtn1 = this._root.getChild("n1").asCom;
+        this._skillBtn0.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn0Press);
+        this._skillBtn0.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn0Release);
+        this._skillBtn1.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn1Press);
+        this._skillBtn1.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn1Release);
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._hpbar = this._root.getChild("n00").asProgress;
@@ -76,8 +78,8 @@ export class UIBattle {
     }
     OnChampionInit(e) {
         if (this.IsSelf(e.champion)) {
-            this._root.getChild("n0").data = e.champion.GetSkillAt(0).id;
-            this._root.getChild("n1").data = e.champion.GetSkillAt(1).id;
+            this._skillBtn0.data = e.champion.GetSkillAt(0);
+            this._skillBtn1.data = e.champion.GetSkillAt(1);
         }
     }
     OnBattleEnd(e) {
@@ -118,6 +120,12 @@ export class UIBattle {
                 if (this.IsSelf(target)) {
                     this._mpBar.max = target.mmp;
                     this._mpBar.value = target.mp;
+                    const skill0 = this._skillBtn0.data;
+                    this._skillBtn0.getChild("n2").grayed = target.mp < skill0.mpCost;
+                    this._skillBtn0.touchable = target.mp >= skill0.mpCost;
+                    const skill1 = this._skillBtn1.data;
+                    this._skillBtn1.getChild("n2").grayed = target.mp < skill1.mpCost;
+                    this._skillBtn1.touchable = target.mp >= skill1.mpCost;
                 }
                 break;
             case EAttr.GLADIATOR_TIME:
@@ -130,25 +138,25 @@ export class UIBattle {
     IsSelf(champion) {
         return champion.rid.equals(Global.battleManager.playerID);
     }
-    OnSkillBtnPress(e) {
+    OnSkillBtn0Press(e) {
         if (this._markToEnd)
             return;
         e.stopPropagation();
         this._frameActionManager.SetS1(true);
     }
-    OnSkillBtnRelease(e) {
+    OnSkillBtn0Release(e) {
         if (this._markToEnd)
             return;
         e.stopPropagation();
         this._frameActionManager.SetS1(false);
     }
-    OnSkillBtn2Press(e) {
+    OnSkillBtn1Press(e) {
         if (this._markToEnd)
             return;
         e.stopPropagation();
         this._frameActionManager.SetS2(true);
     }
-    OnSkillBtn2Release(e) {
+    OnSkillBtn1Release(e) {
         if (this._markToEnd)
             return;
         e.stopPropagation();

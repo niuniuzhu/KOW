@@ -133,6 +133,8 @@ export class VChampion extends VEntity {
 
 	public DecodeSync(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader, isNew: boolean): void {
 		super.DecodeSync(rid, reader, isNew);
+		//通知UI创建实体
+		UIEvent.ChampionInit(this);
 		this.team = reader.int32();
 		this.name = reader.string();
 		this.hp = reader.int32();

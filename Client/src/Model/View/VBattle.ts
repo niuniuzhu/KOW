@@ -3,7 +3,6 @@ import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
-import { UIEvent } from "../BattleEvent/UIEvent";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
 import { Camera } from "./Camera";
@@ -169,8 +168,6 @@ export class VBattle {
 				if (isSelf) {
 					this._camera.lookAt = champion;
 				}
-				//通知UI创建实体
-				UIEvent.ChampionInit(champion);
 			} else {
 				champion.DecodeSync(rid, reader, false);
 			}

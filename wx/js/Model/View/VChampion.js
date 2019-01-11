@@ -117,6 +117,7 @@ export class VChampion extends VEntity {
     }
     DecodeSync(rid, reader, isNew) {
         super.DecodeSync(rid, reader, isNew);
+        UIEvent.ChampionInit(this);
         this.team = reader.int32();
         this.name = reader.string();
         this.hp = reader.int32();

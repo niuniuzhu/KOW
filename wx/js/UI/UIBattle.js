@@ -11,6 +11,7 @@ export class UIBattle {
         this._frameActionManager = new FrameAciontManager();
         this._touchID = -1;
         this._markToEnd = false;
+        this._lastKeyInputDirection = Vec2.zero;
         fairygui.UIPackage.addPackage("res/ui/battle");
         fairygui.UIPackage.addPackage("res/ui/endlevel");
         fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick);
@@ -48,6 +49,7 @@ export class UIBattle {
         this._markToEnd = false;
         Global.graphic.uiRoot.addChild(this._root);
         this._root.on(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
+        this._root.on(laya.events.Event.KEY_PRESS, this, this.OnKeyPress);
         this._frameActionManager.Reset();
         UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
         UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
@@ -188,5 +190,27 @@ export class UIBattle {
         if (e.touchId == this._touchID) {
             this._gestureState.OnDrag(e.stageX, e.stageY);
         }
+    }
+    OnKeyPress(e) {
+        const dir = new Vec2();
+        switch (e.keyCode) {
+            case laya.events.Keyboard.W:
+                dir.y -= 1;
+                break;
+            case laya.events.Keyboard.S:
+                dir.y += 1;
+                break;
+            case laya.events.Keyboard.A:
+                dir.x -= 1;
+                break;
+            case laya.events.Keyboard.D:
+                dir.x += 1;
+                break;
+        }
+        if (this._lastKeyInputDirection.EqualsTo(dir))
+            return;
+        this._lastKeyInputDirection.CopyFrom(dir);
+        dir.Normalize();
+        this._frameActionManager.SetInputDirection(dir);
     }
 }

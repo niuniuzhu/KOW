@@ -139,6 +139,7 @@ export class FVec2 {
 		let f = this.Magnitude();
 		if (f == 0)
 			return;
+		f = FMathUtils.Div(1, f);
 		this.MulN(f);
 	}
 

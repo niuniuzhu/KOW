@@ -120,6 +120,7 @@ define(["require", "exports", "./FMathUtils"], function (require, exports, FMath
             let f = this.Magnitude();
             if (f == 0)
                 return;
+            f = FMathUtils_1.FMathUtils.Div(1, f);
             this.MulN(f);
         }
         ClampMagnitude(maxLength) {

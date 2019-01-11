@@ -125,6 +125,7 @@ define(["require", "exports", "./MathUtils"], function (require, exports, MathUt
             let f = this.Magnitude();
             if (f == 0)
                 return;
+            f = 1 / f;
             this.x *= f;
             this.y *= f;
         }

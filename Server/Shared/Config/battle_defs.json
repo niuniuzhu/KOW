@@ -72,7 +72,7 @@
 								0 /*方向键*/
 							],
 							"trigger_types": [
-								2 /*弹起*/
+								2 /*按住*/
 							]
 						},
 						{
@@ -129,6 +129,41 @@
 							],
 							"trigger_types": [
 								1 /*弹起*/
+							]
+						},
+						{
+							"id": 2, /*按键中断*/
+							"type": 1, /*中断类型为技能*/
+							"skill": 0, /*触发的技能id*/
+							"connect_state": 2,
+							"filters": [
+								{
+									"filter_type": 0, /*过滤类型*/
+									"attr0": 0,
+									"attr1": 0,
+									"value": 0,
+									"op": 0,
+									"skill": 0
+								}
+							],
+							"rel": 0, /*过滤器的关系*/
+							"input_types": [
+								1 /*技能1*/
+							],
+							"trigger_types": [
+								1 /**弹起*/
+							]
+						},
+						{
+							"id": 2, /*按键中断*/
+							"type": 1, /*中断类型为技能*/
+							"skill": 1, /*触发的技能id*/
+							"connect_state": 3,
+							"input_types": [
+								2 /*技能2*/
+							],
+							"trigger_types": [
+								0 /*按下*/
 							]
 						}
 					]

@@ -2,6 +2,7 @@ import { Global } from "../Global";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { FrameAciontManager } from "../Model/FrameActionManager";
 import { EAttr } from "../Model/Logic/Attribute";
+import { MathUtils } from "../RC/Math/MathUtils";
 import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState } from "./GestureState";
 import { Joystick } from "./Joystick";
@@ -11,7 +12,8 @@ export class UIBattle {
         this._frameActionManager = new FrameAciontManager();
         this._touchID = -1;
         this._markToEnd = false;
-        this._lastKeyInputDirection = Vec2.zero;
+        this._keyInput = Vec2.zero;
+        this._lastKeyInput = Vec2.zero;
         fairygui.UIPackage.addPackage("res/ui/battle");
         fairygui.UIPackage.addPackage("res/ui/endlevel");
         fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick);
@@ -48,9 +50,10 @@ export class UIBattle {
         this._touchID = -1;
         this._markToEnd = false;
         Global.graphic.uiRoot.addChild(this._root);
-        this._root.on(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
-        this._root.on(laya.events.Event.KEY_PRESS, this, this.OnKeyPress);
         this._frameActionManager.Reset();
+        this._root.on(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
+        Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
+        Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
         UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
         UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
         UIEvent.AddListener(UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));
@@ -68,9 +71,11 @@ export class UIBattle {
     GestureOff() {
         this._gestureState.OnTouchEnd();
         this._touchID = -1;
-        this._root.off(laya.events.Event.MOUSE_DOWN, this, this.OnDragStart);
-        this._root.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
-        this._root.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
+        this._root.off(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
+        this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
+        this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
+        Laya.stage.off(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
+        Laya.stage.off(Laya.Event.KEY_UP, this, this.OnKeyUp);
     }
     Update(dt) {
         this._gestureState.Update(dt);
@@ -174,16 +179,16 @@ export class UIBattle {
             fairygui.GComponent.cast(e.currentTarget) != this._root)
             return;
         this._touchID = e.touchId;
-        this._root.on(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
-        this._root.on(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
+        this._root.on(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
+        this._root.on(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
         this._gestureState.OnTouchBegin(e.stageX, e.stageY);
     }
     OnDragEnd(e) {
         if (e.touchId == this._touchID) {
             this._touchID = -1;
             this._gestureState.OnTouchEnd();
-            this._root.off(laya.events.Event.MOUSE_UP, this, this.OnDragEnd);
-            this._root.off(laya.events.Event.MOUSE_MOVE, this, this.OnDrag);
+            this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
+            this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
         }
     }
     OnDrag(e) {
@@ -191,26 +196,60 @@ export class UIBattle {
             this._gestureState.OnDrag(e.stageX, e.stageY);
         }
     }
-    OnKeyPress(e) {
-        const dir = new Vec2();
+    OnKeyDown(e) {
+        if (this._markToEnd)
+            return;
         switch (e.keyCode) {
+            case laya.events.Keyboard.J:
+                this._frameActionManager.SetS1(true);
+                return;
+            case laya.events.Keyboard.K:
+                this._frameActionManager.SetS2(true);
+                return;
             case laya.events.Keyboard.W:
-                dir.y -= 1;
+                this._keyInput.y = -1;
                 break;
             case laya.events.Keyboard.S:
-                dir.y += 1;
+                this._keyInput.y = 1;
                 break;
             case laya.events.Keyboard.A:
-                dir.x -= 1;
+                this._keyInput.x = -1;
                 break;
             case laya.events.Keyboard.D:
-                dir.x += 1;
+                this._keyInput.x = 1;
                 break;
         }
-        if (this._lastKeyInputDirection.EqualsTo(dir))
+        if (MathUtils.Approximately(this._keyInput.x, this._lastKeyInput.x) &&
+            MathUtils.Approximately(this._keyInput.y, this._lastKeyInput.y))
             return;
-        this._lastKeyInputDirection.CopyFrom(dir);
-        dir.Normalize();
-        this._frameActionManager.SetInputDirection(dir);
+        this._lastKeyInput.CopyFrom(this._keyInput);
+        this._keyInput.NormalizeSafe();
+        this._frameActionManager.SetInputDirection(this._keyInput);
+    }
+    OnKeyUp(e) {
+        if (this._markToEnd)
+            return;
+        switch (e.keyCode) {
+            case laya.events.Keyboard.J:
+                this._frameActionManager.SetS1(false);
+                return;
+            case laya.events.Keyboard.K:
+                this._frameActionManager.SetS2(false);
+                return;
+            case laya.events.Keyboard.W:
+            case laya.events.Keyboard.S:
+                this._keyInput.y = 0;
+                break;
+            case laya.events.Keyboard.A:
+            case laya.events.Keyboard.D:
+                this._keyInput.x = 0;
+                break;
+        }
+        if (MathUtils.Approximately(this._keyInput.x, this._lastKeyInput.x) &&
+            MathUtils.Approximately(this._keyInput.y, this._lastKeyInput.y))
+            return;
+        this._lastKeyInput.CopyFrom(this._keyInput);
+        this._keyInput.NormalizeSafe();
+        this._frameActionManager.SetInputDirection(this._keyInput);
     }
 }

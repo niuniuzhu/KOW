@@ -123,6 +123,7 @@ export class Vec2 {
         let f = this.Magnitude();
         if (f == 0)
             return;
+        f = 1 / f;
         this.x *= f;
         this.y *= f;
     }

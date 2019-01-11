@@ -72,10 +72,11 @@ export class UIBattle implements IUIModule {
 		this._markToEnd = false;
 
 		Global.graphic.uiRoot.addChild(this._root);
+		this._frameActionManager.Reset();
+
 		this._root.on(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
 		Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
 		Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
-		this._frameActionManager.Reset();
 
 		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
 		UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));

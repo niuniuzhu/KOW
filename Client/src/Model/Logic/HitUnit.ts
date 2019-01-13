@@ -1,5 +1,7 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
+import { ExpressionEvaluator } from "../../RC/Utils/ExpressionEvaluator";
+import { StringUtils } from "../../RC/Utils/TextUtils";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "./Attribute";
@@ -9,6 +11,8 @@ import { HitManager } from "./HitManager";
  * 受击单元
  */
 export class HitUnit implements ISnapshotable {
+	private static readonly EE: ExpressionEvaluator = new ExpressionEvaluator();
+
 	private _manager: HitManager;
 	private _casterID: Long;
 	private _targetID: Long;
@@ -29,14 +33,21 @@ export class HitUnit implements ISnapshotable {
 		const target = this._manager.battle.GetChampion(this._targetID);
 		const skill = caster.GetSkill(this._skillID);
 
+		let totalDmg;
 		//simple calc
-		let commonDmg = FMathUtils.Sub(caster.atk, target.def);
-		commonDmg = commonDmg < 0 ? 0 : commonDmg;
-		const totalDmg = FMathUtils.Add(commonDmg, skill.damage);
+		if (skill.formula != null) {
+			const formula = StringUtils.Format(skill.formula, "" + skill.shakeTime);
+			totalDmg = HitUnit.EE.evaluate(formula);
+		}
+		else {
+			let commonDmg = FMathUtils.Sub(caster.atk, target.def);
+			commonDmg = commonDmg < 0 ? 0 : commonDmg;
+			totalDmg = FMathUtils.Add(commonDmg, skill.damage);
+		}
 
 		//minus hp
 		let hp = target.GetAttr(EAttr.HP);
-		hp -= totalDmg;
+		hp -= FMathUtils.Floor(totalDmg);
 		hp = hp < 0 ? 0 : hp
 		target.SetAttr(EAttr.HP, hp);
 

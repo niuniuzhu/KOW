@@ -47,6 +47,7 @@ define(["require", "exports", "../../../RC/FSM/FSM", "./EntityStateContext"], fu
             writer.bool(this.previousEntityState != null);
             if (this.previousEntityState != null)
                 writer.int32(this.previousEntityState.type);
+            this.context.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
             reader.int32();
@@ -63,6 +64,7 @@ define(["require", "exports", "../../../RC/FSM/FSM", "./EntityStateContext"], fu
             if (reader.bool()) {
                 this._previousState = this.GetState(reader.int32());
             }
+            this.context.DecodeSnapshot(reader);
         }
         HandleInput(type, press) {
             this.currentEntityState.HandleInput(type, press);

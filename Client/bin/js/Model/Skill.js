@@ -2,6 +2,9 @@ define(["require", "exports", "./Defs", "../RC/Utils/Hashtable"], function (requ
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Skill {
+        constructor() {
+            this.shakeTime = 0;
+        }
         get id() { return this._id; }
         get connectState() { return this._connectState; }
         get mpCost() { return this._mpCost; }
@@ -9,6 +12,7 @@ define(["require", "exports", "./Defs", "../RC/Utils/Hashtable"], function (requ
         get emitterID() { return this._emitterID; }
         get bulletID() { return this._bulletID; }
         get damage() { return this._damage; }
+        get formula() { return this._formula; }
         Init(id) {
             this._id = id;
             this.LoadDef();
@@ -21,6 +25,7 @@ define(["require", "exports", "./Defs", "../RC/Utils/Hashtable"], function (requ
             this._emitterID = Hashtable_1.Hashtable.GetNumber(def, "emitter");
             this._bulletID = Hashtable_1.Hashtable.GetNumber(def, "bullet");
             this._damage = Hashtable_1.Hashtable.GetNumber(def, "damage");
+            this._formula = Hashtable_1.Hashtable.GetString(def, "formula", null);
         }
     }
     exports.Skill = Skill;

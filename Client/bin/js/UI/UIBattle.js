@@ -45,10 +45,10 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._touchID = -1;
             this._markToEnd = false;
             Global_1.Global.graphic.uiRoot.addChild(this._root);
+            this._frameActionManager.Reset();
             this._root.on(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
             Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
             Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
-            this._frameActionManager.Reset();
             UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
             UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
             UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));

@@ -9,6 +9,10 @@ export class Skill {
 	public get emitterID(): number { return this._emitterID; }
 	public get bulletID(): number { return this._bulletID; }
 	public get damage(): number { return this._damage; }
+	public get formula(): string { return this._formula; }
+
+	//runtime properties
+	public shakeTime: number = 0;
 
 	private _id: number;
 	private _connectState: number;
@@ -17,6 +21,7 @@ export class Skill {
 	private _emitterID: number;
 	private _bulletID: number;
 	private _damage: number;
+	private _formula: string;
 
 	public Init(id: number) {
 		this._id = id;
@@ -31,5 +36,6 @@ export class Skill {
 		this._emitterID = Hashtable.GetNumber(def, "emitter");
 		this._bulletID = Hashtable.GetNumber(def, "bullet");
 		this._damage = Hashtable.GetNumber(def, "damage");
+		this._formula = Hashtable.GetString(def, "formula", null);
 	}
 }

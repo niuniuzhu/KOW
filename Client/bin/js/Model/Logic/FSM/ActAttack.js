@@ -23,6 +23,7 @@ define(["require", "exports", "../../../Libs/long", "../../../RC/FMath/FMathUtil
             this._casterID = owner.rid;
             this._skillID = owner.fsm.context.skillID;
             const skill = owner.GetSkill(this._skillID);
+            skill.shakeTime = owner.fsm.context.shakeTime;
             if (skill == null) {
                 Logger_1.Logger.Warn(`can not find skill:${this._skillID}`);
                 owner.fsm.ChangeState(StateEnums_1.StateType.Idle);

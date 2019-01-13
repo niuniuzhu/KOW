@@ -13,7 +13,7 @@
 				0
 			],
 			"gladiator_radius": 1.5, /*禁区半径*/
-			"max_players": 1,
+			"max_players": 2,
 			"born_pos": [
 				[
 					0,
@@ -223,7 +223,7 @@
 						{
 							"id": 0, /*计时中断*/
 							"connect_state": 4,
-							"duration": 2000
+							"duration": 3000
 						},
 						{
 							"id": 2, /*按键中断*/
@@ -261,7 +261,7 @@
 								0,
 								30
 							],
-							"formula": "50+{0}*0.05" /*冲刺时间公式*/
+							"formula": "50+{0}*0.03" /*冲刺时间公式*/
 						}
 					],
 					"interrupts": [
@@ -345,7 +345,8 @@
 			"mp_add": 5,
 			"emitter": 0,
 			"bullet": 0,
-			"damage": 100
+			"damage": 100,
+			"formula": "100+{0}*0.1"
 		}
 	},
 	"emitter": {

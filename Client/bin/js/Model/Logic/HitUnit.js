@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../BattleEvent/SyncEvent", "./Attribute"], function (require, exports, FMathUtils_1, SyncEvent_1, Attribute_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/Utils/ExpressionEvaluator", "../../RC/Utils/TextUtils", "../BattleEvent/SyncEvent", "./Attribute"], function (require, exports, FMathUtils_1, ExpressionEvaluator_1, TextUtils_1, SyncEvent_1, Attribute_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class HitUnit {
@@ -14,9 +14,16 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../BattleEvent/SyncE
             const caster = this._manager.battle.GetChampion(this._casterID);
             const target = this._manager.battle.GetChampion(this._targetID);
             const skill = caster.GetSkill(this._skillID);
-            let commonDmg = FMathUtils_1.FMathUtils.Sub(caster.atk, target.def);
-            commonDmg = commonDmg < 0 ? 0 : commonDmg;
-            const totalDmg = FMathUtils_1.FMathUtils.Add(commonDmg, skill.damage);
+            let totalDmg;
+            if (skill.formula != null) {
+                const formula = TextUtils_1.StringUtils.Format(skill.formula, "" + skill.shakeTime);
+                totalDmg = HitUnit.EE.evaluate(formula);
+            }
+            else {
+                let commonDmg = FMathUtils_1.FMathUtils.Sub(caster.atk, target.def);
+                commonDmg = commonDmg < 0 ? 0 : commonDmg;
+                totalDmg = FMathUtils_1.FMathUtils.Add(commonDmg, skill.damage);
+            }
             let hp = target.GetAttr(Attribute_1.EAttr.HP);
             hp -= totalDmg;
             hp = hp < 0 ? 0 : hp;
@@ -37,6 +44,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../BattleEvent/SyncE
             this._skillID = reader.int32();
         }
     }
+    HitUnit.EE = new ExpressionEvaluator_1.ExpressionEvaluator();
     exports.HitUnit = HitUnit;
 });
 //# sourceMappingURL=HitUnit.js.map

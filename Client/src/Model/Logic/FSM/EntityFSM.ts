@@ -64,6 +64,8 @@ export class EntityFSM extends FSM implements ISnapshotable {
 		writer.bool(this.previousEntityState != null);
 		if (this.previousEntityState != null)
 			writer.int32(this.previousEntityState.type);
+
+		this.context.EncodeSnapshot(writer);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
@@ -84,6 +86,8 @@ export class EntityFSM extends FSM implements ISnapshotable {
 		if (reader.bool()) {
 			this._previousState = this.GetState(reader.int32());
 		}
+
+		this.context.DecodeSnapshot(reader);
 	}
 
 	public HandleInput(type: InputType, press: boolean): void {

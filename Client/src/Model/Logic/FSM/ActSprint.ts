@@ -8,21 +8,22 @@ import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
 
 export class ActSprint extends ActVelocity implements ISnapshotable {
 	private _formula: string;
-	private _ee: ExpressionEvaluator;
+	private readonly _ee: ExpressionEvaluator = new ExpressionEvaluator();
 
 	protected OnInit(def: Hashtable): void {
 		super.OnInit(def);
-		this._formula = Hashtable.GetString(def, "formula");
-		this._ee = new ExpressionEvaluator();
+		this._formula = Hashtable.GetString(def, "formula", null);
 	}
 
 	protected OnEnter(param: any): void {
 		super.OnEnter(param);
 
 		//获取上一状态的持续时间
-		const lastDuration = (<EntityState>this.state).owner.fsm.previousEntityState.time;
+		const owner = (<EntityState>this.state).owner;
+		const lastDuration = owner.fsm.previousEntityState.time;
 		const formula = StringUtils.Format(this._formula, "" + lastDuration);
 		const intrpt = <IntrptTimeup>(<EntityState>this.state).GetInterrupt(0);
 		intrpt.duration = this._ee.evaluate(formula);
+		owner.fsm.context.shakeTime = lastDuration;
 	}
 }

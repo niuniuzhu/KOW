@@ -1,14 +1,17 @@
 import Stack from "../../RC/Collections/Stack";
+import { EntityType } from "../Logic/Entity";
 import { BaseBattleEvent } from "./BaseBattleEvent";
 
 export class SyncEvent extends BaseBattleEvent {
 	public static readonly E_BATTLE_INIT: number = 100;
 	public static readonly E_SNAPSHOT: number = 101;
 
-	public static readonly E_HIT: number = 200;
-	public static readonly E_BULLET_COLLISION: number = 201;
-	public static readonly E_SCENE_ITEM_COLLISION: number = 202;
-	public static readonly E_SCENE_ITEM_TRIGGER: number = 203;
+	public static readonly E_ENTITY_CREATED: number = 200;
+
+	public static readonly E_HIT: number = 300;
+	public static readonly E_BULLET_COLLISION: number = 301;
+	public static readonly E_SCENE_ITEM_COLLISION: number = 302;
+	public static readonly E_SCENE_ITEM_TRIGGER: number = 303;
 
 	private static readonly POOL: Stack<SyncEvent> = new Stack<SyncEvent>();
 	private static readonly HANDLERS: Map<number, (e: SyncEvent) => void> = new Map<number, (e: SyncEvent) => void>();
@@ -65,6 +68,14 @@ export class SyncEvent extends BaseBattleEvent {
 		this.BeginInvoke(e);
 	}
 
+	public static EntityCreated(type: EntityType, data: Uint8Array): void {
+		let e = this.Get();
+		e._type = SyncEvent.E_ENTITY_CREATED;
+		e.entityType = type;
+		e.data = data;
+		this.BeginInvoke(e);
+	}
+
 	public static Snapshot(data: Uint8Array): void {
 		let e = this.Get();
 		e._type = SyncEvent.E_SNAPSHOT;
@@ -107,6 +118,7 @@ export class SyncEvent extends BaseBattleEvent {
 	}
 
 	public data: Uint8Array;
+	public entityType: EntityType;
 	public rid0: Long;
 	public rid1: Long;
 	public rid2: Long;

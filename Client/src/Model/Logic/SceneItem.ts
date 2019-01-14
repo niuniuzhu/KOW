@@ -1,11 +1,11 @@
 import * as $protobuf from "../../Libs/protobufjs";
+import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "./Attribute";
-import { Entity, EntityInitParams } from "./Entity";
-import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
-import { SyncEvent } from "../BattleEvent/SyncEvent";
+import { Entity, EntityInitParams, EntityType } from "./Entity";
 
 export enum SceneItemAttrOp {
 	Add,
@@ -16,6 +16,7 @@ export enum SceneItemAttrOp {
 }
 
 export class SceneItem extends Entity implements ISnapshotable {
+	public get type(): EntityType { return EntityType.SceneItem; }
 	public get radius(): number { return this._radius; }
 	public get attrs(): EAttr[] { return this._attrs; }
 	public get values(): number[] { return this._values; }

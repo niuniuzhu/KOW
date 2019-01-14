@@ -9,7 +9,7 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "./Attribute";
 import { Champion } from "./Champion";
-import { Entity, EntityInitParams } from "./Entity";
+import { Entity, EntityInitParams, EntityType } from "./Entity";
 
 enum BulletMoveType {
 	Linear,
@@ -50,6 +50,8 @@ enum DestroyType {
 }
 
 export class Bullet extends Entity implements ISnapshotable {
+	public get type(): EntityType { return EntityType.Bullet; }
+	
 	//static properties
 	private _radius: number;
 	private _moveSpeed: number;

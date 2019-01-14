@@ -3,6 +3,12 @@ import { FVec2 } from "../../RC/FMath/FVec2";
 import { ISnapshotable } from "../ISnapshotable";
 import { Battle } from "./Battle";
 
+export enum EntityType {
+	Champion,
+	Bullet,
+	SceneItem
+}
+
 export class EntityInitParams {
 	//entity
 	public rid: Long;
@@ -18,6 +24,7 @@ export class EntityInitParams {
 }
 
 export abstract class Entity implements ISnapshotable {
+	public abstract get type(): EntityType;
 	public get battle(): Battle { return this._battle; }
 	public get id(): number { return this._id; }
 	public get rid(): Long { return this._rid; }

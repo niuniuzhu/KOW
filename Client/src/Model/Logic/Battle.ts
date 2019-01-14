@@ -225,11 +225,6 @@ export class Battle implements ISnapshotable {
 			item.Update(dt);
 		}
 
-		//sync to view
-		if (!this.chase) {
-			this.SyncToView();
-		}
-
 		//handle item's intersections
 		for (let i = 0, count = this._items.length; i < count; i++) {
 			const item = this._items[i];
@@ -248,6 +243,11 @@ export class Battle implements ISnapshotable {
 		for (let i = 0, count = this._champions.length; i < count; i++) {
 			const champion = this._champions[i];
 			champion.UpdateAfterHit();
+		}
+
+		//sync to view
+		if (!this.chase) {
+			this.SyncToView();
 		}
 
 		//destroy champions
@@ -501,6 +501,11 @@ export class Battle implements ISnapshotable {
 		champion.Init(params);
 		this._champions.push(champion);
 		this._idToChampion.set(champion.rid.toString(), champion);
+		//sync to view
+		const writer = $protobuf.Writer.create();
+		champion.EncodeSnapshot(writer);
+		const data = writer.finish();
+		SyncEvent.EntityCreated(champion.type, data);
 		return champion;
 	}
 
@@ -589,6 +594,11 @@ export class Battle implements ISnapshotable {
 		bullet.Init(params);
 		this._bullets.push(bullet);
 		this._idToBullet.set(bullet.rid.toString(), bullet);
+		//sync to view
+		const writer = $protobuf.Writer.create();
+		bullet.EncodeSnapshot(writer);
+		const data = writer.finish();
+		SyncEvent.EntityCreated(bullet.type, data);
 		return bullet;
 	}
 
@@ -631,6 +641,11 @@ export class Battle implements ISnapshotable {
 		item.Init(params);
 		this._items.push(item);
 		this._idToItem.set(item.rid.toString(), item);
+		//sync to view
+		const writer = $protobuf.Writer.create();
+		item.EncodeSnapshot(writer);
+		const data = writer.finish();
+		SyncEvent.EntityCreated(item.type, data);
 		return item;
 	}
 
@@ -802,6 +817,15 @@ export class Battle implements ISnapshotable {
 			bullet.DecodeSnapshot(reader);
 			str += "======bullet======\n";
 			str += bullet.Dump();
+		}
+
+		//scene_items
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const item = new SceneItem(this);
+			item.DecodeSnapshot(reader);
+			str += "======bullet======\n";
+			str += item.Dump();
 		}
 		return str;
 	}

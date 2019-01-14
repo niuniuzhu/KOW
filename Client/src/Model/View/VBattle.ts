@@ -5,6 +5,7 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
+import { EntityType } from "../Logic/Entity";
 import { Camera } from "./Camera";
 import { EffectPool } from "./EffectPool";
 import { PopTextType } from "./HUD";
@@ -43,6 +44,7 @@ export class VBattle {
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo): void {
 		SyncEvent.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_ENTITY_CREATED, this.OnEntityCreated.bind(this));
 		SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
 		SyncEvent.AddListener(SyncEvent.E_HIT, this.OnHit.bind(this));
 		SyncEvent.AddListener(SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
@@ -71,6 +73,7 @@ export class VBattle {
 		this._destroied = true;
 
 		SyncEvent.RemoveListener(SyncEvent.E_BATTLE_INIT);
+		SyncEvent.RemoveListener(SyncEvent.E_ENTITY_CREATED);
 		SyncEvent.RemoveListener(SyncEvent.E_SNAPSHOT);
 		SyncEvent.RemoveListener(SyncEvent.E_HIT);
 		SyncEvent.RemoveListener(SyncEvent.E_BULLET_COLLISION);
@@ -190,15 +193,9 @@ export class VBattle {
 			const rid = <Long>reader.uint64();
 			let champion = this.GetChampion(rid);
 			if (champion == null) {
-				champion = new VChampion(this);
-				champion.DecodeSync(rid, reader, true);
-				this._champions.push(champion);
-				this._idToChampion.set(champion.rid.toString(), champion);
-				const isSelf = champion.rid.equals(Global.battleManager.playerID);
-				if (isSelf) {
-					this._camera.lookAt = champion;
-				}
-			} else {
+				champion = this.CreateChampion(rid, reader);
+			}
+			else {
 				champion.DecodeSync(rid, reader, false);
 			}
 		}
@@ -209,11 +206,9 @@ export class VBattle {
 			const rid = <Long>reader.uint64();
 			let bullet = this.GetBullet(rid);
 			if (bullet == null) {
-				bullet = new VBullet(this);
-				bullet.DecodeSync(rid, reader, true);
-				this._bullets.push(bullet);
-				this._idToBullet.set(bullet.rid.toString(), bullet);
-			} else {
+				bullet = this.CreateBullet(rid, reader);
+			}
+			else {
 				bullet.DecodeSync(rid, reader, false);
 			}
 		}
@@ -224,14 +219,24 @@ export class VBattle {
 			const rid = <Long>reader.uint64();
 			let item = this.GetSceneItem(rid);
 			if (item == null) {
-				item = new VSceneItem(this);
-				item.DecodeSync(rid, reader, true);
-				this._items.push(item);
-				this._idToItem.set(item.rid.toString(), item);
-			} else {
+				item = this.CreateSceneItem(rid, reader);
+			}
+			else {
 				item.DecodeSync(rid, reader, false);
 			}
 		}
+	}
+
+	public CreateChampion(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader): VChampion {
+		const champion = new VChampion(this);
+		champion.DecodeSync(rid, reader, true);
+		this._champions.push(champion);
+		this._idToChampion.set(champion.rid.toString(), champion);
+		const isSelf = champion.rid.equals(Global.battleManager.playerID);
+		if (isSelf) {
+			this._camera.lookAt = champion;
+		}
+		return champion;
 	}
 
 	/**
@@ -260,6 +265,14 @@ export class VBattle {
 		return this._idToChampion.get(rid.toString());
 	}
 
+	public CreateBullet(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader): VBullet {
+		const bullet = new VBullet(this);
+		bullet.DecodeSync(rid, reader, true);
+		this._bullets.push(bullet);
+		this._idToBullet.set(bullet.rid.toString(), bullet);
+		return bullet;
+	}
+
 	/**
 	 * 销毁子弹
 	 */
@@ -286,21 +299,12 @@ export class VBattle {
 		return this._idToBullet.get(rid.toString());
 	}
 
-	public SpawnEffect(id: number): VEffect {
-		const effect = this._effectPool.Get(id);
-		this._effects.push(effect);
-		return effect;
-	}
-
-	public DespawnEffect(fx: VEffect): void {
-		this._effects.splice(this._effects.indexOf(fx), 1);
-		this._effectPool.Release(fx);
-	}
-
-	public DespawnEffectAt(index: number): void {
-		const fx = this._effects[index];
-		this._effects.splice(index, 1);
-		this._effectPool.Release(fx);
+	public CreateSceneItem(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader): VSceneItem {
+		const item = new VSceneItem(this);
+		item.DecodeSync(rid, reader, true);
+		this._items.push(item);
+		this._idToItem.set(item.rid.toString(), item);
+		return item;
 	}
 
 	/**
@@ -329,9 +333,42 @@ export class VBattle {
 		return this._idToItem.get(rid.toString());
 	}
 
+	public SpawnEffect(id: number): VEffect {
+		const effect = this._effectPool.Get(id);
+		this._effects.push(effect);
+		return effect;
+	}
+
+	public DespawnEffect(fx: VEffect): void {
+		this._effects.splice(this._effects.indexOf(fx), 1);
+		this._effectPool.Release(fx);
+	}
+
+	public DespawnEffectAt(index: number): void {
+		const fx = this._effects[index];
+		this._effects.splice(index, 1);
+		this._effectPool.Release(fx);
+	}
+
 	private OnBattleInit(e: SyncEvent): void {
 		const reader = $protobuf.Reader.create(e.data);
 		this.DecodeSync(reader);
+	}
+
+	private OnEntityCreated(e: SyncEvent): void {
+		const reader = $protobuf.Reader.create(e.data);
+		const rid = <Long>reader.uint64();
+		switch (e.entityType) {
+			case EntityType.Champion:
+				this.CreateChampion(rid, reader);
+				break;
+			case EntityType.Bullet:
+				this.CreateBullet(rid, reader);
+				break;
+			case EntityType.SceneItem:
+				this.CreateSceneItem(rid, reader);
+				break;
+		}
 	}
 
 	private OnSnapshot(e: SyncEvent): void {

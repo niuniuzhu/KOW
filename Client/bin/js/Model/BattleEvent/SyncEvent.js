@@ -41,6 +41,13 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
             e.data = data;
             this.BeginInvoke(e);
         }
+        static EntityCreated(type, data) {
+            let e = this.Get();
+            e._type = SyncEvent.E_ENTITY_CREATED;
+            e.entityType = type;
+            e.data = data;
+            this.BeginInvoke(e);
+        }
         static Snapshot(data) {
             let e = this.Get();
             e._type = SyncEvent.E_SNAPSHOT;
@@ -80,10 +87,11 @@ define(["require", "exports", "../../RC/Collections/Stack", "./BaseBattleEvent"]
     }
     SyncEvent.E_BATTLE_INIT = 100;
     SyncEvent.E_SNAPSHOT = 101;
-    SyncEvent.E_HIT = 200;
-    SyncEvent.E_BULLET_COLLISION = 201;
-    SyncEvent.E_SCENE_ITEM_COLLISION = 202;
-    SyncEvent.E_SCENE_ITEM_TRIGGER = 203;
+    SyncEvent.E_ENTITY_CREATED = 200;
+    SyncEvent.E_HIT = 300;
+    SyncEvent.E_BULLET_COLLISION = 301;
+    SyncEvent.E_SCENE_ITEM_COLLISION = 302;
+    SyncEvent.E_SCENE_ITEM_TRIGGER = 303;
     SyncEvent.POOL = new Stack_1.default();
     SyncEvent.HANDLERS = new Map();
     SyncEvent.EVENTS = [];

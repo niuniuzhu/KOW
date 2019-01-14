@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1, VSceneItem_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../Logic/Entity", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, Entity_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1, VSceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -19,6 +19,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         get camera() { return this._camera; }
         SetBattleInfo(battleInfo) {
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_ENTITY_CREATED, this.OnEntityCreated.bind(this));
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_HIT, this.OnHit.bind(this));
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
@@ -37,6 +38,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 return;
             this._destroied = true;
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
+            SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_ENTITY_CREATED);
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_HIT);
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_BULLET_COLLISION);
@@ -124,14 +126,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 const rid = reader.uint64();
                 let champion = this.GetChampion(rid);
                 if (champion == null) {
-                    champion = new VChampion_1.VChampion(this);
-                    champion.DecodeSync(rid, reader, true);
-                    this._champions.push(champion);
-                    this._idToChampion.set(champion.rid.toString(), champion);
-                    const isSelf = champion.rid.equals(Global_1.Global.battleManager.playerID);
-                    if (isSelf) {
-                        this._camera.lookAt = champion;
-                    }
+                    champion = this.CreateChampion(rid, reader);
                 }
                 else {
                     champion.DecodeSync(rid, reader, false);
@@ -142,10 +137,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 const rid = reader.uint64();
                 let bullet = this.GetBullet(rid);
                 if (bullet == null) {
-                    bullet = new VBullet_1.VBullet(this);
-                    bullet.DecodeSync(rid, reader, true);
-                    this._bullets.push(bullet);
-                    this._idToBullet.set(bullet.rid.toString(), bullet);
+                    bullet = this.CreateBullet(rid, reader);
                 }
                 else {
                     bullet.DecodeSync(rid, reader, false);
@@ -156,15 +148,23 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 const rid = reader.uint64();
                 let item = this.GetSceneItem(rid);
                 if (item == null) {
-                    item = new VSceneItem_1.VSceneItem(this);
-                    item.DecodeSync(rid, reader, true);
-                    this._items.push(item);
-                    this._idToItem.set(item.rid.toString(), item);
+                    item = this.CreateSceneItem(rid, reader);
                 }
                 else {
                     item.DecodeSync(rid, reader, false);
                 }
             }
+        }
+        CreateChampion(rid, reader) {
+            const champion = new VChampion_1.VChampion(this);
+            champion.DecodeSync(rid, reader, true);
+            this._champions.push(champion);
+            this._idToChampion.set(champion.rid.toString(), champion);
+            const isSelf = champion.rid.equals(Global_1.Global.battleManager.playerID);
+            if (isSelf) {
+                this._camera.lookAt = champion;
+            }
+            return champion;
         }
         DestroyChampion(champion) {
             champion.Destroy();
@@ -180,6 +180,13 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         GetChampion(rid) {
             return this._idToChampion.get(rid.toString());
         }
+        CreateBullet(rid, reader) {
+            const bullet = new VBullet_1.VBullet(this);
+            bullet.DecodeSync(rid, reader, true);
+            this._bullets.push(bullet);
+            this._idToBullet.set(bullet.rid.toString(), bullet);
+            return bullet;
+        }
         DestroyBullet(bullet) {
             bullet.Destroy();
             this._bullets.splice(this._bullets.indexOf(bullet), 1);
@@ -194,19 +201,12 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         GetBullet(rid) {
             return this._idToBullet.get(rid.toString());
         }
-        SpawnEffect(id) {
-            const effect = this._effectPool.Get(id);
-            this._effects.push(effect);
-            return effect;
-        }
-        DespawnEffect(fx) {
-            this._effects.splice(this._effects.indexOf(fx), 1);
-            this._effectPool.Release(fx);
-        }
-        DespawnEffectAt(index) {
-            const fx = this._effects[index];
-            this._effects.splice(index, 1);
-            this._effectPool.Release(fx);
+        CreateSceneItem(rid, reader) {
+            const item = new VSceneItem_1.VSceneItem(this);
+            item.DecodeSync(rid, reader, true);
+            this._items.push(item);
+            this._idToItem.set(item.rid.toString(), item);
+            return item;
         }
         DestroySceneItem(sceneItem) {
             sceneItem.Destroy();
@@ -222,9 +222,38 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         GetSceneItem(rid) {
             return this._idToItem.get(rid.toString());
         }
+        SpawnEffect(id) {
+            const effect = this._effectPool.Get(id);
+            this._effects.push(effect);
+            return effect;
+        }
+        DespawnEffect(fx) {
+            this._effects.splice(this._effects.indexOf(fx), 1);
+            this._effectPool.Release(fx);
+        }
+        DespawnEffectAt(index) {
+            const fx = this._effects[index];
+            this._effects.splice(index, 1);
+            this._effectPool.Release(fx);
+        }
         OnBattleInit(e) {
             const reader = $protobuf.Reader.create(e.data);
             this.DecodeSync(reader);
+        }
+        OnEntityCreated(e) {
+            const reader = $protobuf.Reader.create(e.data);
+            const rid = reader.uint64();
+            switch (e.entityType) {
+                case Entity_1.EntityType.Champion:
+                    this.CreateChampion(rid, reader);
+                    break;
+                case Entity_1.EntityType.Bullet:
+                    this.CreateBullet(rid, reader);
+                    break;
+                case Entity_1.EntityType.SceneItem:
+                    this.CreateSceneItem(rid, reader);
+                    break;
+            }
         }
         OnSnapshot(e) {
             const reader = $protobuf.Reader.create(e.data);

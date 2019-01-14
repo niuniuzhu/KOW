@@ -51,6 +51,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._collisionCount = 0;
             this._targetToCollisionCount = new Map();
         }
+        get type() { return Entity_1.EntityType.Bullet; }
         Init(params) {
             super.Init(params);
             this._casterID = params.casterID;

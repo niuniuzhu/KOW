@@ -142,9 +142,6 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const item = this._items[i];
                 item.Update(dt);
             }
-            if (!this.chase) {
-                this.SyncToView();
-            }
             for (let i = 0, count = this._items.length; i < count; i++) {
                 const item = this._items[i];
                 item.Intersect();
@@ -157,6 +154,9 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             for (let i = 0, count = this._champions.length; i < count; i++) {
                 const champion = this._champions[i];
                 champion.UpdateAfterHit();
+            }
+            if (!this.chase) {
+                this.SyncToView();
             }
             for (let i = 0, count = this._champions.length; i < count; i++) {
                 const champion = this._champions[i];
@@ -337,6 +337,10 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             champion.Init(params);
             this._champions.push(champion);
             this._idToChampion.set(champion.rid.toString(), champion);
+            const writer = $protobuf.Writer.create();
+            champion.EncodeSnapshot(writer);
+            const data = writer.finish();
+            SyncEvent_1.SyncEvent.EntityCreated(champion.type, data);
             return champion;
         }
         DestroyChampion(champion) {
@@ -389,6 +393,10 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             bullet.Init(params);
             this._bullets.push(bullet);
             this._idToBullet.set(bullet.rid.toString(), bullet);
+            const writer = $protobuf.Writer.create();
+            bullet.EncodeSnapshot(writer);
+            const data = writer.finish();
+            SyncEvent_1.SyncEvent.EntityCreated(bullet.type, data);
             return bullet;
         }
         DestroyBullet(bullet) {
@@ -415,6 +423,10 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             item.Init(params);
             this._items.push(item);
             this._idToItem.set(item.rid.toString(), item);
+            const writer = $protobuf.Writer.create();
+            item.EncodeSnapshot(writer);
+            const data = writer.finish();
+            SyncEvent_1.SyncEvent.EntityCreated(item.type, data);
             return item;
         }
         GetSceneItems() {
@@ -530,6 +542,13 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 bullet.DecodeSnapshot(reader);
                 str += "======bullet======\n";
                 str += bullet.Dump();
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const item = new SceneItem_1.SceneItem(this);
+                item.DecodeSnapshot(reader);
+                str += "======bullet======\n";
+                str += item.Dump();
             }
             return str;
         }

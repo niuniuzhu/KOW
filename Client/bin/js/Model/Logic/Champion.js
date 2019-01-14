@@ -25,6 +25,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this._intersectionCache = [];
             this._inputAgent.handler = this.HandleInput.bind(this);
         }
+        get type() { return Entity_1.EntityType.Champion; }
         get fsm() { return this._fsm; }
         get inputAgent() { return this._inputAgent; }
         get radius() { return this._radius; }
@@ -304,21 +305,27 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         SetAttr(attr, value) {
             switch (attr) {
                 case Attribute_1.EAttr.HP:
+                    value = FMathUtils_1.FMathUtils.Clamp(value, 0, this.mhp);
                     this.hp = value;
                     break;
                 case Attribute_1.EAttr.MHP:
+                    value = value < 0 ? 0 : value;
                     this.mhp = value;
                     break;
                 case Attribute_1.EAttr.MP:
+                    value = FMathUtils_1.FMathUtils.Clamp(value, 0, this.mmp);
                     this.mp = value;
                     break;
                 case Attribute_1.EAttr.MMP:
+                    value = value < 0 ? 0 : value;
                     this.mmp = value;
                     break;
                 case Attribute_1.EAttr.ATK:
+                    value = value < 0 ? 0 : value;
                     this.atk = value;
                     break;
                 case Attribute_1.EAttr.DEF:
+                    value = value < 0 ? 0 : value;
                     this.def = value;
                     break;
                 case Attribute_1.EAttr.S_DISABLE_MOVE:

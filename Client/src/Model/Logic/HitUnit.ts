@@ -49,7 +49,6 @@ export class HitUnit implements ISnapshotable, ICalcUnit {
 		//minus hp
 		let hp = target.GetAttr(EAttr.HP);
 		hp -= FMathUtils.Floor(totalDmg);
-		hp = hp < 0 ? 0 : hp
 		target.SetAttr(EAttr.HP, hp);
 
 		//mp

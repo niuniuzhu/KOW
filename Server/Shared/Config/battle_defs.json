@@ -16,7 +16,7 @@
 			"max_hp_packet": 1,
 			"hp_packet_padding": 10,
 			"hp_packet_refresh_interval": 5000,
-			"max_players": 1,
+			"max_players": 2,
 			"born_pos": [
 				[
 					0,
@@ -408,7 +408,7 @@
 	"scene_item": {
 		"s0": {
 			"name": "血包",
-			"radius": 0.5,
+			"radius": 0.4,
 			"attrs": [
 				1
 			],

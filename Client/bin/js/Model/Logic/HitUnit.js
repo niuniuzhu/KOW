@@ -26,7 +26,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/Utils/Expre
             }
             let hp = target.GetAttr(Attribute_1.EAttr.HP);
             hp -= FMathUtils_1.FMathUtils.Floor(totalDmg);
-            hp = hp < 0 ? 0 : hp;
             target.SetAttr(Attribute_1.EAttr.HP, hp);
             target.SetAttr(Attribute_1.EAttr.MP, FMathUtils_1.FMathUtils.Add(target.mp, skill.mpAdd));
             if (!caster.battle.chase) {

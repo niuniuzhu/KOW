@@ -9,13 +9,14 @@ import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
 import { EAttr } from "./Attribute";
 import { Battle } from "./Battle";
-import { Entity, EntityInitParams } from "./Entity";
+import { Entity, EntityInitParams, EntityType } from "./Entity";
 import { EntityFSM } from "./FSM/EntityFSM";
 import { EntityState } from "./FSM/EntityState";
 import { StateType } from "../StateEnums";
 import { InputAgent, InputType } from "./InputAagent";
 
 export class Champion extends Entity implements ISnapshotable {
+	public get type(): EntityType { return EntityType.Champion; }
 	public get fsm(): EntityFSM { return this._fsm; }
 	public get inputAgent(): InputAgent { return this._inputAgent; }
 	public get radius(): number { return this._radius; }
@@ -501,21 +502,27 @@ export class Champion extends Entity implements ISnapshotable {
 	public SetAttr(attr: EAttr, value: any) {
 		switch (attr) {
 			case EAttr.HP:
+				value = FMathUtils.Clamp(value, 0, this.mhp);
 				this.hp = value;
 				break;
 			case EAttr.MHP:
+				value = value < 0 ? 0 : value;
 				this.mhp = value;
 				break;
 			case EAttr.MP:
+				value = FMathUtils.Clamp(value, 0, this.mmp);
 				this.mp = value;
 				break;
 			case EAttr.MMP:
+				value = value < 0 ? 0 : value;
 				this.mmp = value;
 				break;
 			case EAttr.ATK:
+				value = value < 0 ? 0 : value;
 				this.atk = value;
 				break;
 			case EAttr.DEF:
+				value = value < 0 ? 0 : value;
 				this.def = value;
 				break;
 			case EAttr.S_DISABLE_MOVE:

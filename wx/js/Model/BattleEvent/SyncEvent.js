@@ -40,16 +40,31 @@ export class SyncEvent extends BaseBattleEvent {
         e.data = data;
         this.BeginInvoke(e);
     }
+    static EntityCreated(type, data) {
+        let e = this.Get();
+        e._type = SyncEvent.E_ENTITY_CREATED;
+        e.entityType = type;
+        e.data = data;
+        this.BeginInvoke(e);
+    }
     static Snapshot(data) {
         let e = this.Get();
         e._type = SyncEvent.E_SNAPSHOT;
         e.data = data;
         this.BeginInvoke(e);
     }
-    static Hit(targetID, value) {
+    static ItemTrigger(itemID, targetID) {
+        let e = this.Get();
+        e._type = SyncEvent.E_SCENE_ITEM_TRIGGER;
+        e.rid0 = itemID;
+        e.rid1 = targetID;
+        this.BeginInvoke(e);
+    }
+    static Hit(casterID, targetID, value) {
         let e = this.Get();
         e._type = SyncEvent.E_HIT;
-        e.rid0 = targetID;
+        e.rid0 = casterID;
+        e.rid1 = targetID;
         e.v0 = value;
         this.BeginInvoke(e);
     }
@@ -61,11 +76,21 @@ export class SyncEvent extends BaseBattleEvent {
         e.rid2 = targetID;
         this.BeginInvoke(e);
     }
+    static ScenItemCollision(itemID, targetID) {
+        let e = this.Get();
+        e._type = SyncEvent.E_SCENE_ITEM_COLLISION;
+        e.rid0 = itemID;
+        e.rid1 = targetID;
+        this.BeginInvoke(e);
+    }
 }
 SyncEvent.E_BATTLE_INIT = 100;
 SyncEvent.E_SNAPSHOT = 101;
-SyncEvent.E_HIT = 200;
-SyncEvent.E_BULLET_COLLISION = 201;
+SyncEvent.E_ENTITY_CREATED = 200;
+SyncEvent.E_HIT = 300;
+SyncEvent.E_BULLET_COLLISION = 301;
+SyncEvent.E_SCENE_ITEM_COLLISION = 302;
+SyncEvent.E_SCENE_ITEM_TRIGGER = 303;
 SyncEvent.POOL = new Stack();
 SyncEvent.HANDLERS = new Map();
 SyncEvent.EVENTS = [];

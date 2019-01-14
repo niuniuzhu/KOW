@@ -27,7 +27,9 @@ export class UIBattle {
         this._skillBtn1.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn1Release);
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
-        this._hpbar = this._root.getChild("n00").asProgress;
+        this._hpProgress = this._root.getChild("n00").asProgress;
+        this._hpbar = this._hpProgress.getChild("bar").asImage;
+        this._hpbarBg = this._hpProgress.getChild("di").asImage;
         this._mpBar = this._root.getChild("n1").asCom.getChild("n3").asProgress;
         this._time0 = this._root.getChild("s00").asTextField;
         this._time1 = this._root.getChild("s10").asTextField;
@@ -80,6 +82,7 @@ export class UIBattle {
     Update(dt) {
         this._gestureState.Update(dt);
         this._frameActionManager.Update(dt);
+        this._hpbarBg.width = MathUtils.Lerp(this._hpbarBg.width, this._hpbar.width, dt * 0.0015);
     }
     OnResize(e) {
     }
@@ -118,8 +121,8 @@ export class UIBattle {
             case EAttr.HP:
             case EAttr.MHP:
                 if (this.IsSelf(target)) {
-                    this._hpbar.max = target.mhp;
-                    this._hpbar.value = target.hp;
+                    this._hpProgress.max = target.mhp;
+                    this._hpProgress.value = target.hp;
                 }
                 break;
             case EAttr.MP:

@@ -7,6 +7,8 @@ import { ProtoCreator } from "../Net/ProtoHelper";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
 import { SceneState } from "./SceneState";
+import { CDefs } from "../Model/CDefs";
+import { Hashtable } from "../RC/Utils/Hashtable";
 export class LoadingState extends SceneState {
     constructor(type) {
         super(type);
@@ -49,6 +51,12 @@ export class LoadingState extends SceneState {
     }
     LoadAssets(battleInfo) {
         const urls = [];
+        const mapDef = CDefs.GetMap(battleInfo.mapID);
+        const preloads = Hashtable.GetStringArray(mapDef, "preloads");
+        for (const u of preloads) {
+            const ss = u.split(",");
+            urls.push({ url: "res/" + ss[0], type: ss[1] });
+        }
         const count = battleInfo.playerInfos.length;
         for (let i = 0; i < count; ++i) {
             const playerInfo = battleInfo.playerInfos[i];

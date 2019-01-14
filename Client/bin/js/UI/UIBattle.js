@@ -23,8 +23,8 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
             this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
             this._hpProgress = this._root.getChild("n00").asProgress;
-            this._hpbar = this._hpProgress.getChild("bar");
-            this._hpbarBg = this._hpProgress.getChild("di");
+            this._hpbar = this._hpProgress.getChild("bar").asImage;
+            this._hpbarBg = this._hpProgress.getChild("di").asImage;
             this._mpBar = this._root.getChild("n1").asCom.getChild("n3").asProgress;
             this._time0 = this._root.getChild("s00").asTextField;
             this._time1 = this._root.getChild("s10").asTextField;
@@ -77,7 +77,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
         Update(dt) {
             this._gestureState.Update(dt);
             this._frameActionManager.Update(dt);
-            this._hpbarBg.width = MathUtils_1.MathUtils.Lerp(this._hpbarBg.width, this._hpbar.width, dt * 0.001);
+            this._hpbarBg.width = MathUtils_1.MathUtils.Lerp(this._hpbarBg.width, this._hpbar.width, dt * 0.0015);
         }
         OnResize(e) {
         }

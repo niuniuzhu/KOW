@@ -1,4 +1,6 @@
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
+import { ExpressionEvaluator } from "../../RC/Utils/ExpressionEvaluator";
+import { StringUtils } from "../../RC/Utils/TextUtils";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { EAttr } from "./Attribute";
 export class HitUnit {
@@ -10,20 +12,26 @@ export class HitUnit {
         this._targetID = targetID;
         this._skillID = skillID;
     }
-    CalcDamage() {
+    Calculate() {
         const caster = this._manager.battle.GetChampion(this._casterID);
         const target = this._manager.battle.GetChampion(this._targetID);
         const skill = caster.GetSkill(this._skillID);
-        let commonDmg = FMathUtils.Sub(caster.atk, target.def);
-        commonDmg = commonDmg < 0 ? 0 : commonDmg;
-        const totalDmg = FMathUtils.Add(commonDmg, skill.damage);
+        let totalDmg;
+        if (skill.formula != null) {
+            const formula = StringUtils.Format(skill.formula, "" + skill.shakeTime);
+            totalDmg = HitUnit.EE.evaluate(formula);
+        }
+        else {
+            let commonDmg = FMathUtils.Sub(caster.atk, target.def);
+            commonDmg = commonDmg < 0 ? 0 : commonDmg;
+            totalDmg = FMathUtils.Add(commonDmg, skill.damage);
+        }
         let hp = target.GetAttr(EAttr.HP);
-        hp -= totalDmg;
-        hp = hp < 0 ? 0 : hp;
+        hp -= FMathUtils.Floor(totalDmg);
         target.SetAttr(EAttr.HP, hp);
         target.SetAttr(EAttr.MP, FMathUtils.Add(target.mp, skill.mpAdd));
         if (!caster.battle.chase) {
-            SyncEvent.Hit(target.rid, totalDmg);
+            SyncEvent.Hit(caster.rid, target.rid, totalDmg);
         }
     }
     EncodeSnapshot(writer) {
@@ -37,3 +45,4 @@ export class HitUnit {
         this._skillID = reader.int32();
     }
 }
+HitUnit.EE = new ExpressionEvaluator();

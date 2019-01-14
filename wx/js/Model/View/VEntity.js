@@ -2,6 +2,9 @@ import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
+import { AnimationProxy } from "./AnimationProxy";
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { ModelLayer } from "../../Graphic";
 export class VEntity {
     constructor(battle) {
         this._position = Vec2.zero;
@@ -14,13 +17,13 @@ export class VEntity {
         this._battle = battle;
         this._root.setSize(0, 0);
         this._root.setPivot(0.5, 0.5, true);
-        Global.graphic.entityRoot.addChild(this._root);
     }
     get rid() { return this._rid; }
     get id() { return this._id; }
     get root() { return this._root; }
     get animationProxy() { return this._animationProxy; }
     get markToDestroy() { return this._markToDestroy; }
+    set markToDestroy(value) { this._markToDestroy = value; }
     get position() { return this._position; }
     set position(value) {
         if (this._position.EqualsTo(value))
@@ -44,6 +47,32 @@ export class VEntity {
             this._animationProxy = null;
         }
         this._root.dispose();
+    }
+    LoadDefs() {
+        const cdefs = this.BeforeLoadDefs();
+        const modelID = Hashtable.GetNumber(cdefs, "model", -1);
+        if (modelID >= 0) {
+            this._animationProxy = new AnimationProxy(modelID);
+            this._root.addChild(this._animationProxy);
+        }
+        this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
+        this.AfterLoadDefs(cdefs);
+    }
+    DisplayRoot() {
+        switch (this._modelLevel) {
+            case ModelLayer.EntityLow:
+                Global.graphic.entityLow.addChild(this._root);
+                break;
+            case ModelLayer.EntityHigh:
+                Global.graphic.entityHigh.addChild(this._root);
+                break;
+            case ModelLayer.EffectLow:
+                Global.graphic.lowEffectRoot.addChild(this._root);
+                break;
+            case ModelLayer.EffectHigh:
+                Global.graphic.highEffectRoot.addChild(this._root);
+                break;
+        }
     }
     DecodeSync(rid, reader, isNew) {
         this._rid = rid;

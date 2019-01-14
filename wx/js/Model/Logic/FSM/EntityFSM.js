@@ -46,6 +46,7 @@ export class EntityFSM extends FSM {
         writer.bool(this.previousEntityState != null);
         if (this.previousEntityState != null)
             writer.int32(this.previousEntityState.type);
+        this.context.EncodeSnapshot(writer);
     }
     DecodeSnapshot(reader) {
         reader.int32();
@@ -62,6 +63,7 @@ export class EntityFSM extends FSM {
         if (reader.bool()) {
             this._previousState = this.GetState(reader.int32());
         }
+        this.context.DecodeSnapshot(reader);
     }
     HandleInput(type, press) {
         this.currentEntityState.HandleInput(type, press);

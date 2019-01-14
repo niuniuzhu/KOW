@@ -20,8 +20,10 @@ var FxDestroyType;
     FxDestroyType[FxDestroyType["Target"] = 2] = "Target";
 })(FxDestroyType || (FxDestroyType = {}));
 export class VBullet extends VEntity {
-    LoadDefs() {
-        const cdefs = CDefs.GetBullet(this._id);
+    BeforeLoadDefs() {
+        return CDefs.GetBullet(this._id);
+    }
+    AfterLoadDefs(cdefs) {
         this._hitFxID = Hashtable.GetNumber(cdefs, "hit_effect");
         this._hitFxDelay = Hashtable.GetNumber(cdefs, "hit_fx_delay");
         this._hitFxAttachType = Hashtable.GetNumber(cdefs, "hit_fx_attach_type");
@@ -29,6 +31,7 @@ export class VBullet extends VEntity {
         this._hitFxDestroyType = Hashtable.GetNumber(cdefs, "hit_fx_destroy_type");
         this._followPos = Hashtable.GetBool(cdefs, "hit_fx_follow_pos");
         this._followRot = Hashtable.GetBool(cdefs, "hit_fx_follow_rot");
+        this.DisplayRoot();
     }
     Destroy() {
         if (this._fx != null) {

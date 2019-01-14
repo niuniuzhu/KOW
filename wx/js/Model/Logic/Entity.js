@@ -1,4 +1,10 @@
 import { FVec2 } from "../../RC/FMath/FVec2";
+export var EntityType;
+(function (EntityType) {
+    EntityType[EntityType["Champion"] = 0] = "Champion";
+    EntityType[EntityType["Bullet"] = 1] = "Bullet";
+    EntityType[EntityType["SceneItem"] = 2] = "SceneItem";
+})(EntityType || (EntityType = {}));
 export class EntityInitParams {
 }
 export class Entity {

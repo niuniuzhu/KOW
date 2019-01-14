@@ -3,11 +3,10 @@ import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Defs } from "../Defs";
-import { Entity } from "./Entity";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
-import { Logger } from "../../RC/Utils/Logger";
+import { Defs } from "../Defs";
 import { EAttr } from "./Attribute";
+import { Entity, EntityType } from "./Entity";
 var BulletMoveType;
 (function (BulletMoveType) {
     BulletMoveType[BulletMoveType["Linear"] = 0] = "Linear";
@@ -58,6 +57,7 @@ export class Bullet extends Entity {
         this._collisionCount = 0;
         this._targetToCollisionCount = new Map();
     }
+    get type() { return EntityType.Bullet; }
     Init(params) {
         super.Init(params);
         this._casterID = params.casterID;
@@ -91,7 +91,6 @@ export class Bullet extends Entity {
         writer.int32(this._skillID);
         writer.int32(this._time);
         writer.int32(this._nextCollisionTime);
-        Logger.Log("encode:" + this._nextCollisionTime);
         writer.int32(this._collisionCount);
         const count = this._targetToCollisionCount.size;
         writer.int32(count);
@@ -106,7 +105,6 @@ export class Bullet extends Entity {
         this._skillID = reader.int32();
         this._time = reader.int32();
         this._nextCollisionTime = reader.int32();
-        Logger.Log("decode:" + this._nextCollisionTime);
         this._collisionCount = reader.int32();
         const count = reader.int32();
         for (let i = 0; i < count; ++i) {
@@ -170,7 +168,7 @@ export class Bullet extends Entity {
                 if (!target.battle.chase) {
                     SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
                 }
-                this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
+                this._battle.calcManager.AddHitUnit(this._casterID, target.rid, this._skillID);
                 hit = true;
                 ++this._collisionCount;
                 this._targetToCollisionCount.set(target.rid, ++count);

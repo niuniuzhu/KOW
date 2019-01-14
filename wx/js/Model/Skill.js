@@ -1,6 +1,9 @@
 import { Defs } from "./Defs";
 import { Hashtable } from "../RC/Utils/Hashtable";
 export class Skill {
+    constructor() {
+        this.shakeTime = 0;
+    }
     get id() { return this._id; }
     get connectState() { return this._connectState; }
     get mpCost() { return this._mpCost; }
@@ -8,6 +11,7 @@ export class Skill {
     get emitterID() { return this._emitterID; }
     get bulletID() { return this._bulletID; }
     get damage() { return this._damage; }
+    get formula() { return this._formula; }
     Init(id) {
         this._id = id;
         this.LoadDef();
@@ -20,5 +24,6 @@ export class Skill {
         this._emitterID = Hashtable.GetNumber(def, "emitter");
         this._bulletID = Hashtable.GetNumber(def, "bullet");
         this._damage = Hashtable.GetNumber(def, "damage");
+        this._formula = Hashtable.GetString(def, "formula", null);
     }
 }

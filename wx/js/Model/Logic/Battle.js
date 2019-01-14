@@ -17,7 +17,9 @@ import { Bullet } from "./Bullet";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
-import { HitManager } from "./HitManager";
+import { CalcationManager } from "./CalcationManager";
+import { HPPacket } from "./HPPacket";
+import { SceneItem } from "./SceneItem";
 export class Battle {
     constructor() {
         this._frameRate = 0;
@@ -38,7 +40,10 @@ export class Battle {
         this._idToEmitter = new Map();
         this._bullets = [];
         this._idToBullet = new Map();
-        this._hitManager = new HitManager(this);
+        this._items = [];
+        this._idToItem = new Map();
+        this._hpPacket = new HPPacket(this);
+        this._calcManager = new CalcationManager(this);
     }
     get frameRate() { return this._frameRate; }
     get keyframeStep() { return this._keyframeStep; }
@@ -51,7 +56,7 @@ export class Battle {
     get gladiatorPos() { return this._gladiatorPos; }
     get gladiatorRadius() { return this._gladiatorRadius; }
     get random() { return this._random; }
-    get hitManager() { return this._hitManager; }
+    get calcManager() { return this._calcManager; }
     SetBattleInfo(battleInfo) {
         this._destroied = false;
         this._frameRate = battleInfo.frameRate;
@@ -85,6 +90,7 @@ export class Battle {
         this._gladiatorTimeout = Hashtable.GetNumber(defs, "gladiator_timeout");
         this._gladiatorPos = Hashtable.GetFVec2(defs, "gladiator_pos");
         this._gladiatorRadius = Hashtable.GetNumber(defs, "gladiator_radius");
+        this._hpPacket.Init(defs);
     }
     Destroy() {
         if (this._destroied)
@@ -92,7 +98,7 @@ export class Battle {
         this._destroied = true;
         this._bounds = null;
         this._frameActionGroups.clear();
-        this._hitManager.Destroy();
+        this._calcManager.Destroy();
         for (let i = 0, count = this._champions.length; i < count; i++)
             this._champions[i].Destroy();
         this._champions.splice(0);
@@ -105,6 +111,10 @@ export class Battle {
             this._bullets[i].Destroy();
         this._bullets.splice(0);
         this._idToBullet.clear();
+        for (let i = 0, count = this._items.length; i < count; i++)
+            this._items[i].Destroy();
+        this._items.splice(0);
+        this._idToItem.clear();
     }
     Update(dt) {
         this.Chase(this._frameActionGroups);
@@ -122,6 +132,7 @@ export class Battle {
     }
     UpdateLogic(dt) {
         ++this._frame;
+        this._hpPacket.Update(dt);
         for (let i = 0, count = this._champions.length; i < count; i++) {
             const champion = this._champions[i];
             champion.Update(dt);
@@ -146,22 +157,38 @@ export class Battle {
             const bullet = this._bullets[i];
             bullet.Update(dt);
         }
-        if (!this.chase) {
-            this.SyncToView();
+        for (let i = 0, count = this._items.length; i < count; i++) {
+            const item = this._items[i];
+            item.Update(dt);
+        }
+        for (let i = 0, count = this._items.length; i < count; i++) {
+            const item = this._items[i];
+            item.Intersect();
         }
         for (let i = 0, count = this._bullets.length; i < count; i++) {
             const bullet = this._bullets[i];
             bullet.Intersect();
         }
-        this._hitManager.Update();
+        this._calcManager.Update();
         for (let i = 0, count = this._champions.length; i < count; i++) {
             const champion = this._champions[i];
             champion.UpdateAfterHit();
+        }
+        if (!this.chase) {
+            this.SyncToView();
         }
         for (let i = 0, count = this._champions.length; i < count; i++) {
             const champion = this._champions[i];
             if (champion.markToDestroy) {
                 this.DestroyChampionAt(i);
+                --i;
+                --count;
+            }
+        }
+        for (let i = 0, count = this._items.length; i < count; i++) {
+            const item = this._items[i];
+            if (item.markToDestroy) {
+                this.DestroySceneItemAt(i);
                 --i;
                 --count;
             }
@@ -214,7 +241,13 @@ export class Battle {
             const bullet = this._bullets[i];
             bullet.EncodeSnapshot(writer);
         }
-        this._hitManager.EncodeSnapshot(writer);
+        count = this._items.length;
+        writer.int32(count);
+        for (let i = 0; i < count; i++) {
+            const item = this._items[i];
+            item.EncodeSnapshot(writer);
+        }
+        this._calcManager.EncodeSnapshot(writer);
     }
     DecodeSnapshot(reader) {
         this._frame = reader.int32();
@@ -240,7 +273,14 @@ export class Battle {
             this._bullets.push(bullet);
             this._idToBullet.set(bullet.rid.toString(), bullet);
         }
-        this._hitManager.DecodeSnapshot(reader);
+        count = reader.int32();
+        for (let i = 0; i < count; i++) {
+            const item = new SceneItem(this);
+            item.DecodeSnapshot(reader);
+            this._items.push(item);
+            this._idToItem.set(item.rid.toString(), item);
+        }
+        this._calcManager.DecodeSnapshot(reader);
     }
     EncodeSync(writer) {
         writer.int32(this._frame);
@@ -254,6 +294,12 @@ export class Battle {
         writer.int32(count);
         for (let i = 0; i < count; i++) {
             const bullet = this._bullets[i];
+            bullet.EncodeSync(writer);
+        }
+        count = this._items.length;
+        writer.int32(count);
+        for (let i = 0; i < count; i++) {
+            const bullet = this._items[i];
             bullet.EncodeSync(writer);
         }
     }
@@ -310,6 +356,10 @@ export class Battle {
         champion.Init(params);
         this._champions.push(champion);
         this._idToChampion.set(champion.rid.toString(), champion);
+        const writer = $protobuf.Writer.create();
+        champion.EncodeSnapshot(writer);
+        const data = writer.finish();
+        SyncEvent.EntityCreated(champion.type, data);
         return champion;
     }
     DestroyChampion(champion) {
@@ -362,6 +412,10 @@ export class Battle {
         bullet.Init(params);
         this._bullets.push(bullet);
         this._idToBullet.set(bullet.rid.toString(), bullet);
+        const writer = $protobuf.Writer.create();
+        bullet.EncodeSnapshot(writer);
+        const data = writer.finish();
+        SyncEvent.EntityCreated(bullet.type, data);
         return bullet;
     }
     DestroyBullet(bullet) {
@@ -377,6 +431,39 @@ export class Battle {
     }
     GetBullet(rid) {
         return this._idToBullet.get(rid.toString());
+    }
+    CreateSceneItem(id, position = FVec2.zero, direction = FVec2.down) {
+        const params = new EntityInitParams();
+        params.rid = this.MakeRid(id);
+        params.id = id;
+        params.position = position;
+        params.direction = direction;
+        const item = new SceneItem(this);
+        item.Init(params);
+        this._items.push(item);
+        this._idToItem.set(item.rid.toString(), item);
+        const writer = $protobuf.Writer.create();
+        item.EncodeSnapshot(writer);
+        const data = writer.finish();
+        SyncEvent.EntityCreated(item.type, data);
+        return item;
+    }
+    GetSceneItems() {
+        return this._items;
+    }
+    DestroySceneItem(sceneItem) {
+        sceneItem.Destroy();
+        this._items.splice(this._items.indexOf(sceneItem), 1);
+        this._idToItem.delete(sceneItem.rid.toString());
+    }
+    DestroySceneItemAt(index) {
+        const item = this._items[index];
+        item.Destroy();
+        this._items.splice(index, 1);
+        this._idToItem.delete(item.rid.toString());
+    }
+    GetSceneItem(rid) {
+        return this._idToItem.get(rid.toString());
     }
     ApplyFrameActionGroup(frameActionGroup) {
         for (let i = 0; i < frameActionGroup.numActions; i++) {
@@ -474,6 +561,13 @@ export class Battle {
             bullet.DecodeSnapshot(reader);
             str += "======bullet======\n";
             str += bullet.Dump();
+        }
+        count = reader.int32();
+        for (let i = 0; i < count; i++) {
+            const item = new SceneItem(this);
+            item.DecodeSnapshot(reader);
+            str += "======bullet======\n";
+            str += item.Dump();
         }
         return str;
     }

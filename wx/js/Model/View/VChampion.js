@@ -6,7 +6,6 @@ import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { EAttr } from "../Logic/Attribute";
 import { Skill } from "../Skill";
-import { AnimationProxy } from "./AnimationProxy";
 import { VEntityState } from "./FSM/VEntityState";
 import { HUD } from "./HUD";
 import { VEntity } from "./VEntity";
@@ -85,14 +84,11 @@ export class VChampion extends VEntity {
         return; this._t_def_add = value; this.OnAttrChange(EAttr.S_DEF_ADD, value); }
     set t_speed_add(value) { if (this._t_speed_add == value)
         return; this._t_speed_add = value; this.OnAttrChange(EAttr.S_SPEED_ADD, value); }
-    LoadDefs() {
+    BeforeLoadDefs() {
+        return CDefs.GetEntity(this._id);
+    }
+    AfterLoadDefs(cdefs) {
         const defs = Defs.GetEntity(this._id);
-        const cdefs = CDefs.GetEntity(this._id);
-        const modelID = Hashtable.GetNumber(cdefs, "model", -1);
-        if (modelID >= 0) {
-            this._animationProxy = new AnimationProxy(modelID);
-            this._root.addChild(this._animationProxy);
-        }
         const skillsDef = Hashtable.GetNumberArray(defs, "skills");
         for (const sid of skillsDef) {
             const skill = new Skill();
@@ -107,6 +103,7 @@ export class VChampion extends VEntity {
                 state.Init(statesDef);
             }
         }
+        this.DisplayRoot();
     }
     OnAttrChange(attr, value) {
         UIEvent.AttrChange(this, attr, value);
@@ -117,7 +114,9 @@ export class VChampion extends VEntity {
     }
     DecodeSync(rid, reader, isNew) {
         super.DecodeSync(rid, reader, isNew);
-        UIEvent.ChampionInit(this);
+        if (isNew) {
+            UIEvent.ChampionInit(this);
+        }
         this.team = reader.int32();
         this.name = reader.string();
         this.hp = reader.int32();

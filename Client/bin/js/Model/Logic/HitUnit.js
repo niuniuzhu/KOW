@@ -10,7 +10,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/Utils/Expre
             this._targetID = targetID;
             this._skillID = skillID;
         }
-        CalcDamage() {
+        Calculate() {
             const caster = this._manager.battle.GetChampion(this._casterID);
             const target = this._manager.battle.GetChampion(this._targetID);
             const skill = caster.GetSkill(this._skillID);
@@ -30,7 +30,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/Utils/Expre
             target.SetAttr(Attribute_1.EAttr.HP, hp);
             target.SetAttr(Attribute_1.EAttr.MP, FMathUtils_1.FMathUtils.Add(target.mp, skill.mpAdd));
             if (!caster.battle.chase) {
-                SyncEvent_1.SyncEvent.Hit(target.rid, totalDmg);
+                SyncEvent_1.SyncEvent.Hit(caster.rid, target.rid, totalDmg);
             }
         }
         EncodeSnapshot(writer) {

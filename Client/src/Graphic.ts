@@ -43,7 +43,7 @@ export class Graphic {
 		this._battleRoot.addChild(this._mapRoot);
 
 		this._lowEffectRoot = new fairygui.GComponent();
-		this._lowEffectRoot.name = "low_effect_root";
+		this._lowEffectRoot.name = "effect_low";
 		this._lowEffectRoot.setSize(0, 0);
 		this._battleRoot.addChild(this._lowEffectRoot);
 
@@ -58,7 +58,7 @@ export class Graphic {
 		this._battleRoot.addChild(this._entityHigh);
 
 		this._highEffectRoot = new fairygui.GComponent();
-		this._highEffectRoot.name = "high_effect_root";
+		this._highEffectRoot.name = "effect_high";
 		this._highEffectRoot.setSize(0, 0);
 		this._battleRoot.addChild(this._highEffectRoot);
 

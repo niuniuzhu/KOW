@@ -22,6 +22,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_HIT, this.OnHit.bind(this));
             SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_COLLISION, this.OnItemCollision.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_TRIGGER, this.OnItemTrigger.bind(this));
             this._destroied = false;
             this._mapID = battleInfo.mapID;
             const def = Defs_1.Defs.GetMap(this._mapID);
@@ -38,6 +40,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_HIT);
             SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_BULLET_COLLISION);
+            SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_COLLISION);
+            SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_TRIGGER);
             for (let i = 0, count = this._champions.length; i < count; ++i) {
                 this._champions[i].Destroy();
             }
@@ -227,8 +231,12 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this.DecodeSync(reader);
         }
         OnHit(e) {
-            const target = this.GetChampion(e.rid0);
+            const target = this.GetChampion(e.rid1);
             target.hud.PopText(HUD_1.PopTextType.Hurt, e.v0);
+        }
+        OnItemCollision(e) {
+        }
+        OnItemTrigger(e) {
         }
         OnBulletCollision(e) {
             const bullet = this.GetBullet(e.rid0);

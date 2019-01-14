@@ -14,6 +14,7 @@ export abstract class VEntity {
 	public get root(): fairygui.GComponent { return this._root; }
 	public get animationProxy(): AnimationProxy { return this._animationProxy; }
 	public get markToDestroy(): boolean { return this._markToDestroy; }
+	public set markToDestroy(value: boolean) { this._markToDestroy = value; }
 
 	public get position(): Vec2 { return this._position; }
 	public set position(value: Vec2) {
@@ -72,7 +73,7 @@ export abstract class VEntity {
 			this._animationProxy = new AnimationProxy(modelID);
 			this._root.addChild(this._animationProxy);
 		}
-		this._modelLevel = Hashtable.GetNumber(cdefs, "model_level");
+		this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
 		this.AfterLoadDefs(cdefs);
 	}
 

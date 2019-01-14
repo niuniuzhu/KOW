@@ -20,8 +20,10 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity
         FxDestroyType[FxDestroyType["Target"] = 2] = "Target";
     })(FxDestroyType || (FxDestroyType = {}));
     class VBullet extends VEntity_1.VEntity {
-        LoadDefs() {
-            const cdefs = CDefs_1.CDefs.GetBullet(this._id);
+        BeforeLoadDefs() {
+            return CDefs_1.CDefs.GetBullet(this._id);
+        }
+        AfterLoadDefs(cdefs) {
             this._hitFxID = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_effect");
             this._hitFxDelay = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_delay");
             this._hitFxAttachType = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_attach_type");
@@ -29,6 +31,7 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity
             this._hitFxDestroyType = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_destroy_type");
             this._followPos = Hashtable_1.Hashtable.GetBool(cdefs, "hit_fx_follow_pos");
             this._followRot = Hashtable_1.Hashtable.GetBool(cdefs, "hit_fx_follow_rot");
+            this.DisplayRoot();
         }
         Destroy() {
             if (this._fx != null) {

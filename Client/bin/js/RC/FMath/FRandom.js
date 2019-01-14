@@ -6,7 +6,7 @@ define(["require", "exports", "./FMathUtils"], function (require, exports, FMath
             this._seed = seed || Math.random();
         }
         Next() {
-            this._seed = (this._seed + 49297) % 233280;
+            this._seed = (this._seed * 9301 + 49297) % 233280;
             const result = FMathUtils_1.FMathUtils.Div(this._seed, 233280.0);
             return result;
         }

@@ -10,6 +10,7 @@ export class VSceneItem extends VEntity {
 
 	protected AfterLoadDefs(cdefs: Hashtable): void {
 		this.DisplayRoot();
+		this._animationProxy.Play(Hashtable.GetNumber(cdefs, "animation"), 0, 1, false);
 	}
 
 	public DecodeSync(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader, isNew: boolean): void {

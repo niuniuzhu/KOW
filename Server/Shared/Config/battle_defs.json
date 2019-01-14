@@ -14,7 +14,8 @@
 			],
 			"gladiator_radius": 1.5, /*禁区半径*/
 			"max_hp_packet": 1,
-			"hp_packet_refresh_interval": 1000,
+			"hp_packet_padding": 10,
+			"hp_packet_refresh_interval": 5000,
 			"max_players": 1,
 			"born_pos": [
 				[
@@ -407,7 +408,7 @@
 	"scene_item": {
 		"s0": {
 			"name": "血包",
-			"radius": 20,
+			"radius": 0.5,
 			"attrs": [
 				1
 			],

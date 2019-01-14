@@ -4,13 +4,12 @@ import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
+import { EAttr } from "./Attribute";
 import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";
-import { SyncEvent } from "../BattleEvent/SyncEvent";
-import { Logger } from "../../RC/Utils/Logger";
-import { EAttr } from "./Attribute";
 
 enum BulletMoveType {
 	Linear,
@@ -133,7 +132,6 @@ export class Bullet extends Entity implements ISnapshotable {
 		writer.int32(this._skillID);
 		writer.int32(this._time);
 		writer.int32(this._nextCollisionTime);
-		Logger.Log("encode:" + this._nextCollisionTime);
 		writer.int32(this._collisionCount);
 		const count = this._targetToCollisionCount.size;
 		writer.int32(count);
@@ -149,7 +147,6 @@ export class Bullet extends Entity implements ISnapshotable {
 		this._skillID = reader.int32();
 		this._time = reader.int32();
 		this._nextCollisionTime = reader.int32();
-		Logger.Log("decode:" + this._nextCollisionTime);
 		this._collisionCount = reader.int32();
 		const count = reader.int32();
 		for (let i = 0; i < count; ++i) {
@@ -234,7 +231,7 @@ export class Bullet extends Entity implements ISnapshotable {
 					SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
 				}
 				//添加受击单元
-				this._battle.hitManager.AddHitUnit(this._casterID, target.rid, this._skillID);
+				this._battle.calcManager.AddHitUnit(this._casterID, target.rid, this._skillID);
 				hit = true;
 				++this._collisionCount;
 				this._targetToCollisionCount.set(target.rid, ++count);

@@ -20,7 +20,7 @@ import { Bullet } from "./Bullet";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
-import { HitManager } from "./HitManager";
+import { CalcationManager } from "./CalcationManager";
 import { HPPacket } from "./HPPacket";
 import { SceneItem } from "./SceneItem";
 
@@ -44,7 +44,7 @@ export class Battle implements ISnapshotable {
 	public get gladiatorPos(): FVec2 { return this._gladiatorPos; }
 	public get gladiatorRadius(): number { return this._gladiatorRadius; }
 	public get random(): FRandom { return this._random; }
-	public get hitManager(): HitManager { return this._hitManager; }
+	public get calcManager(): CalcationManager { return this._calcManager; }
 
 	public chase: boolean = false;
 
@@ -72,11 +72,11 @@ export class Battle implements ISnapshotable {
 	private readonly _items: SceneItem[] = [];
 	private readonly _idToItem: Map<string, SceneItem> = new Map<string, SceneItem>();
 	private readonly _hpPacket: HPPacket;
-	private readonly _hitManager: HitManager;
+	private readonly _calcManager: CalcationManager;
 
 	constructor() {
 		this._hpPacket = new HPPacket(this);
-		this._hitManager = new HitManager(this);
+		this._calcManager = new CalcationManager(this);
 	}
 
 	/**
@@ -131,7 +131,7 @@ export class Battle implements ISnapshotable {
 		this._destroied = true;
 		this._bounds = null;
 		this._frameActionGroups.clear();
-		this._hitManager.Destroy();
+		this._calcManager.Destroy();
 
 		for (let i = 0, count = this._champions.length; i < count; i++)
 			this._champions[i].Destroy();
@@ -242,7 +242,7 @@ export class Battle implements ISnapshotable {
 			bullet.Intersect();
 		}
 
-		this._hitManager.Update();
+		this._calcManager.Update();
 
 		//update after hit
 		for (let i = 0, count = this._champions.length; i < count; i++) {
@@ -345,7 +345,7 @@ export class Battle implements ISnapshotable {
 			item.EncodeSnapshot(writer);
 		}
 
-		this._hitManager.EncodeSnapshot(writer);
+		this._calcManager.EncodeSnapshot(writer);
 	}
 
 	/**
@@ -390,7 +390,7 @@ export class Battle implements ISnapshotable {
 			this._idToItem.set(item.rid.toString(), item);
 		}
 
-		this._hitManager.DecodeSnapshot(reader);
+		this._calcManager.DecodeSnapshot(reader);
 	}
 
 	/**
@@ -632,6 +632,10 @@ export class Battle implements ISnapshotable {
 		this._items.push(item);
 		this._idToItem.set(item.rid.toString(), item);
 		return item;
+	}
+
+	public GetSceneItems(): SceneItem[] {
+		return this._items;
 	}
 
 	/**

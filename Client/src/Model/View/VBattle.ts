@@ -46,6 +46,8 @@ export class VBattle {
 		SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
 		SyncEvent.AddListener(SyncEvent.E_HIT, this.OnHit.bind(this));
 		SyncEvent.AddListener(SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_SCENE_ITEM_COLLISION, this.OnItemCollision.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_SCENE_ITEM_TRIGGER, this.OnItemTrigger.bind(this));
 
 		this._destroied = false;
 		this._mapID = battleInfo.mapID
@@ -72,6 +74,8 @@ export class VBattle {
 		SyncEvent.RemoveListener(SyncEvent.E_SNAPSHOT);
 		SyncEvent.RemoveListener(SyncEvent.E_HIT);
 		SyncEvent.RemoveListener(SyncEvent.E_BULLET_COLLISION);
+		SyncEvent.RemoveListener(SyncEvent.E_SCENE_ITEM_COLLISION);
+		SyncEvent.RemoveListener(SyncEvent.E_SCENE_ITEM_TRIGGER);
 
 		//destroy champions
 		for (let i = 0, count = this._champions.length; i < count; ++i) {
@@ -336,8 +340,14 @@ export class VBattle {
 	}
 
 	private OnHit(e: SyncEvent): void {
-		const target = this.GetChampion(e.rid0);
+		const target = this.GetChampion(e.rid1);
 		target.hud.PopText(PopTextType.Hurt, e.v0);
+	}
+
+	private OnItemCollision(e: SyncEvent): void {
+	}
+
+	private OnItemTrigger(e: SyncEvent): void {
 	}
 
 	private OnBulletCollision(e: SyncEvent): void {

@@ -93,12 +93,8 @@ export class VChampion extends VEntity {
 		this._hud = new HUD(this);
 	}
 
-	protected LoadDefs(): void {
-	}
-
 	protected BeforeLoadDefs(): Hashtable {
-		const cdefs = CDefs.GetEntity(this._id);
-		return cdefs;
+		return CDefs.GetEntity(this._id);
 	}
 
 	protected AfterLoadDefs(cdefs: Hashtable): void {

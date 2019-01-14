@@ -7,6 +7,8 @@ export class SyncEvent extends BaseBattleEvent {
 
 	public static readonly E_HIT: number = 200;
 	public static readonly E_BULLET_COLLISION: number = 201;
+	public static readonly E_SCENE_ITEM_COLLISION: number = 202;
+	public static readonly E_SCENE_ITEM_TRIGGER: number = 203;
 
 	private static readonly POOL: Stack<SyncEvent> = new Stack<SyncEvent>();
 	private static readonly HANDLERS: Map<number, (e: SyncEvent) => void> = new Map<number, (e: SyncEvent) => void>();
@@ -70,10 +72,19 @@ export class SyncEvent extends BaseBattleEvent {
 		this.BeginInvoke(e);
 	}
 
-	public static Hit(targetID: Long, value: number): void {
+	public static ItemTrigger(itemID: Long, targetID: Long): void {
+		let e = this.Get();
+		e._type = SyncEvent.E_SCENE_ITEM_TRIGGER;
+		e.rid0 = itemID;
+		e.rid1 = targetID;
+		this.BeginInvoke(e);
+	}
+
+	public static Hit(casterID: Long, targetID: Long, value: number): void {
 		let e = this.Get();
 		e._type = SyncEvent.E_HIT;
-		e.rid0 = targetID;
+		e.rid0 = casterID;
+		e.rid1 = targetID;
 		e.v0 = value;
 		this.BeginInvoke(e);
 	}
@@ -84,6 +95,14 @@ export class SyncEvent extends BaseBattleEvent {
 		e.rid0 = bulletID;
 		e.rid1 = casterID;
 		e.rid2 = targetID;
+		this.BeginInvoke(e);
+	}
+
+	public static ScenItemCollision(itemID: Long, targetID: Long): void {
+		let e = this.Get();
+		e._type = SyncEvent.E_SCENE_ITEM_COLLISION;
+		e.rid0 = itemID;
+		e.rid1 = targetID;
 		this.BeginInvoke(e);
 	}
 

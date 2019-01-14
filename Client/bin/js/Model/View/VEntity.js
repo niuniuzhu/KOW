@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2"], function (require, exports, Consts_1, Global_1, MathUtils_1, Vec2_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "./AnimationProxy", "../../RC/Utils/Hashtable", "../../Graphic"], function (require, exports, Consts_1, Global_1, MathUtils_1, Vec2_1, AnimationProxy_1, Hashtable_1, Graphic_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -13,13 +13,13 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/Mat
             this._battle = battle;
             this._root.setSize(0, 0);
             this._root.setPivot(0.5, 0.5, true);
-            Global_1.Global.graphic.entityRoot.addChild(this._root);
         }
         get rid() { return this._rid; }
         get id() { return this._id; }
         get root() { return this._root; }
         get animationProxy() { return this._animationProxy; }
         get markToDestroy() { return this._markToDestroy; }
+        set markToDestroy(value) { this._markToDestroy = value; }
         get position() { return this._position; }
         set position(value) {
             if (this._position.EqualsTo(value))
@@ -43,6 +43,32 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/Mat
                 this._animationProxy = null;
             }
             this._root.dispose();
+        }
+        LoadDefs() {
+            const cdefs = this.BeforeLoadDefs();
+            const modelID = Hashtable_1.Hashtable.GetNumber(cdefs, "model", -1);
+            if (modelID >= 0) {
+                this._animationProxy = new AnimationProxy_1.AnimationProxy(modelID);
+                this._root.addChild(this._animationProxy);
+            }
+            this._modelLevel = Hashtable_1.Hashtable.GetNumber(cdefs, "model_layer");
+            this.AfterLoadDefs(cdefs);
+        }
+        DisplayRoot() {
+            switch (this._modelLevel) {
+                case Graphic_1.ModelLayer.EntityLow:
+                    Global_1.Global.graphic.entityLow.addChild(this._root);
+                    break;
+                case Graphic_1.ModelLayer.EntityHigh:
+                    Global_1.Global.graphic.entityHigh.addChild(this._root);
+                    break;
+                case Graphic_1.ModelLayer.EffectLow:
+                    Global_1.Global.graphic.lowEffectRoot.addChild(this._root);
+                    break;
+                case Graphic_1.ModelLayer.EffectHigh:
+                    Global_1.Global.graphic.highEffectRoot.addChild(this._root);
+                    break;
+            }
         }
         DecodeSync(rid, reader, isNew) {
             this._rid = rid;

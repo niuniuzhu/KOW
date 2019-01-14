@@ -4,8 +4,10 @@ import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "./Attribute";
 import { Entity, EntityInitParams } from "./Entity";
+import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
 
-enum Op {
+export enum SceneItemAttrOp {
 	Add,
 	Mul,
 	Pow,
@@ -15,11 +17,14 @@ enum Op {
 
 export class SceneItem extends Entity implements ISnapshotable {
 	public get radius(): number { return this._radius; }
+	public get attrs(): EAttr[] { return this._attrs; }
+	public get values(): number[] { return this._values; }
+	public get ops(): SceneItemAttrOp[] { return this._ops; }
 
 	private _radius: number;
 	private _attrs: EAttr[];
 	private _values: number[];
-	private _ops: Op[];
+	private _ops: SceneItemAttrOp[];
 
 	public Init(params: EntityInitParams): void {
 		super.Init(params);
@@ -48,5 +53,27 @@ export class SceneItem extends Entity implements ISnapshotable {
 	}
 
 	public Intersect(): void {
+		const champions = this._battle.GetChampions();
+		let hit: boolean = false;
+		for (const target of champions) {
+			if (target.isDead)
+				continue;
+			const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
+			if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
+				//派发物品碰撞通知
+				if (!target.battle.chase) {
+					SyncEvent.ScenItemCollision(this.rid, target.rid);
+				}
+				//添加物品使用单元
+				this._battle.calcManager.AddItemUnit(this.rid, target.rid);
+				hit = true;
+			}
+			if (hit) {
+				break;
+			}
+		}
+		if (hit) {
+			this._markToDestroy = true;
+		}
 	}
 }

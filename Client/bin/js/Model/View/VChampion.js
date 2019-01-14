@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../BattleEvent/UIEvent", "../CDefs", "../Defs", "../Logic/Attribute", "../Skill", "./AnimationProxy", "./FSM/VEntityState", "./HUD", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, UIEvent_1, CDefs_1, Defs_1, Attribute_1, Skill_1, AnimationProxy_1, VEntityState_1, HUD_1, VEntity_1) {
+define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../BattleEvent/UIEvent", "../CDefs", "../Defs", "../Logic/Attribute", "../Skill", "./FSM/VEntityState", "./HUD", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, UIEvent_1, CDefs_1, Defs_1, Attribute_1, Skill_1, VEntityState_1, HUD_1, VEntity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VChampion extends VEntity_1.VEntity {
@@ -76,14 +76,11 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
             return; this._t_def_add = value; this.OnAttrChange(Attribute_1.EAttr.S_DEF_ADD, value); }
         set t_speed_add(value) { if (this._t_speed_add == value)
             return; this._t_speed_add = value; this.OnAttrChange(Attribute_1.EAttr.S_SPEED_ADD, value); }
-        LoadDefs() {
+        BeforeLoadDefs() {
+            return CDefs_1.CDefs.GetEntity(this._id);
+        }
+        AfterLoadDefs(cdefs) {
             const defs = Defs_1.Defs.GetEntity(this._id);
-            const cdefs = CDefs_1.CDefs.GetEntity(this._id);
-            const modelID = Hashtable_1.Hashtable.GetNumber(cdefs, "model", -1);
-            if (modelID >= 0) {
-                this._animationProxy = new AnimationProxy_1.AnimationProxy(modelID);
-                this._root.addChild(this._animationProxy);
-            }
             const skillsDef = Hashtable_1.Hashtable.GetNumberArray(defs, "skills");
             for (const sid of skillsDef) {
                 const skill = new Skill_1.Skill();
@@ -98,6 +95,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
                     state.Init(statesDef);
                 }
             }
+            this.DisplayRoot();
         }
         OnAttrChange(attr, value) {
             UIEvent_1.UIEvent.AttrChange(this, attr, value);

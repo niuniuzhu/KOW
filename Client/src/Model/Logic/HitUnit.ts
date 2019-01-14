@@ -5,20 +5,21 @@ import { StringUtils } from "../../RC/Utils/TextUtils";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "./Attribute";
-import { HitManager } from "./HitManager";
+import { CalcationManager } from "./CalcationManager";
+import { ICalcUnit } from "./ICalcUnit";
 
 /**
  * 受击单元
  */
-export class HitUnit implements ISnapshotable {
+export class HitUnit implements ISnapshotable, ICalcUnit {
 	private static readonly EE: ExpressionEvaluator = new ExpressionEvaluator();
 
-	private _manager: HitManager;
+	private readonly _manager: CalcationManager;
 	private _casterID: Long;
 	private _targetID: Long;
 	private _skillID: number;
 
-	constructor(manager: HitManager) {
+	constructor(manager: CalcationManager) {
 		this._manager = manager;
 	}
 
@@ -28,7 +29,7 @@ export class HitUnit implements ISnapshotable {
 		this._skillID = skillID;
 	}
 
-	public CalcDamage(): void {
+	public Calculate(): void {
 		const caster = this._manager.battle.GetChampion(this._casterID);
 		const target = this._manager.battle.GetChampion(this._targetID);
 		const skill = caster.GetSkill(this._skillID);
@@ -55,7 +56,7 @@ export class HitUnit implements ISnapshotable {
 		target.SetAttr(EAttr.MP, FMathUtils.Add(target.mp, skill.mpAdd));
 
 		if (!caster.battle.chase) {
-			SyncEvent.Hit(target.rid, totalDmg);
+			SyncEvent.Hit(caster.rid, target.rid, totalDmg);
 		}
 	}
 

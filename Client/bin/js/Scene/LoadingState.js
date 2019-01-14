@@ -1,4 +1,4 @@
-define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../Libs/protos", "../Model/BattleInfo", "../Net/ProtoHelper", "../RC/Utils/Logger", "./SceneManager", "./SceneState"], function (require, exports, AssetsManager_1, Consts_1, Global_1, protos_1, BattleInfo_1, ProtoHelper_1, Logger_1, SceneManager_1, SceneState_1) {
+define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../Libs/protos", "../Model/BattleInfo", "../Net/ProtoHelper", "../RC/Utils/Logger", "./SceneManager", "./SceneState", "../Model/CDefs", "../RC/Utils/Hashtable"], function (require, exports, AssetsManager_1, Consts_1, Global_1, protos_1, BattleInfo_1, ProtoHelper_1, Logger_1, SceneManager_1, SceneState_1, CDefs_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoadingState extends SceneState_1.SceneState {
@@ -43,6 +43,12 @@ define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../
         }
         LoadAssets(battleInfo) {
             const urls = [];
+            const mapDef = CDefs_1.CDefs.GetMap(battleInfo.mapID);
+            const preloads = Hashtable_1.Hashtable.GetStringArray(mapDef, "preloads");
+            for (const u of preloads) {
+                const ss = u.split(",");
+                urls.push({ url: "res/" + ss[0], type: ss[1] });
+            }
             const count = battleInfo.playerInfos.length;
             for (let i = 0; i < count; ++i) {
                 const playerInfo = battleInfo.playerInfos[i];

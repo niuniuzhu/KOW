@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "./HitManager"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, HitManager_1) {
+define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "./HitManager", "./HPPacket", "./SceneItem"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, HitManager_1, HPPacket_1, SceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -21,6 +21,9 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._idToEmitter = new Map();
             this._bullets = [];
             this._idToBullet = new Map();
+            this._items = [];
+            this._idToItem = new Map();
+            this._hpPacket = new HPPacket_1.HPPacket(this);
             this._hitManager = new HitManager_1.HitManager(this);
         }
         get frameRate() { return this._frameRate; }
@@ -68,6 +71,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._gladiatorTimeout = Hashtable_1.Hashtable.GetNumber(defs, "gladiator_timeout");
             this._gladiatorPos = Hashtable_1.Hashtable.GetFVec2(defs, "gladiator_pos");
             this._gladiatorRadius = Hashtable_1.Hashtable.GetNumber(defs, "gladiator_radius");
+            this._hpPacket.Init(defs);
         }
         Destroy() {
             if (this._destroied)
@@ -88,6 +92,10 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 this._bullets[i].Destroy();
             this._bullets.splice(0);
             this._idToBullet.clear();
+            for (let i = 0, count = this._items.length; i < count; i++)
+                this._items[i].Destroy();
+            this._items.splice(0);
+            this._idToItem.clear();
         }
         Update(dt) {
             this.Chase(this._frameActionGroups);
@@ -105,6 +113,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         }
         UpdateLogic(dt) {
             ++this._frame;
+            this._hpPacket.Update(dt);
             for (let i = 0, count = this._champions.length; i < count; i++) {
                 const champion = this._champions[i];
                 champion.Update(dt);
@@ -129,8 +138,16 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const bullet = this._bullets[i];
                 bullet.Update(dt);
             }
+            for (let i = 0, count = this._items.length; i < count; i++) {
+                const item = this._items[i];
+                item.Update(dt);
+            }
             if (!this.chase) {
                 this.SyncToView();
+            }
+            for (let i = 0, count = this._items.length; i < count; i++) {
+                const item = this._items[i];
+                item.Intersect();
             }
             for (let i = 0, count = this._bullets.length; i < count; i++) {
                 const bullet = this._bullets[i];
@@ -145,6 +162,14 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const champion = this._champions[i];
                 if (champion.markToDestroy) {
                     this.DestroyChampionAt(i);
+                    --i;
+                    --count;
+                }
+            }
+            for (let i = 0, count = this._items.length; i < count; i++) {
+                const item = this._items[i];
+                if (item.markToDestroy) {
+                    this.DestroySceneItemAt(i);
                     --i;
                     --count;
                 }
@@ -197,6 +222,12 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 const bullet = this._bullets[i];
                 bullet.EncodeSnapshot(writer);
             }
+            count = this._items.length;
+            writer.int32(count);
+            for (let i = 0; i < count; i++) {
+                const item = this._items[i];
+                item.EncodeSnapshot(writer);
+            }
             this._hitManager.EncodeSnapshot(writer);
         }
         DecodeSnapshot(reader) {
@@ -223,6 +254,13 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 this._bullets.push(bullet);
                 this._idToBullet.set(bullet.rid.toString(), bullet);
             }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const item = new SceneItem_1.SceneItem(this);
+                item.DecodeSnapshot(reader);
+                this._items.push(item);
+                this._idToItem.set(item.rid.toString(), item);
+            }
             this._hitManager.DecodeSnapshot(reader);
         }
         EncodeSync(writer) {
@@ -237,6 +275,12 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             writer.int32(count);
             for (let i = 0; i < count; i++) {
                 const bullet = this._bullets[i];
+                bullet.EncodeSync(writer);
+            }
+            count = this._items.length;
+            writer.int32(count);
+            for (let i = 0; i < count; i++) {
+                const bullet = this._items[i];
                 bullet.EncodeSync(writer);
             }
         }
@@ -360,6 +404,32 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         }
         GetBullet(rid) {
             return this._idToBullet.get(rid.toString());
+        }
+        CreateSceneItem(id, position = FVec2_1.FVec2.zero, direction = FVec2_1.FVec2.down) {
+            const params = new Entity_1.EntityInitParams();
+            params.rid = this.MakeRid(id);
+            params.id = id;
+            params.position = position;
+            params.direction = direction;
+            const item = new SceneItem_1.SceneItem(this);
+            item.Init(params);
+            this._items.push(item);
+            this._idToItem.set(item.rid.toString(), item);
+            return item;
+        }
+        DestroySceneItem(sceneItem) {
+            sceneItem.Destroy();
+            this._items.splice(this._items.indexOf(sceneItem), 1);
+            this._idToItem.delete(sceneItem.rid.toString());
+        }
+        DestroySceneItemAt(index) {
+            const item = this._items[index];
+            item.Destroy();
+            this._items.splice(index, 1);
+            this._idToItem.delete(item.rid.toString());
+        }
+        GetSceneItem(rid) {
+            return this._idToItem.get(rid.toString());
         }
         ApplyFrameActionGroup(frameActionGroup) {
             for (let i = 0; i < frameActionGroup.numActions; i++) {

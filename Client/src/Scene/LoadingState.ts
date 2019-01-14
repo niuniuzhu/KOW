@@ -8,6 +8,8 @@ import { Logger } from "../RC/Utils/Logger";
 import { UILoading } from "../UI/UILoading";
 import { SceneManager } from "./SceneManager";
 import { SceneState } from "./SceneState";
+import { CDefs } from "../Model/CDefs";
+import { Hashtable } from "../RC/Utils/Hashtable";
 
 /**
  * 加载资源状态
@@ -76,10 +78,17 @@ export class LoadingState extends SceneState {
 	 */
 	private LoadAssets(battleInfo: BattleInfo): void {
 		const urls = [];
+		//获取场景预加载资源路径
+		const mapDef = CDefs.GetMap(battleInfo.mapID);
+		const preloads = Hashtable.GetStringArray(mapDef, "preloads");
+		for (const u of preloads) {
+			const ss = u.split(",");
+			urls.push({ url: "res/" + ss[0], type: ss[1] });
+		}
+		//压入角色资源
 		const count = battleInfo.playerInfos.length;
 		for (let i = 0; i < count; ++i) {
 			const playerInfo = battleInfo.playerInfos[i];
-			//压入角色资源
 			urls.push({ url: "res/roles/" + Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
 		}
 		//压入地图资源

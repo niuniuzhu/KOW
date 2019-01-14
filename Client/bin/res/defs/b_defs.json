@@ -19,6 +19,13 @@
 		"endlevel.bin,3",
 		"endlevel_atlas0.png,4"
 	],
+	"map": {
+		"m0": {
+			"preloads": [
+				"roles/m100.atlas,7"
+			]
+		}
+	},
 	"model": {
 		"m0": {
 			"animations": [
@@ -80,11 +87,23 @@
 					"interval": 100
 				}
 			]
+		},
+		"m100": {
+			"animations": [
+				{
+					"id": 0,
+					"name": "idle",
+					"length": 1,
+					"play_mode": 1,
+					"interval": 100
+				}
+			]
 		}
 	},
 	"entity": {
 		"e0": {
 			"model": 0,
+			"model_layer": 1,
 			"states": {
 				"0": {
 					"actions": [
@@ -166,13 +185,20 @@
 	"effect": {
 		"fx0": {
 			"model": 0,
-			"animation": 7,
-			"layer": 1
+			"model_layer": 3,
+			"animation": 7
 		},
 		"fx1": {
 			"model": 0,
-			"animation": 8,
-			"layer": 1
+			"model_layer": 3,
+			"animation": 8
+		}
+	},
+	"scene_item": {
+		"s0": {
+			"model": 100,
+			"model_layer": 0,
+			"animation": 0
 		}
 	}
 }

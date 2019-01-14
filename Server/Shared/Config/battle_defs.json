@@ -13,7 +13,9 @@
 				0
 			],
 			"gladiator_radius": 1.5, /*禁区半径*/
-			"max_players": 2,
+			"max_hp_packet": 1,
+			"hp_packet_refresh_interval": 1000,
+			"max_players": 1,
 			"born_pos": [
 				[
 					0,
@@ -38,6 +40,7 @@
 	},
 	"entity": {
 		"e0": {
+			"name": "熊",
 			"mhp": 1000,
 			"mmp": 100,
 			"mp_recover": 5,
@@ -332,6 +335,7 @@
 	},
 	"skill": {
 		"s0": {
+			"name": "爪击",
 			"connect_state": 2,
 			"mp_cost": 0,
 			"mp_add": 5,
@@ -340,6 +344,7 @@
 			"damage": 40
 		},
 		"s1": {
+			"name": "撕咬",
 			"connect_state": 3,
 			"mp_cost": 100,
 			"mp_add": 5,
@@ -397,6 +402,21 @@
 			"attr_types": [],
 			"attr_filter_ops": [],
 			"attr_compare_values": []
+		}
+	},
+	"scene_item": {
+		"s0": {
+			"name": "血包",
+			"radius": 20,
+			"attrs": [
+				1
+			],
+			"values": [
+				100
+			],
+			"ops": [
+				0
+			]
 		}
 	}
 }

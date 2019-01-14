@@ -11,6 +11,7 @@ import { PopTextType } from "./HUD";
 import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
 import { VEffect } from "./VEffect";
+import { VSceneItem } from "./VSceneItem";
 
 export class VBattle {
 	private _mapID: number = 0;
@@ -22,6 +23,8 @@ export class VBattle {
 	private readonly _bullets: VBullet[] = [];
 	private readonly _idToBullet: Map<string, VBullet> = new Map<string, VBullet>();
 	private readonly _effects: VEffect[] = [];
+	private readonly _items: VSceneItem[] = [];
+	private readonly _idToItem: Map<string, VSceneItem> = new Map<string, VSceneItem>();
 
 	private _root: fairygui.GComponent;
 	private _logicFrame: number;
@@ -84,6 +87,13 @@ export class VBattle {
 		this._bullets.splice(0);
 		this._idToBullet.clear();
 
+		//destroy items
+		for (let i = 0, count = this._items.length; i < count; ++i) {
+			this._items[i].Destroy();
+		}
+		this._items.splice(0);
+		this._idToItem.clear();
+
 		//destroy effects
 		for (let i = 0, count = this._effects.length; i < count; ++i) {
 			this._effectPool.Release(this._effects[i]);
@@ -99,6 +109,12 @@ export class VBattle {
 	public Update(dt: number): void {
 		//更新摄像机
 		this._camera.Update(dt);
+
+		//update items
+		for (let i = 0, count = this._items.length; i < count; i++) {
+			const item = this._items[i];
+			item.Update(dt);
+		}
 
 		//update effects
 		for (let i = 0, count = this._effects.length; i < count; i++) {
@@ -147,6 +163,16 @@ export class VBattle {
 				--count;
 			}
 		}
+
+		//destroy items
+		for (let i = 0, count = this._items.length; i < count; i++) {
+			const item = this._items[i];
+			if (item.markToDestroy) {
+				this.DestroySceneItemAt(i);
+				--i;
+				--count;
+			}
+		}
 	}
 
 	/**
@@ -185,6 +211,21 @@ export class VBattle {
 				this._idToBullet.set(bullet.rid.toString(), bullet);
 			} else {
 				bullet.DecodeSync(rid, reader, false);
+			}
+		}
+
+		//sceneitems
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const rid = <Long>reader.uint64();
+			let item = this.GetSceneItem(rid);
+			if (item == null) {
+				item = new VSceneItem(this);
+				item.DecodeSync(rid, reader, true);
+				this._items.push(item);
+				this._idToItem.set(item.rid.toString(), item);
+			} else {
+				item.DecodeSync(rid, reader, false);
 			}
 		}
 	}
@@ -256,6 +297,32 @@ export class VBattle {
 		const fx = this._effects[index];
 		this._effects.splice(index, 1);
 		this._effectPool.Release(fx);
+	}
+
+	/**
+	 * 销毁场景物品
+	 */
+	public DestroySceneItem(sceneItem: VSceneItem): void {
+		sceneItem.Destroy();
+		this._items.splice(this._items.indexOf(sceneItem), 1);
+		this._idToItem.delete(sceneItem.rid.toString());
+	}
+
+	/**
+	 * 销毁场景物品
+	 */
+	private DestroySceneItemAt(index: number): void {
+		const item = this._items[index];
+		item.Destroy();
+		this._items.splice(index, 1);
+		this._idToItem.delete(item.rid.toString());
+	}
+
+	/**
+	 * 获取指定rid的场景物品
+	 */
+	public GetSceneItem(rid: Long): VSceneItem {
+		return this._idToItem.get(rid.toString());
 	}
 
 	private OnBattleInit(e: SyncEvent): void {

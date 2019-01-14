@@ -4,11 +4,7 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
 import { AnimationProxy } from "./AnimationProxy";
 import { VBattle } from "./VBattle";
-
-enum EffectRootLevel {
-	Low,
-	High
-}
+import { ModelLayer } from "../../Graphic";
 
 export class VEffect {
 	public get id(): number { return this._id; }
@@ -43,7 +39,7 @@ export class VEffect {
 	private readonly _root = new fairygui.GComponent();
 
 	private _id: number;
-	private _effectRootLevel: EffectRootLevel;
+	private _effectRootLevel: ModelLayer;
 	private _animationID: number;
 	private _lifeTime: number;
 
@@ -56,15 +52,6 @@ export class VEffect {
 		this.LoadDefs();
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
-		switch (this._effectRootLevel) {
-			case EffectRootLevel.Low:
-				Global.graphic.lowEffectRoot.addChild(this._root);
-				break;
-			case EffectRootLevel.High:
-				Global.graphic.highEffectRoot.addChild(this._root);
-				break;
-		}
-		this._animationProxy.Play(this._animationID, 0, 1, true);
 	}
 
 	public Destroy(): void {
@@ -80,8 +67,9 @@ export class VEffect {
 		const modelID = Hashtable.GetNumber(cdefs, "model", -1);
 		if (modelID >= 0) {
 			this._animationProxy = new AnimationProxy(modelID);
+			this._root.addChild(this._animationProxy);
 		}
-		this._effectRootLevel = Hashtable.GetNumber(cdefs, "layer");
+		this._effectRootLevel = Hashtable.GetNumber(cdefs, "model_layer");
 		this._animationID = Hashtable.GetNumber(cdefs, "animation");
 		const setting = this._animationProxy.GetSetting(this._animationID);
 		this._lifeTime = setting.length * setting.interval;
@@ -97,13 +85,21 @@ export class VEffect {
 	}
 
 	public OnSpawn(): void {
-		this._root.addChild(this._animationProxy);
 		this._time = 0;
 		this.markToDestroy = false;
+		switch (this._effectRootLevel) {
+			case ModelLayer.EffectLow:
+				Global.graphic.lowEffectRoot.addChild(this._root);
+				break;
+			case ModelLayer.EffectHigh:
+				Global.graphic.highEffectRoot.addChild(this._root);
+				break;
+		}
+		this._animationProxy.Play(this._animationID, 0, 1, true);
 	}
 
 	public OnDespawn(): void {
-		this._root.removeChild(this._animationProxy);
+		this._root.removeFromParent();
 	}
 
 	private OnPositionChanged(delta: Vec2): void {

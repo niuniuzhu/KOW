@@ -5,6 +5,8 @@ import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { AnimationProxy } from "./AnimationProxy";
 import { VBattle } from "./VBattle";
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { ModelLayer } from "../../Graphic";
 
 export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
@@ -43,6 +45,7 @@ export abstract class VEntity {
 	private _logicPos: Vec2 = Vec2.zero;
 	private _logicRot: number = 0;
 	private _markToDestroy: boolean;
+	private _modelLevel: ModelLayer;
 
 	protected readonly _root = new fairygui.GComponent();
 	protected _animationProxy: AnimationProxy = null;
@@ -51,7 +54,6 @@ export abstract class VEntity {
 		this._battle = battle;
 		this._root.setSize(0, 0);
 		this._root.setPivot(0.5, 0.5, true);
-		Global.graphic.entityRoot.addChild(this._root);
 	}
 
 	public Destroy(): void {
@@ -62,7 +64,38 @@ export abstract class VEntity {
 		this._root.dispose();
 	}
 
-	protected abstract LoadDefs(): void;
+	protected LoadDefs(): void {
+		const cdefs = this.BeforeLoadDefs();
+		//加载动画数据
+		const modelID = Hashtable.GetNumber(cdefs, "model", -1);
+		if (modelID >= 0) {
+			this._animationProxy = new AnimationProxy(modelID);
+			this._root.addChild(this._animationProxy);
+		}
+		this._modelLevel = Hashtable.GetNumber(cdefs, "model_level");
+		this.AfterLoadDefs(cdefs);
+	}
+
+	protected abstract BeforeLoadDefs(): Hashtable;
+
+	protected abstract AfterLoadDefs(cdefs: Hashtable): void;
+
+	protected DisplayRoot(): void {
+		switch (this._modelLevel) {
+			case ModelLayer.EntityLow:
+				Global.graphic.entityLow.addChild(this._root);
+				break;
+			case ModelLayer.EntityHigh:
+				Global.graphic.entityHigh.addChild(this._root);
+				break;
+			case ModelLayer.EffectLow:
+				Global.graphic.lowEffectRoot.addChild(this._root);
+				break;
+			case ModelLayer.EffectHigh:
+				Global.graphic.highEffectRoot.addChild(this._root);
+				break;
+		}
+	}
 
 	/**
 	 * 解码快照

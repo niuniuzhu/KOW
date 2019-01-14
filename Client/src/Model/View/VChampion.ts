@@ -7,7 +7,6 @@ import { CDefs } from "../CDefs";
 import { Defs } from "../Defs";
 import { EAttr } from "../Logic/Attribute";
 import { Skill } from "../Skill";
-import { AnimationProxy } from "./AnimationProxy";
 import { VEntityState } from "./FSM/VEntityState";
 import { HUD } from "./HUD";
 import { VBattle } from "./VBattle";
@@ -95,16 +94,15 @@ export class VChampion extends VEntity {
 	}
 
 	protected LoadDefs(): void {
-		const defs = Defs.GetEntity(this._id);
+	}
+
+	protected BeforeLoadDefs(): Hashtable {
 		const cdefs = CDefs.GetEntity(this._id);
+		return cdefs;
+	}
 
-		//加载动画数据
-		const modelID = Hashtable.GetNumber(cdefs, "model", -1);
-		if (modelID >= 0) {
-			this._animationProxy = new AnimationProxy(modelID);
-			this._root.addChild(this._animationProxy);
-		}
-
+	protected AfterLoadDefs(cdefs: Hashtable): void {
+		const defs = Defs.GetEntity(this._id);
 		const skillsDef = Hashtable.GetNumberArray(defs, "skills");
 		for (const sid of skillsDef) {
 			const skill = new Skill();
@@ -120,6 +118,7 @@ export class VChampion extends VEntity {
 				state.Init(statesDef);
 			}
 		}
+		this.DisplayRoot();
 	}
 
 	private OnAttrChange(attr: EAttr, value: any): void {
@@ -134,7 +133,9 @@ export class VChampion extends VEntity {
 	public DecodeSync(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader, isNew: boolean): void {
 		super.DecodeSync(rid, reader, isNew);
 		//通知UI创建实体
-		UIEvent.ChampionInit(this);
+		if (isNew) {
+			UIEvent.ChampionInit(this);
+		}
 		this.team = reader.int32();
 		this.name = reader.string();
 		this.hp = reader.int32();

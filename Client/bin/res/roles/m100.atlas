@@ -1,0 +1,25 @@
+{
+    "frames": {
+        "idle0.png": {
+            "frame": {
+                "h": 59,
+                "idx": 0,
+                "w": 60,
+                "x": 0,
+                "y": 0
+            },
+            "sourceSize": {
+                "h": 59,
+                "w": 60
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0
+            }
+        }
+    },
+    "meta": {
+        "image": "m100.png",
+        "prefix": "m100/"
+    }
+}

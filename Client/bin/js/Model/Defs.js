@@ -9,6 +9,7 @@ define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (r
             this._skillMap = Hashtable_1.Hashtable.GetMap(this._defs, "skill");
             this._emitterMap = Hashtable_1.Hashtable.GetMap(this._defs, "emitter");
             this._bulletMap = Hashtable_1.Hashtable.GetMap(this._defs, "bullet");
+            this._sceneItem = Hashtable_1.Hashtable.GetMap(this._defs, "scene_item");
         }
         static GetMap(id) {
             return Hashtable_1.Hashtable.GetMap(this._mapMap, Consts_1.Consts.ASSETS_MAP_PREFIX + id);
@@ -24,6 +25,9 @@ define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (r
         }
         static GetBullet(id) {
             return Hashtable_1.Hashtable.GetMap(this._bulletMap, Consts_1.Consts.ASSETS_BULLET_PREFIX + id);
+        }
+        static GetSceneItem(id) {
+            return Hashtable_1.Hashtable.GetMap(this._sceneItem, Consts_1.Consts.ASSETS_SCENE_ITEM_PREFIX + id);
         }
     }
     exports.Defs = Defs;

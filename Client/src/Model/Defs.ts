@@ -8,6 +8,7 @@ export class Defs {
 	private static _skillMap: Hashtable;
 	private static _emitterMap: Hashtable;
 	private static _bulletMap: Hashtable;
+	private static _sceneItem: Hashtable;
 
 	public static Init(json: Hashtable) {
 		this._defs = json;
@@ -16,6 +17,7 @@ export class Defs {
 		this._skillMap = Hashtable.GetMap(this._defs, "skill");
 		this._emitterMap = Hashtable.GetMap(this._defs, "emitter");
 		this._bulletMap = Hashtable.GetMap(this._defs, "bullet");
+		this._sceneItem = Hashtable.GetMap(this._defs, "scene_item");
 	}
 
 	public static GetMap(id: number): Hashtable {
@@ -36,5 +38,9 @@ export class Defs {
 
 	public static GetBullet(id: number): Hashtable {
 		return Hashtable.GetMap(this._bulletMap, Consts.ASSETS_BULLET_PREFIX + id);
+	}
+
+	public static GetSceneItem(id: number): Hashtable {
+		return Hashtable.GetMap(this._sceneItem, Consts.ASSETS_SCENE_ITEM_PREFIX + id);
 	}
 }

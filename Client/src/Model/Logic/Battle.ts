@@ -21,6 +21,8 @@ import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
 import { HitManager } from "./HitManager";
+import { HPPacket } from "./HPPacket";
+import { SceneItem } from "./SceneItem";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -56,6 +58,7 @@ export class Battle implements ISnapshotable {
 	private _gladiatorTimeout: number;
 	private _gladiatorPos: FVec2;
 	private _gladiatorRadius: number;
+
 	private _destroied: boolean = false;
 	private _markToEnd: boolean = false;
 
@@ -66,9 +69,13 @@ export class Battle implements ISnapshotable {
 	private readonly _idToEmitter: Map<string, Emitter> = new Map<string, Emitter>();
 	private readonly _bullets: Bullet[] = [];
 	private readonly _idToBullet: Map<string, Bullet> = new Map<string, Bullet>();
+	private readonly _items: SceneItem[] = [];
+	private readonly _idToItem: Map<string, SceneItem> = new Map<string, SceneItem>();
+	private readonly _hpPacket: HPPacket;
 	private readonly _hitManager: HitManager;
 
 	constructor() {
+		this._hpPacket = new HPPacket(this);
 		this._hitManager = new HitManager(this);
 	}
 
@@ -112,6 +119,7 @@ export class Battle implements ISnapshotable {
 		this._gladiatorTimeout = Hashtable.GetNumber(defs, "gladiator_timeout");
 		this._gladiatorPos = Hashtable.GetFVec2(defs, "gladiator_pos");
 		this._gladiatorRadius = Hashtable.GetNumber(defs, "gladiator_radius");
+		this._hpPacket.Init(defs);
 	}
 
 	/**
@@ -139,6 +147,11 @@ export class Battle implements ISnapshotable {
 			this._bullets[i].Destroy();
 		this._bullets.splice(0);
 		this._idToBullet.clear();
+
+		for (let i = 0, count = this._items.length; i < count; i++)
+			this._items[i].Destroy();
+		this._items.splice(0);
+		this._idToItem.clear();
 	}
 
 	/**
@@ -170,6 +183,9 @@ export class Battle implements ISnapshotable {
 	 */
 	private UpdateLogic(dt: number): void {
 		++this._frame;
+
+		//check for creating items
+		this._hpPacket.Update(dt);
 
 		//update champions
 		for (let i = 0, count = this._champions.length; i < count; i++) {
@@ -203,9 +219,21 @@ export class Battle implements ISnapshotable {
 			bullet.Update(dt);
 		}
 
+		//update items
+		for (let i = 0, count = this._items.length; i < count; i++) {
+			const item = this._items[i];
+			item.Update(dt);
+		}
+
 		//sync to view
 		if (!this.chase) {
 			this.SyncToView();
+		}
+
+		//handle item's intersections
+		for (let i = 0, count = this._items.length; i < count; i++) {
+			const item = this._items[i];
+			item.Intersect();
 		}
 
 		//handle bullet's intersections
@@ -227,6 +255,16 @@ export class Battle implements ISnapshotable {
 			const champion = this._champions[i];
 			if (champion.markToDestroy) {
 				this.DestroyChampionAt(i);
+				--i;
+				--count;
+			}
+		}
+
+		//destroy items
+		for (let i = 0, count = this._items.length; i < count; i++) {
+			const item = this._items[i];
+			if (item.markToDestroy) {
+				this.DestroySceneItemAt(i);
 				--i;
 				--count;
 			}
@@ -299,6 +337,14 @@ export class Battle implements ISnapshotable {
 			bullet.EncodeSnapshot(writer);
 		}
 
+		//items
+		count = this._items.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const item = this._items[i];
+			item.EncodeSnapshot(writer);
+		}
+
 		this._hitManager.EncodeSnapshot(writer);
 	}
 
@@ -335,6 +381,15 @@ export class Battle implements ISnapshotable {
 			this._idToBullet.set(bullet.rid.toString(), bullet);
 		}
 
+		//items
+		count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const item = new SceneItem(this);
+			item.DecodeSnapshot(reader);
+			this._items.push(item);
+			this._idToItem.set(item.rid.toString(), item);
+		}
+
 		this._hitManager.DecodeSnapshot(reader);
 	}
 
@@ -357,6 +412,14 @@ export class Battle implements ISnapshotable {
 		writer.int32(count);
 		for (let i = 0; i < count; i++) {
 			const bullet = this._bullets[i];
+			bullet.EncodeSync(writer);
+		}
+
+		//sceneitem
+		count = this._items.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const bullet = this._items[i];
 			bullet.EncodeSync(writer);
 		}
 	}
@@ -556,6 +619,48 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
+	 * 创建场景物品
+	 */
+	public CreateSceneItem(id: number, position: FVec2 = FVec2.zero, direction: FVec2 = FVec2.down): SceneItem {
+		const params = new EntityInitParams();
+		params.rid = this.MakeRid(id);
+		params.id = id;
+		params.position = position;
+		params.direction = direction;
+		const item = new SceneItem(this);
+		item.Init(params);
+		this._items.push(item);
+		this._idToItem.set(item.rid.toString(), item);
+		return item;
+	}
+
+	/**
+	 * 销毁场景物品
+	 */
+	public DestroySceneItem(sceneItem: SceneItem): void {
+		sceneItem.Destroy();
+		this._items.splice(this._items.indexOf(sceneItem), 1);
+		this._idToItem.delete(sceneItem.rid.toString());
+	}
+
+	/**
+	 * 销毁场景物品
+	 */
+	private DestroySceneItemAt(index: number): void {
+		const item = this._items[index];
+		item.Destroy();
+		this._items.splice(index, 1);
+		this._idToItem.delete(item.rid.toString());
+	}
+
+	/**
+	 * 获取指定rid的场景物品
+	 */
+	public GetSceneItem(rid: Long): SceneItem {
+		return this._idToItem.get(rid.toString());
+	}
+
+	/**
 	 * 应用帧行为
 	 * @param frameAction 帧行为
 	 */
@@ -625,7 +730,7 @@ export class Battle implements ISnapshotable {
 
 			//发送协议
 			Global.connector.bsConnector.Send(Protos.GC2BS_EndBattle, msg);
-			
+
 			this._markToEnd = true;
 		}
 	}

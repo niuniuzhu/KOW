@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1, VSceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -10,6 +10,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._bullets = [];
             this._idToBullet = new Map();
             this._effects = [];
+            this._items = [];
+            this._idToItem = new Map();
             this._destroied = false;
             this._effectPool = new EffectPool_1.EffectPool(this);
         }
@@ -46,6 +48,11 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             }
             this._bullets.splice(0);
             this._idToBullet.clear();
+            for (let i = 0, count = this._items.length; i < count; ++i) {
+                this._items[i].Destroy();
+            }
+            this._items.splice(0);
+            this._idToItem.clear();
             for (let i = 0, count = this._effects.length; i < count; ++i) {
                 this._effectPool.Release(this._effects[i]);
             }
@@ -57,6 +64,10 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         Update(dt) {
             this._camera.Update(dt);
+            for (let i = 0, count = this._items.length; i < count; i++) {
+                const item = this._items[i];
+                item.Update(dt);
+            }
             for (let i = 0, count = this._effects.length; i < count; i++) {
                 const effect = this._effects[i];
                 effect.Update(dt);
@@ -89,6 +100,14 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 const effect = this._effects[i];
                 if (effect.markToDestroy) {
                     this.DespawnEffectAt(i);
+                    --i;
+                    --count;
+                }
+            }
+            for (let i = 0, count = this._items.length; i < count; i++) {
+                const item = this._items[i];
+                if (item.markToDestroy) {
+                    this.DestroySceneItemAt(i);
                     --i;
                     --count;
                 }
@@ -126,6 +145,20 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 }
                 else {
                     bullet.DecodeSync(rid, reader, false);
+                }
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
+                const rid = reader.uint64();
+                let item = this.GetSceneItem(rid);
+                if (item == null) {
+                    item = new VSceneItem_1.VSceneItem(this);
+                    item.DecodeSync(rid, reader, true);
+                    this._items.push(item);
+                    this._idToItem.set(item.rid.toString(), item);
+                }
+                else {
+                    item.DecodeSync(rid, reader, false);
                 }
             }
         }
@@ -170,6 +203,20 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             const fx = this._effects[index];
             this._effects.splice(index, 1);
             this._effectPool.Release(fx);
+        }
+        DestroySceneItem(sceneItem) {
+            sceneItem.Destroy();
+            this._items.splice(this._items.indexOf(sceneItem), 1);
+            this._idToItem.delete(sceneItem.rid.toString());
+        }
+        DestroySceneItemAt(index) {
+            const item = this._items[index];
+            item.Destroy();
+            this._items.splice(index, 1);
+            this._idToItem.delete(item.rid.toString());
+        }
+        GetSceneItem(rid) {
+            return this._idToItem.get(rid.toString());
         }
         OnBattleInit(e) {
             const reader = $protobuf.Reader.create(e.data);

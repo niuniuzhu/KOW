@@ -37,8 +37,11 @@ export class VBullet extends VEntity {
 	private _triggered: boolean;
 	private _fx: VEffect;
 
-	protected LoadDefs(): void {
-		const cdefs = CDefs.GetBullet(this._id);
+	protected BeforeLoadDefs(): Hashtable {
+		return CDefs.GetBullet(this._id);
+	}
+
+	protected AfterLoadDefs(cdefs: Hashtable): void {
 		this._hitFxID = Hashtable.GetNumber(cdefs, "hit_effect");
 		this._hitFxDelay = Hashtable.GetNumber(cdefs, "hit_fx_delay");
 		this._hitFxAttachType = Hashtable.GetNumber(cdefs, "hit_fx_attach_type");
@@ -46,6 +49,7 @@ export class VBullet extends VEntity {
 		this._hitFxDestroyType = Hashtable.GetNumber(cdefs, "hit_fx_destroy_type");
 		this._followPos = Hashtable.GetBool(cdefs, "hit_fx_follow_pos");
 		this._followRot = Hashtable.GetBool(cdefs, "hit_fx_follow_rot");
+		this.DisplayRoot();
 	}
 
 	public Destroy(): void {

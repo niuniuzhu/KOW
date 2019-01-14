@@ -8,6 +8,7 @@ export class Consts {
 	public static readonly ASSETS_SKILL_PREFIX: string = "s";
 	public static readonly ASSETS_EMITTER_PREFIX: string = "m";
 	public static readonly ASSETS_BULLET_PREFIX: string = "b";
+	public static readonly ASSETS_SCENE_ITEM_PREFIX: string = "s";
 	public static readonly ASSETS_EFFECT_PREFIX: string = "fx";
 	public static readonly LOGIC_TO_PIXEL_RATIO: number = 100;
 }

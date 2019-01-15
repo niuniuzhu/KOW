@@ -3,7 +3,7 @@ using Shared.Net;
 
 namespace DBServer.Biz
 {
-	public partial class BizProcessor
+	public class BizProcessor
 	{
 		public ErrorCode OnLs2DbQueryAccount( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
@@ -44,7 +44,7 @@ namespace DBServer.Biz
 				} );
 
 			if ( errorCode == ErrorCode.Success )
-				errorCode = DB.instance.accountDB.SqlExecNonQuery( $"update account_user SET last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out uint _ );
+				errorCode = DB.instance.accountDB.SqlExecNonQuery( $"update account_user SET channel={( int )queryLogin.Channel}, last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out uint _ );
 
 			switch ( errorCode )
 			{

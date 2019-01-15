@@ -5,6 +5,18 @@ namespace CentralServer.User
 	public class CSUser
 	{
 		/// <summary>
+		/// 渠道
+		/// </summary>
+		public CSUserMgr.Channel channel { get; private set; }
+		/// <summary>
+		/// 浏览器
+		/// </summary>
+		public CSUserMgr.Browser browser { get; private set; }
+		/// <summary>
+		/// 平台
+		/// </summary>
+		public CSUserMgr.Platform platform { get; private set; }
+		/// <summary>
 		/// 登陆密匙
 		/// </summary>
 		public uint ukey { get; private set; }
@@ -12,6 +24,18 @@ namespace CentralServer.User
 		/// 网络唯一ID
 		/// </summary>
 		public ulong gcNID { get; private set; }
+		/// <summary>
+		/// 微信登陆的openID
+		/// </summary>
+		public string openID { get; private set; }
+		/// <summary>
+		/// 微信登陆的sessionKey
+		/// </summary>
+		public string sessionKey { get; private set; }
+		/// <summary>
+		/// 微信登陆的unionID
+		/// </summary>
+		public string unionID { get; private set; }
 		/// <summary>
 		/// 玩家是否已连线
 		/// </summary>
@@ -60,23 +84,29 @@ namespace CentralServer.User
 		/// <summary>
 		/// 是否达到下线的条件
 		/// </summary>
-		public bool CanOffline()
+		internal bool CanOffline()
 		{
 			//todo 目前只需要判断是否在战场状态
 			return this.gsSID == 0;
 		}
 
-		public void OnCreate( uint ukey, ulong gcNID, long loginTime )
+		internal void OnCreate( Protos.LS2CS_GCLogin gcLogin, long loginTime )
 		{
-			this.ukey = ukey;
-			this.gcNID = gcNID;
+			this.channel = ( CSUserMgr.Channel )gcLogin.Channel;
+			this.browser = ( CSUserMgr.Browser )gcLogin.Browser;
+			this.platform = ( CSUserMgr.Platform )gcLogin.Platform;
+			this.ukey = gcLogin.Ukey;
+			this.gcNID = gcLogin.SessionID;
+			this.openID = gcLogin.OpenID;
+			this.sessionKey = gcLogin.SessionKey;
+			this.unionID = gcLogin.UnionID;
 			this.loginTime = loginTime;
 		}
 
 		/// <summary>
 		/// 处理玩家上线
 		/// </summary>
-		public void Online( uint sid, uint lid )
+		internal void Online( uint sid, uint lid )
 		{
 			this.isConnected = true;
 			this.gsSID = sid;
@@ -86,7 +116,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 处理玩家下线
 		/// </summary>
-		public void Offline()
+		internal void Offline()
 		{
 			this.gsSID = 0;
 			this.isConnected = false;
@@ -95,7 +125,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 设置玩家进入战场
 		/// </summary>
-		public void EnterBattle( uint bsSID, uint bsLID, uint bid )
+		internal void EnterBattle( uint bsSID, uint bsLID, uint bid )
 		{
 			this.bsSID = bsSID;
 			this.bsLID = bsLID;
@@ -106,7 +136,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 设置玩家离开战场
 		/// </summary>
-		public void LeaveBattle()
+		internal void LeaveBattle()
 		{
 			this.isInBattle = false;
 			this.bsSID = 0;

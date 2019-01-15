@@ -13,7 +13,7 @@ if (mode == undefined || mode == 0) {
 	if (platform == undefined)
 		platform = 0;
 	require(["./js/Main"], function (G) {
-		new G.Main("{\"platform\": " + platform + "}");
+		new G.Main();
 	})
 }
 else {

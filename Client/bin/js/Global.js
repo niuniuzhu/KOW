@@ -1,17 +1,6 @@
-define(["require", "exports", "./Net/Connector", "./Graphic", "./UI/UIManager", "./Scene/SceneManager", "./Model/BattleManager", "./Net/ProtoHelper"], function (require, exports, Connector_1, Graphic_1, UIManager_1, SceneManager_1, BattleManager_1, ProtoHelper_1) {
+define(["require", "exports", "./Graphic", "./Model/BattleManager", "./Net/Connector", "./Net/ProtoHelper", "./Scene/SceneManager", "./UI/UIManager"], function (require, exports, Graphic_1, BattleManager_1, Connector_1, ProtoHelper_1, SceneManager_1, UIManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Platform;
-    (function (Platform) {
-        Platform[Platform["Editor"] = 0] = "Editor";
-        Platform[Platform["Web"] = 1] = "Web";
-        Platform[Platform["WXMini"] = 2] = "WXMini";
-    })(Platform || (Platform = {}));
-    var RunMode;
-    (function (RunMode) {
-        RunMode[RunMode["Game"] = 0] = "Game";
-        RunMode[RunMode["Pressure"] = 1] = "Pressure";
-    })(RunMode || (RunMode = {}));
     class Global {
         static get connector() { return this._connector; }
         static get graphic() { return this._graphic; }
@@ -27,8 +16,6 @@ define(["require", "exports", "./Net/Connector", "./Graphic", "./UI/UIManager", 
             this._battleManager.Init();
         }
     }
-    Global.Platform = Platform;
-    Global.RunMode = RunMode;
     Global._connector = new Connector_1.Connector();
     Global._graphic = new Graphic_1.Graphic();
     Global._uiManager = new UIManager_1.UIManager();

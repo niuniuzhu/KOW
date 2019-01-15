@@ -15,6 +15,16 @@ namespace LoginServer
 			HelpText = "Specify configuration file." )]
 		public string cfg { get; set; }
 
+		[Option( "wxAppID",
+			SetName = "bysetting",
+			HelpText = "wx appID" )]
+		public string wxAppID { get; set; }
+
+		[Option( "wxAppSecret",
+			SetName = "bysetting",
+			HelpText = "wx AppSecret" )]
+		public string wxAppSecret { get; set; }
+
 		[Option( 'p', "cli_port",
 			Default = 49996,
 			SetName = "bysetting",

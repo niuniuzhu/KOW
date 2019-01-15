@@ -26,16 +26,19 @@ namespace Protos {
           string.Concat(
             "CgtMUzJEQi5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iQQoSTFMyREJf",
             "UXVlcnlBY2NvdW50Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIM",
-            "CgRuYW1lGAIgASgJIncKEExTMkRCX1F1ZXJ5TG9naW4SHQoEb3B0cxgBIAEo",
-            "CzIPLlByb3Rvcy5Nc2dPcHRzEgwKBG5hbWUYAiABKAkSCwoDcHdkGAMgASgJ",
-            "Eg8KB3ZlcnRQd2QYBCABKAgSCgoCaXAYBSABKAkSDAoEdGltZRgGIAEoAyI4",
-            "CgpMUzJEQl9FeGVjEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIL",
-            "CgNjbWQYAiABKAliBnByb3RvMw=="));
+            "CgRuYW1lGAIgASgJIvQBChBMUzJEQl9RdWVyeUxvZ2luEh0KBG9wdHMYASAB",
+            "KAsyDy5Qcm90b3MuTXNnT3B0cxInCgdjaGFubmVsGAIgASgOMhYuUHJvdG9z",
+            "Lkdsb2JhbC5DaGFubmVsEicKB2Jyb3dzZXIYAyABKA4yFi5Qcm90b3MuR2xv",
+            "YmFsLkJyb3dzZXISKQoIcGxhdGZvcm0YBCABKA4yFy5Qcm90b3MuR2xvYmFs",
+            "LlBsYXRmb3JtEgwKBG5hbWUYBSABKAkSCwoDcHdkGAYgASgJEg8KB3ZlcnRQ",
+            "d2QYByABKAgSCgoCaXAYCCABKAkSDAoEdGltZRgJIAEoAyI4CgpMUzJEQl9F",
+            "eGVjEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxILCgNjbWQYAiAB",
+            "KAliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2DB_QueryAccount), global::Protos.LS2DB_QueryAccount.Parser, new[]{ "Opts", "Name" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2DB_QueryLogin), global::Protos.LS2DB_QueryLogin.Parser, new[]{ "Opts", "Name", "Pwd", "VertPwd", "Ip", "Time" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2DB_QueryLogin), global::Protos.LS2DB_QueryLogin.Parser, new[]{ "Opts", "Channel", "Browser", "Platform", "Name", "Pwd", "VertPwd", "Ip", "Time" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2DB_Exec), global::Protos.LS2DB_Exec.Parser, new[]{ "Opts", "Cmd" }, null, null, null)
           }));
     }
@@ -235,6 +238,9 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LS2DB_QueryLogin(LS2DB_QueryLogin other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      channel_ = other.channel_;
+      browser_ = other.browser_;
+      platform_ = other.platform_;
       name_ = other.name_;
       pwd_ = other.pwd_;
       vertPwd_ = other.vertPwd_;
@@ -259,8 +265,41 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "channel" field.</summary>
+    public const int ChannelFieldNumber = 2;
+    private global::Protos.Global.Types.Channel channel_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Channel Channel {
+      get { return channel_; }
+      set {
+        channel_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "browser" field.</summary>
+    public const int BrowserFieldNumber = 3;
+    private global::Protos.Global.Types.Browser browser_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Browser Browser {
+      get { return browser_; }
+      set {
+        browser_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "platform" field.</summary>
+    public const int PlatformFieldNumber = 4;
+    private global::Protos.Global.Types.Platform platform_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Platform Platform {
+      get { return platform_; }
+      set {
+        platform_ = value;
+      }
+    }
+
     /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
+    public const int NameFieldNumber = 5;
     private string name_ = "";
     /// <summary>
     ///用户名
@@ -274,7 +313,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "pwd" field.</summary>
-    public const int PwdFieldNumber = 3;
+    public const int PwdFieldNumber = 6;
     private string pwd_ = "";
     /// <summary>
     ///密码
@@ -288,7 +327,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "vertPwd" field.</summary>
-    public const int VertPwdFieldNumber = 4;
+    public const int VertPwdFieldNumber = 7;
     private bool vertPwd_;
     /// <summary>
     ///是否需要验证密码
@@ -302,7 +341,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "ip" field.</summary>
-    public const int IpFieldNumber = 5;
+    public const int IpFieldNumber = 8;
     private string ip_ = "";
     /// <summary>
     ///登陆ip
@@ -316,7 +355,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "time" field.</summary>
-    public const int TimeFieldNumber = 6;
+    public const int TimeFieldNumber = 9;
     private long time_;
     /// <summary>
     ///登陆时间
@@ -343,6 +382,9 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
+      if (Channel != other.Channel) return false;
+      if (Browser != other.Browser) return false;
+      if (Platform != other.Platform) return false;
       if (Name != other.Name) return false;
       if (Pwd != other.Pwd) return false;
       if (VertPwd != other.VertPwd) return false;
@@ -355,6 +397,9 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Channel != 0) hash ^= Channel.GetHashCode();
+      if (Browser != 0) hash ^= Browser.GetHashCode();
+      if (Platform != 0) hash ^= Platform.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (Pwd.Length != 0) hash ^= Pwd.GetHashCode();
       if (VertPwd != false) hash ^= VertPwd.GetHashCode();
@@ -377,24 +422,36 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
+      if (Channel != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) Channel);
+      }
+      if (Browser != 0) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) Browser);
+      }
+      if (Platform != 0) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Platform);
+      }
       if (Name.Length != 0) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(42);
         output.WriteString(Name);
       }
       if (Pwd.Length != 0) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(50);
         output.WriteString(Pwd);
       }
       if (VertPwd != false) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(56);
         output.WriteBool(VertPwd);
       }
       if (Ip.Length != 0) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(66);
         output.WriteString(Ip);
       }
       if (Time != 0L) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(72);
         output.WriteInt64(Time);
       }
       if (_unknownFields != null) {
@@ -407,6 +464,15 @@ namespace Protos {
       int size = 0;
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Channel != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Channel);
+      }
+      if (Browser != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Browser);
+      }
+      if (Platform != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Platform);
       }
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
@@ -439,6 +505,15 @@ namespace Protos {
           opts_ = new global::Protos.MsgOpts();
         }
         Opts.MergeFrom(other.Opts);
+      }
+      if (other.Channel != 0) {
+        Channel = other.Channel;
+      }
+      if (other.Browser != 0) {
+        Browser = other.Browser;
+      }
+      if (other.Platform != 0) {
+        Platform = other.Platform;
       }
       if (other.Name.Length != 0) {
         Name = other.Name;
@@ -473,23 +548,35 @@ namespace Protos {
             input.ReadMessage(opts_);
             break;
           }
-          case 18: {
-            Name = input.ReadString();
+          case 16: {
+            channel_ = (global::Protos.Global.Types.Channel) input.ReadEnum();
             break;
           }
-          case 26: {
-            Pwd = input.ReadString();
+          case 24: {
+            browser_ = (global::Protos.Global.Types.Browser) input.ReadEnum();
             break;
           }
           case 32: {
-            VertPwd = input.ReadBool();
+            platform_ = (global::Protos.Global.Types.Platform) input.ReadEnum();
             break;
           }
           case 42: {
+            Name = input.ReadString();
+            break;
+          }
+          case 50: {
+            Pwd = input.ReadString();
+            break;
+          }
+          case 56: {
+            VertPwd = input.ReadBool();
+            break;
+          }
+          case 66: {
             Ip = input.ReadString();
             break;
           }
-          case 48: {
+          case 72: {
             Time = input.ReadInt64();
             break;
           }

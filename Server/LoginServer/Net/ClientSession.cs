@@ -12,6 +12,7 @@ namespace LoginServer.Net
 			this.RegMsgHandler( Protos.MsgID.EGc2LsAskRegister, LS.instance.bizProcessor.OnGCtoLSAskRegister );
 			this.RegMsgHandler( Protos.MsgID.EGc2LsAskLogin, LS.instance.bizProcessor.OnGCtoLSAskLogin );
 			this.RegMsgHandler( Protos.MsgID.EGc2LsAskSmartLogin, LS.instance.bizProcessor.OnGc2LsAskSmartLogin );
+			this.RegMsgHandler( Protos.MsgID.EGc2LsAskWxlogin, LS.instance.bizProcessor.OnGc2LsAskWxlogin );
 		}
 
 		protected override void OnEstablish()

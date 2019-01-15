@@ -14,20 +14,76 @@ export class LoginState extends SceneState {
         super(type);
         this.__ui = this._ui = Global.uiManager.login;
     }
-    ConnectToLS(connector) {
-        const config = CDefs.GetConfig();
-        if (Global.platform == Global.Platform.Editor) {
-            connector.Connect("localhost", config["ls_port"]);
+    OnEnter(param) {
+        if (Laya.Browser.onMiniGame) {
+            this.HandleWXLogin();
+            return;
+        }
+        super.OnEnter(param);
+    }
+    HandleWXLogin() {
+        const sysInfo = wx.getSystemInfoSync();
+        const sdkVersion = sysInfo.SDKVersion;
+        Logger.Log(sdkVersion);
+        wx.login({
+            "success": res => {
+                this.SendCodeToLS(res.code);
+            },
+            "fail": () => {
+            },
+            "complete": () => {
+            }
+        });
+    }
+    SendCodeToLS(code) {
+        const login = ProtoCreator.Q_GC2LS_AskWXLogin();
+        login.code = code;
+        if (Laya.Browser.onIOS) {
+            login.platform = Protos.Global.Platform.IOS;
+        }
+        else if (Laya.Browser.onAndroid) {
+            login.platform = Protos.Global.Platform.Android;
+        }
+        else if (Laya.Browser.onWP) {
+            login.platform = Protos.Global.Platform.WP;
         }
         else {
-            connector.Connect(config["ls_ip"], config["ls_port"]);
+            login.platform = Protos.Global.Platform.PC;
         }
+        if (Laya.Browser.onEdge) {
+            login.browser = Protos.Global.Browser.Edge;
+        }
+        else if (Laya.Browser.onFirefox) {
+            login.browser = Protos.Global.Browser.Firefox;
+        }
+        else if (Laya.Browser.onIE) {
+            login.browser = Protos.Global.Browser.IE;
+        }
+        else if (Laya.Browser.onSafari) {
+            login.browser = Protos.Global.Browser.Safair;
+        }
+        else {
+            login.browser = Protos.Global.Browser.Chrome;
+        }
+        const connector = new WSConnector();
+        connector.onerror = (e) => this._ui.OnConnectToLSError(e);
+        connector.onclose = () => Logger.Log("connection closed.");
+        connector.onopen = (e) => {
+            connector.Send(Protos.GC2LS_AskWXLogin, login, message => {
+                const resp = message;
+                Logger.Log("gcNID:" + resp.sessionID);
+                this._ui.OnLoginResut(resp);
+            });
+        };
+        this.ConnectToLS(connector);
+    }
+    ConnectToLS(connector) {
+        const config = CDefs.GetConfig();
+        connector.Connect(config["ls_ip"], config["ls_port"]);
     }
     Register(uname, platform, sdk) {
         const register = ProtoCreator.Q_GC2LS_AskRegister();
         register.name = uname;
-        register.platform = platform;
-        register.sdk = sdk;
         const connector = new WSConnector();
         connector.onerror = (e) => this._ui.OnConnectToLSError(e);
         connector.onclose = () => Logger.Log("connection closed.");
@@ -39,11 +95,42 @@ export class LoginState extends SceneState {
         };
         this.ConnectToLS(connector);
     }
-    Login(uname, platform, sdk) {
+    Login(uname) {
         const login = ProtoCreator.Q_GC2LS_AskSmartLogin();
         login.name = uname;
-        login.platform = platform;
-        login.sdk = sdk;
+        if (Laya.Browser.onIOS) {
+            login.platform = Protos.Global.Platform.IOS;
+        }
+        else if (Laya.Browser.onAndroid) {
+            login.platform = Protos.Global.Platform.Android;
+        }
+        else if (Laya.Browser.onWP) {
+            login.platform = Protos.Global.Platform.WP;
+        }
+        else {
+            login.platform = Protos.Global.Platform.PC;
+        }
+        if (Laya.Browser.onEdge) {
+            login.browser = Protos.Global.Browser.Edge;
+        }
+        else if (Laya.Browser.onFirefox) {
+            login.browser = Protos.Global.Browser.Firefox;
+        }
+        else if (Laya.Browser.onIE) {
+            login.browser = Protos.Global.Browser.IE;
+        }
+        else if (Laya.Browser.onSafari) {
+            login.browser = Protos.Global.Browser.Safair;
+        }
+        else {
+            login.browser = Protos.Global.Browser.Chrome;
+        }
+        if (Laya.Browser.onMiniGame) {
+            login.channel = Protos.Global.Channel.WXMini;
+        }
+        else {
+            login.channel = Protos.Global.Channel.Web;
+        }
         const connector = new WSConnector();
         connector.onerror = (e) => this._ui.OnConnectToLSError(e);
         connector.onclose = () => Logger.Log("connection closed.");
@@ -82,11 +169,6 @@ export class LoginState extends SceneState {
                 }
             });
         };
-        if (Global.platform == Global.Platform.Editor) {
-            connector.Connect("localhost", port);
-        }
-        else {
-            connector.Connect(ip, port);
-        }
+        connector.Connect(ip, port);
     }
 }

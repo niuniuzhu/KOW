@@ -31,12 +31,13 @@ namespace Protos {
             "LwoGcmVzdWx0GAIgASgOMh8uUHJvdG9zLkxTMkdDX0Fza1JlZ1JldC5FUmVz",
             "dWx0IlUKB0VSZXN1bHQSCwoHU3VjY2VzcxAAEgoKBkZhaWxlZBABEg8KC1Vu",
             "YW1lRXhpc3RzEAISEAoMVW5hbWVJbGxlZ2FsEAMSDgoKUHdkSWxsZWdhbBAE",
-            "It8BChFMUzJHQ19Bc2tMb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
+            "IogCChFMUzJHQ19Bc2tMb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
             "Lk1zZ09wdHMSMQoGcmVzdWx0GAIgASgOMiEuUHJvdG9zLkxTMkdDX0Fza0xv",
             "Z2luUmV0LkVSZXN1bHQSEQoJc2Vzc2lvbklEGAMgASgEEh8KB2dzSW5mb3MY",
-            "BCADKAsyDi5Qcm90b3MuR1NJbmZvIkQKB0VSZXN1bHQSCwoHU3VjY2VzcxAA",
+            "BCADKAsyDi5Qcm90b3MuR1NJbmZvIm0KB0VSZXN1bHQSCwoHU3VjY2VzcxAA",
             "EgoKBkZhaWxlZBABEhAKDEludmFsaWRVbmFtZRADEg4KCkludmFsaWRQd2QQ",
-            "BGIGcHJvdG8z"));
+            "BBIICgRCdXN5EAUSDwoLSW52YWxpZENvZGUQBhIMCghGcmVxdWVudBAHYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.GS2CSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -609,6 +610,9 @@ namespace Protos {
         [pbr::OriginalName("Failed")] Failed = 1,
         [pbr::OriginalName("InvalidUname")] InvalidUname = 3,
         [pbr::OriginalName("InvalidPwd")] InvalidPwd = 4,
+        [pbr::OriginalName("Busy")] Busy = 5,
+        [pbr::OriginalName("InvalidCode")] InvalidCode = 6,
+        [pbr::OriginalName("Frequent")] Frequent = 7,
       }
 
     }

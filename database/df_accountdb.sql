@@ -6,7 +6,9 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `account_user`;
 CREATE TABLE `account_user` (
   `id` int (11) unsigned NOT NULL AUTO_INCREMENT,
-  `sdk` tinyint(4) unsigned NOT NULL,
+  `channel` tinyint(4) unsigned NOT NULL,
+  `browser` tinyint(4) unsigned NOT NULL,
+  `platform` tinyint(4) unsigned NOT NULL,
   `uname` varchar(36) NOT NULL,
   `pwd` varchar(32) NOT NULL,
   `last_login_time` bigint(20) NOT NULL,

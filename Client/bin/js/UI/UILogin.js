@@ -37,7 +37,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
                 return;
             }
             fairygui.GRoot.inst.showModalWait();
-            Global_1.Global.sceneManager.login.Login(uname, 0, 0);
+            Global_1.Global.sceneManager.login.Login(uname);
         }
         OnEnterBtnClick() {
             let item = this._areaList.getChildAt(this._areaList.selectedIndex);

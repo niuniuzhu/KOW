@@ -24,13 +24,17 @@ namespace Protos {
     static LS2CSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtMUzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iTwoNTFMyQ1Nf",
-            "R0NMb2dpbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSEQoJc2Vz",
-            "c2lvbklEGAIgASgEEgwKBHVrZXkYAyABKA1iBnByb3RvMw=="));
+            "CgtMUzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8igQIKDUxTMkNT",
+            "X0dDTG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEicKB2No",
+            "YW5uZWwYAiABKA4yFi5Qcm90b3MuR2xvYmFsLkNoYW5uZWwSJwoHYnJvd3Nl",
+            "chgDIAEoDjIWLlByb3Rvcy5HbG9iYWwuQnJvd3NlchIpCghwbGF0Zm9ybRgE",
+            "IAEoDjIXLlByb3Rvcy5HbG9iYWwuUGxhdGZvcm0SEQoJc2Vzc2lvbklEGAUg",
+            "ASgEEgwKBHVrZXkYBiABKA0SDgoGb3BlbklEGAcgASgJEhIKCnNlc3Npb25L",
+            "ZXkYCCABKAkSDwoHdW5pb25JRBgJIAEoCWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2CS_GCLogin), global::Protos.LS2CS_GCLogin.Parser, new[]{ "Opts", "SessionID", "Ukey" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2CS_GCLogin), global::Protos.LS2CS_GCLogin.Parser, new[]{ "Opts", "Channel", "Browser", "Platform", "SessionID", "Ukey", "OpenID", "SessionKey", "UnionID" }, null, null, null)
           }));
     }
     #endregion
@@ -66,8 +70,14 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LS2CS_GCLogin(LS2CS_GCLogin other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      channel_ = other.channel_;
+      browser_ = other.browser_;
+      platform_ = other.platform_;
       sessionID_ = other.sessionID_;
       ukey_ = other.ukey_;
+      openID_ = other.openID_;
+      sessionKey_ = other.sessionKey_;
+      unionID_ = other.unionID_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -87,8 +97,41 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "channel" field.</summary>
+    public const int ChannelFieldNumber = 2;
+    private global::Protos.Global.Types.Channel channel_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Channel Channel {
+      get { return channel_; }
+      set {
+        channel_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "browser" field.</summary>
+    public const int BrowserFieldNumber = 3;
+    private global::Protos.Global.Types.Browser browser_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Browser Browser {
+      get { return browser_; }
+      set {
+        browser_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "platform" field.</summary>
+    public const int PlatformFieldNumber = 4;
+    private global::Protos.Global.Types.Platform platform_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Platform Platform {
+      get { return platform_; }
+      set {
+        platform_ = value;
+      }
+    }
+
     /// <summary>Field number for the "sessionID" field.</summary>
-    public const int SessionIDFieldNumber = 2;
+    public const int SessionIDFieldNumber = 5;
     private ulong sessionID_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong SessionID {
@@ -99,13 +142,46 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "ukey" field.</summary>
-    public const int UkeyFieldNumber = 3;
+    public const int UkeyFieldNumber = 6;
     private uint ukey_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Ukey {
       get { return ukey_; }
       set {
         ukey_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "openID" field.</summary>
+    public const int OpenIDFieldNumber = 7;
+    private string openID_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string OpenID {
+      get { return openID_; }
+      set {
+        openID_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "sessionKey" field.</summary>
+    public const int SessionKeyFieldNumber = 8;
+    private string sessionKey_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string SessionKey {
+      get { return sessionKey_; }
+      set {
+        sessionKey_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "unionID" field.</summary>
+    public const int UnionIDFieldNumber = 9;
+    private string unionID_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UnionID {
+      get { return unionID_; }
+      set {
+        unionID_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -123,8 +199,14 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
+      if (Channel != other.Channel) return false;
+      if (Browser != other.Browser) return false;
+      if (Platform != other.Platform) return false;
       if (SessionID != other.SessionID) return false;
       if (Ukey != other.Ukey) return false;
+      if (OpenID != other.OpenID) return false;
+      if (SessionKey != other.SessionKey) return false;
+      if (UnionID != other.UnionID) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -132,8 +214,14 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Channel != 0) hash ^= Channel.GetHashCode();
+      if (Browser != 0) hash ^= Browser.GetHashCode();
+      if (Platform != 0) hash ^= Platform.GetHashCode();
       if (SessionID != 0UL) hash ^= SessionID.GetHashCode();
       if (Ukey != 0) hash ^= Ukey.GetHashCode();
+      if (OpenID.Length != 0) hash ^= OpenID.GetHashCode();
+      if (SessionKey.Length != 0) hash ^= SessionKey.GetHashCode();
+      if (UnionID.Length != 0) hash ^= UnionID.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -151,13 +239,37 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (SessionID != 0UL) {
+      if (Channel != 0) {
         output.WriteRawTag(16);
+        output.WriteEnum((int) Channel);
+      }
+      if (Browser != 0) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) Browser);
+      }
+      if (Platform != 0) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Platform);
+      }
+      if (SessionID != 0UL) {
+        output.WriteRawTag(40);
         output.WriteUInt64(SessionID);
       }
       if (Ukey != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(48);
         output.WriteUInt32(Ukey);
+      }
+      if (OpenID.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(OpenID);
+      }
+      if (SessionKey.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(SessionKey);
+      }
+      if (UnionID.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(UnionID);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -170,11 +282,29 @@ namespace Protos {
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
+      if (Channel != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Channel);
+      }
+      if (Browser != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Browser);
+      }
+      if (Platform != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Platform);
+      }
       if (SessionID != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(SessionID);
       }
       if (Ukey != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Ukey);
+      }
+      if (OpenID.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(OpenID);
+      }
+      if (SessionKey.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionKey);
+      }
+      if (UnionID.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UnionID);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -193,11 +323,29 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
+      if (other.Channel != 0) {
+        Channel = other.Channel;
+      }
+      if (other.Browser != 0) {
+        Browser = other.Browser;
+      }
+      if (other.Platform != 0) {
+        Platform = other.Platform;
+      }
       if (other.SessionID != 0UL) {
         SessionID = other.SessionID;
       }
       if (other.Ukey != 0) {
         Ukey = other.Ukey;
+      }
+      if (other.OpenID.Length != 0) {
+        OpenID = other.OpenID;
+      }
+      if (other.SessionKey.Length != 0) {
+        SessionKey = other.SessionKey;
+      }
+      if (other.UnionID.Length != 0) {
+        UnionID = other.UnionID;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -218,11 +366,35 @@ namespace Protos {
             break;
           }
           case 16: {
-            SessionID = input.ReadUInt64();
+            channel_ = (global::Protos.Global.Types.Channel) input.ReadEnum();
             break;
           }
           case 24: {
+            browser_ = (global::Protos.Global.Types.Browser) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            platform_ = (global::Protos.Global.Types.Platform) input.ReadEnum();
+            break;
+          }
+          case 40: {
+            SessionID = input.ReadUInt64();
+            break;
+          }
+          case 48: {
             Ukey = input.ReadUInt32();
+            break;
+          }
+          case 58: {
+            OpenID = input.ReadString();
+            break;
+          }
+          case 66: {
+            SessionKey = input.ReadString();
+            break;
+          }
+          case 74: {
+            UnionID = input.ReadString();
             break;
           }
         }

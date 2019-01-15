@@ -31,44 +31,48 @@ namespace Protos {
             "AkNTEAISBgoCQlMQAxIGCgJMUxAEEgYKAkRCEAUSBgoCR1MQBiI4CglHX0Fz",
             "a1BpbmcSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEgwKBHRpbWUY",
             "AiABKAMiSgoMR19Bc2tQaW5nUmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3Mu",
-            "TXNnT3B0cxINCgVzdGltZRgCIAEoAxIMCgR0aW1lGAMgASgDIiwKBkdsb2Jh",
-            "bCIiCgdFQ29tbW9uEgsKB1N1Y2Nlc3MQABIKCgZGYWlsZWQQASqTCgoFTXNn",
-            "SUQSDAoIVW5kZWZpbmUQABIOCgplR19Bc2tQaW5nEAoSEQoNZUdfQXNrUGlu",
-            "Z1JldBALEhcKEmVHQzJMU19Bc2tSZWdpc3RlchDoBxIUCg9lR0MyTFNfQXNr",
-            "TG9naW4Q6QcSGQoUZUdDMkxTX0Fza1NtYXJ0TG9naW4Q6gcSFAoPZUdDMkdT",
-            "X0Fza0xvZ2luEMwIEhUKEGVHQzJHU19LZWVwQWxpdmUQzQgSFAoPZUdDMkJT",
-            "X0Fza0xvZ2luELAJEhUKEGVHQzJCU19LZWVwQWxpdmUQsQkSGwoWZUdDMkJT",
-            "X1JlcXVlc3RTbmFwc2hvdBCyCRIXChJlR0MyQlNfRnJhbWVBY3Rpb24QswkS",
-            "HwoaZUdDMkJTX1JlcXVlc3RGcmFtZUFjdGlvbnMQtAkSGgoVZUdDMkJTX0Nv",
-            "bW1pdFNuYXBzaG90ELUJEhUKEGVHQzJCU19FbmRCYXR0bGUQtgkSFgoRZUdD",
-            "MkNTX0JlZ2luTWF0Y2gQlAoSEgoNZUxTMkdDX0dTSW5mbxDQDxIVChBlTFMy",
-            "R0NfQXNrUmVnUmV0ENEPEhcKEmVMUzJHQ19Bc2tMb2dpblJldBDSDxITCg5l",
-            "TFMyQ1NfR0NMb2dpbhC0EBIYChNlTFMyREJfUXVlcnlBY2NvdW50EJgREhYK",
-            "EWVMUzJEQl9RdWVyeUxvZ2luEJkREhAKC2VMUzJEQl9FeGVjEJoREhcKEmVH",
-            "UzJDU19SZXBvcnRTdGF0ZRC4FxIWChFlR1MyQ1NfR0NBc2tMb2dpbhC5FxIS",
-            "Cg1lR1MyQ1NfR0NMb3N0ELoXEhQKD2VHUzJHQ19Mb2dpblJldBCcGBIQCgtl",
-            "R1MyR0NfS2ljaxCdGBISCg1lR1MyR0NfQ1NMb3N0EJ4YEhcKEmVCUzJDU19S",
-            "ZXBvcnRTdGF0ZRCgHxIZChRlQlMyQ1NfQmF0dGxlSW5mb1JldBChHxIVChBl",
-            "QlMyQ1NfQmF0dGxlRW5kEKIfEhQKD2VCUzJDU19LaWNrVXNlchCjHxIUCg9l",
-            "QlMyR0NfTG9naW5SZXQQhCASHgoZZUJTMkdDX1JlcXVlc3RTbmFwc2hvdFJl",
-            "dBCFIBIXChJlQlMyR0NfRnJhbWVBY3Rpb24QhiASIgodZUJTMkdDX1JlcXVl",
-            "c3RGcmFtZUFjdGlvbnNSZXQQhyASFQoQZUJTMkdDX091dE9mU3luYxCIIBIT",
-            "Cg5lQ1MyTFNfR1NJbmZvcxCIJxISCg1lQ1MyTFNfR1NJbmZvEIknEhIKDWVD",
-            "UzJMU19HU0xvc3QQiicSFgoRZUNTMkxTX0dDTG9naW5SZXQQiycSFgoRZUNT",
-            "MkdTX0dDTG9naW5SZXQQ7CcSEgoNZUNTMkdTX0tpY2tHQxDtJxIWChFlQ1My",
-            "QlNfQmF0dGxlSW5mbxDQKBIZChRlQ1MyR0NfQmVnaW5NYXRjaFJldBC0KRIW",
-            "ChFlQ1MyR0NfUGxheWVySm9pbhC1KRIXChJlQ1MyR0NfUGxheWVyTGVhdmUQ",
-            "tikSFAoPZUNTMkdDX1Jvb21JbmZvELcpEhcKEmVDUzJHQ19FbnRlckJhdHRs",
-            "ZRC4KRIVChBlQ1MyR0NfQmF0dGxlRW5kELkpEhIKDWVDUzJHQ19CU0xvc2UQ",
-            "uikSGwoWZURCMkxTX1F1ZXJ5QWNjb3VudFJldBDAPhIZChRlREIyTFNfUXVl",
-            "cnlMb2dpblJldBDBPhITCg5lREIyTFNfRXhlY1JldBDCPmIGcHJvdG8z"));
+            "TXNnT3B0cxINCgVzdGltZRgCIAEoAxIMCgR0aW1lGAMgASgDIsABCgZHbG9i",
+            "YWwiIgoHRUNvbW1vbhILCgdTdWNjZXNzEAASCgoGRmFpbGVkEAEiHgoHQ2hh",
+            "bm5lbBIHCgNXZWIQABIKCgZXWE1pbmkQASIwCghQbGF0Zm9ybRIGCgJQQxAA",
+            "EgsKB0FuZHJvaWQQARIHCgNJT1MQAhIGCgJXUBADIkAKB0Jyb3dzZXISCgoG",
+            "Q2hyb21lEAASCwoHRmlyZWZveBABEgoKBlNhZmFpchACEggKBEVkZ2UQAxIG",
+            "CgJJRRAEKqsKCgVNc2dJRBIMCghVbmRlZmluZRAAEg4KCmVHX0Fza1BpbmcQ",
+            "ChIRCg1lR19Bc2tQaW5nUmV0EAsSFwoSZUdDMkxTX0Fza1JlZ2lzdGVyEOgH",
+            "EhQKD2VHQzJMU19Bc2tMb2dpbhDpBxIZChRlR0MyTFNfQXNrU21hcnRMb2dp",
+            "bhDqBxIWChFlR0MyTFNfQXNrV1hMb2dpbhDrBxIUCg9lR0MyR1NfQXNrTG9n",
+            "aW4QzAgSFQoQZUdDMkdTX0tlZXBBbGl2ZRDNCBIUCg9lR0MyQlNfQXNrTG9n",
+            "aW4QsAkSFQoQZUdDMkJTX0tlZXBBbGl2ZRCxCRIbChZlR0MyQlNfUmVxdWVz",
+            "dFNuYXBzaG90ELIJEhcKEmVHQzJCU19GcmFtZUFjdGlvbhCzCRIfChplR0My",
+            "QlNfUmVxdWVzdEZyYW1lQWN0aW9ucxC0CRIaChVlR0MyQlNfQ29tbWl0U25h",
+            "cHNob3QQtQkSFQoQZUdDMkJTX0VuZEJhdHRsZRC2CRIWChFlR0MyQ1NfQmVn",
+            "aW5NYXRjaBCUChISCg1lTFMyR0NfR1NJbmZvENAPEhUKEGVMUzJHQ19Bc2tS",
+            "ZWdSZXQQ0Q8SFwoSZUxTMkdDX0Fza0xvZ2luUmV0ENIPEhMKDmVMUzJDU19H",
+            "Q0xvZ2luELQQEhgKE2VMUzJEQl9RdWVyeUFjY291bnQQmBESFgoRZUxTMkRC",
+            "X1F1ZXJ5TG9naW4QmRESEAoLZUxTMkRCX0V4ZWMQmhESFwoSZUdTMkNTX1Jl",
+            "cG9ydFN0YXRlELgXEhYKEWVHUzJDU19HQ0Fza0xvZ2luELkXEhIKDWVHUzJD",
+            "U19HQ0xvc3QQuhcSFAoPZUdTMkdDX0xvZ2luUmV0EJwYEhAKC2VHUzJHQ19L",
+            "aWNrEJ0YEhIKDWVHUzJHQ19DU0xvc3QQnhgSFwoSZUJTMkNTX1JlcG9ydFN0",
+            "YXRlEKAfEhkKFGVCUzJDU19CYXR0bGVJbmZvUmV0EKEfEhUKEGVCUzJDU19C",
+            "YXR0bGVFbmQQoh8SFAoPZUJTMkNTX0tpY2tVc2VyEKMfEhQKD2VCUzJHQ19M",
+            "b2dpblJldBCEIBIeChllQlMyR0NfUmVxdWVzdFNuYXBzaG90UmV0EIUgEhcK",
+            "EmVCUzJHQ19GcmFtZUFjdGlvbhCGIBIiCh1lQlMyR0NfUmVxdWVzdEZyYW1l",
+            "QWN0aW9uc1JldBCHIBIVChBlQlMyR0NfT3V0T2ZTeW5jEIggEhMKDmVDUzJM",
+            "U19HU0luZm9zEIgnEhIKDWVDUzJMU19HU0luZm8QiScSEgoNZUNTMkxTX0dT",
+            "TG9zdBCKJxIWChFlQ1MyTFNfR0NMb2dpblJldBCLJxIWChFlQ1MyR1NfR0NM",
+            "b2dpblJldBDsJxISCg1lQ1MyR1NfS2lja0dDEO0nEhYKEWVDUzJCU19CYXR0",
+            "bGVJbmZvENAoEhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhYKEWVDUzJH",
+            "Q19QbGF5ZXJKb2luELUpEhcKEmVDUzJHQ19QbGF5ZXJMZWF2ZRC2KRIUCg9l",
+            "Q1MyR0NfUm9vbUluZm8QtykSFwoSZUNTMkdDX0VudGVyQmF0dGxlELgpEhUK",
+            "EGVDUzJHQ19CYXR0bGVFbmQQuSkSEgoNZUNTMkdDX0JTTG9zZRC6KRIbChZl",
+            "REIyTFNfUXVlcnlBY2NvdW50UmV0EMA+EhkKFGVEQjJMU19RdWVyeUxvZ2lu",
+            "UmV0EME+EhMKDmVEQjJMU19FeGVjUmV0EMI+YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.MsgOpts), global::Protos.MsgOpts.Parser, new[]{ "Flag", "Pid", "Rpid", "Transid" }, null, new[]{ typeof(global::Protos.MsgOpts.Types.Flag), typeof(global::Protos.MsgOpts.Types.TransTarget) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPing), global::Protos.G_AskPing.Parser, new[]{ "Opts", "Time" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPingRet), global::Protos.G_AskPingRet.Parser, new[]{ "Opts", "Stime", "Time" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Global), global::Protos.Global.Parser, null, null, new[]{ typeof(global::Protos.Global.Types.ECommon) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Global), global::Protos.Global.Parser, null, null, new[]{ typeof(global::Protos.Global.Types.ECommon), typeof(global::Protos.Global.Types.Channel), typeof(global::Protos.Global.Types.Platform), typeof(global::Protos.Global.Types.Browser) }, null)
           }));
     }
     #endregion
@@ -85,6 +89,7 @@ namespace Protos {
     [pbr::OriginalName("eGC2LS_AskRegister")] EGc2LsAskRegister = 1000,
     [pbr::OriginalName("eGC2LS_AskLogin")] EGc2LsAskLogin = 1001,
     [pbr::OriginalName("eGC2LS_AskSmartLogin")] EGc2LsAskSmartLogin = 1002,
+    [pbr::OriginalName("eGC2LS_AskWXLogin")] EGc2LsAskWxlogin = 1003,
     [pbr::OriginalName("eGC2GS_AskLogin")] EGc2GsAskLogin = 1100,
     [pbr::OriginalName("eGC2GS_KeepAlive")] EGc2GsKeepAlive = 1101,
     [pbr::OriginalName("eGC2BS_AskLogin")] EGc2BsAskLogin = 1200,
@@ -863,6 +868,26 @@ namespace Protos {
       public enum ECommon {
         [pbr::OriginalName("Success")] Success = 0,
         [pbr::OriginalName("Failed")] Failed = 1,
+      }
+
+      public enum Channel {
+        [pbr::OriginalName("Web")] Web = 0,
+        [pbr::OriginalName("WXMini")] Wxmini = 1,
+      }
+
+      public enum Platform {
+        [pbr::OriginalName("PC")] Pc = 0,
+        [pbr::OriginalName("Android")] Android = 1,
+        [pbr::OriginalName("IOS")] Ios = 2,
+        [pbr::OriginalName("WP")] Wp = 3,
+      }
+
+      public enum Browser {
+        [pbr::OriginalName("Chrome")] Chrome = 0,
+        [pbr::OriginalName("Firefox")] Firefox = 1,
+        [pbr::OriginalName("Safair")] Safair = 2,
+        [pbr::OriginalName("Edge")] Edge = 3,
+        [pbr::OriginalName("IE")] Ie = 4,
       }
 
     }

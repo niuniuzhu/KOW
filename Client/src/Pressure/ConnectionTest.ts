@@ -21,7 +21,7 @@ export class ConnectionTest {
 
 		this._closeTime = MathUtils.Random(1000, 3000);
 		const name = GUID.create().toString();
-		this.Login(name, 0, 0);
+		this.Login(name);
 	}
 
 	public Update(dt: number): void {
@@ -33,11 +33,9 @@ export class ConnectionTest {
 		connector.Connect("localhost", 49996);
 	}
 
-	private Login(uname: string, platform: number, sdk: number): void {
+	private Login(uname: string): void {
 		const login = ProtoCreator.Q_GC2LS_AskSmartLogin();
 		login.name = uname;
-		login.platform = platform;
-		login.sdk = sdk;
 
 		const connector = new WSConnector();
 		connector.onerror = (e) => Logger.Error(e);

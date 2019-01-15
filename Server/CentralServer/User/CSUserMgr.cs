@@ -7,6 +7,27 @@ namespace CentralServer.User
 {
 	public class CSUserMgr
 	{
+		public enum Channel
+		{
+			Web,
+			WXMini
+		}
+		public enum Browser
+		{
+			Chrome = 0,
+			Firefox = 1,
+			Safair = 2,
+			Edge = 3,
+			IE = 4
+		}
+		public enum Platform
+		{
+			PC = 0,
+			Android = 1,
+			IOS = 2,
+			WP = 3
+		}
+
 		/// <summary>
 		/// ukey到玩家的映射
 		/// </summary>
@@ -67,13 +88,13 @@ namespace CentralServer.User
 		/// <summary>
 		/// 创建玩家登陆凭证
 		/// </summary>
-		public CSUser CreateUser( uint ukey, ulong gcNID )
+		internal CSUser CreateUser( Protos.LS2CS_GCLogin gcLogin )
 		{
-			CSUser user = this.GetUser( ukey );
+			CSUser user = this.GetUser( gcLogin.Ukey );
 			if ( user == null )
 			{
 				user = new CSUser();
-				this._ukeyToUser[ukey] = user;
+				this._ukeyToUser[gcLogin.Ukey] = user;
 				this._authUsers.Add( user );
 			}
 			else
@@ -83,8 +104,8 @@ namespace CentralServer.User
 					this.KickUser( user, ( int )Protos.CS2GS_KickGC.Types.EReason.DuplicateLogin );
 				this._gcNIDToUser.Remove( user.gcNID );
 			}
-			user.OnCreate( ukey, gcNID, TimeUtils.utcTime );
-			this._gcNIDToUser[gcNID] = user;
+			user.OnCreate( gcLogin, TimeUtils.utcTime );
+			this._gcNIDToUser[gcLogin.SessionID] = user;
 			Logger.Info( $"user:{user.gcNID} was created" );
 			return user;
 		}
@@ -92,7 +113,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 注销玩家
 		/// </summary>
-		public void DestroyUser( CSUser user )
+		internal void DestroyUser( CSUser user )
 		{
 			System.Diagnostics.Debug.Assert( !user.isConnected, $"user:{user.gcNID} still online" );
 			//如果玩家在战场则不销毁,留待战场结束再判断是否在线,不在线再行销毁
@@ -106,7 +127,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家上线
 		/// </summary>
-		public CSUser Online( ulong gcNID, uint sid, uint lid )
+		internal CSUser Online( ulong gcNID, uint sid, uint lid )
 		{
 			//先验证是否合法登陆
 			CSUser user = this.GetUser( gcNID );
@@ -123,7 +144,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家下线
 		/// </summary>
-		public void Offline( CSUser user )
+		internal void Offline( CSUser user )
 		{
 			Logger.Info( $"user:{user.gcNID}({user.gsLID}) offline" );
 			//玩家下线
@@ -135,7 +156,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家下线
 		/// </summary>
-		public bool Offline( ulong gcNID )
+		internal bool Offline( ulong gcNID )
 		{
 			CSUser user = this.GetUser( gcNID );
 			if ( user == null )
@@ -150,7 +171,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 断开指定玩家连接,由Session在连接关闭时调用
 		/// </summary>
-		public bool KickUser( ulong gcNID, Protos.CS2GS_KickGC.Types.EReason reason )
+		internal bool KickUser( ulong gcNID, Protos.CS2GS_KickGC.Types.EReason reason )
 		{
 			CSUser user = this.GetUser( gcNID );
 			if ( user == null )
@@ -162,7 +183,7 @@ namespace CentralServer.User
 			return true;
 		}
 
-		public void KickUser( CSUser user, Protos.CS2GS_KickGC.Types.EReason reason )
+		internal void KickUser( CSUser user, Protos.CS2GS_KickGC.Types.EReason reason )
 		{
 			//通知gs玩家被踢下线
 			Protos.CS2GS_KickGC kickGc = ProtoCreator.Q_CS2GS_KickGC();
@@ -176,7 +197,7 @@ namespace CentralServer.User
 		/// 踢走连接到指定逻辑ID的GS的所有玩家
 		/// 当GS丢失连接时调用
 		/// </summary>
-		public void OnGSDisconnect( uint gsLID )
+		internal void OnGSDisconnect( uint gsLID )
 		{
 			CSUser[] users = this._gcNIDToUser.Values.ToArray();
 			int count = users.Length;

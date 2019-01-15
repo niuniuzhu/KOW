@@ -1,20 +1,9 @@
-import { Connector } from "./Net/Connector";
 import { Graphic } from "./Graphic";
-import { UIManager } from "./UI/UIManager";
-import { SceneManager } from "./Scene/SceneManager";
 import { BattleManager } from "./Model/BattleManager";
+import { Connector } from "./Net/Connector";
 import { ProtoCreator } from "./Net/ProtoHelper";
-var Platform;
-(function (Platform) {
-    Platform[Platform["Editor"] = 0] = "Editor";
-    Platform[Platform["Web"] = 1] = "Web";
-    Platform[Platform["WXMini"] = 2] = "WXMini";
-})(Platform || (Platform = {}));
-var RunMode;
-(function (RunMode) {
-    RunMode[RunMode["Game"] = 0] = "Game";
-    RunMode[RunMode["Pressure"] = 1] = "Pressure";
-})(RunMode || (RunMode = {}));
+import { SceneManager } from "./Scene/SceneManager";
+import { UIManager } from "./UI/UIManager";
 export class Global {
     static get connector() { return this._connector; }
     static get graphic() { return this._graphic; }
@@ -30,8 +19,6 @@ export class Global {
         this._battleManager.Init();
     }
 }
-Global.Platform = Platform;
-Global.RunMode = RunMode;
 Global._connector = new Connector();
 Global._graphic = new Graphic();
 Global._uiManager = new UIManager();

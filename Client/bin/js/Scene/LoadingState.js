@@ -1,4 +1,4 @@
-define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../Libs/protos", "../Model/BattleInfo", "../Net/ProtoHelper", "../RC/Utils/Logger", "./SceneManager", "./SceneState", "../Model/CDefs", "../RC/Utils/Hashtable"], function (require, exports, AssetsManager_1, Consts_1, Global_1, protos_1, BattleInfo_1, ProtoHelper_1, Logger_1, SceneManager_1, SceneState_1, CDefs_1, Hashtable_1) {
+define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../Libs/protos", "../Model/BattleInfo", "../Model/CDefs", "../Net/ProtoHelper", "../RC/Utils/Hashtable", "../RC/Utils/Logger", "./SceneManager", "./SceneState"], function (require, exports, AssetsManager_1, Consts_1, Global_1, protos_1, BattleInfo_1, CDefs_1, ProtoHelper_1, Hashtable_1, Logger_1, SceneManager_1, SceneState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LoadingState extends SceneState_1.SceneState {
@@ -34,12 +34,7 @@ define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../
                     }
                 });
             };
-            if (Global_1.Global.platform == Global_1.Global.Platform.Editor) {
-                connector.Connect("localhost", port);
-            }
-            else {
-                connector.Connect(ip, port);
-            }
+            connector.Connect(ip, port);
         }
         LoadAssets(battleInfo) {
             const urls = [];

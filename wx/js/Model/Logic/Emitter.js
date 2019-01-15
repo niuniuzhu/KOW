@@ -125,7 +125,7 @@ export class Emitter {
         const skill = caster.GetSkill(this._skillID);
         switch (this._emitType) {
             case EmitType.Center:
-                this._battle.CreateBullet(skill.emitterID, this._casterID, this._skillID, new FVec2(this._position.x, this._position.y), new FVec2(this._direction.x, this._direction.y));
+                this._battle.CreateBullet(skill.bulletID, this._casterID, this._skillID, new FVec2(this._position.x, this._position.y), new FVec2(this._direction.x, this._direction.y));
                 break;
             case EmitType.Edage:
                 break;

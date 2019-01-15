@@ -4,13 +4,29 @@ using Shared;
 using Shared.DB;
 using Shared.Net;
 using StackExchange.Redis;
+using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Text;
+using System.Threading;
 using GSInfo = Shared.GSInfo;
 
 namespace LoginServer.Biz
 {
 	public partial class BizProcessor
 	{
+		struct CSLoginParam
+		{
+			public Protos.Global.Types.Channel channel;
+			public Protos.Global.Types.Browser browser;
+			public Protos.Global.Types.Platform platform;
+			public uint ukey;
+			public uint sid;
+			public string openID;
+			public string sessionKey;
+			public string unionID;
+		}
+
 		public ErrorCode OnGCtoLSAskRegister( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 
@@ -79,7 +95,7 @@ namespace LoginServer.Biz
 			{
 				//请求DB服务器注册账号
 				Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
-				sqlExec.Cmd = $"insert account_user( sdk,uname,pwd,last_login_time,last_login_ip ) values({register.Sdk}, \'{register.Name}\', \'{pwdmd5}\', {TimeUtils.utcTime}, \'{remote}\');";
+				sqlExec.Cmd = $"insert account_user( uname,pwd,last_login_time,last_login_ip ) values(\'{register.Name}\', \'{pwdmd5}\', {TimeUtils.utcTime}, \'{remote}\');";
 				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, sqlExec, RPCEntry.Pop( OnCheckAccount, register, regRet, pwdmd5 ) );
 			}
 			else
@@ -146,7 +162,6 @@ namespace LoginServer.Biz
 				pwd = string.Empty;
 
 			//登录id 
-			uint ukey;
 			//若Redis可用则查询；不可用就直接查询数据库
 			//尝试从缓存中查找账号
 			if ( LS.instance.redisWrapper.IsConnected )
@@ -171,14 +186,26 @@ namespace LoginServer.Biz
 					}
 				}
 				//从redis取回ukey
-				ukey = ( uint )LS.instance.redisWrapper.HashGet( "ukeys", login.Name );
-				HandleLoginSuccess( gcLoginRet, ukey, session.id );
+				uint ukey = ( uint )LS.instance.redisWrapper.HashGet( "ukeys", login.Name );
+				CSLoginParam param;
+				param.channel = login.Channel;
+				param.browser = login.Browser;
+				param.platform = login.Platform;
+				param.openID = string.Empty;
+				param.sessionKey = string.Empty;
+				param.unionID = string.Empty;
+				param.sid = session.id;
+				param.ukey = ukey;
+				HandleLoginSuccess( gcLoginRet, param );
 			}
 			//从数据库中查找
 			else
 			{
 				string pwdmd5 = Core.Crypto.MD5Util.GetMd5HexDigest( pwd ).Replace( "-", string.Empty ).ToLower();
 				Protos.LS2DB_QueryLogin queryLogin = ProtoCreator.Q_LS2DB_QueryLogin();
+				queryLogin.Channel = login.Channel;
+				queryLogin.Browser = login.Browser;
+				queryLogin.Platform = login.Platform;
 				queryLogin.Name = login.Name;
 				queryLogin.Pwd = pwdmd5;
 				queryLogin.VertPwd = LS.instance.config.pwdVerification;
@@ -186,7 +213,7 @@ namespace LoginServer.Biz
 				queryLogin.Ip = session.connection.remoteEndPoint.ToString();
 
 				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, queryLogin,
-												RPCEntry.Pop( OnQueryLoginRet, gcLoginRet, session.id, login.Name, pwdmd5 ) );
+												RPCEntry.Pop( OnQueryLoginRet, gcLoginRet, session.id, login.Name, pwdmd5, login.Channel, login.Browser, login.Platform ) );
 			}
 			return ErrorCode.Success;
 		}
@@ -197,6 +224,9 @@ namespace LoginServer.Biz
 			uint sid = ( uint )args[1];
 			string uname = ( string )args[2];
 			string pwdmd5 = ( string )args[3];
+			Protos.Global.Types.Channel channel = ( Protos.Global.Types.Channel )args[4];
+			Protos.Global.Types.Browser browser = ( Protos.Global.Types.Browser )args[5];
+			Protos.Global.Types.Platform platform = ( Protos.Global.Types.Platform )args[6];
 
 			Protos.DB2LS_QueryLoginRet queryLoginRet = ( Protos.DB2LS_QueryLoginRet )message;
 			gcLoginRet.Result = ( Protos.LS2GC_AskLoginRet.Types.EResult )queryLoginRet.Result;
@@ -210,7 +240,17 @@ namespace LoginServer.Biz
 					LS.instance.redisWrapper.HashSet( "unames", uname, pwdmd5 );
 					LS.instance.redisWrapper.HashSet( "ukeys", uname, ukey );
 				}
-				HandleLoginSuccess( gcLoginRet, ukey, sid );
+
+				CSLoginParam param;
+				param.channel = channel;
+				param.browser = browser;
+				param.platform = platform;
+				param.openID = string.Empty;
+				param.sessionKey = string.Empty;
+				param.unionID = string.Empty;
+				param.sid = sid;
+				param.ukey = ukey;
+				HandleLoginSuccess( gcLoginRet, param );
 			}
 			else
 			{
@@ -284,7 +324,17 @@ namespace LoginServer.Biz
 					success = true;
 					//从redis取回ukey
 					uint ukey = ( uint )LS.instance.redisWrapper.HashGet( "ukeys", login.Name );
-					HandleLoginSuccess( gcLoginRet, ukey, sid );
+
+					CSLoginParam param;
+					param.channel = login.Channel;
+					param.browser = login.Browser;
+					param.platform = login.Platform;
+					param.openID = string.Empty;
+					param.sessionKey = string.Empty;
+					param.unionID = string.Empty;
+					param.sid = sid;
+					param.ukey = ukey;
+					HandleLoginSuccess( gcLoginRet, param );
 				}
 			}
 			//从数据库中查找
@@ -324,7 +374,17 @@ namespace LoginServer.Biz
 					LS.instance.redisWrapper.HashSet( "unames", login.Name, string.Empty );
 					LS.instance.redisWrapper.HashSet( "ukeys", login.Name, ukey );
 				}
-				HandleLoginSuccess( gcLoginRet, ukey, sid );
+
+				CSLoginParam param;
+				param.channel = login.Channel;
+				param.browser = login.Browser;
+				param.platform = login.Platform;
+				param.openID = string.Empty;
+				param.sessionKey = string.Empty;
+				param.unionID = string.Empty;
+				param.sid = sid;
+				param.ukey = ukey;
+				HandleLoginSuccess( gcLoginRet, param );
 			}
 			//数据库也查询失败,自动注册
 			else
@@ -333,8 +393,8 @@ namespace LoginServer.Biz
 				//请求DB服务器注册账号
 				Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
 				sqlExec.Cmd =
-					$"insert account_user( sdk,uname,pwd,last_login_time,last_login_ip ) values({login.Sdk}, \'{login.Name}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{remote}\');";
-				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, sqlExec, RPCEntry.Pop( OnSmartRegisterAccount, gcLoginRet, sid, login.Name ) );
+					$"insert account_user( channel,uname,pwd,last_login_time,last_login_ip ) values({( int )login.Channel}, \'{login.Name}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{remote}\');";
+				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, sqlExec, RPCEntry.Pop( OnSmartRegisterAccount, gcLoginRet, sid, login.Name, login.Channel, login.Browser, login.Platform ) );
 			}
 		}
 
@@ -346,6 +406,9 @@ namespace LoginServer.Biz
 			Protos.LS2GC_AskLoginRet gcLoginRet = ( Protos.LS2GC_AskLoginRet )args[0];
 			uint sid = ( uint )args[1];
 			string uname = ( string )args[2];
+			Protos.Global.Types.Channel channel = ( Protos.Global.Types.Channel )args[3];
+			Protos.Global.Types.Browser browser = ( Protos.Global.Types.Browser )args[3];
+			Protos.Global.Types.Platform platform = ( Protos.Global.Types.Platform )args[3];
 
 			//返回的消息
 			Protos.DB2LS_ExecRet sqlExecRet = ( Protos.DB2LS_ExecRet )message;
@@ -362,7 +425,18 @@ namespace LoginServer.Biz
 
 			uint ukey = sqlExecRet.Id;
 			if ( sqlExecRet.Result == Protos.DB2LS_QueryResult.Success )
-				HandleLoginSuccess( gcLoginRet, ukey, sid );
+			{
+				CSLoginParam param;
+				param.channel = channel;
+				param.browser = browser;
+				param.platform = platform;
+				param.openID = string.Empty;
+				param.sessionKey = string.Empty;
+				param.unionID = string.Empty;
+				param.sid = sid;
+				param.ukey = ukey;
+				HandleLoginSuccess( gcLoginRet, param );
+			}
 			else
 			{
 				//这里不应该会失败,以防万一打印一些信息
@@ -375,16 +449,22 @@ namespace LoginServer.Biz
 			}
 		}
 
-		private static void HandleLoginSuccess( Protos.LS2GC_AskLoginRet gcLoginRet, uint ukey, uint sid )
+		private static void HandleLoginSuccess( Protos.LS2GC_AskLoginRet gcLoginRet, CSLoginParam param )
 		{
 			ulong gcNID = GuidHash.GetUInt64();
 			//通知cs,客户端登陆成功
 			Protos.LS2CS_GCLogin csLogin = ProtoCreator.Q_LS2CS_GCLogin();
+			csLogin.Channel = param.channel;
+			csLogin.Browser = param.browser;
+			csLogin.Platform = param.platform;
 			csLogin.SessionID = gcNID;
-			csLogin.Ukey = ukey;
+			csLogin.Ukey = param.ukey;
+			csLogin.OpenID = param.openID;
+			csLogin.SessionKey = param.sessionKey;
+			csLogin.UnionID = param.unionID;
 
 			LS.instance.netSessionMgr.Send( SessionType.ServerL2CS, csLogin,
-											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, sid, gcNID ) );
+											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, param.sid, gcNID ) );
 		}
 
 		private bool CheckUsername( string uname )
@@ -404,6 +484,59 @@ namespace LoginServer.Biz
 				 !Consts.REGEX_PWD.IsMatch( pwd ) )
 				return false;
 			return true;
+		}
+
+		public ErrorCode OnGc2LsAskWxlogin( NetSessionBase session, Google.Protobuf.IMessage message )
+		{
+			Protos.GC2LS_AskWXLogin login = ( Protos.GC2LS_AskWXLogin )message;
+			Protos.LS2GC_AskLoginRet gcLoginRet = ProtoCreator.R_GC2LS_AskLogin( login.Opts.Pid );
+			string reqUrl =
+				$"https://api.weixin.qq.com/sns/jscode2session?appid={LS.instance.config.wxAppID}&secret={LS.instance.config.wxAppSecret}&js_code={login.Code}&grant_type=authorization_code";
+			var client = new WebClient();
+			client.DownloadStringTaskAsync( reqUrl ).ContinueWith( ( t, o ) =>
+			{
+				Hashtable json = ( Hashtable )MiniJSON.JsonDecode( t.Result );
+				int errorCode = json.GetInt( "errcode" );
+				if ( errorCode != 0 )
+				{
+					//错误码,参考 https://developers.weixin.qq.com/minigame/dev/api/code2Session.html
+					switch ( errorCode )
+					{
+						case -1:
+							gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.Busy;
+							break;
+						case 40029:
+							gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidCode;
+							break;
+						case 45011:
+							gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.Frequent;
+							break;
+					}
+					session.Send( gcLoginRet );
+					session.DelayClose( 500, $"login fail:{errorCode}" );
+				}
+				else
+				{
+					string openID = json.GetString( "openid" );
+					string sessionKey = json.GetString( "session_key" );
+					string unionID = json.GetString( "unionid" );
+					uint ukey = Core.Crypto.CRC32.Compute( Encoding.UTF8.GetBytes( openID ) );
+
+					Logger.Log( $"wxLogin success, openID:{openID}, sessionKey:{sessionKey}, unionID:{unionID}, ukey:{ukey}" );
+
+					CSLoginParam param;
+					param.channel = Protos.Global.Types.Channel.Wxmini;
+					param.browser = login.Browser;
+					param.platform = login.Platform;
+					param.openID = openID;
+					param.sessionKey = sessionKey;
+					param.unionID = unionID;
+					param.sid = session.id;
+					param.ukey = ukey;
+					HandleLoginSuccess( gcLoginRet, param );
+				}
+			}, null, CancellationToken.None );
+			return ErrorCode.Success;
 		}
 	}
 }

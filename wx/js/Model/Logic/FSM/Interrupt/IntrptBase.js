@@ -1,5 +1,6 @@
 import { Hashtable } from "../../../../RC/Utils/Hashtable";
 import { StateType } from "../../../StateEnums";
+import { Logger } from "../../../../RC/Utils/Logger";
 var FilterType;
 (function (FilterType) {
     FilterType[FilterType["AttrToAttr"] = 0] = "AttrToAttr";
@@ -48,7 +49,8 @@ export class IntrptBase {
         this._id = Hashtable.GetNumber(def, "id");
         this._intrptType = Hashtable.GetNumber(def, "type");
         this._connectState = Hashtable.GetNumber(def, "connect_state");
-        this._skillID = Hashtable.GetNumber(def, "skill");
+        this._skillID = Hashtable.GetNumber(def, "skill", null);
+        this._skillIDs = Hashtable.GetNumberArray(def, "skills");
         this._delay = Hashtable.GetNumber(def, "delay");
         const filterDefs = Hashtable.GetMapArray(def, "filters");
         if (filterDefs != null) {
@@ -162,10 +164,25 @@ export class IntrptBase {
                 owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
                 break;
             case IntrptType.Skill:
-                const skill = owner.GetSkill(this._skillID);
+                let skill;
+                if (this._skillID == null) {
+                    if (this._skillIDs == null || this._skillIDs.length == 0) {
+                        Logger.Warn("invalid skill id");
+                        return;
+                    }
+                    const index = owner.battle.random.NextFloor(0, this._skillIDs.length);
+                    skill = owner.GetSkill(this._skillIDs[index]);
+                }
+                else {
+                    skill = owner.GetSkill(this._skillID);
+                }
+                if (skill == null) {
+                    Logger.Warn("invalid skill");
+                    return;
+                }
                 const meet = owner.mp >= skill.mpCost;
                 if (meet) {
-                    owner.fsm.context.skillID = this._skillID;
+                    owner.fsm.context.skillID = skill.id;
                     owner.fsm.ChangeState(skill.connectState, null, igroneIntrptList, force);
                 }
                 break;

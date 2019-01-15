@@ -23,7 +23,7 @@ namespace CentralServer.Biz
 		public ErrorCode OnLs2CsGclogin( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.LS2CS_GCLogin gcLogin = ( Protos.LS2CS_GCLogin )message;
-			CSUser user = CS.instance.userMgr.CreateUser( gcLogin.Ukey, gcLogin.SessionID );
+			CSUser user = CS.instance.userMgr.CreateUser( gcLogin );
 
 			Protos.CS2LS_GCLoginRet gcLoginRet = ProtoCreator.R_LS2CS_GCLogin( gcLogin.Opts.Pid );
 			gcLoginRet.Result = user != null

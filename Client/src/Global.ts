@@ -1,27 +1,11 @@
-import { Connector } from "./Net/Connector";
 import { Graphic } from "./Graphic";
-import { UIManager } from "./UI/UIManager";
-import { SceneManager } from "./Scene/SceneManager";
 import { BattleManager } from "./Model/BattleManager";
+import { Connector } from "./Net/Connector";
 import { ProtoCreator } from "./Net/ProtoHelper";
-
-enum Platform {
-	Editor,
-	Web,
-	WXMini
-}
-
-enum RunMode {
-	Game,
-	Pressure
-}
+import { SceneManager } from "./Scene/SceneManager";
+import { UIManager } from "./UI/UIManager";
 
 export class Global {
-	public static readonly Platform = Platform;
-	public static readonly RunMode = RunMode;
-
-	public static platform: Platform;
-
 	private static _connector: Connector = new Connector();
 	private static _graphic: Graphic = new Graphic();
 	private static _uiManager: UIManager = new UIManager();

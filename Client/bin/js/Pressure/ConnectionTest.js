@@ -13,7 +13,7 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
             this._connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.OnFrameAction.bind(this));
             this._closeTime = MathUtils_1.MathUtils.Random(1000, 3000);
             const name = GUID_1.GUID.create().toString();
-            this.Login(name, 0, 0);
+            this.Login(name);
         }
         Update(dt) {
             this._time += dt;
@@ -22,11 +22,9 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
         ConnectToLS(connector) {
             connector.Connect("localhost", 49996);
         }
-        Login(uname, platform, sdk) {
+        Login(uname) {
             const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskSmartLogin();
             login.name = uname;
-            login.platform = platform;
-            login.sdk = sdk;
             const connector = new WSConnector_1.WSConnector();
             connector.onerror = (e) => Logger_1.Logger.Error(e);
             connector.onclose = () => { };

@@ -5,4 +5,4 @@ import "./js/Libs/laya.html.min.js";
 import "./js/Libs/fairygui.min.js";
 import { Main } from "./js/Main.js";
 
-new Main("{\"platform\": 2}");
+new Main();

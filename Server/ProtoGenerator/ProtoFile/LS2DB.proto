@@ -10,11 +10,14 @@ message LS2DB_QueryAccount{
 
 message LS2DB_QueryLogin{
 	MsgOpts opts = 1;
-	string name = 2;//用户名
-	string pwd = 3;//密码
-	bool vertPwd = 4;//是否需要验证密码
-	string ip = 5;//登陆ip
-	int64 time = 6;//登陆时间
+	Global.Channel channel = 2;
+	Global.Browser browser = 3;
+	Global.Platform platform = 4;
+	string name = 5;//用户名
+	string pwd = 6;//密码
+	bool vertPwd = 7;//是否需要验证密码
+	string ip = 8;//登陆ip
+	int64 time = 9;//登陆时间
 }
 
 message LS2DB_Exec {

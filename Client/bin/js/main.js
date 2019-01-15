@@ -1,12 +1,10 @@
-define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, Preloader_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1) {
+define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, Preloader_1, Logger_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
         static get instance() { return Main._instance; }
         constructor(config) {
             Main._instance = this;
-            const cfgJson = JsonHelper_1.JsonHelper.Parse(config);
-            Global_1.Global.platform = Hashtable_1.Hashtable.GetNumber(cfgJson, "platform");
             Laya.MiniAdpter.init();
             Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);
             Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
@@ -46,7 +44,7 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
         }
         StartGame() {
             Logger_1.Logger.Log("start game...");
-            if (Global_1.Global.platform == Global_1.Global.Platform.WXMini) {
+            if (Laya.Browser.onMiniGame) {
                 $protobuf.util.Long = Long.default.prototype.constructor;
                 $protobuf.configure();
             }

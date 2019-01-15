@@ -928,6 +928,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[1000] = "eGC2LS_AskRegister"] = 1000;
         values[valuesById[1001] = "eGC2LS_AskLogin"] = 1001;
         values[valuesById[1002] = "eGC2LS_AskSmartLogin"] = 1002;
+        values[valuesById[1003] = "eGC2LS_AskWXLogin"] = 1003;
         values[valuesById[1100] = "eGC2GS_AskLogin"] = 1100;
         values[valuesById[1101] = "eGC2GS_KeepAlive"] = 1101;
         values[valuesById[1200] = "eGC2BS_AskLogin"] = 1200;
@@ -1483,6 +1484,32 @@ export const Protos = $root.Protos = (() => {
             const valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "Failed"] = 1;
+            return values;
+        })();
+
+        Global.Channel = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "Web"] = 0;
+            values[valuesById[1] = "WXMini"] = 1;
+            return values;
+        })();
+
+        Global.Platform = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "PC"] = 0;
+            values[valuesById[1] = "Android"] = 1;
+            values[valuesById[2] = "IOS"] = 2;
+            values[valuesById[3] = "WP"] = 3;
+            return values;
+        })();
+
+        Global.Browser = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "Chrome"] = 0;
+            values[valuesById[1] = "Firefox"] = 1;
+            values[valuesById[2] = "Safair"] = 2;
+            values[valuesById[3] = "Edge"] = 3;
+            values[valuesById[4] = "IE"] = 4;
             return values;
         })();
 
@@ -7087,10 +7114,8 @@ export const Protos = $root.Protos = (() => {
         }
 
         GC2LS_AskRegister.prototype.opts = null;
-        GC2LS_AskRegister.prototype.sdk = 0;
         GC2LS_AskRegister.prototype.name = "";
         GC2LS_AskRegister.prototype.passwd = "";
-        GC2LS_AskRegister.prototype.platform = 0;
 
         GC2LS_AskRegister.create = function create(properties) {
             return new GC2LS_AskRegister(properties);
@@ -7101,14 +7126,10 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.sdk != null && message.hasOwnProperty("sdk"))
-                writer.uint32(16).int32(message.sdk);
             if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(26).string(message.name);
+                writer.uint32(18).string(message.name);
             if (message.passwd != null && message.hasOwnProperty("passwd"))
-                writer.uint32(34).string(message.passwd);
-            if (message.platform != null && message.hasOwnProperty("platform"))
-                writer.uint32(40).uint32(message.platform);
+                writer.uint32(26).string(message.passwd);
             return writer;
         };
 
@@ -7127,16 +7148,10 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.sdk = reader.int32();
-                    break;
-                case 3:
                     message.name = reader.string();
                     break;
-                case 4:
+                case 3:
                     message.passwd = reader.string();
-                    break;
-                case 5:
-                    message.platform = reader.uint32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -7160,18 +7175,12 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
-            if (message.sdk != null && message.hasOwnProperty("sdk"))
-                if (!$util.isInteger(message.sdk))
-                    return "sdk: integer expected";
             if (message.name != null && message.hasOwnProperty("name"))
                 if (!$util.isString(message.name))
                     return "name: string expected";
             if (message.passwd != null && message.hasOwnProperty("passwd"))
                 if (!$util.isString(message.passwd))
                     return "passwd: string expected";
-            if (message.platform != null && message.hasOwnProperty("platform"))
-                if (!$util.isInteger(message.platform))
-                    return "platform: integer expected";
             return null;
         };
 
@@ -7184,14 +7193,10 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.GC2LS_AskRegister.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
-            if (object.sdk != null)
-                message.sdk = object.sdk | 0;
             if (object.name != null)
                 message.name = String(object.name);
             if (object.passwd != null)
                 message.passwd = String(object.passwd);
-            if (object.platform != null)
-                message.platform = object.platform >>> 0;
             return message;
         };
 
@@ -7201,21 +7206,15 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
-                object.sdk = 0;
                 object.name = "";
                 object.passwd = "";
-                object.platform = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.sdk != null && message.hasOwnProperty("sdk"))
-                object.sdk = message.sdk;
             if (message.name != null && message.hasOwnProperty("name"))
                 object.name = message.name;
             if (message.passwd != null && message.hasOwnProperty("passwd"))
                 object.passwd = message.passwd;
-            if (message.platform != null && message.hasOwnProperty("platform"))
-                object.platform = message.platform;
             return object;
         };
 
@@ -7236,6 +7235,9 @@ export const Protos = $root.Protos = (() => {
         }
 
         GC2LS_AskLogin.prototype.opts = null;
+        GC2LS_AskLogin.prototype.channel = 0;
+        GC2LS_AskLogin.prototype.browser = 0;
+        GC2LS_AskLogin.prototype.platform = 0;
         GC2LS_AskLogin.prototype.name = "";
         GC2LS_AskLogin.prototype.passwd = "";
 
@@ -7248,10 +7250,16 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                writer.uint32(16).int32(message.channel);
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                writer.uint32(24).int32(message.browser);
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                writer.uint32(32).int32(message.platform);
             if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(18).string(message.name);
+                writer.uint32(42).string(message.name);
             if (message.passwd != null && message.hasOwnProperty("passwd"))
-                writer.uint32(26).string(message.passwd);
+                writer.uint32(50).string(message.passwd);
             return writer;
         };
 
@@ -7270,9 +7278,18 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.name = reader.string();
+                    message.channel = reader.int32();
                     break;
                 case 3:
+                    message.browser = reader.int32();
+                    break;
+                case 4:
+                    message.platform = reader.int32();
+                    break;
+                case 5:
+                    message.name = reader.string();
+                    break;
+                case 6:
                     message.passwd = reader.string();
                     break;
                 default:
@@ -7297,6 +7314,35 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                switch (message.channel) {
+                default:
+                    return "channel: enum value expected";
+                case 0:
+                case 1:
+                    break;
+                }
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                switch (message.browser) {
+                default:
+                    return "browser: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    break;
+                }
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                switch (message.platform) {
+                default:
+                    return "platform: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
             if (message.name != null && message.hasOwnProperty("name"))
                 if (!$util.isString(message.name))
                     return "name: string expected";
@@ -7315,6 +7361,56 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.GC2LS_AskLogin.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
+            switch (object.channel) {
+            case "Web":
+            case 0:
+                message.channel = 0;
+                break;
+            case "WXMini":
+            case 1:
+                message.channel = 1;
+                break;
+            }
+            switch (object.browser) {
+            case "Chrome":
+            case 0:
+                message.browser = 0;
+                break;
+            case "Firefox":
+            case 1:
+                message.browser = 1;
+                break;
+            case "Safair":
+            case 2:
+                message.browser = 2;
+                break;
+            case "Edge":
+            case 3:
+                message.browser = 3;
+                break;
+            case "IE":
+            case 4:
+                message.browser = 4;
+                break;
+            }
+            switch (object.platform) {
+            case "PC":
+            case 0:
+                message.platform = 0;
+                break;
+            case "Android":
+            case 1:
+                message.platform = 1;
+                break;
+            case "IOS":
+            case 2:
+                message.platform = 2;
+                break;
+            case "WP":
+            case 3:
+                message.platform = 3;
+                break;
+            }
             if (object.name != null)
                 message.name = String(object.name);
             if (object.passwd != null)
@@ -7328,11 +7424,20 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
+                object.channel = options.enums === String ? "Web" : 0;
+                object.browser = options.enums === String ? "Chrome" : 0;
+                object.platform = options.enums === String ? "PC" : 0;
                 object.name = "";
                 object.passwd = "";
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                object.channel = options.enums === String ? $root.Protos.Global.Channel[message.channel] : message.channel;
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                object.browser = options.enums === String ? $root.Protos.Global.Browser[message.browser] : message.browser;
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                object.platform = options.enums === String ? $root.Protos.Global.Platform[message.platform] : message.platform;
             if (message.name != null && message.hasOwnProperty("name"))
                 object.name = message.name;
             if (message.passwd != null && message.hasOwnProperty("passwd"))
@@ -7357,9 +7462,10 @@ export const Protos = $root.Protos = (() => {
         }
 
         GC2LS_AskSmartLogin.prototype.opts = null;
-        GC2LS_AskSmartLogin.prototype.sdk = 0;
-        GC2LS_AskSmartLogin.prototype.name = "";
+        GC2LS_AskSmartLogin.prototype.channel = 0;
+        GC2LS_AskSmartLogin.prototype.browser = 0;
         GC2LS_AskSmartLogin.prototype.platform = 0;
+        GC2LS_AskSmartLogin.prototype.name = "";
 
         GC2LS_AskSmartLogin.create = function create(properties) {
             return new GC2LS_AskSmartLogin(properties);
@@ -7370,12 +7476,14 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.sdk != null && message.hasOwnProperty("sdk"))
-                writer.uint32(16).int32(message.sdk);
-            if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(26).string(message.name);
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                writer.uint32(16).int32(message.channel);
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                writer.uint32(24).int32(message.browser);
             if (message.platform != null && message.hasOwnProperty("platform"))
-                writer.uint32(32).uint32(message.platform);
+                writer.uint32(32).int32(message.platform);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(42).string(message.name);
             return writer;
         };
 
@@ -7394,13 +7502,16 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.sdk = reader.int32();
+                    message.channel = reader.int32();
                     break;
                 case 3:
-                    message.name = reader.string();
+                    message.browser = reader.int32();
                     break;
                 case 4:
-                    message.platform = reader.uint32();
+                    message.platform = reader.int32();
+                    break;
+                case 5:
+                    message.name = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -7424,15 +7535,38 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
-            if (message.sdk != null && message.hasOwnProperty("sdk"))
-                if (!$util.isInteger(message.sdk))
-                    return "sdk: integer expected";
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                switch (message.channel) {
+                default:
+                    return "channel: enum value expected";
+                case 0:
+                case 1:
+                    break;
+                }
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                switch (message.browser) {
+                default:
+                    return "browser: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    break;
+                }
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                switch (message.platform) {
+                default:
+                    return "platform: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
             if (message.name != null && message.hasOwnProperty("name"))
                 if (!$util.isString(message.name))
                     return "name: string expected";
-            if (message.platform != null && message.hasOwnProperty("platform"))
-                if (!$util.isInteger(message.platform))
-                    return "platform: integer expected";
             return null;
         };
 
@@ -7445,12 +7579,58 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.GC2LS_AskSmartLogin.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
-            if (object.sdk != null)
-                message.sdk = object.sdk | 0;
+            switch (object.channel) {
+            case "Web":
+            case 0:
+                message.channel = 0;
+                break;
+            case "WXMini":
+            case 1:
+                message.channel = 1;
+                break;
+            }
+            switch (object.browser) {
+            case "Chrome":
+            case 0:
+                message.browser = 0;
+                break;
+            case "Firefox":
+            case 1:
+                message.browser = 1;
+                break;
+            case "Safair":
+            case 2:
+                message.browser = 2;
+                break;
+            case "Edge":
+            case 3:
+                message.browser = 3;
+                break;
+            case "IE":
+            case 4:
+                message.browser = 4;
+                break;
+            }
+            switch (object.platform) {
+            case "PC":
+            case 0:
+                message.platform = 0;
+                break;
+            case "Android":
+            case 1:
+                message.platform = 1;
+                break;
+            case "IOS":
+            case 2:
+                message.platform = 2;
+                break;
+            case "WP":
+            case 3:
+                message.platform = 3;
+                break;
+            }
             if (object.name != null)
                 message.name = String(object.name);
-            if (object.platform != null)
-                message.platform = object.platform >>> 0;
             return message;
         };
 
@@ -7460,18 +7640,21 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
-                object.sdk = 0;
+                object.channel = options.enums === String ? "Web" : 0;
+                object.browser = options.enums === String ? "Chrome" : 0;
+                object.platform = options.enums === String ? "PC" : 0;
                 object.name = "";
-                object.platform = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.sdk != null && message.hasOwnProperty("sdk"))
-                object.sdk = message.sdk;
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                object.channel = options.enums === String ? $root.Protos.Global.Channel[message.channel] : message.channel;
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                object.browser = options.enums === String ? $root.Protos.Global.Browser[message.browser] : message.browser;
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                object.platform = options.enums === String ? $root.Protos.Global.Platform[message.platform] : message.platform;
             if (message.name != null && message.hasOwnProperty("name"))
                 object.name = message.name;
-            if (message.platform != null && message.hasOwnProperty("platform"))
-                object.platform = message.platform;
             return object;
         };
 
@@ -7480,6 +7663,192 @@ export const Protos = $root.Protos = (() => {
         };
 
         return GC2LS_AskSmartLogin;
+    })();
+
+    Protos.GC2LS_AskWXLogin = (function() {
+
+        function GC2LS_AskWXLogin(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2LS_AskWXLogin.prototype.opts = null;
+        GC2LS_AskWXLogin.prototype.browser = 0;
+        GC2LS_AskWXLogin.prototype.platform = 0;
+        GC2LS_AskWXLogin.prototype.code = "";
+
+        GC2LS_AskWXLogin.create = function create(properties) {
+            return new GC2LS_AskWXLogin(properties);
+        };
+
+        GC2LS_AskWXLogin.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                writer.uint32(16).int32(message.browser);
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                writer.uint32(24).int32(message.platform);
+            if (message.code != null && message.hasOwnProperty("code"))
+                writer.uint32(34).string(message.code);
+            return writer;
+        };
+
+        GC2LS_AskWXLogin.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2LS_AskWXLogin.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskWXLogin();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.browser = reader.int32();
+                    break;
+                case 3:
+                    message.platform = reader.int32();
+                    break;
+                case 4:
+                    message.code = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2LS_AskWXLogin.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2LS_AskWXLogin.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                switch (message.browser) {
+                default:
+                    return "browser: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    break;
+                }
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                switch (message.platform) {
+                default:
+                    return "platform: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
+            if (message.code != null && message.hasOwnProperty("code"))
+                if (!$util.isString(message.code))
+                    return "code: string expected";
+            return null;
+        };
+
+        GC2LS_AskWXLogin.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2LS_AskWXLogin)
+                return object;
+            let message = new $root.Protos.GC2LS_AskWXLogin();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.GC2LS_AskWXLogin.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            switch (object.browser) {
+            case "Chrome":
+            case 0:
+                message.browser = 0;
+                break;
+            case "Firefox":
+            case 1:
+                message.browser = 1;
+                break;
+            case "Safair":
+            case 2:
+                message.browser = 2;
+                break;
+            case "Edge":
+            case 3:
+                message.browser = 3;
+                break;
+            case "IE":
+            case 4:
+                message.browser = 4;
+                break;
+            }
+            switch (object.platform) {
+            case "PC":
+            case 0:
+                message.platform = 0;
+                break;
+            case "Android":
+            case 1:
+                message.platform = 1;
+                break;
+            case "IOS":
+            case 2:
+                message.platform = 2;
+                break;
+            case "WP":
+            case 3:
+                message.platform = 3;
+                break;
+            }
+            if (object.code != null)
+                message.code = String(object.code);
+            return message;
+        };
+
+        GC2LS_AskWXLogin.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.browser = options.enums === String ? "Chrome" : 0;
+                object.platform = options.enums === String ? "PC" : 0;
+                object.code = "";
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                object.browser = options.enums === String ? $root.Protos.Global.Browser[message.browser] : message.browser;
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                object.platform = options.enums === String ? $root.Protos.Global.Platform[message.platform] : message.platform;
+            if (message.code != null && message.hasOwnProperty("code"))
+                object.code = message.code;
+            return object;
+        };
+
+        GC2LS_AskWXLogin.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GC2LS_AskWXLogin;
     })();
 
     Protos.GS2GC_LoginRet = (function() {
@@ -7949,8 +8318,14 @@ export const Protos = $root.Protos = (() => {
         }
 
         LS2CS_GCLogin.prototype.opts = null;
+        LS2CS_GCLogin.prototype.channel = 0;
+        LS2CS_GCLogin.prototype.browser = 0;
+        LS2CS_GCLogin.prototype.platform = 0;
         LS2CS_GCLogin.prototype.sessionID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
         LS2CS_GCLogin.prototype.ukey = 0;
+        LS2CS_GCLogin.prototype.openID = "";
+        LS2CS_GCLogin.prototype.sessionKey = "";
+        LS2CS_GCLogin.prototype.unionID = "";
 
         LS2CS_GCLogin.create = function create(properties) {
             return new LS2CS_GCLogin(properties);
@@ -7961,10 +8336,22 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                writer.uint32(16).int32(message.channel);
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                writer.uint32(24).int32(message.browser);
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                writer.uint32(32).int32(message.platform);
             if (message.sessionID != null && message.hasOwnProperty("sessionID"))
-                writer.uint32(16).uint64(message.sessionID);
+                writer.uint32(40).uint64(message.sessionID);
             if (message.ukey != null && message.hasOwnProperty("ukey"))
-                writer.uint32(24).uint32(message.ukey);
+                writer.uint32(48).uint32(message.ukey);
+            if (message.openID != null && message.hasOwnProperty("openID"))
+                writer.uint32(58).string(message.openID);
+            if (message.sessionKey != null && message.hasOwnProperty("sessionKey"))
+                writer.uint32(66).string(message.sessionKey);
+            if (message.unionID != null && message.hasOwnProperty("unionID"))
+                writer.uint32(74).string(message.unionID);
             return writer;
         };
 
@@ -7983,10 +8370,28 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.sessionID = reader.uint64();
+                    message.channel = reader.int32();
                     break;
                 case 3:
+                    message.browser = reader.int32();
+                    break;
+                case 4:
+                    message.platform = reader.int32();
+                    break;
+                case 5:
+                    message.sessionID = reader.uint64();
+                    break;
+                case 6:
                     message.ukey = reader.uint32();
+                    break;
+                case 7:
+                    message.openID = reader.string();
+                    break;
+                case 8:
+                    message.sessionKey = reader.string();
+                    break;
+                case 9:
+                    message.unionID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -8010,12 +8415,50 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                switch (message.channel) {
+                default:
+                    return "channel: enum value expected";
+                case 0:
+                case 1:
+                    break;
+                }
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                switch (message.browser) {
+                default:
+                    return "browser: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    break;
+                }
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                switch (message.platform) {
+                default:
+                    return "platform: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
             if (message.sessionID != null && message.hasOwnProperty("sessionID"))
                 if (!$util.isInteger(message.sessionID) && !(message.sessionID && $util.isInteger(message.sessionID.low) && $util.isInteger(message.sessionID.high)))
                     return "sessionID: integer|Long expected";
             if (message.ukey != null && message.hasOwnProperty("ukey"))
                 if (!$util.isInteger(message.ukey))
                     return "ukey: integer expected";
+            if (message.openID != null && message.hasOwnProperty("openID"))
+                if (!$util.isString(message.openID))
+                    return "openID: string expected";
+            if (message.sessionKey != null && message.hasOwnProperty("sessionKey"))
+                if (!$util.isString(message.sessionKey))
+                    return "sessionKey: string expected";
+            if (message.unionID != null && message.hasOwnProperty("unionID"))
+                if (!$util.isString(message.unionID))
+                    return "unionID: string expected";
             return null;
         };
 
@@ -8028,6 +8471,56 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.LS2CS_GCLogin.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
+            switch (object.channel) {
+            case "Web":
+            case 0:
+                message.channel = 0;
+                break;
+            case "WXMini":
+            case 1:
+                message.channel = 1;
+                break;
+            }
+            switch (object.browser) {
+            case "Chrome":
+            case 0:
+                message.browser = 0;
+                break;
+            case "Firefox":
+            case 1:
+                message.browser = 1;
+                break;
+            case "Safair":
+            case 2:
+                message.browser = 2;
+                break;
+            case "Edge":
+            case 3:
+                message.browser = 3;
+                break;
+            case "IE":
+            case 4:
+                message.browser = 4;
+                break;
+            }
+            switch (object.platform) {
+            case "PC":
+            case 0:
+                message.platform = 0;
+                break;
+            case "Android":
+            case 1:
+                message.platform = 1;
+                break;
+            case "IOS":
+            case 2:
+                message.platform = 2;
+                break;
+            case "WP":
+            case 3:
+                message.platform = 3;
+                break;
+            }
             if (object.sessionID != null)
                 if ($util.Long)
                     (message.sessionID = $util.Long.fromValue(object.sessionID)).unsigned = true;
@@ -8039,6 +8532,12 @@ export const Protos = $root.Protos = (() => {
                     message.sessionID = new $util.LongBits(object.sessionID.low >>> 0, object.sessionID.high >>> 0).toNumber(true);
             if (object.ukey != null)
                 message.ukey = object.ukey >>> 0;
+            if (object.openID != null)
+                message.openID = String(object.openID);
+            if (object.sessionKey != null)
+                message.sessionKey = String(object.sessionKey);
+            if (object.unionID != null)
+                message.unionID = String(object.unionID);
             return message;
         };
 
@@ -8048,15 +8547,27 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
+                object.channel = options.enums === String ? "Web" : 0;
+                object.browser = options.enums === String ? "Chrome" : 0;
+                object.platform = options.enums === String ? "PC" : 0;
                 if ($util.Long) {
                     let long = new $util.Long(0, 0, true);
                     object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.sessionID = options.longs === String ? "0" : 0;
                 object.ukey = 0;
+                object.openID = "";
+                object.sessionKey = "";
+                object.unionID = "";
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                object.channel = options.enums === String ? $root.Protos.Global.Channel[message.channel] : message.channel;
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                object.browser = options.enums === String ? $root.Protos.Global.Browser[message.browser] : message.browser;
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                object.platform = options.enums === String ? $root.Protos.Global.Platform[message.platform] : message.platform;
             if (message.sessionID != null && message.hasOwnProperty("sessionID"))
                 if (typeof message.sessionID === "number")
                     object.sessionID = options.longs === String ? String(message.sessionID) : message.sessionID;
@@ -8064,6 +8575,12 @@ export const Protos = $root.Protos = (() => {
                     object.sessionID = options.longs === String ? $util.Long.prototype.toString.call(message.sessionID) : options.longs === Number ? new $util.LongBits(message.sessionID.low >>> 0, message.sessionID.high >>> 0).toNumber(true) : message.sessionID;
             if (message.ukey != null && message.hasOwnProperty("ukey"))
                 object.ukey = message.ukey;
+            if (message.openID != null && message.hasOwnProperty("openID"))
+                object.openID = message.openID;
+            if (message.sessionKey != null && message.hasOwnProperty("sessionKey"))
+                object.sessionKey = message.sessionKey;
+            if (message.unionID != null && message.hasOwnProperty("unionID"))
+                object.unionID = message.unionID;
             return object;
         };
 
@@ -8191,6 +8708,9 @@ export const Protos = $root.Protos = (() => {
         }
 
         LS2DB_QueryLogin.prototype.opts = null;
+        LS2DB_QueryLogin.prototype.channel = 0;
+        LS2DB_QueryLogin.prototype.browser = 0;
+        LS2DB_QueryLogin.prototype.platform = 0;
         LS2DB_QueryLogin.prototype.name = "";
         LS2DB_QueryLogin.prototype.pwd = "";
         LS2DB_QueryLogin.prototype.vertPwd = false;
@@ -8206,16 +8726,22 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                writer.uint32(16).int32(message.channel);
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                writer.uint32(24).int32(message.browser);
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                writer.uint32(32).int32(message.platform);
             if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(18).string(message.name);
+                writer.uint32(42).string(message.name);
             if (message.pwd != null && message.hasOwnProperty("pwd"))
-                writer.uint32(26).string(message.pwd);
+                writer.uint32(50).string(message.pwd);
             if (message.vertPwd != null && message.hasOwnProperty("vertPwd"))
-                writer.uint32(32).bool(message.vertPwd);
+                writer.uint32(56).bool(message.vertPwd);
             if (message.ip != null && message.hasOwnProperty("ip"))
-                writer.uint32(42).string(message.ip);
+                writer.uint32(66).string(message.ip);
             if (message.time != null && message.hasOwnProperty("time"))
-                writer.uint32(48).int64(message.time);
+                writer.uint32(72).int64(message.time);
             return writer;
         };
 
@@ -8234,18 +8760,27 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.name = reader.string();
+                    message.channel = reader.int32();
                     break;
                 case 3:
-                    message.pwd = reader.string();
+                    message.browser = reader.int32();
                     break;
                 case 4:
-                    message.vertPwd = reader.bool();
+                    message.platform = reader.int32();
                     break;
                 case 5:
-                    message.ip = reader.string();
+                    message.name = reader.string();
                     break;
                 case 6:
+                    message.pwd = reader.string();
+                    break;
+                case 7:
+                    message.vertPwd = reader.bool();
+                    break;
+                case 8:
+                    message.ip = reader.string();
+                    break;
+                case 9:
                     message.time = reader.int64();
                     break;
                 default:
@@ -8270,6 +8805,35 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                switch (message.channel) {
+                default:
+                    return "channel: enum value expected";
+                case 0:
+                case 1:
+                    break;
+                }
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                switch (message.browser) {
+                default:
+                    return "browser: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    break;
+                }
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                switch (message.platform) {
+                default:
+                    return "platform: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
             if (message.name != null && message.hasOwnProperty("name"))
                 if (!$util.isString(message.name))
                     return "name: string expected";
@@ -8297,6 +8861,56 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.LS2DB_QueryLogin.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
+            switch (object.channel) {
+            case "Web":
+            case 0:
+                message.channel = 0;
+                break;
+            case "WXMini":
+            case 1:
+                message.channel = 1;
+                break;
+            }
+            switch (object.browser) {
+            case "Chrome":
+            case 0:
+                message.browser = 0;
+                break;
+            case "Firefox":
+            case 1:
+                message.browser = 1;
+                break;
+            case "Safair":
+            case 2:
+                message.browser = 2;
+                break;
+            case "Edge":
+            case 3:
+                message.browser = 3;
+                break;
+            case "IE":
+            case 4:
+                message.browser = 4;
+                break;
+            }
+            switch (object.platform) {
+            case "PC":
+            case 0:
+                message.platform = 0;
+                break;
+            case "Android":
+            case 1:
+                message.platform = 1;
+                break;
+            case "IOS":
+            case 2:
+                message.platform = 2;
+                break;
+            case "WP":
+            case 3:
+                message.platform = 3;
+                break;
+            }
             if (object.name != null)
                 message.name = String(object.name);
             if (object.pwd != null)
@@ -8323,6 +8937,9 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
+                object.channel = options.enums === String ? "Web" : 0;
+                object.browser = options.enums === String ? "Chrome" : 0;
+                object.platform = options.enums === String ? "PC" : 0;
                 object.name = "";
                 object.pwd = "";
                 object.vertPwd = false;
@@ -8335,6 +8952,12 @@ export const Protos = $root.Protos = (() => {
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.channel != null && message.hasOwnProperty("channel"))
+                object.channel = options.enums === String ? $root.Protos.Global.Channel[message.channel] : message.channel;
+            if (message.browser != null && message.hasOwnProperty("browser"))
+                object.browser = options.enums === String ? $root.Protos.Global.Browser[message.browser] : message.browser;
+            if (message.platform != null && message.hasOwnProperty("platform"))
+                object.platform = options.enums === String ? $root.Protos.Global.Platform[message.platform] : message.platform;
             if (message.name != null && message.hasOwnProperty("name"))
                 object.name = message.name;
             if (message.pwd != null && message.hasOwnProperty("pwd"))
@@ -8827,6 +9450,9 @@ export const Protos = $root.Protos = (() => {
                 case 1:
                 case 3:
                 case 4:
+                case 5:
+                case 6:
+                case 7:
                     break;
                 }
             if (message.sessionID != null && message.hasOwnProperty("sessionID"))
@@ -8869,6 +9495,18 @@ export const Protos = $root.Protos = (() => {
             case "InvalidPwd":
             case 4:
                 message.result = 4;
+                break;
+            case "Busy":
+            case 5:
+                message.result = 5;
+                break;
+            case "InvalidCode":
+            case 6:
+                message.result = 6;
+                break;
+            case "Frequent":
+            case 7:
+                message.result = 7;
                 break;
             }
             if (object.sessionID != null)
@@ -8935,6 +9573,9 @@ export const Protos = $root.Protos = (() => {
             values[valuesById[1] = "Failed"] = 1;
             values[valuesById[3] = "InvalidUname"] = 3;
             values[valuesById[4] = "InvalidPwd"] = 4;
+            values[valuesById[5] = "Busy"] = 5;
+            values[valuesById[6] = "InvalidCode"] = 6;
+            values[valuesById[7] = "Frequent"] = 7;
             return values;
         })();
 

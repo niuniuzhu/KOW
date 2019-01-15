@@ -6,23 +6,33 @@ import "Global.proto";
 //客户端请求注册
 message GC2LS_AskRegister {
 	MsgOpts opts = 1;
-	int32 sdk = 2;
-	string name = 3;
-	string passwd = 4;
-	uint32 platform = 5;
+	string name = 2;
+	string passwd = 3;
 }
 
 //客户端请求登陆
 message GC2LS_AskLogin {
 	MsgOpts opts = 1;
-	string name = 2;
-	string passwd = 3;
+	Global.Channel channel = 2;
+	Global.Browser browser = 3;
+	Global.Platform platform = 4;
+	string name = 5;
+	string passwd = 6;
 }
 
 //客户端登陆并自动注册
 message GC2LS_AskSmartLogin {
 	MsgOpts opts = 1;
-	int32 sdk = 2;
-	string name = 3;
-	uint32 platform = 4;
+	Global.Channel channel = 2;
+	Global.Browser browser = 3;
+	Global.Platform platform = 4;
+	string name = 5;
+}
+
+//客户端请求登陆微信
+message GC2LS_AskWXLogin {
+	MsgOpts opts = 1;
+	Global.Browser browser = 2;
+	Global.Platform platform = 3;
+	string code = 4;//调用ws.login获取的凭证
 }

@@ -4,16 +4,12 @@ import { Global } from "./Global";
 import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
-import { Hashtable } from "./RC/Utils/Hashtable";
-import { JsonHelper } from "./RC/Utils/JsonHelper";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
 export class Main {
     static get instance() { return Main._instance; }
     constructor(config) {
         Main._instance = this;
-        const cfgJson = JsonHelper.Parse(config);
-        Global.platform = Hashtable.GetNumber(cfgJson, "platform");
         Laya.MiniAdpter.init();
         Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
         Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
@@ -53,7 +49,7 @@ export class Main {
     }
     StartGame() {
         Logger.Log("start game...");
-        if (Global.platform == Global.Platform.WXMini) {
+        if (Laya.Browser.onMiniGame) {
             $protobuf.util.Long = Long.default.prototype.constructor;
             $protobuf.configure();
         }

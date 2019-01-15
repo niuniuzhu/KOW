@@ -169,6 +169,7 @@ export namespace Protos {
         eGC2LS_AskRegister = 1000,
         eGC2LS_AskLogin = 1001,
         eGC2LS_AskSmartLogin = 1002,
+        eGC2LS_AskWXLogin = 1003,
         eGC2GS_AskLogin = 1100,
         eGC2GS_KeepAlive = 1101,
         eGC2BS_AskLogin = 1200,
@@ -327,6 +328,26 @@ export namespace Protos {
         enum ECommon {
             Success = 0,
             Failed = 1
+        }
+
+        enum Channel {
+            Web = 0,
+            WXMini = 1
+        }
+
+        enum Platform {
+            PC = 0,
+            Android = 1,
+            IOS = 2,
+            WP = 3
+        }
+
+        enum Browser {
+            Chrome = 0,
+            Firefox = 1,
+            Safair = 2,
+            Edge = 3,
+            IE = 4
         }
     }
 
@@ -1295,19 +1316,15 @@ export namespace Protos {
 
     interface IGC2LS_AskRegister {
         opts?: (Protos.IMsgOpts|null);
-        sdk?: (number|null);
         name?: (string|null);
         passwd?: (string|null);
-        platform?: (number|null);
     }
 
     class GC2LS_AskRegister implements IGC2LS_AskRegister {
         constructor(properties?: Protos.IGC2LS_AskRegister);
         public opts?: (Protos.IMsgOpts|null);
-        public sdk: number;
         public name: string;
         public passwd: string;
-        public platform: number;
         public static create(properties?: Protos.IGC2LS_AskRegister): Protos.GC2LS_AskRegister;
         public static encode(message: Protos.IGC2LS_AskRegister, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGC2LS_AskRegister, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1321,6 +1338,9 @@ export namespace Protos {
 
     interface IGC2LS_AskLogin {
         opts?: (Protos.IMsgOpts|null);
+        channel?: (Protos.Global.Channel|null);
+        browser?: (Protos.Global.Browser|null);
+        platform?: (Protos.Global.Platform|null);
         name?: (string|null);
         passwd?: (string|null);
     }
@@ -1328,6 +1348,9 @@ export namespace Protos {
     class GC2LS_AskLogin implements IGC2LS_AskLogin {
         constructor(properties?: Protos.IGC2LS_AskLogin);
         public opts?: (Protos.IMsgOpts|null);
+        public channel: Protos.Global.Channel;
+        public browser: Protos.Global.Browser;
+        public platform: Protos.Global.Platform;
         public name: string;
         public passwd: string;
         public static create(properties?: Protos.IGC2LS_AskLogin): Protos.GC2LS_AskLogin;
@@ -1343,17 +1366,19 @@ export namespace Protos {
 
     interface IGC2LS_AskSmartLogin {
         opts?: (Protos.IMsgOpts|null);
-        sdk?: (number|null);
+        channel?: (Protos.Global.Channel|null);
+        browser?: (Protos.Global.Browser|null);
+        platform?: (Protos.Global.Platform|null);
         name?: (string|null);
-        platform?: (number|null);
     }
 
     class GC2LS_AskSmartLogin implements IGC2LS_AskSmartLogin {
         constructor(properties?: Protos.IGC2LS_AskSmartLogin);
         public opts?: (Protos.IMsgOpts|null);
-        public sdk: number;
+        public channel: Protos.Global.Channel;
+        public browser: Protos.Global.Browser;
+        public platform: Protos.Global.Platform;
         public name: string;
-        public platform: number;
         public static create(properties?: Protos.IGC2LS_AskSmartLogin): Protos.GC2LS_AskSmartLogin;
         public static encode(message: Protos.IGC2LS_AskSmartLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGC2LS_AskSmartLogin, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1362,6 +1387,30 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GC2LS_AskSmartLogin;
         public static toObject(message: Protos.GC2LS_AskSmartLogin, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2LS_AskWXLogin {
+        opts?: (Protos.IMsgOpts|null);
+        browser?: (Protos.Global.Browser|null);
+        platform?: (Protos.Global.Platform|null);
+        code?: (string|null);
+    }
+
+    class GC2LS_AskWXLogin implements IGC2LS_AskWXLogin {
+        constructor(properties?: Protos.IGC2LS_AskWXLogin);
+        public opts?: (Protos.IMsgOpts|null);
+        public browser: Protos.Global.Browser;
+        public platform: Protos.Global.Platform;
+        public code: string;
+        public static create(properties?: Protos.IGC2LS_AskWXLogin): Protos.GC2LS_AskWXLogin;
+        public static encode(message: Protos.IGC2LS_AskWXLogin, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2LS_AskWXLogin, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2LS_AskWXLogin;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2LS_AskWXLogin;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2LS_AskWXLogin;
+        public static toObject(message: Protos.GC2LS_AskWXLogin, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
@@ -1448,15 +1497,27 @@ export namespace Protos {
 
     interface ILS2CS_GCLogin {
         opts?: (Protos.IMsgOpts|null);
+        channel?: (Protos.Global.Channel|null);
+        browser?: (Protos.Global.Browser|null);
+        platform?: (Protos.Global.Platform|null);
         sessionID?: (Long|null);
         ukey?: (number|null);
+        openID?: (string|null);
+        sessionKey?: (string|null);
+        unionID?: (string|null);
     }
 
     class LS2CS_GCLogin implements ILS2CS_GCLogin {
         constructor(properties?: Protos.ILS2CS_GCLogin);
         public opts?: (Protos.IMsgOpts|null);
+        public channel: Protos.Global.Channel;
+        public browser: Protos.Global.Browser;
+        public platform: Protos.Global.Platform;
         public sessionID: Long;
         public ukey: number;
+        public openID: string;
+        public sessionKey: string;
+        public unionID: string;
         public static create(properties?: Protos.ILS2CS_GCLogin): Protos.LS2CS_GCLogin;
         public static encode(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1490,6 +1551,9 @@ export namespace Protos {
 
     interface ILS2DB_QueryLogin {
         opts?: (Protos.IMsgOpts|null);
+        channel?: (Protos.Global.Channel|null);
+        browser?: (Protos.Global.Browser|null);
+        platform?: (Protos.Global.Platform|null);
         name?: (string|null);
         pwd?: (string|null);
         vertPwd?: (boolean|null);
@@ -1500,6 +1564,9 @@ export namespace Protos {
     class LS2DB_QueryLogin implements ILS2DB_QueryLogin {
         constructor(properties?: Protos.ILS2DB_QueryLogin);
         public opts?: (Protos.IMsgOpts|null);
+        public channel: Protos.Global.Channel;
+        public browser: Protos.Global.Browser;
+        public platform: Protos.Global.Platform;
         public name: string;
         public pwd: string;
         public vertPwd: boolean;
@@ -1617,7 +1684,10 @@ export namespace Protos {
             Success = 0,
             Failed = 1,
             InvalidUname = 3,
-            InvalidPwd = 4
+            InvalidPwd = 4,
+            Busy = 5,
+            InvalidCode = 6,
+            Frequent = 7
         }
     }
 }

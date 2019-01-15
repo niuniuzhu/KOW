@@ -11,6 +11,7 @@ enum MsgID {
 	eGC2LS_AskRegister = 1000;
 	eGC2LS_AskLogin = 1001;
 	eGC2LS_AskSmartLogin = 1002;
+	eGC2LS_AskWXLogin = 1003;
 
 	eGC2GS_AskLogin = 1100;
 	eGC2GS_KeepAlive = 1101;
@@ -121,6 +122,23 @@ message Global{
 		Success = 0;
 		Failed = 1;
 	}
+	enum Channel {
+		Web = 0;
+		WXMini = 1;
+	}
+	enum Platform {
+		PC = 0;
+		Android = 1;
+		IOS = 2;
+		WP = 3;
+	}
+	enum Browser {
+		Chrome = 0;
+		Firefox = 1;
+		Safair = 2;
+		Edge = 3;
+		IE = 4;
+	}
 }
 
 /*
@@ -132,6 +150,7 @@ message Global{
 		"GC2LS_AskRegister": "LS2GC_AskRegRet",
 		"GC2LS_AskLogin": "LS2GC_AskLoginRet",
 		"GC2LS_AskSmartLogin": "LS2GC_AskLoginRet",
+		"GC2LS_AskWXLogin":"LS2GC_AskLoginRet",
 		"GC2GS_AskLogin": "GS2GC_LoginRet",
 		"GS2CS_GCAskLogin": "CS2GS_GCLoginRet",
 		"GC2BS_AskLogin": "BS2GC_LoginRet",

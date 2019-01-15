@@ -3,13 +3,13 @@ import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { BattleInfo } from "../Model/BattleInfo";
+import { CDefs } from "../Model/CDefs";
 import { ProtoCreator } from "../Net/ProtoHelper";
+import { Hashtable } from "../RC/Utils/Hashtable";
 import { Logger } from "../RC/Utils/Logger";
 import { UILoading } from "../UI/UILoading";
 import { SceneManager } from "./SceneManager";
 import { SceneState } from "./SceneState";
-import { CDefs } from "../Model/CDefs";
-import { Hashtable } from "../RC/Utils/Hashtable";
 
 /**
  * 加载资源状态
@@ -65,12 +65,7 @@ export class LoadingState extends SceneState {
 				}
 			});
 		}
-		if (Global.platform == Global.Platform.Editor) {
-			connector.Connect("localhost", port);
-		}
-		else {
-			connector.Connect(ip, port);
-		}
+		connector.Connect(ip, port);
 	}
 
 	/**

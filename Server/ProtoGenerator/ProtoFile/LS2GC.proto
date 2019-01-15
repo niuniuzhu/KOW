@@ -30,6 +30,9 @@ message LS2GC_AskLoginRet {
 		Failed = 1;
 		InvalidUname = 3;
 		InvalidPwd = 4;
+		Busy = 5;
+		InvalidCode = 6;
+		Frequent = 7;
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;

@@ -6,6 +6,12 @@ import "Global.proto";
 //通知cs有客户端登陆
 message LS2CS_GCLogin{
 	MsgOpts opts = 1;
-	uint64 sessionID = 2;
-	uint32 ukey = 3;
+	Global.Channel channel = 2;
+	Global.Browser browser = 3;
+	Global.Platform platform = 4;
+	uint64 sessionID = 5;
+	uint32 ukey = 6;
+	string openID = 7;
+	string sessionKey = 8;
+	string unionID = 9;
 }

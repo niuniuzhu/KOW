@@ -50,7 +50,7 @@ export class UILogin implements IUIModule {
 			return;
 		}
 		fairygui.GRoot.inst.showModalWait();
-		Global.sceneManager.login.Login(uname, 0, 0);
+		Global.sceneManager.login.Login(uname);
 	}
 
 	private OnEnterBtnClick(): void {

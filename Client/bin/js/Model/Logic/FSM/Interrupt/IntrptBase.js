@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../StateEnums"], function (require, exports, Hashtable_1, StateEnums_1) {
+define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../StateEnums", "../../../../RC/Utils/Logger"], function (require, exports, Hashtable_1, StateEnums_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var FilterType;
@@ -49,7 +49,8 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../StateE
             this._id = Hashtable_1.Hashtable.GetNumber(def, "id");
             this._intrptType = Hashtable_1.Hashtable.GetNumber(def, "type");
             this._connectState = Hashtable_1.Hashtable.GetNumber(def, "connect_state");
-            this._skillID = Hashtable_1.Hashtable.GetNumber(def, "skill");
+            this._skillID = Hashtable_1.Hashtable.GetNumber(def, "skill", null);
+            this._skillIDs = Hashtable_1.Hashtable.GetNumberArray(def, "skills");
             this._delay = Hashtable_1.Hashtable.GetNumber(def, "delay");
             const filterDefs = Hashtable_1.Hashtable.GetMapArray(def, "filters");
             if (filterDefs != null) {
@@ -163,10 +164,25 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../StateE
                     owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
                     break;
                 case IntrptType.Skill:
-                    const skill = owner.GetSkill(this._skillID);
+                    let skill;
+                    if (this._skillID == null) {
+                        if (this._skillIDs == null || this._skillIDs.length == 0) {
+                            Logger_1.Logger.Warn("invalid skill id");
+                            return;
+                        }
+                        const index = owner.battle.random.NextFloor(0, this._skillIDs.length);
+                        skill = owner.GetSkill(this._skillIDs[index]);
+                    }
+                    else {
+                        skill = owner.GetSkill(this._skillID);
+                    }
+                    if (skill == null) {
+                        Logger_1.Logger.Warn("invalid skill");
+                        return;
+                    }
                     const meet = owner.mp >= skill.mpCost;
                     if (meet) {
-                        owner.fsm.context.skillID = this._skillID;
+                        owner.fsm.context.skillID = skill.id;
                         owner.fsm.ChangeState(skill.connectState, null, igroneIntrptList, force);
                     }
                     break;

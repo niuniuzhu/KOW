@@ -200,6 +200,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             }
             if (this._attrTypes == null || this._attrTypes.length == 0) {
                 this._targets2.concat(this._targets1);
+                return;
             }
             const count = this._attrTypes.length;
             for (let i = 0; i < count; ++i) {
@@ -208,41 +209,41 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                 const compareValue = this._attrCompareValues[i];
                 switch (attrType) {
                     case AttrFilter.Distence:
-                        this.FilterDistance(caster, attrOp, compareValue);
+                        this.FilterDistance(caster, attrOp, compareValue, this._targets2);
                         break;
                     case AttrFilter.Hp:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
                             return t.GetAttr(Attribute_1.EAttr.HP);
-                        }, v => v, v => v);
+                        }, v => v, v => v, this._targets1, this._targets2);
                         break;
                     case AttrFilter.Mp:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
                             return t.mp;
-                        }, v => v, v => v);
+                        }, v => v, v => v, this._targets1, this._targets2);
                         break;
                     case AttrFilter.Atk:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
                             return t.atk;
-                        }, v => v, v => v);
+                        }, v => v, v => v, this._targets1, this._targets2);
                         break;
                     case AttrFilter.Def:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
                             return t.def;
-                        }, v => v, v => v);
+                        }, v => v, v => v, this._targets1, this._targets2);
                         break;
                     case AttrFilter.Velocity:
                         this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
                             return t.velocity;
-                        }, v => v, v => v);
+                        }, v => v, v => v, this._targets1, this._targets2);
                         break;
                 }
             }
         }
-        FilterDistance(caster, attrOp, compareValue) {
+        FilterDistance(caster, attrOp, compareValue, targets) {
             switch (attrOp) {
                 case AttrFilterOP.Max: {
                     if (this._targets1.length == 1) {
-                        this._targets2.push(this._targets1[0]);
+                        targets.push(this._targets1[0]);
                     }
                     else {
                         let maxValue = 0;
@@ -254,13 +255,13 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                                 meet = target;
                             }
                         }
-                        this._targets2.push(meet);
+                        targets.push(meet);
                     }
                     break;
                 }
                 case AttrFilterOP.Min:
                     if (this._targets1.length == 1) {
-                        this._targets2.push(this._targets1[0]);
+                        targets.push(this._targets1[0]);
                     }
                     else {
                         let minValue = FMathUtils_1.FMathUtils.MAX_VALUE;
@@ -272,7 +273,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                                 meet = target;
                             }
                         }
-                        this._targets2.push(meet);
+                        targets.push(meet);
                     }
                     break;
                 case AttrFilterOP.Equal: {
@@ -284,7 +285,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets.push(meet);
                     break;
                 }
                 case AttrFilterOP.Greater: {
@@ -296,7 +297,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets.push(meet);
                     break;
                 }
                 case AttrFilterOP.GreaterEqual: {
@@ -308,7 +309,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets.push(meet);
                     break;
                 }
                 case AttrFilterOP.Less: {
@@ -320,7 +321,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets.push(meet);
                     break;
                 }
                 case AttrFilterOP.LessEqual: {
@@ -332,107 +333,107 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets.push(meet);
                     break;
                 }
             }
         }
-        FilterAttr(caster, attrOp, compareValue, getFunc, compValFunc, targetValFunc) {
+        FilterAttr(caster, attrOp, compareValue, getFunc, compValFunc, targetValFunc, targets1, targets2) {
             switch (attrOp) {
                 case AttrFilterOP.Max: {
-                    if (this._targets1.length == 1) {
-                        this._targets2.push(this._targets1[0]);
+                    if (targets1.length == 1) {
+                        targets2.push(targets1[0]);
                     }
                     else {
                         let maxValue = 0;
                         let meet;
-                        for (const target of this._targets1) {
+                        for (const target of targets1) {
                             const attrValue = getFunc(caster, target);
                             if (targetValFunc(attrValue) > compValFunc(maxValue)) {
                                 maxValue = attrValue;
                                 meet = target;
                             }
                         }
-                        this._targets2.push(meet);
+                        targets2.push(meet);
                     }
                     break;
                 }
                 case AttrFilterOP.Min: {
-                    if (this._targets1.length == 1) {
-                        this._targets2.push(this._targets1[0]);
+                    if (targets1.length == 1) {
+                        targets2.push(targets1[0]);
                     }
                     else {
                         let minValue = FMathUtils_1.FMathUtils.MAX_VALUE;
                         let meet;
-                        for (const target of this._targets1) {
+                        for (const target of targets1) {
                             const attrValue = getFunc(caster, target);
                             if (targetValFunc(attrValue) < compValFunc(minValue)) {
                                 minValue = attrValue;
                                 meet = target;
                             }
                         }
-                        this._targets2.push(meet);
+                        targets2.push(meet);
                     }
                     break;
                 }
                 case AttrFilterOP.Equal: {
                     let meet;
-                    for (const target of this._targets1) {
+                    for (const target of targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) == compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.Greater: {
                     let meet;
-                    for (const target of this._targets1) {
+                    for (const target of targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) > compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.GreaterEqual: {
                     let meet;
-                    for (const target of this._targets1) {
+                    for (const target of targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) >= compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.Less: {
                     let meet;
-                    for (const target of this._targets1) {
+                    for (const target of targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) < compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets2.push(meet);
                     break;
                 }
                 case AttrFilterOP.LessEqual: {
                     let meet;
-                    for (const target of this._targets1) {
+                    for (const target of targets1) {
                         const attrValue = getFunc(caster, target);
                         if (targetValFunc(attrValue) <= compValFunc(compareValue)) {
                             meet = target;
                         }
                     }
                     if (meet != null)
-                        this._targets2.push(meet);
+                        targets2.push(meet);
                     break;
                 }
             }

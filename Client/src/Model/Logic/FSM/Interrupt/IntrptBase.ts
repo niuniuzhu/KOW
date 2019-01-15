@@ -6,6 +6,7 @@ import { EntityState } from "../EntityState";
 import { StateType } from "../../../StateEnums";
 import { EAttr } from "../../Attribute";
 import { FMathUtils } from "../../../../RC/FMath/FMathUtils";
+import { Logger } from "../../../../RC/Utils/Logger";
 
 /**
  * 过滤类型
@@ -81,6 +82,10 @@ export abstract class IntrptBase implements ISnapshotable {
 	 */
 	private _skillID: number;
 	/**
+	 * 连接的技能ID(随机选择数组中其中一个)
+	 */
+	private _skillIDs: number[];
+	/**
 	 * 延时
 	 */
 	private _delay: number = 0;
@@ -114,7 +119,8 @@ export abstract class IntrptBase implements ISnapshotable {
 		this._id = Hashtable.GetNumber(def, "id");
 		this._intrptType = Hashtable.GetNumber(def, "type");
 		this._connectState = Hashtable.GetNumber(def, "connect_state");
-		this._skillID = Hashtable.GetNumber(def, "skill");
+		this._skillID = Hashtable.GetNumber(def, "skill", null);
+		this._skillIDs = Hashtable.GetNumberArray(def, "skills");
 		this._delay = Hashtable.GetNumber(def, "delay");
 		const filterDefs = Hashtable.GetMapArray(def, "filters");
 		if (filterDefs != null) {
@@ -250,11 +256,26 @@ export abstract class IntrptBase implements ISnapshotable {
 				owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
 				break;
 			case IntrptType.Skill://中断到技能
-				const skill = owner.GetSkill(this._skillID);
+				let skill;
+				if (this._skillID == null) {
+					if (this._skillIDs == null || this._skillIDs.length == 0) {
+						Logger.Warn("invalid skill id");
+						return;
+					}
+					const index = owner.battle.random.NextFloor(0, this._skillIDs.length);
+					skill = owner.GetSkill(this._skillIDs[index]);
+				}
+				else {
+					skill = owner.GetSkill(this._skillID);
+				}
+				if (skill == null) {
+					Logger.Warn("invalid skill");
+					return;
+				}
 				const meet = owner.mp >= skill.mpCost;
 				if (meet) {//成功使用技能
 					//在上下文中记录技能id
-					owner.fsm.context.skillID = this._skillID;
+					owner.fsm.context.skillID = skill.id;
 					owner.fsm.ChangeState(skill.connectState, null, igroneIntrptList, force);
 				}
 				break;

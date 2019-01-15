@@ -9,7 +9,6 @@ define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../
         }
         ConnectToBS(gcNID, ip, port) {
             const connector = Global_1.Global.connector.bsConnector;
-            connector.onerror = (e) => this._ui.OnConnectToBSError(e, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
             connector.onopen = () => {
                 Logger_1.Logger.Log("BS Connected");
                 const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();
@@ -34,7 +33,12 @@ define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../
                     }
                 });
             };
-            connector.Connect(ip, port);
+            if (Global_1.Global.local) {
+                connector.Connect("localhost", port);
+            }
+            else {
+                connector.Connect(ip, port);
+            }
         }
         LoadAssets(battleInfo) {
             const urls = [];

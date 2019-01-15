@@ -48,8 +48,8 @@ export class SceneManager {
 		this.fsm.AddState(this._battle);
 	}
 
-	public ChangeState(state: State, param: any = null): void {
-		this.fsm.ChangeState(state, param);
+	public ChangeState(state: State, param: any = null, force: boolean = false): void {
+		this.fsm.ChangeState(state, param, force);
 	}
 
 	public Update(dt: number): void {

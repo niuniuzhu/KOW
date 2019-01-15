@@ -27,9 +27,6 @@ export class UILogin {
     }
     OnResize(e) {
     }
-    BackToLogin() {
-        this._root.getController("c1").selectedIndex = 0;
-    }
     OnLoginBtnClick() {
         let uname = this._root.getChild("name").asTextField.text;
         if (uname == "") {
@@ -47,7 +44,7 @@ export class UILogin {
     }
     OnAreaClick() {
     }
-    OnRegisterResult(resp) {
+    OnRegisterResult(resp, callback) {
         fairygui.GRoot.inst.closeModalWait();
         switch (resp.result) {
             case Protos.LS2GC_AskRegRet.EResult.Success:
@@ -56,39 +53,39 @@ export class UILogin {
                 UIAlert.Show("注册成功");
                 break;
             case Protos.LS2GC_AskRegRet.EResult.Failed:
-                UIAlert.Show("注册失败", this.BackToLogin.bind(this));
+                UIAlert.Show("注册失败", callback);
                 break;
             case Protos.LS2GC_AskRegRet.EResult.UnameExists:
-                UIAlert.Show("用户名已存在", this.BackToLogin.bind(this));
+                UIAlert.Show("用户名已存在", callback);
                 break;
             case Protos.LS2GC_AskRegRet.EResult.UnameIllegal:
-                UIAlert.Show("无效的用户名", this.BackToLogin.bind(this));
+                UIAlert.Show("无效的用户名", callback);
                 break;
             case Protos.LS2GC_AskRegRet.EResult.PwdIllegal:
-                UIAlert.Show("无效的密码", this.BackToLogin.bind(this));
+                UIAlert.Show("无效的密码", callback);
                 break;
         }
     }
-    OnLoginResut(resp) {
+    OnLoginResut(resp, callback) {
         fairygui.GRoot.inst.closeModalWait();
         switch (resp.result) {
             case Protos.LS2GC_AskLoginRet.EResult.Success:
                 this.HandleLoginLSSuccess(resp);
                 break;
             case Protos.LS2GC_AskLoginRet.EResult.Failed:
-                UIAlert.Show("登陆失败", this.BackToLogin.bind(this));
+                UIAlert.Show("登陆失败", callback);
                 break;
             case Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
-                UIAlert.Show("请输入正确的用户名", this.BackToLogin.bind(this));
+                UIAlert.Show("请输入正确的用户名", callback);
                 break;
             case Protos.LS2GC_AskLoginRet.EResult.InvalidPwd:
-                UIAlert.Show("请输入正确的密码", this.BackToLogin.bind(this));
+                UIAlert.Show("请输入正确的密码", callback);
                 break;
         }
     }
-    OnConnectToLSError(e) {
+    OnConnectToLSError(e, callback) {
         fairygui.GRoot.inst.closeModalWait();
-        UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
+        UIAlert.Show("无法连接服务器[" + e.toString() + "]", callback);
     }
     HandleLoginLSSuccess(loginResult) {
         this._areaList.removeChildrenToPool();
@@ -103,16 +100,18 @@ export class UILogin {
             this._areaList.selectedIndex = 0;
         this._root.getController("c1").selectedIndex = 1;
     }
-    OnConnectToGSError(e) {
-        fairygui.GRoot.inst.closeModalWait();
-        UIAlert.Show("无法连接服务器[" + e.toString() + "]", this.BackToLogin.bind(this));
-    }
-    OnLoginGSResult(resp) {
+    OnLoginGSResult(resp, callback) {
         fairygui.GRoot.inst.closeModalWait();
         switch (resp.result) {
             case Protos.GS2GC_LoginRet.EResult.SessionExpire:
-                UIAlert.Show("登陆失败或凭证已过期", this.BackToLogin.bind(this));
+                UIAlert.Show("登陆失败或凭证已过期", callback);
                 break;
         }
+    }
+    WxLoginFail(callback) {
+        UIAlert.Show("登陆微信失败", callback);
+    }
+    GSNotFound(callback) {
+        UIAlert.Show("无法连接服务器", callback);
     }
 }

@@ -30,8 +30,8 @@ define(["require", "exports", "../RC/FSM/FSM", "./MainState", "./LoginState", ".
             this.fsm.AddState(this._loading);
             this.fsm.AddState(this._battle);
         }
-        ChangeState(state, param = null) {
-            this.fsm.ChangeState(state, param);
+        ChangeState(state, param = null, force = false) {
+            this.fsm.ChangeState(state, param, force);
         }
         Update(dt) {
             this.fsm.Update(dt);

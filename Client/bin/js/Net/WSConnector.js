@@ -30,11 +30,12 @@ define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Log
         Close() {
             this._pid = 0;
             this._socket.close();
+            this._socket = null;
         }
         Connect(ip, port) {
             if (this.connected)
                 this.Close();
-            Logger_1.Logger.Log(`Begin connect to: wss://${ip}:${port}`);
+            Logger_1.Logger.Log(`connect to: wss://${ip}:${port}`);
             this._socket = new WebSocket(`wss://${ip}:${port}`);
             this._socket.binaryType = "arraybuffer";
             this._socket.onmessage = this.OnReceived.bind(this);
@@ -43,6 +44,8 @@ define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Log
             this._socket.onopen = this.OnOpen.bind(this);
         }
         Send(msgType, message, rpcHandler = null, transTarget = protos_1.Protos.MsgOpts.TransTarget.Undefine, nsid = Long.ZERO) {
+            if (this._socket == null)
+                return;
             let opts = ProtoHelper_1.ProtoCreator.GetMsgOpts(message);
             if (opts == null) {
                 Logger_1.Logger.Error("invalid message options");

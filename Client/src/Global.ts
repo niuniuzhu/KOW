@@ -18,6 +18,8 @@ export class Global {
 	public static get sceneManager(): SceneManager { return this._sceneManager; }
 	public static get battleManager(): BattleManager { return this._battleManager; }
 
+	public static local: boolean;
+
 	public static Init() {
 		ProtoCreator.Init();
 		this._connector.Init();

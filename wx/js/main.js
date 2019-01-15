@@ -6,10 +6,16 @@ import * as $protobuf from "./Libs/protobufjs";
 import { Preloader } from "./Preloader";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
+import { JsonHelper } from "./RC/Utils/JsonHelper";
+import { Hashtable } from "./RC/Utils/Hashtable";
 export class Main {
     static get instance() { return Main._instance; }
     constructor(config) {
         Main._instance = this;
+        if (config != null) {
+            const cfgJson = JsonHelper.Parse(config);
+            Global.local = Hashtable.GetBool(cfgJson, "local");
+        }
         Laya.MiniAdpter.init();
         Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
         Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;

@@ -1,10 +1,14 @@
-define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, Preloader_1, Logger_1, SceneManager_1) {
+define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Logger", "./Scene/SceneManager", "./RC/Utils/JsonHelper", "./RC/Utils/Hashtable"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, Preloader_1, Logger_1, SceneManager_1, JsonHelper_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
         static get instance() { return Main._instance; }
         constructor(config) {
             Main._instance = this;
+            if (config != null) {
+                const cfgJson = JsonHelper_1.JsonHelper.Parse(config);
+                Global_1.Global.local = Hashtable_1.Hashtable.GetBool(cfgJson, "local");
+            }
             Laya.MiniAdpter.init();
             Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);
             Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;

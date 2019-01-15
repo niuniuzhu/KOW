@@ -15,19 +15,24 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
         }
         HandleWXLogin() {
             const sysInfo = wx.getSystemInfoSync();
-            const sdkVersion = sysInfo.SDKVersion;
-            Logger_1.Logger.Log(sdkVersion);
+            Logger_1.Logger.Log("brand:" + sysInfo.brand);
+            Logger_1.Logger.Log("model:" + sysInfo.model);
+            Logger_1.Logger.Log("system:" + sysInfo.system);
+            Logger_1.Logger.Log("platform:" + sysInfo.platform);
+            Logger_1.Logger.Log("version:" + sysInfo.version);
+            Logger_1.Logger.Log("sdk:" + sysInfo.SDKVersion);
             wx.login({
                 "success": res => {
-                    this.SendCodeToLS(res.code);
+                    this.SendWxLoginToLS(res.code);
                 },
                 "fail": () => {
+                    this._ui.WxLoginFail(() => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                 },
                 "complete": () => {
                 }
             });
         }
-        SendCodeToLS(code) {
+        SendWxLoginToLS(code) {
             const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskWXLogin();
             login.code = code;
             if (Laya.Browser.onIOS) {
@@ -58,31 +63,52 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                 login.browser = protos_1.Protos.Global.Browser.Chrome;
             }
             const connector = new WSConnector_1.WSConnector();
-            connector.onerror = (e) => this._ui.OnConnectToLSError(e);
+            connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
             connector.onopen = (e) => {
                 connector.Send(protos_1.Protos.GC2LS_AskWXLogin, login, message => {
                     const resp = message;
                     Logger_1.Logger.Log("gcNID:" + resp.sessionID);
-                    this._ui.OnLoginResut(resp);
+                    let count = resp.gsInfos.length;
+                    let min = Number.MAX_VALUE;
+                    let fitting = null;
+                    for (let i = 0; i < count; ++i) {
+                        let gsInfo = resp.gsInfos[i];
+                        const state = gsInfo.state;
+                        if (state < min) {
+                            min = state;
+                            fitting = gsInfo;
+                        }
+                    }
+                    if (fitting == null) {
+                        this._ui.GSNotFound(() => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
+                    }
+                    else {
+                        this.LoginGS(fitting.ip, fitting.port, fitting.password, resp.sessionID);
+                    }
                 });
             };
             this.ConnectToLS(connector);
         }
         ConnectToLS(connector) {
             const config = CDefs_1.CDefs.GetConfig();
-            connector.Connect(config["ls_ip"], config["ls_port"]);
+            if (Global_1.Global.local) {
+                connector.Connect("localhost", config["ls_port"]);
+            }
+            else {
+                connector.Connect(config["ls_ip"], config["ls_port"]);
+            }
         }
-        Register(uname, platform, sdk) {
+        Register(uname) {
             const register = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskRegister();
             register.name = uname;
             const connector = new WSConnector_1.WSConnector();
-            connector.onerror = (e) => this._ui.OnConnectToLSError(e);
+            connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
             connector.onopen = (e) => {
                 connector.Send(protos_1.Protos.GC2LS_AskRegister, register, message => {
                     const resp = message;
-                    this._ui.OnRegisterResult(resp);
+                    this._ui.OnRegisterResult(resp, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                 });
             };
             this.ConnectToLS(connector);
@@ -124,20 +150,19 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                 login.channel = protos_1.Protos.Global.Channel.Web;
             }
             const connector = new WSConnector_1.WSConnector();
-            connector.onerror = (e) => this._ui.OnConnectToLSError(e);
+            connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
             connector.onclose = () => Logger_1.Logger.Log("connection closed.");
             connector.onopen = (e) => {
                 connector.Send(protos_1.Protos.GC2LS_AskSmartLogin, login, message => {
                     const resp = message;
                     Logger_1.Logger.Log("gcNID:" + resp.sessionID);
-                    this._ui.OnLoginResut(resp);
+                    this._ui.OnLoginResut(resp, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                 });
             };
             this.ConnectToLS(connector);
         }
         LoginGS(ip, port, pwd, gcNID) {
             const connector = Global_1.Global.connector.gsConnector;
-            connector.onerror = (e) => this._ui.OnConnectToGSError(e);
             connector.onopen = (e) => {
                 Logger_1.Logger.Log("GS Connected");
                 const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();
@@ -145,7 +170,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                 askLogin.sessionID = gcNID;
                 connector.Send(protos_1.Protos.GC2GS_AskLogin, askLogin, message => {
                     const resp = message;
-                    this._ui.OnLoginGSResult(resp);
+                    this._ui.OnLoginGSResult(resp, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
                             const json = JsonHelper_1.JsonHelper.Parse(TextUtils_1.StringUtils.DecodeUTF8(resp.defs));
@@ -161,7 +186,12 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                     }
                 });
             };
-            connector.Connect(ip, port);
+            if (Global_1.Global.local) {
+                connector.Connect("localhost", port);
+            }
+            else {
+                connector.Connect(ip, port);
+            }
         }
     }
     exports.LoginState = LoginState;

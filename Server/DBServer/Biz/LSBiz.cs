@@ -44,7 +44,7 @@ namespace DBServer.Biz
 				} );
 
 			if ( errorCode == ErrorCode.Success )
-				errorCode = DB.instance.accountDB.SqlExecNonQuery( $"update account_user SET channel={( int )queryLogin.Channel}, last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out uint _ );
+				errorCode = DB.instance.accountDB.SqlExecNonQuery( $"update account_user SET channel={( int )queryLogin.Channel}, browser={( int )queryLogin.Browser}, platform={( int )queryLogin.Platform}, last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out uint _ );
 
 			switch ( errorCode )
 			{

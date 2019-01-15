@@ -47,12 +47,13 @@ export class WSConnector {
 	public Close(): void {
 		this._pid = 0;
 		this._socket.close();
+		this._socket = null;
 	}
 
 	public Connect(ip: string, port: number): void {
 		if (this.connected)
 			this.Close();
-		Logger.Log(`Begin connect to: wss://${ip}:${port}`);
+		Logger.Log(`connect to: wss://${ip}:${port}`);
 		this._socket = new WebSocket(`wss://${ip}:${port}`);
 		this._socket.binaryType = "arraybuffer";
 		this._socket.onmessage = this.OnReceived.bind(this);
@@ -64,6 +65,8 @@ export class WSConnector {
 	public Send(msgType: any, message: any, rpcHandler: (any) => any = null,
 		transTarget: Protos.MsgOpts.TransTarget = Protos.MsgOpts.TransTarget.Undefine,
 		nsid: Long = Long.ZERO): void {
+		if (this._socket == null)
+			return;
 		let opts = ProtoCreator.GetMsgOpts(message);
 		if (opts == null) {
 			Logger.Error("invalid message options");

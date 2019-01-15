@@ -9,21 +9,42 @@ import { SceneState } from "./SceneState";
 export class GlobalState extends SceneState {
 	constructor(type: number) {
 		super(type);
-
-		Global.connector.gsConnector.onclose = this.HandleGSDisconnect;
-		Global.connector.bsConnector.onclose = this.HandleBSDisconnect;
+		Global.connector.gsConnector.onclose = this.OnGSDisconnect;
+		Global.connector.gsConnector.onerror = this.OnGSError;
+		Global.connector.bsConnector.onclose = this.OnBSDisconnect;
+		Global.connector.bsConnector.onerror = this.OnBSError;
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
 	}
 
-	private HandleGSDisconnect(e: Event): void {
+	private OnGSDisconnect(e: Event): void {
 		Logger.Log("gs connection closed.");
 		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 	}
 
-	private HandleBSDisconnect(e: Event): void {
+	private OnGSError(e: Event): void {
+		Logger.Log("gs connection error.");
+		if (fairygui.GRoot.inst.modalWaiting) {
+			fairygui.GRoot.inst.closeModalWait();
+		}
+		UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
+	}
+
+	private OnBSDisconnect(e: Event): void {
 		Logger.Log("bs connection closed.");
 		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+	}
+
+	private OnBSError(e: Event): void {
+		Logger.Log("bs connection error.");
+		if (fairygui.GRoot.inst.modalWaiting) {
+			fairygui.GRoot.inst.closeModalWait();
+		}
+		//断开GS
+		if (Global.connector.gsConnector.connected) {
+			Global.connector.gsConnector.Close();
+		}
+		UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
 	}
 
 	/**
@@ -49,6 +70,10 @@ export class GlobalState extends SceneState {
 	}
 
 	private BackToLogin(): void {
+		//断开GS
+		if (Global.connector.bsConnector.connected) {
+			Global.connector.bsConnector.Close();
+		}
 		Global.battleManager.Destroy();
 		Global.sceneManager.ChangeState(SceneManager.State.Login);
 	}

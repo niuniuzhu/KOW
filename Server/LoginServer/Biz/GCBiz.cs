@@ -393,7 +393,7 @@ namespace LoginServer.Biz
 				//请求DB服务器注册账号
 				Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
 				sqlExec.Cmd =
-					$"insert account_user( channel,uname,pwd,last_login_time,last_login_ip ) values({( int )login.Channel}, \'{login.Name}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{remote}\');";
+					$"insert account_user( channel,browser,platform,uname,pwd,last_login_time,last_login_ip ) values({( int )login.Channel},{( int )login.Browser},{( int )login.Platform}, \'{login.Name}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{remote}\');";
 				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, sqlExec, RPCEntry.Pop( OnSmartRegisterAccount, gcLoginRet, sid, login.Name, login.Channel, login.Browser, login.Platform ) );
 			}
 		}

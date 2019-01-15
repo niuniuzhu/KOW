@@ -17,7 +17,6 @@ export class LoadingState extends SceneState {
     }
     ConnectToBS(gcNID, ip, port) {
         const connector = Global.connector.bsConnector;
-        connector.onerror = (e) => this._ui.OnConnectToBSError(e, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
         connector.onopen = () => {
             Logger.Log("BS Connected");
             const askLogin = ProtoCreator.Q_GC2BS_AskLogin();
@@ -42,7 +41,12 @@ export class LoadingState extends SceneState {
                 }
             });
         };
-        connector.Connect(ip, port);
+        if (Global.local) {
+            connector.Connect("localhost", port);
+        }
+        else {
+            connector.Connect(ip, port);
+        }
     }
     LoadAssets(battleInfo) {
         const urls = [];

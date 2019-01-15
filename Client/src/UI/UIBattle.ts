@@ -123,7 +123,7 @@ export class UIBattle implements IUIModule {
 		//检查是否玩家自己
 		if (this.IsSelf(e.champion)) {
 			this._skillBtn0.data = e.champion.GetSkillAt(0);
-			this._skillBtn1.data = e.champion.GetSkillAt(1);
+			this._skillBtn1.data = e.champion.GetSkillAt(2);
 		}
 	}
 

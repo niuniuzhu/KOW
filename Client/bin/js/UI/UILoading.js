@@ -25,9 +25,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
         }
         OnResize(e) {
         }
-        OnConnectToBSError(e, onConfirm) {
-            UIAlert_1.UIAlert.Show("无法连接服务器[" + e.toString() + "]", onConfirm);
-        }
         OnLoginBSResut(result, onConfirm) {
             switch (result) {
                 case protos_1.Protos.Global.ECommon.Success:

@@ -25,9 +25,6 @@ export class UILoading {
     }
     OnResize(e) {
     }
-    OnConnectToBSError(e, onConfirm) {
-        UIAlert.Show("无法连接服务器[" + e.toString() + "]", onConfirm);
-    }
     OnLoginBSResut(result, onConfirm) {
         switch (result) {
             case Protos.Global.ECommon.Success:

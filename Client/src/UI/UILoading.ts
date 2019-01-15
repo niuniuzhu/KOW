@@ -38,10 +38,6 @@ export class UILoading implements IUIModule {
 	public OnResize(e: laya.events.Event): void {
 	}
 
-	public OnConnectToBSError(e: Event, onConfirm: () => void): void {
-		UIAlert.Show("无法连接服务器[" + e.toString() + "]", onConfirm);
-	}
-
 	public OnLoginBSResut(result: Protos.Global.ECommon, onConfirm: () => void): void {
 		switch (result) {
 			case Protos.Global.ECommon.Success:

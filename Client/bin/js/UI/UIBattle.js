@@ -84,7 +84,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
         OnChampionInit(e) {
             if (this.IsSelf(e.champion)) {
                 this._skillBtn0.data = e.champion.GetSkillAt(0);
-                this._skillBtn1.data = e.champion.GetSkillAt(1);
+                this._skillBtn1.data = e.champion.GetSkillAt(2);
             }
         }
         OnBattleEnd(e) {

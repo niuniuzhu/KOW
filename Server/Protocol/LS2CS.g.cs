@@ -24,17 +24,18 @@ namespace Protos {
     static LS2CSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtMUzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8igQIKDUxTMkNT",
+            "CgtMUzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iswIKDUxTMkNT",
             "X0dDTG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEicKB2No",
             "YW5uZWwYAiABKA4yFi5Qcm90b3MuR2xvYmFsLkNoYW5uZWwSJwoHYnJvd3Nl",
             "chgDIAEoDjIWLlByb3Rvcy5HbG9iYWwuQnJvd3NlchIpCghwbGF0Zm9ybRgE",
             "IAEoDjIXLlByb3Rvcy5HbG9iYWwuUGxhdGZvcm0SEQoJc2Vzc2lvbklEGAUg",
             "ASgEEgwKBHVrZXkYBiABKA0SDgoGb3BlbklEGAcgASgJEhIKCnNlc3Npb25L",
-            "ZXkYCCABKAkSDwoHdW5pb25JRBgJIAEoCWIGcHJvdG8z"));
+            "ZXkYCCABKAkSDwoHdW5pb25JRBgJIAEoCRIQCghuaWNrbmFtZRgKIAEoCRIO",
+            "CgZhdmF0YXIYCyABKAkSDgoGZ2VuZGVyGAwgASgFYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2CS_GCLogin), global::Protos.LS2CS_GCLogin.Parser, new[]{ "Opts", "Channel", "Browser", "Platform", "SessionID", "Ukey", "OpenID", "SessionKey", "UnionID" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2CS_GCLogin), global::Protos.LS2CS_GCLogin.Parser, new[]{ "Opts", "Channel", "Browser", "Platform", "SessionID", "Ukey", "OpenID", "SessionKey", "UnionID", "Nickname", "Avatar", "Gender" }, null, null, null)
           }));
     }
     #endregion
@@ -78,6 +79,9 @@ namespace Protos {
       openID_ = other.openID_;
       sessionKey_ = other.sessionKey_;
       unionID_ = other.unionID_;
+      nickname_ = other.nickname_;
+      avatar_ = other.avatar_;
+      gender_ = other.gender_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -185,6 +189,39 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "nickname" field.</summary>
+    public const int NicknameFieldNumber = 10;
+    private string nickname_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Nickname {
+      get { return nickname_; }
+      set {
+        nickname_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "avatar" field.</summary>
+    public const int AvatarFieldNumber = 11;
+    private string avatar_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Avatar {
+      get { return avatar_; }
+      set {
+        avatar_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "gender" field.</summary>
+    public const int GenderFieldNumber = 12;
+    private int gender_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Gender {
+      get { return gender_; }
+      set {
+        gender_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as LS2CS_GCLogin);
@@ -207,6 +244,9 @@ namespace Protos {
       if (OpenID != other.OpenID) return false;
       if (SessionKey != other.SessionKey) return false;
       if (UnionID != other.UnionID) return false;
+      if (Nickname != other.Nickname) return false;
+      if (Avatar != other.Avatar) return false;
+      if (Gender != other.Gender) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -222,6 +262,9 @@ namespace Protos {
       if (OpenID.Length != 0) hash ^= OpenID.GetHashCode();
       if (SessionKey.Length != 0) hash ^= SessionKey.GetHashCode();
       if (UnionID.Length != 0) hash ^= UnionID.GetHashCode();
+      if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
+      if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
+      if (Gender != 0) hash ^= Gender.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -271,6 +314,18 @@ namespace Protos {
         output.WriteRawTag(74);
         output.WriteString(UnionID);
       }
+      if (Nickname.Length != 0) {
+        output.WriteRawTag(82);
+        output.WriteString(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        output.WriteRawTag(90);
+        output.WriteString(Avatar);
+      }
+      if (Gender != 0) {
+        output.WriteRawTag(96);
+        output.WriteInt32(Gender);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -305,6 +360,15 @@ namespace Protos {
       }
       if (UnionID.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(UnionID);
+      }
+      if (Nickname.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Avatar);
+      }
+      if (Gender != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gender);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -346,6 +410,15 @@ namespace Protos {
       }
       if (other.UnionID.Length != 0) {
         UnionID = other.UnionID;
+      }
+      if (other.Nickname.Length != 0) {
+        Nickname = other.Nickname;
+      }
+      if (other.Avatar.Length != 0) {
+        Avatar = other.Avatar;
+      }
+      if (other.Gender != 0) {
+        Gender = other.Gender;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -395,6 +468,18 @@ namespace Protos {
           }
           case 74: {
             UnionID = input.ReadString();
+            break;
+          }
+          case 82: {
+            Nickname = input.ReadString();
+            break;
+          }
+          case 90: {
+            Avatar = input.ReadString();
+            break;
+          }
+          case 96: {
+            Gender = input.ReadInt32();
             break;
           }
         }

@@ -16,6 +16,7 @@ export class UIAlert {
     static OnHide() {
         UIAlert._com.off(laya.events.Event.REMOVED, null, UIAlert.OnHide);
         UIAlert._isShowing = false;
-        UIAlert._hideHandler();
+        if (UIAlert._hideHandler != null)
+            UIAlert._hideHandler();
     }
 }

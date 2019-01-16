@@ -1032,6 +1032,9 @@ export namespace Protos {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.DB2LS_QueryResult|null);
         ukey?: (number|null);
+        nickname?: (string|null);
+        avatar?: (string|null);
+        gender?: (number|null);
     }
 
     class DB2LS_QueryLoginRet implements IDB2LS_QueryLoginRet {
@@ -1039,6 +1042,9 @@ export namespace Protos {
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.DB2LS_QueryResult;
         public ukey: number;
+        public nickname: string;
+        public avatar: string;
+        public gender: number;
         public static create(properties?: Protos.IDB2LS_QueryLoginRet): Protos.DB2LS_QueryLoginRet;
         public static encode(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1395,6 +1401,9 @@ export namespace Protos {
         browser?: (Protos.Global.Browser|null);
         platform?: (Protos.Global.Platform|null);
         code?: (string|null);
+        nickname?: (string|null);
+        avatar?: (string|null);
+        gender?: (number|null);
     }
 
     class GC2LS_AskWXLogin implements IGC2LS_AskWXLogin {
@@ -1403,6 +1412,9 @@ export namespace Protos {
         public browser: Protos.Global.Browser;
         public platform: Protos.Global.Platform;
         public code: string;
+        public nickname: string;
+        public avatar: string;
+        public gender: number;
         public static create(properties?: Protos.IGC2LS_AskWXLogin): Protos.GC2LS_AskWXLogin;
         public static encode(message: Protos.IGC2LS_AskWXLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGC2LS_AskWXLogin, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1505,6 +1517,9 @@ export namespace Protos {
         openID?: (string|null);
         sessionKey?: (string|null);
         unionID?: (string|null);
+        nickname?: (string|null);
+        avatar?: (string|null);
+        gender?: (number|null);
     }
 
     class LS2CS_GCLogin implements ILS2CS_GCLogin {
@@ -1518,6 +1533,9 @@ export namespace Protos {
         public openID: string;
         public sessionKey: string;
         public unionID: string;
+        public nickname: string;
+        public avatar: string;
+        public gender: number;
         public static create(properties?: Protos.ILS2CS_GCLogin): Protos.LS2CS_GCLogin;
         public static encode(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;

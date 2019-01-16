@@ -27,19 +27,20 @@ namespace Protos {
             "CgtEQjJMUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iYQoVREIyTFNf",
             "UXVlcnlBY2NvdW50UmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0",
             "cxIpCgZyZXN1bHQYAiABKA4yGS5Qcm90b3MuREIyTFNfUXVlcnlSZXN1bHQi",
-            "bQoTREIyTFNfUXVlcnlMb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
-            "Lk1zZ09wdHMSKQoGcmVzdWx0GAIgASgOMhkuUHJvdG9zLkRCMkxTX1F1ZXJ5",
-            "UmVzdWx0EgwKBHVrZXkYAyABKA0icgoNREIyTFNfRXhlY1JldBIdCgRvcHRz",
-            "GAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSKQoGcmVzdWx0GAIgASgOMhkuUHJv",
-            "dG9zLkRCMkxTX1F1ZXJ5UmVzdWx0EgsKA3JvdxgDIAEoBRIKCgJpZBgEIAEo",
-            "DSphChFEQjJMU19RdWVyeVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVk",
-            "EAESEQoNVXNlcm5hbWVFeGlzdBACEhAKDEludmFsaWRVbmFtZRADEg4KCklu",
-            "dmFsaWRQd2QQBGIGcHJvdG8z"));
+            "nwEKE0RCMkxTX1F1ZXJ5TG9naW5SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
+            "cy5Nc2dPcHRzEikKBnJlc3VsdBgCIAEoDjIZLlByb3Rvcy5EQjJMU19RdWVy",
+            "eVJlc3VsdBIMCgR1a2V5GAMgASgNEhAKCG5pY2tuYW1lGAQgASgJEg4KBmF2",
+            "YXRhchgFIAEoCRIOCgZnZW5kZXIYBiABKAUicgoNREIyTFNfRXhlY1JldBId",
+            "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSKQoGcmVzdWx0GAIgASgO",
+            "MhkuUHJvdG9zLkRCMkxTX1F1ZXJ5UmVzdWx0EgsKA3JvdxgDIAEoBRIKCgJp",
+            "ZBgEIAEoDSphChFEQjJMU19RdWVyeVJlc3VsdBILCgdTdWNjZXNzEAASCgoG",
+            "RmFpbGVkEAESEQoNVXNlcm5hbWVFeGlzdBACEhAKDEludmFsaWRVbmFtZRAD",
+            "Eg4KCkludmFsaWRQd2QQBGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.DB2LS_QueryResult), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2LS_QueryAccountRet), global::Protos.DB2LS_QueryAccountRet.Parser, new[]{ "Opts", "Result" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2LS_QueryLoginRet), global::Protos.DB2LS_QueryLoginRet.Parser, new[]{ "Opts", "Result", "Ukey" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2LS_QueryLoginRet), global::Protos.DB2LS_QueryLoginRet.Parser, new[]{ "Opts", "Result", "Ukey", "Nickname", "Avatar", "Gender" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2LS_ExecRet), global::Protos.DB2LS_ExecRet.Parser, new[]{ "Opts", "Result", "Row", "Id" }, null, null, null)
           }));
     }
@@ -249,6 +250,9 @@ namespace Protos {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       result_ = other.result_;
       ukey_ = other.ukey_;
+      nickname_ = other.nickname_;
+      avatar_ = other.avatar_;
+      gender_ = other.gender_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -290,6 +294,39 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "nickname" field.</summary>
+    public const int NicknameFieldNumber = 4;
+    private string nickname_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Nickname {
+      get { return nickname_; }
+      set {
+        nickname_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "avatar" field.</summary>
+    public const int AvatarFieldNumber = 5;
+    private string avatar_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Avatar {
+      get { return avatar_; }
+      set {
+        avatar_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "gender" field.</summary>
+    public const int GenderFieldNumber = 6;
+    private int gender_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Gender {
+      get { return gender_; }
+      set {
+        gender_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as DB2LS_QueryLoginRet);
@@ -306,6 +343,9 @@ namespace Protos {
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Result != other.Result) return false;
       if (Ukey != other.Ukey) return false;
+      if (Nickname != other.Nickname) return false;
+      if (Avatar != other.Avatar) return false;
+      if (Gender != other.Gender) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -315,6 +355,9 @@ namespace Protos {
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
       if (Ukey != 0) hash ^= Ukey.GetHashCode();
+      if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
+      if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
+      if (Gender != 0) hash ^= Gender.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -340,6 +383,18 @@ namespace Protos {
         output.WriteRawTag(24);
         output.WriteUInt32(Ukey);
       }
+      if (Nickname.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Avatar);
+      }
+      if (Gender != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(Gender);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -356,6 +411,15 @@ namespace Protos {
       }
       if (Ukey != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Ukey);
+      }
+      if (Nickname.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Avatar);
+      }
+      if (Gender != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gender);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -379,6 +443,15 @@ namespace Protos {
       }
       if (other.Ukey != 0) {
         Ukey = other.Ukey;
+      }
+      if (other.Nickname.Length != 0) {
+        Nickname = other.Nickname;
+      }
+      if (other.Avatar.Length != 0) {
+        Avatar = other.Avatar;
+      }
+      if (other.Gender != 0) {
+        Gender = other.Gender;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -404,6 +477,18 @@ namespace Protos {
           }
           case 24: {
             Ukey = input.ReadUInt32();
+            break;
+          }
+          case 34: {
+            Nickname = input.ReadString();
+            break;
+          }
+          case 42: {
+            Avatar = input.ReadString();
+            break;
+          }
+          case 48: {
+            Gender = input.ReadInt32();
             break;
           }
         }

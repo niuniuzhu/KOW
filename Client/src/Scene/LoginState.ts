@@ -16,6 +16,7 @@ import { SceneState } from "./SceneState";
  */
 export class LoginState extends SceneState {
 	private readonly _ui: UILogin;
+	private _sysInfo: _getSystemInfoSyncReturnValue;
 
 	/**
 	 * 构造函数
@@ -26,64 +27,109 @@ export class LoginState extends SceneState {
 	}
 
 	protected OnEnter(param: any): void {
-		if (Laya.Browser.onMiniGame) {
-			this.HandleWXLogin();
-			return;
-		}
 		super.OnEnter(param);
+		if (Laya.Browser.onMiniGame) {
+			this._ui.mode = UILogin.Mode.WXLogin;
+			this.WxAuthorize(this.WXLogin.bind(this));
+		}
+		else {
+			this._ui.mode = UILogin.Mode.WebLogin;
+		}
 	}
 
-	private HandleWXLogin(): void {
-		const sysInfo = wx.getSystemInfoSync();
-		Logger.Log("brand:" + sysInfo.brand);
-		Logger.Log("model:" + sysInfo.model);
-		Logger.Log("system:" + sysInfo.system);
-		Logger.Log("platform:" + sysInfo.platform);
-		Logger.Log("version:" + sysInfo.version);
-		Logger.Log("sdk:" + sysInfo.SDKVersion);
-
-		//微信登陆 see https://developers.weixin.qq.com/minigame/dev/api/wx.login.html
-		wx.login({
-			"success": res => {
-				this.SendWxLoginToLS(res.code);
+	/**
+	 * 服务端返回登陆微信成功
+	 */
+	private WxAuthorize(callback: (userInfo: _userInfo) => void): void {
+		//获取系统信息
+		this._sysInfo = wx.getSystemInfoSync();
+		Logger.Log("brand:" + this._sysInfo.brand);
+		Logger.Log("model:" + this._sysInfo.model);
+		Logger.Log("pixelRatio:" + this._sysInfo.pixelRatio);
+		Logger.Log("system:" + this._sysInfo.system);
+		Logger.Log("platform:" + this._sysInfo.platform);
+		Logger.Log("version:" + this._sysInfo.version);
+		Logger.Log("sdk:" + this._sysInfo.SDKVersion);
+		//检查授权情况
+		wx.getSetting({
+			"success": resp => {
+				if (resp.authSetting["scope.userInfo"]) {//已经授权了
+					wx.getUserInfo({
+						"withCredentials": true,
+						"lang": "zh_CN",
+						"success": resp2 => {
+							callback(resp2.userInfo);
+						},
+						"complete": () => { },
+						"fail": () => { }
+					})
+				}
+				else {
+					this.CreateAuthorizeButton(callback);
+				}
 			},
 			"fail": () => {
-				this._ui.WxLoginFail(() => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
 			},
 			"complete": () => {
 			}
 		});
+	}
 
-		// wx.getUserInfo({
-		// 	"withCredentials": false,
-		// 	"lang": "zh_CN",
-		// 	"success": res => {
-		// 		Logger.Log(res);
-		// 	},
-		// 	"fail": () => {
-		// 	},
-		// 	"complete": () => {
-		// 	}
-		// });
+	private CreateAuthorizeButton(callback: (userInfo: _userInfo) => void): void {
+		const s = this._sysInfo.screenWidth / Laya.stage.designWidth;//fixed height
+		const w = s * 187;
+		const h = s * 65;
 
-		// wx.getSetting({
-		// 	"success": res => {
-		// 		Logger.Log(res);
-		// 	},
-		// 	"fail": () => {
-		// 	},
-		// 	"complete": () => {
-		// 	}
-		// });
+		const userInfoObj: _createUserInfoButtonObject = {
+			"type": "image",
+			"text": "",
+			"image": "res/wx_login.png",
+			"style": {
+				"left": (this._sysInfo.screenWidth - w) * 0.5,
+				"top": (this._sysInfo.screenHeight - h) * 0.5,
+				"width": w,
+				"height": h
+			},
+			"withCredentials": true,
+			"lang": "zh_CN"
+		}
+		//创建微信授权按钮
+		const btn = wx.createUserInfoButton(userInfoObj);
+		btn.onTap(resp => {
+			if (resp.userInfo != null) {//授权成功
+				btn.destroy();
+				callback(resp.userInfo);
+			}
+			else {
+				this._ui.OnFail("授权失败[" + resp.errMsg + "]");
+			}
+		});
+	}
+
+	private WXLogin(userInfo: _userInfo): void {
+		const loginObj: _loginObject = {
+			"success": resp => {
+				this.SendWxLoginToLS(resp.code, userInfo);
+			},
+			"fail": () => {
+				this._ui.OnFail("登陆微信失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+			}
+		}
+		//微信登陆 see https://developers.weixin.qq.com/minigame/dev/api/wx.login.html
+		wx.login(loginObj);
 	}
 
 	/**
 	 * 请求服务端验证微信登陆
 	 * @param code 微信登陆返回的凭证
+	 * @param userInfo 授权的微信用户信息
 	 */
-	private SendWxLoginToLS(code: string): void {
+	private SendWxLoginToLS(code: string, userInfo: _userInfo): void {
 		const login = ProtoCreator.Q_GC2LS_AskWXLogin();
 		login.code = code;
+		login.nickname = userInfo.nickName;
+		login.avatar = userInfo.avatarUrl;
+		login.gender = userInfo.gender;
 		if (Laya.Browser.onIOS) {
 			login.platform = Protos.Global.Platform.IOS;
 		}
@@ -114,25 +160,15 @@ export class LoginState extends SceneState {
 		}
 
 		const connector = new WSConnector();
-		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+		connector.onerror = (e) => this._ui.OnFail("无法连接服务器[" + e.toString() + "]", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
 		connector.onclose = () => Logger.Log("connection closed.");
 		connector.onopen = (e) => {
 			connector.Send(Protos.GC2LS_AskWXLogin, login, message => {
 				const resp: Protos.LS2GC_AskLoginRet = <Protos.LS2GC_AskLoginRet>message;
 				Logger.Log("gcNID:" + resp.sessionID);
-				let count = resp.gsInfos.length;
-				let min = Number.MAX_VALUE;
-				let fitting: Protos.IGSInfo = null;
-				for (let i = 0; i < count; ++i) {
-					let gsInfo = resp.gsInfos[i];
-					const state = <number>gsInfo.state;
-					if (state < min) {
-						min = state;
-						fitting = gsInfo;
-					}
-				}
+				const fitting = this.SelectFittingBS(resp.gsInfos);
 				if (fitting == null) {
-					this._ui.GSNotFound(() => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+					this._ui.OnFail("无法连接服务器", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
 				}
 				else {
 					this.LoginGS(fitting.ip, fitting.port, fitting.password, resp.sessionID);
@@ -142,36 +178,8 @@ export class LoginState extends SceneState {
 		this.ConnectToLS(connector);
 	}
 
-	private ConnectToLS(connector: WSConnector): void {
-		const config = CDefs.GetConfig();
-		if (Global.local) {
-			connector.Connect("localhost", config["ls_port"]);
-		} else {
-			connector.Connect(config["ls_ip"], config["ls_port"]);
-		}
-	}
-
 	/**
-	 * 注册
-	 */
-	public Register(uname: string): void {
-		const register = ProtoCreator.Q_GC2LS_AskRegister();
-		register.name = uname;
-
-		const connector = new WSConnector();
-		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
-		connector.onclose = () => Logger.Log("connection closed.");
-		connector.onopen = (e) => {
-			connector.Send(Protos.GC2LS_AskRegister, register, message => {
-				const resp: Protos.LS2GC_AskRegRet = <Protos.LS2GC_AskRegRet>message;
-				this._ui.OnRegisterResult(resp, () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
-			});
-		}
-		this.ConnectToLS(connector);
-	}
-
-	/**
-	 * 登陆
+	 * Web登陆
 	 */
 	public Login(uname: string): void {
 		const login = ProtoCreator.Q_GC2LS_AskSmartLogin();
@@ -213,16 +221,53 @@ export class LoginState extends SceneState {
 		}
 
 		const connector = new WSConnector();
-		connector.onerror = (e) => this._ui.OnConnectToLSError(e, () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+		connector.onerror = (e) => this._ui.OnFail("无法连接服务器[" + e.toString() + "]", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
 		connector.onclose = () => Logger.Log("connection closed.");
 		connector.onopen = (e) => {
 			connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
+				this._ui.ModalWait(false);
 				const resp: Protos.LS2GC_AskLoginRet = <Protos.LS2GC_AskLoginRet>message;
 				Logger.Log("gcNID:" + resp.sessionID);
-				this._ui.OnLoginResut(resp, () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+				if (resp.result == Protos.LS2GC_AskLoginRet.EResult.Success) {
+					const fitting = this.SelectFittingBS(resp.gsInfos);
+					if (fitting == null) {
+						this._ui.OnFail("无法连接服务器", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+					}
+					else {
+						this.LoginGS(fitting.ip, fitting.port, fitting.password, resp.sessionID);
+					}
+				}
+				else {
+					this._ui.OnLoginResut(resp, () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+				}
 			});
 		};
+		this._ui.ModalWait(true);
 		this.ConnectToLS(connector);
+	}
+
+	private SelectFittingBS(gsInfos: Protos.IGSInfo[]): Protos.IGSInfo {
+		let count = gsInfos.length;
+		let min = Number.MAX_VALUE;
+		let fitting: Protos.IGSInfo = null;
+		for (let i = 0; i < count; ++i) {
+			let gsInfo = gsInfos[i];
+			const state = <number>gsInfo.state;
+			if (state < min) {
+				min = state;
+				fitting = gsInfo;
+			}
+		}
+		return fitting;
+	}
+
+	private ConnectToLS(connector: WSConnector): void {
+		const config = CDefs.GetConfig();
+		if (Global.local) {
+			connector.Connect("localhost", config["ls_port"]);
+		} else {
+			connector.Connect(config["ls_ip"], config["ls_port"]);
+		}
 	}
 
 	/**
@@ -241,7 +286,6 @@ export class LoginState extends SceneState {
 			askLogin.sessionID = gcNID;
 			connector.Send(Protos.GC2GS_AskLogin, askLogin, message => {
 				const resp: Protos.GS2GC_LoginRet = <Protos.GS2GC_LoginRet>message;
-				this._ui.OnLoginGSResult(resp, () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
 						//处理定义文件
@@ -256,6 +300,9 @@ export class LoginState extends SceneState {
 							//进去主界面
 							Global.sceneManager.ChangeState(SceneManager.State.Main);
 						}
+						break;
+					case Protos.GS2GC_LoginRet.EResult.SessionExpire:
+						this._ui.OnFail("登陆失败或凭证已过期", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
 						break;
 				}
 			});

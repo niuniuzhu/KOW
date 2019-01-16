@@ -96,5 +96,11 @@ namespace LoginServer
 			SetName = "bysetting",
 			HelpText = "auto register." )]
 		public int autoRegister { get; set; }
+
+		[Option( "code2session_url",
+			Default = "",
+			SetName = "bysetting",
+			HelpText = "Expire time for login session." )]
+		public string code2sessionUrl { get; set; }
 	}
 }

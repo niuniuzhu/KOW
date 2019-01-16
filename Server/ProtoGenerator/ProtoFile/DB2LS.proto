@@ -20,6 +20,9 @@ message DB2LS_QueryLoginRet{
 	MsgOpts opts = 1;
 	DB2LS_QueryResult result = 2;
 	uint32 ukey = 3;
+	string nickname = 4;
+	string avatar = 5;
+	int32 gender = 6;
 }
 
 message DB2LS_ExecRet{

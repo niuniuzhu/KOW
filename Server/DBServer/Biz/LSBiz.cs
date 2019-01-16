@@ -27,13 +27,16 @@ namespace DBServer.Biz
 
 			Protos.DB2LS_QueryLoginRet queryLoginRet = ProtoCreator.R_LS2DB_QueryLogin( queryLogin.Opts.Pid );
 			ErrorCode errorCode = DB.instance.accountDB.SqlExecQuery(
-				$"select id,pwd from account_user where uname=\'{queryLogin.Name}\'",
+				$"select id,pwd,nickname,avatar,gender from account_user where uname=\'{queryLogin.Name}\'",
 				dataReader =>
 				{
 					if ( !dataReader.HasRows )
 						return ErrorCode.InvalidUname;
 					dataReader.Read();
 					queryLoginRet.Ukey = dataReader.GetUInt32( "id" );
+					queryLoginRet.Nickname = dataReader.GetString( "nickname" );
+					queryLoginRet.Avatar = dataReader.GetString( "avatar" );
+					queryLoginRet.Gender = dataReader.GetByte( "gender" );
 					ErrorCode QueryError = ErrorCode.Success;
 					if ( queryLogin.VertPwd )
 					{
@@ -44,7 +47,8 @@ namespace DBServer.Biz
 				} );
 
 			if ( errorCode == ErrorCode.Success )
-				errorCode = DB.instance.accountDB.SqlExecNonQuery( $"update account_user SET channel={( int )queryLogin.Channel}, browser={( int )queryLogin.Browser}, platform={( int )queryLogin.Platform}, last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out uint _ );
+				errorCode = DB.instance.accountDB.SqlExecNonQuery(
+					$"update account_user SET channel={( int )queryLogin.Channel}, browser={( int )queryLogin.Browser}, platform={( int )queryLogin.Platform}, last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'", out _, out uint _ );
 
 			switch ( errorCode )
 			{

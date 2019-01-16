@@ -35,4 +35,7 @@ message GC2LS_AskWXLogin {
 	Global.Browser browser = 2;
 	Global.Platform platform = 3;
 	string code = 4;//调用ws.login获取的凭证
+	string nickname = 5;
+	string avatar = 6;
+	int32 gender = 7;
 }

@@ -1,6 +1,7 @@
 {
     "wxAppID": "wx813f14b0ccd8c57a",
     "wxAppSecret": "18a374f26e73c75d714708ac2063e96f",
+    "code2sessionUrl": "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code",
     "cliPort": 49996,
     "csIP": "127.0.0.1",
     "csPort": 10001,

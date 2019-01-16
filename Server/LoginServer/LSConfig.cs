@@ -8,6 +8,7 @@ namespace LoginServer
 	{
 		public string wxAppID;
 		public string wxAppSecret;
+		public string code2sessionUrl;
 		public int cliPort;
 		public string csIP;
 		public int csPort;
@@ -26,6 +27,7 @@ namespace LoginServer
 		{
 			this.wxAppID = opts.wxAppID;
 			this.wxAppSecret = opts.wxAppSecret;
+			this.code2sessionUrl = opts.code2sessionUrl;
 			this.cliPort = opts.cliPort;
 			this.csIP = opts.csIP;
 			this.csPort = opts.csPort;
@@ -46,6 +48,7 @@ namespace LoginServer
 		{
 			this.wxAppID = json.GetString( "wxAppID" );
 			this.wxAppSecret = json.GetString( "wxAppSecret" );
+			this.code2sessionUrl = json.GetString( "code2sessionUrl" );
 			this.cliPort = json.GetInt( "cliPort" );
 			this.csIP = json.GetString( "csIP" );
 			this.csPort = json.GetInt( "csPort" );

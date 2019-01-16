@@ -14,4 +14,7 @@ message LS2CS_GCLogin{
 	string openID = 7;
 	string sessionKey = 8;
 	string unionID = 9;
+	string nickname = 10;
+	string avatar = 11;
+	int32 gender = 12;
 }

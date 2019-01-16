@@ -25,11 +25,13 @@ namespace LoginServer.Biz
 			public string openID;
 			public string sessionKey;
 			public string unionID;
+			public string nickname;
+			public string avatar;
+			public byte gender;
 		}
 
 		public ErrorCode OnGCtoLSAskRegister( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
-
 			Protos.GC2LS_AskRegister register = ( Protos.GC2LS_AskRegister )message;
 			Protos.LS2GC_AskRegRet regRet = ProtoCreator.R_GC2LS_AskRegister( register.Opts.Pid );
 
@@ -95,7 +97,7 @@ namespace LoginServer.Biz
 			{
 				//请求DB服务器注册账号
 				Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
-				sqlExec.Cmd = $"insert account_user( uname,pwd,last_login_time,last_login_ip ) values(\'{register.Name}\', \'{pwdmd5}\', {TimeUtils.utcTime}, \'{remote}\');";
+				sqlExec.Cmd = $"insert account_user( channel,browser,platform,uname,pwd,nickname,avatar,gender,last_login_time,last_login_ip ) values(0, 0, 0, \'{register.Name}\', \'{pwdmd5}\', \'{string.Empty}\', \'{string.Empty}\', 0, {TimeUtils.utcTime}, \'{remote}\');";
 				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, sqlExec, RPCEntry.Pop( OnCheckAccount, register, regRet, pwdmd5 ) );
 			}
 			else
@@ -123,6 +125,9 @@ namespace LoginServer.Biz
 				{
 					LS.instance.redisWrapper.HashSet( "unames", register.Name, pwdmd5 );
 					LS.instance.redisWrapper.HashSet( "ukeys", register.Name, sqlExecRet.Id );
+					LS.instance.redisWrapper.HashSet( "nickname", register.Name, string.Empty );
+					LS.instance.redisWrapper.HashSet( "avatar", register.Name, string.Empty );
+					LS.instance.redisWrapper.HashSet( "gender", register.Name, 0 );
 				}
 			}
 			//发送注册结果到gc
@@ -187,6 +192,9 @@ namespace LoginServer.Biz
 				}
 				//从redis取回ukey
 				uint ukey = ( uint )LS.instance.redisWrapper.HashGet( "ukeys", login.Name );
+				string nickname = LS.instance.redisWrapper.HashGet( "nickname", login.Name );
+				string avatar = LS.instance.redisWrapper.HashGet( "avatar", login.Name );
+				byte gender = ( byte )LS.instance.redisWrapper.HashGet( "gender", login.Name );
 				CSLoginParam param;
 				param.channel = login.Channel;
 				param.browser = login.Browser;
@@ -196,6 +204,9 @@ namespace LoginServer.Biz
 				param.unionID = string.Empty;
 				param.sid = session.id;
 				param.ukey = ukey;
+				param.nickname = nickname;
+				param.avatar = avatar;
+				param.gender = gender;
 				HandleLoginSuccess( gcLoginRet, param );
 			}
 			//从数据库中查找
@@ -234,11 +245,17 @@ namespace LoginServer.Biz
 			{
 				//从数据库取回ukey
 				uint ukey = queryLoginRet.Ukey;
+				string nickname = queryLoginRet.Nickname;
+				string avatar = queryLoginRet.Avatar;
+				byte gender = ( byte )queryLoginRet.Gender;
 				//写入redis缓存
 				if ( LS.instance.redisWrapper.IsConnected )
 				{
 					LS.instance.redisWrapper.HashSet( "unames", uname, pwdmd5 );
 					LS.instance.redisWrapper.HashSet( "ukeys", uname, ukey );
+					LS.instance.redisWrapper.HashSet( "nickname", uname, nickname );
+					LS.instance.redisWrapper.HashSet( "avatar", uname, avatar );
+					LS.instance.redisWrapper.HashSet( "gender", uname, gender );
 				}
 
 				CSLoginParam param;
@@ -250,6 +267,9 @@ namespace LoginServer.Biz
 				param.unionID = string.Empty;
 				param.sid = sid;
 				param.ukey = ukey;
+				param.nickname = nickname;
+				param.avatar = avatar;
+				param.gender = gender;
 				HandleLoginSuccess( gcLoginRet, param );
 			}
 			else
@@ -324,7 +344,9 @@ namespace LoginServer.Biz
 					success = true;
 					//从redis取回ukey
 					uint ukey = ( uint )LS.instance.redisWrapper.HashGet( "ukeys", login.Name );
-
+					string nickname = LS.instance.redisWrapper.HashGet( "nickname", login.Name );
+					string avatar = LS.instance.redisWrapper.HashGet( "avatar", login.Name );
+					byte gender = ( byte )LS.instance.redisWrapper.HashGet( "gender", login.Name );
 					CSLoginParam param;
 					param.channel = login.Channel;
 					param.browser = login.Browser;
@@ -334,6 +356,9 @@ namespace LoginServer.Biz
 					param.unionID = string.Empty;
 					param.sid = sid;
 					param.ukey = ukey;
+					param.nickname = nickname;
+					param.avatar = avatar;
+					param.gender = gender;
 					HandleLoginSuccess( gcLoginRet, param );
 				}
 			}
@@ -368,11 +393,18 @@ namespace LoginServer.Biz
 			{
 				//从数据库取回ukey
 				uint ukey = queryLoginRet.Ukey;
+				string nickname = queryLoginRet.Nickname;
+				string avatar = queryLoginRet.Avatar;
+				byte gender = ( byte )queryLoginRet.Gender;
+
 				//写入redis缓存
 				if ( LS.instance.redisWrapper.IsConnected )
 				{
 					LS.instance.redisWrapper.HashSet( "unames", login.Name, string.Empty );
 					LS.instance.redisWrapper.HashSet( "ukeys", login.Name, ukey );
+					LS.instance.redisWrapper.HashSet( "nickname", login.Name, nickname );
+					LS.instance.redisWrapper.HashSet( "avatar", login.Name, avatar );
+					LS.instance.redisWrapper.HashSet( "gender", login.Name, gender );
 				}
 
 				CSLoginParam param;
@@ -384,6 +416,9 @@ namespace LoginServer.Biz
 				param.unionID = string.Empty;
 				param.sid = sid;
 				param.ukey = ukey;
+				param.nickname = nickname;
+				param.avatar = avatar;
+				param.gender = gender;
 				HandleLoginSuccess( gcLoginRet, param );
 			}
 			//数据库也查询失败,自动注册
@@ -393,7 +428,7 @@ namespace LoginServer.Biz
 				//请求DB服务器注册账号
 				Protos.LS2DB_Exec sqlExec = ProtoCreator.Q_LS2DB_Exec();
 				sqlExec.Cmd =
-					$"insert account_user( channel,browser,platform,uname,pwd,last_login_time,last_login_ip ) values({( int )login.Channel},{( int )login.Browser},{( int )login.Platform}, \'{login.Name}\', \'{string.Empty}\', {TimeUtils.utcTime}, \'{remote}\');";
+					$"insert account_user( channel,browser,platform,uname,pwd,nickname,avatar,gender,last_login_time,last_login_ip ) values({( int )login.Channel},{( int )login.Browser},{( int )login.Platform}, \'{login.Name}\', \'{string.Empty}\', \'{string.Empty}\', \'{string.Empty}\', 0, {TimeUtils.utcTime}, \'{remote}\');";
 				LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, sqlExec, RPCEntry.Pop( OnSmartRegisterAccount, gcLoginRet, sid, login.Name, login.Channel, login.Browser, login.Platform ) );
 			}
 		}
@@ -420,6 +455,9 @@ namespace LoginServer.Biz
 				{
 					redisWrapper.HashSet( "unames", uname, string.Empty );
 					redisWrapper.HashSet( "ukeys", uname, sqlExecRet.Id );
+					redisWrapper.HashSet( "nickname", uname, string.Empty );
+					redisWrapper.HashSet( "avatar", uname, string.Empty );
+					redisWrapper.HashSet( "gender", uname, 0 );
 				}
 			}
 
@@ -435,6 +473,9 @@ namespace LoginServer.Biz
 				param.unionID = string.Empty;
 				param.sid = sid;
 				param.ukey = ukey;
+				param.nickname = string.Empty;
+				param.avatar = string.Empty;
+				param.gender = 0;
 				HandleLoginSuccess( gcLoginRet, param );
 			}
 			else
@@ -462,6 +503,9 @@ namespace LoginServer.Biz
 			csLogin.OpenID = param.openID;
 			csLogin.SessionKey = param.sessionKey;
 			csLogin.UnionID = param.unionID;
+			csLogin.Nickname = param.nickname;
+			csLogin.Avatar = param.avatar;
+			csLogin.Gender = param.gender;
 
 			LS.instance.netSessionMgr.Send( SessionType.ServerL2CS, csLogin,
 											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, param.sid, gcNID ) );
@@ -490,9 +534,8 @@ namespace LoginServer.Biz
 		{
 			Protos.GC2LS_AskWXLogin login = ( Protos.GC2LS_AskWXLogin )message;
 			Protos.LS2GC_AskLoginRet gcLoginRet = ProtoCreator.R_GC2LS_AskLogin( login.Opts.Pid );
-			string reqUrl =
-				$"https://api.weixin.qq.com/sns/jscode2session?appid={LS.instance.config.wxAppID}&secret={LS.instance.config.wxAppSecret}&js_code={login.Code}&grant_type=authorization_code";
-			var client = new WebClient();
+			string reqUrl = string.Format( LS.instance.config.code2sessionUrl, LS.instance.config.wxAppID, LS.instance.config.wxAppSecret, login.Code );
+			WebClient client = new WebClient();
 			client.DownloadStringTaskAsync( reqUrl ).ContinueWith( ( t, o ) =>
 			{
 				Hashtable json = ( Hashtable )MiniJSON.JsonDecode( t.Result );
@@ -533,6 +576,9 @@ namespace LoginServer.Biz
 					param.unionID = unionID;
 					param.sid = session.id;
 					param.ukey = ukey;
+					param.nickname = login.Nickname;
+					param.avatar = login.Avatar;
+					param.gender = ( byte )login.Gender;
 					HandleLoginSuccess( gcLoginRet, param );
 				}
 			}, null, CancellationToken.None );

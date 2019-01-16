@@ -5465,6 +5465,9 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryLoginRet.prototype.opts = null;
         DB2LS_QueryLoginRet.prototype.result = 0;
         DB2LS_QueryLoginRet.prototype.ukey = 0;
+        DB2LS_QueryLoginRet.prototype.nickname = "";
+        DB2LS_QueryLoginRet.prototype.avatar = "";
+        DB2LS_QueryLoginRet.prototype.gender = 0;
 
         DB2LS_QueryLoginRet.create = function create(properties) {
             return new DB2LS_QueryLoginRet(properties);
@@ -5479,6 +5482,12 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(16).int32(message.result);
             if (message.ukey != null && message.hasOwnProperty("ukey"))
                 writer.uint32(24).uint32(message.ukey);
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                writer.uint32(34).string(message.nickname);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(42).string(message.avatar);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(48).int32(message.gender);
             return writer;
         };
 
@@ -5501,6 +5510,15 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 3:
                     message.ukey = reader.uint32();
+                    break;
+                case 4:
+                    message.nickname = reader.string();
+                    break;
+                case 5:
+                    message.avatar = reader.string();
+                    break;
+                case 6:
+                    message.gender = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -5538,6 +5556,15 @@ export const Protos = $root.Protos = (() => {
             if (message.ukey != null && message.hasOwnProperty("ukey"))
                 if (!$util.isInteger(message.ukey))
                     return "ukey: integer expected";
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                if (!$util.isString(message.nickname))
+                    return "nickname: string expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
             return null;
         };
 
@@ -5574,6 +5601,12 @@ export const Protos = $root.Protos = (() => {
             }
             if (object.ukey != null)
                 message.ukey = object.ukey >>> 0;
+            if (object.nickname != null)
+                message.nickname = String(object.nickname);
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
             return message;
         };
 
@@ -5585,6 +5618,9 @@ export const Protos = $root.Protos = (() => {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
                 object.ukey = 0;
+                object.nickname = "";
+                object.avatar = "";
+                object.gender = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -5592,6 +5628,12 @@ export const Protos = $root.Protos = (() => {
                 object.result = options.enums === String ? $root.Protos.DB2LS_QueryResult[message.result] : message.result;
             if (message.ukey != null && message.hasOwnProperty("ukey"))
                 object.ukey = message.ukey;
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                object.nickname = message.nickname;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
             return object;
         };
 
@@ -7678,6 +7720,9 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskWXLogin.prototype.browser = 0;
         GC2LS_AskWXLogin.prototype.platform = 0;
         GC2LS_AskWXLogin.prototype.code = "";
+        GC2LS_AskWXLogin.prototype.nickname = "";
+        GC2LS_AskWXLogin.prototype.avatar = "";
+        GC2LS_AskWXLogin.prototype.gender = 0;
 
         GC2LS_AskWXLogin.create = function create(properties) {
             return new GC2LS_AskWXLogin(properties);
@@ -7694,6 +7739,12 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(24).int32(message.platform);
             if (message.code != null && message.hasOwnProperty("code"))
                 writer.uint32(34).string(message.code);
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                writer.uint32(42).string(message.nickname);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(50).string(message.avatar);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(56).int32(message.gender);
             return writer;
         };
 
@@ -7719,6 +7770,15 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 4:
                     message.code = reader.string();
+                    break;
+                case 5:
+                    message.nickname = reader.string();
+                    break;
+                case 6:
+                    message.avatar = reader.string();
+                    break;
+                case 7:
+                    message.gender = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -7766,6 +7826,15 @@ export const Protos = $root.Protos = (() => {
             if (message.code != null && message.hasOwnProperty("code"))
                 if (!$util.isString(message.code))
                     return "code: string expected";
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                if (!$util.isString(message.nickname))
+                    return "nickname: string expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
             return null;
         };
 
@@ -7820,6 +7889,12 @@ export const Protos = $root.Protos = (() => {
             }
             if (object.code != null)
                 message.code = String(object.code);
+            if (object.nickname != null)
+                message.nickname = String(object.nickname);
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
             return message;
         };
 
@@ -7832,6 +7907,9 @@ export const Protos = $root.Protos = (() => {
                 object.browser = options.enums === String ? "Chrome" : 0;
                 object.platform = options.enums === String ? "PC" : 0;
                 object.code = "";
+                object.nickname = "";
+                object.avatar = "";
+                object.gender = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -7841,6 +7919,12 @@ export const Protos = $root.Protos = (() => {
                 object.platform = options.enums === String ? $root.Protos.Global.Platform[message.platform] : message.platform;
             if (message.code != null && message.hasOwnProperty("code"))
                 object.code = message.code;
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                object.nickname = message.nickname;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
             return object;
         };
 
@@ -8326,6 +8410,9 @@ export const Protos = $root.Protos = (() => {
         LS2CS_GCLogin.prototype.openID = "";
         LS2CS_GCLogin.prototype.sessionKey = "";
         LS2CS_GCLogin.prototype.unionID = "";
+        LS2CS_GCLogin.prototype.nickname = "";
+        LS2CS_GCLogin.prototype.avatar = "";
+        LS2CS_GCLogin.prototype.gender = 0;
 
         LS2CS_GCLogin.create = function create(properties) {
             return new LS2CS_GCLogin(properties);
@@ -8352,6 +8439,12 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(66).string(message.sessionKey);
             if (message.unionID != null && message.hasOwnProperty("unionID"))
                 writer.uint32(74).string(message.unionID);
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                writer.uint32(82).string(message.nickname);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(90).string(message.avatar);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(96).int32(message.gender);
             return writer;
         };
 
@@ -8392,6 +8485,15 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 9:
                     message.unionID = reader.string();
+                    break;
+                case 10:
+                    message.nickname = reader.string();
+                    break;
+                case 11:
+                    message.avatar = reader.string();
+                    break;
+                case 12:
+                    message.gender = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -8459,6 +8561,15 @@ export const Protos = $root.Protos = (() => {
             if (message.unionID != null && message.hasOwnProperty("unionID"))
                 if (!$util.isString(message.unionID))
                     return "unionID: string expected";
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                if (!$util.isString(message.nickname))
+                    return "nickname: string expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
             return null;
         };
 
@@ -8538,6 +8649,12 @@ export const Protos = $root.Protos = (() => {
                 message.sessionKey = String(object.sessionKey);
             if (object.unionID != null)
                 message.unionID = String(object.unionID);
+            if (object.nickname != null)
+                message.nickname = String(object.nickname);
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
             return message;
         };
 
@@ -8559,6 +8676,9 @@ export const Protos = $root.Protos = (() => {
                 object.openID = "";
                 object.sessionKey = "";
                 object.unionID = "";
+                object.nickname = "";
+                object.avatar = "";
+                object.gender = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -8581,6 +8701,12 @@ export const Protos = $root.Protos = (() => {
                 object.sessionKey = message.sessionKey;
             if (message.unionID != null && message.hasOwnProperty("unionID"))
                 object.unionID = message.unionID;
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                object.nickname = message.nickname;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
             return object;
         };
 

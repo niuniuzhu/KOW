@@ -30,7 +30,7 @@ export class LoginState extends SceneState {
 		super.OnEnter(param);
 		if (Laya.Browser.onMiniGame) {
 			this._ui.mode = UILogin.Mode.WXLogin;
-			this.WxAuthorize(this.WXLogin.bind(this));
+			this.WxAuthorize(this.OnWXAuthorizeSuccess.bind(this));
 		}
 		else {
 			this._ui.mode = UILogin.Mode.WebLogin;
@@ -38,7 +38,8 @@ export class LoginState extends SceneState {
 	}
 
 	/**
-	 * 服务端返回登陆微信成功
+	 * 开始授权
+	 * @param callback 授权成功回调函数
 	 */
 	private WxAuthorize(callback: (userInfo: _userInfo) => void): void {
 		//获取系统信息
@@ -75,6 +76,10 @@ export class LoginState extends SceneState {
 		});
 	}
 
+	/**
+	 * 创建授权按钮
+	 * @param callback 授权成功回调函数
+	 */
 	private CreateAuthorizeButton(callback: (userInfo: _userInfo) => void): void {
 		const s = this._sysInfo.screenWidth / Laya.stage.designWidth;//fixed height
 		const w = s * 187;
@@ -103,17 +108,28 @@ export class LoginState extends SceneState {
 		});
 	}
 
-	private WXLogin(userInfo: _userInfo): void {
-		const loginObj: _loginObject = {
+	/**
+	 * 授权成功回调
+	 * @param userInfo 用户信息
+	 */
+	private OnWXAuthorizeSuccess(userInfo: _userInfo): void {
+		//微信登陆 see https://developers.weixin.qq.com/minigame/dev/api/wx.login.html
+		const s = "{		\"wxgame\": {			\"score\": 16,				\"update_time\": 1513080573		}	}";
+		wx.login({
 			"success": resp => {
+				//登陆成功
+				// wx.setUserCloudStorage({
+				// 	"KVDataList": [{ "key": "test", "value": s }],
+				// 	"success": resp2 => {
+				// 		Logger.Log(resp2);
+				// 	}
+				// });
 				this.SendWxLoginToLS(resp.code, userInfo);
 			},
 			"fail": () => {
 				this._ui.OnFail("登陆微信失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
 			}
-		}
-		//微信登陆 see https://developers.weixin.qq.com/minigame/dev/api/wx.login.html
-		wx.login(loginObj);
+		});
 	}
 
 	/**

@@ -19,7 +19,7 @@ export class LoginState extends SceneState {
         super.OnEnter(param);
         if (Laya.Browser.onMiniGame) {
             this._ui.mode = UILogin.Mode.WXLogin;
-            this.WxAuthorize(this.WXLogin.bind(this));
+            this.WxAuthorize(this.OnWXAuthorizeSuccess.bind(this));
         }
         else {
             this._ui.mode = UILogin.Mode.WebLogin;
@@ -82,16 +82,16 @@ export class LoginState extends SceneState {
             }
         });
     }
-    WXLogin(userInfo) {
-        const loginObj = {
+    OnWXAuthorizeSuccess(userInfo) {
+        const s = "{		\"wxgame\": {			\"score\": 16,				\"update_time\": 1513080573		}	}";
+        wx.login({
             "success": resp => {
                 this.SendWxLoginToLS(resp.code, userInfo);
             },
             "fail": () => {
                 this._ui.OnFail("登陆微信失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
             }
-        };
-        wx.login(loginObj);
+        });
     }
     SendWxLoginToLS(code, userInfo) {
         const login = ProtoCreator.Q_GC2LS_AskWXLogin();

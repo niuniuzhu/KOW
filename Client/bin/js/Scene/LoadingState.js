@@ -65,7 +65,7 @@ define(["require", "exports", "../AssetsManager", "../Consts", "../Global", "../
         }
         InitBattle() {
             Global_1.Global.battleManager.SetBattleInfo(this._battleInfo, () => {
-                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Battle);
+                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Battle, this._battleInfo);
             });
         }
     }

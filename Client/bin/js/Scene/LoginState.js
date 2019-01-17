@@ -10,7 +10,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
             super.OnEnter(param);
             if (Laya.Browser.onMiniGame) {
                 this._ui.mode = UILogin_1.UILogin.Mode.WXLogin;
-                this.WxAuthorize(this.WXLogin.bind(this));
+                this.WxAuthorize(this.OnWXAuthorizeSuccess.bind(this));
             }
             else {
                 this._ui.mode = UILogin_1.UILogin.Mode.WebLogin;
@@ -73,16 +73,16 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                 }
             });
         }
-        WXLogin(userInfo) {
-            const loginObj = {
+        OnWXAuthorizeSuccess(userInfo) {
+            const s = "{		\"wxgame\": {			\"score\": 16,				\"update_time\": 1513080573		}	}";
+            wx.login({
                 "success": resp => {
                     this.SendWxLoginToLS(resp.code, userInfo);
                 },
                 "fail": () => {
                     this._ui.OnFail("登陆微信失败", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                 }
-            };
-            wx.login(loginObj);
+            });
         }
         SendWxLoginToLS(code, userInfo) {
             const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskWXLogin();
@@ -238,7 +238,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                                 Global_1.Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
                             }
                             else {
-                                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
+                                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main, resp.userInfo);
                             }
                             break;
                         case protos_1.Protos.GS2GC_LoginRet.EResult.SessionExpire:

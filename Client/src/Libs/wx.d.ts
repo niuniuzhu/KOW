@@ -5690,4 +5690,27 @@ declare namespace wx {
 	export function writeBLECharacteristicValue(
 		object: _writeBLECharacteristicValueObject
 	): void;
+
+	interface _getUserCloudStorageObject {
+		keyList: string[];
+		success: (resp) => void;
+		fail?: () => void;
+		complete?: () => void;
+	}
+
+	interface _KVData {
+		key: string;
+		value: string;
+	}
+
+	interface _setUserCloudStorageObject {
+		KVDataList: _KVData[];
+		success: (resp) => void;
+		fail?: () => void;
+		complete?: () => void;
+	}
+
+	export function setUserCloudStorage(object: _setUserCloudStorageObject): void;
+
+	export function getUserCloudStorage(object: _getUserCloudStorageObject): void;
 }

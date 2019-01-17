@@ -322,7 +322,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 params.rid = playerInfo.gcNID;
                 params.id = playerInfo.actorID;
                 params.team = playerInfo.team;
-                params.name = playerInfo.name;
+                params.name = playerInfo.nickname;
                 const player = this.CreateChampion(params);
                 if (player.team >= this._bornPoses.length ||
                     player.team >= this._bornDirs.length) {

@@ -10,6 +10,7 @@ export class UIAlert {
 	public static Show(content: string, removeHandler: () => void = null): void {
 		if (null == UIAlert._com) {
 			UIAlert._com = fairygui.UIPackage.createObject("global", "alert").asCom;
+			UIAlert._com.getChild("confirm").onClick(null, this.OnConfirmBtnClick);
 		}
 		UIAlert._hideHandler = removeHandler;
 		if (UIAlert._hideHandler != null)
@@ -18,6 +19,10 @@ export class UIAlert {
 		UIAlert._com.center();
 		UIAlert._com.getChild("text").asTextField.text = content;
 		UIAlert._isShowing = true;
+	}
+
+	private static OnConfirmBtnClick(): void {
+		fairygui.GRoot.inst.hidePopup(UIAlert._com);
 	}
 
 	public static OnHide(): void {

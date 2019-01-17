@@ -29,7 +29,7 @@ export class VBattle {
 
 	private _root: fairygui.GComponent;
 	private _logicFrame: number;
-	private _destroied: boolean = false;
+	private _destroied: boolean = true;
 
 	public get mapID(): number { return this._mapID; }
 	public get camera(): Camera { return this._camera; }

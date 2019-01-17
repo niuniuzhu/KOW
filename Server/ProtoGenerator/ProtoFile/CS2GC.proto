@@ -3,6 +3,16 @@ package Protos;
 
 import "Global.proto";
 
+message CS2GC_PlayerInfo {
+	uint64 gcNID = 1;//玩家网络id
+	string nickname = 2;//玩家名字
+	string avatar = 3;
+	int32 gender = 4;
+	int32 honor = 5;
+	int32 actorID = 6;//角色id
+	int32 team = 7;//所在队伍
+}
+
 //匹配回应
 message CS2GC_BeginMatchRet {
 	enum EResult {
@@ -21,16 +31,9 @@ message CS2GC_BeginMatchRet {
 	repeated CS2GC_PlayerInfo playerInfos = 6;//玩家信息
 }
 
-message CS2GC_PlayerInfo {
-	uint64 gcNID = 1;//玩家网络id
-	string name = 2;//玩家名字
-	int32 actorID = 3;//角色id
-	int32 team = 4;//所在队伍
-}
-
 message CS2GC_PlayerJoin {
 	MsgOpts opts = 1;
-	CS2GC_PlayerInfo playerInfos = 2;//玩家信息
+	CS2GC_PlayerInfo playerInfo = 2;//玩家信息
 }
 
 message CS2GC_PlayerLeave {

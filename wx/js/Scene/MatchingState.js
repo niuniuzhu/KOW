@@ -29,15 +29,16 @@ export class MatchingState extends SceneState {
     }
     OnPlayerJoint(message) {
         const playerJoin = message;
-        this._ui.OnPlayerJoin(playerJoin.playerInfos);
+        this._ui.OnPlayerJoin(playerJoin.playerInfo, this._players.length);
+        this._players.push(playerJoin.playerInfo);
     }
     OnPlayerLeave(message) {
         const playerLeave = message;
         for (let i = 0; i < this._players.length; i++) {
             const player = this._players[i];
             if (player.gcNID == playerLeave.gcNID) {
+                this._ui.OnPlayerLeave(i);
                 this._players.splice(i, 1);
-                this._ui.OnPlayerLeave(player);
                 return;
             }
         }
@@ -47,15 +48,30 @@ export class MatchingState extends SceneState {
         beginMatch.actorID = 0;
         Global.connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
             const resp = message;
-            this._ui.OnBeginMatchResult(resp.result);
             switch (resp.result) {
                 case Protos.CS2GC_BeginMatchRet.EResult.Success:
                     this._maxPlayers = resp.maxPlayer;
                     for (let i = 0; i < resp.playerInfos.length; i++) {
                         const playerInfo = resp.playerInfos[i];
+                        this._ui.OnPlayerJoin(playerInfo, i);
                         this._players.push(playerInfo);
                     }
                     Logger.Log("begin match");
+                    break;
+                case Protos.CS2GC_BeginMatchRet.EResult.IllegalID:
+                    this._ui.OnFail("无效网络ID", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+                    break;
+                case Protos.CS2GC_BeginMatchRet.EResult.NoRoom:
+                    this._ui.OnFail("匹配失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+                    break;
+                case Protos.CS2GC_BeginMatchRet.EResult.UserInBattle:
+                    this._ui.OnFail("玩家已在战场中", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+                    break;
+                case Protos.CS2GC_BeginMatchRet.EResult.UserInRoom:
+                    this._ui.OnFail("玩家已在匹配中", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+                    break;
+                case Protos.CS2GC_BeginMatchRet.EResult.Failed:
+                    this._ui.OnFail("匹配失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
                     break;
             }
         });

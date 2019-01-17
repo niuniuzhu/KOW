@@ -16,9 +16,12 @@ message CS2GS_GCLoginRet{
 	MsgOpts opts = 1;
 	EResult result = 2;
 	EGCCState gcState = 3;
-	uint64 gcNID = 4;//登录bs时进行校验的id
-	string bsIP = 5;//bs ip
-	int32 bsPort = 6;//bs port
+	//main
+	G_UserInfo userInfo = 4;
+	//bs
+	uint64 gcNID = 5;//登录bs时进行校验的id
+	string bsIP = 6;//bs ip
+	int32 bsPort = 7;//bs port
 }
 
 message CS2GS_KickGC {

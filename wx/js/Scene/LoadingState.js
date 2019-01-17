@@ -73,7 +73,7 @@ export class LoadingState extends SceneState {
     }
     InitBattle() {
         Global.battleManager.SetBattleInfo(this._battleInfo, () => {
-            Global.sceneManager.ChangeState(SceneManager.State.Battle);
+            Global.sceneManager.ChangeState(SceneManager.State.Battle, this._battleInfo);
         });
     }
 }

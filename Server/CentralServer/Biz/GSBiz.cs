@@ -3,8 +3,11 @@ using CentralServer.User;
 using Core.Misc;
 using Core.Net;
 using Google.Protobuf;
+using Protos;
 using Shared;
 using Shared.Net;
+using BSInfo = Shared.BSInfo;
+using GSInfo = Shared.GSInfo;
 
 namespace CentralServer.Biz
 {
@@ -94,6 +97,15 @@ namespace CentralServer.Biz
 			}
 			else
 			{
+				gcAskLoginRet.UserInfo = new G_UserInfo
+				{
+					GcNID = user.gcNID,
+					Nickname = user.nickname,
+					Avatar = user.avatar,
+					Gender = user.gender,
+					//todo
+					Honor = 0
+				};
 				//检查玩家是否在战场
 				if ( user.isInBattle )
 				{

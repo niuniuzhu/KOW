@@ -12,7 +12,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._effects = [];
             this._items = [];
             this._idToItem = new Map();
-            this._destroied = false;
+            this._destroied = true;
             this._effectPool = new EffectPool_1.EffectPool(this);
         }
         get mapID() { return this._mapID; }

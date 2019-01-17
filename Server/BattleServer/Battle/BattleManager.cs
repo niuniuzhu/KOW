@@ -69,7 +69,11 @@ namespace BattleServer.Battle
 				{
 					gcNID = playerInfo.GcNID,
 					actorID = playerInfo.ActorID,
-					name = playerInfo.Name,
+					nickname = playerInfo.Nickname,
+					avatar = playerInfo.Avatar,
+					gender = ( byte )playerInfo.Gender,
+					//todo
+					honor = 0,
 					team = playerInfo.Team
 				};
 				battleEntry.players[i] = player;

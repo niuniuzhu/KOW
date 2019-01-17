@@ -1516,6 +1516,164 @@ export const Protos = $root.Protos = (() => {
         return Global;
     })();
 
+    Protos.G_UserInfo = (function() {
+
+        function G_UserInfo(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        G_UserInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+        G_UserInfo.prototype.nickname = "";
+        G_UserInfo.prototype.avatar = "";
+        G_UserInfo.prototype.gender = 0;
+        G_UserInfo.prototype.honor = 0;
+
+        G_UserInfo.create = function create(properties) {
+            return new G_UserInfo(properties);
+        };
+
+        G_UserInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                writer.uint32(8).uint64(message.gcNID);
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                writer.uint32(18).string(message.nickname);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(26).string(message.avatar);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(32).int32(message.gender);
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                writer.uint32(40).int32(message.honor);
+            return writer;
+        };
+
+        G_UserInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        G_UserInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.G_UserInfo();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.gcNID = reader.uint64();
+                    break;
+                case 2:
+                    message.nickname = reader.string();
+                    break;
+                case 3:
+                    message.avatar = reader.string();
+                    break;
+                case 4:
+                    message.gender = reader.int32();
+                    break;
+                case 5:
+                    message.honor = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        G_UserInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        G_UserInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                    return "gcNID: integer|Long expected";
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                if (!$util.isString(message.nickname))
+                    return "nickname: string expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                if (!$util.isInteger(message.honor))
+                    return "honor: integer expected";
+            return null;
+        };
+
+        G_UserInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.G_UserInfo)
+                return object;
+            let message = new $root.Protos.G_UserInfo();
+            if (object.gcNID != null)
+                if ($util.Long)
+                    (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                else if (typeof object.gcNID === "string")
+                    message.gcNID = parseInt(object.gcNID, 10);
+                else if (typeof object.gcNID === "number")
+                    message.gcNID = object.gcNID;
+                else if (typeof object.gcNID === "object")
+                    message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+            if (object.nickname != null)
+                message.nickname = String(object.nickname);
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
+            if (object.honor != null)
+                message.honor = object.honor | 0;
+            return message;
+        };
+
+        G_UserInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, true);
+                    object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.gcNID = options.longs === String ? "0" : 0;
+                object.nickname = "";
+                object.avatar = "";
+                object.gender = 0;
+                object.honor = 0;
+            }
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                if (typeof message.gcNID === "number")
+                    object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                else
+                    object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                object.nickname = message.nickname;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                object.honor = message.honor;
+            return object;
+        };
+
+        G_UserInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return G_UserInfo;
+    })();
+
     Protos.BS2GC_LoginRet = (function() {
 
         function BS2GC_LoginRet(properties) {
@@ -2440,7 +2598,10 @@ export const Protos = $root.Protos = (() => {
         }
 
         CS2BS_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-        CS2BS_PlayerInfo.prototype.name = "";
+        CS2BS_PlayerInfo.prototype.nickname = "";
+        CS2BS_PlayerInfo.prototype.avatar = "";
+        CS2BS_PlayerInfo.prototype.gender = 0;
+        CS2BS_PlayerInfo.prototype.honor = 0;
         CS2BS_PlayerInfo.prototype.actorID = 0;
         CS2BS_PlayerInfo.prototype.team = 0;
 
@@ -2453,12 +2614,18 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 writer.uint32(8).uint64(message.gcNID);
-            if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(18).string(message.name);
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                writer.uint32(18).string(message.nickname);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(26).string(message.avatar);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(32).int32(message.gender);
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                writer.uint32(40).int32(message.honor);
             if (message.actorID != null && message.hasOwnProperty("actorID"))
-                writer.uint32(24).int32(message.actorID);
+                writer.uint32(48).int32(message.actorID);
             if (message.team != null && message.hasOwnProperty("team"))
-                writer.uint32(32).int32(message.team);
+                writer.uint32(56).int32(message.team);
             return writer;
         };
 
@@ -2477,12 +2644,21 @@ export const Protos = $root.Protos = (() => {
                     message.gcNID = reader.uint64();
                     break;
                 case 2:
-                    message.name = reader.string();
+                    message.nickname = reader.string();
                     break;
                 case 3:
-                    message.actorID = reader.int32();
+                    message.avatar = reader.string();
                     break;
                 case 4:
+                    message.gender = reader.int32();
+                    break;
+                case 5:
+                    message.honor = reader.int32();
+                    break;
+                case 6:
+                    message.actorID = reader.int32();
+                    break;
+                case 7:
                     message.team = reader.int32();
                     break;
                 default:
@@ -2505,9 +2681,18 @@ export const Protos = $root.Protos = (() => {
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
                     return "gcNID: integer|Long expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                if (!$util.isString(message.nickname))
+                    return "nickname: string expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                if (!$util.isInteger(message.honor))
+                    return "honor: integer expected";
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 if (!$util.isInteger(message.actorID))
                     return "actorID: integer expected";
@@ -2530,8 +2715,14 @@ export const Protos = $root.Protos = (() => {
                     message.gcNID = object.gcNID;
                 else if (typeof object.gcNID === "object")
                     message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
-            if (object.name != null)
-                message.name = String(object.name);
+            if (object.nickname != null)
+                message.nickname = String(object.nickname);
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
+            if (object.honor != null)
+                message.honor = object.honor | 0;
             if (object.actorID != null)
                 message.actorID = object.actorID | 0;
             if (object.team != null)
@@ -2549,7 +2740,10 @@ export const Protos = $root.Protos = (() => {
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
-                object.name = "";
+                object.nickname = "";
+                object.avatar = "";
+                object.gender = 0;
+                object.honor = 0;
                 object.actorID = 0;
                 object.team = 0;
             }
@@ -2558,8 +2752,14 @@ export const Protos = $root.Protos = (() => {
                     object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
                 else
                     object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                object.nickname = message.nickname;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                object.honor = message.honor;
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 object.actorID = message.actorID;
             if (message.team != null && message.hasOwnProperty("team"))
@@ -2729,6 +2929,192 @@ export const Protos = $root.Protos = (() => {
         };
 
         return CS2BS_BattleInfo;
+    })();
+
+    Protos.CS2GC_PlayerInfo = (function() {
+
+        function CS2GC_PlayerInfo(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+        CS2GC_PlayerInfo.prototype.nickname = "";
+        CS2GC_PlayerInfo.prototype.avatar = "";
+        CS2GC_PlayerInfo.prototype.gender = 0;
+        CS2GC_PlayerInfo.prototype.honor = 0;
+        CS2GC_PlayerInfo.prototype.actorID = 0;
+        CS2GC_PlayerInfo.prototype.team = 0;
+
+        CS2GC_PlayerInfo.create = function create(properties) {
+            return new CS2GC_PlayerInfo(properties);
+        };
+
+        CS2GC_PlayerInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                writer.uint32(8).uint64(message.gcNID);
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                writer.uint32(18).string(message.nickname);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(26).string(message.avatar);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(32).int32(message.gender);
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                writer.uint32(40).int32(message.honor);
+            if (message.actorID != null && message.hasOwnProperty("actorID"))
+                writer.uint32(48).int32(message.actorID);
+            if (message.team != null && message.hasOwnProperty("team"))
+                writer.uint32(56).int32(message.team);
+            return writer;
+        };
+
+        CS2GC_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_PlayerInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerInfo();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.gcNID = reader.uint64();
+                    break;
+                case 2:
+                    message.nickname = reader.string();
+                    break;
+                case 3:
+                    message.avatar = reader.string();
+                    break;
+                case 4:
+                    message.gender = reader.int32();
+                    break;
+                case 5:
+                    message.honor = reader.int32();
+                    break;
+                case 6:
+                    message.actorID = reader.int32();
+                    break;
+                case 7:
+                    message.team = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_PlayerInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                    return "gcNID: integer|Long expected";
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                if (!$util.isString(message.nickname))
+                    return "nickname: string expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                if (!$util.isInteger(message.honor))
+                    return "honor: integer expected";
+            if (message.actorID != null && message.hasOwnProperty("actorID"))
+                if (!$util.isInteger(message.actorID))
+                    return "actorID: integer expected";
+            if (message.team != null && message.hasOwnProperty("team"))
+                if (!$util.isInteger(message.team))
+                    return "team: integer expected";
+            return null;
+        };
+
+        CS2GC_PlayerInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_PlayerInfo)
+                return object;
+            let message = new $root.Protos.CS2GC_PlayerInfo();
+            if (object.gcNID != null)
+                if ($util.Long)
+                    (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                else if (typeof object.gcNID === "string")
+                    message.gcNID = parseInt(object.gcNID, 10);
+                else if (typeof object.gcNID === "number")
+                    message.gcNID = object.gcNID;
+                else if (typeof object.gcNID === "object")
+                    message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+            if (object.nickname != null)
+                message.nickname = String(object.nickname);
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
+            if (object.honor != null)
+                message.honor = object.honor | 0;
+            if (object.actorID != null)
+                message.actorID = object.actorID | 0;
+            if (object.team != null)
+                message.team = object.team | 0;
+            return message;
+        };
+
+        CS2GC_PlayerInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, true);
+                    object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.gcNID = options.longs === String ? "0" : 0;
+                object.nickname = "";
+                object.avatar = "";
+                object.gender = 0;
+                object.honor = 0;
+                object.actorID = 0;
+                object.team = 0;
+            }
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                if (typeof message.gcNID === "number")
+                    object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                else
+                    object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                object.nickname = message.nickname;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                object.honor = message.honor;
+            if (message.actorID != null && message.hasOwnProperty("actorID"))
+                object.actorID = message.actorID;
+            if (message.team != null && message.hasOwnProperty("team"))
+                object.team = message.team;
+            return object;
+        };
+
+        CS2GC_PlayerInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2GC_PlayerInfo;
     })();
 
     Protos.CS2GC_BeginMatchRet = (function() {
@@ -2960,150 +3346,6 @@ export const Protos = $root.Protos = (() => {
         return CS2GC_BeginMatchRet;
     })();
 
-    Protos.CS2GC_PlayerInfo = (function() {
-
-        function CS2GC_PlayerInfo(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        CS2GC_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-        CS2GC_PlayerInfo.prototype.name = "";
-        CS2GC_PlayerInfo.prototype.actorID = 0;
-        CS2GC_PlayerInfo.prototype.team = 0;
-
-        CS2GC_PlayerInfo.create = function create(properties) {
-            return new CS2GC_PlayerInfo(properties);
-        };
-
-        CS2GC_PlayerInfo.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                writer.uint32(8).uint64(message.gcNID);
-            if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(18).string(message.name);
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                writer.uint32(24).int32(message.actorID);
-            if (message.team != null && message.hasOwnProperty("team"))
-                writer.uint32(32).int32(message.team);
-            return writer;
-        };
-
-        CS2GC_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        CS2GC_PlayerInfo.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerInfo();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.gcNID = reader.uint64();
-                    break;
-                case 2:
-                    message.name = reader.string();
-                    break;
-                case 3:
-                    message.actorID = reader.int32();
-                    break;
-                case 4:
-                    message.team = reader.int32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        CS2GC_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        CS2GC_PlayerInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
-                    return "gcNID: integer|Long expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                if (!$util.isInteger(message.actorID))
-                    return "actorID: integer expected";
-            if (message.team != null && message.hasOwnProperty("team"))
-                if (!$util.isInteger(message.team))
-                    return "team: integer expected";
-            return null;
-        };
-
-        CS2GC_PlayerInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.CS2GC_PlayerInfo)
-                return object;
-            let message = new $root.Protos.CS2GC_PlayerInfo();
-            if (object.gcNID != null)
-                if ($util.Long)
-                    (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
-                else if (typeof object.gcNID === "string")
-                    message.gcNID = parseInt(object.gcNID, 10);
-                else if (typeof object.gcNID === "number")
-                    message.gcNID = object.gcNID;
-                else if (typeof object.gcNID === "object")
-                    message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.actorID != null)
-                message.actorID = object.actorID | 0;
-            if (object.team != null)
-                message.team = object.team | 0;
-            return message;
-        };
-
-        CS2GC_PlayerInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
-                    object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.gcNID = options.longs === String ? "0" : 0;
-                object.name = "";
-                object.actorID = 0;
-                object.team = 0;
-            }
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                if (typeof message.gcNID === "number")
-                    object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
-                else
-                    object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                object.actorID = message.actorID;
-            if (message.team != null && message.hasOwnProperty("team"))
-                object.team = message.team;
-            return object;
-        };
-
-        CS2GC_PlayerInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return CS2GC_PlayerInfo;
-    })();
-
     Protos.CS2GC_PlayerJoin = (function() {
 
         function CS2GC_PlayerJoin(properties) {
@@ -3114,7 +3356,7 @@ export const Protos = $root.Protos = (() => {
         }
 
         CS2GC_PlayerJoin.prototype.opts = null;
-        CS2GC_PlayerJoin.prototype.playerInfos = null;
+        CS2GC_PlayerJoin.prototype.playerInfo = null;
 
         CS2GC_PlayerJoin.create = function create(properties) {
             return new CS2GC_PlayerJoin(properties);
@@ -3125,8 +3367,8 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.playerInfos != null && message.hasOwnProperty("playerInfos"))
-                $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfos, writer.uint32(18).fork()).ldelim();
+            if (message.playerInfo != null && message.hasOwnProperty("playerInfo"))
+                $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfo, writer.uint32(18).fork()).ldelim();
             return writer;
         };
 
@@ -3145,7 +3387,7 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.playerInfos = $root.Protos.CS2GC_PlayerInfo.decode(reader, reader.uint32());
+                    message.playerInfo = $root.Protos.CS2GC_PlayerInfo.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -3169,10 +3411,10 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
-            if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
-                let error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos);
+            if (message.playerInfo != null && message.hasOwnProperty("playerInfo")) {
+                let error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfo);
                 if (error)
-                    return "playerInfos." + error;
+                    return "playerInfo." + error;
             }
             return null;
         };
@@ -3186,10 +3428,10 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.CS2GC_PlayerJoin.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
-            if (object.playerInfos != null) {
-                if (typeof object.playerInfos !== "object")
-                    throw TypeError(".Protos.CS2GC_PlayerJoin.playerInfos: object expected");
-                message.playerInfos = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfos);
+            if (object.playerInfo != null) {
+                if (typeof object.playerInfo !== "object")
+                    throw TypeError(".Protos.CS2GC_PlayerJoin.playerInfo: object expected");
+                message.playerInfo = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfo);
             }
             return message;
         };
@@ -3200,12 +3442,12 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
-                object.playerInfos = null;
+                object.playerInfo = null;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.playerInfos != null && message.hasOwnProperty("playerInfos"))
-                object.playerInfos = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfos, options);
+            if (message.playerInfo != null && message.hasOwnProperty("playerInfo"))
+                object.playerInfo = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfo, options);
             return object;
         };
 
@@ -3924,6 +4166,7 @@ export const Protos = $root.Protos = (() => {
         CS2GS_GCLoginRet.prototype.opts = null;
         CS2GS_GCLoginRet.prototype.result = 0;
         CS2GS_GCLoginRet.prototype.gcState = 0;
+        CS2GS_GCLoginRet.prototype.userInfo = null;
         CS2GS_GCLoginRet.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
         CS2GS_GCLoginRet.prototype.bsIP = "";
         CS2GS_GCLoginRet.prototype.bsPort = 0;
@@ -3941,12 +4184,14 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(16).int32(message.result);
             if (message.gcState != null && message.hasOwnProperty("gcState"))
                 writer.uint32(24).int32(message.gcState);
+            if (message.userInfo != null && message.hasOwnProperty("userInfo"))
+                $root.Protos.G_UserInfo.encode(message.userInfo, writer.uint32(34).fork()).ldelim();
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                writer.uint32(32).uint64(message.gcNID);
+                writer.uint32(40).uint64(message.gcNID);
             if (message.bsIP != null && message.hasOwnProperty("bsIP"))
-                writer.uint32(42).string(message.bsIP);
+                writer.uint32(50).string(message.bsIP);
             if (message.bsPort != null && message.hasOwnProperty("bsPort"))
-                writer.uint32(48).int32(message.bsPort);
+                writer.uint32(56).int32(message.bsPort);
             return writer;
         };
 
@@ -3971,12 +4216,15 @@ export const Protos = $root.Protos = (() => {
                     message.gcState = reader.int32();
                     break;
                 case 4:
-                    message.gcNID = reader.uint64();
+                    message.userInfo = $root.Protos.G_UserInfo.decode(reader, reader.uint32());
                     break;
                 case 5:
-                    message.bsIP = reader.string();
+                    message.gcNID = reader.uint64();
                     break;
                 case 6:
+                    message.bsIP = reader.string();
+                    break;
+                case 7:
                     message.bsPort = reader.int32();
                     break;
                 default:
@@ -4017,6 +4265,11 @@ export const Protos = $root.Protos = (() => {
                 case 1:
                     break;
                 }
+            if (message.userInfo != null && message.hasOwnProperty("userInfo")) {
+                let error = $root.Protos.G_UserInfo.verify(message.userInfo);
+                if (error)
+                    return "userInfo." + error;
+            }
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
                     return "gcNID: integer|Long expected";
@@ -4058,6 +4311,11 @@ export const Protos = $root.Protos = (() => {
                 message.gcState = 1;
                 break;
             }
+            if (object.userInfo != null) {
+                if (typeof object.userInfo !== "object")
+                    throw TypeError(".Protos.CS2GS_GCLoginRet.userInfo: object expected");
+                message.userInfo = $root.Protos.G_UserInfo.fromObject(object.userInfo);
+            }
             if (object.gcNID != null)
                 if ($util.Long)
                     (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
@@ -4082,6 +4340,7 @@ export const Protos = $root.Protos = (() => {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
                 object.gcState = options.enums === String ? "Idle" : 0;
+                object.userInfo = null;
                 if ($util.Long) {
                     let long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -4096,6 +4355,8 @@ export const Protos = $root.Protos = (() => {
                 object.result = options.enums === String ? $root.Protos.CS2GS_GCLoginRet.EResult[message.result] : message.result;
             if (message.gcState != null && message.hasOwnProperty("gcState"))
                 object.gcState = options.enums === String ? $root.Protos.CS2GS_GCLoginRet.EGCCState[message.gcState] : message.gcState;
+            if (message.userInfo != null && message.hasOwnProperty("userInfo"))
+                object.userInfo = $root.Protos.G_UserInfo.toObject(message.userInfo, options);
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 if (typeof message.gcNID === "number")
                     object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
@@ -7947,6 +8208,7 @@ export const Protos = $root.Protos = (() => {
         GS2GC_LoginRet.prototype.opts = null;
         GS2GC_LoginRet.prototype.result = 0;
         GS2GC_LoginRet.prototype.gcState = 0;
+        GS2GC_LoginRet.prototype.userInfo = null;
         GS2GC_LoginRet.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
         GS2GC_LoginRet.prototype.bsIP = "";
         GS2GC_LoginRet.prototype.bsPort = 0;
@@ -7965,14 +8227,16 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(16).int32(message.result);
             if (message.gcState != null && message.hasOwnProperty("gcState"))
                 writer.uint32(24).int32(message.gcState);
+            if (message.userInfo != null && message.hasOwnProperty("userInfo"))
+                $root.Protos.G_UserInfo.encode(message.userInfo, writer.uint32(34).fork()).ldelim();
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                writer.uint32(32).uint64(message.gcNID);
+                writer.uint32(40).uint64(message.gcNID);
             if (message.bsIP != null && message.hasOwnProperty("bsIP"))
-                writer.uint32(42).string(message.bsIP);
+                writer.uint32(50).string(message.bsIP);
             if (message.bsPort != null && message.hasOwnProperty("bsPort"))
-                writer.uint32(48).int32(message.bsPort);
+                writer.uint32(56).int32(message.bsPort);
             if (message.defs != null && message.hasOwnProperty("defs"))
-                writer.uint32(58).bytes(message.defs);
+                writer.uint32(66).bytes(message.defs);
             return writer;
         };
 
@@ -7997,15 +8261,18 @@ export const Protos = $root.Protos = (() => {
                     message.gcState = reader.int32();
                     break;
                 case 4:
-                    message.gcNID = reader.uint64();
+                    message.userInfo = $root.Protos.G_UserInfo.decode(reader, reader.uint32());
                     break;
                 case 5:
-                    message.bsIP = reader.string();
+                    message.gcNID = reader.uint64();
                     break;
                 case 6:
-                    message.bsPort = reader.int32();
+                    message.bsIP = reader.string();
                     break;
                 case 7:
+                    message.bsPort = reader.int32();
+                    break;
+                case 8:
                     message.defs = reader.bytes();
                     break;
                 default:
@@ -8046,6 +8313,11 @@ export const Protos = $root.Protos = (() => {
                 case 1:
                     break;
                 }
+            if (message.userInfo != null && message.hasOwnProperty("userInfo")) {
+                let error = $root.Protos.G_UserInfo.verify(message.userInfo);
+                if (error)
+                    return "userInfo." + error;
+            }
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
                     return "gcNID: integer|Long expected";
@@ -8090,6 +8362,11 @@ export const Protos = $root.Protos = (() => {
                 message.gcState = 1;
                 break;
             }
+            if (object.userInfo != null) {
+                if (typeof object.userInfo !== "object")
+                    throw TypeError(".Protos.GS2GC_LoginRet.userInfo: object expected");
+                message.userInfo = $root.Protos.G_UserInfo.fromObject(object.userInfo);
+            }
             if (object.gcNID != null)
                 if ($util.Long)
                     (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
@@ -8119,6 +8396,7 @@ export const Protos = $root.Protos = (() => {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
                 object.gcState = options.enums === String ? "Idle" : 0;
+                object.userInfo = null;
                 if ($util.Long) {
                     let long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -8140,6 +8418,8 @@ export const Protos = $root.Protos = (() => {
                 object.result = options.enums === String ? $root.Protos.GS2GC_LoginRet.EResult[message.result] : message.result;
             if (message.gcState != null && message.hasOwnProperty("gcState"))
                 object.gcState = options.enums === String ? $root.Protos.GS2GC_LoginRet.EGCCState[message.gcState] : message.gcState;
+            if (message.userInfo != null && message.hasOwnProperty("userInfo"))
+                object.userInfo = $root.Protos.G_UserInfo.toObject(message.userInfo, options);
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 if (typeof message.gcNID === "number")
                     object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;

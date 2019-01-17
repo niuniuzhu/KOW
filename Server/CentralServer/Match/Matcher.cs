@@ -58,10 +58,14 @@ namespace CentralServer.Match
 
 			//通知GC有玩家加入房间
 			Protos.CS2GC_PlayerJoin playerJoin = ProtoCreator.Q_CS2GC_PlayerJoin();
-			playerJoin.PlayerInfos = new Protos.CS2GC_PlayerInfo
+			playerJoin.PlayerInfo = new Protos.CS2GC_PlayerInfo
 			{
 				GcNID = player.user.gcNID,
-				Name = player.user.name,
+				Nickname = player.user.nickname,
+				Avatar = player.user.avatar,
+				Gender = player.user.gender,
+				//todo
+				Honor = 0,
 				ActorID = player.actorID,
 				Team = player.team
 			};
@@ -264,7 +268,11 @@ namespace CentralServer.Match
 				Protos.CS2BS_PlayerInfo pi = new Protos.CS2BS_PlayerInfo
 				{
 					GcNID = player.user.ukey | ( ulong )appropriateBSInfo.lid << 32,
-					Name = player.user.name,
+					Nickname = player.user.nickname,
+					Avatar = player.user.avatar,
+					Gender = player.user.gender,
+					//todo
+					Honor = 0,
 					ActorID = player.actorID,
 					Team = player.team
 				};
@@ -331,7 +339,11 @@ namespace CentralServer.Match
 				RoomPlayer player = room.GetPlayerAt( i );
 				Protos.CS2GC_PlayerInfo pi = new Protos.CS2GC_PlayerInfo();
 				pi.GcNID = player.user.gcNID;
-				pi.Name = player.user.name;
+				pi.Nickname = player.user.nickname;
+				pi.Avatar = player.user.avatar;
+				pi.Gender = player.user.gender;
+				//todo
+				pi.Honor = 0;
 				pi.ActorID = player.actorID;
 				pi.Team = player.team;
 				repeatedField.Add( pi );

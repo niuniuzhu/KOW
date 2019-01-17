@@ -56,6 +56,14 @@ export class UIBattle {
         this._root.on(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
         Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
         Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
+        const battleInfo = param;
+        for (const playerInfo of battleInfo.playerInfos) {
+            if (playerInfo.gcNID.equals(battleInfo.playerID)) {
+                this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
+                this._root.getChild("nickname").asTextField.text = playerInfo.nickname;
+                break;
+            }
+        }
         UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
         UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
         UIEvent.AddListener(UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));

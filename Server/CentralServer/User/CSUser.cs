@@ -72,7 +72,15 @@ namespace CentralServer.User
 		/// <summary>
 		/// 玩家名字
 		/// </summary>
-		public string name = string.Empty;
+		public string nickname { get; private set; }
+		/// <summary>
+		/// 头像地址
+		/// </summary>
+		public string avatar { get; private set; }
+		/// <summary>
+		/// 性别
+		/// </summary>
+		public byte gender { get; private set; }
 
 		/// <summary>
 		/// 发送消息
@@ -80,15 +88,6 @@ namespace CentralServer.User
 		/// <param name="msg">消息体</param>
 		public void Send( IMessage msg ) => CS.instance.netSessionMgr.Send(
 			this.gsSID, msg, null, Protos.MsgOpts.Types.TransTarget.Gc, this.gcNID );
-
-		/// <summary>
-		/// 是否达到下线的条件
-		/// </summary>
-		internal bool CanOffline()
-		{
-			//todo 目前只需要判断是否在战场状态
-			return this.gsSID == 0;
-		}
 
 		internal void OnCreate( Protos.LS2CS_GCLogin gcLogin, long loginTime )
 		{
@@ -101,6 +100,9 @@ namespace CentralServer.User
 			this.sessionKey = gcLogin.SessionKey;
 			this.unionID = gcLogin.UnionID;
 			this.loginTime = loginTime;
+			this.nickname = gcLogin.Nickname;
+			this.avatar = gcLogin.Avatar;
+			this.gender = ( byte )gcLogin.Gender;
 		}
 
 		/// <summary>

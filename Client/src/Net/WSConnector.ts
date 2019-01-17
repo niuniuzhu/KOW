@@ -53,7 +53,7 @@ export class WSConnector {
 	public Connect(ip: string, port: number): void {
 		if (this.connected)
 			this.Close();
-		Logger.Log(`connect to: wss://${ip}:${port}`);
+		// Logger.Log(`connect to: wss://${ip}:${port}`);
 		this._socket = new WebSocket(`wss://${ip}:${port}`);
 		this._socket.binaryType = "arraybuffer";
 		this._socket.onmessage = this.OnReceived.bind(this);

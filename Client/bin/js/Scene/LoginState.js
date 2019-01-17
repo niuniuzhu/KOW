@@ -10,40 +10,73 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
             super.OnEnter(param);
             if (Laya.Browser.onMiniGame) {
                 this._ui.mode = UILogin_1.UILogin.Mode.WXLogin;
-                this.HandleWXLogin();
+                this.WxAuthorize(this.WXLogin.bind(this));
             }
             else {
                 this._ui.mode = UILogin_1.UILogin.Mode.WebLogin;
             }
         }
-        HandleWXLogin() {
-            const sysInfo = wx.getSystemInfoSync();
-            Logger_1.Logger.Log("brand:" + sysInfo.brand);
-            Logger_1.Logger.Log("model:" + sysInfo.model);
-            Logger_1.Logger.Log("pixelRatio:" + sysInfo.pixelRatio);
-            Logger_1.Logger.Log("system:" + sysInfo.system);
-            Logger_1.Logger.Log("platform:" + sysInfo.platform);
-            Logger_1.Logger.Log("version:" + sysInfo.version);
-            Logger_1.Logger.Log("sdk:" + sysInfo.SDKVersion);
-            const w = Laya.stage.width / Laya.stage.designWidth * 187;
-            const h = Laya.stage.height / Laya.stage.designHeight * 65;
+        WxAuthorize(callback) {
+            this._sysInfo = wx.getSystemInfoSync();
+            Logger_1.Logger.Log("brand:" + this._sysInfo.brand);
+            Logger_1.Logger.Log("model:" + this._sysInfo.model);
+            Logger_1.Logger.Log("pixelRatio:" + this._sysInfo.pixelRatio);
+            Logger_1.Logger.Log("system:" + this._sysInfo.system);
+            Logger_1.Logger.Log("platform:" + this._sysInfo.platform);
+            Logger_1.Logger.Log("version:" + this._sysInfo.version);
+            Logger_1.Logger.Log("sdk:" + this._sysInfo.SDKVersion);
+            wx.getSetting({
+                "success": resp => {
+                    if (resp.authSetting["scope.userInfo"]) {
+                        wx.getUserInfo({
+                            "withCredentials": true,
+                            "lang": "zh_CN",
+                            "success": resp2 => {
+                                callback(resp2.userInfo);
+                            },
+                            "complete": () => { },
+                            "fail": () => { }
+                        });
+                    }
+                    else {
+                        this.CreateAuthorizeButton(callback);
+                    }
+                },
+                "fail": () => {
+                },
+                "complete": () => {
+                }
+            });
+        }
+        CreateAuthorizeButton(callback) {
+            const s = this._sysInfo.screenWidth / Laya.stage.designWidth;
+            const w = s * 187;
+            const h = s * 65;
             const userInfoObj = {
                 "type": "image",
                 "text": "",
-                "image": "res/anniu.png",
+                "image": "res/wx_login.png",
                 "style": {
-                    "left": (sysInfo.screenWidth - w) * 0.5,
-                    "top": (sysInfo.screenHeight - h) * 0.5,
+                    "left": (this._sysInfo.screenWidth - w) * 0.5,
+                    "top": (this._sysInfo.screenHeight - h) * 0.5,
                     "width": w,
                     "height": h
                 },
                 "withCredentials": true,
                 "lang": "zh_CN"
             };
+            const btn = wx.createUserInfoButton(userInfoObj);
+            btn.onTap(resp => {
+                if (resp.userInfo != null) {
+                    btn.destroy();
+                    callback(resp.userInfo);
+                }
+            });
+        }
+        WXLogin(userInfo) {
             const loginObj = {
                 "success": resp => {
-                    this.SendWxLoginToLS(resp.code);
-                    const btn = wx.createUserInfoButton(userInfoObj);
+                    this.SendWxLoginToLS(resp.code, userInfo);
                 },
                 "fail": () => {
                     this._ui.OnFail("登陆微信失败", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
@@ -51,9 +84,12 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
             };
             wx.login(loginObj);
         }
-        SendWxLoginToLS(code) {
+        SendWxLoginToLS(code, userInfo) {
             const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskWXLogin();
             login.code = code;
+            login.nickname = userInfo.nickName;
+            login.avatar = userInfo.avatarUrl;
+            login.gender = userInfo.gender;
             if (Laya.Browser.onIOS) {
                 login.platform = protos_1.Protos.Global.Platform.IOS;
             }
@@ -191,6 +227,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                 askLogin.pwd = pwd;
                 askLogin.sessionID = gcNID;
                 connector.Send(protos_1.Protos.GC2GS_AskLogin, askLogin, message => {
+                    this._ui.ModalWait(false);
                     const resp = message;
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
@@ -210,6 +247,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                     }
                 });
             };
+            this._ui.ModalWait(true);
             if (Global_1.Global.local) {
                 connector.Connect("localhost", port);
             }

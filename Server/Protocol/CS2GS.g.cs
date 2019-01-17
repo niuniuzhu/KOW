@@ -24,21 +24,22 @@ namespace Protos {
     static CS2GSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtDUzJHUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ikgIKEENTMkdT",
+            "CgtDUzJHUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iuAIKEENTMkdT",
             "X0dDTG9naW5SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEjAK",
             "BnJlc3VsdBgCIAEoDjIgLlByb3Rvcy5DUzJHU19HQ0xvZ2luUmV0LkVSZXN1",
             "bHQSMwoHZ2NTdGF0ZRgDIAEoDjIiLlByb3Rvcy5DUzJHU19HQ0xvZ2luUmV0",
-            "LkVHQ0NTdGF0ZRINCgVnY05JRBgEIAEoBBIMCgRic0lQGAUgASgJEg4KBmJz",
-            "UG9ydBgGIAEoBSIoCgdFUmVzdWx0EgsKB1N1Y2Nlc3MQABIQCgxJbGxlZ2Fs",
-            "TG9naW4QASIhCglFR0NDU3RhdGUSCAoESWRsZRAAEgoKBkJhdHRsZRABIqMB",
-            "CgxDUzJHU19LaWNrR0MSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRz",
-            "Eg0KBWdjTklEGAIgASgEEiwKBnJlYXNvbhgDIAEoDjIcLlByb3Rvcy5DUzJH",
-            "U19LaWNrR0MuRVJlYXNvbiI3CgdFUmVhc29uEhIKDkR1cGxpY2F0ZUxvZ2lu",
-            "EAASDQoJT3V0T2ZTeW5jEAESCQoFT3RoZXIQAmIGcHJvdG8z"));
+            "LkVHQ0NTdGF0ZRIkCgh1c2VySW5mbxgEIAEoCzISLlByb3Rvcy5HX1VzZXJJ",
+            "bmZvEg0KBWdjTklEGAUgASgEEgwKBGJzSVAYBiABKAkSDgoGYnNQb3J0GAcg",
+            "ASgFIigKB0VSZXN1bHQSCwoHU3VjY2VzcxAAEhAKDElsbGVnYWxMb2dpbhAB",
+            "IiEKCUVHQ0NTdGF0ZRIICgRJZGxlEAASCgoGQmF0dGxlEAEiowEKDENTMkdT",
+            "X0tpY2tHQxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NO",
+            "SUQYAiABKAQSLAoGcmVhc29uGAMgASgOMhwuUHJvdG9zLkNTMkdTX0tpY2tH",
+            "Qy5FUmVhc29uIjcKB0VSZWFzb24SEgoORHVwbGljYXRlTG9naW4QABINCglP",
+            "dXRPZlN5bmMQARIJCgVPdGhlchACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GS_GCLoginRet), global::Protos.CS2GS_GCLoginRet.Parser, new[]{ "Opts", "Result", "GcState", "GcNID", "BsIP", "BsPort" }, null, new[]{ typeof(global::Protos.CS2GS_GCLoginRet.Types.EResult), typeof(global::Protos.CS2GS_GCLoginRet.Types.EGCCState) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GS_GCLoginRet), global::Protos.CS2GS_GCLoginRet.Parser, new[]{ "Opts", "Result", "GcState", "UserInfo", "GcNID", "BsIP", "BsPort" }, null, new[]{ typeof(global::Protos.CS2GS_GCLoginRet.Types.EResult), typeof(global::Protos.CS2GS_GCLoginRet.Types.EGCCState) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GS_KickGC), global::Protos.CS2GS_KickGC.Parser, new[]{ "Opts", "GcNID", "Reason" }, null, new[]{ typeof(global::Protos.CS2GS_KickGC.Types.EReason) }, null)
           }));
     }
@@ -74,6 +75,7 @@ namespace Protos {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       result_ = other.result_;
       gcState_ = other.gcState_;
+      userInfo_ = other.userInfo_ != null ? other.userInfo_.Clone() : null;
       gcNID_ = other.gcNID_;
       bsIP_ = other.bsIP_;
       bsPort_ = other.bsPort_;
@@ -118,11 +120,25 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "userInfo" field.</summary>
+    public const int UserInfoFieldNumber = 4;
+    private global::Protos.G_UserInfo userInfo_;
+    /// <summary>
+    ///main
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.G_UserInfo UserInfo {
+      get { return userInfo_; }
+      set {
+        userInfo_ = value;
+      }
+    }
+
     /// <summary>Field number for the "gcNID" field.</summary>
-    public const int GcNIDFieldNumber = 4;
+    public const int GcNIDFieldNumber = 5;
     private ulong gcNID_;
     /// <summary>
-    ///登录bs时进行校验的id
+    ///bs
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong GcNID {
@@ -133,7 +149,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "bsIP" field.</summary>
-    public const int BsIPFieldNumber = 5;
+    public const int BsIPFieldNumber = 6;
     private string bsIP_ = "";
     /// <summary>
     ///bs ip
@@ -147,7 +163,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "bsPort" field.</summary>
-    public const int BsPortFieldNumber = 6;
+    public const int BsPortFieldNumber = 7;
     private int bsPort_;
     /// <summary>
     ///bs port
@@ -176,6 +192,7 @@ namespace Protos {
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Result != other.Result) return false;
       if (GcState != other.GcState) return false;
+      if (!object.Equals(UserInfo, other.UserInfo)) return false;
       if (GcNID != other.GcNID) return false;
       if (BsIP != other.BsIP) return false;
       if (BsPort != other.BsPort) return false;
@@ -188,6 +205,7 @@ namespace Protos {
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
       if (GcState != 0) hash ^= GcState.GetHashCode();
+      if (userInfo_ != null) hash ^= UserInfo.GetHashCode();
       if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
       if (BsIP.Length != 0) hash ^= BsIP.GetHashCode();
       if (BsPort != 0) hash ^= BsPort.GetHashCode();
@@ -216,16 +234,20 @@ namespace Protos {
         output.WriteRawTag(24);
         output.WriteEnum((int) GcState);
       }
+      if (userInfo_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(UserInfo);
+      }
       if (GcNID != 0UL) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteUInt64(GcNID);
       }
       if (BsIP.Length != 0) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(50);
         output.WriteString(BsIP);
       }
       if (BsPort != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(56);
         output.WriteInt32(BsPort);
       }
       if (_unknownFields != null) {
@@ -244,6 +266,9 @@ namespace Protos {
       }
       if (GcState != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) GcState);
+      }
+      if (userInfo_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UserInfo);
       }
       if (GcNID != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
@@ -276,6 +301,12 @@ namespace Protos {
       }
       if (other.GcState != 0) {
         GcState = other.GcState;
+      }
+      if (other.userInfo_ != null) {
+        if (userInfo_ == null) {
+          userInfo_ = new global::Protos.G_UserInfo();
+        }
+        UserInfo.MergeFrom(other.UserInfo);
       }
       if (other.GcNID != 0UL) {
         GcNID = other.GcNID;
@@ -312,15 +343,22 @@ namespace Protos {
             gcState_ = (global::Protos.CS2GS_GCLoginRet.Types.EGCCState) input.ReadEnum();
             break;
           }
-          case 32: {
+          case 34: {
+            if (userInfo_ == null) {
+              userInfo_ = new global::Protos.G_UserInfo();
+            }
+            input.ReadMessage(userInfo_);
+            break;
+          }
+          case 40: {
             GcNID = input.ReadUInt64();
             break;
           }
-          case 42: {
+          case 50: {
             BsIP = input.ReadString();
             break;
           }
-          case 48: {
+          case 56: {
             BsPort = input.ReadInt32();
             break;
           }

@@ -59,7 +59,7 @@ export class Battle implements ISnapshotable {
 	private _gladiatorPos: FVec2;
 	private _gladiatorRadius: number;
 
-	private _destroied: boolean = false;
+	private _destroied: boolean = true;
 	private _markToEnd: boolean = false;
 
 	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
@@ -482,7 +482,7 @@ export class Battle implements ISnapshotable {
 			params.rid = playerInfo.gcNID;
 			params.id = playerInfo.actorID;
 			params.team = playerInfo.team;
-			params.name = playerInfo.name;
+			params.name = playerInfo.nickname;
 			const player = this.CreateChampion(params);
 			if (player.team >= this._bornPoses.length ||
 				player.team >= this._bornDirs.length) {

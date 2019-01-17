@@ -74,10 +74,11 @@ namespace GateServer.Biz
 					gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.Success;
 					gsLoginRet.GcNID = csLoginRet.GcNID;
 					gsLoginRet.GcState = ( Protos.GS2GC_LoginRet.Types.EGCCState )csLoginRet.GcState;
+					gsLoginRet.UserInfo = csLoginRet.UserInfo;
 					gsLoginRet.BsIP = csLoginRet.BsIP;
 					gsLoginRet.BsPort = csLoginRet.BsPort;
 					gsLoginRet.Defs = Defs.binary;
-					; GS.instance.netSessionMgr.Send( sid, gsLoginRet );
+					GS.instance.netSessionMgr.Send( sid, gsLoginRet );
 					break;
 
 				case Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin:

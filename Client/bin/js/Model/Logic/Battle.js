@@ -12,7 +12,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this.chase = false;
             this._bornPoses = [];
             this._bornDirs = [];
-            this._destroied = false;
+            this._destroied = true;
             this._markToEnd = false;
             this._frameActionGroups = new Queue_1.default();
             this._champions = [];

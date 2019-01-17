@@ -36,43 +36,46 @@ namespace Protos {
             "bm5lbBIHCgNXZWIQABIKCgZXWE1pbmkQASIwCghQbGF0Zm9ybRIGCgJQQxAA",
             "EgsKB0FuZHJvaWQQARIHCgNJT1MQAhIGCgJXUBADIkAKB0Jyb3dzZXISCgoG",
             "Q2hyb21lEAASCwoHRmlyZWZveBABEgoKBlNhZmFpchACEggKBEVkZ2UQAxIG",
-            "CgJJRRAEKqsKCgVNc2dJRBIMCghVbmRlZmluZRAAEg4KCmVHX0Fza1BpbmcQ",
-            "ChIRCg1lR19Bc2tQaW5nUmV0EAsSFwoSZUdDMkxTX0Fza1JlZ2lzdGVyEOgH",
-            "EhQKD2VHQzJMU19Bc2tMb2dpbhDpBxIZChRlR0MyTFNfQXNrU21hcnRMb2dp",
-            "bhDqBxIWChFlR0MyTFNfQXNrV1hMb2dpbhDrBxIUCg9lR0MyR1NfQXNrTG9n",
-            "aW4QzAgSFQoQZUdDMkdTX0tlZXBBbGl2ZRDNCBIUCg9lR0MyQlNfQXNrTG9n",
-            "aW4QsAkSFQoQZUdDMkJTX0tlZXBBbGl2ZRCxCRIbChZlR0MyQlNfUmVxdWVz",
-            "dFNuYXBzaG90ELIJEhcKEmVHQzJCU19GcmFtZUFjdGlvbhCzCRIfChplR0My",
-            "QlNfUmVxdWVzdEZyYW1lQWN0aW9ucxC0CRIaChVlR0MyQlNfQ29tbWl0U25h",
-            "cHNob3QQtQkSFQoQZUdDMkJTX0VuZEJhdHRsZRC2CRIWChFlR0MyQ1NfQmVn",
-            "aW5NYXRjaBCUChISCg1lTFMyR0NfR1NJbmZvENAPEhUKEGVMUzJHQ19Bc2tS",
-            "ZWdSZXQQ0Q8SFwoSZUxTMkdDX0Fza0xvZ2luUmV0ENIPEhMKDmVMUzJDU19H",
-            "Q0xvZ2luELQQEhgKE2VMUzJEQl9RdWVyeUFjY291bnQQmBESFgoRZUxTMkRC",
-            "X1F1ZXJ5TG9naW4QmRESEAoLZUxTMkRCX0V4ZWMQmhESFwoSZUdTMkNTX1Jl",
-            "cG9ydFN0YXRlELgXEhYKEWVHUzJDU19HQ0Fza0xvZ2luELkXEhIKDWVHUzJD",
-            "U19HQ0xvc3QQuhcSFAoPZUdTMkdDX0xvZ2luUmV0EJwYEhAKC2VHUzJHQ19L",
-            "aWNrEJ0YEhIKDWVHUzJHQ19DU0xvc3QQnhgSFwoSZUJTMkNTX1JlcG9ydFN0",
-            "YXRlEKAfEhkKFGVCUzJDU19CYXR0bGVJbmZvUmV0EKEfEhUKEGVCUzJDU19C",
-            "YXR0bGVFbmQQoh8SFAoPZUJTMkNTX0tpY2tVc2VyEKMfEhQKD2VCUzJHQ19M",
-            "b2dpblJldBCEIBIeChllQlMyR0NfUmVxdWVzdFNuYXBzaG90UmV0EIUgEhcK",
-            "EmVCUzJHQ19GcmFtZUFjdGlvbhCGIBIiCh1lQlMyR0NfUmVxdWVzdEZyYW1l",
-            "QWN0aW9uc1JldBCHIBIVChBlQlMyR0NfT3V0T2ZTeW5jEIggEhMKDmVDUzJM",
-            "U19HU0luZm9zEIgnEhIKDWVDUzJMU19HU0luZm8QiScSEgoNZUNTMkxTX0dT",
-            "TG9zdBCKJxIWChFlQ1MyTFNfR0NMb2dpblJldBCLJxIWChFlQ1MyR1NfR0NM",
-            "b2dpblJldBDsJxISCg1lQ1MyR1NfS2lja0dDEO0nEhYKEWVDUzJCU19CYXR0",
-            "bGVJbmZvENAoEhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhYKEWVDUzJH",
-            "Q19QbGF5ZXJKb2luELUpEhcKEmVDUzJHQ19QbGF5ZXJMZWF2ZRC2KRIUCg9l",
-            "Q1MyR0NfUm9vbUluZm8QtykSFwoSZUNTMkdDX0VudGVyQmF0dGxlELgpEhUK",
-            "EGVDUzJHQ19CYXR0bGVFbmQQuSkSEgoNZUNTMkdDX0JTTG9zZRC6KRIbChZl",
-            "REIyTFNfUXVlcnlBY2NvdW50UmV0EMA+EhkKFGVEQjJMU19RdWVyeUxvZ2lu",
-            "UmV0EME+EhMKDmVEQjJMU19FeGVjUmV0EMI+YgZwcm90bzM="));
+            "CgJJRRAEIlwKCkdfVXNlckluZm8SDQoFZ2NOSUQYASABKAQSEAoIbmlja25h",
+            "bWUYAiABKAkSDgoGYXZhdGFyGAMgASgJEg4KBmdlbmRlchgEIAEoBRINCgVo",
+            "b25vchgFIAEoBSqrCgoFTXNnSUQSDAoIVW5kZWZpbmUQABIOCgplR19Bc2tQ",
+            "aW5nEAoSEQoNZUdfQXNrUGluZ1JldBALEhcKEmVHQzJMU19Bc2tSZWdpc3Rl",
+            "chDoBxIUCg9lR0MyTFNfQXNrTG9naW4Q6QcSGQoUZUdDMkxTX0Fza1NtYXJ0",
+            "TG9naW4Q6gcSFgoRZUdDMkxTX0Fza1dYTG9naW4Q6wcSFAoPZUdDMkdTX0Fz",
+            "a0xvZ2luEMwIEhUKEGVHQzJHU19LZWVwQWxpdmUQzQgSFAoPZUdDMkJTX0Fz",
+            "a0xvZ2luELAJEhUKEGVHQzJCU19LZWVwQWxpdmUQsQkSGwoWZUdDMkJTX1Jl",
+            "cXVlc3RTbmFwc2hvdBCyCRIXChJlR0MyQlNfRnJhbWVBY3Rpb24QswkSHwoa",
+            "ZUdDMkJTX1JlcXVlc3RGcmFtZUFjdGlvbnMQtAkSGgoVZUdDMkJTX0NvbW1p",
+            "dFNuYXBzaG90ELUJEhUKEGVHQzJCU19FbmRCYXR0bGUQtgkSFgoRZUdDMkNT",
+            "X0JlZ2luTWF0Y2gQlAoSEgoNZUxTMkdDX0dTSW5mbxDQDxIVChBlTFMyR0Nf",
+            "QXNrUmVnUmV0ENEPEhcKEmVMUzJHQ19Bc2tMb2dpblJldBDSDxITCg5lTFMy",
+            "Q1NfR0NMb2dpbhC0EBIYChNlTFMyREJfUXVlcnlBY2NvdW50EJgREhYKEWVM",
+            "UzJEQl9RdWVyeUxvZ2luEJkREhAKC2VMUzJEQl9FeGVjEJoREhcKEmVHUzJD",
+            "U19SZXBvcnRTdGF0ZRC4FxIWChFlR1MyQ1NfR0NBc2tMb2dpbhC5FxISCg1l",
+            "R1MyQ1NfR0NMb3N0ELoXEhQKD2VHUzJHQ19Mb2dpblJldBCcGBIQCgtlR1My",
+            "R0NfS2ljaxCdGBISCg1lR1MyR0NfQ1NMb3N0EJ4YEhcKEmVCUzJDU19SZXBv",
+            "cnRTdGF0ZRCgHxIZChRlQlMyQ1NfQmF0dGxlSW5mb1JldBChHxIVChBlQlMy",
+            "Q1NfQmF0dGxlRW5kEKIfEhQKD2VCUzJDU19LaWNrVXNlchCjHxIUCg9lQlMy",
+            "R0NfTG9naW5SZXQQhCASHgoZZUJTMkdDX1JlcXVlc3RTbmFwc2hvdFJldBCF",
+            "IBIXChJlQlMyR0NfRnJhbWVBY3Rpb24QhiASIgodZUJTMkdDX1JlcXVlc3RG",
+            "cmFtZUFjdGlvbnNSZXQQhyASFQoQZUJTMkdDX091dE9mU3luYxCIIBITCg5l",
+            "Q1MyTFNfR1NJbmZvcxCIJxISCg1lQ1MyTFNfR1NJbmZvEIknEhIKDWVDUzJM",
+            "U19HU0xvc3QQiicSFgoRZUNTMkxTX0dDTG9naW5SZXQQiycSFgoRZUNTMkdT",
+            "X0dDTG9naW5SZXQQ7CcSEgoNZUNTMkdTX0tpY2tHQxDtJxIWChFlQ1MyQlNf",
+            "QmF0dGxlSW5mbxDQKBIZChRlQ1MyR0NfQmVnaW5NYXRjaFJldBC0KRIWChFl",
+            "Q1MyR0NfUGxheWVySm9pbhC1KRIXChJlQ1MyR0NfUGxheWVyTGVhdmUQtikS",
+            "FAoPZUNTMkdDX1Jvb21JbmZvELcpEhcKEmVDUzJHQ19FbnRlckJhdHRsZRC4",
+            "KRIVChBlQ1MyR0NfQmF0dGxlRW5kELkpEhIKDWVDUzJHQ19CU0xvc2UQuikS",
+            "GwoWZURCMkxTX1F1ZXJ5QWNjb3VudFJldBDAPhIZChRlREIyTFNfUXVlcnlM",
+            "b2dpblJldBDBPhITCg5lREIyTFNfRXhlY1JldBDCPmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.MsgOpts), global::Protos.MsgOpts.Parser, new[]{ "Flag", "Pid", "Rpid", "Transid" }, null, new[]{ typeof(global::Protos.MsgOpts.Types.Flag), typeof(global::Protos.MsgOpts.Types.TransTarget) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPing), global::Protos.G_AskPing.Parser, new[]{ "Opts", "Time" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPingRet), global::Protos.G_AskPingRet.Parser, new[]{ "Opts", "Stime", "Time" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Global), global::Protos.Global.Parser, null, null, new[]{ typeof(global::Protos.Global.Types.ECommon), typeof(global::Protos.Global.Types.Channel), typeof(global::Protos.Global.Types.Platform), typeof(global::Protos.Global.Types.Browser) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Global), global::Protos.Global.Parser, null, null, new[]{ typeof(global::Protos.Global.Types.ECommon), typeof(global::Protos.Global.Types.Channel), typeof(global::Protos.Global.Types.Platform), typeof(global::Protos.Global.Types.Browser) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_UserInfo), global::Protos.G_UserInfo.Parser, new[]{ "GcNID", "Nickname", "Avatar", "Gender", "Honor" }, null, null, null)
           }));
     }
     #endregion
@@ -892,6 +895,247 @@ namespace Protos {
 
     }
     #endregion
+
+  }
+
+  public sealed partial class G_UserInfo : pb::IMessage<G_UserInfo> {
+    private static readonly pb::MessageParser<G_UserInfo> _parser = new pb::MessageParser<G_UserInfo>(() => new G_UserInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<G_UserInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.GlobalReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public G_UserInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public G_UserInfo(G_UserInfo other) : this() {
+      gcNID_ = other.gcNID_;
+      nickname_ = other.nickname_;
+      avatar_ = other.avatar_;
+      gender_ = other.gender_;
+      honor_ = other.honor_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public G_UserInfo Clone() {
+      return new G_UserInfo(this);
+    }
+
+    /// <summary>Field number for the "gcNID" field.</summary>
+    public const int GcNIDFieldNumber = 1;
+    private ulong gcNID_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong GcNID {
+      get { return gcNID_; }
+      set {
+        gcNID_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "nickname" field.</summary>
+    public const int NicknameFieldNumber = 2;
+    private string nickname_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Nickname {
+      get { return nickname_; }
+      set {
+        nickname_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "avatar" field.</summary>
+    public const int AvatarFieldNumber = 3;
+    private string avatar_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Avatar {
+      get { return avatar_; }
+      set {
+        avatar_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "gender" field.</summary>
+    public const int GenderFieldNumber = 4;
+    private int gender_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Gender {
+      get { return gender_; }
+      set {
+        gender_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "honor" field.</summary>
+    public const int HonorFieldNumber = 5;
+    private int honor_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Honor {
+      get { return honor_; }
+      set {
+        honor_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as G_UserInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(G_UserInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (GcNID != other.GcNID) return false;
+      if (Nickname != other.Nickname) return false;
+      if (Avatar != other.Avatar) return false;
+      if (Gender != other.Gender) return false;
+      if (Honor != other.Honor) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
+      if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
+      if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
+      if (Gender != 0) hash ^= Gender.GetHashCode();
+      if (Honor != 0) hash ^= Honor.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (GcNID != 0UL) {
+        output.WriteRawTag(8);
+        output.WriteUInt64(GcNID);
+      }
+      if (Nickname.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Avatar);
+      }
+      if (Gender != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Gender);
+      }
+      if (Honor != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Honor);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (GcNID != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
+      }
+      if (Nickname.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Avatar);
+      }
+      if (Gender != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gender);
+      }
+      if (Honor != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Honor);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(G_UserInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.GcNID != 0UL) {
+        GcNID = other.GcNID;
+      }
+      if (other.Nickname.Length != 0) {
+        Nickname = other.Nickname;
+      }
+      if (other.Avatar.Length != 0) {
+        Avatar = other.Avatar;
+      }
+      if (other.Gender != 0) {
+        Gender = other.Gender;
+      }
+      if (other.Honor != 0) {
+        Honor = other.Honor;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            GcNID = input.ReadUInt64();
+            break;
+          }
+          case 18: {
+            Nickname = input.ReadString();
+            break;
+          }
+          case 26: {
+            Avatar = input.ReadString();
+            break;
+          }
+          case 32: {
+            Gender = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Honor = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
 
   }
 

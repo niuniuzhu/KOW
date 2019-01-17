@@ -25,20 +25,21 @@ namespace Protos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgtHUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8aC0NTMkdTLnBy",
-            "b3RvIpsCCg5HUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
+            "b3RvIsECCg5HUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
             "Lk1zZ09wdHMSLgoGcmVzdWx0GAIgASgOMh4uUHJvdG9zLkdTMkdDX0xvZ2lu",
             "UmV0LkVSZXN1bHQSMQoHZ2NTdGF0ZRgDIAEoDjIgLlByb3Rvcy5HUzJHQ19M",
-            "b2dpblJldC5FR0NDU3RhdGUSDQoFZ2NOSUQYBCABKAQSDAoEYnNJUBgFIAEo",
-            "CRIOCgZic1BvcnQYBiABKAUSDAoEZGVmcxgHIAEoDCIpCgdFUmVzdWx0EgsK",
-            "B1N1Y2Nlc3MQABIRCg1TZXNzaW9uRXhwaXJlEAEiIQoJRUdDQ1N0YXRlEggK",
-            "BElkbGUQABIKCgZCYXR0bGUQASJZCgpHUzJHQ19LaWNrEh0KBG9wdHMYASAB",
-            "KAsyDy5Qcm90b3MuTXNnT3B0cxIsCgZyZWFzb24YAiABKA4yHC5Qcm90b3Mu",
-            "Q1MyR1NfS2lja0dDLkVSZWFzb24iLQoMR1MyR0NfQ1NMb3N0Eh0KBG9wdHMY",
-            "ASABKAsyDy5Qcm90b3MuTXNnT3B0c2IGcHJvdG8z"));
+            "b2dpblJldC5FR0NDU3RhdGUSJAoIdXNlckluZm8YBCABKAsyEi5Qcm90b3Mu",
+            "R19Vc2VySW5mbxINCgVnY05JRBgFIAEoBBIMCgRic0lQGAYgASgJEg4KBmJz",
+            "UG9ydBgHIAEoBRIMCgRkZWZzGAggASgMIikKB0VSZXN1bHQSCwoHU3VjY2Vz",
+            "cxAAEhEKDVNlc3Npb25FeHBpcmUQASIhCglFR0NDU3RhdGUSCAoESWRsZRAA",
+            "EgoKBkJhdHRsZRABIlkKCkdTMkdDX0tpY2sSHQoEb3B0cxgBIAEoCzIPLlBy",
+            "b3Rvcy5Nc2dPcHRzEiwKBnJlYXNvbhgCIAEoDjIcLlByb3Rvcy5DUzJHU19L",
+            "aWNrR0MuRVJlYXNvbiItCgxHUzJHQ19DU0xvc3QSHQoEb3B0cxgBIAEoCzIP",
+            "LlByb3Rvcy5Nc2dPcHRzYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2GSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_LoginRet), global::Protos.GS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "GcState", "GcNID", "BsIP", "BsPort", "Defs" }, null, new[]{ typeof(global::Protos.GS2GC_LoginRet.Types.EResult), typeof(global::Protos.GS2GC_LoginRet.Types.EGCCState) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_LoginRet), global::Protos.GS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "GcState", "UserInfo", "GcNID", "BsIP", "BsPort", "Defs" }, null, new[]{ typeof(global::Protos.GS2GC_LoginRet.Types.EResult), typeof(global::Protos.GS2GC_LoginRet.Types.EGCCState) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_Kick), global::Protos.GS2GC_Kick.Parser, new[]{ "Opts", "Reason" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GS2GC_CSLost), global::Protos.GS2GC_CSLost.Parser, new[]{ "Opts" }, null, null, null)
           }));
@@ -79,6 +80,7 @@ namespace Protos {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       result_ = other.result_;
       gcState_ = other.gcState_;
+      userInfo_ = other.userInfo_ != null ? other.userInfo_.Clone() : null;
       gcNID_ = other.gcNID_;
       bsIP_ = other.bsIP_;
       bsPort_ = other.bsPort_;
@@ -124,11 +126,25 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "userInfo" field.</summary>
+    public const int UserInfoFieldNumber = 4;
+    private global::Protos.G_UserInfo userInfo_;
+    /// <summary>
+    ///main
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.G_UserInfo UserInfo {
+      get { return userInfo_; }
+      set {
+        userInfo_ = value;
+      }
+    }
+
     /// <summary>Field number for the "gcNID" field.</summary>
-    public const int GcNIDFieldNumber = 4;
+    public const int GcNIDFieldNumber = 5;
     private ulong gcNID_;
     /// <summary>
-    ///登录bs时进行校验的id
+    ///bs
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong GcNID {
@@ -139,7 +155,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "bsIP" field.</summary>
-    public const int BsIPFieldNumber = 5;
+    public const int BsIPFieldNumber = 6;
     private string bsIP_ = "";
     /// <summary>
     ///bs ip
@@ -153,7 +169,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "bsPort" field.</summary>
-    public const int BsPortFieldNumber = 6;
+    public const int BsPortFieldNumber = 7;
     private int bsPort_;
     /// <summary>
     ///bs port
@@ -167,7 +183,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "defs" field.</summary>
-    public const int DefsFieldNumber = 7;
+    public const int DefsFieldNumber = 8;
     private pb::ByteString defs_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pb::ByteString Defs {
@@ -193,6 +209,7 @@ namespace Protos {
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Result != other.Result) return false;
       if (GcState != other.GcState) return false;
+      if (!object.Equals(UserInfo, other.UserInfo)) return false;
       if (GcNID != other.GcNID) return false;
       if (BsIP != other.BsIP) return false;
       if (BsPort != other.BsPort) return false;
@@ -206,6 +223,7 @@ namespace Protos {
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
       if (GcState != 0) hash ^= GcState.GetHashCode();
+      if (userInfo_ != null) hash ^= UserInfo.GetHashCode();
       if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
       if (BsIP.Length != 0) hash ^= BsIP.GetHashCode();
       if (BsPort != 0) hash ^= BsPort.GetHashCode();
@@ -235,20 +253,24 @@ namespace Protos {
         output.WriteRawTag(24);
         output.WriteEnum((int) GcState);
       }
+      if (userInfo_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(UserInfo);
+      }
       if (GcNID != 0UL) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteUInt64(GcNID);
       }
       if (BsIP.Length != 0) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(50);
         output.WriteString(BsIP);
       }
       if (BsPort != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(56);
         output.WriteInt32(BsPort);
       }
       if (Defs.Length != 0) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(66);
         output.WriteBytes(Defs);
       }
       if (_unknownFields != null) {
@@ -267,6 +289,9 @@ namespace Protos {
       }
       if (GcState != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) GcState);
+      }
+      if (userInfo_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UserInfo);
       }
       if (GcNID != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
@@ -302,6 +327,12 @@ namespace Protos {
       }
       if (other.GcState != 0) {
         GcState = other.GcState;
+      }
+      if (other.userInfo_ != null) {
+        if (userInfo_ == null) {
+          userInfo_ = new global::Protos.G_UserInfo();
+        }
+        UserInfo.MergeFrom(other.UserInfo);
       }
       if (other.GcNID != 0UL) {
         GcNID = other.GcNID;
@@ -341,19 +372,26 @@ namespace Protos {
             gcState_ = (global::Protos.GS2GC_LoginRet.Types.EGCCState) input.ReadEnum();
             break;
           }
-          case 32: {
+          case 34: {
+            if (userInfo_ == null) {
+              userInfo_ = new global::Protos.G_UserInfo();
+            }
+            input.ReadMessage(userInfo_);
+            break;
+          }
+          case 40: {
             GcNID = input.ReadUInt64();
             break;
           }
-          case 42: {
+          case 50: {
             BsIP = input.ReadString();
             break;
           }
-          case 48: {
+          case 56: {
             BsPort = input.ReadInt32();
             break;
           }
-          case 58: {
+          case 66: {
             Defs = input.ReadBytes();
             break;
           }

@@ -1,4 +1,5 @@
 import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
 import { SceneManager } from "../Scene/SceneManager";
 import { IUIModule } from "./IUIModule";
 
@@ -22,6 +23,10 @@ export class UIMain implements IUIModule {
 	public Enter(param: any): void {
 		Global.graphic.uiRoot.addChild(this._root);
 		this._root.getTransition("t0").play();
+
+		const userInfo = <Protos.IG_UserInfo>param;
+		this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
+		this._root.getChild("nickname").asTextField.text = userInfo.nickname;
 	}
 
 	public Exit(): void {

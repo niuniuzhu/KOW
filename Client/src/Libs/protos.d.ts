@@ -351,6 +351,32 @@ export namespace Protos {
         }
     }
 
+    interface IG_UserInfo {
+        gcNID?: (Long|null);
+        nickname?: (string|null);
+        avatar?: (string|null);
+        gender?: (number|null);
+        honor?: (number|null);
+    }
+
+    class G_UserInfo implements IG_UserInfo {
+        constructor(properties?: Protos.IG_UserInfo);
+        public gcNID: Long;
+        public nickname: string;
+        public avatar: string;
+        public gender: number;
+        public honor: number;
+        public static create(properties?: Protos.IG_UserInfo): Protos.G_UserInfo;
+        public static encode(message: Protos.IG_UserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IG_UserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.G_UserInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.G_UserInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.G_UserInfo;
+        public static toObject(message: Protos.G_UserInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
     interface IBS2GC_LoginRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.Global.ECommon|null);
@@ -494,7 +520,10 @@ export namespace Protos {
 
     interface ICS2BS_PlayerInfo {
         gcNID?: (Long|null);
-        name?: (string|null);
+        nickname?: (string|null);
+        avatar?: (string|null);
+        gender?: (number|null);
+        honor?: (number|null);
         actorID?: (number|null);
         team?: (number|null);
     }
@@ -502,7 +531,10 @@ export namespace Protos {
     class CS2BS_PlayerInfo implements ICS2BS_PlayerInfo {
         constructor(properties?: Protos.ICS2BS_PlayerInfo);
         public gcNID: Long;
-        public name: string;
+        public nickname: string;
+        public avatar: string;
+        public gender: number;
+        public honor: number;
         public actorID: number;
         public team: number;
         public static create(properties?: Protos.ICS2BS_PlayerInfo): Protos.CS2BS_PlayerInfo;
@@ -537,6 +569,36 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleInfo;
         public static toObject(message: Protos.CS2BS_BattleInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface ICS2GC_PlayerInfo {
+        gcNID?: (Long|null);
+        nickname?: (string|null);
+        avatar?: (string|null);
+        gender?: (number|null);
+        honor?: (number|null);
+        actorID?: (number|null);
+        team?: (number|null);
+    }
+
+    class CS2GC_PlayerInfo implements ICS2GC_PlayerInfo {
+        constructor(properties?: Protos.ICS2GC_PlayerInfo);
+        public gcNID: Long;
+        public nickname: string;
+        public avatar: string;
+        public gender: number;
+        public honor: number;
+        public actorID: number;
+        public team: number;
+        public static create(properties?: Protos.ICS2GC_PlayerInfo): Protos.CS2GC_PlayerInfo;
+        public static encode(message: Protos.ICS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_PlayerInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_PlayerInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_PlayerInfo;
+        public static toObject(message: Protos.CS2GC_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
@@ -580,39 +642,15 @@ export namespace Protos {
         }
     }
 
-    interface ICS2GC_PlayerInfo {
-        gcNID?: (Long|null);
-        name?: (string|null);
-        actorID?: (number|null);
-        team?: (number|null);
-    }
-
-    class CS2GC_PlayerInfo implements ICS2GC_PlayerInfo {
-        constructor(properties?: Protos.ICS2GC_PlayerInfo);
-        public gcNID: Long;
-        public name: string;
-        public actorID: number;
-        public team: number;
-        public static create(properties?: Protos.ICS2GC_PlayerInfo): Protos.CS2GC_PlayerInfo;
-        public static encode(message: Protos.ICS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.ICS2GC_PlayerInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_PlayerInfo;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_PlayerInfo;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_PlayerInfo;
-        public static toObject(message: Protos.CS2GC_PlayerInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
     interface ICS2GC_PlayerJoin {
         opts?: (Protos.IMsgOpts|null);
-        playerInfos?: (Protos.ICS2GC_PlayerInfo|null);
+        playerInfo?: (Protos.ICS2GC_PlayerInfo|null);
     }
 
     class CS2GC_PlayerJoin implements ICS2GC_PlayerJoin {
         constructor(properties?: Protos.ICS2GC_PlayerJoin);
         public opts?: (Protos.IMsgOpts|null);
-        public playerInfos?: (Protos.ICS2GC_PlayerInfo|null);
+        public playerInfo?: (Protos.ICS2GC_PlayerInfo|null);
         public static create(properties?: Protos.ICS2GC_PlayerJoin): Protos.CS2GC_PlayerJoin;
         public static encode(message: Protos.ICS2GC_PlayerJoin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_PlayerJoin, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -746,6 +784,7 @@ export namespace Protos {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.CS2GS_GCLoginRet.EResult|null);
         gcState?: (Protos.CS2GS_GCLoginRet.EGCCState|null);
+        userInfo?: (Protos.IG_UserInfo|null);
         gcNID?: (Long|null);
         bsIP?: (string|null);
         bsPort?: (number|null);
@@ -756,6 +795,7 @@ export namespace Protos {
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.CS2GS_GCLoginRet.EResult;
         public gcState: Protos.CS2GS_GCLoginRet.EGCCState;
+        public userInfo?: (Protos.IG_UserInfo|null);
         public gcNID: Long;
         public bsIP: string;
         public bsPort: number;
@@ -1430,6 +1470,7 @@ export namespace Protos {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.GS2GC_LoginRet.EResult|null);
         gcState?: (Protos.GS2GC_LoginRet.EGCCState|null);
+        userInfo?: (Protos.IG_UserInfo|null);
         gcNID?: (Long|null);
         bsIP?: (string|null);
         bsPort?: (number|null);
@@ -1441,6 +1482,7 @@ export namespace Protos {
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.GS2GC_LoginRet.EResult;
         public gcState: Protos.GS2GC_LoginRet.EGCCState;
+        public userInfo?: (Protos.IG_UserInfo|null);
         public gcNID: Long;
         public bsIP: string;
         public bsPort: number;

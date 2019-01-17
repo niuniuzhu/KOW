@@ -24,16 +24,17 @@ namespace Protos {
     static CS2BSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtDUzJCUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iTgoQQ1MyQlNf",
-            "UGxheWVySW5mbxINCgVnY05JRBgBIAEoBBIMCgRuYW1lGAIgASgJEg8KB2Fj",
-            "dG9ySUQYAyABKAUSDAoEdGVhbRgEIAEoBSKEAQoQQ1MyQlNfQmF0dGxlSW5m",
-            "bxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFbWFwSUQYAiAB",
-            "KAUSEwoLY29ublRpbWVvdXQYAyABKAUSLQoLcGxheWVySW5mb3MYBCADKAsy",
-            "GC5Qcm90b3MuQ1MyQlNfUGxheWVySW5mb2IGcHJvdG8z"));
+            "CgtDUzJCUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8igQEKEENTMkJT",
+            "X1BsYXllckluZm8SDQoFZ2NOSUQYASABKAQSEAoIbmlja25hbWUYAiABKAkS",
+            "DgoGYXZhdGFyGAMgASgJEg4KBmdlbmRlchgEIAEoBRINCgVob25vchgFIAEo",
+            "BRIPCgdhY3RvcklEGAYgASgFEgwKBHRlYW0YByABKAUihAEKEENTMkJTX0Jh",
+            "dHRsZUluZm8SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBW1h",
+            "cElEGAIgASgFEhMKC2Nvbm5UaW1lb3V0GAMgASgFEi0KC3BsYXllckluZm9z",
+            "GAQgAygLMhguUHJvdG9zLkNTMkJTX1BsYXllckluZm9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_PlayerInfo), global::Protos.CS2BS_PlayerInfo.Parser, new[]{ "GcNID", "Name", "ActorID", "Team" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_PlayerInfo), global::Protos.CS2BS_PlayerInfo.Parser, new[]{ "GcNID", "Nickname", "Avatar", "Gender", "Honor", "ActorID", "Team" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2BS_BattleInfo), global::Protos.CS2BS_BattleInfo.Parser, new[]{ "Opts", "MapID", "ConnTimeout", "PlayerInfos" }, null, null, null)
           }));
     }
@@ -67,7 +68,10 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CS2BS_PlayerInfo(CS2BS_PlayerInfo other) : this() {
       gcNID_ = other.gcNID_;
-      name_ = other.name_;
+      nickname_ = other.nickname_;
+      avatar_ = other.avatar_;
+      gender_ = other.gender_;
+      honor_ = other.honor_;
       actorID_ = other.actorID_;
       team_ = other.team_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -92,22 +96,55 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
-    private string name_ = "";
+    /// <summary>Field number for the "nickname" field.</summary>
+    public const int NicknameFieldNumber = 2;
+    private string nickname_ = "";
     /// <summary>
     ///玩家名字
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
+    public string Nickname {
+      get { return nickname_; }
       set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        nickname_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "avatar" field.</summary>
+    public const int AvatarFieldNumber = 3;
+    private string avatar_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Avatar {
+      get { return avatar_; }
+      set {
+        avatar_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "gender" field.</summary>
+    public const int GenderFieldNumber = 4;
+    private int gender_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Gender {
+      get { return gender_; }
+      set {
+        gender_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "honor" field.</summary>
+    public const int HonorFieldNumber = 5;
+    private int honor_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Honor {
+      get { return honor_; }
+      set {
+        honor_ = value;
       }
     }
 
     /// <summary>Field number for the "actorID" field.</summary>
-    public const int ActorIDFieldNumber = 3;
+    public const int ActorIDFieldNumber = 6;
     private int actorID_;
     /// <summary>
     ///角色id
@@ -121,7 +158,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "team" field.</summary>
-    public const int TeamFieldNumber = 4;
+    public const int TeamFieldNumber = 7;
     private int team_;
     /// <summary>
     ///所在队伍
@@ -148,7 +185,10 @@ namespace Protos {
         return true;
       }
       if (GcNID != other.GcNID) return false;
-      if (Name != other.Name) return false;
+      if (Nickname != other.Nickname) return false;
+      if (Avatar != other.Avatar) return false;
+      if (Gender != other.Gender) return false;
+      if (Honor != other.Honor) return false;
       if (ActorID != other.ActorID) return false;
       if (Team != other.Team) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -158,7 +198,10 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
+      if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
+      if (Gender != 0) hash ^= Gender.GetHashCode();
+      if (Honor != 0) hash ^= Honor.GetHashCode();
       if (ActorID != 0) hash ^= ActorID.GetHashCode();
       if (Team != 0) hash ^= Team.GetHashCode();
       if (_unknownFields != null) {
@@ -178,16 +221,28 @@ namespace Protos {
         output.WriteRawTag(8);
         output.WriteUInt64(GcNID);
       }
-      if (Name.Length != 0) {
+      if (Nickname.Length != 0) {
         output.WriteRawTag(18);
-        output.WriteString(Name);
+        output.WriteString(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Avatar);
+      }
+      if (Gender != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Gender);
+      }
+      if (Honor != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Honor);
       }
       if (ActorID != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(48);
         output.WriteInt32(ActorID);
       }
       if (Team != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(56);
         output.WriteInt32(Team);
       }
       if (_unknownFields != null) {
@@ -201,8 +256,17 @@ namespace Protos {
       if (GcNID != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
       }
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      if (Nickname.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Avatar);
+      }
+      if (Gender != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gender);
+      }
+      if (Honor != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Honor);
       }
       if (ActorID != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
@@ -224,8 +288,17 @@ namespace Protos {
       if (other.GcNID != 0UL) {
         GcNID = other.GcNID;
       }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
+      if (other.Nickname.Length != 0) {
+        Nickname = other.Nickname;
+      }
+      if (other.Avatar.Length != 0) {
+        Avatar = other.Avatar;
+      }
+      if (other.Gender != 0) {
+        Gender = other.Gender;
+      }
+      if (other.Honor != 0) {
+        Honor = other.Honor;
       }
       if (other.ActorID != 0) {
         ActorID = other.ActorID;
@@ -249,14 +322,26 @@ namespace Protos {
             break;
           }
           case 18: {
-            Name = input.ReadString();
+            Nickname = input.ReadString();
             break;
           }
-          case 24: {
-            ActorID = input.ReadInt32();
+          case 26: {
+            Avatar = input.ReadString();
             break;
           }
           case 32: {
+            Gender = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Honor = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            ActorID = input.ReadInt32();
+            break;
+          }
+          case 56: {
             Team = input.ReadInt32();
             break;
           }

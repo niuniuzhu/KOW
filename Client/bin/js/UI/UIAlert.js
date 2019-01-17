@@ -6,6 +6,7 @@ define(["require", "exports", "../Global"], function (require, exports, Global_1
         static Show(content, removeHandler = null) {
             if (null == UIAlert._com) {
                 UIAlert._com = fairygui.UIPackage.createObject("global", "alert").asCom;
+                UIAlert._com.getChild("confirm").onClick(null, this.OnConfirmBtnClick);
             }
             UIAlert._hideHandler = removeHandler;
             if (UIAlert._hideHandler != null)
@@ -15,10 +16,14 @@ define(["require", "exports", "../Global"], function (require, exports, Global_1
             UIAlert._com.getChild("text").asTextField.text = content;
             UIAlert._isShowing = true;
         }
+        static OnConfirmBtnClick() {
+            fairygui.GRoot.inst.hidePopup(UIAlert._com);
+        }
         static OnHide() {
             UIAlert._com.off(laya.events.Event.REMOVED, null, UIAlert.OnHide);
             UIAlert._isShowing = false;
-            UIAlert._hideHandler();
+            if (UIAlert._hideHandler != null)
+                UIAlert._hideHandler();
         }
     }
     exports.UIAlert = UIAlert;

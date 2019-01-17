@@ -31,7 +31,7 @@ export class Battle {
         this.chase = false;
         this._bornPoses = [];
         this._bornDirs = [];
-        this._destroied = false;
+        this._destroied = true;
         this._markToEnd = false;
         this._frameActionGroups = new Queue();
         this._champions = [];
@@ -341,7 +341,7 @@ export class Battle {
             params.rid = playerInfo.gcNID;
             params.id = playerInfo.actorID;
             params.team = playerInfo.team;
-            params.name = playerInfo.name;
+            params.name = playerInfo.nickname;
             const player = this.CreateChampion(params);
             if (player.team >= this._bornPoses.length ||
                 player.team >= this._bornDirs.length) {

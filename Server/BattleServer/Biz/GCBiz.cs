@@ -51,7 +51,10 @@ namespace BattleServer.Biz
 					{
 						GcNID = player.gcNID,
 						ActorID = player.actorID,
-						Name = player.name,
+						Nickname = player.nickname,
+						Avatar = player.avatar,
+						Gender = player.gender,
+						Honor = player.honor,
 						Team = player.team
 					};
 					loginRet.PlayerInfos.Add( playerInfo );

@@ -100,9 +100,6 @@ export class LoginState extends SceneState {
 				btn.destroy();
 				callback(resp.userInfo);
 			}
-			else {
-				this._ui.OnFail("授权失败[" + resp.errMsg + "]");
-			}
 		});
 	}
 
@@ -285,6 +282,7 @@ export class LoginState extends SceneState {
 			askLogin.pwd = pwd;
 			askLogin.sessionID = gcNID;
 			connector.Send(Protos.GC2GS_AskLogin, askLogin, message => {
+				this._ui.ModalWait(false);
 				const resp: Protos.GS2GC_LoginRet = <Protos.GS2GC_LoginRet>message;
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
@@ -298,7 +296,7 @@ export class LoginState extends SceneState {
 						}
 						else {
 							//进去主界面
-							Global.sceneManager.ChangeState(SceneManager.State.Main);
+							Global.sceneManager.ChangeState(SceneManager.State.Main, resp.userInfo);
 						}
 						break;
 					case Protos.GS2GC_LoginRet.EResult.SessionExpire:
@@ -307,6 +305,7 @@ export class LoginState extends SceneState {
 				}
 			});
 		}
+		this._ui.ModalWait(true);
 		if (Global.local) {
 			connector.Connect("localhost", port);
 		} else {

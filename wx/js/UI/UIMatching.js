@@ -1,15 +1,20 @@
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
-import { SceneManager } from "../Scene/SceneManager";
 import { UIAlert } from "./UIAlert";
 export class UIMatching {
-    get root() { return this._root; }
     constructor() {
+        this._images = [];
+        this._nicknames = [];
         fairygui.UIPackage.addPackage("res/ui/matching");
         this._root = fairygui.UIPackage.createObject("matching", "Main").asCom;
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
+        this._images.push(this._root.getChild("image0").asCom);
+        this._images.push(this._root.getChild("image1").asCom);
+        this._nicknames.push(this._root.getChild("nickname0").asTextField);
+        this._nicknames.push(this._root.getChild("nickname1").asTextField);
     }
+    get root() { return this._root; }
     Dispose() {
     }
     Enter(param) {
@@ -22,31 +27,6 @@ export class UIMatching {
     }
     OnResize(e) {
     }
-    OnBeginMatchResult(result) {
-        let error = "";
-        switch (result) {
-            case Protos.CS2GC_BeginMatchRet.EResult.Success:
-                break;
-            case Protos.CS2GC_BeginMatchRet.EResult.IllegalID:
-                error = "无效网络ID";
-                break;
-            case Protos.CS2GC_BeginMatchRet.EResult.NoRoom:
-                error = "匹配失败";
-                break;
-            case Protos.CS2GC_BeginMatchRet.EResult.UserInBattle:
-                error = "玩家已在战场中";
-                break;
-            case Protos.CS2GC_BeginMatchRet.EResult.UserInRoom:
-                error = "玩家已在匹配中";
-                break;
-            case Protos.CS2GC_BeginMatchRet.EResult.Failed:
-                error = "匹配失败";
-                break;
-        }
-        if (error != "") {
-            UIAlert.Show(error, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
-        }
-    }
     OnEnterBattleResult(result, onConfirm) {
         switch (result) {
             case Protos.CS2GC_EnterBattle.Result.Success:
@@ -58,10 +38,17 @@ export class UIMatching {
                 break;
         }
     }
+    OnFail(message, callback = null) {
+        UIAlert.Show(message, callback);
+    }
     UpdateRoomInfo(roomInfo) {
     }
-    OnPlayerJoin(player) {
+    OnPlayerJoin(playerInfo, index) {
+        this._images[index].getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
+        this._nicknames[index].text = playerInfo.nickname;
     }
-    OnPlayerLeave(player) {
+    OnPlayerLeave(index) {
+        this._images[index].getChild("loader").asCom.getChild("icon").asLoader.url = "";
+        this._nicknames[index].text = "";
     }
 }

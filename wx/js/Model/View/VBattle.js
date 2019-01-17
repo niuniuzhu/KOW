@@ -22,7 +22,7 @@ export class VBattle {
         this._effects = [];
         this._items = [];
         this._idToItem = new Map();
-        this._destroied = false;
+        this._destroied = true;
         this._effectPool = new EffectPool(this);
     }
     get mapID() { return this._mapID; }

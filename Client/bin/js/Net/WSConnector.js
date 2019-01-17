@@ -35,7 +35,6 @@ define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Log
         Connect(ip, port) {
             if (this.connected)
                 this.Close();
-            Logger_1.Logger.Log(`connect to: wss://${ip}:${port}`);
             this._socket = new WebSocket(`wss://${ip}:${port}`);
             this._socket.binaryType = "arraybuffer";
             this._socket.onmessage = this.OnReceived.bind(this);

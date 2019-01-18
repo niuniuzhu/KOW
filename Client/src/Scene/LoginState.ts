@@ -99,10 +99,12 @@ export class LoginState extends SceneState {
 			"withCredentials": true,
 			"lang": "zh_CN"
 		}
+		let authorized = false;
 		//创建微信授权按钮
 		const btn = wx.createUserInfoButton(userInfoObj);
 		btn.onTap(resp => {
-			if (resp.userInfo != null) {//授权成功
+			if (resp.userInfo != null && !authorized) {//授权成功
+				authorized = true;
 				btn.destroy();
 				callback(resp.userInfo);
 			}

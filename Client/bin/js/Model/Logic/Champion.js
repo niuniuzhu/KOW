@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../IntersectInfo", "../Skill", "./Attribute", "./Entity", "./FSM/EntityFSM", "./FSM/EntityState", "../StateEnums", "./InputAagent"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, IntersectInfo_1, Skill_1, Attribute_1, Entity_1, EntityFSM_1, EntityState_1, StateEnums_1, InputAagent_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../IntersectInfo", "../Skill", "../StateEnums", "./Attribute", "./Entity", "./FSM/EntityFSM", "./FSM/EntityState", "./InputAagent"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, IntersectInfo_1, Skill_1, StateEnums_1, Attribute_1, Entity_1, EntityFSM_1, EntityState_1, InputAagent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Champion extends Entity_1.Entity {
@@ -31,6 +31,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         get radius() { return this._radius; }
         get moveSpeed() { return this._moveSpeed; }
         get numSkills() { return this._skills.length; }
+        get isInGladiator() { return FVec2_1.FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils_1.FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius); }
         get intersectionCache() { return this._intersectionCache; }
         Init(params) {
             super.Init(params);
@@ -226,7 +227,6 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
         }
         AfterUpdate(dt) {
             this.MoveStep(dt);
-            this.ProcessGladiator(dt);
         }
         MoveStep(dt) {
             const moveVector = FVec2_1.FVec2.zero;
@@ -256,25 +256,10 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             pos.y = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
             this.position.CopyFrom(pos);
         }
-        ProcessGladiator(dt) {
-            const isInGladiator = FVec2_1.FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils_1.FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius);
-            if (this.gladiatorTime == -1 && isInGladiator) {
-                this.OnEnterGladiator();
-            }
-            if (this.gladiatorTime >= 0 && !isInGladiator) {
-                this.OnExitGladiator();
-            }
-            if (isInGladiator) {
-                this.gladiatorTime += dt;
-                if (this.gladiatorTime > this._battle.gladiatorTimeout)
-                    this.gladiatorTime = this._battle.gladiatorTimeout;
-            }
-        }
-        OnEnterGladiator() {
-            this.gladiatorTime = 0;
-        }
-        OnExitGladiator() {
-            this.gladiatorTime = -1;
+        UpdateGladiator(dt) {
+            this.gladiatorTime += dt;
+            if (this.gladiatorTime > this._battle.gladiatorTimeout)
+                this.gladiatorTime = this._battle.gladiatorTimeout;
         }
         UpdateAfterHit() {
             if (this.hp <= 0) {

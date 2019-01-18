@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "../FrameActionGroup", "./Bullet", "./Champion", "./Emitter", "./Entity", "./CalcationManager", "./HPPacket", "./SceneItem"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, Champion_1, Emitter_1, Entity_1, CalcationManager_1, HPPacket_1, SceneItem_1) {
+define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "../FrameActionGroup", "./Bullet", "./CalcationManager", "./Champion", "./Emitter", "./Entity", "./HPPacket", "./SceneItem"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, CalcationManager_1, Champion_1, Emitter_1, Entity_1, HPPacket_1, SceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -154,6 +154,20 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             for (let i = 0, count = this._champions.length; i < count; i++) {
                 const champion = this._champions[i];
                 champion.UpdateAfterHit();
+            }
+            let championInGladiator = null;
+            for (let i = 0, count = this._champions.length; i < count; i++) {
+                const champion = this._champions[i];
+                if (champion.isDead || !champion.isInGladiator)
+                    continue;
+                if (championInGladiator != null) {
+                    championInGladiator = null;
+                    break;
+                }
+                championInGladiator = champion;
+            }
+            if (championInGladiator != null) {
+                championInGladiator.UpdateGladiator(dt);
             }
             if (!this.chase) {
                 this.SyncToView();

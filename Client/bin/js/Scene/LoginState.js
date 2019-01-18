@@ -43,6 +43,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                     }
                 },
                 "fail": () => {
+                    this._ui.OnFail("登陆微信失败", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                 },
                 "complete": () => {
                 }
@@ -65,9 +66,11 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                 "withCredentials": true,
                 "lang": "zh_CN"
             };
+            let authorized = false;
             const btn = wx.createUserInfoButton(userInfoObj);
             btn.onTap(resp => {
-                if (resp.userInfo != null) {
+                if (resp.userInfo != null && !authorized) {
+                    authorized = true;
                     btn.destroy();
                     callback(resp.userInfo);
                 }

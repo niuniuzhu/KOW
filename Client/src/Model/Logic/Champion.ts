@@ -7,12 +7,12 @@ import { FrameAction } from "../FrameAction";
 import { IntersectInfo } from "../IntersectInfo";
 import { ISnapshotable } from "../ISnapshotable";
 import { Skill } from "../Skill";
+import { StateType } from "../StateEnums";
 import { EAttr } from "./Attribute";
 import { Battle } from "./Battle";
 import { Entity, EntityInitParams, EntityType } from "./Entity";
 import { EntityFSM } from "./FSM/EntityFSM";
 import { EntityState } from "./FSM/EntityState";
-import { StateType } from "../StateEnums";
 import { InputAgent, InputType } from "./InputAagent";
 
 export class Champion extends Entity implements ISnapshotable {
@@ -22,6 +22,7 @@ export class Champion extends Entity implements ISnapshotable {
 	public get radius(): number { return this._radius; }
 	public get moveSpeed(): number { return this._moveSpeed; }
 	public get numSkills(): number { return this._skills.length; }
+	public get isInGladiator(): boolean { return FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius); }
 
 	//static properties
 	private _radius: number;
@@ -392,7 +393,6 @@ export class Champion extends Entity implements ISnapshotable {
 
 	public AfterUpdate(dt: number): void {
 		this.MoveStep(dt);
-		this.ProcessGladiator(dt);
 	}
 
 	private MoveStep(dt: number): void {
@@ -445,27 +445,10 @@ export class Champion extends Entity implements ISnapshotable {
 		this.position.CopyFrom(pos);
 	}
 
-	private ProcessGladiator(dt: number): void {
-		const isInGladiator = FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius);
-		if (this.gladiatorTime == -1 && isInGladiator) {
-			this.OnEnterGladiator();
-		}
-		if (this.gladiatorTime >= 0 && !isInGladiator) {
-			this.OnExitGladiator();
-		}
-		if (isInGladiator) {
-			this.gladiatorTime += dt;
-			if (this.gladiatorTime > this._battle.gladiatorTimeout)
-				this.gladiatorTime = this._battle.gladiatorTimeout;
-		}
-	}
-
-	private OnEnterGladiator(): void {
-		this.gladiatorTime = 0;
-	}
-
-	private OnExitGladiator(): void {
-		this.gladiatorTime = -1;
+	public UpdateGladiator(dt: number): void {
+		this.gladiatorTime += dt;
+		if (this.gladiatorTime > this._battle.gladiatorTimeout)
+			this.gladiatorTime = this._battle.gladiatorTimeout;
 	}
 
 	public UpdateAfterHit(): void {

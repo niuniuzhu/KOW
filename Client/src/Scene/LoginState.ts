@@ -70,6 +70,7 @@ export class LoginState extends SceneState {
 				}
 			},
 			"fail": () => {
+				this._ui.OnFail("登陆微信失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
 			},
 			"complete": () => {
 			}

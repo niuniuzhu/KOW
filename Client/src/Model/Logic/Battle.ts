@@ -17,10 +17,10 @@ import { FrameAction } from "../FrameAction";
 import { FrameActionGroup } from "../FrameActionGroup";
 import { ISnapshotable } from "../ISnapshotable";
 import { Bullet } from "./Bullet";
+import { CalcationManager } from "./CalcationManager";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
-import { CalcationManager } from "./CalcationManager";
 import { HPPacket } from "./HPPacket";
 import { SceneItem } from "./SceneItem";
 
@@ -243,6 +243,25 @@ export class Battle implements ISnapshotable {
 		for (let i = 0, count = this._champions.length; i < count; i++) {
 			const champion = this._champions[i];
 			champion.UpdateAfterHit();
+		}
+
+		//check gladiator
+		let championInGladiator: Champion = null;
+		for (let i = 0, count = this._champions.length; i < count; i++) {
+			const champion = this._champions[i];
+			if (champion.isDead || !champion.isInGladiator)
+				continue;
+			//仅当一个玩家在禁区时计时生效
+			//当championInGladiator不为null,即存在多个玩家在禁区
+			if (championInGladiator != null) {
+				championInGladiator = null;
+				break;
+			}
+			championInGladiator = champion;
+		}
+		if (championInGladiator != null) {
+			//更新禁区时间
+			championInGladiator.UpdateGladiator(dt);
 		}
 
 		//sync to view

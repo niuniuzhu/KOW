@@ -3,6 +3,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateActi
     Object.defineProperty(exports, "__esModule", { value: true });
     class VActAnimation extends VEntityStateAction_1.VEntityStateAction {
         OnInit(def) {
+            super.OnInit(def);
             this._animationID = Hashtable_1.Hashtable.GetNumber(def, "animation");
             this._autoScaleTime = Hashtable_1.Hashtable.GetBool(def, "auto_scale_time");
             this._duration = Hashtable_1.Hashtable.GetNumber(def, "duration");

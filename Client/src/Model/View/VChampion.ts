@@ -123,6 +123,7 @@ export class VChampion extends VEntity {
 
 	public Update(dt: number): void {
 		super.Update(dt);
+		this._fsm.Update(dt);
 		this._hud.Update(dt);
 	}
 

@@ -7,6 +7,7 @@ import { ActSprint } from "./Logic/FSM/ActSprint";
 import { ActVelocity } from "./Logic/FSM/ActVelocity";
 import { EntityStateAction } from "./Logic/FSM/EntityStateAction";
 import { VActAnimation } from "./View/FSM/VActAnimation";
+import { VActEffect } from "./View/FSM/VActEffect";
 import { VActShake } from "./View/FSM/VActShake";
 import { VEntityStateAction } from "./View/FSM/VEntityStateAction";
 
@@ -44,9 +45,11 @@ ID_TO_STATE_ACTION.set(ActionType.Sprint, ActSprint);
 export enum VActionType {
 	None = -1,
 	Animation = 0,
-	Shake = 4
+	Shake = 4,
+	Effect = 5,
 }
 
 export const V_ID_TO_STATE_ACTION = new Map<number, new (state: FSMState, type: VActionType, def: Hashtable) => VEntityStateAction>();
 V_ID_TO_STATE_ACTION.set(VActionType.Animation, VActAnimation);
 V_ID_TO_STATE_ACTION.set(VActionType.Shake, VActShake);
+V_ID_TO_STATE_ACTION.set(VActionType.Effect, VActEffect);

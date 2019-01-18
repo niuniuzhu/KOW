@@ -102,6 +102,7 @@ define(["require", "exports", "../../RC/FSM/FSM", "../../RC/Math/Vec2", "../../R
         }
         Update(dt) {
             super.Update(dt);
+            this._fsm.Update(dt);
             this._hud.Update(dt);
         }
         DecodeSync(rid, reader, isNew) {

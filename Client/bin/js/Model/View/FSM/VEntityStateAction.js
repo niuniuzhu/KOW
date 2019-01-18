@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/FSM/FSMStateAction"], function (require, exports, FSMStateAction_1) {
+define(["require", "exports", "../../../RC/FSM/FSMStateAction", "../../../RC/Utils/Hashtable"], function (require, exports, FSMStateAction_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntityStateAction extends FSMStateAction_1.FSMStateAction {
@@ -7,6 +7,29 @@ define(["require", "exports", "../../../RC/FSM/FSMStateAction"], function (requi
             this.OnInit(def);
         }
         OnInit(def) {
+            this._triggerTime = Hashtable_1.Hashtable.GetNumber(def, "trigger_time");
+        }
+        OnEnter(param) {
+            this._isTriggered = false;
+            if (this._triggerTime <= 0) {
+                this.Trigger();
+            }
+        }
+        Update(dt) {
+            const time = this.state.time;
+            if (!this._isTriggered) {
+                if (time >= this._triggerTime) {
+                    this.Trigger();
+                }
+            }
+            else
+                super.Update(dt);
+        }
+        Trigger() {
+            this._isTriggered = true;
+            this.OnTrigger();
+        }
+        OnTrigger() {
         }
     }
     exports.VEntityStateAction = VEntityStateAction;

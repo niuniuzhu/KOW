@@ -1,4 +1,4 @@
-define(["require", "exports", "./Logic/FSM/ActAttack", "./Logic/FSM/ActEntityAttrs", "./Logic/FSM/ActMove", "./Logic/FSM/ActSprint", "./Logic/FSM/ActVelocity", "./Logic/FSM/EntityStateAction", "./View/FSM/VActAnimation", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActEntityAttrs_1, ActMove_1, ActSprint_1, ActVelocity_1, EntityStateAction_1, VActAnimation_1, VActShake_1) {
+define(["require", "exports", "./Logic/FSM/ActAttack", "./Logic/FSM/ActEntityAttrs", "./Logic/FSM/ActMove", "./Logic/FSM/ActSprint", "./Logic/FSM/ActVelocity", "./Logic/FSM/EntityStateAction", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActEntityAttrs_1, ActMove_1, ActSprint_1, ActVelocity_1, EntityStateAction_1, VActAnimation_1, VActEffect_1, VActShake_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;
@@ -36,9 +36,11 @@ define(["require", "exports", "./Logic/FSM/ActAttack", "./Logic/FSM/ActEntityAtt
         VActionType[VActionType["None"] = -1] = "None";
         VActionType[VActionType["Animation"] = 0] = "Animation";
         VActionType[VActionType["Shake"] = 4] = "Shake";
+        VActionType[VActionType["Effect"] = 5] = "Effect";
     })(VActionType = exports.VActionType || (exports.VActionType = {}));
     exports.V_ID_TO_STATE_ACTION = new Map();
     exports.V_ID_TO_STATE_ACTION.set(VActionType.Animation, VActAnimation_1.VActAnimation);
     exports.V_ID_TO_STATE_ACTION.set(VActionType.Shake, VActShake_1.VActShake);
+    exports.V_ID_TO_STATE_ACTION.set(VActionType.Effect, VActEffect_1.VActEffect);
 });
 //# sourceMappingURL=StateEnums.js.map

@@ -16,6 +16,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/Mat
         }
         get rid() { return this._rid; }
         get id() { return this._id; }
+        get battle() { return this._battle; }
         get root() { return this._root; }
         get animationProxy() { return this._animationProxy; }
         get markToDestroy() { return this._markToDestroy; }

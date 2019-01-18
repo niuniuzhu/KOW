@@ -3,23 +3,7 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
         static get instance() { return Main._instance; }
-        TT(f) {
-            setTimeout(f, 5000);
-        }
         constructor(config) {
-            let a = false;
-            this.TT(() => {
-                if (!a) {
-                    a = true;
-                    console.log(a);
-                }
-            });
-            this.TT(() => {
-                if (!a) {
-                    a = true;
-                    console.log(a);
-                }
-            });
             Main._instance = this;
             if (config != null) {
                 const cfgJson = JsonHelper_1.JsonHelper.Parse(config);

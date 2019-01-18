@@ -11,6 +11,7 @@ import { ModelLayer } from "../../Graphic";
 export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
 	public get id(): number { return this._id; }
+	public get battle(): VBattle { return this._battle; }
 	public get root(): fairygui.GComponent { return this._root; }
 	public get animationProxy(): AnimationProxy { return this._animationProxy; }
 	public get markToDestroy(): boolean { return this._markToDestroy; }

@@ -3,6 +3,7 @@ define(["require", "exports", "./VEntityStateAction"], function (require, export
     Object.defineProperty(exports, "__esModule", { value: true });
     class VActShake extends VEntityStateAction_1.VEntityStateAction {
         OnInit(def) {
+            super.OnInit(def);
         }
         OnEnter(param) {
             super.OnEnter(param);

@@ -77,7 +77,7 @@
 					"name": "zhuaji",
 					"length": 6,
 					"play_mode": 1,
-					"interval": 100
+					"interval": 50
 				},
 				{
 					"id": 8,
@@ -142,6 +142,15 @@
 						{
 							"id": 0,
 							"animation": 2
+						},
+						{
+							"id": 5,
+							"trigger_time": 400,
+							"effect": 0,
+							"attach_type": 1,
+							"posrot_type": 3,
+							"follow_pos": true,
+							"follow_rot": true
 						}
 					]
 				},

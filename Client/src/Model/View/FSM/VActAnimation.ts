@@ -8,6 +8,7 @@ export class VActAnimation extends VEntityStateAction {
 	private _duration: number;
 
 	protected OnInit(def: Hashtable): void {
+		super.OnInit(def);
 		this._animationID = Hashtable.GetNumber(def, "animation");
 		this._autoScaleTime = Hashtable.GetBool(def, "auto_scale_time");
 		this._duration = Hashtable.GetNumber(def, "duration");

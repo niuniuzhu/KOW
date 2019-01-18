@@ -9,8 +9,6 @@ namespace LoginServer.Net
 	{
 		protected ClientSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
-			this.RegMsgHandler( Protos.MsgID.EGc2LsAskRegister, LS.instance.bizProcessor.OnGCtoLSAskRegister );
-			this.RegMsgHandler( Protos.MsgID.EGc2LsAskLogin, LS.instance.bizProcessor.OnGCtoLSAskLogin );
 			this.RegMsgHandler( Protos.MsgID.EGc2LsAskSmartLogin, LS.instance.bizProcessor.OnGc2LsAskSmartLogin );
 			this.RegMsgHandler( Protos.MsgID.EGc2LsAskWxlogin, LS.instance.bizProcessor.OnGc2LsAskWxlogin );
 		}

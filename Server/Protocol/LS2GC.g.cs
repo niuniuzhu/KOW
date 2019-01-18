@@ -31,13 +31,12 @@ namespace Protos {
             "LwoGcmVzdWx0GAIgASgOMh8uUHJvdG9zLkxTMkdDX0Fza1JlZ1JldC5FUmVz",
             "dWx0IlUKB0VSZXN1bHQSCwoHU3VjY2VzcxAAEgoKBkZhaWxlZBABEg8KC1Vu",
             "YW1lRXhpc3RzEAISEAoMVW5hbWVJbGxlZ2FsEAMSDgoKUHdkSWxsZWdhbBAE",
-            "IogCChFMUzJHQ19Bc2tMb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
+            "IvgBChFMUzJHQ19Bc2tMb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
             "Lk1zZ09wdHMSMQoGcmVzdWx0GAIgASgOMiEuUHJvdG9zLkxTMkdDX0Fza0xv",
             "Z2luUmV0LkVSZXN1bHQSEQoJc2Vzc2lvbklEGAMgASgEEh8KB2dzSW5mb3MY",
-            "BCADKAsyDi5Qcm90b3MuR1NJbmZvIm0KB0VSZXN1bHQSCwoHU3VjY2VzcxAA",
-            "EgoKBkZhaWxlZBABEhAKDEludmFsaWRVbmFtZRADEg4KCkludmFsaWRQd2QQ",
-            "BBIICgRCdXN5EAUSDwoLSW52YWxpZENvZGUQBhIMCghGcmVxdWVudBAHYgZw",
-            "cm90bzM="));
+            "BCADKAsyDi5Qcm90b3MuR1NJbmZvIl0KB0VSZXN1bHQSCwoHU3VjY2VzcxAA",
+            "EgoKBkZhaWxlZBABEhAKDEludmFsaWRVbmFtZRACEggKBEJ1c3kQAxIPCgtJ",
+            "bnZhbGlkQ29kZRAEEgwKCEZyZXF1ZW50EAViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.GS2CSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -608,11 +607,10 @@ namespace Protos {
       public enum EResult {
         [pbr::OriginalName("Success")] Success = 0,
         [pbr::OriginalName("Failed")] Failed = 1,
-        [pbr::OriginalName("InvalidUname")] InvalidUname = 3,
-        [pbr::OriginalName("InvalidPwd")] InvalidPwd = 4,
-        [pbr::OriginalName("Busy")] Busy = 5,
-        [pbr::OriginalName("InvalidCode")] InvalidCode = 6,
-        [pbr::OriginalName("Frequent")] Frequent = 7,
+        [pbr::OriginalName("InvalidUname")] InvalidUname = 2,
+        [pbr::OriginalName("Busy")] Busy = 3,
+        [pbr::OriginalName("InvalidCode")] InvalidCode = 4,
+        [pbr::OriginalName("Frequent")] Frequent = 5,
       }
 
     }

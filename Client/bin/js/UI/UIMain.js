@@ -17,8 +17,10 @@ define(["require", "exports", "../Global", "../Scene/SceneManager"], function (r
             Global_1.Global.graphic.uiRoot.addChild(this._root);
             this._root.getTransition("t0").play();
             const userInfo = param;
-            this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
-            this._root.getChild("nickname").asTextField.text = userInfo.nickname;
+            if (userInfo != null) {
+                this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
+                this._root.getChild("nickname").asTextField.text = userInfo.nickname;
+            }
         }
         Exit() {
             Global_1.Global.graphic.uiRoot.removeChild(this._root);

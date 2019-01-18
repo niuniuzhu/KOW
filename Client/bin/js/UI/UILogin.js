@@ -59,10 +59,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
                     UIAlert_1.UIAlert.Show("登陆失败", callback);
                     break;
                 case protos_1.Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
-                    UIAlert_1.UIAlert.Show("请输入正确的用户名", callback);
-                    break;
-                case protos_1.Protos.LS2GC_AskLoginRet.EResult.InvalidPwd:
-                    UIAlert_1.UIAlert.Show("请输入正确的密码", callback);
+                    UIAlert_1.UIAlert.Show("无效用户名", callback);
                     break;
             }
         }

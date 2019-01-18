@@ -35,7 +35,7 @@ export class ConnectionTest {
 
 	private Login(uname: string): void {
 		const login = ProtoCreator.Q_GC2LS_AskSmartLogin();
-		login.name = uname;
+		login.id = uname;
 
 		const connector = new WSConnector();
 		connector.onerror = (e) => Logger.Error(e);

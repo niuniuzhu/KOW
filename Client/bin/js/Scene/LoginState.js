@@ -137,7 +137,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
         }
         Login(uname) {
             const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskSmartLogin();
-            login.name = uname;
+            login.id = uname;
             if (Laya.Browser.onIOS) {
                 login.platform = protos_1.Protos.Global.Platform.IOS;
             }

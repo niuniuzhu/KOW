@@ -28,11 +28,10 @@ message LS2GC_AskLoginRet {
 	enum EResult{
 		Success = 0;
 		Failed = 1;
-		InvalidUname = 3;
-		InvalidPwd = 4;
-		Busy = 5;
-		InvalidCode = 6;
-		Frequent = 7;
+		InvalidUname = 2;
+		Busy = 3;
+		InvalidCode = 4;
+		Frequent = 5;
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;

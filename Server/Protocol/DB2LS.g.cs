@@ -24,40 +24,30 @@ namespace Protos {
     static DB2LSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtEQjJMUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iYQoVREIyTFNf",
+            "CgtEQjJMUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iXgoVREIyTFNf",
             "UXVlcnlBY2NvdW50UmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0",
-            "cxIpCgZyZXN1bHQYAiABKA4yGS5Qcm90b3MuREIyTFNfUXVlcnlSZXN1bHQi",
-            "nwEKE0RCMkxTX1F1ZXJ5TG9naW5SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
-            "cy5Nc2dPcHRzEikKBnJlc3VsdBgCIAEoDjIZLlByb3Rvcy5EQjJMU19RdWVy",
-            "eVJlc3VsdBIMCgR1a2V5GAMgASgNEhAKCG5pY2tuYW1lGAQgASgJEg4KBmF2",
-            "YXRhchgFIAEoCRIOCgZnZW5kZXIYBiABKAUicgoNREIyTFNfRXhlY1JldBId",
-            "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSKQoGcmVzdWx0GAIgASgO",
-            "MhkuUHJvdG9zLkRCMkxTX1F1ZXJ5UmVzdWx0EgsKA3JvdxgDIAEoBRIKCgJp",
-            "ZBgEIAEoDSphChFEQjJMU19RdWVyeVJlc3VsdBILCgdTdWNjZXNzEAASCgoG",
-            "RmFpbGVkEAESEQoNVXNlcm5hbWVFeGlzdBACEhAKDEludmFsaWRVbmFtZRAD",
-            "Eg4KCkludmFsaWRQd2QQBGIGcHJvdG8z"));
+            "cxImCgZyZXN1bHQYAiABKA4yFi5Qcm90b3MuR2xvYmFsLkVDb21tb24iqgIK",
+            "E0RCMkxTX1F1ZXJ5TG9naW5SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5N",
+            "c2dPcHRzEiYKBnJlc3VsdBgCIAEoDjIWLlByb3Rvcy5HbG9iYWwuRUNvbW1v",
+            "bhIMCgR1a2V5GAMgASgNEicKB2NoYW5uZWwYBCABKA4yFi5Qcm90b3MuR2xv",
+            "YmFsLkNoYW5uZWwSJwoHYnJvd3NlchgFIAEoDjIWLlByb3Rvcy5HbG9iYWwu",
+            "QnJvd3NlchIpCghwbGF0Zm9ybRgGIAEoDjIXLlByb3Rvcy5HbG9iYWwuUGxh",
+            "dGZvcm0SDwoHdW5pb25JRBgHIAEoCRIQCghuaWNrbmFtZRgIIAEoCRIOCgZh",
+            "dmF0YXIYCSABKAkSDgoGZ2VuZGVyGAogASgFIm8KDURCMkxTX0V4ZWNSZXQS",
+            "HQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiYKBnJlc3VsdBgCIAEo",
+            "DjIWLlByb3Rvcy5HbG9iYWwuRUNvbW1vbhILCgNyb3cYAyABKAUSCgoCaWQY",
+            "BCABKA1iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.DB2LS_QueryResult), }, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2LS_QueryAccountRet), global::Protos.DB2LS_QueryAccountRet.Parser, new[]{ "Opts", "Result" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2LS_QueryLoginRet), global::Protos.DB2LS_QueryLoginRet.Parser, new[]{ "Opts", "Result", "Ukey", "Nickname", "Avatar", "Gender" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2LS_QueryLoginRet), global::Protos.DB2LS_QueryLoginRet.Parser, new[]{ "Opts", "Result", "Ukey", "Channel", "Browser", "Platform", "UnionID", "Nickname", "Avatar", "Gender" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2LS_ExecRet), global::Protos.DB2LS_ExecRet.Parser, new[]{ "Opts", "Result", "Row", "Id" }, null, null, null)
           }));
     }
     #endregion
 
   }
-  #region Enums
-  public enum DB2LS_QueryResult {
-    [pbr::OriginalName("Success")] Success = 0,
-    [pbr::OriginalName("Failed")] Failed = 1,
-    [pbr::OriginalName("UsernameExist")] UsernameExist = 2,
-    [pbr::OriginalName("InvalidUname")] InvalidUname = 3,
-    [pbr::OriginalName("InvalidPwd")] InvalidPwd = 4,
-  }
-
-  #endregion
-
   #region Messages
   public sealed partial class DB2LS_QueryAccountRet : pb::IMessage<DB2LS_QueryAccountRet> {
     private static readonly pb::MessageParser<DB2LS_QueryAccountRet> _parser = new pb::MessageParser<DB2LS_QueryAccountRet>(() => new DB2LS_QueryAccountRet());
@@ -107,9 +97,9 @@ namespace Protos {
 
     /// <summary>Field number for the "result" field.</summary>
     public const int ResultFieldNumber = 2;
-    private global::Protos.DB2LS_QueryResult result_ = 0;
+    private global::Protos.Global.Types.ECommon result_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.DB2LS_QueryResult Result {
+    public global::Protos.Global.Types.ECommon Result {
       get { return result_; }
       set {
         result_ = value;
@@ -213,7 +203,7 @@ namespace Protos {
             break;
           }
           case 16: {
-            result_ = (global::Protos.DB2LS_QueryResult) input.ReadEnum();
+            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
             break;
           }
         }
@@ -250,6 +240,10 @@ namespace Protos {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       result_ = other.result_;
       ukey_ = other.ukey_;
+      channel_ = other.channel_;
+      browser_ = other.browser_;
+      platform_ = other.platform_;
+      unionID_ = other.unionID_;
       nickname_ = other.nickname_;
       avatar_ = other.avatar_;
       gender_ = other.gender_;
@@ -274,9 +268,9 @@ namespace Protos {
 
     /// <summary>Field number for the "result" field.</summary>
     public const int ResultFieldNumber = 2;
-    private global::Protos.DB2LS_QueryResult result_ = 0;
+    private global::Protos.Global.Types.ECommon result_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.DB2LS_QueryResult Result {
+    public global::Protos.Global.Types.ECommon Result {
       get { return result_; }
       set {
         result_ = value;
@@ -294,8 +288,52 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "channel" field.</summary>
+    public const int ChannelFieldNumber = 4;
+    private global::Protos.Global.Types.Channel channel_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Channel Channel {
+      get { return channel_; }
+      set {
+        channel_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "browser" field.</summary>
+    public const int BrowserFieldNumber = 5;
+    private global::Protos.Global.Types.Browser browser_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Browser Browser {
+      get { return browser_; }
+      set {
+        browser_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "platform" field.</summary>
+    public const int PlatformFieldNumber = 6;
+    private global::Protos.Global.Types.Platform platform_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.Platform Platform {
+      get { return platform_; }
+      set {
+        platform_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "unionID" field.</summary>
+    public const int UnionIDFieldNumber = 7;
+    private string unionID_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UnionID {
+      get { return unionID_; }
+      set {
+        unionID_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "nickname" field.</summary>
-    public const int NicknameFieldNumber = 4;
+    public const int NicknameFieldNumber = 8;
     private string nickname_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Nickname {
@@ -306,7 +344,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "avatar" field.</summary>
-    public const int AvatarFieldNumber = 5;
+    public const int AvatarFieldNumber = 9;
     private string avatar_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Avatar {
@@ -317,7 +355,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "gender" field.</summary>
-    public const int GenderFieldNumber = 6;
+    public const int GenderFieldNumber = 10;
     private int gender_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Gender {
@@ -343,6 +381,10 @@ namespace Protos {
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Result != other.Result) return false;
       if (Ukey != other.Ukey) return false;
+      if (Channel != other.Channel) return false;
+      if (Browser != other.Browser) return false;
+      if (Platform != other.Platform) return false;
+      if (UnionID != other.UnionID) return false;
       if (Nickname != other.Nickname) return false;
       if (Avatar != other.Avatar) return false;
       if (Gender != other.Gender) return false;
@@ -355,6 +397,10 @@ namespace Protos {
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
       if (Ukey != 0) hash ^= Ukey.GetHashCode();
+      if (Channel != 0) hash ^= Channel.GetHashCode();
+      if (Browser != 0) hash ^= Browser.GetHashCode();
+      if (Platform != 0) hash ^= Platform.GetHashCode();
+      if (UnionID.Length != 0) hash ^= UnionID.GetHashCode();
       if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
       if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
       if (Gender != 0) hash ^= Gender.GetHashCode();
@@ -383,16 +429,32 @@ namespace Protos {
         output.WriteRawTag(24);
         output.WriteUInt32(Ukey);
       }
+      if (Channel != 0) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Channel);
+      }
+      if (Browser != 0) {
+        output.WriteRawTag(40);
+        output.WriteEnum((int) Browser);
+      }
+      if (Platform != 0) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) Platform);
+      }
+      if (UnionID.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(UnionID);
+      }
       if (Nickname.Length != 0) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(66);
         output.WriteString(Nickname);
       }
       if (Avatar.Length != 0) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(74);
         output.WriteString(Avatar);
       }
       if (Gender != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(80);
         output.WriteInt32(Gender);
       }
       if (_unknownFields != null) {
@@ -411,6 +473,18 @@ namespace Protos {
       }
       if (Ukey != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Ukey);
+      }
+      if (Channel != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Channel);
+      }
+      if (Browser != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Browser);
+      }
+      if (Platform != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Platform);
+      }
+      if (UnionID.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UnionID);
       }
       if (Nickname.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Nickname);
@@ -444,6 +518,18 @@ namespace Protos {
       if (other.Ukey != 0) {
         Ukey = other.Ukey;
       }
+      if (other.Channel != 0) {
+        Channel = other.Channel;
+      }
+      if (other.Browser != 0) {
+        Browser = other.Browser;
+      }
+      if (other.Platform != 0) {
+        Platform = other.Platform;
+      }
+      if (other.UnionID.Length != 0) {
+        UnionID = other.UnionID;
+      }
       if (other.Nickname.Length != 0) {
         Nickname = other.Nickname;
       }
@@ -472,22 +558,38 @@ namespace Protos {
             break;
           }
           case 16: {
-            result_ = (global::Protos.DB2LS_QueryResult) input.ReadEnum();
+            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
             break;
           }
           case 24: {
             Ukey = input.ReadUInt32();
             break;
           }
-          case 34: {
-            Nickname = input.ReadString();
+          case 32: {
+            channel_ = (global::Protos.Global.Types.Channel) input.ReadEnum();
             break;
           }
-          case 42: {
-            Avatar = input.ReadString();
+          case 40: {
+            browser_ = (global::Protos.Global.Types.Browser) input.ReadEnum();
             break;
           }
           case 48: {
+            platform_ = (global::Protos.Global.Types.Platform) input.ReadEnum();
+            break;
+          }
+          case 58: {
+            UnionID = input.ReadString();
+            break;
+          }
+          case 66: {
+            Nickname = input.ReadString();
+            break;
+          }
+          case 74: {
+            Avatar = input.ReadString();
+            break;
+          }
+          case 80: {
             Gender = input.ReadInt32();
             break;
           }
@@ -547,9 +649,9 @@ namespace Protos {
 
     /// <summary>Field number for the "result" field.</summary>
     public const int ResultFieldNumber = 2;
-    private global::Protos.DB2LS_QueryResult result_ = 0;
+    private global::Protos.Global.Types.ECommon result_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protos.DB2LS_QueryResult Result {
+    public global::Protos.Global.Types.ECommon Result {
       get { return result_; }
       set {
         result_ = value;
@@ -699,7 +801,7 @@ namespace Protos {
             break;
           }
           case 16: {
-            result_ = (global::Protos.DB2LS_QueryResult) input.ReadEnum();
+            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
             break;
           }
           case 24: {

@@ -24,18 +24,18 @@ namespace Protos {
     static LS2CSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtMUzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iswIKDUxTMkNT",
-            "X0dDTG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEicKB2No",
-            "YW5uZWwYAiABKA4yFi5Qcm90b3MuR2xvYmFsLkNoYW5uZWwSJwoHYnJvd3Nl",
-            "chgDIAEoDjIWLlByb3Rvcy5HbG9iYWwuQnJvd3NlchIpCghwbGF0Zm9ybRgE",
-            "IAEoDjIXLlByb3Rvcy5HbG9iYWwuUGxhdGZvcm0SEQoJc2Vzc2lvbklEGAUg",
-            "ASgEEgwKBHVrZXkYBiABKA0SDgoGb3BlbklEGAcgASgJEhIKCnNlc3Npb25L",
-            "ZXkYCCABKAkSDwoHdW5pb25JRBgJIAEoCRIQCghuaWNrbmFtZRgKIAEoCRIO",
-            "CgZhdmF0YXIYCyABKAkSDgoGZ2VuZGVyGAwgASgFYgZwcm90bzM="));
+            "CgtMUzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iqwIKDUxTMkNT",
+            "X0dDTG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdj",
+            "TklEGAIgASgEEgoKAmlkGAMgASgJEgwKBHVrZXkYBCABKA0SJwoHY2hhbm5l",
+            "bBgFIAEoDjIWLlByb3Rvcy5HbG9iYWwuQ2hhbm5lbBInCgdicm93c2VyGAYg",
+            "ASgOMhYuUHJvdG9zLkdsb2JhbC5Ccm93c2VyEikKCHBsYXRmb3JtGAcgASgO",
+            "MhcuUHJvdG9zLkdsb2JhbC5QbGF0Zm9ybRISCgpzZXNzaW9uS2V5GAggASgJ",
+            "Eg8KB3VuaW9uSUQYCSABKAkSEAoIbmlja25hbWUYCiABKAkSDgoGYXZhdGFy",
+            "GAsgASgJEg4KBmdlbmRlchgMIAEoBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2CS_GCLogin), global::Protos.LS2CS_GCLogin.Parser, new[]{ "Opts", "Channel", "Browser", "Platform", "SessionID", "Ukey", "OpenID", "SessionKey", "UnionID", "Nickname", "Avatar", "Gender" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2CS_GCLogin), global::Protos.LS2CS_GCLogin.Parser, new[]{ "Opts", "GcNID", "Id", "Ukey", "Channel", "Browser", "Platform", "SessionKey", "UnionID", "Nickname", "Avatar", "Gender" }, null, null, null)
           }));
     }
     #endregion
@@ -71,12 +71,12 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LS2CS_GCLogin(LS2CS_GCLogin other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      gcNID_ = other.gcNID_;
+      id_ = other.id_;
+      ukey_ = other.ukey_;
       channel_ = other.channel_;
       browser_ = other.browser_;
       platform_ = other.platform_;
-      sessionID_ = other.sessionID_;
-      ukey_ = other.ukey_;
-      openID_ = other.openID_;
       sessionKey_ = other.sessionKey_;
       unionID_ = other.unionID_;
       nickname_ = other.nickname_;
@@ -101,8 +101,41 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "gcNID" field.</summary>
+    public const int GcNIDFieldNumber = 2;
+    private ulong gcNID_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong GcNID {
+      get { return gcNID_; }
+      set {
+        gcNID_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 3;
+    private string id_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Id {
+      get { return id_; }
+      set {
+        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "ukey" field.</summary>
+    public const int UkeyFieldNumber = 4;
+    private uint ukey_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Ukey {
+      get { return ukey_; }
+      set {
+        ukey_ = value;
+      }
+    }
+
     /// <summary>Field number for the "channel" field.</summary>
-    public const int ChannelFieldNumber = 2;
+    public const int ChannelFieldNumber = 5;
     private global::Protos.Global.Types.Channel channel_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Protos.Global.Types.Channel Channel {
@@ -113,7 +146,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "browser" field.</summary>
-    public const int BrowserFieldNumber = 3;
+    public const int BrowserFieldNumber = 6;
     private global::Protos.Global.Types.Browser browser_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Protos.Global.Types.Browser Browser {
@@ -124,46 +157,13 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "platform" field.</summary>
-    public const int PlatformFieldNumber = 4;
+    public const int PlatformFieldNumber = 7;
     private global::Protos.Global.Types.Platform platform_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Protos.Global.Types.Platform Platform {
       get { return platform_; }
       set {
         platform_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "sessionID" field.</summary>
-    public const int SessionIDFieldNumber = 5;
-    private ulong sessionID_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ulong SessionID {
-      get { return sessionID_; }
-      set {
-        sessionID_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "ukey" field.</summary>
-    public const int UkeyFieldNumber = 6;
-    private uint ukey_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint Ukey {
-      get { return ukey_; }
-      set {
-        ukey_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "openID" field.</summary>
-    public const int OpenIDFieldNumber = 7;
-    private string openID_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string OpenID {
-      get { return openID_; }
-      set {
-        openID_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -236,12 +236,12 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
+      if (GcNID != other.GcNID) return false;
+      if (Id != other.Id) return false;
+      if (Ukey != other.Ukey) return false;
       if (Channel != other.Channel) return false;
       if (Browser != other.Browser) return false;
       if (Platform != other.Platform) return false;
-      if (SessionID != other.SessionID) return false;
-      if (Ukey != other.Ukey) return false;
-      if (OpenID != other.OpenID) return false;
       if (SessionKey != other.SessionKey) return false;
       if (UnionID != other.UnionID) return false;
       if (Nickname != other.Nickname) return false;
@@ -254,12 +254,12 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
+      if (Id.Length != 0) hash ^= Id.GetHashCode();
+      if (Ukey != 0) hash ^= Ukey.GetHashCode();
       if (Channel != 0) hash ^= Channel.GetHashCode();
       if (Browser != 0) hash ^= Browser.GetHashCode();
       if (Platform != 0) hash ^= Platform.GetHashCode();
-      if (SessionID != 0UL) hash ^= SessionID.GetHashCode();
-      if (Ukey != 0) hash ^= Ukey.GetHashCode();
-      if (OpenID.Length != 0) hash ^= OpenID.GetHashCode();
       if (SessionKey.Length != 0) hash ^= SessionKey.GetHashCode();
       if (UnionID.Length != 0) hash ^= UnionID.GetHashCode();
       if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
@@ -282,29 +282,29 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (Channel != 0) {
+      if (GcNID != 0UL) {
         output.WriteRawTag(16);
+        output.WriteUInt64(GcNID);
+      }
+      if (Id.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Id);
+      }
+      if (Ukey != 0) {
+        output.WriteRawTag(32);
+        output.WriteUInt32(Ukey);
+      }
+      if (Channel != 0) {
+        output.WriteRawTag(40);
         output.WriteEnum((int) Channel);
       }
       if (Browser != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(48);
         output.WriteEnum((int) Browser);
       }
       if (Platform != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(56);
         output.WriteEnum((int) Platform);
-      }
-      if (SessionID != 0UL) {
-        output.WriteRawTag(40);
-        output.WriteUInt64(SessionID);
-      }
-      if (Ukey != 0) {
-        output.WriteRawTag(48);
-        output.WriteUInt32(Ukey);
-      }
-      if (OpenID.Length != 0) {
-        output.WriteRawTag(58);
-        output.WriteString(OpenID);
       }
       if (SessionKey.Length != 0) {
         output.WriteRawTag(66);
@@ -337,6 +337,15 @@ namespace Protos {
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
+      if (GcNID != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
+      }
+      if (Id.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
+      if (Ukey != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Ukey);
+      }
       if (Channel != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Channel);
       }
@@ -345,15 +354,6 @@ namespace Protos {
       }
       if (Platform != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Platform);
-      }
-      if (SessionID != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(SessionID);
-      }
-      if (Ukey != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Ukey);
-      }
-      if (OpenID.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(OpenID);
       }
       if (SessionKey.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionKey);
@@ -387,6 +387,15 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
+      if (other.GcNID != 0UL) {
+        GcNID = other.GcNID;
+      }
+      if (other.Id.Length != 0) {
+        Id = other.Id;
+      }
+      if (other.Ukey != 0) {
+        Ukey = other.Ukey;
+      }
       if (other.Channel != 0) {
         Channel = other.Channel;
       }
@@ -395,15 +404,6 @@ namespace Protos {
       }
       if (other.Platform != 0) {
         Platform = other.Platform;
-      }
-      if (other.SessionID != 0UL) {
-        SessionID = other.SessionID;
-      }
-      if (other.Ukey != 0) {
-        Ukey = other.Ukey;
-      }
-      if (other.OpenID.Length != 0) {
-        OpenID = other.OpenID;
       }
       if (other.SessionKey.Length != 0) {
         SessionKey = other.SessionKey;
@@ -439,27 +439,27 @@ namespace Protos {
             break;
           }
           case 16: {
-            channel_ = (global::Protos.Global.Types.Channel) input.ReadEnum();
+            GcNID = input.ReadUInt64();
             break;
           }
-          case 24: {
-            browser_ = (global::Protos.Global.Types.Browser) input.ReadEnum();
+          case 26: {
+            Id = input.ReadString();
             break;
           }
           case 32: {
-            platform_ = (global::Protos.Global.Types.Platform) input.ReadEnum();
-            break;
-          }
-          case 40: {
-            SessionID = input.ReadUInt64();
-            break;
-          }
-          case 48: {
             Ukey = input.ReadUInt32();
             break;
           }
-          case 58: {
-            OpenID = input.ReadString();
+          case 40: {
+            channel_ = (global::Protos.Global.Types.Channel) input.ReadEnum();
+            break;
+          }
+          case 48: {
+            browser_ = (global::Protos.Global.Types.Browser) input.ReadEnum();
+            break;
+          }
+          case 56: {
+            platform_ = (global::Protos.Global.Types.Platform) input.ReadEnum();
             break;
           }
           case 66: {

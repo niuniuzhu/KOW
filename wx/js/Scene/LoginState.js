@@ -146,7 +146,7 @@ export class LoginState extends SceneState {
     }
     Login(uname) {
         const login = ProtoCreator.Q_GC2LS_AskSmartLogin();
-        login.name = uname;
+        login.id = uname;
         if (Laya.Browser.onIOS) {
             login.platform = Protos.Global.Platform.IOS;
         }

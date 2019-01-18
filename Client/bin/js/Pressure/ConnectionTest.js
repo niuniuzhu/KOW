@@ -24,7 +24,7 @@ define(["require", "exports", "../Net/WSConnector", "../Net/ProtoHelper", "../RC
         }
         Login(uname) {
             const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskSmartLogin();
-            login.name = uname;
+            login.id = uname;
             const connector = new WSConnector_1.WSConnector();
             connector.onerror = (e) => Logger_1.Logger.Error(e);
             connector.onclose = () => { };

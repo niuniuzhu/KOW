@@ -12,6 +12,7 @@ enum MsgID {
 	eGC2LS_AskLogin = 1001;
 	eGC2LS_AskSmartLogin = 1002;
 	eGC2LS_AskWXLogin = 1003;
+	eGC2LC_UpdateProfile = 1004;
 
 	eGC2GS_AskLogin = 1100;
 	eGC2GS_KeepAlive = 1101;

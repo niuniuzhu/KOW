@@ -25,8 +25,10 @@ export class UIMain implements IUIModule {
 		this._root.getTransition("t0").play();
 
 		const userInfo = <Protos.IG_UserInfo>param;
-		this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
-		this._root.getChild("nickname").asTextField.text = userInfo.nickname;
+		if (userInfo != null) {
+			this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
+			this._root.getChild("nickname").asTextField.text = userInfo.nickname;
+		}
 	}
 
 	public Exit(): void {

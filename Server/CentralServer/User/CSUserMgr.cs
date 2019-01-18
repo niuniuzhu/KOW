@@ -105,7 +105,7 @@ namespace CentralServer.User
 				this._gcNIDToUser.Remove( user.gcNID );
 			}
 			user.OnCreate( gcLogin, TimeUtils.utcTime );
-			this._gcNIDToUser[gcLogin.SessionID] = user;
+			this._gcNIDToUser[gcLogin.GcNID] = user;
 			Logger.Info( $"user:{user.gcNID} was created" );
 			return user;
 		}

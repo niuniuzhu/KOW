@@ -3,39 +3,47 @@ package Protos;
 
 import "Global.proto";
 
-//客户端请求注册
+//客户端请求注册(废弃)
 message GC2LS_AskRegister {
 	MsgOpts opts = 1;
-	string name = 2;
+	string id = 2;
 	string passwd = 3;
 }
 
-//客户端请求登陆
+//客户端请求登陆(废弃)
 message GC2LS_AskLogin {
 	MsgOpts opts = 1;
-	Global.Channel channel = 2;
-	Global.Browser browser = 3;
-	Global.Platform platform = 4;
-	string name = 5;
-	string passwd = 6;
+	string id = 2;
+	string passwd = 3;
+	Global.Channel channel = 4;
+	Global.Browser browser = 5;
+	Global.Platform platform = 6;
 }
 
 //客户端登陆并自动注册
 message GC2LS_AskSmartLogin {
 	MsgOpts opts = 1;
-	Global.Channel channel = 2;
-	Global.Browser browser = 3;
-	Global.Platform platform = 4;
-	string name = 5;
+	string id = 2;
+	Global.Channel channel = 3;
+	Global.Browser browser = 4;
+	Global.Platform platform = 5;
 }
 
 //客户端请求登陆微信
 message GC2LS_AskWXLogin {
 	MsgOpts opts = 1;
-	Global.Browser browser = 2;
-	Global.Platform platform = 3;
-	string code = 4;//调用ws.login获取的凭证
+	string code = 2;//调用ws.login获取的凭证
+	Global.Browser browser = 3;
+	Global.Platform platform = 4;
 	string nickname = 5;
 	string avatar = 6;
 	int32 gender = 7;
+}
+
+//更新用户信息
+message GC2LC_UpdateProfile {
+	MsgOpts opts = 1;
+	string nickname = 2;
+	string avatar = 3;
+	int32 gender = 4;
 }

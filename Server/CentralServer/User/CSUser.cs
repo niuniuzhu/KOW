@@ -95,8 +95,8 @@ namespace CentralServer.User
 			this.browser = ( CSUserMgr.Browser )gcLogin.Browser;
 			this.platform = ( CSUserMgr.Platform )gcLogin.Platform;
 			this.ukey = gcLogin.Ukey;
-			this.gcNID = gcLogin.SessionID;
-			this.openID = gcLogin.OpenID;
+			this.gcNID = gcLogin.GcNID;
+			this.openID = gcLogin.Id;
 			this.sessionKey = gcLogin.SessionKey;
 			this.unionID = gcLogin.UnionID;
 			this.loginTime = loginTime;

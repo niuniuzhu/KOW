@@ -1,3 +1,4 @@
+import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
 import { VChampion } from "./VChampion";
@@ -24,6 +25,7 @@ enum FxDestroyType {
 
 export class VBullet extends VEntity {
 	private _hitFxID: number;
+	private _hitFxOffset: Vec2;
 	private _hitFxDelay: number;
 	private _hitFxAttachType: FxAttachType;
 	private _posRotType: PosRotType;
@@ -44,6 +46,7 @@ export class VBullet extends VEntity {
 	protected AfterLoadDefs(cdefs: Hashtable): void {
 		this._hitFxID = Hashtable.GetNumber(cdefs, "hit_effect");
 		this._hitFxDelay = Hashtable.GetNumber(cdefs, "hit_fx_delay");
+		this._hitFxOffset = Hashtable.GetVec2(cdefs, "offset");
 		this._hitFxAttachType = Hashtable.GetNumber(cdefs, "hit_fx_attach_type");
 		this._posRotType = Hashtable.GetNumber(cdefs, "hit_fx_posrot_type");
 		this._hitFxDestroyType = Hashtable.GetNumber(cdefs, "hit_fx_destroy_type");
@@ -86,10 +89,16 @@ export class VBullet extends VEntity {
 			if (this._followPos) {
 				switch (this._hitFxAttachType) {
 					case FxAttachType.Bullet:
-						this._fx.position = this.position;
+						{
+							const offset = Vec2.Rotate(this._hitFxOffset, this.rotation);
+							this._fx.position = Vec2.Add(this.position, offset);
+						}
 						break;
 					case FxAttachType.Target:
-						this._fx.position = this._target.position;
+						{
+							const offset = Vec2.Rotate(this._hitFxOffset, this._target.rotation);
+							this._fx.position = Vec2.Add(this._target.position, offset);
+						}
 						break;
 				}
 			}
@@ -116,7 +125,8 @@ export class VBullet extends VEntity {
 		switch (this._hitFxAttachType) {
 			case FxAttachType.Bullet:
 				if ((this._posRotType & PosRotType.Position) > 0) {
-					this._fx.position = this.position;
+					const offset = Vec2.Rotate(this._hitFxOffset, this.rotation);
+					this._fx.position = Vec2.Add(this.position, offset);
 				}
 				if ((this._posRotType & PosRotType.Rotation) > 0) {
 					this._fx.rotation = this.rotation;
@@ -124,7 +134,8 @@ export class VBullet extends VEntity {
 				break;
 			case FxAttachType.Target:
 				if ((this._posRotType & PosRotType.Position) > 0) {
-					this._fx.position = this._target.position;
+					const offset = Vec2.Rotate(this._hitFxOffset, this._target.rotation);
+					this._fx.position = Vec2.Add(this._target.position, offset);
 				}
 				if ((this._posRotType & PosRotType.Rotation) > 0) {
 					this._fx.rotation = this._target.rotation;

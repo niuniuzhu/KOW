@@ -1,9 +1,8 @@
+import { Vec2 } from "../../../RC/Math/Vec2";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { VEffect } from "../VEffect";
 import { VEntityState } from "./VEntityState";
 import { VEntityStateAction } from "./VEntityStateAction";
-import { FVec2 } from "../../../RC/FMath/FVec2";
-import { MathUtils } from "../../../RC/Math/MathUtils";
 
 enum FxAttachType {
 	None,
@@ -18,7 +17,7 @@ enum PosRotType {
 
 export class VActEffect extends VEntityStateAction {
 	private _effectID: number;
-	private _offset: FVec2;
+	private _offset: Vec2;
 	private _attachType: FxAttachType;
 	private _posRotType: PosRotType;
 	private _followPos: boolean;
@@ -29,7 +28,7 @@ export class VActEffect extends VEntityStateAction {
 	protected OnInit(def: Hashtable): void {
 		super.OnInit(def);
 		this._effectID = Hashtable.GetNumber(def, "effect");
-		this._offset = Hashtable.GetFVec2(def, "offset");
+		this._offset = Hashtable.GetVec2(def, "offset");
 		this._attachType = Hashtable.GetNumber(def, "attach_type");
 		this._posRotType = Hashtable.GetNumber(def, "posrot_type");
 		this._followPos = Hashtable.GetBool(def, "follow_pos");
@@ -49,8 +48,8 @@ export class VActEffect extends VEntityStateAction {
 		switch (this._attachType) {
 			case FxAttachType.Caster:
 				if ((this._posRotType & PosRotType.Position) > 0) {
-					const offset = FVec2.Rotate(this._offset, owner.rotation);
-					this._fx.position = FVec2.Add(owner.position, offset);
+					const offset = Vec2.Rotate(this._offset, owner.rotation);
+					this._fx.position = Vec2.Add(owner.position, offset);
 				}
 				if ((this._posRotType & PosRotType.Rotation) > 0) {
 					this._fx.rotation = owner.rotation;
@@ -64,8 +63,8 @@ export class VActEffect extends VEntityStateAction {
 		if (this._followPos) {
 			switch (this._attachType) {
 				case FxAttachType.Caster:
-					const offset = FVec2.Rotate(this._offset, owner.rotation);
-					this._fx.position = FVec2.Add(owner.position, offset);
+					const offset = Vec2.Rotate(this._offset, owner.rotation);
+					this._fx.position = Vec2.Add(owner.position, offset);
 					break;
 			}
 		}

@@ -200,6 +200,10 @@
 	"bullet": {
 		"b0": {
 			"hit_effect": 0,
+			"offset": [
+				0,
+				0
+			],
 			"hit_fx_delay": 0,
 			"hit_fx_attach_type": 2,
 			"hit_fx_posrot_type": 1,
@@ -209,6 +213,10 @@
 		},
 		"b1": {
 			"hit_effect": 1,
+			"offset": [
+				0,
+				0
+			],
 			"hit_fx_delay": 0,
 			"hit_fx_attach_type": 2,
 			"hit_fx_posrot_type": 1,
@@ -218,6 +226,10 @@
 		},
 		"b2": {
 			"hit_effect": 2,
+			"offset": [
+				0,
+				0
+			],
 			"hit_fx_delay": 0,
 			"hit_fx_attach_type": 2,
 			"hit_fx_posrot_type": 1,

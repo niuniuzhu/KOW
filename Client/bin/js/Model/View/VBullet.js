@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity"], function (require, exports, Hashtable_1, CDefs_1, VEntity_1) {
+define(["require", "exports", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity"], function (require, exports, Vec2_1, Hashtable_1, CDefs_1, VEntity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var FxAttachType;
@@ -26,6 +26,7 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity
         AfterLoadDefs(cdefs) {
             this._hitFxID = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_effect");
             this._hitFxDelay = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_delay");
+            this._hitFxOffset = Hashtable_1.Hashtable.GetVec2(cdefs, "offset");
             this._hitFxAttachType = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_attach_type");
             this._posRotType = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_posrot_type");
             this._hitFxDestroyType = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_destroy_type");
@@ -65,10 +66,16 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity
                 if (this._followPos) {
                     switch (this._hitFxAttachType) {
                         case FxAttachType.Bullet:
-                            this._fx.position = this.position;
+                            {
+                                const offset = Vec2_1.Vec2.Rotate(this._hitFxOffset, this.rotation);
+                                this._fx.position = Vec2_1.Vec2.Add(this.position, offset);
+                            }
                             break;
                         case FxAttachType.Target:
-                            this._fx.position = this._target.position;
+                            {
+                                const offset = Vec2_1.Vec2.Rotate(this._hitFxOffset, this._target.rotation);
+                                this._fx.position = Vec2_1.Vec2.Add(this._target.position, offset);
+                            }
                             break;
                     }
                 }
@@ -94,7 +101,8 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity
             switch (this._hitFxAttachType) {
                 case FxAttachType.Bullet:
                     if ((this._posRotType & PosRotType.Position) > 0) {
-                        this._fx.position = this.position;
+                        const offset = Vec2_1.Vec2.Rotate(this._hitFxOffset, this.rotation);
+                        this._fx.position = Vec2_1.Vec2.Add(this.position, offset);
                     }
                     if ((this._posRotType & PosRotType.Rotation) > 0) {
                         this._fx.rotation = this.rotation;
@@ -102,7 +110,8 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity
                     break;
                 case FxAttachType.Target:
                     if ((this._posRotType & PosRotType.Position) > 0) {
-                        this._fx.position = this._target.position;
+                        const offset = Vec2_1.Vec2.Rotate(this._hitFxOffset, this._target.rotation);
+                        this._fx.position = Vec2_1.Vec2.Add(this._target.position, offset);
                     }
                     if ((this._posRotType & PosRotType.Rotation) > 0) {
                         this._fx.rotation = this._target.rotation;

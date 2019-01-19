@@ -438,10 +438,10 @@ export class Champion extends Entity implements ISnapshotable {
 
 		const pos = FVec2.Add(this.position, moveDelta);
 		//限制活动范围
-		pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
-		pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
-		pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
-		pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
+		pos.x = FMathUtils.Max(this._battle.bounds.xMin, pos.x);
+		pos.x = FMathUtils.Min(this._battle.bounds.xMax, pos.x);
+		pos.y = FMathUtils.Max(this._battle.bounds.yMin, pos.y);
+		pos.y = FMathUtils.Min(this._battle.bounds.yMax, pos.y);
 		this.position.CopyFrom(pos);
 	}
 

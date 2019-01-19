@@ -1,7 +1,7 @@
 import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
+import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
-import { MathUtils } from "../../RC/Math/MathUtils";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
@@ -187,13 +187,15 @@ export class Emitter implements ISnapshotable {
 		if (caster == null) {
 			caster = this._battle.GetChampion(this._casterID);
 		}
-		let rot = MathUtils.Acos(caster.direction.Dot(FVec2.up));
-		if (caster.direction.x > 0) {
-			rot = - rot;
+		const angle = caster.direction.Dot(FVec2.down);
+		let rot = FMathUtils.Acos(angle);
+		if (caster.direction.x < 0) {
+			rot = FMathUtils.PI2 - rot;
 		}
-		this._offset.Rotate(rot);
+
+		const offset = FVec2.Rotate(this._offset, rot);
 		this._position.CopyFrom(caster.position);
-		this._position.Add(this._offset);
+		this._position.Add(offset);
 	}
 
 	private Emit(): void {

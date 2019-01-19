@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateAction"], function (require, exports, Hashtable_1, VEntityStateAction_1) {
+define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateAction", "../../../RC/FMath/FVec2"], function (require, exports, Hashtable_1, VEntityStateAction_1, FVec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var FxAttachType;
@@ -16,6 +16,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateActi
         OnInit(def) {
             super.OnInit(def);
             this._effectID = Hashtable_1.Hashtable.GetNumber(def, "effect");
+            this._offset = Hashtable_1.Hashtable.GetFVec2(def, "offset");
             this._attachType = Hashtable_1.Hashtable.GetNumber(def, "attach_type");
             this._posRotType = Hashtable_1.Hashtable.GetNumber(def, "posrot_type");
             this._followPos = Hashtable_1.Hashtable.GetBool(def, "follow_pos");
@@ -32,7 +33,8 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateActi
             switch (this._attachType) {
                 case FxAttachType.Caster:
                     if ((this._posRotType & PosRotType.Position) > 0) {
-                        this._fx.position = owner.position;
+                        const offset = FVec2_1.FVec2.Rotate(this._offset, owner.rotation);
+                        this._fx.position = FVec2_1.FVec2.Add(owner.position, offset);
                     }
                     if ((this._posRotType & PosRotType.Rotation) > 0) {
                         this._fx.rotation = owner.rotation;
@@ -45,7 +47,8 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateActi
             if (this._followPos) {
                 switch (this._attachType) {
                     case FxAttachType.Caster:
-                        this._fx.position = owner.position;
+                        const offset = FVec2_1.FVec2.Rotate(this._offset, owner.rotation);
+                        this._fx.position = FVec2_1.FVec2.Add(owner.position, offset);
                         break;
                 }
             }

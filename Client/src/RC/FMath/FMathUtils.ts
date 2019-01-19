@@ -5,7 +5,9 @@ export class FMathUtils {
 
 	public static readonly MIN_VALUE: number = -FMathUtils.MAX_VALUE;
 
-	public static readonly PI: number = 3.142;
+	public static readonly PI: number = 3.14215926;
+
+	public static readonly PI2: number = FMathUtils.PI * 2;
 
 	public static readonly DEG_TO_RAD: number = FMathUtils.Div(FMathUtils.PI, 180);
 

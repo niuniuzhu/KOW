@@ -5,7 +5,7 @@ import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { Defs } from "../Defs";
 import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "./Attribute";
-import { Entity, EntityInitParams, EntityType } from "./Entity";
+import { Entity, EntityType } from "./Entity";
 
 export enum SceneItemAttrOp {
 	Add,
@@ -26,12 +26,6 @@ export class SceneItem extends Entity implements ISnapshotable {
 	private _attrs: EAttr[];
 	private _values: number[];
 	private _ops: SceneItemAttrOp[];
-
-	public Init(params: EntityInitParams): void {
-		super.Init(params);
-		this.position.CopyFrom(params.position);
-		this.direction.CopyFrom(params.direction);
-	}
 
 	protected LoadDefs(): void {
 		const defs = Defs.GetSceneItem(this._id);

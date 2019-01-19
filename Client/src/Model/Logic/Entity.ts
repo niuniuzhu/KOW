@@ -46,6 +46,8 @@ export abstract class Entity implements ISnapshotable {
 		this._rid = params.rid;
 		this._id = params.id;
 		this._markToDestroy = false;
+		this.position.CopyFrom(params.position);
+		this.direction.CopyFrom(params.direction);
 		this.LoadDefs();
 	}
 

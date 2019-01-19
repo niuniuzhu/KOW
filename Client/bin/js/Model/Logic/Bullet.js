@@ -56,8 +56,6 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             super.Init(params);
             this._casterID = params.casterID;
             this._skillID = params.skillID;
-            this.position.CopyFrom(params.position);
-            this.direction.CopyFrom(params.direction);
         }
         LoadDefs() {
             const defs = Defs_1.Defs.GetBullet(this._id);

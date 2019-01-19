@@ -24,6 +24,8 @@ define(["require", "exports", "../../RC/FMath/FVec2"], function (require, export
             this._rid = params.rid;
             this._id = params.id;
             this._markToDestroy = false;
+            this.position.CopyFrom(params.position);
+            this.direction.CopyFrom(params.direction);
             this.LoadDefs();
         }
         Destroy() {

@@ -22,8 +22,11 @@ export class VEffect extends VEntity {
 
 	protected AfterLoadDefs(cdefs: Hashtable): void {
 		this._animationID = Hashtable.GetNumber(cdefs, "animation");
-		const setting = this._animationProxy.GetSetting(this._animationID);
-		this._lifeTime = setting.length * setting.interval;
+		this._lifeTime = Hashtable.GetNumber(cdefs, "lifetime");
+		if (this._lifeTime == 0) {
+			const setting = this._animationProxy.GetSetting(this._animationID);
+			this._lifeTime = setting.length * setting.interval;
+		}
 	}
 
 	public Update(dt: number): void {

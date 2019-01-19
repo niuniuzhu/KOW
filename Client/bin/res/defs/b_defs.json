@@ -147,7 +147,7 @@
 							"id": 5,
 							"effect": 0,
 							"offset": [
-								10,
+								0,
 								-70
 							],
 							"trigger_time": 400,
@@ -242,7 +242,8 @@
 		"fx0": {
 			"model": 0,
 			"model_layer": 3,
-			"animation": 7
+			"animation": 7,
+			"lifetime": -1
 		},
 		"fx1": {
 			"model": 0,

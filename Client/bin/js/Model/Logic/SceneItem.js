@@ -15,11 +15,6 @@ define(["require", "exports", "../../RC/FMath/Intersection", "../../RC/Utils/Has
         get attrs() { return this._attrs; }
         get values() { return this._values; }
         get ops() { return this._ops; }
-        Init(params) {
-            super.Init(params);
-            this.position.CopyFrom(params.position);
-            this.direction.CopyFrom(params.direction);
-        }
         LoadDefs() {
             const defs = Defs_1.Defs.GetSceneItem(this._id);
             this._radius = Hashtable_1.Hashtable.GetNumber(defs, "radius");

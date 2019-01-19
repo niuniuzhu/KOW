@@ -103,8 +103,6 @@ export class Bullet extends Entity implements ISnapshotable {
 		super.Init(params);
 		this._casterID = params.casterID;
 		this._skillID = params.skillID;
-		this.position.CopyFrom(params.position);
-		this.direction.CopyFrom(params.direction);
 	}
 
 	protected LoadDefs(): void {

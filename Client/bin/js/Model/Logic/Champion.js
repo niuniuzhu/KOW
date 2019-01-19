@@ -250,10 +250,10 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.velocity = FMathUtils_1.FMathUtils.Sqrt(sqrtDis);
             const moveDelta = FVec2_1.FVec2.MulN(moveVector, FMathUtils_1.FMathUtils.Mul(0.001, dt));
             const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
-            pos.x = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
-            pos.x = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
-            pos.y = FMathUtils_1.FMathUtils.Max(FMathUtils_1.FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
-            pos.y = FMathUtils_1.FMathUtils.Min(FMathUtils_1.FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
+            pos.x = FMathUtils_1.FMathUtils.Max(this._battle.bounds.xMin, pos.x);
+            pos.x = FMathUtils_1.FMathUtils.Min(this._battle.bounds.xMax, pos.x);
+            pos.y = FMathUtils_1.FMathUtils.Max(this._battle.bounds.yMin, pos.y);
+            pos.y = FMathUtils_1.FMathUtils.Min(this._battle.bounds.yMax, pos.y);
             this.position.CopyFrom(pos);
         }
         UpdateGladiator(dt) {

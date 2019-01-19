@@ -337,13 +337,13 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 params.id = playerInfo.actorID;
                 params.team = playerInfo.team;
                 params.name = playerInfo.nickname;
+                params.position = this._bornPoses[params.team];
+                params.direction = this._bornDirs[params.team];
                 const player = this.CreateChampion(params);
                 if (player.team >= this._bornPoses.length ||
                     player.team >= this._bornDirs.length) {
                     throw new Error("invalid team:" + player.team + ", player:" + player.rid);
                 }
-                player.position.CopyFrom(this._bornPoses[player.team]);
-                player.direction.CopyFrom(this._bornDirs[player.team]);
             }
         }
         CreateChampion(params) {

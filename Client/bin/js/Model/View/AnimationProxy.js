@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable", "../CDefs"], function (require, exports, Consts_1, Hashtable_1, CDefs_1) {
+define(["require", "exports", "../../Consts", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../CDefs", "./AnimationTemplatePool", "../../RC/Utils/Logger"], function (require, exports, Consts_1, Vec2_1, Hashtable_1, CDefs_1, AnimationTemplatePool_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var AnimationPlayMode;
@@ -26,28 +26,39 @@ define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable", "../CD
                 const alias = `${model}_${id}`;
                 const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
                 const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
-                if (!AnimationProxy.TEMPLATE_CACHE.has(alias)) {
+                let mw = 0, mh = 0;
+                let setting = AnimationTemplatePool_1.AnimationTemplatePool.Get(alias);
+                if (setting == null) {
                     const startFrame = Hashtable_1.Hashtable.GetNumber(aniDef, "start_frame");
                     const urls = [];
                     for (let i = startFrame; i < length; ++i) {
                         urls.push(`${model}/${aniName}${i}.png`);
                     }
-                    Laya.Animation.createFrames(urls, alias);
-                    AnimationProxy.TEMPLATE_CACHE.add(alias);
+                    const template = Laya.Animation.createFrames(urls, alias);
+                    for (const g of template) {
+                        const texture = g._one[0];
+                        if (texture.sourceWidth > mw) {
+                            mw = texture.sourceWidth;
+                        }
+                        if (texture.sourceHeight > mh) {
+                            mh = texture.sourceHeight;
+                        }
+                    }
+                    setting = new AnimationSetting();
+                    setting.id = id;
+                    setting.alias = alias;
+                    setting.size = new Vec2_1.Vec2(mw, mh);
+                    setting.playMode = Hashtable_1.Hashtable.GetNumber(aniDef, "play_mode");
+                    setting.length = length;
+                    setting.interval = Hashtable_1.Hashtable.GetNumber(aniDef, "interval");
+                    Logger_1.Logger.Log(setting.alias + ", size:" + setting.size.ToString());
+                    AnimationTemplatePool_1.AnimationTemplatePool.Add(alias, setting);
                 }
-                const aniSetting = new AnimationSetting();
-                aniSetting.id = id;
-                aniSetting.alias = alias;
-                aniSetting.playMode = Hashtable_1.Hashtable.GetNumber(aniDef, "play_mode");
-                aniSetting.length = length;
-                aniSetting.interval = Hashtable_1.Hashtable.GetNumber(aniDef, "interval");
-                this._aniSettings.set(id, aniSetting);
+                this._aniSettings.set(id, AnimationTemplatePool_1.AnimationTemplatePool.Get(alias));
             }
             this._animation = new Laya.Animation();
-            this._animation.autoSize = true;
             this.setPivot(0.5, 0.5, true);
             this.setNativeObject(this._animation);
-            this.setSize(this._animation.width, this._animation.height);
         }
         get available() { return this._aniSettings != null && this._animation != null; }
         get animation() { return this._animation; }
@@ -63,7 +74,7 @@ define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable", "../CD
             const aniSetting = this.GetAnimationSetting(id);
             this._animation.interval = aniSetting.interval * timeScale;
             this._animation.play(startFrame, aniSetting.playMode == AnimationPlayMode.Loop, aniSetting.alias);
-            this.setSize(this._animation.width, this._animation.height);
+            this.setSize(aniSetting.size.x, aniSetting.size.y);
         }
         GetAnimationSetting(id) {
             if (!this.available)
@@ -76,7 +87,6 @@ define(["require", "exports", "../../Consts", "../../RC/Utils/Hashtable", "../CD
             super.dispose();
         }
     }
-    AnimationProxy.TEMPLATE_CACHE = new Set();
     exports.AnimationProxy = AnimationProxy;
 });
 //# sourceMappingURL=AnimationProxy.js.map

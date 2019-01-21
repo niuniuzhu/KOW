@@ -5,7 +5,7 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
-import { EntityType } from "../Logic/Entity";
+import { EntityType } from "../EntityType";
 import { Camera } from "./Camera";
 import { EffectPool } from "./EffectPool";
 import { PopTextType } from "./HUD";

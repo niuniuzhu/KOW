@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "./Entity"], function (require, exports, Intersection_1, Hashtable_1, SyncEvent_1, Defs_1, Entity_1) {
+define(["require", "exports", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./Entity"], function (require, exports, Intersection_1, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, Entity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var SceneItemAttrOp;
@@ -10,7 +10,7 @@ define(["require", "exports", "../../RC/FMath/Intersection", "../../RC/Utils/Has
         SceneItemAttrOp[SceneItemAttrOp["Cos"] = 4] = "Cos";
     })(SceneItemAttrOp = exports.SceneItemAttrOp || (exports.SceneItemAttrOp = {}));
     class SceneItem extends Entity_1.Entity {
-        get type() { return Entity_1.EntityType.SceneItem; }
+        get type() { return EntityType_1.EntityType.SceneItem; }
         get radius() { return this._radius; }
         get attrs() { return this._attrs; }
         get values() { return this._values; }

@@ -3,9 +3,10 @@ import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { Defs } from "../Defs";
+import { EntityType } from "../EntityType";
 import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "./Attribute";
-import { Entity, EntityType } from "./Entity";
+import { Entity } from "./Entity";
 
 export enum SceneItemAttrOp {
 	Add,

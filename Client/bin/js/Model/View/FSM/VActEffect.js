@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/Math/Vec2", "../../../RC/Utils/Hashtable", "./VEntityStateAction"], function (require, exports, Vec2_1, Hashtable_1, VEntityStateAction_1) {
+define(["require", "exports", "../../../RC/Utils/Hashtable", "../../EntityType", "./VEntityStateAction", "../../../RC/Utils/Logger"], function (require, exports, Hashtable_1, EntityType_1, VEntityStateAction_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var FxAttachType;
@@ -6,21 +6,15 @@ define(["require", "exports", "../../../RC/Math/Vec2", "../../../RC/Utils/Hashta
         FxAttachType[FxAttachType["None"] = 0] = "None";
         FxAttachType[FxAttachType["Caster"] = 1] = "Caster";
     })(FxAttachType || (FxAttachType = {}));
-    var PosRotType;
-    (function (PosRotType) {
-        PosRotType[PosRotType["None"] = 0] = "None";
-        PosRotType[PosRotType["Position"] = 1] = "Position";
-        PosRotType[PosRotType["Rotation"] = 2] = "Rotation";
-    })(PosRotType || (PosRotType = {}));
     class VActEffect extends VEntityStateAction_1.VEntityStateAction {
         OnInit(def) {
             super.OnInit(def);
             this._effectID = Hashtable_1.Hashtable.GetNumber(def, "effect");
             this._offset = Hashtable_1.Hashtable.GetVec2(def, "offset");
             this._attachType = Hashtable_1.Hashtable.GetNumber(def, "attach_type");
-            this._posRotType = Hashtable_1.Hashtable.GetNumber(def, "posrot_type");
             this._followPos = Hashtable_1.Hashtable.GetBool(def, "follow_pos");
             this._followRot = Hashtable_1.Hashtable.GetBool(def, "follow_rot");
+            this._alwaysFollow = Hashtable_1.Hashtable.GetBool(def, "always_follow");
         }
         OnExit() {
             super.OnExit();
@@ -28,36 +22,15 @@ define(["require", "exports", "../../../RC/Math/Vec2", "../../../RC/Utils/Hashta
         }
         OnTrigger() {
             super.OnTrigger();
-            const owner = this.state.owner;
-            this._fx = owner.battle.SpawnEffect(this._effectID);
             switch (this._attachType) {
                 case FxAttachType.Caster:
-                    if ((this._posRotType & PosRotType.Position) > 0) {
-                        const offset = Vec2_1.Vec2.Rotate(this._offset, owner.rotation);
-                        this._fx.position = Vec2_1.Vec2.Add(owner.position, offset);
-                    }
-                    if ((this._posRotType & PosRotType.Rotation) > 0) {
-                        this._fx.rotation = owner.rotation;
-                    }
+                    const owner = this.state.owner;
+                    this._fx = owner.battle.SpawnEffect(this._effectID);
+                    this._fx.SetTarget(EntityType_1.EntityType.Champion, owner.rid, this._offset, this._followPos, this._followRot, this._alwaysFollow);
                     break;
-            }
-        }
-        OnUpdate(dt) {
-            const owner = this.state.owner;
-            if (this._followPos) {
-                switch (this._attachType) {
-                    case FxAttachType.Caster:
-                        const offset = Vec2_1.Vec2.Rotate(this._offset, owner.rotation);
-                        this._fx.position = Vec2_1.Vec2.Add(owner.position, offset);
-                        break;
-                }
-            }
-            if (this._followRot) {
-                switch (this._attachType) {
-                    case FxAttachType.Caster:
-                        this._fx.rotation = owner.rotation;
-                        break;
-                }
+                default:
+                    Logger_1.Logger.Error(`attach type:${this._attachType} not supported`);
+                    break;
             }
         }
     }

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "./Attribute", "./Entity"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, SyncEvent_1, Defs_1, Attribute_1, Entity_1) {
+define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./Attribute", "./Entity"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, Attribute_1, Entity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -51,7 +51,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._collisionCount = 0;
             this._targetToCollisionCount = new Map();
         }
-        get type() { return Entity_1.EntityType.Bullet; }
+        get type() { return EntityType_1.EntityType.Bullet; }
         Init(params) {
             super.Init(params);
             this._casterID = params.casterID;

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../IntersectInfo", "../Skill", "../StateEnums", "./Attribute", "./Entity", "./FSM/EntityFSM", "./FSM/EntityState", "./InputAagent"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, IntersectInfo_1, Skill_1, StateEnums_1, Attribute_1, Entity_1, EntityFSM_1, EntityState_1, InputAagent_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../Defs", "../EntityType", "../IntersectInfo", "../Skill", "../StateEnums", "./Attribute", "./Entity", "./FSM/EntityFSM", "./FSM/EntityState", "./InputAagent"], function (require, exports, FMathUtils_1, FVec2_1, Hashtable_1, Defs_1, EntityType_1, IntersectInfo_1, Skill_1, StateEnums_1, Attribute_1, Entity_1, EntityFSM_1, EntityState_1, InputAagent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Champion extends Entity_1.Entity {
@@ -25,7 +25,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this._intersectionCache = [];
             this._inputAgent.handler = this.HandleInput.bind(this);
         }
-        get type() { return Entity_1.EntityType.Champion; }
+        get type() { return EntityType_1.EntityType.Champion; }
         get fsm() { return this._fsm; }
         get inputAgent() { return this._inputAgent; }
         get radius() { return this._radius; }

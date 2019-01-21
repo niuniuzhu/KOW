@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../Logic/Entity", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, Entity_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1, VSceneItem_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1, VSceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -244,13 +244,13 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             const reader = $protobuf.Reader.create(e.data);
             const rid = reader.uint64();
             switch (e.entityType) {
-                case Entity_1.EntityType.Champion:
+                case EntityType_1.EntityType.Champion:
                     this.CreateChampion(rid, reader);
                     break;
-                case Entity_1.EntityType.Bullet:
+                case EntityType_1.EntityType.Bullet:
                     this.CreateBullet(rid, reader);
                     break;
-                case Entity_1.EntityType.SceneItem:
+                case EntityType_1.EntityType.SceneItem:
                     this.CreateSceneItem(rid, reader);
                     break;
             }

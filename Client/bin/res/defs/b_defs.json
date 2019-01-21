@@ -148,13 +148,13 @@
 							"effect": 0,
 							"offset": [
 								0,
-								-70
+								0
 							],
 							"trigger_time": 400,
 							"attach_type": 1,
-							"posrot_type": 3,
 							"follow_pos": true,
-							"follow_rot": true
+							"follow_rot": true,
+							"always_follow": false
 						}
 					]
 				},
@@ -199,17 +199,17 @@
 	},
 	"bullet": {
 		"b0": {
-			"hit_effect": 0,
+			"hit_effect": 1,
 			"offset": [
 				0,
 				0
 			],
 			"hit_fx_delay": 0,
 			"hit_fx_attach_type": 2,
-			"hit_fx_posrot_type": 1,
 			"hit_fx_destroy_type": 0,
-			"hit_fx_follow_pos": false,
-			"hit_fx_follow_rot": false
+			"hit_fx_follow_pos": true,
+			"hit_fx_follow_rot": true,
+			"hit_fx_always_follow": false
 		},
 		"b1": {
 			"hit_effect": 1,
@@ -219,10 +219,10 @@
 			],
 			"hit_fx_delay": 0,
 			"hit_fx_attach_type": 2,
-			"hit_fx_posrot_type": 1,
 			"hit_fx_destroy_type": 0,
-			"hit_fx_follow_pos": false,
-			"hit_fx_follow_rot": false
+			"hit_fx_follow_pos": true,
+			"hit_fx_follow_rot": true,
+			"hit_fx_always_follow": false
 		},
 		"b2": {
 			"hit_effect": 2,
@@ -232,10 +232,10 @@
 			],
 			"hit_fx_delay": 0,
 			"hit_fx_attach_type": 2,
-			"hit_fx_posrot_type": 1,
 			"hit_fx_destroy_type": 0,
-			"hit_fx_follow_pos": false,
-			"hit_fx_follow_rot": false
+			"hit_fx_follow_pos": true,
+			"hit_fx_follow_rot": true,
+			"hit_fx_always_follow": false
 		}
 	},
 	"effect": {
@@ -243,7 +243,7 @@
 			"model": 0,
 			"model_layer": 3,
 			"animation": 7,
-			"lifetime": -1
+			"lifetime": 0
 		},
 		"fx1": {
 			"model": 0,

@@ -1,5 +1,5 @@
 import Stack from "../../RC/Collections/Stack";
-import { EntityType } from "../Logic/Entity";
+import { EntityType } from "../EntityType";
 import { BaseBattleEvent } from "./BaseBattleEvent";
 
 export class SyncEvent extends BaseBattleEvent {

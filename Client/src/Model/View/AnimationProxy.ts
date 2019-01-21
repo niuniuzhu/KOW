@@ -1,6 +1,9 @@
 import { Consts } from "../../Consts";
+import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
+import { AnimationTemplatePool } from "./AnimationTemplatePool";
+import { Logger } from "../../RC/Utils/Logger";
 
 export enum AnimationPlayMode {
 	Loop,
@@ -14,11 +17,10 @@ export class AnimationSetting {
 	public playMode: AnimationPlayMode;
 	public length: number;
 	public interval: number;
+	public size: Vec2;
 }
 
 export class AnimationProxy extends fairygui.GGraph {
-	public static readonly TEMPLATE_CACHE = new Set<string>();
-
 	public get available(): boolean { return this._aniSettings != null && this._animation != null; }
 	public get animation(): Laya.Animation { return this._animation; }
 
@@ -40,33 +42,49 @@ export class AnimationProxy extends fairygui.GGraph {
 			const alias = `${model}_${id}`;
 			const aniName = Hashtable.GetString(aniDef, "name");
 			const length = Hashtable.GetNumber(aniDef, "length");
+			let mw: number = 0, mh: number = 0;
 
-			if (!AnimationProxy.TEMPLATE_CACHE.has(alias)) {
+			//todo 应该记录到缓存池,能按key读取
+			//setting也保存到缓存池
+			//计算所有graphic的大小,选取最大一个为该动画的大小
+			let setting = AnimationTemplatePool.Get(alias);
+			if (setting == null) {
 				const startFrame = Hashtable.GetNumber(aniDef, "start_frame");
 				const urls: string[] = [];
 				for (let i = startFrame; i < length; ++i) {
 					urls.push(`${model}/${aniName}${i}.png`);
 				}
 				//创建动画模板
-				Laya.Animation.createFrames(urls, alias);
-				AnimationProxy.TEMPLATE_CACHE.add(alias);
+				const template: laya.display.Graphics[] = Laya.Animation.createFrames(urls, alias);
+				for (const g of template) {
+					const texture = <laya.resource.Texture>g._one[0];
+					if (texture.sourceWidth > mw) {
+						mw = texture.sourceWidth;
+					}
+					if (texture.sourceHeight > mh) {
+						mh = texture.sourceHeight;
+					}
+				}
+				setting = new AnimationSetting();
+				setting.id = id;
+				setting.alias = alias;
+				setting.size = new Vec2(mw, mh);
+				setting.playMode = Hashtable.GetNumber(aniDef, "play_mode");
+				setting.length = length;
+				setting.interval = Hashtable.GetNumber(aniDef, "interval");
+				Logger.Log(setting.alias + ", size:" + setting.size.ToString());
+				AnimationTemplatePool.Add(alias, setting);
 			}
-
-			const aniSetting = new AnimationSetting();
-			aniSetting.id = id;
-			aniSetting.alias = alias;
-			aniSetting.playMode = Hashtable.GetNumber(aniDef, "play_mode");
-			aniSetting.length = length;
-			aniSetting.interval = Hashtable.GetNumber(aniDef, "interval");
-			this._aniSettings.set(id, aniSetting);
+			this._aniSettings.set(id, AnimationTemplatePool.Get(alias));
 		}
 
 		this._animation = new Laya.Animation();
-		this._animation.autoSize = true;
+		// this._animation.autoSize = true;
 
 		this.setPivot(0.5, 0.5, true);
 		this.setNativeObject(this._animation);
-		this.setSize(this._animation.width, this._animation.height);
+		//计算所有graphic的大小,选取最大一个为该动画的大小
+		// this.setSize(0, 0);
 	}
 
 	public GetSetting(id: number): AnimationSetting {
@@ -89,7 +107,7 @@ export class AnimationProxy extends fairygui.GGraph {
 		const aniSetting = this.GetAnimationSetting(id);
 		this._animation.interval = aniSetting.interval * timeScale;
 		this._animation.play(startFrame, aniSetting.playMode == AnimationPlayMode.Loop, aniSetting.alias);
-		this.setSize(this._animation.width, this._animation.height);
+		this.setSize(aniSetting.size.x, aniSetting.size.y);
 	}
 
 	public GetAnimationSetting(id: number): AnimationSetting {

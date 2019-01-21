@@ -17,11 +17,11 @@ class FrameInfo {
         this._frame = buffer.ReadInt();
         this._inputFlag = buffer.ReadByte();
         if ((this.inputFlag & InputFlag.Move) > 0) {
-            this._v0 = buffer.ReadFloat();
-            this._v1 = buffer.ReadFloat();
+            this._v0 = buffer.ReadInt() * 0.001;
+            this._v1 = buffer.ReadInt() * 0.001;
         }
         if ((this.inputFlag & InputFlag.S1) > 0 || (this.inputFlag & InputFlag.S2) > 0) {
-            this._v0 = buffer.ReadInt();
+            this._v0 = buffer.ReadInt() * 0.001;
         }
     }
 }

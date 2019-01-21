@@ -21,8 +21,8 @@ message GC2BS_RequestSnapshot {
 message GC2BS_FrameActionInfo {
 	int32 frame = 1;
 	int32 inputFlag = 2;
-	float v0 = 3;
-	float v1 = 4;
+	int32 v0 = 3;
+	int32 v1 = 4;
 }
 
 //帧行为

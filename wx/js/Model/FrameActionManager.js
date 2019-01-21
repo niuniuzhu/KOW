@@ -5,6 +5,7 @@ const Global_1 = require("../Global");
 const protos_1 = require("../Libs/protos");
 const ProtoHelper_1 = require("../Net/ProtoHelper");
 const Timer_1 = require("../RC/Utils/Timer");
+const Logger_1 = require("../RC/Utils/Logger");
 var InputFlag;
 (function (InputFlag) {
     InputFlag[InputFlag["None"] = 0] = "None";
@@ -27,8 +28,9 @@ class FrameAciontManager {
         const info = new protos_1.Protos.GC2BS_FrameActionInfo();
         info.frame = 0;
         info.inputFlag = InputFlag.Move;
-        info.v0 = direction.x;
-        info.v1 = direction.y;
+        info.v0 = Math.floor(direction.x * 1000);
+        info.v1 = Math.floor(direction.y * 1000);
+        Logger_1.Logger.Log(info.v0 + ":" + info.v1);
         this._infos.push(info);
     }
     SetS1(press) {
@@ -37,7 +39,7 @@ class FrameAciontManager {
         const info = new protos_1.Protos.GC2BS_FrameActionInfo();
         info.frame = 0;
         info.inputFlag = InputFlag.S1;
-        info.v0 = press ? 1 : 0;
+        info.v0 = press ? 1000 : 0;
         this._infos.push(info);
     }
     SetS2(press) {
@@ -46,7 +48,7 @@ class FrameAciontManager {
         const info = new protos_1.Protos.GC2BS_FrameActionInfo();
         info.frame = 0;
         info.inputFlag = InputFlag.S2;
-        info.v0 = press ? 1 : 0;
+        info.v0 = press ? 1000 : 0;
         this._infos.push(info);
     }
     Update(dt) {

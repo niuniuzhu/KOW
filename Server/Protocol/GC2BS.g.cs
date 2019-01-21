@@ -30,7 +30,7 @@ namespace Protos {
             "CzIPLlByb3Rvcy5Nc2dPcHRzIkUKFUdDMkJTX1JlcXVlc3RTbmFwc2hvdBId",
             "CgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiABKAUi",
             "UQoVR0MyQlNfRnJhbWVBY3Rpb25JbmZvEg0KBWZyYW1lGAEgASgFEhEKCWlu",
-            "cHV0RmxhZxgCIAEoBRIKCgJ2MBgDIAEoAhIKCgJ2MRgEIAEoAiJgChFHQzJC",
+            "cHV0RmxhZxgCIAEoBRIKCgJ2MBgDIAEoBRIKCgJ2MRgEIAEoBSJgChFHQzJC",
             "U19GcmFtZUFjdGlvbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMS",
             "LAoFaW5mb3MYAiADKAsyHS5Qcm90b3MuR0MyQlNfRnJhbWVBY3Rpb25JbmZv",
             "IlQKGUdDMkJTX1JlcXVlc3RGcmFtZUFjdGlvbnMSHQoEb3B0cxgBIAEoCzIP",
@@ -581,9 +581,9 @@ namespace Protos {
 
     /// <summary>Field number for the "v0" field.</summary>
     public const int V0FieldNumber = 3;
-    private float v0_;
+    private int v0_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public float V0 {
+    public int V0 {
       get { return v0_; }
       set {
         v0_ = value;
@@ -592,9 +592,9 @@ namespace Protos {
 
     /// <summary>Field number for the "v1" field.</summary>
     public const int V1FieldNumber = 4;
-    private float v1_;
+    private int v1_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public float V1 {
+    public int V1 {
       get { return v1_; }
       set {
         v1_ = value;
@@ -616,8 +616,8 @@ namespace Protos {
       }
       if (Frame != other.Frame) return false;
       if (InputFlag != other.InputFlag) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(V0, other.V0)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(V1, other.V1)) return false;
+      if (V0 != other.V0) return false;
+      if (V1 != other.V1) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -626,8 +626,8 @@ namespace Protos {
       int hash = 1;
       if (Frame != 0) hash ^= Frame.GetHashCode();
       if (InputFlag != 0) hash ^= InputFlag.GetHashCode();
-      if (V0 != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(V0);
-      if (V1 != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(V1);
+      if (V0 != 0) hash ^= V0.GetHashCode();
+      if (V1 != 0) hash ^= V1.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -649,13 +649,13 @@ namespace Protos {
         output.WriteRawTag(16);
         output.WriteInt32(InputFlag);
       }
-      if (V0 != 0F) {
-        output.WriteRawTag(29);
-        output.WriteFloat(V0);
+      if (V0 != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(V0);
       }
-      if (V1 != 0F) {
-        output.WriteRawTag(37);
-        output.WriteFloat(V1);
+      if (V1 != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(V1);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -671,11 +671,11 @@ namespace Protos {
       if (InputFlag != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(InputFlag);
       }
-      if (V0 != 0F) {
-        size += 1 + 4;
+      if (V0 != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(V0);
       }
-      if (V1 != 0F) {
-        size += 1 + 4;
+      if (V1 != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(V1);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -694,10 +694,10 @@ namespace Protos {
       if (other.InputFlag != 0) {
         InputFlag = other.InputFlag;
       }
-      if (other.V0 != 0F) {
+      if (other.V0 != 0) {
         V0 = other.V0;
       }
-      if (other.V1 != 0F) {
+      if (other.V1 != 0) {
         V1 = other.V1;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -719,12 +719,12 @@ namespace Protos {
             InputFlag = input.ReadInt32();
             break;
           }
-          case 29: {
-            V0 = input.ReadFloat();
+          case 24: {
+            V0 = input.ReadInt32();
             break;
           }
-          case 37: {
-            V1 = input.ReadFloat();
+          case 32: {
+            V1 = input.ReadInt32();
             break;
           }
         }

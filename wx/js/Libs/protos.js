@@ -6482,9 +6482,9 @@ $root.Protos = (function() {
             if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
                 writer.uint32(16).int32(message.inputFlag);
             if (message.v0 != null && message.hasOwnProperty("v0"))
-                writer.uint32(29).float(message.v0);
+                writer.uint32(24).int32(message.v0);
             if (message.v1 != null && message.hasOwnProperty("v1"))
-                writer.uint32(37).float(message.v1);
+                writer.uint32(32).int32(message.v1);
             return writer;
         };
 
@@ -6506,10 +6506,10 @@ $root.Protos = (function() {
                     message.inputFlag = reader.int32();
                     break;
                 case 3:
-                    message.v0 = reader.float();
+                    message.v0 = reader.int32();
                     break;
                 case 4:
-                    message.v1 = reader.float();
+                    message.v1 = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -6535,11 +6535,11 @@ $root.Protos = (function() {
                 if (!$util.isInteger(message.inputFlag))
                     return "inputFlag: integer expected";
             if (message.v0 != null && message.hasOwnProperty("v0"))
-                if (typeof message.v0 !== "number")
-                    return "v0: number expected";
+                if (!$util.isInteger(message.v0))
+                    return "v0: integer expected";
             if (message.v1 != null && message.hasOwnProperty("v1"))
-                if (typeof message.v1 !== "number")
-                    return "v1: number expected";
+                if (!$util.isInteger(message.v1))
+                    return "v1: integer expected";
             return null;
         };
 
@@ -6552,9 +6552,9 @@ $root.Protos = (function() {
             if (object.inputFlag != null)
                 message.inputFlag = object.inputFlag | 0;
             if (object.v0 != null)
-                message.v0 = Number(object.v0);
+                message.v0 = object.v0 | 0;
             if (object.v1 != null)
-                message.v1 = Number(object.v1);
+                message.v1 = object.v1 | 0;
             return message;
         };
 
@@ -6573,9 +6573,9 @@ $root.Protos = (function() {
             if (message.inputFlag != null && message.hasOwnProperty("inputFlag"))
                 object.inputFlag = message.inputFlag;
             if (message.v0 != null && message.hasOwnProperty("v0"))
-                object.v0 = options.json && !isFinite(message.v0) ? String(message.v0) : message.v0;
+                object.v0 = message.v0;
             if (message.v1 != null && message.hasOwnProperty("v1"))
-                object.v1 = options.json && !isFinite(message.v1) ? String(message.v1) : message.v1;
+                object.v1 = message.v1;
             return object;
         };
 

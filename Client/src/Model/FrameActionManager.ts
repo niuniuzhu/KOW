@@ -4,6 +4,8 @@ import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Vec2 } from "../RC/Math/Vec2";
 import { Timer } from "../RC/Utils/Timer";
+import { Logger } from "../RC/Utils/Logger";
+import { FMathUtils } from "../RC/FMath/FMathUtils";
 
 enum InputFlag {
 	None = 0,
@@ -31,8 +33,9 @@ export class FrameAciontManager {
 		const info = new Protos.GC2BS_FrameActionInfo();
 		info.frame = 0;//todo
 		info.inputFlag = InputFlag.Move;
-		info.v0 = direction.x;
-		info.v1 = direction.y;
+		info.v0 = Math.floor(direction.x * 1000);
+		info.v1 = Math.floor(direction.y * 1000);
+		Logger.Log(info.v0 + ":" + info.v1);
 		this._infos.push(info);
 	}
 
@@ -42,7 +45,7 @@ export class FrameAciontManager {
 		const info = new Protos.GC2BS_FrameActionInfo();
 		info.frame = 0;//todo
 		info.inputFlag = InputFlag.S1;
-		info.v0 = press ? 1 : 0;
+		info.v0 = press ? 1000 : 0;
 		this._infos.push(info);
 	}
 
@@ -52,7 +55,7 @@ export class FrameAciontManager {
 		const info = new Protos.GC2BS_FrameActionInfo();
 		info.frame = 0;//todo
 		info.inputFlag = InputFlag.S2;
-		info.v0 = press ? 1 : 0;
+		info.v0 = press ? 1000 : 0;
 		this._infos.push(info);
 	}
 

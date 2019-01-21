@@ -64,7 +64,9 @@ namespace BattleServer.Battle
 
 				if ( ( inputFlag & InputFlag.S1 ) > 0 ||
 					 ( inputFlag & InputFlag.S2 ) > 0 )
-					buffer.Write( ( int )info.V0 );
+				{
+					buffer.Write( info.V0 );
+				}
 			}
 		}
 

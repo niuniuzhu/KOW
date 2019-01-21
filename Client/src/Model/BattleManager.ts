@@ -1,4 +1,3 @@
-import { UIEvent } from "./BattleEvent/UIEvent";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
@@ -7,11 +6,13 @@ import Queue from "../RC/Collections/Queue";
 import { FMathUtils } from "../RC/FMath/FMathUtils";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
+import { SyncEvent } from "./BattleEvent/SyncEvent";
+import { UIEvent } from "./BattleEvent/UIEvent";
 import { BattleInfo } from "./BattleInfo";
 import { FrameActionGroup } from "./FrameActionGroup";
 import { Battle } from "./Logic/Battle";
+import { BattleAssetsMgr } from "./View/BattleAssetsMgr";
 import { VBattle } from "./View/VBattle";
-import { SyncEvent } from "./BattleEvent/SyncEvent";
 
 /**
  * 战场管理器
@@ -57,21 +58,25 @@ export class BattleManager {
 		this._vBattle.Destroy();
 	}
 
-	public Start(): void {
+	/**
+	 * 资源加载前调用
+	 */
+	public Start(battleInfo: BattleInfo, caller: any, onComplete: () => void, onProgress: (p: number) => void): void {
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 		this._destroied = false;
+		this._lBattle.Start();
+		this._vBattle.Start(battleInfo, caller, onComplete, onProgress);
 	}
 
 	/**
-	 * 设置战场信息
+	 * 设置战场信息,资源加载后调用
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo, completeHandler: () => void): void {
 		this._playerID = battleInfo.playerID;
-
 		this._vBattle.SetBattleInfo(battleInfo);
 		this._lBattle.SetBattleInfo(battleInfo);
 

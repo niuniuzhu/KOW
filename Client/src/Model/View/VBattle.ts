@@ -6,6 +6,7 @@ import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
+import { BattleAssetsMgr } from "./BattleAssetsMgr";
 import { Camera } from "./Camera";
 import { EffectPool } from "./EffectPool";
 import { PopTextType } from "./HUD";
@@ -15,8 +16,21 @@ import { VEffect } from "./VEffect";
 import { VSceneItem } from "./VSceneItem";
 
 export class VBattle {
+	/**
+	 * 地图ID
+	 */
 	private _mapID: number = 0;
+	/**
+	 * 虚拟摄像机
+	 */
 	private readonly _camera: Camera = new Camera();
+	/**
+	 * 战场资源管理器
+	 */
+	private readonly _assetsManager: BattleAssetsMgr = new BattleAssetsMgr();
+	/**
+	 * 特效资源池
+	 */
 	private readonly _effectPool: EffectPool;
 
 	private readonly _champions: VChampion[] = [];
@@ -33,35 +47,10 @@ export class VBattle {
 
 	public get mapID(): number { return this._mapID; }
 	public get camera(): Camera { return this._camera; }
+	public get assetsManager(): BattleAssetsMgr { return this._assetsManager; }
 
 	constructor() {
 		this._effectPool = new EffectPool(this);
-	}
-
-	/**
-	 * 设置战场信息
-	 * @param battleInfo 战场信息
-	 */
-	public SetBattleInfo(battleInfo: BattleInfo): void {
-		SyncEvent.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
-		SyncEvent.AddListener(SyncEvent.E_ENTITY_CREATED, this.OnEntityCreated.bind(this));
-		SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
-		SyncEvent.AddListener(SyncEvent.E_HIT, this.OnHit.bind(this));
-		SyncEvent.AddListener(SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
-		SyncEvent.AddListener(SyncEvent.E_SCENE_ITEM_COLLISION, this.OnItemCollision.bind(this));
-		SyncEvent.AddListener(SyncEvent.E_SCENE_ITEM_TRIGGER, this.OnItemTrigger.bind(this));
-
-		this._destroied = false;
-		this._mapID = battleInfo.mapID
-		//加载配置
-		const def = Defs.GetMap(this._mapID);
-
-		this._camera.SetBounds(Hashtable.GetNumber(def, "width") * Consts.LOGIC_TO_PIXEL_RATIO,
-			Hashtable.GetNumber(def, "height") * Consts.LOGIC_TO_PIXEL_RATIO);
-
-		this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
-		this._root.touchable = false;
-		Global.graphic.mapRoot.addChild(this._root);
 	}
 
 	/**
@@ -111,6 +100,42 @@ export class VBattle {
 		this._root.dispose();
 		this._root = null;
 		this._logicFrame = 0;
+
+		this._assetsManager.Destroy();
+	}
+
+	/**
+	 * 预加载资源前调用
+	 */
+	public Start(battleInfo: BattleInfo, caller: any, onComplete: () => void, onProgress: (p: number) => void): void {
+		this._assetsManager.Preload(battleInfo, caller, onComplete, onProgress);
+	}
+
+	/**
+	 * 设置战场信息,资源预加载后调用
+	 * @param battleInfo 战场信息
+	 */
+	public SetBattleInfo(battleInfo: BattleInfo): void {
+		SyncEvent.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_ENTITY_CREATED, this.OnEntityCreated.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_HIT, this.OnHit.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_SCENE_ITEM_COLLISION, this.OnItemCollision.bind(this));
+		SyncEvent.AddListener(SyncEvent.E_SCENE_ITEM_TRIGGER, this.OnItemTrigger.bind(this));
+
+		this._destroied = false;
+		this._mapID = battleInfo.mapID
+		//加载配置
+		const def = Defs.GetMap(this._mapID);
+
+		this._camera.SetBounds(Hashtable.GetNumber(def, "width") * Consts.LOGIC_TO_PIXEL_RATIO,
+			Hashtable.GetNumber(def, "height") * Consts.LOGIC_TO_PIXEL_RATIO);
+
+		fairygui.UIPackage.addPackage("res/ui/assets");
+		this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
+		this._root.touchable = false;
+		Global.graphic.mapRoot.addChild(this._root);
 	}
 
 	public Update(dt: number): void {

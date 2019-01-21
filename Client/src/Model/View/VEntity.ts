@@ -71,7 +71,7 @@ export abstract class VEntity {
 		//加载动画数据
 		const modelID = Hashtable.GetNumber(cdefs, "model", -1);
 		if (modelID >= 0) {
-			this._animationProxy = new AnimationProxy(modelID);
+			this._animationProxy = new AnimationProxy(this, modelID);
 			this._root.addChild(this._animationProxy);
 		}
 		this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");

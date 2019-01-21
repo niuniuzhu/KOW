@@ -1,10 +1,11 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1, VSceneItem_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./BattleAssetsMgr", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, BattleAssetsMgr_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1, VSceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
         constructor() {
             this._mapID = 0;
             this._camera = new Camera_1.Camera();
+            this._assetsManager = new BattleAssetsMgr_1.BattleAssetsMgr();
             this._champions = [];
             this._idToChampion = new Map();
             this._bullets = [];
@@ -17,22 +18,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         get mapID() { return this._mapID; }
         get camera() { return this._camera; }
-        SetBattleInfo(battleInfo) {
-            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
-            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_ENTITY_CREATED, this.OnEntityCreated.bind(this));
-            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
-            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_HIT, this.OnHit.bind(this));
-            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
-            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_COLLISION, this.OnItemCollision.bind(this));
-            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_TRIGGER, this.OnItemTrigger.bind(this));
-            this._destroied = false;
-            this._mapID = battleInfo.mapID;
-            const def = Defs_1.Defs.GetMap(this._mapID);
-            this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(def, "width") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO, Hashtable_1.Hashtable.GetNumber(def, "height") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO);
-            this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
-            this._root.touchable = false;
-            Global_1.Global.graphic.mapRoot.addChild(this._root);
-        }
+        get assetsManager() { return this._assetsManager; }
         Destroy() {
             if (this._destroied)
                 return;
@@ -67,6 +53,27 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._root.dispose();
             this._root = null;
             this._logicFrame = 0;
+            this._assetsManager.Destroy();
+        }
+        Start(battleInfo, caller, onComplete, onProgress) {
+            this._assetsManager.Preload(battleInfo, caller, onComplete, onProgress);
+        }
+        SetBattleInfo(battleInfo) {
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_ENTITY_CREATED, this.OnEntityCreated.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_HIT, this.OnHit.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_COLLISION, this.OnItemCollision.bind(this));
+            SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_TRIGGER, this.OnItemTrigger.bind(this));
+            this._destroied = false;
+            this._mapID = battleInfo.mapID;
+            const def = Defs_1.Defs.GetMap(this._mapID);
+            this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(def, "width") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO, Hashtable_1.Hashtable.GetNumber(def, "height") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO);
+            fairygui.UIPackage.addPackage("res/ui/assets");
+            this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
+            this._root.touchable = false;
+            Global_1.Global.graphic.mapRoot.addChild(this._root);
         }
         Update(dt) {
             this._camera.Update(dt);

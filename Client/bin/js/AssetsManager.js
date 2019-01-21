@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
         static LoadBatch(batch, caller, completeHandler, progressHandler) {
             const urls = [];
             for (const item of batch) {
-                urls.push({ url: item["url"], type: this.ConvertType(Number.parseInt(item["type"])) });
+                urls.push({ url: item.url, type: this.ConvertType(item.type) });
             }
             this.LoadBatchStr(urls, caller, completeHandler, progressHandler);
         }

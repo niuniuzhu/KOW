@@ -1,4 +1,4 @@
-define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Preloader", "./RC/Utils/Logger", "./Scene/SceneManager", "./RC/Utils/JsonHelper", "./RC/Utils/Hashtable"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, Preloader_1, Logger_1, SceneManager_1, JsonHelper_1, Hashtable_1) {
+define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Model/CDefs", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, CDefs_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
@@ -31,11 +31,29 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
                     this._aniComplete = true;
                     this.CheckPreloadComplete();
                 }), 1, 0, 0, -1);
-                Preloader_1.Preloader.Load(this, () => {
+                this.Load(this, () => {
                     this._preloadComplete = true;
                     this.CheckPreloadComplete();
                 });
             });
+        }
+        Load(caller, completeHandler) {
+            Logger_1.Logger.Log("loading defs...");
+            AssetsManager_1.AssetsManager.Load("res/defs/b_defs.json", AssetsManager_1.AssetType.Json, null, () => {
+                const json = Laya.loader.getRes("res/defs/b_defs.json");
+                CDefs_1.CDefs.Init(json);
+                this.LoadUIRes(caller, completeHandler);
+            }, null);
+        }
+        LoadUIRes(caller, completeHandler) {
+            Logger_1.Logger.Log("loading res...");
+            const preloads = CDefs_1.CDefs.GetPreloads();
+            const urls = [];
+            for (const u of preloads) {
+                const ss = u.split(",");
+                urls.push({ url: "res/ui/" + ss[0], type: Number.parseInt(ss[1]) });
+            }
+            AssetsManager_1.AssetsManager.LoadBatch(urls, caller, completeHandler);
         }
         CheckPreloadComplete() {
             if (this._aniComplete && this._preloadComplete) {

@@ -10,6 +10,22 @@ export enum AssetType {
 }
 
 /**
+ * 资源路径描述接口
+ */
+export interface IUrlDesc {
+	url: string;
+	type: AssetType;
+}
+
+/**
+ * 资源路径描述接口
+ */
+export interface IUrlDesc2 {
+	url: string;
+	type: string;
+}
+
+/**
  * 资源管理器
  * 由于laya已经有缓存机制,这里就只封装一下api好了
  */
@@ -20,7 +36,7 @@ export class AssetsManager {
 	}
 
 	public static LoadUIPacket(name: string, atlasCount: number = 1, caller: any, completeHandler?: () => void, progressHandler?: (p: number) => void): void {
-		const urls = [];
+		const urls: IUrlDesc[] = [];
 		urls.push({ url: `res/ui/${name}.bin`, type: AssetType.Binary });
 		for (let i = 0; i < atlasCount; ++i) {
 			urls.push({ url: `res/ui/${name}_atlas${i}.png`, type: AssetType.Image });
@@ -28,15 +44,15 @@ export class AssetsManager {
 		this.LoadBatch(urls, caller, completeHandler, progressHandler);
 	}
 
-	public static LoadBatch(batch: {}[], caller: any, completeHandler?: () => void, progressHandler?: (p: number) => void): void {
-		const urls = [];
+	public static LoadBatch(batch: IUrlDesc[], caller: any, completeHandler?: () => void, progressHandler?: (p: number) => void): void {
+		const urls: IUrlDesc2[] = [];
 		for (const item of batch) {
-			urls.push({ url: item["url"], type: this.ConvertType(Number.parseInt(item["type"])) });
+			urls.push({ url: item.url, type: this.ConvertType(item.type) });
 		}
 		this.LoadBatchStr(urls, caller, completeHandler, progressHandler);
 	}
 
-	public static LoadBatchStr(batch: {}[], caller: any, completeHandler?: () => void, progressHandler?: (p: number) => void): void {
+	public static LoadBatchStr(batch: IUrlDesc2[], caller: any, completeHandler?: () => void, progressHandler?: (p: number) => void): void {
 		Laya.loader.load(batch, completeHandler ? Laya.Handler.create(caller, completeHandler) : null, progressHandler ? new Laya.Handler(caller, progressHandler) : null);
 	}
 

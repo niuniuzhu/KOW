@@ -49,7 +49,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/Mat
             const cdefs = this.BeforeLoadDefs();
             const modelID = Hashtable_1.Hashtable.GetNumber(cdefs, "model", -1);
             if (modelID >= 0) {
-                this._animationProxy = new AnimationProxy_1.AnimationProxy(modelID);
+                this._animationProxy = new AnimationProxy_1.AnimationProxy(this, modelID);
                 this._root.addChild(this._animationProxy);
             }
             this._modelLevel = Hashtable_1.Hashtable.GetNumber(cdefs, "model_layer");

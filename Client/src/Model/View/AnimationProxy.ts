@@ -2,8 +2,7 @@ import { Consts } from "../../Consts";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
-import { AnimationTemplatePool } from "./AnimationTemplatePool";
-import { Logger } from "../../RC/Utils/Logger";
+import { VEntity } from "./VEntity";
 
 export enum AnimationPlayMode {
 	Loop,
@@ -28,7 +27,7 @@ export class AnimationProxy extends fairygui.GGraph {
 	private _animation: Laya.Animation;
 	private _playingID: number = -1;
 
-	constructor(id: number) {
+	constructor(owner: VEntity, id: number) {
 		super();
 		const def = CDefs.GetModel(id);
 		const model = Consts.ASSETS_MODEL_PREFIX + id;
@@ -42,12 +41,11 @@ export class AnimationProxy extends fairygui.GGraph {
 			const alias = `${model}_${id}`;
 			const aniName = Hashtable.GetString(aniDef, "name");
 			const length = Hashtable.GetNumber(aniDef, "length");
-			let mw: number = 0, mh: number = 0;
 
 			//todo 应该记录到缓存池,能按key读取
 			//setting也保存到缓存池
 			//计算所有graphic的大小,选取最大一个为该动画的大小
-			let setting = AnimationTemplatePool.Get(alias);
+			let setting = owner.battle.assetsManager.GetAniSetting(alias);
 			if (setting == null) {
 				const startFrame = Hashtable.GetNumber(aniDef, "start_frame");
 				const urls: string[] = [];
@@ -55,6 +53,7 @@ export class AnimationProxy extends fairygui.GGraph {
 					urls.push(`${model}/${aniName}${i}.png`);
 				}
 				//创建动画模板
+				let mw: number = 0, mh: number = 0;
 				const template: laya.display.Graphics[] = Laya.Animation.createFrames(urls, alias);
 				for (const g of template) {
 					const texture = <laya.resource.Texture>g._one[0];
@@ -72,10 +71,9 @@ export class AnimationProxy extends fairygui.GGraph {
 				setting.playMode = Hashtable.GetNumber(aniDef, "play_mode");
 				setting.length = length;
 				setting.interval = Hashtable.GetNumber(aniDef, "interval");
-				Logger.Log(setting.alias + ", size:" + setting.size.ToString());
-				AnimationTemplatePool.Add(alias, setting);
+				owner.battle.assetsManager.AddAniSetting(alias, setting);
 			}
-			this._aniSettings.set(id, AnimationTemplatePool.Get(alias));
+			this._aniSettings.set(id, owner.battle.assetsManager.GetAniSetting(alias));
 		}
 
 		this._animation = new Laya.Animation();

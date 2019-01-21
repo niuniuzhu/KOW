@@ -1,11 +1,7 @@
-import { AssetsManager, AssetType } from "../AssetsManager";
-import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { BattleInfo } from "../Model/BattleInfo";
-import { CDefs } from "../Model/CDefs";
 import { ProtoCreator } from "../Net/ProtoHelper";
-import { Hashtable } from "../RC/Utils/Hashtable";
 import { Logger } from "../RC/Utils/Logger";
 import { UILoading } from "../UI/UILoading";
 import { SceneManager } from "./SceneManager";
@@ -47,7 +43,6 @@ export class LoadingState extends SceneState {
 
 				switch (resp.result) {
 					case Protos.Global.ECommon.Success:
-						Global.battleManager.Start();
 						//把数据保存,加载资源后用于创建战场
 						this._battleInfo.playerID = resp.playerID;
 						this._battleInfo.rndSeed = resp.rndSeed;
@@ -58,8 +53,17 @@ export class LoadingState extends SceneState {
 						this._battleInfo.mapID = resp.mapID;
 						this._battleInfo.playerInfos = resp.playerInfos;
 						this._battleInfo.serverFrame = resp.curFrame;
-						//预加载资源
-						this.LoadAssets(this._battleInfo);
+
+						//战场开始,预加载资源
+						Global.battleManager.Start(this._battleInfo, this, () => {
+							this._ui.OnLoadComplete();
+							//资源预加载后调用
+							Global.battleManager.SetBattleInfo(this._battleInfo, () => {
+								Global.sceneManager.ChangeState(SceneManager.State.Battle, this._battleInfo);
+							});
+						}, p => {
+							this._ui.OnLoadProgress(p);
+						});
 						break;
 				}
 			});
@@ -69,45 +73,5 @@ export class LoadingState extends SceneState {
 		} else {
 			connector.Connect(ip, port);
 		}
-	}
-
-	/**
-	 * 读取资源载入内存
-	 */
-	private LoadAssets(battleInfo: BattleInfo): void {
-		const urls = [];
-		//获取场景预加载资源路径
-		const mapDef = CDefs.GetMap(battleInfo.mapID);
-		const preloads = Hashtable.GetStringArray(mapDef, "preloads");
-		for (const u of preloads) {
-			const ss = u.split(",");
-			urls.push({ url: "res/" + ss[0], type: ss[1] });
-		}
-		//压入角色资源
-		const count = battleInfo.playerInfos.length;
-		for (let i = 0; i < count; ++i) {
-			const playerInfo = battleInfo.playerInfos[i];
-			urls.push({ url: "res/roles/" + Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
-		}
-		//压入地图资源
-		urls.push({ url: "res/ui/assets.bin", type: AssetType.Binary });
-		urls.push({ url: "res/ui/assets_atlas0.png", type: AssetType.Image });
-		AssetsManager.LoadBatch(urls, this, () => {
-			this._ui.OnLoadComplete();
-			fairygui.UIPackage.addPackage("res/ui/assets");
-			this.InitBattle();
-		}, p => {
-			this._ui.OnLoadProgress(p);
-		});
-	}
-
-	/**
-	 * 准备战场环境
-	 */
-	private InitBattle(): void {
-		//初始化战场,解码快照
-		Global.battleManager.SetBattleInfo(this._battleInfo, () => {
-			Global.sceneManager.ChangeState(SceneManager.State.Battle, this._battleInfo);
-		});
 	}
 }

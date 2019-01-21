@@ -1,13 +1,13 @@
-import { AssetsManager } from "./AssetsManager";
+import { AssetsManager, AssetType, IUrlDesc } from "./AssetsManager";
 import { Consts } from "./Consts";
 import { Global } from "./Global";
 import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
-import { Preloader } from "./Preloader";
+import { CDefs } from "./Model/CDefs";
+import { Hashtable } from "./RC/Utils/Hashtable";
+import { JsonHelper } from "./RC/Utils/JsonHelper";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
-import { JsonHelper } from "./RC/Utils/JsonHelper";
-import { Hashtable } from "./RC/Utils/Hashtable";
 
 export class Main {
 	private static _instance: Main;
@@ -49,11 +49,31 @@ export class Main {
 				this.CheckPreloadComplete();
 			}), 1, 0, 0, -1);
 
-			Preloader.Load(this, () => {
+			this.Load(this, () => {
 				this._preloadComplete = true;
 				this.CheckPreloadComplete();
 			});
 		});
+	}
+
+	public Load(caller: any, completeHandler: () => void): void {
+		Logger.Log("loading defs...");
+		AssetsManager.Load("res/defs/b_defs.json", AssetType.Json, null, () => {
+			const json: JSON = Laya.loader.getRes("res/defs/b_defs.json");
+			CDefs.Init(json);
+			this.LoadUIRes(caller, completeHandler);
+		}, null);
+	}
+
+	private LoadUIRes(caller: any, completeHandler: () => void): void {
+		Logger.Log("loading res...");
+		const preloads = CDefs.GetPreloads();
+		const urls: IUrlDesc[] = [];
+		for (const u of preloads) {
+			const ss = u.split(",");
+			urls.push({ url: "res/ui/" + ss[0], type: Number.parseInt(ss[1]) });
+		}
+		AssetsManager.LoadBatch(urls, caller, completeHandler);
 	}
 
 	private CheckPreloadComplete(): void {

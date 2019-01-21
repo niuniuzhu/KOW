@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../CDefs", "./AnimationTemplatePool", "../../RC/Utils/Logger"], function (require, exports, Consts_1, Vec2_1, Hashtable_1, CDefs_1, AnimationTemplatePool_1, Logger_1) {
+define(["require", "exports", "../../Consts", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../CDefs"], function (require, exports, Consts_1, Vec2_1, Hashtable_1, CDefs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var AnimationPlayMode;
@@ -11,7 +11,7 @@ define(["require", "exports", "../../Consts", "../../RC/Math/Vec2", "../../RC/Ut
     }
     exports.AnimationSetting = AnimationSetting;
     class AnimationProxy extends fairygui.GGraph {
-        constructor(id) {
+        constructor(owner, id) {
             super();
             this._aniSettings = new Map();
             this._playingID = -1;
@@ -26,14 +26,14 @@ define(["require", "exports", "../../Consts", "../../RC/Math/Vec2", "../../RC/Ut
                 const alias = `${model}_${id}`;
                 const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
                 const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
-                let mw = 0, mh = 0;
-                let setting = AnimationTemplatePool_1.AnimationTemplatePool.Get(alias);
+                let setting = owner.battle.assetsManager.GetAniSetting(alias);
                 if (setting == null) {
                     const startFrame = Hashtable_1.Hashtable.GetNumber(aniDef, "start_frame");
                     const urls = [];
                     for (let i = startFrame; i < length; ++i) {
                         urls.push(`${model}/${aniName}${i}.png`);
                     }
+                    let mw = 0, mh = 0;
                     const template = Laya.Animation.createFrames(urls, alias);
                     for (const g of template) {
                         const texture = g._one[0];
@@ -51,10 +51,9 @@ define(["require", "exports", "../../Consts", "../../RC/Math/Vec2", "../../RC/Ut
                     setting.playMode = Hashtable_1.Hashtable.GetNumber(aniDef, "play_mode");
                     setting.length = length;
                     setting.interval = Hashtable_1.Hashtable.GetNumber(aniDef, "interval");
-                    Logger_1.Logger.Log(setting.alias + ", size:" + setting.size.ToString());
-                    AnimationTemplatePool_1.AnimationTemplatePool.Add(alias, setting);
+                    owner.battle.assetsManager.AddAniSetting(alias, setting);
                 }
-                this._aniSettings.set(id, AnimationTemplatePool_1.AnimationTemplatePool.Get(alias));
+                this._aniSettings.set(id, owner.battle.assetsManager.GetAniSetting(alias));
             }
             this._animation = new Laya.Animation();
             this.setPivot(0.5, 0.5, true);

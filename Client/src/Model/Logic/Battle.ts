@@ -80,7 +80,46 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 设置战场信息
+	 * 战场结束
+	 */
+	public Destroy(): void {
+		if (this._destroied)
+			return;
+		this._destroied = true;
+		this._bounds = null;
+		this._frameActionGroups.clear();
+		this._calcManager.Destroy();
+
+		for (let i = 0, count = this._champions.length; i < count; i++)
+			this._champions[i].Destroy();
+		this._champions.splice(0);
+		this._idToChampion.clear();
+
+		for (let i = 0, count = this._emitters.length; i < count; i++)
+			this._emitters[i].Destroy();
+		this._emitters.splice(0);
+		this._idToEmitter.clear();
+
+		for (let i = 0, count = this._bullets.length; i < count; i++)
+			this._bullets[i].Destroy();
+		this._bullets.splice(0);
+		this._idToBullet.clear();
+
+		for (let i = 0, count = this._items.length; i < count; i++)
+			this._items[i].Destroy();
+		this._items.splice(0);
+		this._idToItem.clear();
+	}
+
+	/**
+	 * 预加载资源前调用
+	 */
+	public Start(): void {
+
+	}
+
+	/**
+	 * 设置战场信息,资源预加载后调用
 	 * @param battleInfo 战场信息
 	 */
 	public SetBattleInfo(battleInfo: BattleInfo): void {
@@ -120,38 +159,6 @@ export class Battle implements ISnapshotable {
 		this._gladiatorPos = Hashtable.GetFVec2(defs, "gladiator_pos");
 		this._gladiatorRadius = Hashtable.GetNumber(defs, "gladiator_radius");
 		this._hpPacket.Init(defs);
-	}
-
-	/**
-	 * 战场结束
-	 */
-	public Destroy(): void {
-		if (this._destroied)
-			return;
-		this._destroied = true;
-		this._bounds = null;
-		this._frameActionGroups.clear();
-		this._calcManager.Destroy();
-
-		for (let i = 0, count = this._champions.length; i < count; i++)
-			this._champions[i].Destroy();
-		this._champions.splice(0);
-		this._idToChampion.clear();
-
-		for (let i = 0, count = this._emitters.length; i < count; i++)
-			this._emitters[i].Destroy();
-		this._emitters.splice(0);
-		this._idToEmitter.clear();
-
-		for (let i = 0, count = this._bullets.length; i < count; i++)
-			this._bullets[i].Destroy();
-		this._bullets.splice(0);
-		this._idToBullet.clear();
-
-		for (let i = 0, count = this._items.length; i < count; i++)
-			this._items[i].Destroy();
-		this._items.splice(0);
-		this._idToItem.clear();
 	}
 
 	/**

@@ -38,6 +38,32 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         get gladiatorRadius() { return this._gladiatorRadius; }
         get random() { return this._random; }
         get calcManager() { return this._calcManager; }
+        Destroy() {
+            if (this._destroied)
+                return;
+            this._destroied = true;
+            this._bounds = null;
+            this._frameActionGroups.clear();
+            this._calcManager.Destroy();
+            for (let i = 0, count = this._champions.length; i < count; i++)
+                this._champions[i].Destroy();
+            this._champions.splice(0);
+            this._idToChampion.clear();
+            for (let i = 0, count = this._emitters.length; i < count; i++)
+                this._emitters[i].Destroy();
+            this._emitters.splice(0);
+            this._idToEmitter.clear();
+            for (let i = 0, count = this._bullets.length; i < count; i++)
+                this._bullets[i].Destroy();
+            this._bullets.splice(0);
+            this._idToBullet.clear();
+            for (let i = 0, count = this._items.length; i < count; i++)
+                this._items[i].Destroy();
+            this._items.splice(0);
+            this._idToItem.clear();
+        }
+        Start() {
+        }
         SetBattleInfo(battleInfo) {
             this._destroied = false;
             this._frameRate = battleInfo.frameRate;
@@ -72,30 +98,6 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._gladiatorPos = Hashtable_1.Hashtable.GetFVec2(defs, "gladiator_pos");
             this._gladiatorRadius = Hashtable_1.Hashtable.GetNumber(defs, "gladiator_radius");
             this._hpPacket.Init(defs);
-        }
-        Destroy() {
-            if (this._destroied)
-                return;
-            this._destroied = true;
-            this._bounds = null;
-            this._frameActionGroups.clear();
-            this._calcManager.Destroy();
-            for (let i = 0, count = this._champions.length; i < count; i++)
-                this._champions[i].Destroy();
-            this._champions.splice(0);
-            this._idToChampion.clear();
-            for (let i = 0, count = this._emitters.length; i < count; i++)
-                this._emitters[i].Destroy();
-            this._emitters.splice(0);
-            this._idToEmitter.clear();
-            for (let i = 0, count = this._bullets.length; i < count; i++)
-                this._bullets[i].Destroy();
-            this._bullets.splice(0);
-            this._idToBullet.clear();
-            for (let i = 0, count = this._items.length; i < count; i++)
-                this._items[i].Destroy();
-            this._items.splice(0);
-            this._idToItem.clear();
         }
         Update(dt) {
             this.Chase(this._frameActionGroups);

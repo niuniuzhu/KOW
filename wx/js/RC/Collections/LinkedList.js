@@ -1,6 +1,8 @@
-import * as util from './util';
-import * as arrays from './arrays';
-export default class LinkedList {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const util = require("./util");
+const arrays = require("./arrays");
+class LinkedList {
     constructor() {
         this.firstNode = null;
         this.lastNode = null;
@@ -218,3 +220,4 @@ export default class LinkedList {
         };
     }
 }
+exports.default = LinkedList;

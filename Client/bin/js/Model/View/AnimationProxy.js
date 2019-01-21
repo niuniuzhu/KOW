@@ -36,7 +36,7 @@ define(["require", "exports", "../../Consts", "../../RC/Math/Vec2", "../../RC/Ut
                     let mw = 0, mh = 0;
                     const template = Laya.Animation.createFrames(urls, alias);
                     for (const g of template) {
-                        const texture = g._one[0];
+                        const texture = g._one.texture;
                         if (texture.sourceWidth > mw) {
                             mw = texture.sourceWidth;
                         }

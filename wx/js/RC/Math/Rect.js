@@ -1,6 +1,8 @@
-import { Vec2 } from "./Vec2";
-import { MathUtils } from "./MathUtils";
-export class Rect {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Vec2_1 = require("./Vec2");
+const MathUtils_1 = require("./MathUtils");
+class Rect {
     static get zero() {
         return new Rect();
     }
@@ -8,22 +10,22 @@ export class Rect {
     set x(value) { this._xMin = value; }
     get y() { return this._yMin; }
     set y(value) { this._yMin = value; }
-    get position() { return new Vec2(this._xMin, this._yMin); }
+    get position() { return new Vec2_1.Vec2(this._xMin, this._yMin); }
     set position(value) {
         this._xMin = value.x;
         this._yMin = value.y;
     }
-    get center() { return new Vec2(this.x + this._width / 2, this.y + this._height / 2); }
+    get center() { return new Vec2_1.Vec2(this.x + this._width / 2, this.y + this._height / 2); }
     set center(value) {
         this._xMin = value.x - this._width / 2;
         this._yMin = value.y - this._height / 2;
     }
-    get min() { return new Vec2(this.xMin, this.yMin); }
+    get min() { return new Vec2_1.Vec2(this.xMin, this.yMin); }
     set min(value) {
         this.xMin = value.x;
         this.yMin = value.y;
     }
-    get max() { return new Vec2(this.xMax, this.yMax); }
+    get max() { return new Vec2_1.Vec2(this.xMax, this.yMax); }
     set max(value) {
         this.xMax = value.x;
         this.yMax = value.y;
@@ -32,7 +34,7 @@ export class Rect {
     set width(value) { this._width = value; }
     get height() { return this._height; }
     set height(value) { this.height = value; }
-    get size() { return new Vec2(this._width, this._height); }
+    get size() { return new Vec2_1.Vec2(this._width, this._height); }
     set size(value) {
         this._width = value.x;
         this._height = value.y;
@@ -122,9 +124,10 @@ export class Rect {
         return other.xMax > rect.xMin && other.xMin < rect.xMax && other.yMax > rect.yMin && other.yMin < rect.yMax;
     }
     static NormalizedToPoint(rectangle, normalizedRectCoordinates) {
-        return new Vec2(MathUtils.Lerp(rectangle.x, rectangle.xMax, normalizedRectCoordinates.x), MathUtils.Lerp(rectangle.y, rectangle.yMax, normalizedRectCoordinates.y));
+        return new Vec2_1.Vec2(MathUtils_1.MathUtils.Lerp(rectangle.x, rectangle.xMax, normalizedRectCoordinates.x), MathUtils_1.MathUtils.Lerp(rectangle.y, rectangle.yMax, normalizedRectCoordinates.y));
     }
     static PointToNormalized(rectangle, point) {
-        return new Vec2(MathUtils.InverseLerp(rectangle.x, rectangle.xMax, point.x), MathUtils.InverseLerp(rectangle.y, rectangle.yMax, point.y));
+        return new Vec2_1.Vec2(MathUtils_1.MathUtils.InverseLerp(rectangle.x, rectangle.xMax, point.x), MathUtils_1.MathUtils.InverseLerp(rectangle.y, rectangle.yMax, point.y));
     }
 }
+exports.Rect = Rect;

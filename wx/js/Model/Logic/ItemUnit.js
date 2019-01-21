@@ -1,7 +1,9 @@
-import { FMathUtils } from "../../RC/FMath/FMathUtils";
-import { SyncEvent } from "../BattleEvent/SyncEvent";
-import { SceneItemAttrOp } from "./SceneItem";
-export class ItemUnit {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const FMathUtils_1 = require("../../RC/FMath/FMathUtils");
+const SyncEvent_1 = require("../BattleEvent/SyncEvent");
+const SceneItem_1 = require("./SceneItem");
+class ItemUnit {
     constructor(manager) {
         this._manager = manager;
     }
@@ -19,26 +21,26 @@ export class ItemUnit {
             const op = item.ops[i];
             const old = target.GetAttr(attr);
             switch (op) {
-                case SceneItemAttrOp.Add:
-                    value = FMathUtils.Add(value, old);
+                case SceneItem_1.SceneItemAttrOp.Add:
+                    value = FMathUtils_1.FMathUtils.Add(value, old);
                     break;
-                case SceneItemAttrOp.Mul:
-                    value = FMathUtils.Mul(value, old);
+                case SceneItem_1.SceneItemAttrOp.Mul:
+                    value = FMathUtils_1.FMathUtils.Mul(value, old);
                     break;
-                case SceneItemAttrOp.Pow:
-                    value = FMathUtils.Pow(value, old);
+                case SceneItem_1.SceneItemAttrOp.Pow:
+                    value = FMathUtils_1.FMathUtils.Pow(value, old);
                     break;
-                case SceneItemAttrOp.Sin:
-                    value = FMathUtils.Sin(old);
+                case SceneItem_1.SceneItemAttrOp.Sin:
+                    value = FMathUtils_1.FMathUtils.Sin(old);
                     break;
-                case SceneItemAttrOp.Cos:
-                    value = FMathUtils.Cos(old);
+                case SceneItem_1.SceneItemAttrOp.Cos:
+                    value = FMathUtils_1.FMathUtils.Cos(old);
                     break;
             }
             target.SetAttr(attr, value);
         }
         if (!item.battle.chase) {
-            SyncEvent.ItemTrigger(this._itemID, this._targetID);
+            SyncEvent_1.SyncEvent.ItemTrigger(this._itemID, this._targetID);
         }
     }
     EncodeSnapshot(writer) {
@@ -50,3 +52,4 @@ export class ItemUnit {
         this._targetID = reader.uint64();
     }
 }
+exports.ItemUnit = ItemUnit;

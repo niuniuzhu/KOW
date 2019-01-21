@@ -56,7 +56,7 @@ export class AnimationProxy extends fairygui.GGraph {
 				let mw: number = 0, mh: number = 0;
 				const template: laya.display.Graphics[] = Laya.Animation.createFrames(urls, alias);
 				for (const g of template) {
-					const texture = <laya.resource.Texture>g._one[0];
+					const texture = g._one.texture;
 					if (texture.sourceWidth > mw) {
 						mw = texture.sourceWidth;
 					}

@@ -1,4 +1,6 @@
-export class Logger {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Logger {
     static Log(message) {
         console.log(message);
     }
@@ -24,3 +26,4 @@ export class Logger {
         console.exception(message);
     }
 }
+exports.Logger = Logger;

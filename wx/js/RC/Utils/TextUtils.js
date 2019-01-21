@@ -1,4 +1,6 @@
-export class StringUtils {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class StringUtils {
     static DecodeUTF8(arr) {
         let str = "";
         for (let i = 0; i < arr.length; i++) {
@@ -14,3 +16,4 @@ export class StringUtils {
         return format;
     }
 }
+exports.StringUtils = StringUtils;

@@ -1,5 +1,7 @@
-import * as util from './util';
-export function indexOf(array, item, equalsFunction) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const util = require("./util");
+function indexOf(array, item, equalsFunction) {
     const equals = equalsFunction || util.defaultEquals;
     const length = array.length;
     for (let i = 0; i < length; i++) {
@@ -9,7 +11,8 @@ export function indexOf(array, item, equalsFunction) {
     }
     return -1;
 }
-export function lastIndexOf(array, item, equalsFunction) {
+exports.indexOf = indexOf;
+function lastIndexOf(array, item, equalsFunction) {
     const equals = equalsFunction || util.defaultEquals;
     const length = array.length;
     for (let i = length - 1; i >= 0; i--) {
@@ -19,10 +22,12 @@ export function lastIndexOf(array, item, equalsFunction) {
     }
     return -1;
 }
-export function contains(array, item, equalsFunction) {
+exports.lastIndexOf = lastIndexOf;
+function contains(array, item, equalsFunction) {
     return indexOf(array, item, equalsFunction) >= 0;
 }
-export function remove(array, item, equalsFunction) {
+exports.contains = contains;
+function remove(array, item, equalsFunction) {
     const index = indexOf(array, item, equalsFunction);
     if (index < 0) {
         return false;
@@ -30,7 +35,8 @@ export function remove(array, item, equalsFunction) {
     array.splice(index, 1);
     return true;
 }
-export function frequency(array, item, equalsFunction) {
+exports.remove = remove;
+function frequency(array, item, equalsFunction) {
     const equals = equalsFunction || util.defaultEquals;
     const length = array.length;
     let freq = 0;
@@ -41,7 +47,8 @@ export function frequency(array, item, equalsFunction) {
     }
     return freq;
 }
-export function equals(array1, array2, equalsFunction) {
+exports.frequency = frequency;
+function equals(array1, array2, equalsFunction) {
     const equals = equalsFunction || util.defaultEquals;
     if (array1.length !== array2.length) {
         return false;
@@ -54,10 +61,12 @@ export function equals(array1, array2, equalsFunction) {
     }
     return true;
 }
-export function copy(array) {
+exports.equals = equals;
+function copy(array) {
     return array.concat();
 }
-export function swap(array, i, j) {
+exports.copy = copy;
+function swap(array, i, j) {
     if (i < 0 || i >= array.length || j < 0 || j >= array.length) {
         return false;
     }
@@ -66,13 +75,16 @@ export function swap(array, i, j) {
     array[j] = temp;
     return true;
 }
-export function toString(array) {
+exports.swap = swap;
+function toString(array) {
     return '[' + array.toString() + ']';
 }
-export function forEach(array, callback) {
+exports.toString = toString;
+function forEach(array, callback) {
     for (const ele of array) {
         if (callback(ele) === false) {
             return;
         }
     }
 }
+exports.forEach = forEach;

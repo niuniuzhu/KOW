@@ -1,10 +1,12 @@
-import * as Long from "../../../Libs/long";
-import { FMathUtils } from "../../../RC/FMath/FMathUtils";
-import { Logger } from "../../../RC/Utils/Logger";
-import { StateType } from "../../StateEnums";
-import { EAttr } from "../Attribute";
-import { EntityStateAction } from "./EntityStateAction";
-export class ActAttack extends EntityStateAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Long = require("../../../Libs/long");
+const FMathUtils_1 = require("../../../RC/FMath/FMathUtils");
+const Logger_1 = require("../../../RC/Utils/Logger");
+const StateEnums_1 = require("../../StateEnums");
+const Attribute_1 = require("../Attribute");
+const EntityStateAction_1 = require("./EntityStateAction");
+class ActAttack extends EntityStateAction_1.EntityStateAction {
     constructor() {
         super(...arguments);
         this._casterID = Long.ZERO;
@@ -28,15 +30,15 @@ export class ActAttack extends EntityStateAction {
         const skill = owner.GetSkill(this._skillID);
         skill.shakeTime = owner.fsm.context.shakeTime;
         if (skill == null) {
-            Logger.Warn(`can not find skill:${this._skillID}`);
-            owner.fsm.ChangeState(StateType.Idle);
+            Logger_1.Logger.Warn(`can not find skill:${this._skillID}`);
+            owner.fsm.ChangeState(StateEnums_1.StateType.Idle);
         }
     }
     OnTrigger() {
         super.OnTrigger();
         const owner = this.state.owner;
         const skill = owner.GetSkill(this._skillID);
-        owner.SetAttr(EAttr.MP, FMathUtils.Sub(owner.mp, skill.mpCost));
+        owner.SetAttr(Attribute_1.EAttr.MP, FMathUtils_1.FMathUtils.Sub(owner.mp, skill.mpCost));
         owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
     }
     Dump() {
@@ -46,3 +48,4 @@ export class ActAttack extends EntityStateAction {
         return str;
     }
 }
+exports.ActAttack = ActAttack;

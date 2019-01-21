@@ -1,6 +1,8 @@
-import * as util from './util';
-import Queue from './Queue';
-export default class BSTreeKV {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const util = require("./util");
+const Queue_1 = require("./Queue");
+class BSTreeKV {
     constructor(compareFunction) {
         this.root = null;
         this.compare = compareFunction || util.defaultCompare;
@@ -153,7 +155,7 @@ export default class BSTreeKV {
         this.inorderTraversalAux(node.rightCh, callback, signal);
     }
     levelTraversalAux(node, callback) {
-        const queue = new Queue();
+        const queue = new Queue_1.default();
         if (node !== null) {
             queue.enqueue(node);
         }
@@ -255,3 +257,4 @@ export default class BSTreeKV {
         };
     }
 }
+exports.default = BSTreeKV;

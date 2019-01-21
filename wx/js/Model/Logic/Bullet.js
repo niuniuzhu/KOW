@@ -1,12 +1,15 @@
-import * as Long from "../../Libs/long";
-import { FMathUtils } from "../../RC/FMath/FMathUtils";
-import { FVec2 } from "../../RC/FMath/FVec2";
-import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
-import { Hashtable } from "../../RC/Utils/Hashtable";
-import { SyncEvent } from "../BattleEvent/SyncEvent";
-import { Defs } from "../Defs";
-import { EAttr } from "./Attribute";
-import { Entity, EntityType } from "./Entity";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Long = require("../../Libs/long");
+const FMathUtils_1 = require("../../RC/FMath/FMathUtils");
+const FVec2_1 = require("../../RC/FMath/FVec2");
+const Intersection_1 = require("../../RC/FMath/Intersection");
+const Hashtable_1 = require("../../RC/Utils/Hashtable");
+const SyncEvent_1 = require("../BattleEvent/SyncEvent");
+const Defs_1 = require("../Defs");
+const EntityType_1 = require("../EntityType");
+const Attribute_1 = require("./Attribute");
+const Entity_1 = require("./Entity");
 var BulletMoveType;
 (function (BulletMoveType) {
     BulletMoveType[BulletMoveType["Linear"] = 0] = "Linear";
@@ -45,7 +48,7 @@ var DestroyType;
     DestroyType[DestroyType["Emitter"] = 2] = "Emitter";
     DestroyType[DestroyType["Caster"] = 3] = "Caster";
 })(DestroyType || (DestroyType = {}));
-export class Bullet extends Entity {
+class Bullet extends Entity_1.Entity {
     constructor() {
         super(...arguments);
         this._targets1 = [];
@@ -57,32 +60,30 @@ export class Bullet extends Entity {
         this._collisionCount = 0;
         this._targetToCollisionCount = new Map();
     }
-    get type() { return EntityType.Bullet; }
+    get type() { return EntityType_1.EntityType.Bullet; }
     Init(params) {
         super.Init(params);
         this._casterID = params.casterID;
         this._skillID = params.skillID;
-        this.position.CopyFrom(params.position);
-        this.direction.CopyFrom(params.direction);
     }
     LoadDefs() {
-        const defs = Defs.GetBullet(this._id);
-        this._radius = Hashtable.GetNumber(defs, "radius");
-        this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
-        this._moveType = Hashtable.GetNumber(defs, "move_type");
-        this._angleSpeed = Hashtable.GetNumber(defs, "angle_speed");
-        this._angleRadius = Hashtable.GetNumber(defs, "angle_radius");
-        this._lifeTime = Hashtable.GetNumber(defs, "life_time", -1);
-        this._destroyType = Hashtable.GetNumber(defs, "destroy_type");
-        this._delay = Hashtable.GetNumber(defs, "delay");
-        this._frequency = Hashtable.GetNumber(defs, "frequency");
-        this._maxCollisionPerTarget = Hashtable.GetNumber(defs, "max_collision_per_target", -1);
-        this._maxCollision = Hashtable.GetNumber(defs, "max_collision", -1);
-        this._targetType = Hashtable.GetNumber(defs, "target_type");
-        this._whipping = Hashtable.GetBool(defs, "whipping");
-        this._attrTypes = Hashtable.GetNumberArray(defs, "attr_types");
-        this._attrFilterOPs = Hashtable.GetNumberArray(defs, "attr_filter_ops");
-        this._attrCompareValues = Hashtable.GetNumberArray(defs, "attr_compare_values");
+        const defs = Defs_1.Defs.GetBullet(this._id);
+        this._radius = Hashtable_1.Hashtable.GetNumber(defs, "radius");
+        this._moveSpeed = Hashtable_1.Hashtable.GetNumber(defs, "move_speed");
+        this._moveType = Hashtable_1.Hashtable.GetNumber(defs, "move_type");
+        this._angleSpeed = Hashtable_1.Hashtable.GetNumber(defs, "angle_speed");
+        this._angleRadius = Hashtable_1.Hashtable.GetNumber(defs, "angle_radius");
+        this._lifeTime = Hashtable_1.Hashtable.GetNumber(defs, "life_time", -1);
+        this._destroyType = Hashtable_1.Hashtable.GetNumber(defs, "destroy_type");
+        this._delay = Hashtable_1.Hashtable.GetNumber(defs, "delay");
+        this._frequency = Hashtable_1.Hashtable.GetNumber(defs, "frequency");
+        this._maxCollisionPerTarget = Hashtable_1.Hashtable.GetNumber(defs, "max_collision_per_target", -1);
+        this._maxCollision = Hashtable_1.Hashtable.GetNumber(defs, "max_collision", -1);
+        this._targetType = Hashtable_1.Hashtable.GetNumber(defs, "target_type");
+        this._whipping = Hashtable_1.Hashtable.GetBool(defs, "whipping");
+        this._attrTypes = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_types");
+        this._attrFilterOPs = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_filter_ops");
+        this._attrCompareValues = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_compare_values");
         this._nextCollisionTime = this._delay;
     }
     EncodeSnapshot(writer) {
@@ -137,8 +138,8 @@ export class Bullet extends Entity {
         switch (this._moveType) {
             case BulletMoveType.Linear:
                 {
-                    const moveDelta = FVec2.MulN(FVec2.MulN(this.direction, this._moveSpeed), FMathUtils.Mul(0.001, dt));
-                    const pos = FVec2.Add(this.position, moveDelta);
+                    const moveDelta = FVec2_1.FVec2.MulN(FVec2_1.FVec2.MulN(this.direction, this._moveSpeed), FMathUtils_1.FMathUtils.Mul(0.001, dt));
+                    const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
                     this.position.CopyFrom(pos);
                 }
                 break;
@@ -157,8 +158,8 @@ export class Bullet extends Entity {
         for (const target of this._targets1) {
             if (!this._whipping && target.isDead)
                 continue;
-            const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
-            if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
+            const intersectType = Intersection_1.Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
+            if (intersectType == Intersection_1.IntersectionType.Cling || intersectType == Intersection_1.IntersectionType.Inside) {
                 let count = 0;
                 if (this._targetToCollisionCount.has(target.rid))
                     count = this._targetToCollisionCount.get(target.rid);
@@ -166,7 +167,7 @@ export class Bullet extends Entity {
                     count == this._maxCollisionPerTarget)
                     continue;
                 if (!target.battle.chase) {
-                    SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
+                    SyncEvent_1.SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
                 }
                 this._battle.calcManager.AddHitUnit(this._casterID, target.rid, this._skillID);
                 hit = true;
@@ -219,7 +220,7 @@ export class Bullet extends Entity {
                     break;
                 case AttrFilter.Hp:
                     this.FilterAttr(caster, attrOp, compareValue, (c, t) => {
-                        return t.GetAttr(EAttr.HP);
+                        return t.GetAttr(Attribute_1.EAttr.HP);
                     }, v => v, v => v, this._targets1, this._targets2);
                     break;
                 case AttrFilter.Mp:
@@ -270,7 +271,7 @@ export class Bullet extends Entity {
                     targets.push(this._targets1[0]);
                 }
                 else {
-                    let minValue = FMathUtils.MAX_VALUE;
+                    let minValue = FMathUtils_1.FMathUtils.MAX_VALUE;
                     let meet;
                     for (const target of this._targets1) {
                         const distanceSqr = caster.position.DistanceSquared(target.position);
@@ -286,7 +287,7 @@ export class Bullet extends Entity {
                 let meet;
                 for (const target of this._targets1) {
                     const distanceSqr = caster.position.DistanceSquared(target.position);
-                    if (distanceSqr == FMathUtils.Mul(compareValue, compareValue)) {
+                    if (distanceSqr == FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                         meet = target;
                     }
                 }
@@ -298,7 +299,7 @@ export class Bullet extends Entity {
                 let meet;
                 for (const target of this._targets1) {
                     const distanceSqr = caster.position.DistanceSquared(target.position);
-                    if (distanceSqr < FMathUtils.Mul(compareValue, compareValue)) {
+                    if (distanceSqr < FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                         meet = target;
                     }
                 }
@@ -310,7 +311,7 @@ export class Bullet extends Entity {
                 let meet;
                 for (const target of this._targets1) {
                     const distanceSqr = caster.position.DistanceSquared(target.position);
-                    if (distanceSqr <= FMathUtils.Mul(compareValue, compareValue)) {
+                    if (distanceSqr <= FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                         meet = target;
                     }
                 }
@@ -322,7 +323,7 @@ export class Bullet extends Entity {
                 let meet;
                 for (const target of this._targets1) {
                     const distanceSqr = caster.position.DistanceSquared(target.position);
-                    if (distanceSqr > FMathUtils.Mul(compareValue, compareValue)) {
+                    if (distanceSqr > FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                         meet = target;
                     }
                 }
@@ -334,7 +335,7 @@ export class Bullet extends Entity {
                 let meet;
                 for (const target of this._targets1) {
                     const distanceSqr = caster.position.DistanceSquared(target.position);
-                    if (distanceSqr >= FMathUtils.Mul(compareValue, compareValue)) {
+                    if (distanceSqr >= FMathUtils_1.FMathUtils.Mul(compareValue, compareValue)) {
                         meet = target;
                     }
                 }
@@ -369,7 +370,7 @@ export class Bullet extends Entity {
                     targets2.push(targets1[0]);
                 }
                 else {
-                    let minValue = FMathUtils.MAX_VALUE;
+                    let minValue = FMathUtils_1.FMathUtils.MAX_VALUE;
                     let meet;
                     for (const target of targets1) {
                         const attrValue = getFunc(caster, target);
@@ -445,3 +446,4 @@ export class Bullet extends Entity {
         }
     }
 }
+exports.Bullet = Bullet;

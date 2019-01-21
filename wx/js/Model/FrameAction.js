@@ -1,12 +1,14 @@
-import * as Long from "../Libs/long";
-export var InputFlag;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Long = require("../Libs/long");
+var InputFlag;
 (function (InputFlag) {
     InputFlag[InputFlag["None"] = 0] = "None";
     InputFlag[InputFlag["Move"] = 1] = "Move";
     InputFlag[InputFlag["S1"] = 2] = "S1";
     InputFlag[InputFlag["S2"] = 4] = "S2";
-})(InputFlag || (InputFlag = {}));
-export class FrameInfo {
+})(InputFlag = exports.InputFlag || (exports.InputFlag = {}));
+class FrameInfo {
     get frame() { return this._frame; }
     get inputFlag() { return this._inputFlag; }
     get v0() { return this._v0; }
@@ -23,7 +25,8 @@ export class FrameInfo {
         }
     }
 }
-export class FrameAction {
+exports.FrameInfo = FrameInfo;
+class FrameAction {
     constructor() {
         this._infos = [];
     }
@@ -41,3 +44,4 @@ export class FrameAction {
         }
     }
 }
+exports.FrameAction = FrameAction;

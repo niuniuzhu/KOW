@@ -1,4 +1,6 @@
-export class ConsistentRandom {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class ConsistentRandom {
     constructor(seed) {
         this.seed = seed;
     }
@@ -19,3 +21,4 @@ export class ConsistentRandom {
         return collection[this.NextInt(0, collection.length - 1)];
     }
 }
+exports.ConsistentRandom = ConsistentRandom;

@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"module": "es6",
+		"module": "commonjs",
 		"target": "es6",
 		"outDir": "../wx/js",
 		"inlineSourceMap": false,
@@ -12,7 +12,7 @@
 		"paths": {
 			"*": [
 				"*",
-				"./libs/*"
+				"./Libs/*"
 			]
 		}
 	},

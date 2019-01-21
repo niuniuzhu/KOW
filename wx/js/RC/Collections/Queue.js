@@ -1,7 +1,9 @@
-import LinkedList from './LinkedList';
-export default class Queue {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const LinkedList_1 = require("./LinkedList");
+class Queue {
     constructor() {
-        this.list = new LinkedList();
+        this.list = new LinkedList_1.default();
     }
     enqueue(elem) {
         return this.list.add(elem);
@@ -39,3 +41,4 @@ export default class Queue {
         this.list.forEach(callback);
     }
 }
+exports.default = Queue;

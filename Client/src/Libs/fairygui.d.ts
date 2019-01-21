@@ -1297,7 +1297,7 @@ declare module fairygui.utils {
 		scaleX: number;
 		scaleY: number;
 		constructor(data: fairygui.utils.PixelHitTestData, offsetX: number, offsetY: number);
-		isHit(x: number, y: number): boolean;
+		contains(x: number, y: number): boolean;
 	}
 }
 

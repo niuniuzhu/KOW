@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Direction;
 (function (Direction) {
     Direction[Direction["BEFORE"] = 0] = "BEFORE";
@@ -5,7 +7,7 @@ var Direction;
     Direction[Direction["INSIDE_AT_END"] = 2] = "INSIDE_AT_END";
     Direction[Direction["INSIDE_AT_START"] = 3] = "INSIDE_AT_START";
 })(Direction || (Direction = {}));
-export default class MultiRootTree {
+class MultiRootTree {
     constructor(rootIds = [], nodes = {}) {
         this.rootIds = rootIds;
         this.nodes = nodes;
@@ -389,3 +391,4 @@ export default class MultiRootTree {
         this.rootIds.push(id);
     }
 }
+exports.default = MultiRootTree;

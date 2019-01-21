@@ -1,19 +1,21 @@
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
-import * as $protobuf from "protobufjs";
+"use strict";
 
-const $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
+var $protobuf = require("./protobufjs");
 
-const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
+var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
 
-export const Protos = $root.Protos = (() => {
+var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
-    const Protos = {};
+$root.Protos = (function() {
+
+    var Protos = {};
 
     Protos.BSInfo = (function() {
 
         function BSInfo(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -48,9 +50,9 @@ export const Protos = $root.Protos = (() => {
         BSInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BSInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BSInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.id = reader.uint32();
@@ -106,7 +108,7 @@ export const Protos = $root.Protos = (() => {
         BSInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BSInfo)
                 return object;
-            let message = new $root.Protos.BSInfo();
+            var message = new $root.Protos.BSInfo();
             if (object.id != null)
                 message.id = object.id >>> 0;
             if (object.ip != null)
@@ -137,7 +139,7 @@ export const Protos = $root.Protos = (() => {
         BSInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.id = 0;
                 object.ip = "";
@@ -160,7 +162,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         BSInfo.State = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Free"] = 0;
             values[valuesById[1] = "Busy"] = 1;
             values[valuesById[2] = "Full"] = 2;
@@ -175,7 +177,7 @@ export const Protos = $root.Protos = (() => {
 
         function BS2CS_ReportState(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -204,9 +206,9 @@ export const Protos = $root.Protos = (() => {
         BS2CS_ReportState.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_ReportState();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_ReportState();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -232,12 +234,12 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.bsInfo != null && message.hasOwnProperty("bsInfo")) {
-                let error = $root.Protos.BSInfo.verify(message.bsInfo);
+                var error = $root.Protos.BSInfo.verify(message.bsInfo);
                 if (error)
                     return "bsInfo." + error;
             }
@@ -247,7 +249,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_ReportState.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2CS_ReportState)
                 return object;
-            let message = new $root.Protos.BS2CS_ReportState();
+            var message = new $root.Protos.BS2CS_ReportState();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2CS_ReportState.opts: object expected");
@@ -264,7 +266,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_ReportState.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.bsInfo = null;
@@ -287,7 +289,7 @@ export const Protos = $root.Protos = (() => {
 
         function BS2CS_BattleInfoRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -319,9 +321,9 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleInfoRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleInfoRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleInfoRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -350,7 +352,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -371,7 +373,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleInfoRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2CS_BattleInfoRet)
                 return object;
-            let message = new $root.Protos.BS2CS_BattleInfoRet();
+            var message = new $root.Protos.BS2CS_BattleInfoRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2CS_BattleInfoRet.opts: object expected");
@@ -395,7 +397,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleInfoRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -421,7 +423,7 @@ export const Protos = $root.Protos = (() => {
 
         function BS2CS_BattleEndInfo(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -471,9 +473,9 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEndInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleEndInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleEndInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 2:
                     message.win = reader.bool();
@@ -552,7 +554,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEndInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2CS_BattleEndInfo)
                 return object;
-            let message = new $root.Protos.BS2CS_BattleEndInfo();
+            var message = new $root.Protos.BS2CS_BattleEndInfo();
             if (object.win != null)
                 message.win = Boolean(object.win);
             if (object.damage != null)
@@ -577,7 +579,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEndInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.win = false;
                 object.damage = 0;
@@ -622,7 +624,7 @@ export const Protos = $root.Protos = (() => {
         function BS2CS_BattleEnd(properties) {
             this.infos = {};
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -643,7 +645,7 @@ export const Protos = $root.Protos = (() => {
             if (message.bid != null && message.hasOwnProperty("bid"))
                 writer.uint32(16).uint32(message.bid);
             if (message.infos != null && message.hasOwnProperty("infos"))
-                for (let keys = Object.keys(message.infos), i = 0; i < keys.length; ++i) {
+                for (var keys = Object.keys(message.infos), i = 0; i < keys.length; ++i) {
                     writer.uint32(26).fork().uint32(8).uint64(keys[i]);
                     $root.Protos.BS2CS_BattleEndInfo.encode(message.infos[keys[i]], writer.uint32(18).fork()).ldelim().ldelim();
                 }
@@ -657,9 +659,9 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEnd.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleEnd(), key;
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_BattleEnd(), key;
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -693,7 +695,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -703,12 +705,12 @@ export const Protos = $root.Protos = (() => {
             if (message.infos != null && message.hasOwnProperty("infos")) {
                 if (!$util.isObject(message.infos))
                     return "infos: object expected";
-                let key = Object.keys(message.infos);
-                for (let i = 0; i < key.length; ++i) {
+                var key = Object.keys(message.infos);
+                for (var i = 0; i < key.length; ++i) {
                     if (!$util.key64Re.test(key[i]))
                         return "infos: integer|Long key{k:uint64} expected";
                     {
-                        let error = $root.Protos.BS2CS_BattleEndInfo.verify(message.infos[key[i]]);
+                        var error = $root.Protos.BS2CS_BattleEndInfo.verify(message.infos[key[i]]);
                         if (error)
                             return "infos." + error;
                     }
@@ -720,7 +722,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEnd.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2CS_BattleEnd)
                 return object;
-            let message = new $root.Protos.BS2CS_BattleEnd();
+            var message = new $root.Protos.BS2CS_BattleEnd();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2CS_BattleEnd.opts: object expected");
@@ -732,7 +734,7 @@ export const Protos = $root.Protos = (() => {
                 if (typeof object.infos !== "object")
                     throw TypeError(".Protos.BS2CS_BattleEnd.infos: object expected");
                 message.infos = {};
-                for (let keys = Object.keys(object.infos), i = 0; i < keys.length; ++i) {
+                for (var keys = Object.keys(object.infos), i = 0; i < keys.length; ++i) {
                     if (typeof object.infos[keys[i]] !== "object")
                         throw TypeError(".Protos.BS2CS_BattleEnd.infos: object expected");
                     message.infos[keys[i]] = $root.Protos.BS2CS_BattleEndInfo.fromObject(object.infos[keys[i]]);
@@ -744,7 +746,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEnd.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.objects || options.defaults)
                 object.infos = {};
             if (options.defaults) {
@@ -755,10 +757,10 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.bid != null && message.hasOwnProperty("bid"))
                 object.bid = message.bid;
-            let keys2;
+            var keys2;
             if (message.infos && (keys2 = Object.keys(message.infos)).length) {
                 object.infos = {};
-                for (let j = 0; j < keys2.length; ++j)
+                for (var j = 0; j < keys2.length; ++j)
                     object.infos[keys2[j]] = $root.Protos.BS2CS_BattleEndInfo.toObject(message.infos[keys2[j]], options);
             }
             return object;
@@ -775,7 +777,7 @@ export const Protos = $root.Protos = (() => {
 
         function BS2CS_KickUser(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -807,9 +809,9 @@ export const Protos = $root.Protos = (() => {
         BS2CS_KickUser.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_KickUser();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2CS_KickUser();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -838,7 +840,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -858,7 +860,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_KickUser.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2CS_KickUser)
                 return object;
-            let message = new $root.Protos.BS2CS_KickUser();
+            var message = new $root.Protos.BS2CS_KickUser();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2CS_KickUser.opts: object expected");
@@ -885,11 +887,11 @@ export const Protos = $root.Protos = (() => {
         BS2CS_KickUser.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -912,7 +914,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         BS2CS_KickUser.Reason = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "OutOfSync"] = 0;
             return values;
         })();
@@ -921,7 +923,7 @@ export const Protos = $root.Protos = (() => {
     })();
 
     Protos.MsgID = (function() {
-        const valuesById = {}, values = Object.create(valuesById);
+        var valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "Undefine"] = 0;
         values[valuesById[10] = "eG_AskPing"] = 10;
         values[valuesById[11] = "eG_AskPingRet"] = 11;
@@ -986,7 +988,7 @@ export const Protos = $root.Protos = (() => {
 
         function MsgOpts(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -1021,9 +1023,9 @@ export const Protos = $root.Protos = (() => {
         MsgOpts.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.MsgOpts();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.MsgOpts();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.flag = reader.uint32();
@@ -1072,7 +1074,7 @@ export const Protos = $root.Protos = (() => {
         MsgOpts.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.MsgOpts)
                 return object;
-            let message = new $root.Protos.MsgOpts();
+            var message = new $root.Protos.MsgOpts();
             if (object.flag != null)
                 message.flag = object.flag >>> 0;
             if (object.pid != null)
@@ -1094,13 +1096,13 @@ export const Protos = $root.Protos = (() => {
         MsgOpts.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.flag = 0;
                 object.pid = 0;
                 object.rpid = 0;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.transid = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.transid = options.longs === String ? "0" : 0;
@@ -1124,7 +1126,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         MsgOpts.Flag = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Norm"] = 0;
             values[valuesById[1] = "RPC"] = 1;
             values[valuesById[2] = "RESP"] = 2;
@@ -1133,7 +1135,7 @@ export const Protos = $root.Protos = (() => {
         })();
 
         MsgOpts.TransTarget = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Undefine"] = 0;
             values[valuesById[1] = "GC"] = 1;
             values[valuesById[2] = "CS"] = 2;
@@ -1151,7 +1153,7 @@ export const Protos = $root.Protos = (() => {
 
         function G_AskPing(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -1180,9 +1182,9 @@ export const Protos = $root.Protos = (() => {
         G_AskPing.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.G_AskPing();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.G_AskPing();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -1208,7 +1210,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -1221,7 +1223,7 @@ export const Protos = $root.Protos = (() => {
         G_AskPing.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.G_AskPing)
                 return object;
-            let message = new $root.Protos.G_AskPing();
+            var message = new $root.Protos.G_AskPing();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.G_AskPing.opts: object expected");
@@ -1242,11 +1244,11 @@ export const Protos = $root.Protos = (() => {
         G_AskPing.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
+                    var long = new $util.Long(0, 0, false);
                     object.time = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.time = options.longs === String ? "0" : 0;
@@ -1272,7 +1274,7 @@ export const Protos = $root.Protos = (() => {
 
         function G_AskPingRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -1304,9 +1306,9 @@ export const Protos = $root.Protos = (() => {
         G_AskPingRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.G_AskPingRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.G_AskPingRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -1335,7 +1337,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -1351,7 +1353,7 @@ export const Protos = $root.Protos = (() => {
         G_AskPingRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.G_AskPingRet)
                 return object;
-            let message = new $root.Protos.G_AskPingRet();
+            var message = new $root.Protos.G_AskPingRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.G_AskPingRet.opts: object expected");
@@ -1381,16 +1383,16 @@ export const Protos = $root.Protos = (() => {
         G_AskPingRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
+                    var long = new $util.Long(0, 0, false);
                     object.stime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.stime = options.longs === String ? "0" : 0;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
+                    var long = new $util.Long(0, 0, false);
                     object.time = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.time = options.longs === String ? "0" : 0;
@@ -1421,7 +1423,7 @@ export const Protos = $root.Protos = (() => {
 
         function Global(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -1443,9 +1445,9 @@ export const Protos = $root.Protos = (() => {
         Global.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.Global();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.Global();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 default:
                     reader.skipType(tag & 7);
@@ -1482,21 +1484,21 @@ export const Protos = $root.Protos = (() => {
         };
 
         Global.ECommon = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "Failed"] = 1;
             return values;
         })();
 
         Global.Channel = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Web"] = 0;
             values[valuesById[1] = "WXMini"] = 1;
             return values;
         })();
 
         Global.Platform = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "PC"] = 0;
             values[valuesById[1] = "Android"] = 1;
             values[valuesById[2] = "IOS"] = 2;
@@ -1505,7 +1507,7 @@ export const Protos = $root.Protos = (() => {
         })();
 
         Global.Browser = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Chrome"] = 0;
             values[valuesById[1] = "Firefox"] = 1;
             values[valuesById[2] = "Safair"] = 2;
@@ -1521,7 +1523,7 @@ export const Protos = $root.Protos = (() => {
 
         function G_UserInfo(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -1559,9 +1561,9 @@ export const Protos = $root.Protos = (() => {
         G_UserInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.G_UserInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.G_UserInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.gcNID = reader.uint64();
@@ -1616,7 +1618,7 @@ export const Protos = $root.Protos = (() => {
         G_UserInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.G_UserInfo)
                 return object;
-            let message = new $root.Protos.G_UserInfo();
+            var message = new $root.Protos.G_UserInfo();
             if (object.gcNID != null)
                 if ($util.Long)
                     (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
@@ -1640,10 +1642,10 @@ export const Protos = $root.Protos = (() => {
         G_UserInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -1680,7 +1682,7 @@ export const Protos = $root.Protos = (() => {
         function BS2GC_LoginRet(properties) {
             this.playerInfos = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -1725,7 +1727,7 @@ export const Protos = $root.Protos = (() => {
             if (message.curFrame != null && message.hasOwnProperty("curFrame"))
                 writer.uint32(80).int32(message.curFrame);
             if (message.playerInfos != null && message.playerInfos.length)
-                for (let i = 0; i < message.playerInfos.length; ++i)
+                for (var i = 0; i < message.playerInfos.length; ++i)
                     $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(90).fork()).ldelim();
             return writer;
         };
@@ -1737,9 +1739,9 @@ export const Protos = $root.Protos = (() => {
         BS2GC_LoginRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_LoginRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_LoginRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -1794,7 +1796,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -1833,8 +1835,8 @@ export const Protos = $root.Protos = (() => {
             if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
                 if (!Array.isArray(message.playerInfos))
                     return "playerInfos: array expected";
-                for (let i = 0; i < message.playerInfos.length; ++i) {
-                    let error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
+                for (var i = 0; i < message.playerInfos.length; ++i) {
+                    var error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
                     if (error)
                         return "playerInfos." + error;
                 }
@@ -1845,7 +1847,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_LoginRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2GC_LoginRet)
                 return object;
-            let message = new $root.Protos.BS2GC_LoginRet();
+            var message = new $root.Protos.BS2GC_LoginRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2GC_LoginRet.opts: object expected");
@@ -1888,7 +1890,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.playerInfos))
                     throw TypeError(".Protos.BS2GC_LoginRet.playerInfos: array expected");
                 message.playerInfos = [];
-                for (let i = 0; i < object.playerInfos.length; ++i) {
+                for (var i = 0; i < object.playerInfos.length; ++i) {
                     if (typeof object.playerInfos[i] !== "object")
                         throw TypeError(".Protos.BS2GC_LoginRet.playerInfos: object expected");
                     message.playerInfos[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfos[i]);
@@ -1900,14 +1902,14 @@ export const Protos = $root.Protos = (() => {
         BS2GC_LoginRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults)
                 object.playerInfos = [];
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.playerID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.playerID = options.longs === String ? "0" : 0;
@@ -1944,7 +1946,7 @@ export const Protos = $root.Protos = (() => {
                 object.curFrame = message.curFrame;
             if (message.playerInfos && message.playerInfos.length) {
                 object.playerInfos = [];
-                for (let j = 0; j < message.playerInfos.length; ++j)
+                for (var j = 0; j < message.playerInfos.length; ++j)
                     object.playerInfos[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfos[j], options);
             }
             return object;
@@ -1961,7 +1963,7 @@ export const Protos = $root.Protos = (() => {
 
         function BS2GC_RequestSnapshotRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -1999,9 +2001,9 @@ export const Protos = $root.Protos = (() => {
         BS2GC_RequestSnapshotRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_RequestSnapshotRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_RequestSnapshotRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -2036,7 +2038,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -2064,7 +2066,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_RequestSnapshotRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2GC_RequestSnapshotRet)
                 return object;
-            let message = new $root.Protos.BS2GC_RequestSnapshotRet();
+            var message = new $root.Protos.BS2GC_RequestSnapshotRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2GC_RequestSnapshotRet.opts: object expected");
@@ -2099,7 +2101,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_RequestSnapshotRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -2131,7 +2133,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         BS2GC_RequestSnapshotRet.EResult = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "InvalidUser"] = 1;
             values[valuesById[2] = "InvalidBattle"] = 2;
@@ -2145,7 +2147,7 @@ export const Protos = $root.Protos = (() => {
 
         function BS2GC_FrameAction(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -2177,9 +2179,9 @@ export const Protos = $root.Protos = (() => {
         BS2GC_FrameAction.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_FrameAction();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_FrameAction();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -2208,7 +2210,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -2224,7 +2226,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_FrameAction.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2GC_FrameAction)
                 return object;
-            let message = new $root.Protos.BS2GC_FrameAction();
+            var message = new $root.Protos.BS2GC_FrameAction();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2GC_FrameAction.opts: object expected");
@@ -2243,7 +2245,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_FrameAction.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.frame = 0;
@@ -2277,7 +2279,7 @@ export const Protos = $root.Protos = (() => {
             this.frames = [];
             this.actions = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -2297,12 +2299,12 @@ export const Protos = $root.Protos = (() => {
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.frames != null && message.frames.length) {
                 writer.uint32(18).fork();
-                for (let i = 0; i < message.frames.length; ++i)
+                for (var i = 0; i < message.frames.length; ++i)
                     writer.int32(message.frames[i]);
                 writer.ldelim();
             }
             if (message.actions != null && message.actions.length)
-                for (let i = 0; i < message.actions.length; ++i)
+                for (var i = 0; i < message.actions.length; ++i)
                     writer.uint32(26).bytes(message.actions[i]);
             return writer;
         };
@@ -2314,9 +2316,9 @@ export const Protos = $root.Protos = (() => {
         BS2GC_RequestFrameActionsRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_RequestFrameActionsRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_RequestFrameActionsRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -2325,7 +2327,7 @@ export const Protos = $root.Protos = (() => {
                     if (!(message.frames && message.frames.length))
                         message.frames = [];
                     if ((tag & 7) === 2) {
-                        let end2 = reader.uint32() + reader.pos;
+                        var end2 = reader.uint32() + reader.pos;
                         while (reader.pos < end2)
                             message.frames.push(reader.int32());
                     } else
@@ -2354,21 +2356,21 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.frames != null && message.hasOwnProperty("frames")) {
                 if (!Array.isArray(message.frames))
                     return "frames: array expected";
-                for (let i = 0; i < message.frames.length; ++i)
+                for (var i = 0; i < message.frames.length; ++i)
                     if (!$util.isInteger(message.frames[i]))
                         return "frames: integer[] expected";
             }
             if (message.actions != null && message.hasOwnProperty("actions")) {
                 if (!Array.isArray(message.actions))
                     return "actions: array expected";
-                for (let i = 0; i < message.actions.length; ++i)
+                for (var i = 0; i < message.actions.length; ++i)
                     if (!(message.actions[i] && typeof message.actions[i].length === "number" || $util.isString(message.actions[i])))
                         return "actions: buffer[] expected";
             }
@@ -2378,7 +2380,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_RequestFrameActionsRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2GC_RequestFrameActionsRet)
                 return object;
-            let message = new $root.Protos.BS2GC_RequestFrameActionsRet();
+            var message = new $root.Protos.BS2GC_RequestFrameActionsRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2GC_RequestFrameActionsRet.opts: object expected");
@@ -2388,14 +2390,14 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.frames))
                     throw TypeError(".Protos.BS2GC_RequestFrameActionsRet.frames: array expected");
                 message.frames = [];
-                for (let i = 0; i < object.frames.length; ++i)
+                for (var i = 0; i < object.frames.length; ++i)
                     message.frames[i] = object.frames[i] | 0;
             }
             if (object.actions) {
                 if (!Array.isArray(object.actions))
                     throw TypeError(".Protos.BS2GC_RequestFrameActionsRet.actions: array expected");
                 message.actions = [];
-                for (let i = 0; i < object.actions.length; ++i)
+                for (var i = 0; i < object.actions.length; ++i)
                     if (typeof object.actions[i] === "string")
                         $util.base64.decode(object.actions[i], message.actions[i] = $util.newBuffer($util.base64.length(object.actions[i])), 0);
                     else if (object.actions[i].length)
@@ -2407,7 +2409,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_RequestFrameActionsRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults) {
                 object.frames = [];
                 object.actions = [];
@@ -2418,12 +2420,12 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.frames && message.frames.length) {
                 object.frames = [];
-                for (let j = 0; j < message.frames.length; ++j)
+                for (var j = 0; j < message.frames.length; ++j)
                     object.frames[j] = message.frames[j];
             }
             if (message.actions && message.actions.length) {
                 object.actions = [];
-                for (let j = 0; j < message.actions.length; ++j)
+                for (var j = 0; j < message.actions.length; ++j)
                     object.actions[j] = options.bytes === String ? $util.base64.encode(message.actions[j], 0, message.actions[j].length) : options.bytes === Array ? Array.prototype.slice.call(message.actions[j]) : message.actions[j];
             }
             return object;
@@ -2440,7 +2442,7 @@ export const Protos = $root.Protos = (() => {
 
         function BS2GC_OutOfSync(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -2475,9 +2477,9 @@ export const Protos = $root.Protos = (() => {
         BS2GC_OutOfSync.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_OutOfSync();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.BS2GC_OutOfSync();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -2509,7 +2511,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -2528,7 +2530,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_OutOfSync.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.BS2GC_OutOfSync)
                 return object;
-            let message = new $root.Protos.BS2GC_OutOfSync();
+            var message = new $root.Protos.BS2GC_OutOfSync();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.BS2GC_OutOfSync.opts: object expected");
@@ -2552,7 +2554,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_OutOfSync.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.frame = 0;
@@ -2593,7 +2595,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2BS_PlayerInfo(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -2637,9 +2639,9 @@ export const Protos = $root.Protos = (() => {
         CS2BS_PlayerInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_PlayerInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_PlayerInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.gcNID = reader.uint64();
@@ -2706,7 +2708,7 @@ export const Protos = $root.Protos = (() => {
         CS2BS_PlayerInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2BS_PlayerInfo)
                 return object;
-            let message = new $root.Protos.CS2BS_PlayerInfo();
+            var message = new $root.Protos.CS2BS_PlayerInfo();
             if (object.gcNID != null)
                 if ($util.Long)
                     (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
@@ -2734,10 +2736,10 @@ export const Protos = $root.Protos = (() => {
         CS2BS_PlayerInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -2780,7 +2782,7 @@ export const Protos = $root.Protos = (() => {
         function CS2BS_BattleInfo(properties) {
             this.playerInfos = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -2804,7 +2806,7 @@ export const Protos = $root.Protos = (() => {
             if (message.connTimeout != null && message.hasOwnProperty("connTimeout"))
                 writer.uint32(24).int32(message.connTimeout);
             if (message.playerInfos != null && message.playerInfos.length)
-                for (let i = 0; i < message.playerInfos.length; ++i)
+                for (var i = 0; i < message.playerInfos.length; ++i)
                     $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(34).fork()).ldelim();
             return writer;
         };
@@ -2816,9 +2818,9 @@ export const Protos = $root.Protos = (() => {
         CS2BS_BattleInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_BattleInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_BattleInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -2852,7 +2854,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -2865,8 +2867,8 @@ export const Protos = $root.Protos = (() => {
             if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
                 if (!Array.isArray(message.playerInfos))
                     return "playerInfos: array expected";
-                for (let i = 0; i < message.playerInfos.length; ++i) {
-                    let error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
+                for (var i = 0; i < message.playerInfos.length; ++i) {
+                    var error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
                     if (error)
                         return "playerInfos." + error;
                 }
@@ -2877,7 +2879,7 @@ export const Protos = $root.Protos = (() => {
         CS2BS_BattleInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2BS_BattleInfo)
                 return object;
-            let message = new $root.Protos.CS2BS_BattleInfo();
+            var message = new $root.Protos.CS2BS_BattleInfo();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2BS_BattleInfo.opts: object expected");
@@ -2891,7 +2893,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.playerInfos))
                     throw TypeError(".Protos.CS2BS_BattleInfo.playerInfos: array expected");
                 message.playerInfos = [];
-                for (let i = 0; i < object.playerInfos.length; ++i) {
+                for (var i = 0; i < object.playerInfos.length; ++i) {
                     if (typeof object.playerInfos[i] !== "object")
                         throw TypeError(".Protos.CS2BS_BattleInfo.playerInfos: object expected");
                     message.playerInfos[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfos[i]);
@@ -2903,7 +2905,7 @@ export const Protos = $root.Protos = (() => {
         CS2BS_BattleInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults)
                 object.playerInfos = [];
             if (options.defaults) {
@@ -2919,7 +2921,7 @@ export const Protos = $root.Protos = (() => {
                 object.connTimeout = message.connTimeout;
             if (message.playerInfos && message.playerInfos.length) {
                 object.playerInfos = [];
-                for (let j = 0; j < message.playerInfos.length; ++j)
+                for (var j = 0; j < message.playerInfos.length; ++j)
                     object.playerInfos[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfos[j], options);
             }
             return object;
@@ -2936,7 +2938,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2GC_PlayerInfo(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -2980,9 +2982,9 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.gcNID = reader.uint64();
@@ -3049,7 +3051,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GC_PlayerInfo)
                 return object;
-            let message = new $root.Protos.CS2GC_PlayerInfo();
+            var message = new $root.Protos.CS2GC_PlayerInfo();
             if (object.gcNID != null)
                 if ($util.Long)
                     (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
@@ -3077,10 +3079,10 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -3123,7 +3125,7 @@ export const Protos = $root.Protos = (() => {
         function CS2GC_BeginMatchRet(properties) {
             this.playerInfos = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -3153,7 +3155,7 @@ export const Protos = $root.Protos = (() => {
             if (message.maxPlayer != null && message.hasOwnProperty("maxPlayer"))
                 writer.uint32(40).int32(message.maxPlayer);
             if (message.playerInfos != null && message.playerInfos.length)
-                for (let i = 0; i < message.playerInfos.length; ++i)
+                for (var i = 0; i < message.playerInfos.length; ++i)
                     $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfos[i], writer.uint32(50).fork()).ldelim();
             return writer;
         };
@@ -3165,9 +3167,9 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BeginMatchRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BeginMatchRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BeginMatchRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -3207,7 +3209,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -3235,8 +3237,8 @@ export const Protos = $root.Protos = (() => {
             if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
                 if (!Array.isArray(message.playerInfos))
                     return "playerInfos: array expected";
-                for (let i = 0; i < message.playerInfos.length; ++i) {
-                    let error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos[i]);
+                for (var i = 0; i < message.playerInfos.length; ++i) {
+                    var error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos[i]);
                     if (error)
                         return "playerInfos." + error;
                 }
@@ -3247,7 +3249,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BeginMatchRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GC_BeginMatchRet)
                 return object;
-            let message = new $root.Protos.CS2GC_BeginMatchRet();
+            var message = new $root.Protos.CS2GC_BeginMatchRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GC_BeginMatchRet.opts: object expected");
@@ -3289,7 +3291,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.playerInfos))
                     throw TypeError(".Protos.CS2GC_BeginMatchRet.playerInfos: array expected");
                 message.playerInfos = [];
-                for (let i = 0; i < object.playerInfos.length; ++i) {
+                for (var i = 0; i < object.playerInfos.length; ++i) {
                     if (typeof object.playerInfos[i] !== "object")
                         throw TypeError(".Protos.CS2GC_BeginMatchRet.playerInfos: object expected");
                     message.playerInfos[i] = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfos[i]);
@@ -3301,7 +3303,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BeginMatchRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults)
                 object.playerInfos = [];
             if (options.defaults) {
@@ -3323,7 +3325,7 @@ export const Protos = $root.Protos = (() => {
                 object.maxPlayer = message.maxPlayer;
             if (message.playerInfos && message.playerInfos.length) {
                 object.playerInfos = [];
-                for (let j = 0; j < message.playerInfos.length; ++j)
+                for (var j = 0; j < message.playerInfos.length; ++j)
                     object.playerInfos[j] = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfos[j], options);
             }
             return object;
@@ -3334,7 +3336,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         CS2GC_BeginMatchRet.EResult = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "Failed"] = 1;
             values[valuesById[2] = "IllegalID"] = 2;
@@ -3351,7 +3353,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2GC_PlayerJoin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -3380,9 +3382,9 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerJoin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerJoin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerJoin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -3408,12 +3410,12 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.playerInfo != null && message.hasOwnProperty("playerInfo")) {
-                let error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfo);
+                var error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfo);
                 if (error)
                     return "playerInfo." + error;
             }
@@ -3423,7 +3425,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerJoin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GC_PlayerJoin)
                 return object;
-            let message = new $root.Protos.CS2GC_PlayerJoin();
+            var message = new $root.Protos.CS2GC_PlayerJoin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GC_PlayerJoin.opts: object expected");
@@ -3440,7 +3442,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerJoin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.playerInfo = null;
@@ -3463,7 +3465,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2GC_PlayerLeave(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -3492,9 +3494,9 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerLeave.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerLeave();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerLeave();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -3520,7 +3522,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -3533,7 +3535,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerLeave.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GC_PlayerLeave)
                 return object;
-            let message = new $root.Protos.CS2GC_PlayerLeave();
+            var message = new $root.Protos.CS2GC_PlayerLeave();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GC_PlayerLeave.opts: object expected");
@@ -3554,11 +3556,11 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerLeave.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -3586,7 +3588,7 @@ export const Protos = $root.Protos = (() => {
             this.playerInfos = [];
             this.progresses = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -3605,11 +3607,11 @@ export const Protos = $root.Protos = (() => {
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.playerInfos != null && message.playerInfos.length)
-                for (let i = 0; i < message.playerInfos.length; ++i)
+                for (var i = 0; i < message.playerInfos.length; ++i)
                     $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfos[i], writer.uint32(18).fork()).ldelim();
             if (message.progresses != null && message.progresses.length) {
                 writer.uint32(26).fork();
-                for (let i = 0; i < message.progresses.length; ++i)
+                for (var i = 0; i < message.progresses.length; ++i)
                     writer.int32(message.progresses[i]);
                 writer.ldelim();
             }
@@ -3623,9 +3625,9 @@ export const Protos = $root.Protos = (() => {
         CS2GC_RoomInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_RoomInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_RoomInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -3639,7 +3641,7 @@ export const Protos = $root.Protos = (() => {
                     if (!(message.progresses && message.progresses.length))
                         message.progresses = [];
                     if ((tag & 7) === 2) {
-                        let end2 = reader.uint32() + reader.pos;
+                        var end2 = reader.uint32() + reader.pos;
                         while (reader.pos < end2)
                             message.progresses.push(reader.int32());
                     } else
@@ -3663,15 +3665,15 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
                 if (!Array.isArray(message.playerInfos))
                     return "playerInfos: array expected";
-                for (let i = 0; i < message.playerInfos.length; ++i) {
-                    let error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos[i]);
+                for (var i = 0; i < message.playerInfos.length; ++i) {
+                    var error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos[i]);
                     if (error)
                         return "playerInfos." + error;
                 }
@@ -3679,7 +3681,7 @@ export const Protos = $root.Protos = (() => {
             if (message.progresses != null && message.hasOwnProperty("progresses")) {
                 if (!Array.isArray(message.progresses))
                     return "progresses: array expected";
-                for (let i = 0; i < message.progresses.length; ++i)
+                for (var i = 0; i < message.progresses.length; ++i)
                     if (!$util.isInteger(message.progresses[i]))
                         return "progresses: integer[] expected";
             }
@@ -3689,7 +3691,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_RoomInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GC_RoomInfo)
                 return object;
-            let message = new $root.Protos.CS2GC_RoomInfo();
+            var message = new $root.Protos.CS2GC_RoomInfo();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GC_RoomInfo.opts: object expected");
@@ -3699,7 +3701,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.playerInfos))
                     throw TypeError(".Protos.CS2GC_RoomInfo.playerInfos: array expected");
                 message.playerInfos = [];
-                for (let i = 0; i < object.playerInfos.length; ++i) {
+                for (var i = 0; i < object.playerInfos.length; ++i) {
                     if (typeof object.playerInfos[i] !== "object")
                         throw TypeError(".Protos.CS2GC_RoomInfo.playerInfos: object expected");
                     message.playerInfos[i] = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfos[i]);
@@ -3709,7 +3711,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.progresses))
                     throw TypeError(".Protos.CS2GC_RoomInfo.progresses: array expected");
                 message.progresses = [];
-                for (let i = 0; i < object.progresses.length; ++i)
+                for (var i = 0; i < object.progresses.length; ++i)
                     message.progresses[i] = object.progresses[i] | 0;
             }
             return message;
@@ -3718,7 +3720,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_RoomInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults) {
                 object.playerInfos = [];
                 object.progresses = [];
@@ -3729,12 +3731,12 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.playerInfos && message.playerInfos.length) {
                 object.playerInfos = [];
-                for (let j = 0; j < message.playerInfos.length; ++j)
+                for (var j = 0; j < message.playerInfos.length; ++j)
                     object.playerInfos[j] = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfos[j], options);
             }
             if (message.progresses && message.progresses.length) {
                 object.progresses = [];
-                for (let j = 0; j < message.progresses.length; ++j)
+                for (var j = 0; j < message.progresses.length; ++j)
                     object.progresses[j] = message.progresses[j];
             }
             return object;
@@ -3751,7 +3753,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2GC_EnterBattle(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -3789,9 +3791,9 @@ export const Protos = $root.Protos = (() => {
         CS2GC_EnterBattle.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_EnterBattle();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_EnterBattle();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -3826,7 +3828,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -3855,7 +3857,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_EnterBattle.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GC_EnterBattle)
                 return object;
-            let message = new $root.Protos.CS2GC_EnterBattle();
+            var message = new $root.Protos.CS2GC_EnterBattle();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GC_EnterBattle.opts: object expected");
@@ -3898,11 +3900,11 @@ export const Protos = $root.Protos = (() => {
         CS2GC_EnterBattle.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -3931,7 +3933,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         CS2GC_EnterBattle.Result = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "BSNotFound"] = 1;
             values[valuesById[2] = "BSLost"] = 2;
@@ -3946,7 +3948,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2GC_BSLose(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -3972,9 +3974,9 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BSLose.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BSLose();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BSLose();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -3997,7 +3999,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -4007,7 +4009,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BSLose.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GC_BSLose)
                 return object;
-            let message = new $root.Protos.CS2GC_BSLose();
+            var message = new $root.Protos.CS2GC_BSLose();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GC_BSLose.opts: object expected");
@@ -4019,7 +4021,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BSLose.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults)
                 object.opts = null;
             if (message.opts != null && message.hasOwnProperty("opts"))
@@ -4038,7 +4040,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2GC_BattleEnd(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -4070,9 +4072,9 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BattleEnd.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BattleEnd();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BattleEnd();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -4101,7 +4103,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -4117,7 +4119,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BattleEnd.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GC_BattleEnd)
                 return object;
-            let message = new $root.Protos.CS2GC_BattleEnd();
+            var message = new $root.Protos.CS2GC_BattleEnd();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GC_BattleEnd.opts: object expected");
@@ -4133,7 +4135,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_BattleEnd.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.win = false;
@@ -4159,7 +4161,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2GS_GCLoginRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -4203,9 +4205,9 @@ export const Protos = $root.Protos = (() => {
         CS2GS_GCLoginRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GS_GCLoginRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GS_GCLoginRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -4246,7 +4248,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -4267,7 +4269,7 @@ export const Protos = $root.Protos = (() => {
                     break;
                 }
             if (message.userInfo != null && message.hasOwnProperty("userInfo")) {
-                let error = $root.Protos.G_UserInfo.verify(message.userInfo);
+                var error = $root.Protos.G_UserInfo.verify(message.userInfo);
                 if (error)
                     return "userInfo." + error;
             }
@@ -4286,7 +4288,7 @@ export const Protos = $root.Protos = (() => {
         CS2GS_GCLoginRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GS_GCLoginRet)
                 return object;
-            let message = new $root.Protos.CS2GS_GCLoginRet();
+            var message = new $root.Protos.CS2GS_GCLoginRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GS_GCLoginRet.opts: object expected");
@@ -4336,14 +4338,14 @@ export const Protos = $root.Protos = (() => {
         CS2GS_GCLoginRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
                 object.gcState = options.enums === String ? "Idle" : 0;
                 object.userInfo = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -4375,14 +4377,14 @@ export const Protos = $root.Protos = (() => {
         };
 
         CS2GS_GCLoginRet.EResult = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "IllegalLogin"] = 1;
             return values;
         })();
 
         CS2GS_GCLoginRet.EGCCState = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Idle"] = 0;
             values[valuesById[1] = "Battle"] = 1;
             return values;
@@ -4395,7 +4397,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2GS_KickGC(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -4427,9 +4429,9 @@ export const Protos = $root.Protos = (() => {
         CS2GS_KickGC.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GS_KickGC();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GS_KickGC();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -4458,7 +4460,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -4480,7 +4482,7 @@ export const Protos = $root.Protos = (() => {
         CS2GS_KickGC.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2GS_KickGC)
                 return object;
-            let message = new $root.Protos.CS2GS_KickGC();
+            var message = new $root.Protos.CS2GS_KickGC();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2GS_KickGC.opts: object expected");
@@ -4515,11 +4517,11 @@ export const Protos = $root.Protos = (() => {
         CS2GS_KickGC.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -4542,7 +4544,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         CS2GS_KickGC.EReason = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "DuplicateLogin"] = 0;
             values[valuesById[1] = "OutOfSync"] = 1;
             values[valuesById[2] = "Other"] = 2;
@@ -4557,7 +4559,7 @@ export const Protos = $root.Protos = (() => {
         function CS2LS_GSInfos(properties) {
             this.gsInfo = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -4575,7 +4577,7 @@ export const Protos = $root.Protos = (() => {
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.gsInfo != null && message.gsInfo.length)
-                for (let i = 0; i < message.gsInfo.length; ++i)
+                for (var i = 0; i < message.gsInfo.length; ++i)
                     $root.Protos.GSInfo.encode(message.gsInfo[i], writer.uint32(18).fork()).ldelim();
             return writer;
         };
@@ -4587,9 +4589,9 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSInfos.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2LS_GSInfos();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2LS_GSInfos();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -4617,15 +4619,15 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.gsInfo != null && message.hasOwnProperty("gsInfo")) {
                 if (!Array.isArray(message.gsInfo))
                     return "gsInfo: array expected";
-                for (let i = 0; i < message.gsInfo.length; ++i) {
-                    let error = $root.Protos.GSInfo.verify(message.gsInfo[i]);
+                for (var i = 0; i < message.gsInfo.length; ++i) {
+                    var error = $root.Protos.GSInfo.verify(message.gsInfo[i]);
                     if (error)
                         return "gsInfo." + error;
                 }
@@ -4636,7 +4638,7 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSInfos.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2LS_GSInfos)
                 return object;
-            let message = new $root.Protos.CS2LS_GSInfos();
+            var message = new $root.Protos.CS2LS_GSInfos();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2LS_GSInfos.opts: object expected");
@@ -4646,7 +4648,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.gsInfo))
                     throw TypeError(".Protos.CS2LS_GSInfos.gsInfo: array expected");
                 message.gsInfo = [];
-                for (let i = 0; i < object.gsInfo.length; ++i) {
+                for (var i = 0; i < object.gsInfo.length; ++i) {
                     if (typeof object.gsInfo[i] !== "object")
                         throw TypeError(".Protos.CS2LS_GSInfos.gsInfo: object expected");
                     message.gsInfo[i] = $root.Protos.GSInfo.fromObject(object.gsInfo[i]);
@@ -4658,7 +4660,7 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSInfos.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults)
                 object.gsInfo = [];
             if (options.defaults)
@@ -4667,7 +4669,7 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.gsInfo && message.gsInfo.length) {
                 object.gsInfo = [];
-                for (let j = 0; j < message.gsInfo.length; ++j)
+                for (var j = 0; j < message.gsInfo.length; ++j)
                     object.gsInfo[j] = $root.Protos.GSInfo.toObject(message.gsInfo[j], options);
             }
             return object;
@@ -4684,7 +4686,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2LS_GSInfo(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -4713,9 +4715,9 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2LS_GSInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2LS_GSInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -4741,12 +4743,12 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.gsInfo != null && message.hasOwnProperty("gsInfo")) {
-                let error = $root.Protos.GSInfo.verify(message.gsInfo);
+                var error = $root.Protos.GSInfo.verify(message.gsInfo);
                 if (error)
                     return "gsInfo." + error;
             }
@@ -4756,7 +4758,7 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2LS_GSInfo)
                 return object;
-            let message = new $root.Protos.CS2LS_GSInfo();
+            var message = new $root.Protos.CS2LS_GSInfo();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2LS_GSInfo.opts: object expected");
@@ -4773,7 +4775,7 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.gsInfo = null;
@@ -4796,7 +4798,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2LS_GSLost(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -4825,9 +4827,9 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSLost.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2LS_GSLost();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2LS_GSLost();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -4853,7 +4855,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -4866,7 +4868,7 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSLost.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2LS_GSLost)
                 return object;
-            let message = new $root.Protos.CS2LS_GSLost();
+            var message = new $root.Protos.CS2LS_GSLost();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2LS_GSLost.opts: object expected");
@@ -4880,7 +4882,7 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GSLost.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.gsid = 0;
@@ -4903,7 +4905,7 @@ export const Protos = $root.Protos = (() => {
 
         function CS2LS_GCLoginRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -4932,9 +4934,9 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GCLoginRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2LS_GCLoginRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2LS_GCLoginRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -4960,7 +4962,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -4978,7 +4980,7 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GCLoginRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.CS2LS_GCLoginRet)
                 return object;
-            let message = new $root.Protos.CS2LS_GCLoginRet();
+            var message = new $root.Protos.CS2LS_GCLoginRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.CS2LS_GCLoginRet.opts: object expected");
@@ -5000,7 +5002,7 @@ export const Protos = $root.Protos = (() => {
         CS2LS_GCLoginRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -5017,7 +5019,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         CS2LS_GCLoginRet.EResult = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "Failed"] = 1;
             return values;
@@ -5030,7 +5032,7 @@ export const Protos = $root.Protos = (() => {
 
         function GSInfo(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -5071,9 +5073,9 @@ export const Protos = $root.Protos = (() => {
         GSInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GSInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GSInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.id = reader.uint32();
@@ -5141,7 +5143,7 @@ export const Protos = $root.Protos = (() => {
         GSInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GSInfo)
                 return object;
-            let message = new $root.Protos.GSInfo();
+            var message = new $root.Protos.GSInfo();
             if (object.id != null)
                 message.id = object.id >>> 0;
             if (object.name != null)
@@ -5176,7 +5178,7 @@ export const Protos = $root.Protos = (() => {
         GSInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.id = 0;
                 object.name = "";
@@ -5205,7 +5207,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         GSInfo.State = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Free"] = 0;
             values[valuesById[1] = "Busy"] = 1;
             values[valuesById[2] = "Full"] = 2;
@@ -5220,7 +5222,7 @@ export const Protos = $root.Protos = (() => {
 
         function GS2CS_ReportState(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -5249,9 +5251,9 @@ export const Protos = $root.Protos = (() => {
         GS2CS_ReportState.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2CS_ReportState();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2CS_ReportState();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -5277,12 +5279,12 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.gsInfo != null && message.hasOwnProperty("gsInfo")) {
-                let error = $root.Protos.GSInfo.verify(message.gsInfo);
+                var error = $root.Protos.GSInfo.verify(message.gsInfo);
                 if (error)
                     return "gsInfo." + error;
             }
@@ -5292,7 +5294,7 @@ export const Protos = $root.Protos = (() => {
         GS2CS_ReportState.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GS2CS_ReportState)
                 return object;
-            let message = new $root.Protos.GS2CS_ReportState();
+            var message = new $root.Protos.GS2CS_ReportState();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GS2CS_ReportState.opts: object expected");
@@ -5309,7 +5311,7 @@ export const Protos = $root.Protos = (() => {
         GS2CS_ReportState.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.gsInfo = null;
@@ -5332,7 +5334,7 @@ export const Protos = $root.Protos = (() => {
 
         function GS2CS_GCAskLogin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -5361,9 +5363,9 @@ export const Protos = $root.Protos = (() => {
         GS2CS_GCAskLogin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2CS_GCAskLogin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2CS_GCAskLogin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -5389,7 +5391,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -5402,7 +5404,7 @@ export const Protos = $root.Protos = (() => {
         GS2CS_GCAskLogin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GS2CS_GCAskLogin)
                 return object;
-            let message = new $root.Protos.GS2CS_GCAskLogin();
+            var message = new $root.Protos.GS2CS_GCAskLogin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GS2CS_GCAskLogin.opts: object expected");
@@ -5423,11 +5425,11 @@ export const Protos = $root.Protos = (() => {
         GS2CS_GCAskLogin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.sessionID = options.longs === String ? "0" : 0;
@@ -5453,7 +5455,7 @@ export const Protos = $root.Protos = (() => {
 
         function GS2CS_GCLost(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -5482,9 +5484,9 @@ export const Protos = $root.Protos = (() => {
         GS2CS_GCLost.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2CS_GCLost();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2CS_GCLost();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -5510,7 +5512,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -5523,7 +5525,7 @@ export const Protos = $root.Protos = (() => {
         GS2CS_GCLost.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GS2CS_GCLost)
                 return object;
-            let message = new $root.Protos.GS2CS_GCLost();
+            var message = new $root.Protos.GS2CS_GCLost();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GS2CS_GCLost.opts: object expected");
@@ -5544,11 +5546,11 @@ export const Protos = $root.Protos = (() => {
         GS2CS_GCLost.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.sessionID = options.longs === String ? "0" : 0;
@@ -5574,7 +5576,7 @@ export const Protos = $root.Protos = (() => {
 
         function DB2LS_QueryAccountRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -5603,9 +5605,9 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryAccountRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.DB2LS_QueryAccountRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.DB2LS_QueryAccountRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -5631,7 +5633,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -5649,7 +5651,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryAccountRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.DB2LS_QueryAccountRet)
                 return object;
-            let message = new $root.Protos.DB2LS_QueryAccountRet();
+            var message = new $root.Protos.DB2LS_QueryAccountRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.DB2LS_QueryAccountRet.opts: object expected");
@@ -5671,7 +5673,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryAccountRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -5694,7 +5696,7 @@ export const Protos = $root.Protos = (() => {
 
         function DB2LS_QueryLoginRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -5747,9 +5749,9 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryLoginRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.DB2LS_QueryLoginRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.DB2LS_QueryLoginRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -5799,7 +5801,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -5861,7 +5863,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryLoginRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.DB2LS_QueryLoginRet)
                 return object;
-            let message = new $root.Protos.DB2LS_QueryLoginRet();
+            var message = new $root.Protos.DB2LS_QueryLoginRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.DB2LS_QueryLoginRet.opts: object expected");
@@ -5943,7 +5945,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryLoginRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -5990,7 +5992,7 @@ export const Protos = $root.Protos = (() => {
 
         function DB2LS_ExecRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6025,9 +6027,9 @@ export const Protos = $root.Protos = (() => {
         DB2LS_ExecRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.DB2LS_ExecRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.DB2LS_ExecRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -6059,7 +6061,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -6083,7 +6085,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_ExecRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.DB2LS_ExecRet)
                 return object;
-            let message = new $root.Protos.DB2LS_ExecRet();
+            var message = new $root.Protos.DB2LS_ExecRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.DB2LS_ExecRet.opts: object expected");
@@ -6109,7 +6111,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_ExecRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -6138,7 +6140,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2BS_AskLogin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6167,9 +6169,9 @@ export const Protos = $root.Protos = (() => {
         GC2BS_AskLogin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_AskLogin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_AskLogin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -6195,7 +6197,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -6208,7 +6210,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_AskLogin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2BS_AskLogin)
                 return object;
-            let message = new $root.Protos.GC2BS_AskLogin();
+            var message = new $root.Protos.GC2BS_AskLogin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2BS_AskLogin.opts: object expected");
@@ -6229,11 +6231,11 @@ export const Protos = $root.Protos = (() => {
         GC2BS_AskLogin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.sessionID = options.longs === String ? "0" : 0;
@@ -6259,7 +6261,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2BS_KeepAlive(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6285,9 +6287,9 @@ export const Protos = $root.Protos = (() => {
         GC2BS_KeepAlive.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_KeepAlive();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_KeepAlive();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -6310,7 +6312,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -6320,7 +6322,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_KeepAlive.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2BS_KeepAlive)
                 return object;
-            let message = new $root.Protos.GC2BS_KeepAlive();
+            var message = new $root.Protos.GC2BS_KeepAlive();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2BS_KeepAlive.opts: object expected");
@@ -6332,7 +6334,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_KeepAlive.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults)
                 object.opts = null;
             if (message.opts != null && message.hasOwnProperty("opts"))
@@ -6351,7 +6353,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2BS_RequestSnapshot(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6380,9 +6382,9 @@ export const Protos = $root.Protos = (() => {
         GC2BS_RequestSnapshot.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_RequestSnapshot();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_RequestSnapshot();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -6408,7 +6410,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -6421,7 +6423,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_RequestSnapshot.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2BS_RequestSnapshot)
                 return object;
-            let message = new $root.Protos.GC2BS_RequestSnapshot();
+            var message = new $root.Protos.GC2BS_RequestSnapshot();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2BS_RequestSnapshot.opts: object expected");
@@ -6435,7 +6437,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_RequestSnapshot.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.frame = 0;
@@ -6458,7 +6460,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2BS_FrameActionInfo(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6493,9 +6495,9 @@ export const Protos = $root.Protos = (() => {
         GC2BS_FrameActionInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_FrameActionInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_FrameActionInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.frame = reader.int32();
@@ -6544,7 +6546,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_FrameActionInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2BS_FrameActionInfo)
                 return object;
-            let message = new $root.Protos.GC2BS_FrameActionInfo();
+            var message = new $root.Protos.GC2BS_FrameActionInfo();
             if (object.frame != null)
                 message.frame = object.frame | 0;
             if (object.inputFlag != null)
@@ -6559,7 +6561,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_FrameActionInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.frame = 0;
                 object.inputFlag = 0;
@@ -6589,7 +6591,7 @@ export const Protos = $root.Protos = (() => {
         function GC2BS_FrameAction(properties) {
             this.infos = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6607,7 +6609,7 @@ export const Protos = $root.Protos = (() => {
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.infos != null && message.infos.length)
-                for (let i = 0; i < message.infos.length; ++i)
+                for (var i = 0; i < message.infos.length; ++i)
                     $root.Protos.GC2BS_FrameActionInfo.encode(message.infos[i], writer.uint32(18).fork()).ldelim();
             return writer;
         };
@@ -6619,9 +6621,9 @@ export const Protos = $root.Protos = (() => {
         GC2BS_FrameAction.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_FrameAction();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_FrameAction();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -6649,15 +6651,15 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.infos != null && message.hasOwnProperty("infos")) {
                 if (!Array.isArray(message.infos))
                     return "infos: array expected";
-                for (let i = 0; i < message.infos.length; ++i) {
-                    let error = $root.Protos.GC2BS_FrameActionInfo.verify(message.infos[i]);
+                for (var i = 0; i < message.infos.length; ++i) {
+                    var error = $root.Protos.GC2BS_FrameActionInfo.verify(message.infos[i]);
                     if (error)
                         return "infos." + error;
                 }
@@ -6668,7 +6670,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_FrameAction.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2BS_FrameAction)
                 return object;
-            let message = new $root.Protos.GC2BS_FrameAction();
+            var message = new $root.Protos.GC2BS_FrameAction();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2BS_FrameAction.opts: object expected");
@@ -6678,7 +6680,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.infos))
                     throw TypeError(".Protos.GC2BS_FrameAction.infos: array expected");
                 message.infos = [];
-                for (let i = 0; i < object.infos.length; ++i) {
+                for (var i = 0; i < object.infos.length; ++i) {
                     if (typeof object.infos[i] !== "object")
                         throw TypeError(".Protos.GC2BS_FrameAction.infos: object expected");
                     message.infos[i] = $root.Protos.GC2BS_FrameActionInfo.fromObject(object.infos[i]);
@@ -6690,7 +6692,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_FrameAction.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults)
                 object.infos = [];
             if (options.defaults)
@@ -6699,7 +6701,7 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.infos && message.infos.length) {
                 object.infos = [];
-                for (let j = 0; j < message.infos.length; ++j)
+                for (var j = 0; j < message.infos.length; ++j)
                     object.infos[j] = $root.Protos.GC2BS_FrameActionInfo.toObject(message.infos[j], options);
             }
             return object;
@@ -6716,7 +6718,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2BS_RequestFrameActions(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6748,9 +6750,9 @@ export const Protos = $root.Protos = (() => {
         GC2BS_RequestFrameActions.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_RequestFrameActions();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_RequestFrameActions();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -6779,7 +6781,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -6795,7 +6797,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_RequestFrameActions.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2BS_RequestFrameActions)
                 return object;
-            let message = new $root.Protos.GC2BS_RequestFrameActions();
+            var message = new $root.Protos.GC2BS_RequestFrameActions();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2BS_RequestFrameActions.opts: object expected");
@@ -6811,7 +6813,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_RequestFrameActions.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.from = 0;
@@ -6837,7 +6839,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2BS_CommitSnapshot(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6869,9 +6871,9 @@ export const Protos = $root.Protos = (() => {
         GC2BS_CommitSnapshot.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_CommitSnapshot();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_CommitSnapshot();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -6900,7 +6902,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -6916,7 +6918,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_CommitSnapshot.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2BS_CommitSnapshot)
                 return object;
-            let message = new $root.Protos.GC2BS_CommitSnapshot();
+            var message = new $root.Protos.GC2BS_CommitSnapshot();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2BS_CommitSnapshot.opts: object expected");
@@ -6935,7 +6937,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_CommitSnapshot.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.frame = 0;
@@ -6967,7 +6969,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2BS_EndBattle(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -6999,9 +7001,9 @@ export const Protos = $root.Protos = (() => {
         GC2BS_EndBattle.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_EndBattle();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2BS_EndBattle();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -7030,7 +7032,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -7046,7 +7048,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_EndBattle.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2BS_EndBattle)
                 return object;
-            let message = new $root.Protos.GC2BS_EndBattle();
+            var message = new $root.Protos.GC2BS_EndBattle();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2BS_EndBattle.opts: object expected");
@@ -7065,7 +7067,7 @@ export const Protos = $root.Protos = (() => {
         GC2BS_EndBattle.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.winTeam = 0;
@@ -7097,7 +7099,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2CS_BeginMatch(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -7129,9 +7131,9 @@ export const Protos = $root.Protos = (() => {
         GC2CS_BeginMatch.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2CS_BeginMatch();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2CS_BeginMatch();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -7160,7 +7162,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -7183,7 +7185,7 @@ export const Protos = $root.Protos = (() => {
         GC2CS_BeginMatch.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2CS_BeginMatch)
                 return object;
-            let message = new $root.Protos.GC2CS_BeginMatch();
+            var message = new $root.Protos.GC2CS_BeginMatch();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2CS_BeginMatch.opts: object expected");
@@ -7215,7 +7217,7 @@ export const Protos = $root.Protos = (() => {
         GC2CS_BeginMatch.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.mode = options.enums === String ? "Single1V1" : 0;
@@ -7235,7 +7237,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         GC2CS_BeginMatch.EMode = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Single1V1"] = 0;
             values[valuesById[1] = "Single2V2"] = 1;
             values[valuesById[2] = "Team2V2"] = 2;
@@ -7250,7 +7252,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2GS_AskLogin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -7282,9 +7284,9 @@ export const Protos = $root.Protos = (() => {
         GC2GS_AskLogin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2GS_AskLogin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2GS_AskLogin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -7313,7 +7315,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -7329,7 +7331,7 @@ export const Protos = $root.Protos = (() => {
         GC2GS_AskLogin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2GS_AskLogin)
                 return object;
-            let message = new $root.Protos.GC2GS_AskLogin();
+            var message = new $root.Protos.GC2GS_AskLogin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2GS_AskLogin.opts: object expected");
@@ -7352,12 +7354,12 @@ export const Protos = $root.Protos = (() => {
         GC2GS_AskLogin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.pwd = "";
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.sessionID = options.longs === String ? "0" : 0;
@@ -7385,7 +7387,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2GS_KeepAlive(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -7411,9 +7413,9 @@ export const Protos = $root.Protos = (() => {
         GC2GS_KeepAlive.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2GS_KeepAlive();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2GS_KeepAlive();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -7436,7 +7438,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -7446,7 +7448,7 @@ export const Protos = $root.Protos = (() => {
         GC2GS_KeepAlive.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2GS_KeepAlive)
                 return object;
-            let message = new $root.Protos.GC2GS_KeepAlive();
+            var message = new $root.Protos.GC2GS_KeepAlive();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2GS_KeepAlive.opts: object expected");
@@ -7458,7 +7460,7 @@ export const Protos = $root.Protos = (() => {
         GC2GS_KeepAlive.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults)
                 object.opts = null;
             if (message.opts != null && message.hasOwnProperty("opts"))
@@ -7477,7 +7479,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2LS_AskRegister(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -7509,9 +7511,9 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskRegister.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskRegister();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskRegister();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -7540,7 +7542,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -7556,7 +7558,7 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskRegister.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2LS_AskRegister)
                 return object;
-            let message = new $root.Protos.GC2LS_AskRegister();
+            var message = new $root.Protos.GC2LS_AskRegister();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2LS_AskRegister.opts: object expected");
@@ -7572,7 +7574,7 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskRegister.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.id = "";
@@ -7598,7 +7600,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2LS_AskLogin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -7639,9 +7641,9 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskLogin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskLogin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskLogin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -7679,7 +7681,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -7724,7 +7726,7 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskLogin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2LS_AskLogin)
                 return object;
-            let message = new $root.Protos.GC2LS_AskLogin();
+            var message = new $root.Protos.GC2LS_AskLogin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2LS_AskLogin.opts: object expected");
@@ -7790,7 +7792,7 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskLogin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.id = "";
@@ -7825,7 +7827,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2LS_AskSmartLogin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -7863,9 +7865,9 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskSmartLogin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskSmartLogin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskSmartLogin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -7900,7 +7902,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -7942,7 +7944,7 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskSmartLogin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2LS_AskSmartLogin)
                 return object;
-            let message = new $root.Protos.GC2LS_AskSmartLogin();
+            var message = new $root.Protos.GC2LS_AskSmartLogin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2LS_AskSmartLogin.opts: object expected");
@@ -8006,7 +8008,7 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskSmartLogin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.id = "";
@@ -8038,7 +8040,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2LS_AskWXLogin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -8082,9 +8084,9 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskWXLogin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskWXLogin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LS_AskWXLogin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -8125,7 +8127,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -8168,7 +8170,7 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskWXLogin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2LS_AskWXLogin)
                 return object;
-            let message = new $root.Protos.GC2LS_AskWXLogin();
+            var message = new $root.Protos.GC2LS_AskWXLogin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2LS_AskWXLogin.opts: object expected");
@@ -8228,7 +8230,7 @@ export const Protos = $root.Protos = (() => {
         GC2LS_AskWXLogin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.code = "";
@@ -8266,7 +8268,7 @@ export const Protos = $root.Protos = (() => {
 
         function GC2LC_UpdateProfile(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -8301,9 +8303,9 @@ export const Protos = $root.Protos = (() => {
         GC2LC_UpdateProfile.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LC_UpdateProfile();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2LC_UpdateProfile();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -8335,7 +8337,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -8354,7 +8356,7 @@ export const Protos = $root.Protos = (() => {
         GC2LC_UpdateProfile.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GC2LC_UpdateProfile)
                 return object;
-            let message = new $root.Protos.GC2LC_UpdateProfile();
+            var message = new $root.Protos.GC2LC_UpdateProfile();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GC2LC_UpdateProfile.opts: object expected");
@@ -8372,7 +8374,7 @@ export const Protos = $root.Protos = (() => {
         GC2LC_UpdateProfile.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.nickname = "";
@@ -8401,7 +8403,7 @@ export const Protos = $root.Protos = (() => {
 
         function GS2GC_LoginRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -8448,9 +8450,9 @@ export const Protos = $root.Protos = (() => {
         GS2GC_LoginRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2GC_LoginRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2GC_LoginRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -8494,7 +8496,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -8515,7 +8517,7 @@ export const Protos = $root.Protos = (() => {
                     break;
                 }
             if (message.userInfo != null && message.hasOwnProperty("userInfo")) {
-                let error = $root.Protos.G_UserInfo.verify(message.userInfo);
+                var error = $root.Protos.G_UserInfo.verify(message.userInfo);
                 if (error)
                     return "userInfo." + error;
             }
@@ -8537,7 +8539,7 @@ export const Protos = $root.Protos = (() => {
         GS2GC_LoginRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GS2GC_LoginRet)
                 return object;
-            let message = new $root.Protos.GS2GC_LoginRet();
+            var message = new $root.Protos.GS2GC_LoginRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GS2GC_LoginRet.opts: object expected");
@@ -8592,14 +8594,14 @@ export const Protos = $root.Protos = (() => {
         GS2GC_LoginRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
                 object.gcState = options.enums === String ? "Idle" : 0;
                 object.userInfo = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -8640,14 +8642,14 @@ export const Protos = $root.Protos = (() => {
         };
 
         GS2GC_LoginRet.EResult = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "SessionExpire"] = 1;
             return values;
         })();
 
         GS2GC_LoginRet.EGCCState = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Idle"] = 0;
             values[valuesById[1] = "Battle"] = 1;
             return values;
@@ -8660,7 +8662,7 @@ export const Protos = $root.Protos = (() => {
 
         function GS2GC_Kick(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -8689,9 +8691,9 @@ export const Protos = $root.Protos = (() => {
         GS2GC_Kick.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2GC_Kick();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2GC_Kick();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -8717,7 +8719,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -8736,7 +8738,7 @@ export const Protos = $root.Protos = (() => {
         GS2GC_Kick.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GS2GC_Kick)
                 return object;
-            let message = new $root.Protos.GS2GC_Kick();
+            var message = new $root.Protos.GS2GC_Kick();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GS2GC_Kick.opts: object expected");
@@ -8762,7 +8764,7 @@ export const Protos = $root.Protos = (() => {
         GS2GC_Kick.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.reason = options.enums === String ? "DuplicateLogin" : 0;
@@ -8785,7 +8787,7 @@ export const Protos = $root.Protos = (() => {
 
         function GS2GC_CSLost(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -8811,9 +8813,9 @@ export const Protos = $root.Protos = (() => {
         GS2GC_CSLost.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2GC_CSLost();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GS2GC_CSLost();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -8836,7 +8838,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -8846,7 +8848,7 @@ export const Protos = $root.Protos = (() => {
         GS2GC_CSLost.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.GS2GC_CSLost)
                 return object;
-            let message = new $root.Protos.GS2GC_CSLost();
+            var message = new $root.Protos.GS2GC_CSLost();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.GS2GC_CSLost.opts: object expected");
@@ -8858,7 +8860,7 @@ export const Protos = $root.Protos = (() => {
         GS2GC_CSLost.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults)
                 object.opts = null;
             if (message.opts != null && message.hasOwnProperty("opts"))
@@ -8877,7 +8879,7 @@ export const Protos = $root.Protos = (() => {
 
         function LS2CS_GCLogin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -8936,9 +8938,9 @@ export const Protos = $root.Protos = (() => {
         LS2CS_GCLogin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2CS_GCLogin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2CS_GCLogin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -8994,7 +8996,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -9057,7 +9059,7 @@ export const Protos = $root.Protos = (() => {
         LS2CS_GCLogin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.LS2CS_GCLogin)
                 return object;
-            let message = new $root.Protos.LS2CS_GCLogin();
+            var message = new $root.Protos.LS2CS_GCLogin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.LS2CS_GCLogin.opts: object expected");
@@ -9142,11 +9144,11 @@ export const Protos = $root.Protos = (() => {
         LS2CS_GCLogin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
@@ -9202,7 +9204,7 @@ export const Protos = $root.Protos = (() => {
 
         function LS2DB_QueryAccount(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -9231,9 +9233,9 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryAccount.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2DB_QueryAccount();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2DB_QueryAccount();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -9259,7 +9261,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -9272,7 +9274,7 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryAccount.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.LS2DB_QueryAccount)
                 return object;
-            let message = new $root.Protos.LS2DB_QueryAccount();
+            var message = new $root.Protos.LS2DB_QueryAccount();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.LS2DB_QueryAccount.opts: object expected");
@@ -9286,7 +9288,7 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryAccount.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.name = "";
@@ -9309,7 +9311,7 @@ export const Protos = $root.Protos = (() => {
 
         function LS2DB_QueryLogin(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -9371,9 +9373,9 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryLogin.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2DB_QueryLogin();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2DB_QueryLogin();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -9432,7 +9434,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -9498,7 +9500,7 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryLogin.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.LS2DB_QueryLogin)
                 return object;
-            let message = new $root.Protos.LS2DB_QueryLogin();
+            var message = new $root.Protos.LS2DB_QueryLogin();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.LS2DB_QueryLogin.opts: object expected");
@@ -9585,7 +9587,7 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryLogin.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.name = "";
@@ -9593,7 +9595,7 @@ export const Protos = $root.Protos = (() => {
                 object.vertPwd = false;
                 object.ip = "";
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
+                    var long = new $util.Long(0, 0, false);
                     object.time = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.time = options.longs === String ? "0" : 0;
@@ -9648,7 +9650,7 @@ export const Protos = $root.Protos = (() => {
 
         function LS2DB_Exec(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -9677,9 +9679,9 @@ export const Protos = $root.Protos = (() => {
         LS2DB_Exec.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2DB_Exec();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2DB_Exec();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -9705,7 +9707,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -9718,7 +9720,7 @@ export const Protos = $root.Protos = (() => {
         LS2DB_Exec.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.LS2DB_Exec)
                 return object;
-            let message = new $root.Protos.LS2DB_Exec();
+            var message = new $root.Protos.LS2DB_Exec();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.LS2DB_Exec.opts: object expected");
@@ -9732,7 +9734,7 @@ export const Protos = $root.Protos = (() => {
         LS2DB_Exec.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.cmd = "";
@@ -9756,7 +9758,7 @@ export const Protos = $root.Protos = (() => {
         function LS2GC_GSInfo(properties) {
             this.gsInfos = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -9774,7 +9776,7 @@ export const Protos = $root.Protos = (() => {
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.gsInfos != null && message.gsInfos.length)
-                for (let i = 0; i < message.gsInfos.length; ++i)
+                for (var i = 0; i < message.gsInfos.length; ++i)
                     $root.Protos.GSInfo.encode(message.gsInfos[i], writer.uint32(18).fork()).ldelim();
             return writer;
         };
@@ -9786,9 +9788,9 @@ export const Protos = $root.Protos = (() => {
         LS2GC_GSInfo.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2GC_GSInfo();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2GC_GSInfo();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -9816,15 +9818,15 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
             if (message.gsInfos != null && message.hasOwnProperty("gsInfos")) {
                 if (!Array.isArray(message.gsInfos))
                     return "gsInfos: array expected";
-                for (let i = 0; i < message.gsInfos.length; ++i) {
-                    let error = $root.Protos.GSInfo.verify(message.gsInfos[i]);
+                for (var i = 0; i < message.gsInfos.length; ++i) {
+                    var error = $root.Protos.GSInfo.verify(message.gsInfos[i]);
                     if (error)
                         return "gsInfos." + error;
                 }
@@ -9835,7 +9837,7 @@ export const Protos = $root.Protos = (() => {
         LS2GC_GSInfo.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.LS2GC_GSInfo)
                 return object;
-            let message = new $root.Protos.LS2GC_GSInfo();
+            var message = new $root.Protos.LS2GC_GSInfo();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.LS2GC_GSInfo.opts: object expected");
@@ -9845,7 +9847,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.gsInfos))
                     throw TypeError(".Protos.LS2GC_GSInfo.gsInfos: array expected");
                 message.gsInfos = [];
-                for (let i = 0; i < object.gsInfos.length; ++i) {
+                for (var i = 0; i < object.gsInfos.length; ++i) {
                     if (typeof object.gsInfos[i] !== "object")
                         throw TypeError(".Protos.LS2GC_GSInfo.gsInfos: object expected");
                     message.gsInfos[i] = $root.Protos.GSInfo.fromObject(object.gsInfos[i]);
@@ -9857,7 +9859,7 @@ export const Protos = $root.Protos = (() => {
         LS2GC_GSInfo.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults)
                 object.gsInfos = [];
             if (options.defaults)
@@ -9866,7 +9868,7 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.gsInfos && message.gsInfos.length) {
                 object.gsInfos = [];
-                for (let j = 0; j < message.gsInfos.length; ++j)
+                for (var j = 0; j < message.gsInfos.length; ++j)
                     object.gsInfos[j] = $root.Protos.GSInfo.toObject(message.gsInfos[j], options);
             }
             return object;
@@ -9883,7 +9885,7 @@ export const Protos = $root.Protos = (() => {
 
         function LS2GC_AskRegRet(properties) {
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -9912,9 +9914,9 @@ export const Protos = $root.Protos = (() => {
         LS2GC_AskRegRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2GC_AskRegRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2GC_AskRegRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -9940,7 +9942,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -9961,7 +9963,7 @@ export const Protos = $root.Protos = (() => {
         LS2GC_AskRegRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.LS2GC_AskRegRet)
                 return object;
-            let message = new $root.Protos.LS2GC_AskRegRet();
+            var message = new $root.Protos.LS2GC_AskRegRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.LS2GC_AskRegRet.opts: object expected");
@@ -9995,7 +9997,7 @@ export const Protos = $root.Protos = (() => {
         LS2GC_AskRegRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -10012,7 +10014,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         LS2GC_AskRegRet.EResult = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "Failed"] = 1;
             values[valuesById[2] = "UnameExists"] = 2;
@@ -10029,7 +10031,7 @@ export const Protos = $root.Protos = (() => {
         function LS2GC_AskLoginRet(properties) {
             this.gsInfos = [];
             if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
@@ -10053,7 +10055,7 @@ export const Protos = $root.Protos = (() => {
             if (message.sessionID != null && message.hasOwnProperty("sessionID"))
                 writer.uint32(24).uint64(message.sessionID);
             if (message.gsInfos != null && message.gsInfos.length)
-                for (let i = 0; i < message.gsInfos.length; ++i)
+                for (var i = 0; i < message.gsInfos.length; ++i)
                     $root.Protos.GSInfo.encode(message.gsInfos[i], writer.uint32(34).fork()).ldelim();
             return writer;
         };
@@ -10065,9 +10067,9 @@ export const Protos = $root.Protos = (() => {
         LS2GC_AskLoginRet.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2GC_AskLoginRet();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.LS2GC_AskLoginRet();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
@@ -10101,7 +10103,7 @@ export const Protos = $root.Protos = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
+                var error = $root.Protos.MsgOpts.verify(message.opts);
                 if (error)
                     return "opts." + error;
             }
@@ -10123,8 +10125,8 @@ export const Protos = $root.Protos = (() => {
             if (message.gsInfos != null && message.hasOwnProperty("gsInfos")) {
                 if (!Array.isArray(message.gsInfos))
                     return "gsInfos: array expected";
-                for (let i = 0; i < message.gsInfos.length; ++i) {
-                    let error = $root.Protos.GSInfo.verify(message.gsInfos[i]);
+                for (var i = 0; i < message.gsInfos.length; ++i) {
+                    var error = $root.Protos.GSInfo.verify(message.gsInfos[i]);
                     if (error)
                         return "gsInfos." + error;
                 }
@@ -10135,7 +10137,7 @@ export const Protos = $root.Protos = (() => {
         LS2GC_AskLoginRet.fromObject = function fromObject(object) {
             if (object instanceof $root.Protos.LS2GC_AskLoginRet)
                 return object;
-            let message = new $root.Protos.LS2GC_AskLoginRet();
+            var message = new $root.Protos.LS2GC_AskLoginRet();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
                     throw TypeError(".Protos.LS2GC_AskLoginRet.opts: object expected");
@@ -10180,7 +10182,7 @@ export const Protos = $root.Protos = (() => {
                 if (!Array.isArray(object.gsInfos))
                     throw TypeError(".Protos.LS2GC_AskLoginRet.gsInfos: array expected");
                 message.gsInfos = [];
-                for (let i = 0; i < object.gsInfos.length; ++i) {
+                for (var i = 0; i < object.gsInfos.length; ++i) {
                     if (typeof object.gsInfos[i] !== "object")
                         throw TypeError(".Protos.LS2GC_AskLoginRet.gsInfos: object expected");
                     message.gsInfos[i] = $root.Protos.GSInfo.fromObject(object.gsInfos[i]);
@@ -10192,14 +10194,14 @@ export const Protos = $root.Protos = (() => {
         LS2GC_AskLoginRet.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            var object = {};
             if (options.arrays || options.defaults)
                 object.gsInfos = [];
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
                 if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
+                    var long = new $util.Long(0, 0, true);
                     object.sessionID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.sessionID = options.longs === String ? "0" : 0;
@@ -10215,7 +10217,7 @@ export const Protos = $root.Protos = (() => {
                     object.sessionID = options.longs === String ? $util.Long.prototype.toString.call(message.sessionID) : options.longs === Number ? new $util.LongBits(message.sessionID.low >>> 0, message.sessionID.high >>> 0).toNumber(true) : message.sessionID;
             if (message.gsInfos && message.gsInfos.length) {
                 object.gsInfos = [];
-                for (let j = 0; j < message.gsInfos.length; ++j)
+                for (var j = 0; j < message.gsInfos.length; ++j)
                     object.gsInfos[j] = $root.Protos.GSInfo.toObject(message.gsInfos[j], options);
             }
             return object;
@@ -10226,7 +10228,7 @@ export const Protos = $root.Protos = (() => {
         };
 
         LS2GC_AskLoginRet.EResult = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
+            var valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "Failed"] = 1;
             values[valuesById[2] = "InvalidUname"] = 2;
@@ -10242,4 +10244,4 @@ export const Protos = $root.Protos = (() => {
     return Protos;
 })();
 
-export { $root as default };
+module.exports = $root;

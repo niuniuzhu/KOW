@@ -1,16 +1,13 @@
-import { FVec2 } from "../../RC/FMath/FVec2";
-export var EntityType;
-(function (EntityType) {
-    EntityType[EntityType["Champion"] = 0] = "Champion";
-    EntityType[EntityType["Bullet"] = 1] = "Bullet";
-    EntityType[EntityType["SceneItem"] = 2] = "SceneItem";
-})(EntityType || (EntityType = {}));
-export class EntityInitParams {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const FVec2_1 = require("../../RC/FMath/FVec2");
+class EntityInitParams {
 }
-export class Entity {
+exports.EntityInitParams = EntityInitParams;
+class Entity {
     constructor(battle) {
-        this.position = FVec2.zero;
-        this.direction = FVec2.zero;
+        this.position = FVec2_1.FVec2.zero;
+        this.direction = FVec2_1.FVec2.zero;
         this._battle = battle;
     }
     get battle() { return this._battle; }
@@ -21,6 +18,8 @@ export class Entity {
         this._rid = params.rid;
         this._id = params.id;
         this._markToDestroy = false;
+        this.position.CopyFrom(params.position);
+        this.direction.CopyFrom(params.direction);
         this.LoadDefs();
     }
     Destroy() {
@@ -59,3 +58,4 @@ export class Entity {
         return str;
     }
 }
+exports.Entity = Entity;

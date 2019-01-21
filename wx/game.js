@@ -1,8 +1,9 @@
-import "./js/Libs/weapp-adapter.js";
-import "./js/Libs/laya.core.min.js";
-import "./js/Libs/laya.wxmini.min.js";
-import "./js/Libs/laya.html.min.js";
-import "./js/Libs/fairygui.min.js";
-import { Main } from "./js/Main.js";
-
-new Main("{\"local\":false}");
+if ((typeof swan !== 'undefined') && (typeof swanGlobal !== 'undefined')) {
+  require("./js/Libs/swan-game-adapter.js");
+  require("./js/Libs/laya.bdmini.js");
+} else if (typeof wx !== "undefined") {
+	require("./js/Libs/weapp-adapter.js");
+	require("./js/Libs/laya.wxmini.min.js");
+}
+window.loadLib = require;
+require("index.js");

@@ -1,26 +1,28 @@
-import { FSM } from "../../RC/FSM/FSM";
-import { Vec2 } from "../../RC/Math/Vec2";
-import { Hashtable } from "../../RC/Utils/Hashtable";
-import { UIEvent } from "../BattleEvent/UIEvent";
-import { CDefs } from "../CDefs";
-import { Defs } from "../Defs";
-import { EAttr } from "../Logic/Attribute";
-import { Skill } from "../Skill";
-import { VEntityState } from "./FSM/VEntityState";
-import { HUD } from "./HUD";
-import { VEntity } from "./VEntity";
-export class VChampion extends VEntity {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const FSM_1 = require("../../RC/FSM/FSM");
+const Vec2_1 = require("../../RC/Math/Vec2");
+const Hashtable_1 = require("../../RC/Utils/Hashtable");
+const UIEvent_1 = require("../BattleEvent/UIEvent");
+const CDefs_1 = require("../CDefs");
+const Defs_1 = require("../Defs");
+const Attribute_1 = require("../Logic/Attribute");
+const Skill_1 = require("../Skill");
+const VEntityState_1 = require("./FSM/VEntityState");
+const HUD_1 = require("./HUD");
+const VEntity_1 = require("./VEntity");
+class VChampion extends VEntity_1.VEntity {
     constructor(battle) {
         super(battle);
         this._skills = [];
-        this._fsm = new FSM();
-        this._moveDirection = Vec2.zero;
+        this._fsm = new FSM_1.FSM();
+        this._moveDirection = Vec2_1.Vec2.zero;
         this._t_hp_add = 0;
         this._t_mp_add = 0;
         this._t_atk_add = 0;
         this._t_def_add = 0;
         this._t_speed_add = 0;
-        this._hud = new HUD(this);
+        this._hud = new HUD_1.HUD(this);
     }
     get hud() { return this._hud; }
     get fsm() { return this._fsm; }
@@ -45,60 +47,60 @@ export class VChampion extends VEntity {
     get t_def_add() { return this._t_def_add; }
     get t_speed_add() { return this._t_speed_add; }
     set hp(value) { if (this._hp == value)
-        return; this._hp = value; this.OnAttrChange(EAttr.HP, value); }
+        return; this._hp = value; this.OnAttrChange(Attribute_1.EAttr.HP, value); }
     set mhp(value) { if (this._mhp == value)
-        return; this._mhp = value; this.OnAttrChange(EAttr.MHP, value); }
+        return; this._mhp = value; this.OnAttrChange(Attribute_1.EAttr.MHP, value); }
     set mp(value) { if (this._mp == value)
-        return; this._mp = value; this.OnAttrChange(EAttr.MP, value); }
+        return; this._mp = value; this.OnAttrChange(Attribute_1.EAttr.MP, value); }
     set mmp(value) { if (this._mmp == value)
-        return; this._mmp = value; this.OnAttrChange(EAttr.MMP, value); }
+        return; this._mmp = value; this.OnAttrChange(Attribute_1.EAttr.MMP, value); }
     set mpRecover(value) { if (this._mpRecover == value)
-        return; this._mpRecover = value; this.OnAttrChange(EAttr.MP_RECOVER, value); }
+        return; this._mpRecover = value; this.OnAttrChange(Attribute_1.EAttr.MP_RECOVER, value); }
     set atk(value) { if (this._atk == value)
-        return; this._atk = value; this.OnAttrChange(EAttr.ATK, value); }
+        return; this._atk = value; this.OnAttrChange(Attribute_1.EAttr.ATK, value); }
     set def(value) { if (this._def == value)
-        return; this._def = value; this.OnAttrChange(EAttr.DEF, value); }
+        return; this._def = value; this.OnAttrChange(Attribute_1.EAttr.DEF, value); }
     set disableMove(value) { if (this._disableMove == value)
-        return; this._disableMove = value; this.OnAttrChange(EAttr.S_DISABLE_MOVE, value); }
+        return; this._disableMove = value; this.OnAttrChange(Attribute_1.EAttr.S_DISABLE_MOVE, value); }
     set disableTurn(value) { if (this._disableTurn == value)
-        return; this._disableTurn = value; this.OnAttrChange(EAttr.S_DISABLE_TURN, value); }
+        return; this._disableTurn = value; this.OnAttrChange(Attribute_1.EAttr.S_DISABLE_TURN, value); }
     set disableSkill(value) { if (this._disableSkill == value)
-        return; this._disableSkill = value; this.OnAttrChange(EAttr.S_DISABLE_SKILL, value); }
+        return; this._disableSkill = value; this.OnAttrChange(Attribute_1.EAttr.S_DISABLE_SKILL, value); }
     set disableCollision(value) { if (this._disableCollision == value)
-        return; this._disableCollision = value; this.OnAttrChange(EAttr.S_DISABLE_COLLISION, value); }
+        return; this._disableCollision = value; this.OnAttrChange(Attribute_1.EAttr.S_DISABLE_COLLISION, value); }
     set supperArmor(value) { if (this._supperArmor == value)
-        return; this._supperArmor = value; this.OnAttrChange(EAttr.S_SUPPER_ARMOR, value); }
+        return; this._supperArmor = value; this.OnAttrChange(Attribute_1.EAttr.S_SUPPER_ARMOR, value); }
     set invulnerAbility(value) { if (this._invulnerAbility == value)
-        return; this._invulnerAbility = value; this.OnAttrChange(EAttr.S_INVULNER_ABILITY, value); }
+        return; this._invulnerAbility = value; this.OnAttrChange(Attribute_1.EAttr.S_INVULNER_ABILITY, value); }
     set moveDirection(value) { if (this._moveDirection.EqualsTo(value))
-        return; this._moveDirection.CopyFrom(value); this.OnAttrChange(EAttr.MOVE_DIRECTION, value); }
+        return; this._moveDirection.CopyFrom(value); this.OnAttrChange(Attribute_1.EAttr.MOVE_DIRECTION, value); }
     set gladiatorTime(value) { if (this._gladiatorTime == value)
-        return; this._gladiatorTime = value; this.OnAttrChange(EAttr.GLADIATOR_TIME, value); }
+        return; this._gladiatorTime = value; this.OnAttrChange(Attribute_1.EAttr.GLADIATOR_TIME, value); }
     set t_hp_add(value) { if (this._t_hp_add == value)
-        return; this._t_hp_add = value; this.OnAttrChange(EAttr.S_HP_ADD, value); }
+        return; this._t_hp_add = value; this.OnAttrChange(Attribute_1.EAttr.S_HP_ADD, value); }
     set t_mp_add(value) { if (this._t_mp_add == value)
-        return; this._t_mp_add = value; this.OnAttrChange(EAttr.S_MP_ADD, value); }
+        return; this._t_mp_add = value; this.OnAttrChange(Attribute_1.EAttr.S_MP_ADD, value); }
     set t_atk_add(value) { if (this._t_atk_add == value)
-        return; this._t_atk_add = value; this.OnAttrChange(EAttr.S_ATK_ADD, value); }
+        return; this._t_atk_add = value; this.OnAttrChange(Attribute_1.EAttr.S_ATK_ADD, value); }
     set t_def_add(value) { if (this._t_def_add == value)
-        return; this._t_def_add = value; this.OnAttrChange(EAttr.S_DEF_ADD, value); }
+        return; this._t_def_add = value; this.OnAttrChange(Attribute_1.EAttr.S_DEF_ADD, value); }
     set t_speed_add(value) { if (this._t_speed_add == value)
-        return; this._t_speed_add = value; this.OnAttrChange(EAttr.S_SPEED_ADD, value); }
+        return; this._t_speed_add = value; this.OnAttrChange(Attribute_1.EAttr.S_SPEED_ADD, value); }
     BeforeLoadDefs() {
-        return CDefs.GetEntity(this._id);
+        return CDefs_1.CDefs.GetEntity(this._id);
     }
     AfterLoadDefs(cdefs) {
-        const defs = Defs.GetEntity(this._id);
-        const skillsDef = Hashtable.GetNumberArray(defs, "skills");
+        const defs = Defs_1.Defs.GetEntity(this._id);
+        const skillsDef = Hashtable_1.Hashtable.GetNumberArray(defs, "skills");
         for (const sid of skillsDef) {
-            const skill = new Skill();
+            const skill = new Skill_1.Skill();
             skill.Init(sid);
             this._skills.push(skill);
         }
-        const statesDef = Hashtable.GetMap(cdefs, "states");
+        const statesDef = Hashtable_1.Hashtable.GetMap(cdefs, "states");
         if (statesDef != null) {
             for (const type in statesDef) {
-                const state = new VEntityState(Number.parseInt(type), this);
+                const state = new VEntityState_1.VEntityState(Number.parseInt(type), this);
                 this._fsm.AddState(state);
                 state.Init(statesDef);
             }
@@ -106,16 +108,17 @@ export class VChampion extends VEntity {
         this.DisplayRoot();
     }
     OnAttrChange(attr, value) {
-        UIEvent.AttrChange(this, attr, value);
+        UIEvent_1.UIEvent.AttrChange(this, attr, value);
     }
     Update(dt) {
         super.Update(dt);
+        this._fsm.Update(dt);
         this._hud.Update(dt);
     }
     DecodeSync(rid, reader, isNew) {
         super.DecodeSync(rid, reader, isNew);
         if (isNew) {
-            UIEvent.ChampionInit(this);
+            UIEvent_1.UIEvent.ChampionInit(this);
         }
         this.team = reader.int32();
         this.name = reader.string();
@@ -132,7 +135,7 @@ export class VChampion extends VEntity {
         this.disableCollision = reader.int32();
         this.supperArmor = reader.int32();
         this.invulnerAbility = reader.int32();
-        this.moveDirection = new Vec2(reader.double(), reader.double());
+        this.moveDirection = new Vec2_1.Vec2(reader.double(), reader.double());
         this.gladiatorTime = reader.int32();
         this.t_hp_add = reader.int32();
         this.t_mp_add = reader.int32();
@@ -163,3 +166,4 @@ export class VChampion extends VEntity {
         return this._skills[index];
     }
 }
+exports.VChampion = VChampion;

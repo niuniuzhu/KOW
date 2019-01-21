@@ -1,5 +1,7 @@
-import { default as Dictionary } from './Dictionary';
-import * as util from './util';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Dictionary_1 = require("./Dictionary");
+const util = require("./util");
 class LinkedDictionaryPair {
     constructor(key, value) {
         this.key = key;
@@ -10,7 +12,7 @@ class LinkedDictionaryPair {
         this.next.prev = this.prev;
     }
 }
-export default class LinkedDictionary extends Dictionary {
+class LinkedDictionary extends Dictionary_1.default {
     constructor(toStrFunction) {
         super(toStrFunction);
         this.head = new LinkedDictionaryPair(null, null);
@@ -107,3 +109,4 @@ export default class LinkedDictionary extends Dictionary {
         }
     }
 }
+exports.default = LinkedDictionary;

@@ -1,8 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _hasOwnProperty = Object.prototype.hasOwnProperty;
-export const has = function (obj, prop) {
+exports.has = function (obj, prop) {
     return _hasOwnProperty.call(obj, prop);
 };
-export function defaultCompare(a, b) {
+function defaultCompare(a, b) {
     if (a < b) {
         return -1;
     }
@@ -13,10 +15,12 @@ export function defaultCompare(a, b) {
         return 1;
     }
 }
-export function defaultEquals(a, b) {
+exports.defaultCompare = defaultCompare;
+function defaultEquals(a, b) {
     return a === b;
 }
-export function defaultToString(item) {
+exports.defaultEquals = defaultEquals;
+function defaultToString(item) {
     if (item === null) {
         return 'COLLECTION_NULL';
     }
@@ -30,7 +34,8 @@ export function defaultToString(item) {
         return '$o' + item.toString();
     }
 }
-export function makeString(item, join = ',') {
+exports.defaultToString = defaultToString;
+function makeString(item, join = ',') {
     if (item === null) {
         return 'COLLECTION_NULL';
     }
@@ -44,7 +49,7 @@ export function makeString(item, join = ',') {
         let toret = '{';
         let first = true;
         for (const prop in item) {
-            if (has(item, prop)) {
+            if (exports.has(item, prop)) {
                 if (first) {
                     first = false;
                 }
@@ -57,16 +62,20 @@ export function makeString(item, join = ',') {
         return toret + '}';
     }
 }
-export function isFunction(func) {
+exports.makeString = makeString;
+function isFunction(func) {
     return (typeof func) === 'function';
 }
-export function isUndefined(obj) {
+exports.isFunction = isFunction;
+function isUndefined(obj) {
     return (typeof obj) === 'undefined';
 }
-export function isString(obj) {
+exports.isUndefined = isUndefined;
+function isString(obj) {
     return Object.prototype.toString.call(obj) === '[object String]';
 }
-export function reverseCompareFunction(compareFunction) {
+exports.isString = isString;
+function reverseCompareFunction(compareFunction) {
     if (!isFunction(compareFunction)) {
         return function (a, b) {
             if (a < b) {
@@ -86,8 +95,10 @@ export function reverseCompareFunction(compareFunction) {
         };
     }
 }
-export function compareToEquals(compareFunction) {
+exports.reverseCompareFunction = reverseCompareFunction;
+function compareToEquals(compareFunction) {
     return function (a, b) {
         return compareFunction(a, b) === 0;
     };
 }
+exports.compareToEquals = compareToEquals;

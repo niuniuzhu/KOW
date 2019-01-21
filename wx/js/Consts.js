@@ -1,4 +1,6 @@
-export class Consts {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Consts {
 }
 Consts.SCREEN_WIDTH = 1280;
 Consts.SCREEN_HEIGHT = 720;
@@ -12,3 +14,4 @@ Consts.ASSETS_BULLET_PREFIX = "b";
 Consts.ASSETS_SCENE_ITEM_PREFIX = "s";
 Consts.ASSETS_EFFECT_PREFIX = "fx";
 Consts.LOGIC_TO_PIXEL_RATIO = 100;
+exports.Consts = Consts;

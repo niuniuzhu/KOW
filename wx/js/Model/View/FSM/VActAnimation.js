@@ -1,10 +1,13 @@
-import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { VEntityStateAction } from "./VEntityStateAction";
-export class VActAnimation extends VEntityStateAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Hashtable_1 = require("../../../RC/Utils/Hashtable");
+const VEntityStateAction_1 = require("./VEntityStateAction");
+class VActAnimation extends VEntityStateAction_1.VEntityStateAction {
     OnInit(def) {
-        this._animationID = Hashtable.GetNumber(def, "animation");
-        this._autoScaleTime = Hashtable.GetBool(def, "auto_scale_time");
-        this._duration = Hashtable.GetNumber(def, "duration");
+        super.OnInit(def);
+        this._animationID = Hashtable_1.Hashtable.GetNumber(def, "animation");
+        this._autoScaleTime = Hashtable_1.Hashtable.GetBool(def, "auto_scale_time");
+        this._duration = Hashtable_1.Hashtable.GetNumber(def, "duration");
     }
     OnEnter(param) {
         super.OnEnter(param);
@@ -21,3 +24,4 @@ export class VActAnimation extends VEntityStateAction {
         }
     }
 }
+exports.VActAnimation = VActAnimation;

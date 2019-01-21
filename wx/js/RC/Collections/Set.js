@@ -1,9 +1,11 @@
-import * as util from './util';
-import * as arrays from './arrays';
-import Dictionary from './Dictionary';
-export default class Set {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const util = require("./util");
+const arrays = require("./arrays");
+const Dictionary_1 = require("./Dictionary");
+class Set {
     constructor(toStringFunction) {
-        this.dictionary = new Dictionary(toStringFunction);
+        this.dictionary = new Dictionary_1.default(toStringFunction);
     }
     contains(element) {
         return this.dictionary.containsKey(element);
@@ -84,3 +86,4 @@ export default class Set {
         return arrays.toString(this.toArray());
     }
 }
+exports.default = Set;

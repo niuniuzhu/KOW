@@ -1,8 +1,10 @@
-import * as Long from "../../Libs/long";
-import { FVec2 } from "../../RC/FMath/FVec2";
-import { MathUtils } from "../../RC/Math/MathUtils";
-import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Defs } from "../Defs";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Long = require("../../Libs/long");
+const FMathUtils_1 = require("../../RC/FMath/FMathUtils");
+const FVec2_1 = require("../../RC/FMath/FVec2");
+const Hashtable_1 = require("../../RC/Utils/Hashtable");
+const Defs_1 = require("../Defs");
 var EmitType;
 (function (EmitType) {
     EmitType[EmitType["Center"] = 0] = "Center";
@@ -15,12 +17,12 @@ var DestroyType;
     DestroyType[DestroyType["Bullet"] = 1] = "Bullet";
     DestroyType[DestroyType["Caster"] = 2] = "Caster";
 })(DestroyType || (DestroyType = {}));
-export class Emitter {
+class Emitter {
     constructor(battle) {
         this._casterID = Long.ZERO;
         this._skillID = 0;
-        this._position = FVec2.zero;
-        this._direction = FVec2.zero;
+        this._position = FVec2_1.FVec2.zero;
+        this._direction = FVec2_1.FVec2.zero;
         this._battle = battle;
     }
     get rid() { return this._rid; }
@@ -44,17 +46,17 @@ export class Emitter {
         }
     }
     OnInit() {
-        this._def = Defs.GetEmitter(this._id);
-        this._raduis = Hashtable.GetNumber(this._def, "radius");
-        const mOffset = Hashtable.GetVec2(this._def, "offset");
-        this._offset = new FVec2(mOffset.x, mOffset.y);
-        this._angle = Hashtable.GetNumber(this._def, "angle");
-        this._follow = Hashtable.GetBool(this._def, "follow");
-        this._frequency = Hashtable.GetNumber(this._def, "frequency");
-        this._maxBulletCount = Hashtable.GetNumber(this._def, "max_bullet_count", 1);
-        this._lifeTime = Hashtable.GetNumber(this._def, "life_time", -1);
-        this._emitType = Hashtable.GetNumber(this._def, "emit_type");
-        this._destroyType = Hashtable.GetNumber(this._def, "destroy_type");
+        this._def = Defs_1.Defs.GetEmitter(this._id);
+        this._raduis = Hashtable_1.Hashtable.GetNumber(this._def, "radius");
+        const mOffset = Hashtable_1.Hashtable.GetVec2(this._def, "offset");
+        this._offset = new FVec2_1.FVec2(mOffset.x, mOffset.y);
+        this._angle = Hashtable_1.Hashtable.GetNumber(this._def, "angle");
+        this._follow = Hashtable_1.Hashtable.GetBool(this._def, "follow");
+        this._frequency = Hashtable_1.Hashtable.GetNumber(this._def, "frequency");
+        this._maxBulletCount = Hashtable_1.Hashtable.GetNumber(this._def, "max_bullet_count", 1);
+        this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._def, "life_time", -1);
+        this._emitType = Hashtable_1.Hashtable.GetNumber(this._def, "emit_type");
+        this._destroyType = Hashtable_1.Hashtable.GetNumber(this._def, "destroy_type");
     }
     Destroy() {
     }
@@ -112,20 +114,21 @@ export class Emitter {
         if (caster == null) {
             caster = this._battle.GetChampion(this._casterID);
         }
-        let rot = MathUtils.Acos(caster.direction.Dot(FVec2.up));
-        if (caster.direction.x > 0) {
-            rot = -rot;
+        const angle = caster.direction.Dot(FVec2_1.FVec2.down);
+        let rot = FMathUtils_1.FMathUtils.Acos(angle);
+        if (caster.direction.x < 0) {
+            rot = FMathUtils_1.FMathUtils.PI2 - rot;
         }
-        this._offset.Rotate(rot);
+        const offset = FVec2_1.FVec2.Rotate(this._offset, rot);
         this._position.CopyFrom(caster.position);
-        this._position.Add(this._offset);
+        this._position.Add(offset);
     }
     Emit() {
         const caster = this._battle.GetChampion(this._casterID);
         const skill = caster.GetSkill(this._skillID);
         switch (this._emitType) {
             case EmitType.Center:
-                this._battle.CreateBullet(skill.bulletID, this._casterID, this._skillID, new FVec2(this._position.x, this._position.y), new FVec2(this._direction.x, this._direction.y));
+                this._battle.CreateBullet(skill.bulletID, this._casterID, this._skillID, new FVec2_1.FVec2(this._position.x, this._position.y), new FVec2_1.FVec2(this._direction.x, this._direction.y));
                 break;
             case EmitType.Edage:
                 break;
@@ -147,3 +150,4 @@ export class Emitter {
         return str;
     }
 }
+exports.Emitter = Emitter;

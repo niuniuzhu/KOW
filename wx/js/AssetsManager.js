@@ -1,4 +1,6 @@
-export var AssetType;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var AssetType;
 (function (AssetType) {
     AssetType[AssetType["Text"] = 0] = "Text";
     AssetType[AssetType["Json"] = 1] = "Json";
@@ -8,8 +10,8 @@ export var AssetType;
     AssetType[AssetType["Sound"] = 5] = "Sound";
     AssetType[AssetType["Font"] = 6] = "Font";
     AssetType[AssetType["Atlas"] = 7] = "Atlas";
-})(AssetType || (AssetType = {}));
-export class AssetsManager {
+})(AssetType = exports.AssetType || (exports.AssetType = {}));
+class AssetsManager {
     static Load(url, type, caller, completeHandler, progressHandler) {
         const strType = this.ConvertType(type);
         Laya.loader.load(url, completeHandler ? Laya.Handler.create(caller, completeHandler) : null, progressHandler ? new Laya.Handler(caller, progressHandler) : null, strType, 0, true);
@@ -25,7 +27,7 @@ export class AssetsManager {
     static LoadBatch(batch, caller, completeHandler, progressHandler) {
         const urls = [];
         for (const item of batch) {
-            urls.push({ url: item["url"], type: this.ConvertType(Number.parseInt(item["type"])) });
+            urls.push({ url: item.url, type: this.ConvertType(item.type) });
         }
         this.LoadBatchStr(urls, caller, completeHandler, progressHandler);
     }
@@ -53,3 +55,4 @@ export class AssetsManager {
         }
     }
 }
+exports.AssetsManager = AssetsManager;

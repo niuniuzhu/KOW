@@ -1,6 +1,8 @@
-import { Defs } from "./Defs";
-import { Hashtable } from "../RC/Utils/Hashtable";
-export class Skill {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Defs_1 = require("./Defs");
+const Hashtable_1 = require("../RC/Utils/Hashtable");
+class Skill {
     constructor() {
         this.shakeTime = 0;
     }
@@ -17,13 +19,14 @@ export class Skill {
         this.LoadDef();
     }
     LoadDef() {
-        const def = Defs.GetSkill(this._id);
-        this._connectState = Hashtable.GetNumber(def, "connect_state");
-        this._mpCost = Hashtable.GetNumber(def, "mp_cost");
-        this._mpAdd = Hashtable.GetNumber(def, "mp_add");
-        this._emitterID = Hashtable.GetNumber(def, "emitter");
-        this._bulletID = Hashtable.GetNumber(def, "bullet");
-        this._damage = Hashtable.GetNumber(def, "damage");
-        this._formula = Hashtable.GetString(def, "formula", null);
+        const def = Defs_1.Defs.GetSkill(this._id);
+        this._connectState = Hashtable_1.Hashtable.GetNumber(def, "connect_state");
+        this._mpCost = Hashtable_1.Hashtable.GetNumber(def, "mp_cost");
+        this._mpAdd = Hashtable_1.Hashtable.GetNumber(def, "mp_add");
+        this._emitterID = Hashtable_1.Hashtable.GetNumber(def, "emitter");
+        this._bulletID = Hashtable_1.Hashtable.GetNumber(def, "bullet");
+        this._damage = Hashtable_1.Hashtable.GetNumber(def, "damage");
+        this._formula = Hashtable_1.Hashtable.GetString(def, "formula", null);
     }
 }
+exports.Skill = Skill;

@@ -1,6 +1,8 @@
-import Stack from "../../RC/Collections/Stack";
-import { BaseBattleEvent } from "./BaseBattleEvent";
-export class SyncEvent extends BaseBattleEvent {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Stack_1 = require("../../RC/Collections/Stack");
+const BaseBattleEvent_1 = require("./BaseBattleEvent");
+class SyncEvent extends BaseBattleEvent_1.BaseBattleEvent {
     static Get() {
         if (SyncEvent.POOL.size() > 0)
             return SyncEvent.POOL.pop();
@@ -91,6 +93,7 @@ SyncEvent.E_HIT = 300;
 SyncEvent.E_BULLET_COLLISION = 301;
 SyncEvent.E_SCENE_ITEM_COLLISION = 302;
 SyncEvent.E_SCENE_ITEM_TRIGGER = 303;
-SyncEvent.POOL = new Stack();
+SyncEvent.POOL = new Stack_1.default();
 SyncEvent.HANDLERS = new Map();
 SyncEvent.EVENTS = [];
+exports.SyncEvent = SyncEvent;

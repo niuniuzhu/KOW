@@ -1,6 +1,8 @@
-import { MathUtils } from "./MathUtils";
-import { Quat } from "./Quat";
-export class Vec3 {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const MathUtils_1 = require("./MathUtils");
+const Quat_1 = require("./Quat");
+class Vec3 {
     constructor(x = 0, y = 0, z = 0) {
         this.x = x;
         this.y = y;
@@ -65,9 +67,9 @@ export class Vec3 {
         this.z = z;
     }
     Clamp(min, max) {
-        this.x = MathUtils.Clamp(this.x, min.x, max.x);
-        this.y = MathUtils.Clamp(this.y, min.y, max.y);
-        this.z = MathUtils.Clamp(this.z, min.z, max.z);
+        this.x = MathUtils_1.MathUtils.Clamp(this.x, min.x, max.x);
+        this.y = MathUtils_1.MathUtils.Clamp(this.y, min.y, max.y);
+        this.z = MathUtils_1.MathUtils.Clamp(this.z, min.z, max.z);
         return this;
     }
     Add(v) {
@@ -139,14 +141,14 @@ export class Vec3 {
     ClampMagnitude(maxLength) {
         let sqrMagnitude = this.SqrMagnitude();
         if (sqrMagnitude > maxLength * maxLength) {
-            let f = maxLength / MathUtils.Sqrt(sqrMagnitude);
+            let f = maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude);
             this.x *= f;
             this.y *= f;
             this.z *= f;
         }
     }
     Magnitude() {
-        return MathUtils.Sqrt(this.SqrMagnitude());
+        return MathUtils_1.MathUtils.Sqrt(this.SqrMagnitude());
     }
     SqrMagnitude() {
         return this.x * this.x + this.y * this.y + this.z * this.z;
@@ -183,16 +185,16 @@ export class Vec3 {
         this.z *= f;
     }
     AproxEqualsBox(vector, tolerance) {
-        return (MathUtils.Abs(this.x - vector.x) <= tolerance) && (MathUtils.Abs(this.y - vector.y) <= tolerance) && (MathUtils.Abs(this.z - vector.z) <= tolerance);
+        return (MathUtils_1.MathUtils.Abs(this.x - vector.x) <= tolerance) && (MathUtils_1.MathUtils.Abs(this.y - vector.y) <= tolerance) && (MathUtils_1.MathUtils.Abs(this.z - vector.z) <= tolerance);
     }
     ApproxEquals(vector, tolerance) {
         return this.Distance(vector) <= tolerance;
     }
     RotateAround(angle, axis) {
-        let quaternion = Quat.AngleAxis(0, axis);
+        let quaternion = Quat_1.Quat.AngleAxis(0, axis);
         quaternion = quaternion.Conjugate();
         let worldSpaceVector = quaternion.Transform(this);
-        quaternion = Quat.AngleAxis(angle, axis);
+        quaternion = Quat_1.Quat.AngleAxis(angle, axis);
         worldSpaceVector = quaternion.Transform(worldSpaceVector);
         return worldSpaceVector;
     }
@@ -218,7 +220,7 @@ export class Vec3 {
         let sinT2 = refractionIndex * refractionIndex * (1.0 - cosI * cosI);
         if (sinT2 > 1.0)
             return this;
-        let cosT = MathUtils.Sqrt(1.0 - sinT2);
+        let cosT = MathUtils_1.MathUtils.Sqrt(1.0 - sinT2);
         return Vec3.Add(Vec3.MulN(this, refractionIndex), Vec3.MulN(normal, (refractionIndex * cosI - cosT)));
     }
     InersectNormal(normal) {
@@ -300,13 +302,13 @@ export class Vec3 {
     }
     static Angle(from, to) {
         let v = Vec3.Dot(Vec3.Normalize(from), Vec3.Normalize(to));
-        return MathUtils.Acos(MathUtils.Clamp(v, -1, 1)) * MathUtils.RAD_TO_DEG;
+        return MathUtils_1.MathUtils.Acos(MathUtils_1.MathUtils.Clamp(v, -1, 1)) * MathUtils_1.MathUtils.RAD_TO_DEG;
     }
     static ClampMagnitude(v, maxLength) {
         let nor = v.Clone();
         let sqrMagnitude = nor.SqrMagnitude();
         if (sqrMagnitude > (maxLength * maxLength))
-            nor = Vec3.MulN(nor, (maxLength / MathUtils.Sqrt(sqrMagnitude)));
+            nor = Vec3.MulN(nor, (maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude)));
         return nor;
     }
     static Normalize(v) {
@@ -326,16 +328,16 @@ export class Vec3 {
     }
     static OrthoNormalVector(v) {
         let res = new Vec3();
-        if (MathUtils.Abs(v.z) > Vec3.OVER_SQRT2) {
+        if (MathUtils_1.MathUtils.Abs(v.z) > Vec3.OVER_SQRT2) {
             let a = v.y * v.y + v.z * v.z;
-            let k = 1 / MathUtils.Sqrt(a);
+            let k = 1 / MathUtils_1.MathUtils.Sqrt(a);
             res.x = 0;
             res.y = -v.z * k;
             res.z = v.y * k;
         }
         else {
             let a = v.x * v.x + v.y * v.y;
-            let k = 1 / MathUtils.Sqrt(a);
+            let k = 1 / MathUtils_1.MathUtils.Sqrt(a);
             res.x = -v.y * k;
             res.y = v.x * k;
             res.z = 0;
@@ -357,15 +359,15 @@ export class Vec3 {
         }
         else if (cosom < -1 + 1e-6) {
             let axis = Vec3.OrthoNormalVector(from);
-            let q = Quat.AngleAxis(180.0 * t, axis);
+            let q = Quat_1.Quat.AngleAxis(180.0 * t, axis);
             let v = Vec3.MulN(q.Transform(from), len);
             return v;
         }
         else {
-            let omega = MathUtils.Acos(cosom);
-            let sinom = MathUtils.Sin(omega);
-            scale0 = MathUtils.Sin((1 - t) * omega) / sinom;
-            scale1 = MathUtils.Sin(t * omega) / sinom;
+            let omega = MathUtils_1.MathUtils.Acos(cosom);
+            let sinom = MathUtils_1.MathUtils.Sin(omega);
+            scale0 = MathUtils_1.MathUtils.Sin((1 - t) * omega) / sinom;
+            scale1 = MathUtils_1.MathUtils.Sin(t * omega) / sinom;
         }
         v2 = Vec3.MulN(Vec3.Add(Vec3.MulN(v2, scale1), Vec3.MulN(v1, scale0)), len);
         return v2;
@@ -380,7 +382,7 @@ export class Vec3 {
         return t <= 0 ? from.Clone() : (t >= 1 ? to.Clone() : Vec3.LerpUnclamped(from, to, t));
     }
     static SmoothDamp(current, target, currentVelocity, smoothTime, maxSpeed, deltaTime) {
-        smoothTime = MathUtils.Max(0.0001, smoothTime);
+        smoothTime = MathUtils_1.MathUtils.Max(0.0001, smoothTime);
         let num = 2 / smoothTime;
         let num2 = num * deltaTime;
         let num3 = 1 / (1 + num2 + 0.48 * num2 * num2 + 0.235 * num2 * num2 * num2);
@@ -402,7 +404,7 @@ export class Vec3 {
         let sqrDelta = delta.SqrMagnitude();
         let sqrDistance = maxDistanceDelta * maxDistanceDelta;
         if (sqrDelta > sqrDistance) {
-            let magnitude = MathUtils.Sqrt(sqrDelta);
+            let magnitude = MathUtils_1.MathUtils.Sqrt(sqrDelta);
             if (magnitude > 1e-6) {
                 delta = Vec3.Add(Vec3.DivN(Vec3.MulN(delta, maxDistanceDelta), magnitude), current);
                 return delta;
@@ -414,8 +416,8 @@ export class Vec3 {
     static ClampedMove(lhs, rhs, clampedDelta) {
         let delta = rhs - lhs;
         if (delta > 0)
-            return lhs + MathUtils.Min(delta, clampedDelta);
-        return lhs - MathUtils.Min(-delta, clampedDelta);
+            return lhs + MathUtils_1.MathUtils.Min(delta, clampedDelta);
+        return lhs - MathUtils_1.MathUtils.Min(-delta, clampedDelta);
     }
     static RotateTowards(current, target, maxRadiansDelta, maxMagnitudeDelta) {
         let len1 = current.Magnitude();
@@ -427,12 +429,12 @@ export class Vec3 {
             if (cosom > 1 - 1e-6)
                 return Vec3.MoveTowards(current, target, maxMagnitudeDelta);
             if (cosom < -1 + 1e-6) {
-                let q = Quat.AngleAxis(maxRadiansDelta * MathUtils.RAD_TO_DEG, Vec3.OrthoNormalVector(from));
+                let q = Quat_1.Quat.AngleAxis(maxRadiansDelta * MathUtils_1.MathUtils.RAD_TO_DEG, Vec3.OrthoNormalVector(from));
                 return Vec3.MulN(q.Transform(from), Vec3.ClampedMove(len1, len2, maxMagnitudeDelta));
             }
             else {
-                let angle = MathUtils.Acos(cosom);
-                let q = Quat.AngleAxis(MathUtils.Min(maxRadiansDelta, angle) * MathUtils.RAD_TO_DEG, Vec3.Normalize(Vec3.Cross(from, to)));
+                let angle = MathUtils_1.MathUtils.Acos(cosom);
+                let q = Quat_1.Quat.AngleAxis(MathUtils_1.MathUtils.Min(maxRadiansDelta, angle) * MathUtils_1.MathUtils.RAD_TO_DEG, Vec3.Normalize(Vec3.Cross(from, to)));
                 return Vec3.MulN(q.Transform(from), Vec3.ClampedMove(len1, len2, maxMagnitudeDelta));
             }
         }
@@ -473,34 +475,35 @@ export class Vec3 {
         return new Vec3(value1.x * value1Blend + value2.x * value2Blend + tangent1.x * tangent1Blend + tangent2.x * tangent2Blend, value1.y * value1Blend + value2.y * value2Blend + tangent1.y * tangent1Blend + tangent2.y * tangent2Blend, value1.z * value1Blend + value2.z * value2Blend + tangent1.z * tangent1Blend + tangent2.z * tangent2Blend);
     }
     static DegToRad(v) {
-        return new Vec3(MathUtils.DegToRad(v.x), MathUtils.DegToRad(v.y), MathUtils.DegToRad(v.z));
+        return new Vec3(MathUtils_1.MathUtils.DegToRad(v.x), MathUtils_1.MathUtils.DegToRad(v.y), MathUtils_1.MathUtils.DegToRad(v.z));
     }
     static RadToDeg(v) {
-        return new Vec3(MathUtils.RadToDeg(v.x), MathUtils.RadToDeg(v.y), MathUtils.RadToDeg(v.z));
+        return new Vec3(MathUtils_1.MathUtils.RadToDeg(v.x), MathUtils_1.MathUtils.RadToDeg(v.y), MathUtils_1.MathUtils.RadToDeg(v.z));
     }
     static MaxN(v, value) {
-        return new Vec3(MathUtils.Max(v.x, value), MathUtils.Max(v.y, value), MathUtils.Max(v.z, value));
+        return new Vec3(MathUtils_1.MathUtils.Max(v.x, value), MathUtils_1.MathUtils.Max(v.y, value), MathUtils_1.MathUtils.Max(v.z, value));
     }
     static Max(v, v1) {
-        return new Vec3(MathUtils.Max(v.x, v1.x), MathUtils.Max(v.y, v1.y), MathUtils.Max(v.z, v1.z));
+        return new Vec3(MathUtils_1.MathUtils.Max(v.x, v1.x), MathUtils_1.MathUtils.Max(v.y, v1.y), MathUtils_1.MathUtils.Max(v.z, v1.z));
     }
     static MinN(v, v1) {
-        return new Vec3(MathUtils.Min(v.x, v1), MathUtils.Min(v.y, v1), MathUtils.Min(v.z, v1));
+        return new Vec3(MathUtils_1.MathUtils.Min(v.x, v1), MathUtils_1.MathUtils.Min(v.y, v1), MathUtils_1.MathUtils.Min(v.z, v1));
     }
     static Min(v, v1) {
-        return new Vec3(MathUtils.Min(v.x, v1.x), MathUtils.Min(v.y, v1.y), MathUtils.Min(v.z, v1.z));
+        return new Vec3(MathUtils_1.MathUtils.Min(v.x, v1.x), MathUtils_1.MathUtils.Min(v.y, v1.y), MathUtils_1.MathUtils.Min(v.z, v1.z));
     }
     static Abs(v) {
-        return new Vec3(MathUtils.Abs(v.x), MathUtils.Abs(v.y), MathUtils.Abs(v.z));
+        return new Vec3(MathUtils_1.MathUtils.Abs(v.x), MathUtils_1.MathUtils.Abs(v.y), MathUtils_1.MathUtils.Abs(v.z));
     }
     static Pow(v, value) {
-        return new Vec3(MathUtils.Pow(v.x, value), MathUtils.Pow(v.y, value), MathUtils.Pow(v.z, value));
+        return new Vec3(MathUtils_1.MathUtils.Pow(v.x, value), MathUtils_1.MathUtils.Pow(v.y, value), MathUtils_1.MathUtils.Pow(v.z, value));
     }
     static Floor(v) {
-        return new Vec3(MathUtils.Floor(v.x), MathUtils.Floor(v.y), MathUtils.Floor(v.z));
+        return new Vec3(MathUtils_1.MathUtils.Floor(v.x), MathUtils_1.MathUtils.Floor(v.y), MathUtils_1.MathUtils.Floor(v.z));
     }
     static Round(v) {
-        return new Vec3(MathUtils.Round(v.x), MathUtils.Round(v.y), MathUtils.Round(v.z));
+        return new Vec3(MathUtils_1.MathUtils.Round(v.x), MathUtils_1.MathUtils.Round(v.y), MathUtils_1.MathUtils.Round(v.z));
     }
 }
 Vec3.OVER_SQRT2 = 0.7071067811865475244008443621048490;
+exports.Vec3 = Vec3;

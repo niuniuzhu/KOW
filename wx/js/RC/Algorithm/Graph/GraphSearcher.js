@@ -1,7 +1,9 @@
-import { PriorityQueue } from "../../Collections/index";
-import { MathUtils } from "../../Math/MathUtils";
-import { GraphEdge } from "./GraphEdge";
-export class GraphSearcher {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_1 = require("../../Collections/index");
+const MathUtils_1 = require("../../Math/MathUtils");
+const GraphEdge_1 = require("./GraphEdge");
+class GraphSearcher {
     static MazeSearch(graph, start, maxStep, rndFunc) {
         let visitedNodes = [];
         let edges = [];
@@ -21,7 +23,7 @@ export class GraphSearcher {
             }
             if (allVisited)
                 break;
-            let edge = edges[MathUtils.Floor(rndFunc(0, edges.length))];
+            let edge = edges[MathUtils_1.MathUtils.Floor(rndFunc(0, edges.length))];
             node = graph.GetNodeAt(edge.to);
             ++curStep;
         }
@@ -30,7 +32,7 @@ export class GraphSearcher {
     static PrimSearch(graph, start) {
         let shortestPathPredecessors = [];
         let visitedNodes = new Set();
-        let nodeQueue = new PriorityQueue(GraphEdge.Compare);
+        let nodeQueue = new index_1.PriorityQueue(GraphEdge_1.GraphEdge.Compare);
         let node = graph.GetNodeAt(start);
         while (node != null) {
             visitedNodes.add(node.index);
@@ -50,7 +52,7 @@ export class GraphSearcher {
     static AStarSearch(graph, start, end) {
         let shortestPathPredecessors = new Map();
         let frontierPredecessors = new Map();
-        let nodeQueue = new PriorityQueue(NumberPair.NumberCompare);
+        let nodeQueue = new index_1.PriorityQueue(NumberPair.NumberCompare);
         let costToNode = new Map();
         costToNode.set(start, 0);
         frontierPredecessors.set(start, null);
@@ -92,7 +94,8 @@ export class GraphSearcher {
         return pathList;
     }
 }
-export class NumberPair {
+exports.GraphSearcher = GraphSearcher;
+class NumberPair {
     constructor(first, second) {
         this.first = first;
         this.second = second;
@@ -107,3 +110,4 @@ export class NumberPair {
         return 0;
     }
 }
+exports.NumberPair = NumberPair;

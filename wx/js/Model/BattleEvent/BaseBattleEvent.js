@@ -1,4 +1,6 @@
-export class BaseBattleEvent {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class BaseBattleEvent {
     get type() {
         return this.__type;
     }
@@ -6,3 +8,4 @@ export class BaseBattleEvent {
         this.__type = value;
     }
 }
+exports.BaseBattleEvent = BaseBattleEvent;

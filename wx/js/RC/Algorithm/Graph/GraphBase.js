@@ -1,10 +1,12 @@
-import { GraphNode } from "./GraphNode";
-export class GraphBase {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const GraphNode_1 = require("./GraphNode");
+class GraphBase {
     constructor(size) {
         this._idToNodes = new Map();
         let ns = [];
         for (let i = 0; i < size; i++)
-            ns[i] = new GraphNode(i);
+            ns[i] = new GraphNode_1.GraphNode(i);
         this.nodes = ns;
     }
     get size() { return this._nodes.length; }
@@ -23,3 +25,4 @@ export class GraphBase {
             loopFunc(node);
     }
 }
+exports.GraphBase = GraphBase;

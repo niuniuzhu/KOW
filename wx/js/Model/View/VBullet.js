@@ -1,36 +1,34 @@
-import { Hashtable } from "../../RC/Utils/Hashtable";
-import { CDefs } from "../CDefs";
-import { VEntity } from "./VEntity";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Hashtable_1 = require("../../RC/Utils/Hashtable");
+const CDefs_1 = require("../CDefs");
+const EntityType_1 = require("../EntityType");
+const VEntity_1 = require("./VEntity");
 var FxAttachType;
 (function (FxAttachType) {
     FxAttachType[FxAttachType["None"] = 0] = "None";
     FxAttachType[FxAttachType["Bullet"] = 1] = "Bullet";
     FxAttachType[FxAttachType["Target"] = 2] = "Target";
 })(FxAttachType || (FxAttachType = {}));
-var PosRotType;
-(function (PosRotType) {
-    PosRotType[PosRotType["None"] = 0] = "None";
-    PosRotType[PosRotType["Position"] = 1] = "Position";
-    PosRotType[PosRotType["Rotation"] = 2] = "Rotation";
-})(PosRotType || (PosRotType = {}));
 var FxDestroyType;
 (function (FxDestroyType) {
     FxDestroyType[FxDestroyType["Effect"] = 0] = "Effect";
     FxDestroyType[FxDestroyType["Bullet"] = 1] = "Bullet";
     FxDestroyType[FxDestroyType["Target"] = 2] = "Target";
 })(FxDestroyType || (FxDestroyType = {}));
-export class VBullet extends VEntity {
+class VBullet extends VEntity_1.VEntity {
     BeforeLoadDefs() {
-        return CDefs.GetBullet(this._id);
+        return CDefs_1.CDefs.GetBullet(this._id);
     }
     AfterLoadDefs(cdefs) {
-        this._hitFxID = Hashtable.GetNumber(cdefs, "hit_effect");
-        this._hitFxDelay = Hashtable.GetNumber(cdefs, "hit_fx_delay");
-        this._hitFxAttachType = Hashtable.GetNumber(cdefs, "hit_fx_attach_type");
-        this._posRotType = Hashtable.GetNumber(cdefs, "hit_fx_posrot_type");
-        this._hitFxDestroyType = Hashtable.GetNumber(cdefs, "hit_fx_destroy_type");
-        this._followPos = Hashtable.GetBool(cdefs, "hit_fx_follow_pos");
-        this._followRot = Hashtable.GetBool(cdefs, "hit_fx_follow_rot");
+        this._hitFxID = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_effect");
+        this._hitFxDelay = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_delay");
+        this._hitFxOffset = Hashtable_1.Hashtable.GetVec2(cdefs, "offset");
+        this._hitFxAttachType = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_attach_type");
+        this._hitFxDestroyType = Hashtable_1.Hashtable.GetNumber(cdefs, "hit_fx_destroy_type");
+        this._hitFxFollowPos = Hashtable_1.Hashtable.GetBool(cdefs, "hit_fx_follow_pos");
+        this._hitFxFollowRot = Hashtable_1.Hashtable.GetBool(cdefs, "hit_fx_follow_rot");
+        this._hitFxAlwaysFollow = Hashtable_1.Hashtable.GetBool(cdefs, "hit_fx_always_follow");
         this.DisplayRoot();
     }
     Destroy() {
@@ -61,28 +59,6 @@ export class VBullet extends VEntity {
             }
             this._time += dt;
         }
-        else {
-            if (this._followPos) {
-                switch (this._hitFxAttachType) {
-                    case FxAttachType.Bullet:
-                        this._fx.position = this.position;
-                        break;
-                    case FxAttachType.Target:
-                        this._fx.position = this._target.position;
-                        break;
-                }
-            }
-            if (this._followRot) {
-                switch (this._hitFxAttachType) {
-                    case FxAttachType.Bullet:
-                        this._fx.rotation = this.rotation;
-                        break;
-                    case FxAttachType.Target:
-                        this._fx.rotation = this._target.rotation;
-                        break;
-                }
-            }
-        }
     }
     Trigger() {
         this._triggered = true;
@@ -93,21 +69,12 @@ export class VBullet extends VEntity {
         }
         switch (this._hitFxAttachType) {
             case FxAttachType.Bullet:
-                if ((this._posRotType & PosRotType.Position) > 0) {
-                    this._fx.position = this.position;
-                }
-                if ((this._posRotType & PosRotType.Rotation) > 0) {
-                    this._fx.rotation = this.rotation;
-                }
+                this._fx.SetTarget(EntityType_1.EntityType.Bullet, this.rid, this._hitFxOffset, this._hitFxFollowPos, this._hitFxFollowRot, this._hitFxAlwaysFollow);
                 break;
             case FxAttachType.Target:
-                if ((this._posRotType & PosRotType.Position) > 0) {
-                    this._fx.position = this._target.position;
-                }
-                if ((this._posRotType & PosRotType.Rotation) > 0) {
-                    this._fx.rotation = this._target.rotation;
-                }
+                this._fx.SetTarget(EntityType_1.EntityType.Champion, this._target.rid, this._hitFxOffset, this._hitFxFollowPos, this._hitFxFollowRot, this._hitFxAlwaysFollow);
                 break;
         }
     }
 }
+exports.VBullet = VBullet;

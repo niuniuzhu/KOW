@@ -9,10 +9,10 @@ import { SceneState } from "./SceneState";
 export class GlobalState extends SceneState {
 	constructor(type: number) {
 		super(type);
-		Global.connector.gsConnector.onclose = this.OnGSDisconnect;
-		Global.connector.gsConnector.onerror = this.OnGSError;
-		Global.connector.bsConnector.onclose = this.OnBSDisconnect;
-		Global.connector.bsConnector.onerror = this.OnBSError;
+		Global.connector.gsConnector.onclose = this.OnGSDisconnect.bind(this);
+		Global.connector.gsConnector.onerror = this.OnGSError.bind(this);
+		Global.connector.bsConnector.onclose = this.OnBSDisconnect.bind(this);
+		Global.connector.bsConnector.onerror = this.OnBSError.bind(this);
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
 	}

@@ -1,6 +1,8 @@
-import Stack from "../../RC/Collections/Stack";
-import { BaseBattleEvent } from "./BaseBattleEvent";
-export class UIEvent extends BaseBattleEvent {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Stack_1 = require("../../RC/Collections/Stack");
+const BaseBattleEvent_1 = require("./BaseBattleEvent");
+class UIEvent extends BaseBattleEvent_1.BaseBattleEvent {
     static Get() {
         if (UIEvent.POOL.size() > 0)
             return UIEvent.POOL.pop();
@@ -55,5 +57,6 @@ export class UIEvent extends BaseBattleEvent {
 UIEvent.E_ENTITY_INIT = 101;
 UIEvent.E_END_BATTLE = 102;
 UIEvent.E_ATTR_CHANGE = 103;
-UIEvent.POOL = new Stack();
+UIEvent.POOL = new Stack_1.default();
 UIEvent.HANDLERS = new Map();
+exports.UIEvent = UIEvent;

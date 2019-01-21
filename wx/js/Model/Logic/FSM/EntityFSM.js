@@ -1,9 +1,11 @@
-import { FSM } from "../../../RC/FSM/FSM";
-import { EntityStateContext } from "./EntityStateContext";
-export class EntityFSM extends FSM {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const FSM_1 = require("../../../RC/FSM/FSM");
+const EntityStateContext_1 = require("./EntityStateContext");
+class EntityFSM extends FSM_1.FSM {
     constructor() {
         super(...arguments);
-        this.context = new EntityStateContext();
+        this.context = new EntityStateContext_1.EntityStateContext();
     }
     get currentEntityState() { return this.currentState; }
     get previousEntityState() { return this.previousState; }
@@ -83,3 +85,4 @@ export class EntityFSM extends FSM {
         return str;
     }
 }
+exports.EntityFSM = EntityFSM;

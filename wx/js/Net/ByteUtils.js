@@ -1,4 +1,6 @@
-export class ByteUtils {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class ByteUtils {
     static Encode8u(p, offset, c) {
         p[0 + offset] = c;
         return 1;
@@ -46,3 +48,4 @@ export class ByteUtils {
         return l0 | (l1 << 32);
     }
 }
+exports.ByteUtils = ByteUtils;

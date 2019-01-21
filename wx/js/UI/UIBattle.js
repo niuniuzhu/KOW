@@ -1,22 +1,24 @@
-import { Global } from "../Global";
-import { UIEvent } from "../Model/BattleEvent/UIEvent";
-import { FrameAciontManager } from "../Model/FrameActionManager";
-import { EAttr } from "../Model/Logic/Attribute";
-import { MathUtils } from "../RC/Math/MathUtils";
-import { Vec2 } from "../RC/Math/Vec2";
-import { GestureState } from "./GestureState";
-import { Joystick } from "./Joystick";
-export class UIBattle {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Global_1 = require("../Global");
+const UIEvent_1 = require("../Model/BattleEvent/UIEvent");
+const FrameActionManager_1 = require("../Model/FrameActionManager");
+const Attribute_1 = require("../Model/Logic/Attribute");
+const MathUtils_1 = require("../RC/Math/MathUtils");
+const Vec2_1 = require("../RC/Math/Vec2");
+const GestureState_1 = require("./GestureState");
+const Joystick_1 = require("./Joystick");
+class UIBattle {
     constructor() {
-        this._gestureState = new GestureState();
-        this._frameActionManager = new FrameAciontManager();
+        this._gestureState = new GestureState_1.GestureState();
+        this._frameActionManager = new FrameActionManager_1.FrameAciontManager();
         this._touchID = -1;
         this._markToEnd = false;
-        this._keyInput = Vec2.zero;
-        this._lastKeyInput = Vec2.zero;
+        this._keyInput = Vec2_1.Vec2.zero;
+        this._lastKeyInput = Vec2_1.Vec2.zero;
         fairygui.UIPackage.addPackage("res/ui/battle");
         fairygui.UIPackage.addPackage("res/ui/endlevel");
-        fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick);
+        fairygui.UIObjectFactory.setPackageItemExtension(fairygui.UIPackage.getItemURL("battle", "Joystick"), Joystick_1.Joystick);
         this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
         this._root.name = "battle_main";
         this._skillBtn0 = this._root.getChild("n0").asCom;
@@ -25,8 +27,8 @@ export class UIBattle {
         this._skillBtn0.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn0Release);
         this._skillBtn1.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn1Press);
         this._skillBtn1.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn1Release);
-        this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
-        this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
+        this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
+        this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._hpProgress = this._root.getChild("n00").asProgress;
         this._hpbar = this._hpProgress.getChild("bar").asImage;
         this._hpbarBg = this._hpProgress.getChild("di").asImage;
@@ -38,7 +40,7 @@ export class UIBattle {
         this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
         this._gestureState.joystick = this._root.getChild("joystick");
         this._gestureState.joystick.core = this._root.getChild("joystick").asCom.getChild("n1").asCom;
-        this._gestureState.joystick.cen = new Vec2(100, 100);
+        this._gestureState.joystick.cen = new Vec2_1.Vec2(100, 100);
         this._gestureState.joystick.radius = 100;
         this._gestureState.joystick.resetDuration = 60;
         this._gestureState.onChanged = this.HandleAxisInput.bind(this);
@@ -51,7 +53,7 @@ export class UIBattle {
     Enter(param) {
         this._touchID = -1;
         this._markToEnd = false;
-        Global.graphic.uiRoot.addChild(this._root);
+        Global_1.Global.graphic.uiRoot.addChild(this._root);
         this._frameActionManager.Reset();
         this._root.on(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
         Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
@@ -64,14 +66,14 @@ export class UIBattle {
                 break;
             }
         }
-        UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
-        UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
-        UIEvent.AddListener(UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));
+        UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
+        UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
+        UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));
     }
     Exit() {
-        UIEvent.RemoveListener(UIEvent.E_ENTITY_INIT);
-        UIEvent.RemoveListener(UIEvent.E_END_BATTLE);
-        UIEvent.RemoveListener(UIEvent.E_ATTR_CHANGE);
+        UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ENTITY_INIT);
+        UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_END_BATTLE);
+        UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ATTR_CHANGE);
         this.GestureOff();
         if (this._endBattle.parent != null) {
             this._endBattle.removeFromParent();
@@ -90,7 +92,7 @@ export class UIBattle {
     Update(dt) {
         this._gestureState.Update(dt);
         this._frameActionManager.Update(dt);
-        this._hpbarBg.width = MathUtils.Lerp(this._hpbarBg.width, this._hpbar.width, dt * 0.0015);
+        this._hpbarBg.width = MathUtils_1.MathUtils.Lerp(this._hpbarBg.width, this._hpbar.width, dt * 0.0015);
     }
     OnResize(e) {
     }
@@ -103,7 +105,7 @@ export class UIBattle {
     OnBattleEnd(e) {
         this._markToEnd = true;
         this.GestureOff();
-        Global.graphic.uiRoot.addChild(this._endBattle);
+        Global_1.Global.graphic.uiRoot.addChild(this._endBattle);
         const isWin = e.b0;
         const honer = e.v1;
         const callback = e.callback;
@@ -126,15 +128,15 @@ export class UIBattle {
     OnAttrChange(e) {
         const target = e.champion;
         switch (e.attr) {
-            case EAttr.HP:
-            case EAttr.MHP:
+            case Attribute_1.EAttr.HP:
+            case Attribute_1.EAttr.MHP:
                 if (this.IsSelf(target)) {
                     this._hpProgress.max = target.mhp;
                     this._hpProgress.value = target.hp;
                 }
                 break;
-            case EAttr.MP:
-            case EAttr.MMP:
+            case Attribute_1.EAttr.MP:
+            case Attribute_1.EAttr.MMP:
                 if (this.IsSelf(target)) {
                     this._mpBar.max = target.mmp;
                     this._mpBar.value = target.mp;
@@ -146,7 +148,7 @@ export class UIBattle {
                     this._skillBtn1.touchable = target.mp >= skill1.mpCost;
                 }
                 break;
-            case EAttr.GLADIATOR_TIME:
+            case Attribute_1.EAttr.GLADIATOR_TIME:
                 const tf = target.team == 0 ? this._time0 : this._time1;
                 const t = target.gladiatorTime < 0 ? 0 : target.gladiatorTime;
                 tf.text = "" + Math.floor(t * 0.001);
@@ -154,7 +156,7 @@ export class UIBattle {
         }
     }
     IsSelf(champion) {
-        return champion.rid.equals(Global.battleManager.playerID);
+        return champion.rid.equals(Global_1.Global.battleManager.playerID);
     }
     OnSkillBtn0Press(e) {
         if (this._markToEnd)
@@ -230,8 +232,8 @@ export class UIBattle {
                 this._keyInput.x = 1;
                 break;
         }
-        if (MathUtils.Approximately(this._keyInput.x, this._lastKeyInput.x) &&
-            MathUtils.Approximately(this._keyInput.y, this._lastKeyInput.y))
+        if (MathUtils_1.MathUtils.Approximately(this._keyInput.x, this._lastKeyInput.x) &&
+            MathUtils_1.MathUtils.Approximately(this._keyInput.y, this._lastKeyInput.y))
             return;
         this._lastKeyInput.CopyFrom(this._keyInput);
         this._keyInput.NormalizeSafe();
@@ -256,11 +258,12 @@ export class UIBattle {
                 this._keyInput.x = 0;
                 break;
         }
-        if (MathUtils.Approximately(this._keyInput.x, this._lastKeyInput.x) &&
-            MathUtils.Approximately(this._keyInput.y, this._lastKeyInput.y))
+        if (MathUtils_1.MathUtils.Approximately(this._keyInput.x, this._lastKeyInput.x) &&
+            MathUtils_1.MathUtils.Approximately(this._keyInput.y, this._lastKeyInput.y))
             return;
         this._lastKeyInput.CopyFrom(this._keyInput);
         this._keyInput.NormalizeSafe();
         this._frameActionManager.SetInputDirection(this._keyInput);
     }
 }
+exports.UIBattle = UIBattle;

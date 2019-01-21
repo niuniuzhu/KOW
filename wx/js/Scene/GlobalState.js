@@ -1,67 +1,70 @@
-import { Global } from "../Global";
-import { Protos } from "../Libs/protos";
-import { Connector } from "../Net/Connector";
-import { Logger } from "../RC/Utils/Logger";
-import { UIAlert } from "../UI/UIAlert";
-import { SceneManager } from "./SceneManager";
-import { SceneState } from "./SceneState";
-export class GlobalState extends SceneState {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Global_1 = require("../Global");
+const protos_1 = require("../Libs/protos");
+const Connector_1 = require("../Net/Connector");
+const Logger_1 = require("../RC/Utils/Logger");
+const UIAlert_1 = require("../UI/UIAlert");
+const SceneManager_1 = require("./SceneManager");
+const SceneState_1 = require("./SceneState");
+class GlobalState extends SceneState_1.SceneState {
     constructor(type) {
         super(type);
-        Global.connector.gsConnector.onclose = this.OnGSDisconnect;
-        Global.connector.gsConnector.onerror = this.OnGSError;
-        Global.connector.bsConnector.onclose = this.OnBSDisconnect;
-        Global.connector.bsConnector.onerror = this.OnBSError;
-        Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
-        Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
+        Global_1.Global.connector.gsConnector.onclose = this.OnGSDisconnect.bind(this);
+        Global_1.Global.connector.gsConnector.onerror = this.OnGSError.bind(this);
+        Global_1.Global.connector.bsConnector.onclose = this.OnBSDisconnect.bind(this);
+        Global_1.Global.connector.bsConnector.onerror = this.OnBSError.bind(this);
+        Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
+        Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
     }
     OnGSDisconnect(e) {
-        Logger.Log("gs connection closed.");
+        Logger_1.Logger.Log("gs connection closed.");
     }
     OnGSError(e) {
-        Logger.Log("gs connection error.");
+        Logger_1.Logger.Log("gs connection error.");
         if (fairygui.GRoot.inst.modalWaiting) {
             fairygui.GRoot.inst.closeModalWait();
         }
-        UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
+        UIAlert_1.UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
     }
     OnBSDisconnect(e) {
-        Logger.Log("bs connection closed.");
+        Logger_1.Logger.Log("bs connection closed.");
     }
     OnBSError(e) {
-        Logger.Log("bs connection error.");
+        Logger_1.Logger.Log("bs connection error.");
         if (fairygui.GRoot.inst.modalWaiting) {
             fairygui.GRoot.inst.closeModalWait();
         }
-        if (Global.connector.gsConnector.connected) {
-            Global.connector.gsConnector.Close();
+        if (Global_1.Global.connector.gsConnector.connected) {
+            Global_1.Global.connector.gsConnector.Close();
         }
-        UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
+        UIAlert_1.UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
     }
     HandleKick(message) {
-        Logger.Warn("kick by gs");
+        Logger_1.Logger.Warn("kick by gs");
         let kick = message;
         switch (kick.reason) {
-            case Protos.CS2GS_KickGC.EReason.DuplicateLogin:
-                UIAlert.Show("另一台设备正在登陆相同的账号", this.BackToLogin.bind(this));
+            case protos_1.Protos.CS2GS_KickGC.EReason.DuplicateLogin:
+                UIAlert_1.UIAlert.Show("另一台设备正在登陆相同的账号", this.BackToLogin.bind(this));
                 break;
-            case Protos.CS2GS_KickGC.EReason.OutOfSync:
-                UIAlert.Show("数据不同步", this.BackToLogin.bind(this));
+            case protos_1.Protos.CS2GS_KickGC.EReason.OutOfSync:
+                UIAlert_1.UIAlert.Show("数据不同步", this.BackToLogin.bind(this));
                 break;
             default:
-                UIAlert.Show("已被服务器强制下线", this.BackToLogin.bind(this));
+                UIAlert_1.UIAlert.Show("已被服务器强制下线", this.BackToLogin.bind(this));
                 break;
         }
     }
     BackToLogin() {
-        if (Global.connector.bsConnector.connected) {
-            Global.connector.bsConnector.Close();
+        if (Global_1.Global.connector.bsConnector.connected) {
+            Global_1.Global.connector.bsConnector.Close();
         }
-        Global.battleManager.Destroy();
-        Global.sceneManager.ChangeState(SceneManager.State.Login);
+        Global_1.Global.battleManager.Destroy();
+        Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login);
     }
     HandleCSLost(message) {
-        Logger.Error("cs lost");
-        UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
+        Logger_1.Logger.Error("cs lost");
+        UIAlert_1.UIAlert.Show("与服务器断开连接", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
     }
 }
+exports.GlobalState = GlobalState;

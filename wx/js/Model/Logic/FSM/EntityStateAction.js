@@ -1,6 +1,8 @@
-import { FSMStateAction } from "../../../RC/FSM/FSMStateAction";
-import { Hashtable } from "../../../RC/Utils/Hashtable";
-export class EntityStateAction extends FSMStateAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const FSMStateAction_1 = require("../../../RC/FSM/FSMStateAction");
+const Hashtable_1 = require("../../../RC/Utils/Hashtable");
+class EntityStateAction extends FSMStateAction_1.FSMStateAction {
     get time() { return this.state.time; }
     get intrptTime() { return this.state.time - this._triggerTime; }
     constructor(state, type, def) {
@@ -8,7 +10,7 @@ export class EntityStateAction extends FSMStateAction {
         this.OnInit(def);
     }
     OnInit(def) {
-        this._triggerTime = Hashtable.GetNumber(def, "trigger_time");
+        this._triggerTime = Hashtable_1.Hashtable.GetNumber(def, "trigger_time");
     }
     OnEnter(param) {
         this._isTriggered = false;
@@ -54,3 +56,4 @@ export class EntityStateAction extends FSMStateAction {
         return str;
     }
 }
+exports.EntityStateAction = EntityStateAction;

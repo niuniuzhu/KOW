@@ -4,10 +4,10 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
     class GlobalState extends SceneState_1.SceneState {
         constructor(type) {
             super(type);
-            Global_1.Global.connector.gsConnector.onclose = this.OnGSDisconnect;
-            Global_1.Global.connector.gsConnector.onerror = this.OnGSError;
-            Global_1.Global.connector.bsConnector.onclose = this.OnBSDisconnect;
-            Global_1.Global.connector.bsConnector.onerror = this.OnBSError;
+            Global_1.Global.connector.gsConnector.onclose = this.OnGSDisconnect.bind(this);
+            Global_1.Global.connector.gsConnector.onerror = this.OnGSError.bind(this);
+            Global_1.Global.connector.bsConnector.onclose = this.OnBSDisconnect.bind(this);
+            Global_1.Global.connector.bsConnector.onerror = this.OnBSError.bind(this);
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
         }

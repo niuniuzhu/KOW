@@ -119,6 +119,8 @@ namespace ProtoGenerator
 			//Get options
 			sb.AppendLine( $"\tpublic static {ns}.MsgOpts GetMsgOpts( this Google.Protobuf.IMessage message ) {{" );
 			sb.AppendLine( "\t\tvar msgID = message.GetMsgID();" );
+			sb.AppendLine( "\t\tif ( msgID == Protos.MsgID.Undefine )" );
+			sb.AppendLine( "\t\t\treturn null;" );
 			sb.AppendLine( "\t\tswitch ( msgID ) {" );
 			foreach ( KeyValuePair<string, int> kv in clsToMsgID )
 			{
@@ -148,16 +150,32 @@ namespace ProtoGenerator
 			sb.AppendLine();
 
 			sb.AppendLine( "\t#region get message static functions" );
-			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID( System.Type type ) => _TYPE2ID[type];" );
+			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID( System.Type type )" );
+			sb.AppendLine( "\t{" );
+			sb.AppendLine( "\t\t_TYPE2ID.TryGetValue( type, out Protos.MsgID msgID );" );
+			sb.AppendLine( "\t\treturn msgID;" );
+			sb.AppendLine( "\t}" );
 			sb.AppendLine();
 
-			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID<T>() where T : Google.Protobuf.IMessage => _TYPE2ID[typeof( T )];" );
+			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID<T>() where T : Google.Protobuf.IMessage" );
+			sb.AppendLine( "\t{" );
+			sb.AppendLine( "\t\t_TYPE2ID.TryGetValue( typeof( T ), out Protos.MsgID msgID );" );
+			sb.AppendLine( "\t\treturn msgID;" );
+			sb.AppendLine( "\t}" );
 			sb.AppendLine();
 
-			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID( this Google.Protobuf.IMessage message ) => _TYPE2ID[message.GetType()];" );
+			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID( this Google.Protobuf.IMessage message )" );
+			sb.AppendLine( "\t{" );
+			sb.AppendLine( "\t\t_TYPE2ID.TryGetValue( message.GetType(), out Protos.MsgID msgID );" );
+			sb.AppendLine( "\t\treturn msgID;" );
+			sb.AppendLine( "\t}" );
 			sb.AppendLine();
 
-			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID<T>( this Google.Protobuf.IMessage<T> message ) where T : Google.Protobuf.IMessage<T> => _TYPE2ID[message.GetType()];" );
+			sb.AppendLine( "\tpublic static Protos.MsgID GetMsgID<T>( this Google.Protobuf.IMessage<T> message ) where T : Google.Protobuf.IMessage<T>" );
+			sb.AppendLine( "\t{" );
+			sb.AppendLine( "\t\t_TYPE2ID.TryGetValue( message.GetType(), out Protos.MsgID msgID );" );
+			sb.AppendLine( "\t\treturn msgID;" );
+			sb.AppendLine( "\t}" );
 			sb.AppendLine( "\t#endregion" );
 			#endregion
 			sb.AppendLine( "} //end class" );

@@ -1,4 +1,6 @@
-export class MsgCenter {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class MsgCenter {
     constructor() {
         this._generalHandlers = new Map();
     }
@@ -14,3 +16,4 @@ export class MsgCenter {
         return this._generalHandlers.get(msgID);
     }
 }
+exports.MsgCenter = MsgCenter;

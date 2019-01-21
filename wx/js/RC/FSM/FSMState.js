@@ -1,4 +1,6 @@
-export class FSMState {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class FSMState {
     constructor(type) {
         this._actions = [];
         this._typeToAction = new Map();
@@ -47,3 +49,4 @@ export class FSMState {
     OnUpdate(dt) {
     }
 }
+exports.FSMState = FSMState;

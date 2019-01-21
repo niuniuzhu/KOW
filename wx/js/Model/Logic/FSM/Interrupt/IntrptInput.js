@@ -1,17 +1,19 @@
-import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { IntrptBase } from "./IntrptBase";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Hashtable_1 = require("../../../../RC/Utils/Hashtable");
+const IntrptBase_1 = require("./IntrptBase");
 var InputTriggerType;
 (function (InputTriggerType) {
     InputTriggerType[InputTriggerType["Press"] = 0] = "Press";
     InputTriggerType[InputTriggerType["Release"] = 1] = "Release";
     InputTriggerType[InputTriggerType["Hold"] = 2] = "Hold";
 })(InputTriggerType || (InputTriggerType = {}));
-export class IntrptInput extends IntrptBase {
+class IntrptInput extends IntrptBase_1.IntrptBase {
     OnInit(def) {
         super.OnInit(def);
-        this._inputTypes = Hashtable.GetNumberArray(def, "input_types");
-        this._triggerTypes = Hashtable.GetNumberArray(def, "trigger_types");
-        this._and = Hashtable.GetBool(def, "and");
+        this._inputTypes = Hashtable_1.Hashtable.GetNumberArray(def, "input_types");
+        this._triggerTypes = Hashtable_1.Hashtable.GetNumberArray(def, "trigger_types");
+        this._and = Hashtable_1.Hashtable.GetBool(def, "and");
     }
     OnUpdate(dt) {
         for (let i = 0; i < this._inputTypes.length; ++i) {
@@ -63,3 +65,4 @@ export class IntrptInput extends IntrptBase {
         }
     }
 }
+exports.IntrptInput = IntrptInput;

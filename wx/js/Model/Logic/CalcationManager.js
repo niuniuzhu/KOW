@@ -1,6 +1,8 @@
-import { HitUnit } from "./HitUnit";
-import { ItemUnit } from "./ItemUnit";
-export class CalcationManager {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const HitUnit_1 = require("./HitUnit");
+const ItemUnit_1 = require("./ItemUnit");
+class CalcationManager {
     constructor(battle) {
         this._itemUnits = [];
         this._hitUnits = [];
@@ -12,12 +14,12 @@ export class CalcationManager {
         this._hitUnits.splice(0);
     }
     AddItemUnit(itemID, targetID) {
-        const itemUnit = new ItemUnit(this);
+        const itemUnit = new ItemUnit_1.ItemUnit(this);
         itemUnit.Init(itemID, targetID);
         this._itemUnits.push(itemUnit);
     }
     AddHitUnit(casterID, targetID, skillID) {
-        const hitUnit = new HitUnit(this);
+        const hitUnit = new HitUnit_1.HitUnit(this);
         hitUnit.Init(casterID, targetID, skillID);
         this._hitUnits.push(hitUnit);
     }
@@ -46,15 +48,16 @@ export class CalcationManager {
     DecodeSnapshot(reader) {
         let count = reader.int32();
         for (let i = 0; i < count; ++i) {
-            const itemUnit = new ItemUnit(this);
+            const itemUnit = new ItemUnit_1.ItemUnit(this);
             itemUnit.DecodeSnapshot(reader);
             this._itemUnits.push(itemUnit);
         }
         count = reader.int32();
         for (let i = 0; i < count; ++i) {
-            const hitUnit = new HitUnit(this);
+            const hitUnit = new HitUnit_1.HitUnit(this);
             hitUnit.DecodeSnapshot(reader);
             this._hitUnits.push(hitUnit);
         }
     }
 }
+exports.CalcationManager = CalcationManager;

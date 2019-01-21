@@ -1,6 +1,9 @@
-export class Token {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Token {
 }
-export var TokenizerStates;
+exports.Token = Token;
+var TokenizerStates;
 (function (TokenizerStates) {
     TokenizerStates[TokenizerStates["Started"] = 1] = "Started";
     TokenizerStates[TokenizerStates["ParsingNumber"] = 2] = "ParsingNumber";
@@ -9,7 +12,7 @@ export var TokenizerStates;
     TokenizerStates[TokenizerStates["ParsingContext"] = 5] = "ParsingContext";
     TokenizerStates[TokenizerStates["Error"] = 6] = "Error";
     TokenizerStates[TokenizerStates["ParsingBracket"] = 7] = "ParsingBracket";
-})(TokenizerStates || (TokenizerStates = {}));
+})(TokenizerStates = exports.TokenizerStates || (exports.TokenizerStates = {}));
 var KnownStringComponents;
 (function (KnownStringComponents) {
     KnownStringComponents[KnownStringComponents["Delimiter"] = 1] = "Delimiter";
@@ -54,7 +57,7 @@ tokenStateMachine[TokenizerStates.ParsingContext] = {
     4: TokenizerStates.ParsingContext,
     5: TokenizerStates.ParsingContext
 };
-export class ExpressionEvaluator {
+class ExpressionEvaluator {
     constructor() {
         this.context = {};
     }
@@ -274,3 +277,4 @@ ExpressionEvaluator.digits = "0123456789.";
 ExpressionEvaluator.brackets = "()";
 ExpressionEvaluator.contextBrackets = "{}";
 ExpressionEvaluator.delimeters = " ,\r\r\n";
+exports.ExpressionEvaluator = ExpressionEvaluator;

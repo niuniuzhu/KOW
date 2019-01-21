@@ -1,4 +1,6 @@
-export class FSMStateAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class FSMStateAction {
     get type() { return this._type; }
     get state() { return this._state; }
     constructor(state, type) {
@@ -21,3 +23,4 @@ export class FSMStateAction {
     OnUpdate(dt) {
     }
 }
+exports.FSMStateAction = FSMStateAction;

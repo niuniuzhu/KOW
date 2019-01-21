@@ -1,6 +1,8 @@
-import * as collections from './util';
-import * as arrays from './arrays';
-export default class Heap {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const collections = require("./util");
+const arrays = require("./arrays");
+class Heap {
     constructor(compareFunction) {
         this.data = [];
         this.compare = compareFunction || collections.defaultCompare;
@@ -97,3 +99,4 @@ export default class Heap {
             this.siftDown(0);
     }
 }
+exports.default = Heap;

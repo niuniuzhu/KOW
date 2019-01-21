@@ -1,15 +1,17 @@
-import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { IntrptBase } from "./IntrptBase";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Hashtable_1 = require("../../../../RC/Utils/Hashtable");
+const IntrptBase_1 = require("./IntrptBase");
 var IntrptColliderTargetType;
 (function (IntrptColliderTargetType) {
     IntrptColliderTargetType[IntrptColliderTargetType["Opponent"] = 0] = "Opponent";
     IntrptColliderTargetType[IntrptColliderTargetType["Teamate"] = 1] = "Teamate";
     IntrptColliderTargetType[IntrptColliderTargetType["Bullet"] = 2] = "Bullet";
 })(IntrptColliderTargetType || (IntrptColliderTargetType = {}));
-export class IntrptCollider extends IntrptBase {
+class IntrptCollider extends IntrptBase_1.IntrptBase {
     OnInit(def) {
         super.OnInit(def);
-        this._targetType = Hashtable.GetNumber(def, "target_type");
+        this._targetType = Hashtable_1.Hashtable.GetNumber(def, "target_type");
     }
     OnUpdatePhysic(dt) {
         super.OnUpdatePhysic(dt);
@@ -49,3 +51,4 @@ export class IntrptCollider extends IntrptBase {
         }
     }
 }
+exports.IntrptCollider = IntrptCollider;

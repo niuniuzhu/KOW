@@ -1,7 +1,9 @@
-import LinkedList from './LinkedList';
-export default class Stack {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const LinkedList_1 = require("./LinkedList");
+class Stack {
     constructor() {
-        this.list = new LinkedList();
+        this.list = new LinkedList_1.default();
     }
     push(elem) {
         return this.list.add(elem, 0);
@@ -31,3 +33,4 @@ export default class Stack {
         this.list.forEach(callback);
     }
 }
+exports.default = Stack;

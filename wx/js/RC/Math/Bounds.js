@@ -1,25 +1,27 @@
-import { MathUtils } from "./MathUtils";
-import { Vec3 } from "./Vec3";
-export var Axis;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const MathUtils_1 = require("./MathUtils");
+const Vec3_1 = require("./Vec3");
+var Axis;
 (function (Axis) {
     Axis[Axis["X"] = 0] = "X";
     Axis[Axis["Y"] = 1] = "Y";
     Axis[Axis["Z"] = 2] = "Z";
-})(Axis || (Axis = {}));
-export class Bounds {
+})(Axis = exports.Axis || (exports.Axis = {}));
+class Bounds {
     get center() { return this._center.Clone(); }
     set center(value) { this._center = value.Clone(); }
-    get size() { return Vec3.MulN(this._extents, 2); }
-    set size(value) { this._extents = Vec3.MulN(value, 0.5); }
+    get size() { return Vec3_1.Vec3.MulN(this._extents, 2); }
+    set size(value) { this._extents = Vec3_1.Vec3.MulN(value, 0.5); }
     get extents() { return this._extents.Clone(); }
     set extents(value) { this._extents = value.Clone(); }
-    get min() { return Vec3.Sub(this.center, this.extents); }
+    get min() { return Vec3_1.Vec3.Sub(this.center, this.extents); }
     set min(value) { this.SetMinMax(value, this.max); }
-    get max() { return Vec3.Add(this.center, this.extents); }
+    get max() { return Vec3_1.Vec3.Add(this.center, this.extents); }
     set max(value) { this.SetMinMax(this.min, value); }
     constructor(center, size) {
         this._center = center;
-        this._extents = Vec3.MulN(size, 0.5);
+        this._extents = Vec3_1.Vec3.MulN(size, 0.5);
     }
     Contains(ponumber) {
         if (ponumber.x < this.min.x ||
@@ -33,7 +35,7 @@ export class Bounds {
     }
     ClosestPonumber(point, outDistance) {
         let distance = 0;
-        let t = Vec3.Sub(point, this.center);
+        let t = Vec3_1.Vec3.Sub(point, this.center);
         let closest = [t.x, t.y, t.z];
         let et = [this._extents.x, this._extents.y, this._extents.z];
         for (let i = 0; i < 3; i++) {
@@ -59,18 +61,18 @@ export class Bounds {
         return v;
     }
     SetMinMax(min, max) {
-        this._extents = Vec3.MulN(Vec3.Sub(max, min), 0.5);
-        this._center = Vec3.Add(min, this.extents);
+        this._extents = Vec3_1.Vec3.MulN(Vec3_1.Vec3.Sub(max, min), 0.5);
+        this._center = Vec3_1.Vec3.Add(min, this.extents);
     }
     Encapsulate(point) {
-        this.SetMinMax(Vec3.Min(this.min, point), Vec3.Max(this.max, point));
+        this.SetMinMax(Vec3_1.Vec3.Min(this.min, point), Vec3_1.Vec3.Max(this.max, point));
     }
     EncapsulateBounds(bounds) {
-        this.Encapsulate(Vec3.Sub(bounds.center, bounds.extents));
-        this.Encapsulate(Vec3.Add(bounds.center, bounds.extents));
+        this.Encapsulate(Vec3_1.Vec3.Sub(bounds.center, bounds.extents));
+        this.Encapsulate(Vec3_1.Vec3.Add(bounds.center, bounds.extents));
     }
     Expand(amount) {
-        this._extents = Vec3.Add(this._extents, Vec3.MulN(amount, 0.5));
+        this._extents = Vec3_1.Vec3.Add(this._extents, Vec3_1.Vec3.MulN(amount, 0.5));
     }
     Intersect(bounds, boundsIntersect) {
         if (this.min.x > bounds.max.x)
@@ -85,13 +87,13 @@ export class Bounds {
             return false;
         if (this.max.z < bounds.min.z)
             return false;
-        boundsIntersect[0].min = Vec3.Max(this.min, bounds.min);
-        boundsIntersect[0].max = Vec3.Max(this.max, bounds.max);
+        boundsIntersect[0].min = Vec3_1.Vec3.Max(this.min, bounds.min);
+        boundsIntersect[0].max = Vec3_1.Vec3.Max(this.max, bounds.max);
         return true;
     }
     IntersectMovingBoundsByAxis(bounds, d, axis, outT) {
-        if (MathUtils.Approximately(d, 0.0)) {
-            outT[0] = MathUtils.MAX_VALUE;
+        if (MathUtils_1.MathUtils.Approximately(d, 0.0)) {
+            outT[0] = MathUtils_1.MathUtils.MAX_VALUE;
             return false;
         }
         let min00;
@@ -142,7 +144,7 @@ export class Bounds {
             max10 <= min11 ||
             min20 >= max21 ||
             max20 <= min21) {
-            outT[0] = MathUtils.MAX_VALUE;
+            outT[0] = MathUtils_1.MathUtils.MAX_VALUE;
             return false;
         }
         switch (axis) {
@@ -177,12 +179,12 @@ export class Bounds {
         return enter < 1.0 && enter >= 0;
     }
     IntersectMovingBounds(bounds, d) {
-        let tEnter = -MathUtils.MAX_VALUE;
-        let tLeave = MathUtils.MAX_VALUE;
-        if (MathUtils.Approximately(d.x, 0.0)) {
+        let tEnter = -MathUtils_1.MathUtils.MAX_VALUE;
+        let tLeave = MathUtils_1.MathUtils.MAX_VALUE;
+        if (MathUtils_1.MathUtils.Approximately(d.x, 0.0)) {
             if (this.min.x >= bounds.max.x ||
                 this.max.x <= bounds.min.x)
-                return MathUtils.MAX_VALUE;
+                return MathUtils_1.MathUtils.MAX_VALUE;
         }
         else {
             let oneOverD = 1.0 / d.x;
@@ -198,12 +200,12 @@ export class Bounds {
             if (xLeave < tLeave)
                 tLeave = xLeave;
             if (tEnter > tLeave)
-                return MathUtils.MAX_VALUE;
+                return MathUtils_1.MathUtils.MAX_VALUE;
         }
-        if (MathUtils.Approximately(d.y, 0.0)) {
+        if (MathUtils_1.MathUtils.Approximately(d.y, 0.0)) {
             if (this.min.y >= bounds.max.y ||
                 this.max.y <= bounds.min.y)
-                return MathUtils.MAX_VALUE;
+                return MathUtils_1.MathUtils.MAX_VALUE;
         }
         else {
             let oneOverD = 1.0 / d.y;
@@ -219,12 +221,12 @@ export class Bounds {
             if (yLeave < tLeave)
                 tLeave = yLeave;
             if (tEnter > tLeave)
-                return MathUtils.MAX_VALUE;
+                return MathUtils_1.MathUtils.MAX_VALUE;
         }
-        if (MathUtils.Approximately(d.z, 0.0)) {
+        if (MathUtils_1.MathUtils.Approximately(d.z, 0.0)) {
             if (this.min.z >= bounds.max.z ||
                 this.max.z <= bounds.min.z)
-                return MathUtils.MAX_VALUE;
+                return MathUtils_1.MathUtils.MAX_VALUE;
         }
         else {
             let oneOverD = 1.0 / d.z;
@@ -240,7 +242,7 @@ export class Bounds {
             if (zLeave < tLeave)
                 tLeave = zLeave;
             if (tEnter > tLeave)
-                return MathUtils.MAX_VALUE;
+                return MathUtils_1.MathUtils.MAX_VALUE;
         }
         return tEnter;
     }
@@ -256,3 +258,4 @@ export class Bounds {
         return "(extents:" + this._extents.ToString() + "center:" + this._center.ToString() + ")";
     }
 }
+exports.Bounds = Bounds;

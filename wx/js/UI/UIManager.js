@@ -1,9 +1,11 @@
-import { UILogin } from "./UILogin";
-import { UIMain } from "./UIMain";
-import { UIMatching } from "./UIMatching";
-import { UILoading } from "./UILoading";
-import { UIBattle } from "./UIBattle";
-export class UIManager {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const UILogin_1 = require("./UILogin");
+const UIMain_1 = require("./UIMain");
+const UIMatching_1 = require("./UIMatching");
+const UILoading_1 = require("./UILoading");
+const UIBattle_1 = require("./UIBattle");
+class UIManager {
     get login() { return this._login; }
     get main() { return this._main; }
     get matching() { return this._matching; }
@@ -14,11 +16,11 @@ export class UIManager {
         fairygui.UIConfig.globalModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
         fairygui.UIConfig.windowModalWaiting = fairygui.UIPackage.getItemURL("global", "modelWait");
         fairygui.UIConfig.defaultFont = "Microsoft YaHei, SimHei";
-        this._main = new UIMain();
-        this._login = new UILogin();
-        this._matching = new UIMatching();
-        this._loading = new UILoading();
-        this._battle = new UIBattle();
+        this._main = new UIMain_1.UIMain();
+        this._login = new UILogin_1.UILogin();
+        this._matching = new UIMatching_1.UIMatching();
+        this._loading = new UILoading_1.UILoading();
+        this._battle = new UIBattle_1.UIBattle();
         this._uis = [];
         this._uis[0] = this._main;
         this._uis[1] = this._login;
@@ -37,3 +39,4 @@ export class UIManager {
         }
     }
 }
+exports.UIManager = UIManager;

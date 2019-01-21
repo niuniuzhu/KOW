@@ -1,5 +1,7 @@
-import { FSMState } from "../RC/FSM/FSMState";
-export class SceneState extends FSMState {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const FSMState_1 = require("../RC/FSM/FSMState");
+class SceneState extends FSMState_1.FSMState {
     constructor(type) {
         super(type);
     }
@@ -16,3 +18,4 @@ export class SceneState extends FSMState {
             this.__ui.Update(dt);
     }
 }
+exports.SceneState = SceneState;

@@ -22,7 +22,6 @@ export class Main {
 			const cfgJson = JsonHelper.Parse(config);
 			Global.local = Hashtable.GetBool(cfgJson, "local");
 		}
-		Laya.MiniAdpter.init();
 		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
 		Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
@@ -90,7 +89,12 @@ export class Main {
 		Logger.Log("start game...");
 
 		if (Laya.Browser.onMiniGame) {
-			$protobuf.util.Long = <$protobuf.Constructor<Long>>(<any>Long).default.prototype.constructor;
+			if ((<any>Long).default == null) {
+				$protobuf.util.Long = Long;
+			}
+			else {
+				$protobuf.util.Long = <$protobuf.Constructor<Long>>(<any>Long).default.prototype.constructor;
+			}
 			$protobuf.configure();
 		}
 		//全局环境初始化

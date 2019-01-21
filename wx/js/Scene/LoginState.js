@@ -1,39 +1,41 @@
-import { Global } from "../Global";
-import { Protos } from "../Libs/protos";
-import { CDefs } from "../Model/CDefs";
-import { Defs } from "../Model/Defs";
-import { ProtoCreator } from "../Net/ProtoHelper";
-import { WSConnector } from "../Net/WSConnector";
-import { JsonHelper } from "../RC/Utils/JsonHelper";
-import { Logger } from "../RC/Utils/Logger";
-import { StringUtils } from "../RC/Utils/TextUtils";
-import { UILogin } from "../UI/UILogin";
-import { SceneManager } from "./SceneManager";
-import { SceneState } from "./SceneState";
-export class LoginState extends SceneState {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Global_1 = require("../Global");
+const protos_1 = require("../Libs/protos");
+const CDefs_1 = require("../Model/CDefs");
+const Defs_1 = require("../Model/Defs");
+const ProtoHelper_1 = require("../Net/ProtoHelper");
+const WSConnector_1 = require("../Net/WSConnector");
+const JsonHelper_1 = require("../RC/Utils/JsonHelper");
+const Logger_1 = require("../RC/Utils/Logger");
+const TextUtils_1 = require("../RC/Utils/TextUtils");
+const UILogin_1 = require("../UI/UILogin");
+const SceneManager_1 = require("./SceneManager");
+const SceneState_1 = require("./SceneState");
+class LoginState extends SceneState_1.SceneState {
     constructor(type) {
         super(type);
-        this.__ui = this._ui = Global.uiManager.login;
+        this.__ui = this._ui = Global_1.Global.uiManager.login;
     }
     OnEnter(param) {
         super.OnEnter(param);
         if (Laya.Browser.onMiniGame) {
-            this._ui.mode = UILogin.Mode.WXLogin;
+            this._ui.mode = UILogin_1.UILogin.Mode.WXLogin;
             this.WxAuthorize(this.OnWXAuthorizeSuccess.bind(this));
         }
         else {
-            this._ui.mode = UILogin.Mode.WebLogin;
+            this._ui.mode = UILogin_1.UILogin.Mode.WebLogin;
         }
     }
     WxAuthorize(callback) {
         this._sysInfo = wx.getSystemInfoSync();
-        Logger.Log("brand:" + this._sysInfo.brand);
-        Logger.Log("model:" + this._sysInfo.model);
-        Logger.Log("pixelRatio:" + this._sysInfo.pixelRatio);
-        Logger.Log("system:" + this._sysInfo.system);
-        Logger.Log("platform:" + this._sysInfo.platform);
-        Logger.Log("version:" + this._sysInfo.version);
-        Logger.Log("sdk:" + this._sysInfo.SDKVersion);
+        Logger_1.Logger.Log("brand:" + this._sysInfo.brand);
+        Logger_1.Logger.Log("model:" + this._sysInfo.model);
+        Logger_1.Logger.Log("pixelRatio:" + this._sysInfo.pixelRatio);
+        Logger_1.Logger.Log("system:" + this._sysInfo.system);
+        Logger_1.Logger.Log("platform:" + this._sysInfo.platform);
+        Logger_1.Logger.Log("version:" + this._sysInfo.version);
+        Logger_1.Logger.Log("sdk:" + this._sysInfo.SDKVersion);
         wx.getSetting({
             "success": resp => {
                 if (resp.authSetting["scope.userInfo"]) {
@@ -52,6 +54,7 @@ export class LoginState extends SceneState {
                 }
             },
             "fail": () => {
+                this._ui.OnFail("登陆微信失败", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
             },
             "complete": () => {
             }
@@ -74,9 +77,11 @@ export class LoginState extends SceneState {
             "withCredentials": true,
             "lang": "zh_CN"
         };
+        let authorized = false;
         const btn = wx.createUserInfoButton(userInfoObj);
         btn.onTap(resp => {
-            if (resp.userInfo != null) {
+            if (resp.userInfo != null && !authorized) {
+                authorized = true;
                 btn.destroy();
                 callback(resp.userInfo);
             }
@@ -89,53 +94,53 @@ export class LoginState extends SceneState {
                 this.SendWxLoginToLS(resp.code, userInfo);
             },
             "fail": () => {
-                this._ui.OnFail("登陆微信失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+                this._ui.OnFail("登陆微信失败", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
             }
         });
     }
     SendWxLoginToLS(code, userInfo) {
-        const login = ProtoCreator.Q_GC2LS_AskWXLogin();
+        const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskWXLogin();
         login.code = code;
         login.nickname = userInfo.nickName;
         login.avatar = userInfo.avatarUrl;
         login.gender = userInfo.gender;
         if (Laya.Browser.onIOS) {
-            login.platform = Protos.Global.Platform.IOS;
+            login.platform = protos_1.Protos.Global.Platform.IOS;
         }
         else if (Laya.Browser.onAndroid) {
-            login.platform = Protos.Global.Platform.Android;
+            login.platform = protos_1.Protos.Global.Platform.Android;
         }
         else if (Laya.Browser.onWP) {
-            login.platform = Protos.Global.Platform.WP;
+            login.platform = protos_1.Protos.Global.Platform.WP;
         }
         else {
-            login.platform = Protos.Global.Platform.PC;
+            login.platform = protos_1.Protos.Global.Platform.PC;
         }
         if (Laya.Browser.onEdge) {
-            login.browser = Protos.Global.Browser.Edge;
+            login.browser = protos_1.Protos.Global.Browser.Edge;
         }
         else if (Laya.Browser.onFirefox) {
-            login.browser = Protos.Global.Browser.Firefox;
+            login.browser = protos_1.Protos.Global.Browser.Firefox;
         }
         else if (Laya.Browser.onIE) {
-            login.browser = Protos.Global.Browser.IE;
+            login.browser = protos_1.Protos.Global.Browser.IE;
         }
         else if (Laya.Browser.onSafari) {
-            login.browser = Protos.Global.Browser.Safair;
+            login.browser = protos_1.Protos.Global.Browser.Safair;
         }
         else {
-            login.browser = Protos.Global.Browser.Chrome;
+            login.browser = protos_1.Protos.Global.Browser.Chrome;
         }
-        const connector = new WSConnector();
-        connector.onerror = (e) => this._ui.OnFail("无法连接服务器[" + e.toString() + "]", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
-        connector.onclose = () => Logger.Log("connection closed.");
+        const connector = new WSConnector_1.WSConnector();
+        connector.onerror = (e) => this._ui.OnFail("无法连接服务器[" + e.toString() + "]", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
+        connector.onclose = () => Logger_1.Logger.Log("connection closed.");
         connector.onopen = (e) => {
-            connector.Send(Protos.GC2LS_AskWXLogin, login, message => {
+            connector.Send(protos_1.Protos.GC2LS_AskWXLogin, login, message => {
                 const resp = message;
-                Logger.Log("gcNID:" + resp.sessionID);
+                Logger_1.Logger.Log("gcNID:" + resp.sessionID);
                 const fitting = this.SelectFittingBS(resp.gsInfos);
                 if (fitting == null) {
-                    this._ui.OnFail("无法连接服务器", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+                    this._ui.OnFail("无法连接服务器", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                 }
                 else {
                     this.LoginGS(fitting.ip, fitting.port, fitting.password, resp.sessionID);
@@ -145,60 +150,60 @@ export class LoginState extends SceneState {
         this.ConnectToLS(connector);
     }
     Login(uname) {
-        const login = ProtoCreator.Q_GC2LS_AskSmartLogin();
+        const login = ProtoHelper_1.ProtoCreator.Q_GC2LS_AskSmartLogin();
         login.id = uname;
         if (Laya.Browser.onIOS) {
-            login.platform = Protos.Global.Platform.IOS;
+            login.platform = protos_1.Protos.Global.Platform.IOS;
         }
         else if (Laya.Browser.onAndroid) {
-            login.platform = Protos.Global.Platform.Android;
+            login.platform = protos_1.Protos.Global.Platform.Android;
         }
         else if (Laya.Browser.onWP) {
-            login.platform = Protos.Global.Platform.WP;
+            login.platform = protos_1.Protos.Global.Platform.WP;
         }
         else {
-            login.platform = Protos.Global.Platform.PC;
+            login.platform = protos_1.Protos.Global.Platform.PC;
         }
         if (Laya.Browser.onEdge) {
-            login.browser = Protos.Global.Browser.Edge;
+            login.browser = protos_1.Protos.Global.Browser.Edge;
         }
         else if (Laya.Browser.onFirefox) {
-            login.browser = Protos.Global.Browser.Firefox;
+            login.browser = protos_1.Protos.Global.Browser.Firefox;
         }
         else if (Laya.Browser.onIE) {
-            login.browser = Protos.Global.Browser.IE;
+            login.browser = protos_1.Protos.Global.Browser.IE;
         }
         else if (Laya.Browser.onSafari) {
-            login.browser = Protos.Global.Browser.Safair;
+            login.browser = protos_1.Protos.Global.Browser.Safair;
         }
         else {
-            login.browser = Protos.Global.Browser.Chrome;
+            login.browser = protos_1.Protos.Global.Browser.Chrome;
         }
         if (Laya.Browser.onMiniGame) {
-            login.channel = Protos.Global.Channel.WXMini;
+            login.channel = protos_1.Protos.Global.Channel.WXMini;
         }
         else {
-            login.channel = Protos.Global.Channel.Web;
+            login.channel = protos_1.Protos.Global.Channel.Web;
         }
-        const connector = new WSConnector();
-        connector.onerror = (e) => this._ui.OnFail("无法连接服务器[" + e.toString() + "]", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
-        connector.onclose = () => Logger.Log("connection closed.");
+        const connector = new WSConnector_1.WSConnector();
+        connector.onerror = (e) => this._ui.OnFail("无法连接服务器[" + e.toString() + "]", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
+        connector.onclose = () => Logger_1.Logger.Log("connection closed.");
         connector.onopen = (e) => {
-            connector.Send(Protos.GC2LS_AskSmartLogin, login, message => {
+            connector.Send(protos_1.Protos.GC2LS_AskSmartLogin, login, message => {
                 this._ui.ModalWait(false);
                 const resp = message;
-                Logger.Log("gcNID:" + resp.sessionID);
-                if (resp.result == Protos.LS2GC_AskLoginRet.EResult.Success) {
+                Logger_1.Logger.Log("gcNID:" + resp.sessionID);
+                if (resp.result == protos_1.Protos.LS2GC_AskLoginRet.EResult.Success) {
                     const fitting = this.SelectFittingBS(resp.gsInfos);
                     if (fitting == null) {
-                        this._ui.OnFail("无法连接服务器", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+                        this._ui.OnFail("无法连接服务器", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                     }
                     else {
                         this.LoginGS(fitting.ip, fitting.port, fitting.password, resp.sessionID);
                     }
                 }
                 else {
-                    this._ui.OnLoginResut(resp, () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+                    this._ui.OnLoginResut(resp, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                 }
             });
         };
@@ -220,8 +225,8 @@ export class LoginState extends SceneState {
         return fitting;
     }
     ConnectToLS(connector) {
-        const config = CDefs.GetConfig();
-        if (Global.local) {
+        const config = CDefs_1.CDefs.GetConfig();
+        if (Global_1.Global.local) {
             connector.Connect("localhost", config["ls_port"]);
         }
         else {
@@ -229,35 +234,35 @@ export class LoginState extends SceneState {
         }
     }
     LoginGS(ip, port, pwd, gcNID) {
-        const connector = Global.connector.gsConnector;
+        const connector = Global_1.Global.connector.gsConnector;
         connector.onopen = (e) => {
-            Logger.Log("GS Connected");
-            const askLogin = ProtoCreator.Q_GC2GS_AskLogin();
+            Logger_1.Logger.Log("GS Connected");
+            const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();
             askLogin.pwd = pwd;
             askLogin.sessionID = gcNID;
-            connector.Send(Protos.GC2GS_AskLogin, askLogin, message => {
+            connector.Send(protos_1.Protos.GC2GS_AskLogin, askLogin, message => {
                 this._ui.ModalWait(false);
                 const resp = message;
                 switch (resp.result) {
-                    case Protos.GS2GC_LoginRet.EResult.Success:
-                        const json = JsonHelper.Parse(StringUtils.DecodeUTF8(resp.defs));
-                        Defs.Init(json);
-                        if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
-                            Global.sceneManager.ChangeState(SceneManager.State.Loading);
-                            Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+                    case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
+                        const json = JsonHelper_1.JsonHelper.Parse(TextUtils_1.StringUtils.DecodeUTF8(resp.defs));
+                        Defs_1.Defs.Init(json);
+                        if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {
+                            Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading);
+                            Global_1.Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
                         }
                         else {
-                            Global.sceneManager.ChangeState(SceneManager.State.Main, resp.userInfo);
+                            Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main, resp.userInfo);
                         }
                         break;
-                    case Protos.GS2GC_LoginRet.EResult.SessionExpire:
-                        this._ui.OnFail("登陆失败或凭证已过期", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+                    case protos_1.Protos.GS2GC_LoginRet.EResult.SessionExpire:
+                        this._ui.OnFail("登陆失败或凭证已过期", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
                         break;
                 }
             });
         };
         this._ui.ModalWait(true);
-        if (Global.local) {
+        if (Global_1.Global.local) {
             connector.Connect("localhost", port);
         }
         else {
@@ -265,3 +270,4 @@ export class LoginState extends SceneState {
         }
     }
 }
+exports.LoginState = LoginState;

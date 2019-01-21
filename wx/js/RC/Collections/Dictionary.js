@@ -1,5 +1,7 @@
-import * as util from './util';
-export default class Dictionary {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const util = require("./util");
+class Dictionary {
     constructor(toStrFunction) {
         this.table = {};
         this.nElements = 0;
@@ -94,3 +96,4 @@ export default class Dictionary {
         return toret + '\n}';
     }
 }
+exports.default = Dictionary;

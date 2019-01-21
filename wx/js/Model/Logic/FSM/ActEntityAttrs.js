@@ -1,10 +1,12 @@
-import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { EntityStateAction } from "./EntityStateAction";
-export class ActEntityAttrs extends EntityStateAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Hashtable_1 = require("../../../RC/Utils/Hashtable");
+const EntityStateAction_1 = require("./EntityStateAction");
+class ActEntityAttrs extends EntityStateAction_1.EntityStateAction {
     OnInit(def) {
         super.OnInit(def);
-        this._attrs = Hashtable.GetNumberArray(def, "attrs");
-        this._values = Hashtable.GetNumberArray(def, "values");
+        this._attrs = Hashtable_1.Hashtable.GetNumberArray(def, "attrs");
+        this._values = Hashtable_1.Hashtable.GetNumberArray(def, "values");
     }
     OnTrigger() {
         super.OnTrigger();
@@ -29,3 +31,4 @@ export class ActEntityAttrs extends EntityStateAction {
         }
     }
 }
+exports.ActEntityAttrs = ActEntityAttrs;

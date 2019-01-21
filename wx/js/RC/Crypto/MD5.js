@@ -1,4 +1,6 @@
-export class Md5 {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Md5 {
     constructor() {
         this._state = new Int32Array(4);
         this._buffer = new ArrayBuffer(68);
@@ -325,3 +327,4 @@ Md5.buffer32Identity = new Int32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 Md5.hexChars = '0123456789abcdef';
 Md5.hexOut = [];
 Md5.onePassHasher = new Md5();
+exports.Md5 = Md5;

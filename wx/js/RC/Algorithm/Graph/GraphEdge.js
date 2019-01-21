@@ -1,4 +1,6 @@
-export class GraphEdge {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class GraphEdge {
     get from() { return this._from; }
     get to() { return this._to; }
     get cost() { return this._cost; }
@@ -17,3 +19,4 @@ export class GraphEdge {
         return 0;
     }
 }
+exports.GraphEdge = GraphEdge;

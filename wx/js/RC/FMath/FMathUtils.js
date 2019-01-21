@@ -1,4 +1,6 @@
-export class FMathUtils {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class FMathUtils {
     static DegToRad(deg) {
         return FMathUtils.Mul(deg, FMathUtils.DEG_TO_RAD);
     }
@@ -178,8 +180,10 @@ export class FMathUtils {
 FMathUtils.EPSILON = 0.001;
 FMathUtils.MAX_VALUE = 3.4e+38;
 FMathUtils.MIN_VALUE = -FMathUtils.MAX_VALUE;
-FMathUtils.PI = 3.142;
+FMathUtils.PI = 3.14215926;
+FMathUtils.PI2 = FMathUtils.PI * 2;
 FMathUtils.DEG_TO_RAD = FMathUtils.Div(FMathUtils.PI, 180);
 FMathUtils.RAD_TO_DEG = FMathUtils.Div(180, FMathUtils.PI);
 FMathUtils.FRACTIONAL_PLACES = 100;
 FMathUtils.DIV_ONE = 0.01;
+exports.FMathUtils = FMathUtils;

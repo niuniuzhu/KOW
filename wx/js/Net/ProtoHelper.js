@@ -1,122 +1,124 @@
-import { Protos } from "../Libs/protos";
-export class ProtoCreator {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const protos_1 = require("../Libs/protos");
+class ProtoCreator {
     static Init() {
         if (this._init) {
             return;
         }
         this._init = true;
-        ProtoCreator._TYPE2ID.set(Protos.G_AskPing, 10);
-        ProtoCreator._TYPE2ID.set(Protos.G_AskPingRet, 11);
-        ProtoCreator._TYPE2ID.set(Protos.GC2LS_AskRegister, 1000);
-        ProtoCreator._TYPE2ID.set(Protos.GC2LS_AskLogin, 1001);
-        ProtoCreator._TYPE2ID.set(Protos.GC2LS_AskSmartLogin, 1002);
-        ProtoCreator._TYPE2ID.set(Protos.GC2LS_AskWXLogin, 1003);
-        ProtoCreator._TYPE2ID.set(Protos.GC2LC_UpdateProfile, 1004);
-        ProtoCreator._TYPE2ID.set(Protos.GC2GS_AskLogin, 1100);
-        ProtoCreator._TYPE2ID.set(Protos.GC2GS_KeepAlive, 1101);
-        ProtoCreator._TYPE2ID.set(Protos.GC2BS_AskLogin, 1200);
-        ProtoCreator._TYPE2ID.set(Protos.GC2BS_KeepAlive, 1201);
-        ProtoCreator._TYPE2ID.set(Protos.GC2BS_RequestSnapshot, 1202);
-        ProtoCreator._TYPE2ID.set(Protos.GC2BS_FrameAction, 1203);
-        ProtoCreator._TYPE2ID.set(Protos.GC2BS_RequestFrameActions, 1204);
-        ProtoCreator._TYPE2ID.set(Protos.GC2BS_CommitSnapshot, 1205);
-        ProtoCreator._TYPE2ID.set(Protos.GC2BS_EndBattle, 1206);
-        ProtoCreator._TYPE2ID.set(Protos.GC2CS_BeginMatch, 1300);
-        ProtoCreator._TYPE2ID.set(Protos.LS2GC_GSInfo, 2000);
-        ProtoCreator._TYPE2ID.set(Protos.LS2GC_AskRegRet, 2001);
-        ProtoCreator._TYPE2ID.set(Protos.LS2GC_AskLoginRet, 2002);
-        ProtoCreator._TYPE2ID.set(Protos.LS2CS_GCLogin, 2100);
-        ProtoCreator._TYPE2ID.set(Protos.LS2DB_QueryAccount, 2200);
-        ProtoCreator._TYPE2ID.set(Protos.LS2DB_QueryLogin, 2201);
-        ProtoCreator._TYPE2ID.set(Protos.LS2DB_Exec, 2202);
-        ProtoCreator._TYPE2ID.set(Protos.GS2CS_ReportState, 3000);
-        ProtoCreator._TYPE2ID.set(Protos.GS2CS_GCAskLogin, 3001);
-        ProtoCreator._TYPE2ID.set(Protos.GS2CS_GCLost, 3002);
-        ProtoCreator._TYPE2ID.set(Protos.GS2GC_LoginRet, 3100);
-        ProtoCreator._TYPE2ID.set(Protos.GS2GC_Kick, 3101);
-        ProtoCreator._TYPE2ID.set(Protos.GS2GC_CSLost, 3102);
-        ProtoCreator._TYPE2ID.set(Protos.BS2CS_ReportState, 4000);
-        ProtoCreator._TYPE2ID.set(Protos.BS2CS_BattleInfoRet, 4001);
-        ProtoCreator._TYPE2ID.set(Protos.BS2CS_BattleEnd, 4002);
-        ProtoCreator._TYPE2ID.set(Protos.BS2CS_KickUser, 4003);
-        ProtoCreator._TYPE2ID.set(Protos.BS2GC_LoginRet, 4100);
-        ProtoCreator._TYPE2ID.set(Protos.BS2GC_RequestSnapshotRet, 4101);
-        ProtoCreator._TYPE2ID.set(Protos.BS2GC_FrameAction, 4102);
-        ProtoCreator._TYPE2ID.set(Protos.BS2GC_RequestFrameActionsRet, 4103);
-        ProtoCreator._TYPE2ID.set(Protos.BS2GC_OutOfSync, 4104);
-        ProtoCreator._TYPE2ID.set(Protos.CS2LS_GSInfos, 5000);
-        ProtoCreator._TYPE2ID.set(Protos.CS2LS_GSInfo, 5001);
-        ProtoCreator._TYPE2ID.set(Protos.CS2LS_GSLost, 5002);
-        ProtoCreator._TYPE2ID.set(Protos.CS2LS_GCLoginRet, 5003);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GS_GCLoginRet, 5100);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GS_KickGC, 5101);
-        ProtoCreator._TYPE2ID.set(Protos.CS2BS_BattleInfo, 5200);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GC_BeginMatchRet, 5300);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GC_PlayerJoin, 5301);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GC_PlayerLeave, 5302);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GC_RoomInfo, 5303);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GC_EnterBattle, 5304);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GC_BattleEnd, 5305);
-        ProtoCreator._TYPE2ID.set(Protos.CS2GC_BSLose, 5306);
-        ProtoCreator._TYPE2ID.set(Protos.DB2LS_QueryAccountRet, 8000);
-        ProtoCreator._TYPE2ID.set(Protos.DB2LS_QueryLoginRet, 8001);
-        ProtoCreator._TYPE2ID.set(Protos.DB2LS_ExecRet, 8002);
-        ProtoCreator._ID2TYPE.set(10, Protos.G_AskPing);
-        ProtoCreator._ID2TYPE.set(11, Protos.G_AskPingRet);
-        ProtoCreator._ID2TYPE.set(1000, Protos.GC2LS_AskRegister);
-        ProtoCreator._ID2TYPE.set(1001, Protos.GC2LS_AskLogin);
-        ProtoCreator._ID2TYPE.set(1002, Protos.GC2LS_AskSmartLogin);
-        ProtoCreator._ID2TYPE.set(1003, Protos.GC2LS_AskWXLogin);
-        ProtoCreator._ID2TYPE.set(1004, Protos.GC2LC_UpdateProfile);
-        ProtoCreator._ID2TYPE.set(1100, Protos.GC2GS_AskLogin);
-        ProtoCreator._ID2TYPE.set(1101, Protos.GC2GS_KeepAlive);
-        ProtoCreator._ID2TYPE.set(1200, Protos.GC2BS_AskLogin);
-        ProtoCreator._ID2TYPE.set(1201, Protos.GC2BS_KeepAlive);
-        ProtoCreator._ID2TYPE.set(1202, Protos.GC2BS_RequestSnapshot);
-        ProtoCreator._ID2TYPE.set(1203, Protos.GC2BS_FrameAction);
-        ProtoCreator._ID2TYPE.set(1204, Protos.GC2BS_RequestFrameActions);
-        ProtoCreator._ID2TYPE.set(1205, Protos.GC2BS_CommitSnapshot);
-        ProtoCreator._ID2TYPE.set(1206, Protos.GC2BS_EndBattle);
-        ProtoCreator._ID2TYPE.set(1300, Protos.GC2CS_BeginMatch);
-        ProtoCreator._ID2TYPE.set(2000, Protos.LS2GC_GSInfo);
-        ProtoCreator._ID2TYPE.set(2001, Protos.LS2GC_AskRegRet);
-        ProtoCreator._ID2TYPE.set(2002, Protos.LS2GC_AskLoginRet);
-        ProtoCreator._ID2TYPE.set(2100, Protos.LS2CS_GCLogin);
-        ProtoCreator._ID2TYPE.set(2200, Protos.LS2DB_QueryAccount);
-        ProtoCreator._ID2TYPE.set(2201, Protos.LS2DB_QueryLogin);
-        ProtoCreator._ID2TYPE.set(2202, Protos.LS2DB_Exec);
-        ProtoCreator._ID2TYPE.set(3000, Protos.GS2CS_ReportState);
-        ProtoCreator._ID2TYPE.set(3001, Protos.GS2CS_GCAskLogin);
-        ProtoCreator._ID2TYPE.set(3002, Protos.GS2CS_GCLost);
-        ProtoCreator._ID2TYPE.set(3100, Protos.GS2GC_LoginRet);
-        ProtoCreator._ID2TYPE.set(3101, Protos.GS2GC_Kick);
-        ProtoCreator._ID2TYPE.set(3102, Protos.GS2GC_CSLost);
-        ProtoCreator._ID2TYPE.set(4000, Protos.BS2CS_ReportState);
-        ProtoCreator._ID2TYPE.set(4001, Protos.BS2CS_BattleInfoRet);
-        ProtoCreator._ID2TYPE.set(4002, Protos.BS2CS_BattleEnd);
-        ProtoCreator._ID2TYPE.set(4003, Protos.BS2CS_KickUser);
-        ProtoCreator._ID2TYPE.set(4100, Protos.BS2GC_LoginRet);
-        ProtoCreator._ID2TYPE.set(4101, Protos.BS2GC_RequestSnapshotRet);
-        ProtoCreator._ID2TYPE.set(4102, Protos.BS2GC_FrameAction);
-        ProtoCreator._ID2TYPE.set(4103, Protos.BS2GC_RequestFrameActionsRet);
-        ProtoCreator._ID2TYPE.set(4104, Protos.BS2GC_OutOfSync);
-        ProtoCreator._ID2TYPE.set(5000, Protos.CS2LS_GSInfos);
-        ProtoCreator._ID2TYPE.set(5001, Protos.CS2LS_GSInfo);
-        ProtoCreator._ID2TYPE.set(5002, Protos.CS2LS_GSLost);
-        ProtoCreator._ID2TYPE.set(5003, Protos.CS2LS_GCLoginRet);
-        ProtoCreator._ID2TYPE.set(5100, Protos.CS2GS_GCLoginRet);
-        ProtoCreator._ID2TYPE.set(5101, Protos.CS2GS_KickGC);
-        ProtoCreator._ID2TYPE.set(5200, Protos.CS2BS_BattleInfo);
-        ProtoCreator._ID2TYPE.set(5300, Protos.CS2GC_BeginMatchRet);
-        ProtoCreator._ID2TYPE.set(5301, Protos.CS2GC_PlayerJoin);
-        ProtoCreator._ID2TYPE.set(5302, Protos.CS2GC_PlayerLeave);
-        ProtoCreator._ID2TYPE.set(5303, Protos.CS2GC_RoomInfo);
-        ProtoCreator._ID2TYPE.set(5304, Protos.CS2GC_EnterBattle);
-        ProtoCreator._ID2TYPE.set(5305, Protos.CS2GC_BattleEnd);
-        ProtoCreator._ID2TYPE.set(5306, Protos.CS2GC_BSLose);
-        ProtoCreator._ID2TYPE.set(8000, Protos.DB2LS_QueryAccountRet);
-        ProtoCreator._ID2TYPE.set(8001, Protos.DB2LS_QueryLoginRet);
-        ProtoCreator._ID2TYPE.set(8002, Protos.DB2LS_ExecRet);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.G_AskPing, 10);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.G_AskPingRet, 11);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LS_AskRegister, 1000);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LS_AskLogin, 1001);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LS_AskSmartLogin, 1002);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LS_AskWXLogin, 1003);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2LC_UpdateProfile, 1004);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2GS_AskLogin, 1100);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2GS_KeepAlive, 1101);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_AskLogin, 1200);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_KeepAlive, 1201);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_RequestSnapshot, 1202);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_FrameAction, 1203);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_RequestFrameActions, 1204);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_CommitSnapshot, 1205);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2BS_EndBattle, 1206);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GC2CS_BeginMatch, 1300);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2GC_GSInfo, 2000);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2GC_AskRegRet, 2001);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2GC_AskLoginRet, 2002);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2CS_GCLogin, 2100);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2DB_QueryAccount, 2200);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2DB_QueryLogin, 2201);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.LS2DB_Exec, 2202);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2CS_ReportState, 3000);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2CS_GCAskLogin, 3001);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2CS_GCLost, 3002);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2GC_LoginRet, 3100);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2GC_Kick, 3101);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.GS2GC_CSLost, 3102);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_ReportState, 4000);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_BattleInfoRet, 4001);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_BattleEnd, 4002);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2CS_KickUser, 4003);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_LoginRet, 4100);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_RequestSnapshotRet, 4101);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_FrameAction, 4102);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_RequestFrameActionsRet, 4103);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.BS2GC_OutOfSync, 4104);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSInfos, 5000);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSInfo, 5001);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GSLost, 5002);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2LS_GCLoginRet, 5003);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GS_GCLoginRet, 5100);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GS_KickGC, 5101);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2BS_BattleInfo, 5200);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_BeginMatchRet, 5300);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_PlayerJoin, 5301);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_PlayerLeave, 5302);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_RoomInfo, 5303);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_EnterBattle, 5304);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_BattleEnd, 5305);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.CS2GC_BSLose, 5306);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_QueryAccountRet, 8000);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_QueryLoginRet, 8001);
+        ProtoCreator._TYPE2ID.set(protos_1.Protos.DB2LS_ExecRet, 8002);
+        ProtoCreator._ID2TYPE.set(10, protos_1.Protos.G_AskPing);
+        ProtoCreator._ID2TYPE.set(11, protos_1.Protos.G_AskPingRet);
+        ProtoCreator._ID2TYPE.set(1000, protos_1.Protos.GC2LS_AskRegister);
+        ProtoCreator._ID2TYPE.set(1001, protos_1.Protos.GC2LS_AskLogin);
+        ProtoCreator._ID2TYPE.set(1002, protos_1.Protos.GC2LS_AskSmartLogin);
+        ProtoCreator._ID2TYPE.set(1003, protos_1.Protos.GC2LS_AskWXLogin);
+        ProtoCreator._ID2TYPE.set(1004, protos_1.Protos.GC2LC_UpdateProfile);
+        ProtoCreator._ID2TYPE.set(1100, protos_1.Protos.GC2GS_AskLogin);
+        ProtoCreator._ID2TYPE.set(1101, protos_1.Protos.GC2GS_KeepAlive);
+        ProtoCreator._ID2TYPE.set(1200, protos_1.Protos.GC2BS_AskLogin);
+        ProtoCreator._ID2TYPE.set(1201, protos_1.Protos.GC2BS_KeepAlive);
+        ProtoCreator._ID2TYPE.set(1202, protos_1.Protos.GC2BS_RequestSnapshot);
+        ProtoCreator._ID2TYPE.set(1203, protos_1.Protos.GC2BS_FrameAction);
+        ProtoCreator._ID2TYPE.set(1204, protos_1.Protos.GC2BS_RequestFrameActions);
+        ProtoCreator._ID2TYPE.set(1205, protos_1.Protos.GC2BS_CommitSnapshot);
+        ProtoCreator._ID2TYPE.set(1206, protos_1.Protos.GC2BS_EndBattle);
+        ProtoCreator._ID2TYPE.set(1300, protos_1.Protos.GC2CS_BeginMatch);
+        ProtoCreator._ID2TYPE.set(2000, protos_1.Protos.LS2GC_GSInfo);
+        ProtoCreator._ID2TYPE.set(2001, protos_1.Protos.LS2GC_AskRegRet);
+        ProtoCreator._ID2TYPE.set(2002, protos_1.Protos.LS2GC_AskLoginRet);
+        ProtoCreator._ID2TYPE.set(2100, protos_1.Protos.LS2CS_GCLogin);
+        ProtoCreator._ID2TYPE.set(2200, protos_1.Protos.LS2DB_QueryAccount);
+        ProtoCreator._ID2TYPE.set(2201, protos_1.Protos.LS2DB_QueryLogin);
+        ProtoCreator._ID2TYPE.set(2202, protos_1.Protos.LS2DB_Exec);
+        ProtoCreator._ID2TYPE.set(3000, protos_1.Protos.GS2CS_ReportState);
+        ProtoCreator._ID2TYPE.set(3001, protos_1.Protos.GS2CS_GCAskLogin);
+        ProtoCreator._ID2TYPE.set(3002, protos_1.Protos.GS2CS_GCLost);
+        ProtoCreator._ID2TYPE.set(3100, protos_1.Protos.GS2GC_LoginRet);
+        ProtoCreator._ID2TYPE.set(3101, protos_1.Protos.GS2GC_Kick);
+        ProtoCreator._ID2TYPE.set(3102, protos_1.Protos.GS2GC_CSLost);
+        ProtoCreator._ID2TYPE.set(4000, protos_1.Protos.BS2CS_ReportState);
+        ProtoCreator._ID2TYPE.set(4001, protos_1.Protos.BS2CS_BattleInfoRet);
+        ProtoCreator._ID2TYPE.set(4002, protos_1.Protos.BS2CS_BattleEnd);
+        ProtoCreator._ID2TYPE.set(4003, protos_1.Protos.BS2CS_KickUser);
+        ProtoCreator._ID2TYPE.set(4100, protos_1.Protos.BS2GC_LoginRet);
+        ProtoCreator._ID2TYPE.set(4101, protos_1.Protos.BS2GC_RequestSnapshotRet);
+        ProtoCreator._ID2TYPE.set(4102, protos_1.Protos.BS2GC_FrameAction);
+        ProtoCreator._ID2TYPE.set(4103, protos_1.Protos.BS2GC_RequestFrameActionsRet);
+        ProtoCreator._ID2TYPE.set(4104, protos_1.Protos.BS2GC_OutOfSync);
+        ProtoCreator._ID2TYPE.set(5000, protos_1.Protos.CS2LS_GSInfos);
+        ProtoCreator._ID2TYPE.set(5001, protos_1.Protos.CS2LS_GSInfo);
+        ProtoCreator._ID2TYPE.set(5002, protos_1.Protos.CS2LS_GSLost);
+        ProtoCreator._ID2TYPE.set(5003, protos_1.Protos.CS2LS_GCLoginRet);
+        ProtoCreator._ID2TYPE.set(5100, protos_1.Protos.CS2GS_GCLoginRet);
+        ProtoCreator._ID2TYPE.set(5101, protos_1.Protos.CS2GS_KickGC);
+        ProtoCreator._ID2TYPE.set(5200, protos_1.Protos.CS2BS_BattleInfo);
+        ProtoCreator._ID2TYPE.set(5300, protos_1.Protos.CS2GC_BeginMatchRet);
+        ProtoCreator._ID2TYPE.set(5301, protos_1.Protos.CS2GC_PlayerJoin);
+        ProtoCreator._ID2TYPE.set(5302, protos_1.Protos.CS2GC_PlayerLeave);
+        ProtoCreator._ID2TYPE.set(5303, protos_1.Protos.CS2GC_RoomInfo);
+        ProtoCreator._ID2TYPE.set(5304, protos_1.Protos.CS2GC_EnterBattle);
+        ProtoCreator._ID2TYPE.set(5305, protos_1.Protos.CS2GC_BattleEnd);
+        ProtoCreator._ID2TYPE.set(5306, protos_1.Protos.CS2GC_BSLose);
+        ProtoCreator._ID2TYPE.set(8000, protos_1.Protos.DB2LS_QueryAccountRet);
+        ProtoCreator._ID2TYPE.set(8001, protos_1.Protos.DB2LS_QueryLoginRet);
+        ProtoCreator._ID2TYPE.set(8002, protos_1.Protos.DB2LS_ExecRet);
     }
     static MakeTransMessage(msg, transTarget, transID) {
         msg.opts.flag |= 1 << 3;
@@ -124,1035 +126,1035 @@ export class ProtoCreator {
         msg.opts.transid = transID;
     }
     static Q_G_AskPing() {
-        let msg = new Protos.G_AskPing();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.G_AskPing();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_G_AskPingRet() {
-        let msg = new Protos.G_AskPingRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.G_AskPingRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GC2LS_AskRegister() {
-        let msg = new Protos.GC2LS_AskRegister();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2LS_AskRegister();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GC2LS_AskLogin() {
-        let msg = new Protos.GC2LS_AskLogin();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2LS_AskLogin();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GC2LS_AskSmartLogin() {
-        let msg = new Protos.GC2LS_AskSmartLogin();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2LS_AskSmartLogin();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GC2LS_AskWXLogin() {
-        let msg = new Protos.GC2LS_AskWXLogin();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2LS_AskWXLogin();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GC2LC_UpdateProfile() {
-        let msg = new Protos.GC2LC_UpdateProfile();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GC2LC_UpdateProfile();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GC2GS_AskLogin() {
-        let msg = new Protos.GC2GS_AskLogin();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2GS_AskLogin();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GC2GS_KeepAlive() {
-        let msg = new Protos.GC2GS_KeepAlive();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GC2GS_KeepAlive();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GC2BS_AskLogin() {
-        let msg = new Protos.GC2BS_AskLogin();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2BS_AskLogin();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GC2BS_KeepAlive() {
-        let msg = new Protos.GC2BS_KeepAlive();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GC2BS_KeepAlive();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GC2BS_RequestSnapshot() {
-        let msg = new Protos.GC2BS_RequestSnapshot();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2BS_RequestSnapshot();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GC2BS_FrameAction() {
-        let msg = new Protos.GC2BS_FrameAction();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GC2BS_FrameAction();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GC2BS_RequestFrameActions() {
-        let msg = new Protos.GC2BS_RequestFrameActions();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2BS_RequestFrameActions();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GC2BS_CommitSnapshot() {
-        let msg = new Protos.GC2BS_CommitSnapshot();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GC2BS_CommitSnapshot();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GC2BS_EndBattle() {
-        let msg = new Protos.GC2BS_EndBattle();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GC2BS_EndBattle();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GC2CS_BeginMatch() {
-        let msg = new Protos.GC2CS_BeginMatch();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GC2CS_BeginMatch();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_LS2GC_GSInfo() {
-        let msg = new Protos.LS2GC_GSInfo();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.LS2GC_GSInfo();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_LS2GC_AskRegRet() {
-        let msg = new Protos.LS2GC_AskRegRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.LS2GC_AskRegRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_LS2GC_AskLoginRet() {
-        let msg = new Protos.LS2GC_AskLoginRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_LS2CS_GCLogin() {
-        let msg = new Protos.LS2CS_GCLogin();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.LS2CS_GCLogin();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_LS2DB_QueryAccount() {
-        let msg = new Protos.LS2DB_QueryAccount();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.LS2DB_QueryAccount();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_LS2DB_QueryLogin() {
-        let msg = new Protos.LS2DB_QueryLogin();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.LS2DB_QueryLogin();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_LS2DB_Exec() {
-        let msg = new Protos.LS2DB_Exec();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.LS2DB_Exec();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GS2CS_ReportState() {
-        let msg = new Protos.GS2CS_ReportState();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GS2CS_ReportState();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GS2CS_GCAskLogin() {
-        let msg = new Protos.GS2CS_GCAskLogin();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.GS2CS_GCAskLogin();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_GS2CS_GCLost() {
-        let msg = new Protos.GS2CS_GCLost();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GS2CS_GCLost();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GS2GC_LoginRet() {
-        let msg = new Protos.GS2GC_LoginRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GS2GC_LoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GS2GC_Kick() {
-        let msg = new Protos.GS2GC_Kick();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GS2GC_Kick();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_GS2GC_CSLost() {
-        let msg = new Protos.GS2GC_CSLost();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.GS2GC_CSLost();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2CS_ReportState() {
-        let msg = new Protos.BS2CS_ReportState();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2CS_ReportState();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2CS_BattleInfoRet() {
-        let msg = new Protos.BS2CS_BattleInfoRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2CS_BattleInfoRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2CS_BattleEnd() {
-        let msg = new Protos.BS2CS_BattleEnd();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2CS_BattleEnd();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2CS_KickUser() {
-        let msg = new Protos.BS2CS_KickUser();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2CS_KickUser();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2GC_LoginRet() {
-        let msg = new Protos.BS2GC_LoginRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2GC_LoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2GC_RequestSnapshotRet() {
-        let msg = new Protos.BS2GC_RequestSnapshotRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2GC_RequestSnapshotRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2GC_FrameAction() {
-        let msg = new Protos.BS2GC_FrameAction();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2GC_FrameAction();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2GC_RequestFrameActionsRet() {
-        let msg = new Protos.BS2GC_RequestFrameActionsRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2GC_RequestFrameActionsRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_BS2GC_OutOfSync() {
-        let msg = new Protos.BS2GC_OutOfSync();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.BS2GC_OutOfSync();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2LS_GSInfos() {
-        let msg = new Protos.CS2LS_GSInfos();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2LS_GSInfos();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2LS_GSInfo() {
-        let msg = new Protos.CS2LS_GSInfo();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2LS_GSInfo();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2LS_GSLost() {
-        let msg = new Protos.CS2LS_GSLost();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2LS_GSLost();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2LS_GCLoginRet() {
-        let msg = new Protos.CS2LS_GCLoginRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2LS_GCLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2GS_GCLoginRet() {
-        let msg = new Protos.CS2GS_GCLoginRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GS_GCLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2GS_KickGC() {
-        let msg = new Protos.CS2GS_KickGC();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GS_KickGC();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2BS_BattleInfo() {
-        let msg = new Protos.CS2BS_BattleInfo();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        let msg = new protos_1.Protos.CS2BS_BattleInfo();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RPC;
         return msg;
     }
     static Q_CS2GC_BeginMatchRet() {
-        let msg = new Protos.CS2GC_BeginMatchRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GC_BeginMatchRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2GC_PlayerJoin() {
-        let msg = new Protos.CS2GC_PlayerJoin();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GC_PlayerJoin();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2GC_PlayerLeave() {
-        let msg = new Protos.CS2GC_PlayerLeave();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GC_PlayerLeave();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2GC_RoomInfo() {
-        let msg = new Protos.CS2GC_RoomInfo();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GC_RoomInfo();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2GC_EnterBattle() {
-        let msg = new Protos.CS2GC_EnterBattle();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GC_EnterBattle();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2GC_BattleEnd() {
-        let msg = new Protos.CS2GC_BattleEnd();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GC_BattleEnd();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_CS2GC_BSLose() {
-        let msg = new Protos.CS2GC_BSLose();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.CS2GC_BSLose();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_DB2LS_QueryAccountRet() {
-        let msg = new Protos.DB2LS_QueryAccountRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.DB2LS_QueryAccountRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_DB2LS_QueryLoginRet() {
-        let msg = new Protos.DB2LS_QueryLoginRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.DB2LS_QueryLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
     static Q_DB2LS_ExecRet() {
-        let msg = new Protos.DB2LS_ExecRet();
-        msg.opts = new Protos.MsgOpts();
+        let msg = new protos_1.Protos.DB2LS_ExecRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
         return msg;
     }
-    static R_GC2BS_AskLogin(pid) {
-        let msg = new Protos.BS2GC_LoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_LS2DB_QueryLogin(pid) {
-        let msg = new Protos.DB2LS_QueryLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+    static R_LS2DB_Exec(pid) {
+        let msg = new protos_1.Protos.DB2LS_ExecRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
         msg.opts.rpid = pid;
         return msg;
     }
     static R_GC2LS_AskLogin(pid) {
-        let msg = new Protos.LS2GC_AskLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
         msg.opts.rpid = pid;
         return msg;
     }
-    static R_LS2DB_Exec(pid) {
-        let msg = new Protos.DB2LS_ExecRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_G_AskPing(pid) {
-        let msg = new Protos.G_AskPingRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2LS_AskRegister(pid) {
-        let msg = new Protos.LS2GC_AskRegRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2BS_RequestSnapshot(pid) {
-        let msg = new Protos.BS2GC_RequestSnapshotRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2BS_RequestFrameActions(pid) {
-        let msg = new Protos.BS2GC_RequestFrameActionsRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_CS2BS_BattleInfo(pid) {
-        let msg = new Protos.BS2CS_BattleInfoRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_LS2CS_GCLogin(pid) {
-        let msg = new Protos.CS2LS_GCLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_LS2DB_QueryAccount(pid) {
-        let msg = new Protos.DB2LS_QueryAccountRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2GS_AskLogin(pid) {
-        let msg = new Protos.GS2GC_LoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2CS_BeginMatch(pid) {
-        let msg = new Protos.CS2GC_BeginMatchRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2LS_AskSmartLogin(pid) {
-        let msg = new Protos.LS2GC_AskLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GS2CS_GCAskLogin(pid) {
-        let msg = new Protos.CS2GS_GCLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+    static R_LS2DB_QueryLogin(pid) {
+        let msg = new protos_1.Protos.DB2LS_QueryLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
         msg.opts.rpid = pid;
         return msg;
     }
     static R_GC2LS_AskWXLogin(pid) {
-        let msg = new Protos.LS2GC_AskLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_LS2CS_GCLogin(pid) {
+        let msg = new protos_1.Protos.CS2LS_GCLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2BS_AskLogin(pid) {
+        let msg = new protos_1.Protos.BS2GC_LoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2BS_RequestFrameActions(pid) {
+        let msg = new protos_1.Protos.BS2GC_RequestFrameActionsRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2BS_RequestSnapshot(pid) {
+        let msg = new protos_1.Protos.BS2GC_RequestSnapshotRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2CS_BeginMatch(pid) {
+        let msg = new protos_1.Protos.CS2GC_BeginMatchRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GS2CS_GCAskLogin(pid) {
+        let msg = new protos_1.Protos.CS2GS_GCLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2LS_AskSmartLogin(pid) {
+        let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2GS_AskLogin(pid) {
+        let msg = new protos_1.Protos.GS2GC_LoginRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_LS2DB_QueryAccount(pid) {
+        let msg = new protos_1.Protos.DB2LS_QueryAccountRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2LS_AskRegister(pid) {
+        let msg = new protos_1.Protos.LS2GC_AskRegRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_G_AskPing(pid) {
+        let msg = new protos_1.Protos.G_AskPingRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_CS2BS_BattleInfo(pid) {
+        let msg = new protos_1.Protos.BS2CS_BattleInfoRet();
+        msg.opts = new protos_1.Protos.MsgOpts();
+        msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
         msg.opts.rpid = pid;
         return msg;
     }
     static DecodeMsg(msgID, data, size) {
         switch (msgID) {
             case 10: {
-                let msg = Protos.G_AskPing.decode(data, size);
+                let msg = protos_1.Protos.G_AskPing.decode(data, size);
                 return msg;
             }
             case 11: {
-                let msg = Protos.G_AskPingRet.decode(data, size);
+                let msg = protos_1.Protos.G_AskPingRet.decode(data, size);
                 return msg;
             }
             case 1000: {
-                let msg = Protos.GC2LS_AskRegister.decode(data, size);
+                let msg = protos_1.Protos.GC2LS_AskRegister.decode(data, size);
                 return msg;
             }
             case 1001: {
-                let msg = Protos.GC2LS_AskLogin.decode(data, size);
+                let msg = protos_1.Protos.GC2LS_AskLogin.decode(data, size);
                 return msg;
             }
             case 1002: {
-                let msg = Protos.GC2LS_AskSmartLogin.decode(data, size);
+                let msg = protos_1.Protos.GC2LS_AskSmartLogin.decode(data, size);
                 return msg;
             }
             case 1003: {
-                let msg = Protos.GC2LS_AskWXLogin.decode(data, size);
+                let msg = protos_1.Protos.GC2LS_AskWXLogin.decode(data, size);
                 return msg;
             }
             case 1004: {
-                let msg = Protos.GC2LC_UpdateProfile.decode(data, size);
+                let msg = protos_1.Protos.GC2LC_UpdateProfile.decode(data, size);
                 return msg;
             }
             case 1100: {
-                let msg = Protos.GC2GS_AskLogin.decode(data, size);
+                let msg = protos_1.Protos.GC2GS_AskLogin.decode(data, size);
                 return msg;
             }
             case 1101: {
-                let msg = Protos.GC2GS_KeepAlive.decode(data, size);
+                let msg = protos_1.Protos.GC2GS_KeepAlive.decode(data, size);
                 return msg;
             }
             case 1200: {
-                let msg = Protos.GC2BS_AskLogin.decode(data, size);
+                let msg = protos_1.Protos.GC2BS_AskLogin.decode(data, size);
                 return msg;
             }
             case 1201: {
-                let msg = Protos.GC2BS_KeepAlive.decode(data, size);
+                let msg = protos_1.Protos.GC2BS_KeepAlive.decode(data, size);
                 return msg;
             }
             case 1202: {
-                let msg = Protos.GC2BS_RequestSnapshot.decode(data, size);
+                let msg = protos_1.Protos.GC2BS_RequestSnapshot.decode(data, size);
                 return msg;
             }
             case 1203: {
-                let msg = Protos.GC2BS_FrameAction.decode(data, size);
+                let msg = protos_1.Protos.GC2BS_FrameAction.decode(data, size);
                 return msg;
             }
             case 1204: {
-                let msg = Protos.GC2BS_RequestFrameActions.decode(data, size);
+                let msg = protos_1.Protos.GC2BS_RequestFrameActions.decode(data, size);
                 return msg;
             }
             case 1205: {
-                let msg = Protos.GC2BS_CommitSnapshot.decode(data, size);
+                let msg = protos_1.Protos.GC2BS_CommitSnapshot.decode(data, size);
                 return msg;
             }
             case 1206: {
-                let msg = Protos.GC2BS_EndBattle.decode(data, size);
+                let msg = protos_1.Protos.GC2BS_EndBattle.decode(data, size);
                 return msg;
             }
             case 1300: {
-                let msg = Protos.GC2CS_BeginMatch.decode(data, size);
+                let msg = protos_1.Protos.GC2CS_BeginMatch.decode(data, size);
                 return msg;
             }
             case 2000: {
-                let msg = Protos.LS2GC_GSInfo.decode(data, size);
+                let msg = protos_1.Protos.LS2GC_GSInfo.decode(data, size);
                 return msg;
             }
             case 2001: {
-                let msg = Protos.LS2GC_AskRegRet.decode(data, size);
+                let msg = protos_1.Protos.LS2GC_AskRegRet.decode(data, size);
                 return msg;
             }
             case 2002: {
-                let msg = Protos.LS2GC_AskLoginRet.decode(data, size);
+                let msg = protos_1.Protos.LS2GC_AskLoginRet.decode(data, size);
                 return msg;
             }
             case 2100: {
-                let msg = Protos.LS2CS_GCLogin.decode(data, size);
+                let msg = protos_1.Protos.LS2CS_GCLogin.decode(data, size);
                 return msg;
             }
             case 2200: {
-                let msg = Protos.LS2DB_QueryAccount.decode(data, size);
+                let msg = protos_1.Protos.LS2DB_QueryAccount.decode(data, size);
                 return msg;
             }
             case 2201: {
-                let msg = Protos.LS2DB_QueryLogin.decode(data, size);
+                let msg = protos_1.Protos.LS2DB_QueryLogin.decode(data, size);
                 return msg;
             }
             case 2202: {
-                let msg = Protos.LS2DB_Exec.decode(data, size);
+                let msg = protos_1.Protos.LS2DB_Exec.decode(data, size);
                 return msg;
             }
             case 3000: {
-                let msg = Protos.GS2CS_ReportState.decode(data, size);
+                let msg = protos_1.Protos.GS2CS_ReportState.decode(data, size);
                 return msg;
             }
             case 3001: {
-                let msg = Protos.GS2CS_GCAskLogin.decode(data, size);
+                let msg = protos_1.Protos.GS2CS_GCAskLogin.decode(data, size);
                 return msg;
             }
             case 3002: {
-                let msg = Protos.GS2CS_GCLost.decode(data, size);
+                let msg = protos_1.Protos.GS2CS_GCLost.decode(data, size);
                 return msg;
             }
             case 3100: {
-                let msg = Protos.GS2GC_LoginRet.decode(data, size);
+                let msg = protos_1.Protos.GS2GC_LoginRet.decode(data, size);
                 return msg;
             }
             case 3101: {
-                let msg = Protos.GS2GC_Kick.decode(data, size);
+                let msg = protos_1.Protos.GS2GC_Kick.decode(data, size);
                 return msg;
             }
             case 3102: {
-                let msg = Protos.GS2GC_CSLost.decode(data, size);
+                let msg = protos_1.Protos.GS2GC_CSLost.decode(data, size);
                 return msg;
             }
             case 4000: {
-                let msg = Protos.BS2CS_ReportState.decode(data, size);
+                let msg = protos_1.Protos.BS2CS_ReportState.decode(data, size);
                 return msg;
             }
             case 4001: {
-                let msg = Protos.BS2CS_BattleInfoRet.decode(data, size);
+                let msg = protos_1.Protos.BS2CS_BattleInfoRet.decode(data, size);
                 return msg;
             }
             case 4002: {
-                let msg = Protos.BS2CS_BattleEnd.decode(data, size);
+                let msg = protos_1.Protos.BS2CS_BattleEnd.decode(data, size);
                 return msg;
             }
             case 4003: {
-                let msg = Protos.BS2CS_KickUser.decode(data, size);
+                let msg = protos_1.Protos.BS2CS_KickUser.decode(data, size);
                 return msg;
             }
             case 4100: {
-                let msg = Protos.BS2GC_LoginRet.decode(data, size);
+                let msg = protos_1.Protos.BS2GC_LoginRet.decode(data, size);
                 return msg;
             }
             case 4101: {
-                let msg = Protos.BS2GC_RequestSnapshotRet.decode(data, size);
+                let msg = protos_1.Protos.BS2GC_RequestSnapshotRet.decode(data, size);
                 return msg;
             }
             case 4102: {
-                let msg = Protos.BS2GC_FrameAction.decode(data, size);
+                let msg = protos_1.Protos.BS2GC_FrameAction.decode(data, size);
                 return msg;
             }
             case 4103: {
-                let msg = Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
+                let msg = protos_1.Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
                 return msg;
             }
             case 4104: {
-                let msg = Protos.BS2GC_OutOfSync.decode(data, size);
+                let msg = protos_1.Protos.BS2GC_OutOfSync.decode(data, size);
                 return msg;
             }
             case 5000: {
-                let msg = Protos.CS2LS_GSInfos.decode(data, size);
+                let msg = protos_1.Protos.CS2LS_GSInfos.decode(data, size);
                 return msg;
             }
             case 5001: {
-                let msg = Protos.CS2LS_GSInfo.decode(data, size);
+                let msg = protos_1.Protos.CS2LS_GSInfo.decode(data, size);
                 return msg;
             }
             case 5002: {
-                let msg = Protos.CS2LS_GSLost.decode(data, size);
+                let msg = protos_1.Protos.CS2LS_GSLost.decode(data, size);
                 return msg;
             }
             case 5003: {
-                let msg = Protos.CS2LS_GCLoginRet.decode(data, size);
+                let msg = protos_1.Protos.CS2LS_GCLoginRet.decode(data, size);
                 return msg;
             }
             case 5100: {
-                let msg = Protos.CS2GS_GCLoginRet.decode(data, size);
+                let msg = protos_1.Protos.CS2GS_GCLoginRet.decode(data, size);
                 return msg;
             }
             case 5101: {
-                let msg = Protos.CS2GS_KickGC.decode(data, size);
+                let msg = protos_1.Protos.CS2GS_KickGC.decode(data, size);
                 return msg;
             }
             case 5200: {
-                let msg = Protos.CS2BS_BattleInfo.decode(data, size);
+                let msg = protos_1.Protos.CS2BS_BattleInfo.decode(data, size);
                 return msg;
             }
             case 5300: {
-                let msg = Protos.CS2GC_BeginMatchRet.decode(data, size);
+                let msg = protos_1.Protos.CS2GC_BeginMatchRet.decode(data, size);
                 return msg;
             }
             case 5301: {
-                let msg = Protos.CS2GC_PlayerJoin.decode(data, size);
+                let msg = protos_1.Protos.CS2GC_PlayerJoin.decode(data, size);
                 return msg;
             }
             case 5302: {
-                let msg = Protos.CS2GC_PlayerLeave.decode(data, size);
+                let msg = protos_1.Protos.CS2GC_PlayerLeave.decode(data, size);
                 return msg;
             }
             case 5303: {
-                let msg = Protos.CS2GC_RoomInfo.decode(data, size);
+                let msg = protos_1.Protos.CS2GC_RoomInfo.decode(data, size);
                 return msg;
             }
             case 5304: {
-                let msg = Protos.CS2GC_EnterBattle.decode(data, size);
+                let msg = protos_1.Protos.CS2GC_EnterBattle.decode(data, size);
                 return msg;
             }
             case 5305: {
-                let msg = Protos.CS2GC_BattleEnd.decode(data, size);
+                let msg = protos_1.Protos.CS2GC_BattleEnd.decode(data, size);
                 return msg;
             }
             case 5306: {
-                let msg = Protos.CS2GC_BSLose.decode(data, size);
+                let msg = protos_1.Protos.CS2GC_BSLose.decode(data, size);
                 return msg;
             }
             case 8000: {
-                let msg = Protos.DB2LS_QueryAccountRet.decode(data, size);
+                let msg = protos_1.Protos.DB2LS_QueryAccountRet.decode(data, size);
                 return msg;
             }
             case 8001: {
-                let msg = Protos.DB2LS_QueryLoginRet.decode(data, size);
+                let msg = protos_1.Protos.DB2LS_QueryLoginRet.decode(data, size);
                 return msg;
             }
             case 8002: {
-                let msg = Protos.DB2LS_ExecRet.decode(data, size);
+                let msg = protos_1.Protos.DB2LS_ExecRet.decode(data, size);
                 return msg;
             }
         }
         return null;
     }
     static D_G_AskPing(data, size) {
-        let msg = Protos.G_AskPing.decode(data, size);
+        let msg = protos_1.Protos.G_AskPing.decode(data, size);
         return msg;
     }
     static D_G_AskPingRet(data, size) {
-        let msg = Protos.G_AskPingRet.decode(data, size);
+        let msg = protos_1.Protos.G_AskPingRet.decode(data, size);
         return msg;
     }
     static D_GC2LS_AskRegister(data, size) {
-        let msg = Protos.GC2LS_AskRegister.decode(data, size);
+        let msg = protos_1.Protos.GC2LS_AskRegister.decode(data, size);
         return msg;
     }
     static D_GC2LS_AskLogin(data, size) {
-        let msg = Protos.GC2LS_AskLogin.decode(data, size);
+        let msg = protos_1.Protos.GC2LS_AskLogin.decode(data, size);
         return msg;
     }
     static D_GC2LS_AskSmartLogin(data, size) {
-        let msg = Protos.GC2LS_AskSmartLogin.decode(data, size);
+        let msg = protos_1.Protos.GC2LS_AskSmartLogin.decode(data, size);
         return msg;
     }
     static D_GC2LS_AskWXLogin(data, size) {
-        let msg = Protos.GC2LS_AskWXLogin.decode(data, size);
+        let msg = protos_1.Protos.GC2LS_AskWXLogin.decode(data, size);
         return msg;
     }
     static D_GC2LC_UpdateProfile(data, size) {
-        let msg = Protos.GC2LC_UpdateProfile.decode(data, size);
+        let msg = protos_1.Protos.GC2LC_UpdateProfile.decode(data, size);
         return msg;
     }
     static D_GC2GS_AskLogin(data, size) {
-        let msg = Protos.GC2GS_AskLogin.decode(data, size);
+        let msg = protos_1.Protos.GC2GS_AskLogin.decode(data, size);
         return msg;
     }
     static D_GC2GS_KeepAlive(data, size) {
-        let msg = Protos.GC2GS_KeepAlive.decode(data, size);
+        let msg = protos_1.Protos.GC2GS_KeepAlive.decode(data, size);
         return msg;
     }
     static D_GC2BS_AskLogin(data, size) {
-        let msg = Protos.GC2BS_AskLogin.decode(data, size);
+        let msg = protos_1.Protos.GC2BS_AskLogin.decode(data, size);
         return msg;
     }
     static D_GC2BS_KeepAlive(data, size) {
-        let msg = Protos.GC2BS_KeepAlive.decode(data, size);
+        let msg = protos_1.Protos.GC2BS_KeepAlive.decode(data, size);
         return msg;
     }
     static D_GC2BS_RequestSnapshot(data, size) {
-        let msg = Protos.GC2BS_RequestSnapshot.decode(data, size);
+        let msg = protos_1.Protos.GC2BS_RequestSnapshot.decode(data, size);
         return msg;
     }
     static D_GC2BS_FrameAction(data, size) {
-        let msg = Protos.GC2BS_FrameAction.decode(data, size);
+        let msg = protos_1.Protos.GC2BS_FrameAction.decode(data, size);
         return msg;
     }
     static D_GC2BS_RequestFrameActions(data, size) {
-        let msg = Protos.GC2BS_RequestFrameActions.decode(data, size);
+        let msg = protos_1.Protos.GC2BS_RequestFrameActions.decode(data, size);
         return msg;
     }
     static D_GC2BS_CommitSnapshot(data, size) {
-        let msg = Protos.GC2BS_CommitSnapshot.decode(data, size);
+        let msg = protos_1.Protos.GC2BS_CommitSnapshot.decode(data, size);
         return msg;
     }
     static D_GC2BS_EndBattle(data, size) {
-        let msg = Protos.GC2BS_EndBattle.decode(data, size);
+        let msg = protos_1.Protos.GC2BS_EndBattle.decode(data, size);
         return msg;
     }
     static D_GC2CS_BeginMatch(data, size) {
-        let msg = Protos.GC2CS_BeginMatch.decode(data, size);
+        let msg = protos_1.Protos.GC2CS_BeginMatch.decode(data, size);
         return msg;
     }
     static D_LS2GC_GSInfo(data, size) {
-        let msg = Protos.LS2GC_GSInfo.decode(data, size);
+        let msg = protos_1.Protos.LS2GC_GSInfo.decode(data, size);
         return msg;
     }
     static D_LS2GC_AskRegRet(data, size) {
-        let msg = Protos.LS2GC_AskRegRet.decode(data, size);
+        let msg = protos_1.Protos.LS2GC_AskRegRet.decode(data, size);
         return msg;
     }
     static D_LS2GC_AskLoginRet(data, size) {
-        let msg = Protos.LS2GC_AskLoginRet.decode(data, size);
+        let msg = protos_1.Protos.LS2GC_AskLoginRet.decode(data, size);
         return msg;
     }
     static D_LS2CS_GCLogin(data, size) {
-        let msg = Protos.LS2CS_GCLogin.decode(data, size);
+        let msg = protos_1.Protos.LS2CS_GCLogin.decode(data, size);
         return msg;
     }
     static D_LS2DB_QueryAccount(data, size) {
-        let msg = Protos.LS2DB_QueryAccount.decode(data, size);
+        let msg = protos_1.Protos.LS2DB_QueryAccount.decode(data, size);
         return msg;
     }
     static D_LS2DB_QueryLogin(data, size) {
-        let msg = Protos.LS2DB_QueryLogin.decode(data, size);
+        let msg = protos_1.Protos.LS2DB_QueryLogin.decode(data, size);
         return msg;
     }
     static D_LS2DB_Exec(data, size) {
-        let msg = Protos.LS2DB_Exec.decode(data, size);
+        let msg = protos_1.Protos.LS2DB_Exec.decode(data, size);
         return msg;
     }
     static D_GS2CS_ReportState(data, size) {
-        let msg = Protos.GS2CS_ReportState.decode(data, size);
+        let msg = protos_1.Protos.GS2CS_ReportState.decode(data, size);
         return msg;
     }
     static D_GS2CS_GCAskLogin(data, size) {
-        let msg = Protos.GS2CS_GCAskLogin.decode(data, size);
+        let msg = protos_1.Protos.GS2CS_GCAskLogin.decode(data, size);
         return msg;
     }
     static D_GS2CS_GCLost(data, size) {
-        let msg = Protos.GS2CS_GCLost.decode(data, size);
+        let msg = protos_1.Protos.GS2CS_GCLost.decode(data, size);
         return msg;
     }
     static D_GS2GC_LoginRet(data, size) {
-        let msg = Protos.GS2GC_LoginRet.decode(data, size);
+        let msg = protos_1.Protos.GS2GC_LoginRet.decode(data, size);
         return msg;
     }
     static D_GS2GC_Kick(data, size) {
-        let msg = Protos.GS2GC_Kick.decode(data, size);
+        let msg = protos_1.Protos.GS2GC_Kick.decode(data, size);
         return msg;
     }
     static D_GS2GC_CSLost(data, size) {
-        let msg = Protos.GS2GC_CSLost.decode(data, size);
+        let msg = protos_1.Protos.GS2GC_CSLost.decode(data, size);
         return msg;
     }
     static D_BS2CS_ReportState(data, size) {
-        let msg = Protos.BS2CS_ReportState.decode(data, size);
+        let msg = protos_1.Protos.BS2CS_ReportState.decode(data, size);
         return msg;
     }
     static D_BS2CS_BattleInfoRet(data, size) {
-        let msg = Protos.BS2CS_BattleInfoRet.decode(data, size);
+        let msg = protos_1.Protos.BS2CS_BattleInfoRet.decode(data, size);
         return msg;
     }
     static D_BS2CS_BattleEnd(data, size) {
-        let msg = Protos.BS2CS_BattleEnd.decode(data, size);
+        let msg = protos_1.Protos.BS2CS_BattleEnd.decode(data, size);
         return msg;
     }
     static D_BS2CS_KickUser(data, size) {
-        let msg = Protos.BS2CS_KickUser.decode(data, size);
+        let msg = protos_1.Protos.BS2CS_KickUser.decode(data, size);
         return msg;
     }
     static D_BS2GC_LoginRet(data, size) {
-        let msg = Protos.BS2GC_LoginRet.decode(data, size);
+        let msg = protos_1.Protos.BS2GC_LoginRet.decode(data, size);
         return msg;
     }
     static D_BS2GC_RequestSnapshotRet(data, size) {
-        let msg = Protos.BS2GC_RequestSnapshotRet.decode(data, size);
+        let msg = protos_1.Protos.BS2GC_RequestSnapshotRet.decode(data, size);
         return msg;
     }
     static D_BS2GC_FrameAction(data, size) {
-        let msg = Protos.BS2GC_FrameAction.decode(data, size);
+        let msg = protos_1.Protos.BS2GC_FrameAction.decode(data, size);
         return msg;
     }
     static D_BS2GC_RequestFrameActionsRet(data, size) {
-        let msg = Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
+        let msg = protos_1.Protos.BS2GC_RequestFrameActionsRet.decode(data, size);
         return msg;
     }
     static D_BS2GC_OutOfSync(data, size) {
-        let msg = Protos.BS2GC_OutOfSync.decode(data, size);
+        let msg = protos_1.Protos.BS2GC_OutOfSync.decode(data, size);
         return msg;
     }
     static D_CS2LS_GSInfos(data, size) {
-        let msg = Protos.CS2LS_GSInfos.decode(data, size);
+        let msg = protos_1.Protos.CS2LS_GSInfos.decode(data, size);
         return msg;
     }
     static D_CS2LS_GSInfo(data, size) {
-        let msg = Protos.CS2LS_GSInfo.decode(data, size);
+        let msg = protos_1.Protos.CS2LS_GSInfo.decode(data, size);
         return msg;
     }
     static D_CS2LS_GSLost(data, size) {
-        let msg = Protos.CS2LS_GSLost.decode(data, size);
+        let msg = protos_1.Protos.CS2LS_GSLost.decode(data, size);
         return msg;
     }
     static D_CS2LS_GCLoginRet(data, size) {
-        let msg = Protos.CS2LS_GCLoginRet.decode(data, size);
+        let msg = protos_1.Protos.CS2LS_GCLoginRet.decode(data, size);
         return msg;
     }
     static D_CS2GS_GCLoginRet(data, size) {
-        let msg = Protos.CS2GS_GCLoginRet.decode(data, size);
+        let msg = protos_1.Protos.CS2GS_GCLoginRet.decode(data, size);
         return msg;
     }
     static D_CS2GS_KickGC(data, size) {
-        let msg = Protos.CS2GS_KickGC.decode(data, size);
+        let msg = protos_1.Protos.CS2GS_KickGC.decode(data, size);
         return msg;
     }
     static D_CS2BS_BattleInfo(data, size) {
-        let msg = Protos.CS2BS_BattleInfo.decode(data, size);
+        let msg = protos_1.Protos.CS2BS_BattleInfo.decode(data, size);
         return msg;
     }
     static D_CS2GC_BeginMatchRet(data, size) {
-        let msg = Protos.CS2GC_BeginMatchRet.decode(data, size);
+        let msg = protos_1.Protos.CS2GC_BeginMatchRet.decode(data, size);
         return msg;
     }
     static D_CS2GC_PlayerJoin(data, size) {
-        let msg = Protos.CS2GC_PlayerJoin.decode(data, size);
+        let msg = protos_1.Protos.CS2GC_PlayerJoin.decode(data, size);
         return msg;
     }
     static D_CS2GC_PlayerLeave(data, size) {
-        let msg = Protos.CS2GC_PlayerLeave.decode(data, size);
+        let msg = protos_1.Protos.CS2GC_PlayerLeave.decode(data, size);
         return msg;
     }
     static D_CS2GC_RoomInfo(data, size) {
-        let msg = Protos.CS2GC_RoomInfo.decode(data, size);
+        let msg = protos_1.Protos.CS2GC_RoomInfo.decode(data, size);
         return msg;
     }
     static D_CS2GC_EnterBattle(data, size) {
-        let msg = Protos.CS2GC_EnterBattle.decode(data, size);
+        let msg = protos_1.Protos.CS2GC_EnterBattle.decode(data, size);
         return msg;
     }
     static D_CS2GC_BattleEnd(data, size) {
-        let msg = Protos.CS2GC_BattleEnd.decode(data, size);
+        let msg = protos_1.Protos.CS2GC_BattleEnd.decode(data, size);
         return msg;
     }
     static D_CS2GC_BSLose(data, size) {
-        let msg = Protos.CS2GC_BSLose.decode(data, size);
+        let msg = protos_1.Protos.CS2GC_BSLose.decode(data, size);
         return msg;
     }
     static D_DB2LS_QueryAccountRet(data, size) {
-        let msg = Protos.DB2LS_QueryAccountRet.decode(data, size);
+        let msg = protos_1.Protos.DB2LS_QueryAccountRet.decode(data, size);
         return msg;
     }
     static D_DB2LS_QueryLoginRet(data, size) {
-        let msg = Protos.DB2LS_QueryLoginRet.decode(data, size);
+        let msg = protos_1.Protos.DB2LS_QueryLoginRet.decode(data, size);
         return msg;
     }
     static D_DB2LS_ExecRet(data, size) {
-        let msg = Protos.DB2LS_ExecRet.decode(data, size);
+        let msg = protos_1.Protos.DB2LS_ExecRet.decode(data, size);
         return msg;
     }
     static CreateMsgByID(msgID) {
         switch (msgID) {
             case 10: {
-                return new Protos.G_AskPing();
+                return new protos_1.Protos.G_AskPing();
             }
             case 11: {
-                return new Protos.G_AskPingRet();
+                return new protos_1.Protos.G_AskPingRet();
             }
             case 1000: {
-                return new Protos.GC2LS_AskRegister();
+                return new protos_1.Protos.GC2LS_AskRegister();
             }
             case 1001: {
-                return new Protos.GC2LS_AskLogin();
+                return new protos_1.Protos.GC2LS_AskLogin();
             }
             case 1002: {
-                return new Protos.GC2LS_AskSmartLogin();
+                return new protos_1.Protos.GC2LS_AskSmartLogin();
             }
             case 1003: {
-                return new Protos.GC2LS_AskWXLogin();
+                return new protos_1.Protos.GC2LS_AskWXLogin();
             }
             case 1004: {
-                return new Protos.GC2LC_UpdateProfile();
+                return new protos_1.Protos.GC2LC_UpdateProfile();
             }
             case 1100: {
-                return new Protos.GC2GS_AskLogin();
+                return new protos_1.Protos.GC2GS_AskLogin();
             }
             case 1101: {
-                return new Protos.GC2GS_KeepAlive();
+                return new protos_1.Protos.GC2GS_KeepAlive();
             }
             case 1200: {
-                return new Protos.GC2BS_AskLogin();
+                return new protos_1.Protos.GC2BS_AskLogin();
             }
             case 1201: {
-                return new Protos.GC2BS_KeepAlive();
+                return new protos_1.Protos.GC2BS_KeepAlive();
             }
             case 1202: {
-                return new Protos.GC2BS_RequestSnapshot();
+                return new protos_1.Protos.GC2BS_RequestSnapshot();
             }
             case 1203: {
-                return new Protos.GC2BS_FrameAction();
+                return new protos_1.Protos.GC2BS_FrameAction();
             }
             case 1204: {
-                return new Protos.GC2BS_RequestFrameActions();
+                return new protos_1.Protos.GC2BS_RequestFrameActions();
             }
             case 1205: {
-                return new Protos.GC2BS_CommitSnapshot();
+                return new protos_1.Protos.GC2BS_CommitSnapshot();
             }
             case 1206: {
-                return new Protos.GC2BS_EndBattle();
+                return new protos_1.Protos.GC2BS_EndBattle();
             }
             case 1300: {
-                return new Protos.GC2CS_BeginMatch();
+                return new protos_1.Protos.GC2CS_BeginMatch();
             }
             case 2000: {
-                return new Protos.LS2GC_GSInfo();
+                return new protos_1.Protos.LS2GC_GSInfo();
             }
             case 2001: {
-                return new Protos.LS2GC_AskRegRet();
+                return new protos_1.Protos.LS2GC_AskRegRet();
             }
             case 2002: {
-                return new Protos.LS2GC_AskLoginRet();
+                return new protos_1.Protos.LS2GC_AskLoginRet();
             }
             case 2100: {
-                return new Protos.LS2CS_GCLogin();
+                return new protos_1.Protos.LS2CS_GCLogin();
             }
             case 2200: {
-                return new Protos.LS2DB_QueryAccount();
+                return new protos_1.Protos.LS2DB_QueryAccount();
             }
             case 2201: {
-                return new Protos.LS2DB_QueryLogin();
+                return new protos_1.Protos.LS2DB_QueryLogin();
             }
             case 2202: {
-                return new Protos.LS2DB_Exec();
+                return new protos_1.Protos.LS2DB_Exec();
             }
             case 3000: {
-                return new Protos.GS2CS_ReportState();
+                return new protos_1.Protos.GS2CS_ReportState();
             }
             case 3001: {
-                return new Protos.GS2CS_GCAskLogin();
+                return new protos_1.Protos.GS2CS_GCAskLogin();
             }
             case 3002: {
-                return new Protos.GS2CS_GCLost();
+                return new protos_1.Protos.GS2CS_GCLost();
             }
             case 3100: {
-                return new Protos.GS2GC_LoginRet();
+                return new protos_1.Protos.GS2GC_LoginRet();
             }
             case 3101: {
-                return new Protos.GS2GC_Kick();
+                return new protos_1.Protos.GS2GC_Kick();
             }
             case 3102: {
-                return new Protos.GS2GC_CSLost();
+                return new protos_1.Protos.GS2GC_CSLost();
             }
             case 4000: {
-                return new Protos.BS2CS_ReportState();
+                return new protos_1.Protos.BS2CS_ReportState();
             }
             case 4001: {
-                return new Protos.BS2CS_BattleInfoRet();
+                return new protos_1.Protos.BS2CS_BattleInfoRet();
             }
             case 4002: {
-                return new Protos.BS2CS_BattleEnd();
+                return new protos_1.Protos.BS2CS_BattleEnd();
             }
             case 4003: {
-                return new Protos.BS2CS_KickUser();
+                return new protos_1.Protos.BS2CS_KickUser();
             }
             case 4100: {
-                return new Protos.BS2GC_LoginRet();
+                return new protos_1.Protos.BS2GC_LoginRet();
             }
             case 4101: {
-                return new Protos.BS2GC_RequestSnapshotRet();
+                return new protos_1.Protos.BS2GC_RequestSnapshotRet();
             }
             case 4102: {
-                return new Protos.BS2GC_FrameAction();
+                return new protos_1.Protos.BS2GC_FrameAction();
             }
             case 4103: {
-                return new Protos.BS2GC_RequestFrameActionsRet();
+                return new protos_1.Protos.BS2GC_RequestFrameActionsRet();
             }
             case 4104: {
-                return new Protos.BS2GC_OutOfSync();
+                return new protos_1.Protos.BS2GC_OutOfSync();
             }
             case 5000: {
-                return new Protos.CS2LS_GSInfos();
+                return new protos_1.Protos.CS2LS_GSInfos();
             }
             case 5001: {
-                return new Protos.CS2LS_GSInfo();
+                return new protos_1.Protos.CS2LS_GSInfo();
             }
             case 5002: {
-                return new Protos.CS2LS_GSLost();
+                return new protos_1.Protos.CS2LS_GSLost();
             }
             case 5003: {
-                return new Protos.CS2LS_GCLoginRet();
+                return new protos_1.Protos.CS2LS_GCLoginRet();
             }
             case 5100: {
-                return new Protos.CS2GS_GCLoginRet();
+                return new protos_1.Protos.CS2GS_GCLoginRet();
             }
             case 5101: {
-                return new Protos.CS2GS_KickGC();
+                return new protos_1.Protos.CS2GS_KickGC();
             }
             case 5200: {
-                return new Protos.CS2BS_BattleInfo();
+                return new protos_1.Protos.CS2BS_BattleInfo();
             }
             case 5300: {
-                return new Protos.CS2GC_BeginMatchRet();
+                return new protos_1.Protos.CS2GC_BeginMatchRet();
             }
             case 5301: {
-                return new Protos.CS2GC_PlayerJoin();
+                return new protos_1.Protos.CS2GC_PlayerJoin();
             }
             case 5302: {
-                return new Protos.CS2GC_PlayerLeave();
+                return new protos_1.Protos.CS2GC_PlayerLeave();
             }
             case 5303: {
-                return new Protos.CS2GC_RoomInfo();
+                return new protos_1.Protos.CS2GC_RoomInfo();
             }
             case 5304: {
-                return new Protos.CS2GC_EnterBattle();
+                return new protos_1.Protos.CS2GC_EnterBattle();
             }
             case 5305: {
-                return new Protos.CS2GC_BattleEnd();
+                return new protos_1.Protos.CS2GC_BattleEnd();
             }
             case 5306: {
-                return new Protos.CS2GC_BSLose();
+                return new protos_1.Protos.CS2GC_BSLose();
             }
             case 8000: {
-                return new Protos.DB2LS_QueryAccountRet();
+                return new protos_1.Protos.DB2LS_QueryAccountRet();
             }
             case 8001: {
-                return new Protos.DB2LS_QueryLoginRet();
+                return new protos_1.Protos.DB2LS_QueryLoginRet();
             }
             case 8002: {
-                return new Protos.DB2LS_ExecRet();
+                return new protos_1.Protos.DB2LS_ExecRet();
             }
         }
         return null;
@@ -1337,3 +1339,4 @@ export class ProtoCreator {
 ProtoCreator._init = false;
 ProtoCreator._TYPE2ID = new Map();
 ProtoCreator._ID2TYPE = new Map();
+exports.ProtoCreator = ProtoCreator;

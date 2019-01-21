@@ -1,18 +1,20 @@
-import { Global } from "../Global";
-import { Protos } from "../Libs/protos";
-import { UIAlert } from "./UIAlert";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Global_1 = require("../Global");
+const protos_1 = require("../Libs/protos");
+const UIAlert_1 = require("./UIAlert");
 var Mode;
 (function (Mode) {
     Mode[Mode["WXLogin"] = 0] = "WXLogin";
     Mode[Mode["WebLogin"] = 1] = "WebLogin";
 })(Mode || (Mode = {}));
-export class UILogin {
+class UILogin {
     constructor() {
         this._mode = Mode.WXLogin;
         fairygui.UIPackage.addPackage("res/ui/login");
         this._root = fairygui.UIPackage.createObject("login", "Main").asCom;
-        this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
-        this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
+        this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
+        this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._root.getChild("login_btn").onClick(this, this.OnLoginBtnClick);
     }
     set mode(value) {
@@ -34,10 +36,10 @@ export class UILogin {
         this._root.dispose();
     }
     Enter(param) {
-        Global.graphic.uiRoot.addChild(this._root);
+        Global_1.Global.graphic.uiRoot.addChild(this._root);
     }
     Exit() {
-        Global.graphic.uiRoot.removeChild(this._root);
+        Global_1.Global.graphic.uiRoot.removeChild(this._root);
     }
     Update(dt) {
     }
@@ -46,25 +48,25 @@ export class UILogin {
     OnLoginBtnClick() {
         let uname = this._root.getChild("name").asTextField.text;
         if (uname == "") {
-            UIAlert.Show("无效用户名");
+            UIAlert_1.UIAlert.Show("无效用户名");
             return;
         }
         fairygui.GRoot.inst.showModalWait();
-        Global.sceneManager.login.Login(uname);
+        Global_1.Global.sceneManager.login.Login(uname);
     }
     OnLoginResut(resp, callback) {
         fairygui.GRoot.inst.closeModalWait();
         switch (resp.result) {
-            case Protos.LS2GC_AskLoginRet.EResult.Failed:
-                UIAlert.Show("登陆失败", callback);
+            case protos_1.Protos.LS2GC_AskLoginRet.EResult.Failed:
+                UIAlert_1.UIAlert.Show("登陆失败", callback);
                 break;
-            case Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
-                UIAlert.Show("无效用户名", callback);
+            case protos_1.Protos.LS2GC_AskLoginRet.EResult.InvalidUname:
+                UIAlert_1.UIAlert.Show("无效用户名", callback);
                 break;
         }
     }
     OnFail(message, callback = null) {
-        UIAlert.Show(message, callback);
+        UIAlert_1.UIAlert.Show(message, callback);
     }
     ModalWait(value) {
         if (value)
@@ -74,3 +76,4 @@ export class UILogin {
     }
 }
 UILogin.Mode = Mode;
+exports.UILogin = UILogin;

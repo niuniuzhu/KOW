@@ -1,30 +1,33 @@
-import { FMathUtils } from "../../RC/FMath/FMathUtils";
-import { FVec2 } from "../../RC/FMath/FVec2";
-import { Hashtable } from "../../RC/Utils/Hashtable";
-import { Defs } from "../Defs";
-import { IntersectInfo } from "../IntersectInfo";
-import { Skill } from "../Skill";
-import { EAttr } from "./Attribute";
-import { Entity, EntityType } from "./Entity";
-import { EntityFSM } from "./FSM/EntityFSM";
-import { EntityState } from "./FSM/EntityState";
-import { StateType } from "../StateEnums";
-import { InputAgent } from "./InputAagent";
-export class Champion extends Entity {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const FMathUtils_1 = require("../../RC/FMath/FMathUtils");
+const FVec2_1 = require("../../RC/FMath/FVec2");
+const Hashtable_1 = require("../../RC/Utils/Hashtable");
+const Defs_1 = require("../Defs");
+const EntityType_1 = require("../EntityType");
+const IntersectInfo_1 = require("../IntersectInfo");
+const Skill_1 = require("../Skill");
+const StateEnums_1 = require("../StateEnums");
+const Attribute_1 = require("./Attribute");
+const Entity_1 = require("./Entity");
+const EntityFSM_1 = require("./FSM/EntityFSM");
+const EntityState_1 = require("./FSM/EntityState");
+const InputAagent_1 = require("./InputAagent");
+class Champion extends Entity_1.Entity {
     constructor(battle) {
         super(battle);
         this._skills = [];
-        this._fsm = new EntityFSM();
-        this._inputAgent = new InputAgent();
+        this._fsm = new EntityFSM_1.EntityFSM();
+        this._inputAgent = new InputAagent_1.InputAgent();
         this.disableMove = 0;
         this.disableTurn = 0;
         this.disableSkill = 0;
         this.disableCollision = 0;
         this.supperArmor = 0;
         this.invulnerAbility = 0;
-        this.moveDirection = FVec2.zero;
-        this.intersectVector = FVec2.zero;
-        this.phyxSpeed = FVec2.zero;
+        this.moveDirection = FVec2_1.FVec2.zero;
+        this.intersectVector = FVec2_1.FVec2.zero;
+        this.phyxSpeed = FVec2_1.FVec2.zero;
         this.gladiatorTime = -1;
         this.t_hp_add = 0;
         this.t_mp_add = 0;
@@ -34,12 +37,13 @@ export class Champion extends Entity {
         this._intersectionCache = [];
         this._inputAgent.handler = this.HandleInput.bind(this);
     }
-    get type() { return EntityType.Champion; }
+    get type() { return EntityType_1.EntityType.Champion; }
     get fsm() { return this._fsm; }
     get inputAgent() { return this._inputAgent; }
     get radius() { return this._radius; }
     get moveSpeed() { return this._moveSpeed; }
     get numSkills() { return this._skills.length; }
+    get isInGladiator() { return FVec2_1.FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils_1.FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius); }
     get intersectionCache() { return this._intersectionCache; }
     Init(params) {
         super.Init(params);
@@ -47,30 +51,30 @@ export class Champion extends Entity {
         this.name = params.name;
     }
     LoadDefs() {
-        const defs = Defs.GetEntity(this._id);
-        this._radius = Hashtable.GetNumber(defs, "radius");
-        this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
-        const skillsDef = Hashtable.GetNumberArray(defs, "skills");
+        const defs = Defs_1.Defs.GetEntity(this._id);
+        this._radius = Hashtable_1.Hashtable.GetNumber(defs, "radius");
+        this._moveSpeed = Hashtable_1.Hashtable.GetNumber(defs, "move_speed");
+        const skillsDef = Hashtable_1.Hashtable.GetNumberArray(defs, "skills");
         if (skillsDef != null) { }
         for (const sid of skillsDef) {
-            const skill = new Skill();
+            const skill = new Skill_1.Skill();
             skill.Init(sid);
             this._skills.push(skill);
         }
-        const statesDef = Hashtable.GetMap(defs, "states");
+        const statesDef = Hashtable_1.Hashtable.GetMap(defs, "states");
         if (statesDef != null) {
             for (const type in statesDef) {
-                this._fsm.AddState(new EntityState(Number.parseInt(type), this));
+                this._fsm.AddState(new EntityState_1.EntityState(Number.parseInt(type), this));
             }
             this._fsm.Init(statesDef);
-            this._fsm.ChangeState(Hashtable.GetNumber(defs, "default_state"));
+            this._fsm.ChangeState(Hashtable_1.Hashtable.GetNumber(defs, "default_state"));
         }
-        this.hp = this.mhp = Hashtable.GetNumber(defs, "mhp");
-        this.mmp = Hashtable.GetNumber(defs, "mmp");
+        this.hp = this.mhp = Hashtable_1.Hashtable.GetNumber(defs, "mhp");
+        this.mmp = Hashtable_1.Hashtable.GetNumber(defs, "mmp");
         this.mp = 0;
-        this.mpRecover = Hashtable.GetNumber(defs, "mp_recover");
-        this.atk = Hashtable.GetNumber(defs, "atk");
-        this.def = Hashtable.GetNumber(defs, "def");
+        this.mpRecover = Hashtable_1.Hashtable.GetNumber(defs, "mp_recover");
+        this.atk = Hashtable_1.Hashtable.GetNumber(defs, "atk");
+        this.def = Hashtable_1.Hashtable.GetNumber(defs, "def");
     }
     EncodeSnapshot(writer) {
         super.EncodeSnapshot(writer);
@@ -186,9 +190,9 @@ export class Champion extends Entity {
     }
     Update(dt) {
         super.Update(dt);
-        let v = FMathUtils.Add(this.mp, FMathUtils.Mul(this.mpRecover, FMathUtils.Mul(0.001, dt)));
-        v = FMathUtils.Min(v, this.mmp);
-        this.SetAttr(EAttr.MP, v);
+        let v = FMathUtils_1.FMathUtils.Add(this.mp, FMathUtils_1.FMathUtils.Mul(this.mpRecover, FMathUtils_1.FMathUtils.Mul(0.001, dt)));
+        v = FMathUtils_1.FMathUtils.Min(v, this.mmp);
+        this.SetAttr(Attribute_1.EAttr.MP, v);
         this._intersectionCache.splice(0);
         this._fsm.Update(dt);
     }
@@ -199,23 +203,23 @@ export class Champion extends Entity {
             const other = others[i];
             if (other.disableCollision > 0)
                 continue;
-            const d = FVec2.Sub(this.position, other.position);
+            const d = FVec2_1.FVec2.Sub(this.position, other.position);
             const m = d.SqrMagnitude();
-            const r = FMathUtils.Add(this._radius, other._radius);
+            const r = FMathUtils_1.FMathUtils.Add(this._radius, other._radius);
             if (m >= r * r)
                 continue;
-            const sqrtM = FMathUtils.Sqrt(m);
-            const intersectInfo0 = new IntersectInfo();
+            const sqrtM = FMathUtils_1.FMathUtils.Sqrt(m);
+            const intersectInfo0 = new IntersectInfo_1.IntersectInfo();
             intersectInfo0.rid = other.rid;
             intersectInfo0.distanceVector = d;
             intersectInfo0.tRadius = r;
-            intersectInfo0.magnitude = sqrtM == 0 ? FMathUtils.EPSILON : sqrtM;
+            intersectInfo0.magnitude = sqrtM == 0 ? FMathUtils_1.FMathUtils.EPSILON : sqrtM;
             this._intersectionCache.push(intersectInfo0);
-            const intersectInfo1 = new IntersectInfo();
+            const intersectInfo1 = new IntersectInfo_1.IntersectInfo();
             intersectInfo1.rid = this.rid;
-            intersectInfo1.distanceVector = FVec2.Negate(d);
+            intersectInfo1.distanceVector = FVec2_1.FVec2.Negate(d);
             intersectInfo1.tRadius = r;
-            intersectInfo1.magnitude = sqrtM == 0 ? FMathUtils.EPSILON : sqrtM;
+            intersectInfo1.magnitude = sqrtM == 0 ? FMathUtils_1.FMathUtils.EPSILON : sqrtM;
             other._intersectionCache.push(intersectInfo1);
         }
     }
@@ -223,27 +227,26 @@ export class Champion extends Entity {
         this._fsm.UpdatePhysic(dt);
         this.intersectVector.Set(0, 0);
         for (const intersectInfo of this._intersectionCache) {
-            const delta = FMathUtils.Div(intersectInfo.tRadius, intersectInfo.magnitude);
+            const delta = FMathUtils_1.FMathUtils.Div(intersectInfo.tRadius, intersectInfo.magnitude);
             const direction = intersectInfo.distanceVector.DivN(intersectInfo.magnitude);
-            this.intersectVector.Add(FVec2.MulN(direction, delta));
+            this.intersectVector.Add(FVec2_1.FVec2.MulN(direction, delta));
         }
         const sqrMagnitude = this.intersectVector.SqrMagnitude();
-        if (sqrMagnitude > FMathUtils.Mul(this._moveSpeed, this._moveSpeed)) {
-            this.intersectVector.DivN(FMathUtils.Sqrt(sqrMagnitude));
+        if (sqrMagnitude > FMathUtils_1.FMathUtils.Mul(this._moveSpeed, this._moveSpeed)) {
+            this.intersectVector.DivN(FMathUtils_1.FMathUtils.Sqrt(sqrMagnitude));
             this.intersectVector.MulN(this._moveSpeed);
         }
     }
     AfterUpdate(dt) {
         this.MoveStep(dt);
-        this.ProcessGladiator(dt);
     }
     MoveStep(dt) {
-        const moveVector = FVec2.zero;
+        const moveVector = FVec2_1.FVec2.zero;
         if (this.disableMove <= 0) {
             moveVector.CopyFrom(this.moveDirection);
         }
         let sqrtDis = moveVector.SqrMagnitude();
-        if (sqrtDis >= FMathUtils.EPSILON) {
+        if (sqrtDis >= FMathUtils_1.FMathUtils.EPSILON) {
             if (this.disableTurn <= 0) {
                 this.direction.CopyFrom(this.moveDirection);
             }
@@ -252,38 +255,23 @@ export class Champion extends Entity {
         moveVector.Add(this.intersectVector);
         moveVector.Add(this.phyxSpeed);
         sqrtDis = moveVector.SqrMagnitude();
-        if (sqrtDis < FMathUtils.EPSILON) {
+        if (sqrtDis < FMathUtils_1.FMathUtils.EPSILON) {
             this.velocity = 0;
             return;
         }
-        this.velocity = FMathUtils.Sqrt(sqrtDis);
-        const moveDelta = FVec2.MulN(moveVector, FMathUtils.Mul(0.001, dt));
-        const pos = FVec2.Add(this.position, moveDelta);
-        pos.x = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.xMin, this._radius), pos.x);
-        pos.x = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.xMax, this._radius), pos.x);
-        pos.y = FMathUtils.Max(FMathUtils.Add(this._battle.bounds.yMin, this._radius), pos.y);
-        pos.y = FMathUtils.Min(FMathUtils.Sub(this._battle.bounds.yMax, this._radius), pos.y);
+        this.velocity = FMathUtils_1.FMathUtils.Sqrt(sqrtDis);
+        const moveDelta = FVec2_1.FVec2.MulN(moveVector, FMathUtils_1.FMathUtils.Mul(0.001, dt));
+        const pos = FVec2_1.FVec2.Add(this.position, moveDelta);
+        pos.x = FMathUtils_1.FMathUtils.Max(this._battle.bounds.xMin, pos.x);
+        pos.x = FMathUtils_1.FMathUtils.Min(this._battle.bounds.xMax, pos.x);
+        pos.y = FMathUtils_1.FMathUtils.Max(this._battle.bounds.yMin, pos.y);
+        pos.y = FMathUtils_1.FMathUtils.Min(this._battle.bounds.yMax, pos.y);
         this.position.CopyFrom(pos);
     }
-    ProcessGladiator(dt) {
-        const isInGladiator = FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius);
-        if (this.gladiatorTime == -1 && isInGladiator) {
-            this.OnEnterGladiator();
-        }
-        if (this.gladiatorTime >= 0 && !isInGladiator) {
-            this.OnExitGladiator();
-        }
-        if (isInGladiator) {
-            this.gladiatorTime += dt;
-            if (this.gladiatorTime > this._battle.gladiatorTimeout)
-                this.gladiatorTime = this._battle.gladiatorTimeout;
-        }
-    }
-    OnEnterGladiator() {
-        this.gladiatorTime = 0;
-    }
-    OnExitGladiator() {
-        this.gladiatorTime = -1;
+    UpdateGladiator(dt) {
+        this.gladiatorTime += dt;
+        if (this.gladiatorTime > this._battle.gladiatorTimeout)
+            this.gladiatorTime = this._battle.gladiatorTimeout;
     }
     UpdateAfterHit() {
         if (this.hp <= 0) {
@@ -292,7 +280,7 @@ export class Champion extends Entity {
     }
     Die() {
         this.isDead = true;
-        this._fsm.ChangeState(StateType.Die, null, true, true);
+        this._fsm.ChangeState(StateEnums_1.StateType.Die, null, true, true);
     }
     UseSkill(sid) {
         if (this.disableSkill > 0)
@@ -313,105 +301,105 @@ export class Champion extends Entity {
     }
     SetAttr(attr, value) {
         switch (attr) {
-            case EAttr.HP:
-                value = FMathUtils.Clamp(value, 0, this.mhp);
+            case Attribute_1.EAttr.HP:
+                value = FMathUtils_1.FMathUtils.Clamp(value, 0, this.mhp);
                 this.hp = value;
                 break;
-            case EAttr.MHP:
+            case Attribute_1.EAttr.MHP:
                 value = value < 0 ? 0 : value;
                 this.mhp = value;
                 break;
-            case EAttr.MP:
-                value = FMathUtils.Clamp(value, 0, this.mmp);
+            case Attribute_1.EAttr.MP:
+                value = FMathUtils_1.FMathUtils.Clamp(value, 0, this.mmp);
                 this.mp = value;
                 break;
-            case EAttr.MMP:
+            case Attribute_1.EAttr.MMP:
                 value = value < 0 ? 0 : value;
                 this.mmp = value;
                 break;
-            case EAttr.ATK:
+            case Attribute_1.EAttr.ATK:
                 value = value < 0 ? 0 : value;
                 this.atk = value;
                 break;
-            case EAttr.DEF:
+            case Attribute_1.EAttr.DEF:
                 value = value < 0 ? 0 : value;
                 this.def = value;
                 break;
-            case EAttr.S_DISABLE_MOVE:
+            case Attribute_1.EAttr.S_DISABLE_MOVE:
                 this.disableMove = value;
                 break;
-            case EAttr.S_DISABLE_TURN:
+            case Attribute_1.EAttr.S_DISABLE_TURN:
                 this.disableTurn = value;
                 break;
-            case EAttr.S_DISABLE_SKILL:
+            case Attribute_1.EAttr.S_DISABLE_SKILL:
                 this.disableSkill = value;
                 break;
-            case EAttr.S_DISABLE_COLLISION:
+            case Attribute_1.EAttr.S_DISABLE_COLLISION:
                 this.disableCollision = value;
                 break;
-            case EAttr.S_SUPPER_ARMOR:
+            case Attribute_1.EAttr.S_SUPPER_ARMOR:
                 this.supperArmor = value;
                 break;
-            case EAttr.S_INVULNER_ABILITY:
+            case Attribute_1.EAttr.S_INVULNER_ABILITY:
                 this.invulnerAbility = value;
                 break;
-            case EAttr.GLADIATOR_TIME:
+            case Attribute_1.EAttr.GLADIATOR_TIME:
                 this.gladiatorTime = value;
                 break;
-            case EAttr.S_HP_ADD:
+            case Attribute_1.EAttr.S_HP_ADD:
                 this.t_hp_add = value;
                 break;
-            case EAttr.S_MP_ADD:
+            case Attribute_1.EAttr.S_MP_ADD:
                 this.t_mp_add = value;
                 break;
-            case EAttr.S_ATK_ADD:
+            case Attribute_1.EAttr.S_ATK_ADD:
                 this.t_atk_add = value;
                 break;
-            case EAttr.S_DEF_ADD:
+            case Attribute_1.EAttr.S_DEF_ADD:
                 this.t_def_add = value;
                 break;
-            case EAttr.S_SPEED_ADD:
+            case Attribute_1.EAttr.S_SPEED_ADD:
                 this.t_speed_add = value;
                 break;
         }
     }
     GetAttr(attr) {
         switch (attr) {
-            case EAttr.HP:
+            case Attribute_1.EAttr.HP:
                 return this.hp;
-            case EAttr.MHP:
+            case Attribute_1.EAttr.MHP:
                 return this.mhp;
-            case EAttr.MP:
+            case Attribute_1.EAttr.MP:
                 return this.mp;
-            case EAttr.MMP:
+            case Attribute_1.EAttr.MMP:
                 return this.mmp;
-            case EAttr.ATK:
+            case Attribute_1.EAttr.ATK:
                 return this.atk;
-            case EAttr.DEF:
+            case Attribute_1.EAttr.DEF:
                 return this.def;
-            case EAttr.S_DISABLE_MOVE:
+            case Attribute_1.EAttr.S_DISABLE_MOVE:
                 return this.disableMove;
-            case EAttr.S_DISABLE_TURN:
+            case Attribute_1.EAttr.S_DISABLE_TURN:
                 return this.disableTurn;
-            case EAttr.S_DISABLE_SKILL:
+            case Attribute_1.EAttr.S_DISABLE_SKILL:
                 return this.disableSkill;
-            case EAttr.S_DISABLE_COLLISION:
+            case Attribute_1.EAttr.S_DISABLE_COLLISION:
                 return this.disableCollision;
-            case EAttr.S_SUPPER_ARMOR:
+            case Attribute_1.EAttr.S_SUPPER_ARMOR:
                 return this.supperArmor;
-            case EAttr.S_INVULNER_ABILITY:
+            case Attribute_1.EAttr.S_INVULNER_ABILITY:
                 return this.invulnerAbility;
-            case EAttr.GLADIATOR_TIME:
+            case Attribute_1.EAttr.GLADIATOR_TIME:
                 return this.gladiatorTime;
-            case EAttr.S_HP_ADD:
+            case Attribute_1.EAttr.S_HP_ADD:
                 return this.t_hp_add;
-            case EAttr.S_MP_ADD:
+            case Attribute_1.EAttr.S_MP_ADD:
                 return this.t_mp_add;
-            case EAttr.S_ATK_ADD:
+            case Attribute_1.EAttr.S_ATK_ADD:
                 return this.t_atk_add;
-            case EAttr.S_DEF_ADD:
+            case Attribute_1.EAttr.S_DEF_ADD:
                 return this.t_def_add;
-            case EAttr.S_SPEED_ADD:
+            case Attribute_1.EAttr.S_SPEED_ADD:
                 return this.t_speed_add;
         }
     }
@@ -428,3 +416,4 @@ export class Champion extends Entity {
         return str;
     }
 }
+exports.Champion = Champion;

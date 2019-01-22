@@ -1,4 +1,4 @@
-import * as util from './util';
+import * as util from './Util';
 
 /**
  * Returns the position of the first occurrence of the specified item

@@ -1,6 +1,6 @@
-import * as util from './util';
+import * as util from './Util';
 
-import * as arrays from './arrays';
+import * as arrays from './Arrays';
 
 import Dictionary from './Dictionary';
 

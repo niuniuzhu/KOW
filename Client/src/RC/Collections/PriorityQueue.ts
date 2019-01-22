@@ -1,6 +1,6 @@
 import Heap from "./Heap";
 import { util } from "./index";
-import { ICompareFunction, ILoopFunction } from "./util";
+import { ICompareFunction, ILoopFunction } from "./Util";
 
 export default class PriorityQueue<T> {
 

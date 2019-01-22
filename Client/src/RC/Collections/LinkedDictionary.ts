@@ -1,6 +1,6 @@
 import {IDictionaryPair, default as Dictionary} from './Dictionary';
 
-import * as util from './util';
+import * as util from './Util';
 
 /**
  * This class is used by the LinkedDictionary Internally

@@ -1,5 +1,5 @@
 import Dictionary from './Dictionary';
-import * as util from './util';
+import * as util from './Util';
 
 export default class FactoryDictionary<K, V> extends Dictionary<K, V> {
 

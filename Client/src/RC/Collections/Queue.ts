@@ -1,4 +1,4 @@
-import * as util from './util';
+import * as util from './Util';
 import LinkedList from './LinkedList';
 import Heap from './Heap';
 

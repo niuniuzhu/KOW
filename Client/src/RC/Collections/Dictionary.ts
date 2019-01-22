@@ -1,5 +1,5 @@
-import * as util from './util';
-import * as arrays from './arrays';
+import * as util from './Util';
+import * as arrays from './Arrays';
 
 // Used internally by dictionary
 export interface IDictionaryPair<K, V> {

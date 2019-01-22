@@ -1,5 +1,5 @@
-import * as collections from './util';
-import * as arrays from './arrays';
+import * as collections from './Util';
+import * as arrays from './Arrays';
 
 export default class Heap<T> {
     /**

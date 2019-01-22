@@ -1,6 +1,6 @@
-import * as util from './util';
+import * as util from './Util';
 import Dictionary from './Dictionary';
-import * as arrays from './arrays';
+import * as arrays from './Arrays';
 
 export default class MultiDictionary<K, V> {
 

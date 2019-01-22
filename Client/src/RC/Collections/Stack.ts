@@ -1,5 +1,5 @@
 import LinkedList from './LinkedList';
-import * as util from './util';
+import * as util from './Util';
 
 export default class Stack<T> {
     /**

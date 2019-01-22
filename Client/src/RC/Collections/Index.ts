@@ -4,7 +4,7 @@
 //
 // Orginal javascript code was by Mauricio Santos
 //
-import * as _arrays from './arrays';
+import * as _arrays from './Arrays';
 export var arrays = _arrays;
 export {default as Bag} from './Bag';
 export {default as BSTree} from './BSTree';
@@ -19,5 +19,5 @@ export {default as Queue} from './Queue';
 export {default as PriorityQueue} from './PriorityQueue';
 export {default as Set} from './Set';
 export {default as Stack} from './Stack';
-import * as _util from './util';
+import * as _util from './Util';
 export var util = _util;

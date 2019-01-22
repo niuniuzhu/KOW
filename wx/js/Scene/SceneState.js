@@ -1,4 +1,4 @@
-import { FSMState } from "../RC/FSM/FSMState";
+import { FSMState } from "../RC/Framework/FSM/FSMState";
 export class SceneState extends FSMState {
     constructor(type) {
         super(type);

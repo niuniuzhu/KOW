@@ -4,7 +4,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Build client",
+			"label": "Build web",
 			"type": "shell",
 			"command": "tsc",
 			"args": [
@@ -21,7 +21,7 @@
 			]
 		},
 		{
-			"label": "Build wx",
+			"label": "Build wechat",
 			"type": "shell",
 			"command": "tsc",
 			"args": [

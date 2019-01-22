@@ -1,4 +1,4 @@
-import { FSM } from "../../../RC/FSM/FSM";
+import { FSM } from "../../../RC/Framework/FSM/FSM";
 import { EntityStateContext } from "./EntityStateContext";
 export class EntityFSM extends FSM {
     constructor() {

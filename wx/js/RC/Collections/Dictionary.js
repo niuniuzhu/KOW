@@ -1,4 +1,4 @@
-import * as util from './util';
+import * as util from './Util';
 export default class Dictionary {
     constructor(toStrFunction) {
         this.table = {};

@@ -1,5 +1,5 @@
 import Set from "../../../RC/Collections/Set";
-import { FSMState } from "../../../RC/FSM/FSMState";
+import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { IntrptCollider } from "./Interrupt/IntrptCollider";
 import { IntrptInput } from "./Interrupt/IntrptInput";

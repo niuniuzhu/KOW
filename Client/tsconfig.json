@@ -9,7 +9,7 @@
 		"sourceMap": true,
 		"removeComments": true,
 		"alwaysStrict": true,
-		//"experimentalDecorators": true,
+		"experimentalDecorators": true,
 		//"emitDecoratorMetadata": true,
 		// "strict": true,
 		// "noImplicitReturns": true

@@ -1,4 +1,4 @@
-import * as util from './util';
+import * as util from './Util';
 import Dictionary from './Dictionary';
 import Set from './Set';
 export default class Bag {

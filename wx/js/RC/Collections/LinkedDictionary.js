@@ -1,5 +1,5 @@
 import { default as Dictionary } from './Dictionary';
-import * as util from './util';
+import * as util from './Util';
 class LinkedDictionaryPair {
     constructor(key, value) {
         this.key = key;

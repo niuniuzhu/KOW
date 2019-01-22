@@ -1,4 +1,4 @@
-import * as util from './util';
+import * as util from './Util';
 import Queue from './Queue';
 export default class BSTreeKV {
     constructor(compareFunction) {

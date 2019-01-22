@@ -1,4 +1,4 @@
-import { FSM } from "../../RC/FSM/FSM";
+import { FSM } from "../../RC/Framework/FSM/FSM";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { UIEvent } from "../BattleEvent/UIEvent";

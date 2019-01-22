@@ -1,6 +1,6 @@
-import { FSMStateAction } from "../../../RC/FSM/FSMStateAction";
+import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-export class EntityStateAction extends FSMStateAction {
+export class EntityStateAction extends AbstractAction {
     get time() { return this.state.time; }
     get intrptTime() { return this.state.time - this._triggerTime; }
     constructor(state, type, def) {

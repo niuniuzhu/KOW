@@ -1,5 +1,5 @@
-import * as util from './util';
-import * as arrays from './arrays';
+import * as util from './Util';
+import * as arrays from './Arrays';
 export default class LinkedList {
     constructor() {
         this.firstNode = null;

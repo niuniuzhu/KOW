@@ -1,4 +1,4 @@
-import * as util from './util';
+import * as util from './Util';
 export function indexOf(array, item, equalsFunction) {
     const equals = equalsFunction || util.defaultEquals;
     const length = array.length;

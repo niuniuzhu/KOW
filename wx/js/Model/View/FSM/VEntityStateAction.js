@@ -1,6 +1,6 @@
-import { FSMStateAction } from "../../../RC/FSM/FSMStateAction";
+import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-export class VEntityStateAction extends FSMStateAction {
+export class VEntityStateAction extends AbstractAction {
     constructor(state, type, def) {
         super(state, type);
         this.OnInit(def);

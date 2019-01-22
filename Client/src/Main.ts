@@ -28,12 +28,11 @@ export class Main {
 		Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
 		Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
 		// laya.utils.Stat.show(0, 0);
-		fairygui.UIConfig.packageFileExtension = "bin";
-
 		this.ShowLogo();
 	}
 
 	private ShowLogo(): void {
+		fairygui.UIConfig.packageFileExtension = "bin";
 		AssetsManager.LoadUIPacket("logo", 1, this, () => {
 			Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
 			fairygui.UIPackage.addPackage("res/ui/logo");

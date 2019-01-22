@@ -1,7 +1,7 @@
-define(["require", "exports", "../../../RC/FSM/FSMStateAction", "../../../RC/Utils/Hashtable"], function (require, exports, FSMStateAction_1, Hashtable_1) {
+define(["require", "exports", "../../../RC/Framework/Actions/AbstractAction", "../../../RC/Utils/Hashtable"], function (require, exports, AbstractAction_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class EntityStateAction extends FSMStateAction_1.FSMStateAction {
+    class EntityStateAction extends AbstractAction_1.AbstractAction {
         get time() { return this.state.time; }
         get intrptTime() { return this.state.time - this._triggerTime; }
         constructor(state, type, def) {

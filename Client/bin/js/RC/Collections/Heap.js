@@ -1,4 +1,4 @@
-define(["require", "exports", "./util", "./arrays"], function (require, exports, collections, arrays) {
+define(["require", "exports", "./Util", "./Arrays"], function (require, exports, collections, arrays) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Heap {

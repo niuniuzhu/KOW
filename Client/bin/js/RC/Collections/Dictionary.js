@@ -1,4 +1,4 @@
-define(["require", "exports", "./util"], function (require, exports, util) {
+define(["require", "exports", "./Util"], function (require, exports, util) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Dictionary {

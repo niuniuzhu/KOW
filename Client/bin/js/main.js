@@ -14,10 +14,10 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
             Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
             Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
             Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
-            fairygui.UIConfig.packageFileExtension = "bin";
             this.ShowLogo();
         }
         ShowLogo() {
+            fairygui.UIConfig.packageFileExtension = "bin";
             AssetsManager_1.AssetsManager.LoadUIPacket("logo", 1, this, () => {
                 Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
                 fairygui.UIPackage.addPackage("res/ui/logo");

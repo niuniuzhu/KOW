@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/Collections/Set", "../../../RC/FSM/FSMState", "../../../RC/Utils/Hashtable", "./Interrupt/IntrptCollider", "./Interrupt/IntrptInput", "./Interrupt/IntrptTimeup", "../../StateEnums"], function (require, exports, Set_1, FSMState_1, Hashtable_1, IntrptCollider_1, IntrptInput_1, IntrptTimeup_1, StateEnums_1) {
+define(["require", "exports", "../../../RC/Collections/Set", "../../../RC/Framework/FSM/FSMState", "../../../RC/Utils/Hashtable", "./Interrupt/IntrptCollider", "./Interrupt/IntrptInput", "./Interrupt/IntrptTimeup", "../../StateEnums"], function (require, exports, Set_1, FSMState_1, Hashtable_1, IntrptCollider_1, IntrptInput_1, IntrptTimeup_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityState extends FSMState_1.FSMState {

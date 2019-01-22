@@ -1,4 +1,4 @@
-import { FSMState } from "../RC/FSM/FSMState";
+import { FSMState } from "../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../RC/Utils/Hashtable";
 import { ActAttack } from "./Logic/FSM/ActAttack";
 import { ActEntityAttrs } from "./Logic/FSM/ActEntityAttrs";

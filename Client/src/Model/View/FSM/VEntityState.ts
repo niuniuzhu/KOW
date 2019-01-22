@@ -1,4 +1,4 @@
-import { FSMState } from "../../../RC/FSM/FSMState";
+import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { V_ID_TO_STATE_ACTION } from "../../StateEnums";
 import { VEntity } from "../VEntity";

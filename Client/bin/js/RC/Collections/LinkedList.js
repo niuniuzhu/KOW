@@ -1,4 +1,4 @@
-define(["require", "exports", "./util", "./arrays"], function (require, exports, util, arrays) {
+define(["require", "exports", "./Util", "./Arrays"], function (require, exports, util, arrays) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class LinkedList {

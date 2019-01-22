@@ -1,4 +1,4 @@
-import { FSM } from "../RC/FSM/FSM";
+import { FSM } from "../RC/Framework/FSM/FSM";
 import { MainState } from "./MainState";
 import { LoginState } from "./LoginState";
 import { GlobalState } from "./GlobalState";

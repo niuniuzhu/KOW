@@ -1,5 +1,5 @@
 import { IUIModule } from "../UI/IUIModule";
-import { FSMState } from "../RC/FSM/FSMState";
+import { FSMState } from "../RC/Framework/FSM/FSMState";
 
 export class SceneState extends FSMState {
 	protected __ui: IUIModule;

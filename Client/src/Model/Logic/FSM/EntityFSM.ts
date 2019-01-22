@@ -1,5 +1,5 @@
 import * as $protobuf from "../../../Libs/protobufjs";
-import { FSM } from "../../../RC/FSM/FSM";
+import { FSM } from "../../../RC/Framework/FSM/FSM";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
 import { StateType } from "../../StateEnums";

@@ -1,4 +1,4 @@
-define(["require", "exports", "./util", "./Dictionary", "./Set"], function (require, exports, util, Dictionary_1, Set_1) {
+define(["require", "exports", "./Util", "./Dictionary", "./Set"], function (require, exports, util, Dictionary_1, Set_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Bag {

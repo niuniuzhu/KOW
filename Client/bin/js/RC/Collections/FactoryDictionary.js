@@ -1,4 +1,4 @@
-define(["require", "exports", "./Dictionary", "./util"], function (require, exports, Dictionary_1, util) {
+define(["require", "exports", "./Dictionary", "./Util"], function (require, exports, Dictionary_1, util) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class FactoryDictionary extends Dictionary_1.default {

@@ -1,4 +1,4 @@
-define(["require", "exports", "../RC/FSM/FSMState"], function (require, exports, FSMState_1) {
+define(["require", "exports", "../RC/Framework/FSM/FSMState"], function (require, exports, FSMState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class SceneState extends FSMState_1.FSMState {

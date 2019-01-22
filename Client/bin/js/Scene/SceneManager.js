@@ -1,4 +1,4 @@
-define(["require", "exports", "../RC/FSM/FSM", "./MainState", "./LoginState", "./GlobalState", "./MatchingState", "./BattleState", "./LoadingState"], function (require, exports, FSM_1, MainState_1, LoginState_1, GlobalState_1, MatchingState_1, BattleState_1, LoadingState_1) {
+define(["require", "exports", "../RC/Framework/FSM/FSM", "./MainState", "./LoginState", "./GlobalState", "./MatchingState", "./BattleState", "./LoadingState"], function (require, exports, FSM_1, MainState_1, LoginState_1, GlobalState_1, MatchingState_1, BattleState_1, LoadingState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var State;

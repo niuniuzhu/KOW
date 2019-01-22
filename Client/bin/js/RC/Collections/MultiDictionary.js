@@ -1,4 +1,4 @@
-define(["require", "exports", "./util", "./Dictionary", "./arrays"], function (require, exports, util, Dictionary_1, arrays) {
+define(["require", "exports", "./Util", "./Dictionary", "./Arrays"], function (require, exports, util, Dictionary_1, arrays) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class MultiDictionary {

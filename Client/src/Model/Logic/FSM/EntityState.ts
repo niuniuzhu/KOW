@@ -1,6 +1,6 @@
 import * as $protobuf from "../../../Libs/protobufjs";
 import Set from "../../../RC/Collections/Set";
-import { FSMState } from "../../../RC/FSM/FSMState";
+import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
 import { Champion } from "../Champion";

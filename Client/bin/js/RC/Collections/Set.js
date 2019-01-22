@@ -1,4 +1,4 @@
-define(["require", "exports", "./util", "./arrays", "./Dictionary"], function (require, exports, util, arrays, Dictionary_1) {
+define(["require", "exports", "./Util", "./Arrays", "./Dictionary"], function (require, exports, util, arrays, Dictionary_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Set {

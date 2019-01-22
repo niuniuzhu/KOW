@@ -1,9 +1,9 @@
-import { FSMStateAction } from "./FSMStateAction";
+import { AbstractAction } from "../Actions/AbstractAction";
 
 export class FSMState {
 	protected readonly _type: number;
-	protected readonly _actions: FSMStateAction[] = [];
-	protected readonly _typeToAction = new Map<number, FSMStateAction>();
+	protected readonly _actions: AbstractAction[] = [];
+	protected readonly _typeToAction = new Map<number, AbstractAction>();
 
 	public get type(): number { return this._type; }
 
@@ -11,7 +11,7 @@ export class FSMState {
 		this._type = type;
 	}
 
-	public AddAction(action: FSMStateAction): boolean {
+	public AddAction(action: AbstractAction): boolean {
 		if (this._typeToAction.has(action.type))
 			return false;
 		this._typeToAction.set(action.type, action);
@@ -27,7 +27,7 @@ export class FSMState {
 		this._actions.splice(this._actions.indexOf(action), 1);
 	}
 
-	public GetAction(id: number): FSMStateAction {
+	public GetAction(id: number): AbstractAction {
 		return this._typeToAction.get(id);
 	}
 

@@ -1,7 +1,7 @@
-define(["require", "exports", "../../../RC/FSM/FSMStateAction", "../../../RC/Utils/Hashtable"], function (require, exports, FSMStateAction_1, Hashtable_1) {
+define(["require", "exports", "../../../RC/Framework/Actions/AbstractAction", "../../../RC/Utils/Hashtable"], function (require, exports, AbstractAction_1, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class VEntityStateAction extends FSMStateAction_1.FSMStateAction {
+    class VEntityStateAction extends AbstractAction_1.AbstractAction {
         constructor(state, type, def) {
             super(state, type);
             this.OnInit(def);

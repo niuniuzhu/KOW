@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/FSM/FSM", "./EntityStateContext"], function (require, exports, FSM_1, EntityStateContext_1) {
+define(["require", "exports", "../../../RC/Framework/FSM/FSM", "./EntityStateContext"], function (require, exports, FSM_1, EntityStateContext_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityFSM extends FSM_1.FSM {

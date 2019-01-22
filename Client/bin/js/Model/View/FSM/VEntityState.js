@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/FSM/FSMState", "../../../RC/Utils/Hashtable", "../../StateEnums"], function (require, exports, FSMState_1, Hashtable_1, StateEnums_1) {
+define(["require", "exports", "../../../RC/Framework/FSM/FSMState", "../../../RC/Utils/Hashtable", "../../StateEnums"], function (require, exports, FSMState_1, Hashtable_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntityState extends FSMState_1.FSMState {

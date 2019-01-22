@@ -1,10 +1,10 @@
-import { FSMState } from "../../../RC/FSM/FSMState";
-import { FSMStateAction } from "../../../RC/FSM/FSMStateAction";
+import { FSMState } from "../../../RC/Framework/FSM/FSMState";
+import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { VActionType } from "../../StateEnums";
 import { VEntityState } from "./VEntityState";
 
-export class VEntityStateAction extends FSMStateAction {
+export class VEntityStateAction extends AbstractAction {
 	private _triggerTime: number;
 	private _isTriggered: boolean;
 

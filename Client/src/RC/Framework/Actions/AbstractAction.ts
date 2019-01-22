@@ -1,6 +1,6 @@
-import { FSMState } from "./FSMState";
+import { FSMState } from "../FSM/FSMState";
 
-export class FSMStateAction {
+export class AbstractAction {
 	public get type(): number { return this._type; }
 	public get state(): FSMState { return this._state; }
 

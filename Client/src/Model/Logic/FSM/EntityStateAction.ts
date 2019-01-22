@@ -1,13 +1,13 @@
 import * as $protobuf from "../../../Libs/protobufjs";
-import { FSMState } from "../../../RC/FSM/FSMState";
-import { FSMStateAction } from "../../../RC/FSM/FSMStateAction";
+import { FSMState } from "../../../RC/Framework/FSM/FSMState";
+import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../../ISnapshotable";
 import { InputType } from "../InputAagent";
 import { EntityState } from "./EntityState";
 import { ActionType } from "../../StateEnums";
 
-export class EntityStateAction extends FSMStateAction implements ISnapshotable {
+export class EntityStateAction extends AbstractAction implements ISnapshotable {
 	/**
 	 * 获取总运行时间
 	 */

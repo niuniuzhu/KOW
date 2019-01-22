@@ -1,10 +1,11 @@
-define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../StateEnums", "../../../../RC/Utils/Logger"], function (require, exports, Hashtable_1, StateEnums_1, Logger_1) {
+define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../../RC/Utils/Logger", "../../../StateEnums"], function (require, exports, Hashtable_1, Logger_1, StateEnums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var FilterType;
     (function (FilterType) {
         FilterType[FilterType["AttrToAttr"] = 0] = "AttrToAttr";
         FilterType[FilterType["AttrToValue"] = 1] = "AttrToValue";
+        FilterType[FilterType["State"] = 2] = "State";
     })(FilterType || (FilterType = {}));
     var Op;
     (function (Op) {
@@ -24,8 +25,9 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../StateE
     })(FilterRel || (FilterRel = {}));
     var IntrptType;
     (function (IntrptType) {
-        IntrptType[IntrptType["State"] = 0] = "State";
+        IntrptType[IntrptType["Attr"] = 0] = "Attr";
         IntrptType[IntrptType["Skill"] = 1] = "Skill";
+        IntrptType[IntrptType["State"] = 2] = "State";
     })(IntrptType || (IntrptType = {}));
     class IntrptBase {
         constructor(state, def) {
@@ -132,6 +134,10 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../StateE
                         v0 = owner.GetAttr(intrptFilter.attr0);
                         v1 = intrptFilter.value;
                         break;
+                    case FilterType.State:
+                        v0 = owner.fsm.currentEntityState.type;
+                        v1 = intrptFilter.value;
+                        break;
                 }
                 switch (intrptFilter.op) {
                     case Op.Equal:
@@ -160,7 +166,7 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../StateE
         ChangeState(igroneIntrptList = true, force = true) {
             const owner = this._state.owner;
             switch (this._intrptType) {
-                case IntrptType.State:
+                case IntrptType.Attr:
                     owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
                     break;
                 case IntrptType.Skill:

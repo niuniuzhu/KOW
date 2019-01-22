@@ -13,10 +13,14 @@ import { VEntityAction } from "./View/FSM/VEntityAction";
 import { VChampion } from "./View/VChampion";
 
 export enum StateType {
-	Idle,
-	Move,
-	Attack,
-	Die = 6
+	Idle = 0,
+	Move = 1,
+	Attack = 2,
+	Shake = 3,
+	Sprint = 4,
+	Attack3 = 5,
+	Die = 6,
+	Attack2 = 7
 }
 
 export enum ActionType {

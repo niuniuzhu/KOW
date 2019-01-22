@@ -1,19 +1,19 @@
 import * as $protobuf from "../../../../Libs/protobufjs";
 import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../ISnapshotable";
+import { Logger } from "../../../../RC/Utils/Logger";
 import { InputType } from "../../../Logic/InputAagent";
-import { EntityState } from "../EntityState";
 import { StateType } from "../../../StateEnums";
 import { EAttr } from "../../Attribute";
-import { FMathUtils } from "../../../../RC/FMath/FMathUtils";
-import { Logger } from "../../../../RC/Utils/Logger";
+import { ISnapshotable } from "../../ISnapshotable";
+import { EntityState } from "../EntityState";
 
 /**
  * 过滤类型
  */
 enum FilterType {
 	AttrToAttr,//属性比较过滤
-	AttrToValue//属性与值比较过滤
+	AttrToValue,//属性与值比较过滤
+	State//状态值比较
 }
 
 enum Op {
@@ -29,11 +29,13 @@ enum Op {
  * 中断过滤定义
  */
 class IntrptFilter {
+	//属性中断
 	public filterType: FilterType;
 	public attr0: EAttr;
 	public attr1: EAttr;
 	public value: number;
 	public op: Op;
+	//技能中断
 	public skillID: number;
 }
 
@@ -46,8 +48,9 @@ enum FilterRel {
  * 中断类型
  */
 enum IntrptType {
-	State,
-	Skill
+	Attr,
+	Skill,
+	State
 }
 
 /**
@@ -210,12 +213,18 @@ export abstract class IntrptBase implements ISnapshotable {
 			let v1: number;
 			let meet: boolean;
 			switch (intrptFilter.filterType) {
-				case FilterType.AttrToAttr:
+				case FilterType.AttrToAttr://两属性值比较
 					v0 = owner.GetAttr(intrptFilter.attr0);
 					v1 = owner.GetAttr(intrptFilter.attr1);
 					break;
-				case FilterType.AttrToValue:
+
+				case FilterType.AttrToValue://属性值与给定值比较
 					v0 = owner.GetAttr(intrptFilter.attr0);
+					v1 = intrptFilter.value;
+					break;
+
+				case FilterType.State://状态比较
+					v0 = owner.fsm.currentEntityState.type;
 					v1 = intrptFilter.value;
 					break;
 			}
@@ -223,18 +232,23 @@ export abstract class IntrptBase implements ISnapshotable {
 				case Op.Equal:
 					meet = v0 == v1;
 					break;
+
 				case Op.NotEqual:
 					meet = v0 != v1;
 					break;
+
 				case Op.Greater:
 					meet = v0 > v1;
 					break;
+
 				case Op.GreaterEqual:
 					meet = v0 >= v1;
 					break;
+
 				case Op.Less:
 					meet = v0 < v1;
 					break;
+
 				case Op.LessEqual:
 					meet = v0 <= v1;
 					break;
@@ -252,9 +266,10 @@ export abstract class IntrptBase implements ISnapshotable {
 	protected ChangeState(igroneIntrptList: boolean = true, force: boolean = true): void {
 		const owner = (<EntityState>this._state).owner;
 		switch (this._intrptType) {
-			case IntrptType.State://中断到状态
+			case IntrptType.Attr://中断到状态
 				owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
 				break;
+
 			case IntrptType.Skill://中断到技能
 				let skill;
 				if (this._skillID == null) {

@@ -13,6 +13,7 @@ export class EntityAction extends AbstractAction {
         this._triggerTime = Hashtable.GetNumber(def, "trigger_time");
     }
     OnEnter(param) {
+        this._time = 0;
         this._isTriggered = false;
         if (this._triggerTime <= 0) {
             this.Trigger();
@@ -24,8 +25,9 @@ export class EntityAction extends AbstractAction {
                 this.Trigger();
             }
         }
-        else
+        else {
             super.Update(dt);
+        }
         this._time += dt;
     }
     UpdatePhysic(dt) {

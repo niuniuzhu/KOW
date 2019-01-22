@@ -1,10 +1,11 @@
 import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { StateType } from "../../../StateEnums";
 import { Logger } from "../../../../RC/Utils/Logger";
+import { StateType } from "../../../StateEnums";
 var FilterType;
 (function (FilterType) {
     FilterType[FilterType["AttrToAttr"] = 0] = "AttrToAttr";
     FilterType[FilterType["AttrToValue"] = 1] = "AttrToValue";
+    FilterType[FilterType["State"] = 2] = "State";
 })(FilterType || (FilterType = {}));
 var Op;
 (function (Op) {
@@ -24,8 +25,9 @@ var FilterRel;
 })(FilterRel || (FilterRel = {}));
 var IntrptType;
 (function (IntrptType) {
-    IntrptType[IntrptType["State"] = 0] = "State";
+    IntrptType[IntrptType["Attr"] = 0] = "Attr";
     IntrptType[IntrptType["Skill"] = 1] = "Skill";
+    IntrptType[IntrptType["State"] = 2] = "State";
 })(IntrptType || (IntrptType = {}));
 export class IntrptBase {
     constructor(state, def) {
@@ -132,6 +134,10 @@ export class IntrptBase {
                     v0 = owner.GetAttr(intrptFilter.attr0);
                     v1 = intrptFilter.value;
                     break;
+                case FilterType.State:
+                    v0 = owner.fsm.currentEntityState.type;
+                    v1 = intrptFilter.value;
+                    break;
             }
             switch (intrptFilter.op) {
                 case Op.Equal:
@@ -160,7 +166,7 @@ export class IntrptBase {
     ChangeState(igroneIntrptList = true, force = true) {
         const owner = this._state.owner;
         switch (this._intrptType) {
-            case IntrptType.State:
+            case IntrptType.Attr:
                 owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
                 break;
             case IntrptType.Skill:

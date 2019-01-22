@@ -6,7 +6,11 @@ define(["require", "exports", "./Logic/FSM/ActAttack", "./Logic/FSM/ActEntityAtt
         StateType[StateType["Idle"] = 0] = "Idle";
         StateType[StateType["Move"] = 1] = "Move";
         StateType[StateType["Attack"] = 2] = "Attack";
+        StateType[StateType["Shake"] = 3] = "Shake";
+        StateType[StateType["Sprint"] = 4] = "Sprint";
+        StateType[StateType["Attack3"] = 5] = "Attack3";
         StateType[StateType["Die"] = 6] = "Die";
+        StateType[StateType["Attack2"] = 7] = "Attack2";
     })(StateType = exports.StateType || (exports.StateType = {}));
     var ActionType;
     (function (ActionType) {

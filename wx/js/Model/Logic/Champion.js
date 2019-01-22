@@ -409,7 +409,8 @@ export class Champion extends Entity {
         str += `moveDirection:${this.moveDirection.ToString()}\n`;
         str += `phyxSpeed:${this.phyxSpeed.ToString()}\n`;
         str += `velocity:${this.velocity}\n`;
-        str += `skill count${this._skills.length}\n`;
+        str += `skill count:${this._skills.length}\n`;
+        str += `gladiatorTime:${this.gladiatorTime}\n`;
         str += this._fsm.Dump();
         return str;
     }

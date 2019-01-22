@@ -1,4 +1,4 @@
-import { ByteBuffer } from "../RC/Utils/ByteBuffer";
+import { ByteBuffer } from "../../RC/Utils/ByteBuffer";
 import { FrameAction } from "./FrameAction";
 
 export class FrameActionGroup {

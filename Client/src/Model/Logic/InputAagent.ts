@@ -1,7 +1,7 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
-import { FrameAction, InputFlag } from "../FrameAction";
-import { ISnapshotable } from "../ISnapshotable";
+import { FrameAction, InputFlag } from "./FrameAction";
+import { ISnapshotable } from "./ISnapshotable";
 import { FVec2 } from "../../RC/FMath/FVec2";
 
 export enum InputType {

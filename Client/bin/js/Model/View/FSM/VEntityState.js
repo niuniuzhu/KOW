@@ -21,7 +21,7 @@ define(["require", "exports", "../../../RC/Framework/FSM/FSMState", "../../../RC
                 for (const actionDef of actionsDef) {
                     const type = Hashtable_1.Hashtable.GetNumber(actionDef, "id");
                     const ctr = StateEnums_1.V_ID_TO_STATE_ACTION.get(type);
-                    const action = new ctr(this, type, actionDef);
+                    const action = new ctr(this._owner, type, actionDef);
                     this.AddAction(action);
                 }
             }

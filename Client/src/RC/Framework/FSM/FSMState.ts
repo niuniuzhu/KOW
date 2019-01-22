@@ -27,8 +27,8 @@ export class FSMState {
 		this._actions.splice(this._actions.indexOf(action), 1);
 	}
 
-	public GetAction(id: number): AbstractAction {
-		return this._typeToAction.get(id);
+	public GetAction(type: number): AbstractAction {
+		return this._typeToAction.get(type);
 	}
 
 	public Enter(param: any): void {

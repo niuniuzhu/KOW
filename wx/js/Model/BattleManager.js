@@ -8,7 +8,7 @@ import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
 import { SyncEvent } from "./BattleEvent/SyncEvent";
 import { UIEvent } from "./BattleEvent/UIEvent";
-import { FrameActionGroup } from "./FrameActionGroup";
+import { FrameActionGroup } from "./Logic/FrameActionGroup";
 import { Battle } from "./Logic/Battle";
 import { VBattle } from "./View/VBattle";
 export class BattleManager {

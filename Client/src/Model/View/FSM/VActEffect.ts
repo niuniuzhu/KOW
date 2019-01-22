@@ -1,17 +1,16 @@
 import { Vec2 } from "../../../RC/Math/Vec2";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { Logger } from "../../../RC/Utils/Logger";
 import { EntityType } from "../../EntityType";
 import { VEffect } from "../VEffect";
-import { VEntityState } from "./VEntityState";
-import { VEntityStateAction } from "./VEntityStateAction";
-import { Logger } from "../../../RC/Utils/Logger";
+import { VEntityAction } from "./VEntityAction";
 
 enum FxAttachType {
 	None,
 	Caster
 }
 
-export class VActEffect extends VEntityStateAction {
+export class VActEffect extends VEntityAction {
 	private _effectID: number;
 	private _offset: Vec2;
 	private _attachType: FxAttachType;
@@ -40,9 +39,8 @@ export class VActEffect extends VEntityStateAction {
 		super.OnTrigger();
 		switch (this._attachType) {
 			case FxAttachType.Caster:
-				const owner = (<VEntityState>this.state).owner;
-				this._fx = owner.battle.SpawnEffect(this._effectID);
-				this._fx.SetTarget(EntityType.Champion, owner.rid, this._offset,
+				this._fx = this.owner.battle.SpawnEffect(this._effectID);
+				this._fx.SetTarget(EntityType.Champion, this.owner.rid, this._offset,
 					this._followPos, this._followRot, this._alwaysFollow);
 				break;
 			default:

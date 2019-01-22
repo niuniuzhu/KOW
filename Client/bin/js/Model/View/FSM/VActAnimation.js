@@ -1,7 +1,7 @@
-define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateAction"], function (require, exports, Hashtable_1, VEntityStateAction_1) {
+define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityAction"], function (require, exports, Hashtable_1, VEntityAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class VActAnimation extends VEntityStateAction_1.VEntityStateAction {
+    class VActAnimation extends VEntityAction_1.VEntityAction {
         OnInit(def) {
             super.OnInit(def);
             this._animationID = Hashtable_1.Hashtable.GetNumber(def, "animation");
@@ -10,15 +10,14 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./VEntityStateActi
         }
         OnEnter(param) {
             super.OnEnter(param);
-            const owner = this.state.owner;
-            if (owner.animationProxy != null && owner.animationProxy.available) {
+            if (this.owner.animationProxy != null && this.owner.animationProxy.available) {
                 if (this._animationID >= 0) {
                     let timeScale = 1;
                     if (this._autoScaleTime) {
-                        const animationSetting = owner.animationProxy.GetAnimationSetting(this._animationID);
+                        const animationSetting = this.owner.animationProxy.GetAnimationSetting(this._animationID);
                         timeScale = this._duration / (animationSetting.length * animationSetting.interval);
                     }
-                    owner.animationProxy.Play(this._animationID, 0, timeScale);
+                    this.owner.animationProxy.Play(this._animationID, 0, timeScale);
                 }
             }
         }

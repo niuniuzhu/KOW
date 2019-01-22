@@ -22,8 +22,8 @@ define(["require", "exports"], function (require, exports) {
             this._typeToAction.delete(type);
             this._actions.splice(this._actions.indexOf(action), 1);
         }
-        GetAction(id) {
-            return this._typeToAction.get(id);
+        GetAction(type) {
+            return this._typeToAction.get(type);
         }
         Enter(param) {
             this.OnEnter(param);

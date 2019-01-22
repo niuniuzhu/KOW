@@ -1,13 +1,13 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { EntityType } from "../../EntityType";
-import { VEntityStateAction } from "./VEntityStateAction";
 import { Logger } from "../../../RC/Utils/Logger";
+import { EntityType } from "../../EntityType";
+import { VEntityAction } from "./VEntityAction";
 var FxAttachType;
 (function (FxAttachType) {
     FxAttachType[FxAttachType["None"] = 0] = "None";
     FxAttachType[FxAttachType["Caster"] = 1] = "Caster";
 })(FxAttachType || (FxAttachType = {}));
-export class VActEffect extends VEntityStateAction {
+export class VActEffect extends VEntityAction {
     OnInit(def) {
         super.OnInit(def);
         this._effectID = Hashtable.GetNumber(def, "effect");
@@ -25,9 +25,8 @@ export class VActEffect extends VEntityStateAction {
         super.OnTrigger();
         switch (this._attachType) {
             case FxAttachType.Caster:
-                const owner = this.state.owner;
-                this._fx = owner.battle.SpawnEffect(this._effectID);
-                this._fx.SetTarget(EntityType.Champion, owner.rid, this._offset, this._followPos, this._followRot, this._alwaysFollow);
+                this._fx = this.owner.battle.SpawnEffect(this._effectID);
+                this._fx.SetTarget(EntityType.Champion, this.owner.rid, this._offset, this._followPos, this._followRot, this._alwaysFollow);
                 break;
             default:
                 Logger.Error(`attach type:${this._attachType} not supported`);

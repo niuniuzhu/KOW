@@ -1,6 +1,6 @@
 import * as $protobuf from "../../../../Libs/protobufjs";
 import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../../ISnapshotable";
+import { ISnapshotable } from "../../ISnapshotable";
 import { InputType } from "../../../Logic/InputAagent";
 import { EntityState } from "../EntityState";
 import { StateType } from "../../../StateEnums";

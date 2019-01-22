@@ -7,7 +7,7 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
-import { ISnapshotable } from "../ISnapshotable";
+import { ISnapshotable } from "./ISnapshotable";
 import { EAttr } from "./Attribute";
 import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";

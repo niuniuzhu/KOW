@@ -1,7 +1,7 @@
-define(["require", "exports", "../../../Libs/long", "../../../RC/FMath/FMathUtils", "../../../RC/Utils/Logger", "../../StateEnums", "../Attribute", "./EntityStateAction"], function (require, exports, Long, FMathUtils_1, Logger_1, StateEnums_1, Attribute_1, EntityStateAction_1) {
+define(["require", "exports", "../../../Libs/long", "../../../RC/FMath/FMathUtils", "../../../RC/Utils/Logger", "../../StateEnums", "../Attribute", "./EntityAction"], function (require, exports, Long, FMathUtils_1, Logger_1, StateEnums_1, Attribute_1, EntityAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class ActAttack extends EntityStateAction_1.EntityStateAction {
+    class ActAttack extends EntityAction_1.EntityAction {
         constructor() {
             super(...arguments);
             this._casterID = Long.ZERO;
@@ -19,22 +19,20 @@ define(["require", "exports", "../../../Libs/long", "../../../RC/FMath/FMathUtil
         }
         OnEnter(param) {
             super.OnEnter(param);
-            const owner = this.state.owner;
-            this._casterID = owner.rid;
-            this._skillID = owner.fsm.context.skillID;
-            const skill = owner.GetSkill(this._skillID);
-            skill.shakeTime = owner.fsm.context.shakeTime;
+            this._casterID = this.owner.rid;
+            this._skillID = this.owner.fsm.context.skillID;
+            const skill = this.owner.GetSkill(this._skillID);
+            skill.shakeTime = this.owner.fsm.context.shakeTime;
             if (skill == null) {
                 Logger_1.Logger.Warn(`can not find skill:${this._skillID}`);
-                owner.fsm.ChangeState(StateEnums_1.StateType.Idle);
+                this.owner.fsm.ChangeState(StateEnums_1.StateType.Idle);
             }
         }
         OnTrigger() {
             super.OnTrigger();
-            const owner = this.state.owner;
-            const skill = owner.GetSkill(this._skillID);
-            owner.SetAttr(Attribute_1.EAttr.MP, FMathUtils_1.FMathUtils.Sub(owner.mp, skill.mpCost));
-            owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
+            const skill = this.owner.GetSkill(this._skillID);
+            this.owner.SetAttr(Attribute_1.EAttr.MP, FMathUtils_1.FMathUtils.Sub(this.owner.mp, skill.mpCost));
+            this.owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
         }
         Dump() {
             let str = super.Dump();

@@ -3,7 +3,7 @@ import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { ExpressionEvaluator } from "../../RC/Utils/ExpressionEvaluator";
 import { StringUtils } from "../../RC/Utils/TextUtils";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
-import { ISnapshotable } from "../ISnapshotable";
+import { ISnapshotable } from "./ISnapshotable";
 import { EAttr } from "./Attribute";
 import { CalcationManager } from "./CalcationManager";
 import { ICalcUnit } from "./ICalcUnit";

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../RC/FMath/FMathUtils", "../FrameAction", "../../RC/FMath/FVec2"], function (require, exports, FMathUtils_1, FrameAction_1, FVec2_1) {
+define(["require", "exports", "../../RC/FMath/FMathUtils", "./FrameAction", "../../RC/FMath/FVec2"], function (require, exports, FMathUtils_1, FrameAction_1, FVec2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var InputType;

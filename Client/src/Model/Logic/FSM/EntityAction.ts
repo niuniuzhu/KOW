@@ -1,27 +1,33 @@
 import * as $protobuf from "../../../Libs/protobufjs";
-import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../ISnapshotable";
-import { InputType } from "../InputAagent";
-import { EntityState } from "./EntityState";
+import { ISnapshotable } from "../ISnapshotable";
 import { ActionType } from "../../StateEnums";
+import { InputType } from "../InputAagent";
+import { Champion } from "../Champion";
 
-export class EntityStateAction extends AbstractAction implements ISnapshotable {
+export class EntityAction extends AbstractAction implements ISnapshotable {
+	/**
+	 * 所属实体
+	 */
+	public get owner(): Champion { return this._owner; }
 	/**
 	 * 获取总运行时间
 	 */
-	public get time(): number { return (<EntityState>this.state).time; }
+	public get time(): number { return this._time; }
 	/**
 	 * 获取从触发到结束所使用的时间(如果触发时间为零,则和time一样)
 	 */
-	public get intrptTime(): number { return (<EntityState>this.state).time - this._triggerTime; }
+	public get intrptTime(): number { return this._time - this._triggerTime; }
 
+	private _owner: Champion;
+	private _time: number;
 	private _triggerTime: number;
 	private _isTriggered: boolean;
 
-	constructor(state: FSMState, type: ActionType, def: Hashtable) {
-		super(state, type);
+	constructor(owner: Champion, type: ActionType, def: Hashtable) {
+		super(type);
+		this._owner = owner;
 		this.OnInit(def);
 	}
 
@@ -30,6 +36,7 @@ export class EntityStateAction extends AbstractAction implements ISnapshotable {
 	}
 
 	protected OnEnter(param: any): void {
+		this._time = 0;
 		this._isTriggered = false;
 		if (this._triggerTime <= 0) {
 			this.Trigger();
@@ -37,14 +44,15 @@ export class EntityStateAction extends AbstractAction implements ISnapshotable {
 	}
 
 	public Update(dt: number): void {
-		const time = (<EntityState>this.state).time;
 		if (!this._isTriggered) {
-			if (time >= this._triggerTime) {
+			if (this._time >= this._triggerTime) {
 				this.Trigger();
 			}
 		}
-		else
+		else {
 			super.Update(dt);
+		}
+		this._time += dt;
 	}
 
 	public UpdatePhysic(dt: number): void {

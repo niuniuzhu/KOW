@@ -1,13 +1,12 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../ISnapshotable";
+import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "../../Logic/Attribute";
-import { EntityState } from "./EntityState";
-import { EntityStateAction } from "./EntityStateAction";
+import { EntityAction } from "./EntityAction";
 
 /**
  * 设置实体属性行为
  */
-export class ActEntityAttrs extends EntityStateAction implements ISnapshotable {
+export class ActEntityAttrs extends EntityAction implements ISnapshotable {
 	private _attrs: EAttr[];
 	private _values: number[];
 
@@ -31,15 +30,13 @@ export class ActEntityAttrs extends EntityStateAction implements ISnapshotable {
 	}
 
 	private ActiveAttr(attr: EAttr, value: number): void {
-		const owner = (<EntityState>this.state).owner;
-		owner.SetAttr(attr, owner.GetAttr(attr) + value);
+		this.owner.SetAttr(attr, this.owner.GetAttr(attr) + value);
 	}
 
 	private DeactiveAttrs(): void {
-		const owner = (<EntityState>this.state).owner;
 		const count = this._attrs.length;
 		for (let i = 0; i < count; ++i) {
-			owner.SetAttr(this._attrs[i], owner.GetAttr(this._attrs[i]) - this._values[i]);
+			this.owner.SetAttr(this._attrs[i], this.owner.GetAttr(this._attrs[i]) - this._values[i]);
 		}
 	}
 }

@@ -3,13 +3,22 @@ import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { VActionType } from "../../StateEnums";
 import { VEntityState } from "./VEntityState";
+import { VChampion } from "../VChampion";
 
-export class VEntityStateAction extends AbstractAction {
+export class VEntityAction extends AbstractAction {
+	/**
+	 * 所属实体
+	 */
+	public get owner(): VChampion { return this._owner; }
+
+	private _owner: VChampion;
+	private _time: number;
 	private _triggerTime: number;
 	private _isTriggered: boolean;
 
-	constructor(state: FSMState, type: VActionType, def: Hashtable) {
-		super(state, type);
+	constructor(owner: VChampion, type: VActionType, def: Hashtable) {
+		super(type);
+		this._owner = owner;
 		this.OnInit(def);
 	}
 
@@ -25,14 +34,14 @@ export class VEntityStateAction extends AbstractAction {
 	}
 
 	public Update(dt: number): void {
-		const time = (<VEntityState>this.state).time;
 		if (!this._isTriggered) {
-			if (time >= this._triggerTime) {
+			if (this._time >= this._triggerTime) {
 				this.Trigger();
 			}
 		}
 		else
 			super.Update(dt);
+		this._time += dt;
 	}
 
 	public Trigger(): void {

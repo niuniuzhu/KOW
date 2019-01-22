@@ -1,7 +1,7 @@
 import { Global } from "../Global";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { BattleInfo } from "../Model/BattleInfo";
-import { FrameAciontManager } from "../Model/FrameActionManager";
+import { FrameAciontManager } from "../Model/View/FrameActionManager";
 import { EAttr } from "../Model/Logic/Attribute";
 import { Skill } from "../Model/Skill";
 import { VChampion } from "../Model/View/VChampion";

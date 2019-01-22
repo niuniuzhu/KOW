@@ -1,5 +1,5 @@
 import * as $protobuf from "../../../Libs/protobufjs";
-import { ISnapshotable } from "../../ISnapshotable";
+import { ISnapshotable } from "../ISnapshotable";
 
 export class EntityStateContext implements ISnapshotable {
 	public shakeTime: number;

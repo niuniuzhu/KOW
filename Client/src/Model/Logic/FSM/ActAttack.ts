@@ -2,16 +2,15 @@ import * as Long from "../../../Libs/long";
 import * as $protobuf from "../../../Libs/protobufjs";
 import { FMathUtils } from "../../../RC/FMath/FMathUtils";
 import { Logger } from "../../../RC/Utils/Logger";
-import { ISnapshotable } from "../../ISnapshotable";
+import { ISnapshotable } from "../ISnapshotable";
 import { StateType } from "../../StateEnums";
 import { EAttr } from "../Attribute";
-import { EntityState } from "./EntityState";
-import { EntityStateAction } from "./EntityStateAction";
+import { EntityAction } from "./EntityAction";
 
 /**
  * 攻击行为
  */
-export class ActAttack extends EntityStateAction implements ISnapshotable {
+export class ActAttack extends EntityAction implements ISnapshotable {
 	private _casterID: Long = Long.ZERO;
 	private _skillID: number = -1;
 
@@ -29,24 +28,22 @@ export class ActAttack extends EntityStateAction implements ISnapshotable {
 
 	protected OnEnter(param: any): void {
 		super.OnEnter(param);
-		const owner = (<EntityState>this.state).owner;
-		this._casterID = owner.rid;
-		this._skillID = owner.fsm.context.skillID;
-		const skill = owner.GetSkill(this._skillID);
-		skill.shakeTime = owner.fsm.context.shakeTime;
+		this._casterID = this.owner.rid;
+		this._skillID = this.owner.fsm.context.skillID;
+		const skill = this.owner.GetSkill(this._skillID);
+		skill.shakeTime = this.owner.fsm.context.shakeTime;
 		if (skill == null) {
 			Logger.Warn(`can not find skill:${this._skillID}`);
-			owner.fsm.ChangeState(StateType.Idle);
+			this.owner.fsm.ChangeState(StateType.Idle);
 		}
 	}
 
 	protected OnTrigger(): void {
 		super.OnTrigger();
-		const owner = (<EntityState>this.state).owner;
-		const skill = owner.GetSkill(this._skillID);
+		const skill = this.owner.GetSkill(this._skillID);
 		//扣除mp
-		owner.SetAttr(EAttr.MP, FMathUtils.Sub(owner.mp, skill.mpCost));
-		owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
+		this.owner.SetAttr(EAttr.MP, FMathUtils.Sub(this.owner.mp, skill.mpCost));
+		this.owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
 	}
 
 	public Dump(): string {

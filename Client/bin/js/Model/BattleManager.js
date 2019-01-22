@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Collections/Queue", "../RC/FMath/FMathUtils", "../RC/Utils/Logger", "../Scene/SceneManager", "./BattleEvent/SyncEvent", "./BattleEvent/UIEvent", "./FrameActionGroup", "./Logic/Battle", "./View/VBattle"], function (require, exports, Global_1, protos_1, Connector_1, ProtoHelper_1, Queue_1, FMathUtils_1, Logger_1, SceneManager_1, SyncEvent_1, UIEvent_1, FrameActionGroup_1, Battle_1, VBattle_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector", "../Net/ProtoHelper", "../RC/Collections/Queue", "../RC/FMath/FMathUtils", "../RC/Utils/Logger", "../Scene/SceneManager", "./BattleEvent/SyncEvent", "./BattleEvent/UIEvent", "./Logic/FrameActionGroup", "./Logic/Battle", "./View/VBattle"], function (require, exports, Global_1, protos_1, Connector_1, ProtoHelper_1, Queue_1, FMathUtils_1, Logger_1, SceneManager_1, SyncEvent_1, UIEvent_1, FrameActionGroup_1, Battle_1, VBattle_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleManager {

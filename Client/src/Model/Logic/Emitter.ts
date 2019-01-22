@@ -4,7 +4,7 @@ import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
-import { ISnapshotable } from "../ISnapshotable";
+import { ISnapshotable } from "./ISnapshotable";
 import { Battle } from "./Battle";
 import { Champion } from "./Champion";
 

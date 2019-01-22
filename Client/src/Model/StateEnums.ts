@@ -1,15 +1,16 @@
-import { FSMState } from "../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../RC/Utils/Hashtable";
+import { Champion } from "./Logic/Champion";
 import { ActAttack } from "./Logic/FSM/ActAttack";
 import { ActEntityAttrs } from "./Logic/FSM/ActEntityAttrs";
 import { ActMove } from "./Logic/FSM/ActMove";
 import { ActSprint } from "./Logic/FSM/ActSprint";
 import { ActVelocity } from "./Logic/FSM/ActVelocity";
-import { EntityStateAction } from "./Logic/FSM/EntityStateAction";
+import { EntityAction } from "./Logic/FSM/EntityAction";
 import { VActAnimation } from "./View/FSM/VActAnimation";
 import { VActEffect } from "./View/FSM/VActEffect";
 import { VActShake } from "./View/FSM/VActShake";
-import { VEntityStateAction } from "./View/FSM/VEntityStateAction";
+import { VEntityAction } from "./View/FSM/VEntityAction";
+import { VChampion } from "./View/VChampion";
 
 export enum StateType {
 	Idle,
@@ -34,10 +35,10 @@ export enum InterruptType {
 	Input,
 }
 
-export const ID_TO_STATE_ACTION = new Map<number, new (state: FSMState, type: ActionType, def: Hashtable) => EntityStateAction>();
+export const ID_TO_STATE_ACTION = new Map<number, new (owner: Champion, type: ActionType, def: Hashtable) => EntityAction>();
 ID_TO_STATE_ACTION.set(ActionType.EntityAttrs, ActEntityAttrs);
 ID_TO_STATE_ACTION.set(ActionType.Velocity, ActVelocity);
-ID_TO_STATE_ACTION.set(ActionType.Shake, EntityStateAction);
+ID_TO_STATE_ACTION.set(ActionType.Shake, EntityAction);
 ID_TO_STATE_ACTION.set(ActionType.Attack, ActAttack);
 ID_TO_STATE_ACTION.set(ActionType.Move, ActMove);
 ID_TO_STATE_ACTION.set(ActionType.Sprint, ActSprint);
@@ -49,7 +50,7 @@ export enum VActionType {
 	Effect = 5,
 }
 
-export const V_ID_TO_STATE_ACTION = new Map<number, new (state: FSMState, type: VActionType, def: Hashtable) => VEntityStateAction>();
+export const V_ID_TO_STATE_ACTION = new Map<number, new (owner: VChampion, type: VActionType, def: Hashtable) => VEntityAction>();
 V_ID_TO_STATE_ACTION.set(VActionType.Animation, VActAnimation);
 V_ID_TO_STATE_ACTION.set(VActionType.Shake, VActShake);
 V_ID_TO_STATE_ACTION.set(VActionType.Effect, VActEffect);

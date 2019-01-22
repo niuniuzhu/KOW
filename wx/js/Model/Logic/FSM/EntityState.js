@@ -1,10 +1,10 @@
 import Set from "../../../RC/Collections/Set";
 import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { ID_TO_STATE_ACTION, InterruptType } from "../../StateEnums";
 import { IntrptCollider } from "./Interrupt/IntrptCollider";
 import { IntrptInput } from "./Interrupt/IntrptInput";
 import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
-import { ID_TO_STATE_ACTION, InterruptType } from "../../StateEnums";
 export class EntityState extends FSMState {
     constructor(type, owner) {
         super(type);
@@ -21,7 +21,7 @@ export class EntityState extends FSMState {
             for (const actionDef of actionsDef) {
                 const type = Hashtable.GetNumber(actionDef, "id");
                 const ctr = ID_TO_STATE_ACTION.get(type);
-                const action = new ctr(this, type, actionDef);
+                const action = new ctr(this._owner, type, actionDef);
                 this.AddAction(action);
             }
         }

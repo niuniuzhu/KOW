@@ -1,8 +1,7 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { VEntityState } from "./VEntityState";
-import { VEntityStateAction } from "./VEntityStateAction";
+import { VEntityAction } from "./VEntityAction";
 
-export class VActAnimation extends VEntityStateAction {
+export class VActAnimation extends VEntityAction {
 	private _animationID: number;
 	private _autoScaleTime: boolean;
 	private _duration: number;
@@ -16,16 +15,15 @@ export class VActAnimation extends VEntityStateAction {
 
 	protected OnEnter(param: any): void {
 		super.OnEnter(param);
-		const owner = (<VEntityState>this.state).owner;
-		if (owner.animationProxy != null && owner.animationProxy.available) {
+		if (this.owner.animationProxy != null && this.owner.animationProxy.available) {
 			//播放动画
 			if (this._animationID >= 0) {
 				let timeScale = 1;
 				if (this._autoScaleTime) {
-					const animationSetting = owner.animationProxy.GetAnimationSetting(this._animationID);
+					const animationSetting = this.owner.animationProxy.GetAnimationSetting(this._animationID);
 					timeScale = this._duration / (animationSetting.length * animationSetting.interval);
 				}
-				owner.animationProxy.Play(this._animationID, 0, timeScale);
+				this.owner.animationProxy.Play(this._animationID, 0, timeScale);
 			}
 		}
 	}

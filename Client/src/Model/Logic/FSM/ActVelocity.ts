@@ -2,14 +2,13 @@ import * as $protobuf from "../../../Libs/protobufjs";
 import { FVec2 } from "../../../RC/FMath/FVec2";
 import { MathUtils } from "../../../RC/Math/MathUtils";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../ISnapshotable";
-import { EntityState } from "./EntityState";
-import { EntityStateAction } from "./EntityStateAction";
+import { ISnapshotable } from "../ISnapshotable";
+import { EntityAction } from "./EntityAction";
 
 /**
  * 设置位移速度行为
  */
-export class ActVelocity extends EntityStateAction implements ISnapshotable {
+export class ActVelocity extends EntityAction implements ISnapshotable {
 	private _speed: FVec2;
 
 	protected OnInit(def: Hashtable): void {
@@ -19,18 +18,16 @@ export class ActVelocity extends EntityStateAction implements ISnapshotable {
 
 	protected OnExit(): void {
 		super.OnExit();
-		const owner = (<EntityState>this.state).owner;
-		owner.phyxSpeed.Set(0, 0);
+		this.owner.phyxSpeed.Set(0, 0);
 	}
 
 	protected OnUpdate(dt: number): void {
-		const owner = (<EntityState>this.state).owner;
-		let rot = MathUtils.Acos(owner.direction.Dot(FVec2.up));
-		if (owner.direction.x > 0) {
+		let rot = MathUtils.Acos(this.owner.direction.Dot(FVec2.up));
+		if (this.owner.direction.x > 0) {
 			rot = - rot;
 		}
 		const s = FVec2.Rotate(this._speed, rot);
-		owner.phyxSpeed.CopyFrom(s);
+		this.owner.phyxSpeed.CopyFrom(s);
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {

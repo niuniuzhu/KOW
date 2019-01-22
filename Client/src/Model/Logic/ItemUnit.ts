@@ -1,7 +1,7 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
-import { ISnapshotable } from "../ISnapshotable";
+import { ISnapshotable } from "./ISnapshotable";
 import { CalcationManager } from "./CalcationManager";
 import { ICalcUnit } from "./ICalcUnit";
 import { SceneItemAttrOp } from "./SceneItem";

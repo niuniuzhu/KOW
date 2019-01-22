@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/FrameActionManager", "../Model/Logic/Attribute", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState", "./Joystick"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Attribute_1, MathUtils_1, Vec2_1, GestureState_1, Joystick_1) {
+define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/View/FrameActionManager", "../Model/Logic/Attribute", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState", "./Joystick"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Attribute_1, MathUtils_1, Vec2_1, GestureState_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {

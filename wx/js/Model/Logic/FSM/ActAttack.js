@@ -3,8 +3,8 @@ import { FMathUtils } from "../../../RC/FMath/FMathUtils";
 import { Logger } from "../../../RC/Utils/Logger";
 import { StateType } from "../../StateEnums";
 import { EAttr } from "../Attribute";
-import { EntityStateAction } from "./EntityStateAction";
-export class ActAttack extends EntityStateAction {
+import { EntityAction } from "./EntityAction";
+export class ActAttack extends EntityAction {
     constructor() {
         super(...arguments);
         this._casterID = Long.ZERO;
@@ -22,22 +22,20 @@ export class ActAttack extends EntityStateAction {
     }
     OnEnter(param) {
         super.OnEnter(param);
-        const owner = this.state.owner;
-        this._casterID = owner.rid;
-        this._skillID = owner.fsm.context.skillID;
-        const skill = owner.GetSkill(this._skillID);
-        skill.shakeTime = owner.fsm.context.shakeTime;
+        this._casterID = this.owner.rid;
+        this._skillID = this.owner.fsm.context.skillID;
+        const skill = this.owner.GetSkill(this._skillID);
+        skill.shakeTime = this.owner.fsm.context.shakeTime;
         if (skill == null) {
             Logger.Warn(`can not find skill:${this._skillID}`);
-            owner.fsm.ChangeState(StateType.Idle);
+            this.owner.fsm.ChangeState(StateType.Idle);
         }
     }
     OnTrigger() {
         super.OnTrigger();
-        const owner = this.state.owner;
-        const skill = owner.GetSkill(this._skillID);
-        owner.SetAttr(EAttr.MP, FMathUtils.Sub(owner.mp, skill.mpCost));
-        owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
+        const skill = this.owner.GetSkill(this._skillID);
+        this.owner.SetAttr(EAttr.MP, FMathUtils.Sub(this.owner.mp, skill.mpCost));
+        this.owner.battle.CreateEmitter(skill.emitterID, this._casterID, this._skillID);
     }
     Dump() {
         let str = super.Dump();

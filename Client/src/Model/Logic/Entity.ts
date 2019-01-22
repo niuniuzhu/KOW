@@ -1,7 +1,7 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { EntityType } from "../EntityType";
-import { ISnapshotable } from "../ISnapshotable";
+import { ISnapshotable } from "./ISnapshotable";
 import { Battle } from "./Battle";
 
 export class EntityInitParams {

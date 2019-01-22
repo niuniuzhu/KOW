@@ -1,5 +1,5 @@
-import * as Long from "../Libs/long";
-import { ByteBuffer } from "../RC/Utils/ByteBuffer";
+import * as Long from "../../Libs/long";
+import { ByteBuffer } from "../../RC/Utils/ByteBuffer";
 
 export enum InputFlag {
 	None = 0,

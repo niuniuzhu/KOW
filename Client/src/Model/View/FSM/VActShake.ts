@@ -1,7 +1,7 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { VEntityStateAction } from "./VEntityStateAction";
+import { VEntityAction } from "./VEntityAction";
 
-export class VActShake extends VEntityStateAction {
+export class VActShake extends VEntityAction {
 	protected OnInit(def: Hashtable): void {
 		super.OnInit(def);
 	}

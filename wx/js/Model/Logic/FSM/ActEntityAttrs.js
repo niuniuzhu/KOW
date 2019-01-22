@@ -1,6 +1,6 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { EntityStateAction } from "./EntityStateAction";
-export class ActEntityAttrs extends EntityStateAction {
+import { EntityAction } from "./EntityAction";
+export class ActEntityAttrs extends EntityAction {
     OnInit(def) {
         super.OnInit(def);
         this._attrs = Hashtable.GetNumberArray(def, "attrs");
@@ -18,14 +18,12 @@ export class ActEntityAttrs extends EntityStateAction {
         super.OnExit();
     }
     ActiveAttr(attr, value) {
-        const owner = this.state.owner;
-        owner.SetAttr(attr, owner.GetAttr(attr) + value);
+        this.owner.SetAttr(attr, this.owner.GetAttr(attr) + value);
     }
     DeactiveAttrs() {
-        const owner = this.state.owner;
         const count = this._attrs.length;
         for (let i = 0; i < count; ++i) {
-            owner.SetAttr(this._attrs[i], owner.GetAttr(this._attrs[i]) - this._values[i]);
+            this.owner.SetAttr(this._attrs[i], this.owner.GetAttr(this._attrs[i]) - this._values[i]);
         }
     }
 }

@@ -1,8 +1,6 @@
 export class AbstractAction {
     get type() { return this._type; }
-    get state() { return this._state; }
-    constructor(state, type) {
-        this._state = state;
+    constructor(type) {
         this._type = type;
     }
     Enter(param) {

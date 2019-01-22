@@ -1,6 +1,6 @@
 import { Global } from "../Global";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
-import { FrameAciontManager } from "../Model/FrameActionManager";
+import { FrameAciontManager } from "../Model/View/FrameActionManager";
 import { EAttr } from "../Model/Logic/Attribute";
 import { MathUtils } from "../RC/Math/MathUtils";
 import { Vec2 } from "../RC/Math/Vec2";

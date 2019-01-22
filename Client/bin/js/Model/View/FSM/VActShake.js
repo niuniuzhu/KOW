@@ -1,7 +1,7 @@
-define(["require", "exports", "./VEntityStateAction"], function (require, exports, VEntityStateAction_1) {
+define(["require", "exports", "./VEntityAction"], function (require, exports, VEntityAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class VActShake extends VEntityStateAction_1.VEntityStateAction {
+    class VActShake extends VEntityAction_1.VEntityAction {
         OnInit(def) {
             super.OnInit(def);
         }

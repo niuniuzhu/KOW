@@ -12,7 +12,7 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Logger } from "../../RC/Utils/Logger";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { Defs } from "../Defs";
-import { FrameActionGroup } from "../FrameActionGroup";
+import { FrameActionGroup } from "./FrameActionGroup";
 import { Bullet } from "./Bullet";
 import { CalcationManager } from "./CalcationManager";
 import { Champion } from "./Champion";

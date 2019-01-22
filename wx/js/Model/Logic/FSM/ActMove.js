@@ -1,20 +1,20 @@
 import { InputType } from "../../Logic/InputAagent";
-import { EntityStateAction } from "./EntityStateAction";
-export class ActMove extends EntityStateAction {
+import { EntityAction } from "./EntityAction";
+export class ActMove extends EntityAction {
     OnEnter(param) {
         super.OnEnter(param);
-        const inputAgent = this.state.owner.inputAgent;
-        this.state.owner.moveDirection.CopyFrom(inputAgent.GetInputValue(InputType.Move));
+        const inputAgent = this.owner.inputAgent;
+        this.owner.moveDirection.CopyFrom(inputAgent.GetInputValue(InputType.Move));
     }
     OnExit() {
         super.OnExit();
-        this.state.owner.moveDirection.Set(0, 0);
+        this.owner.moveDirection.Set(0, 0);
     }
     HandlInput(type, press) {
         if (type != InputType.Move)
             return;
-        const inputAgent = this.state.owner.inputAgent;
+        const inputAgent = this.owner.inputAgent;
         if (inputAgent.GetInputState(InputType.Move))
-            this.state.owner.moveDirection.CopyFrom(inputAgent.GetInputValue(InputType.Move));
+            this.owner.moveDirection.CopyFrom(inputAgent.GetInputValue(InputType.Move));
     }
 }

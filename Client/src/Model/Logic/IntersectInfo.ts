@@ -1,4 +1,4 @@
-import { FVec2 } from "../RC/FMath/FVec2";
+import { FVec2 } from "../../RC/FMath/FVec2";
 
 export class IntersectInfo {
 	public rid: Long;

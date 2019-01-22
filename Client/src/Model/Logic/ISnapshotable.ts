@@ -1,4 +1,4 @@
-import { Reader, BufferReader, Writer, BufferWriter } from "../Libs/protobufjs";
+import { Reader, BufferReader, Writer, BufferWriter } from "../../Libs/protobufjs";
 
 export interface ISnapshotable {
 	/**

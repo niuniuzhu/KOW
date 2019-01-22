@@ -1,5 +1,5 @@
 import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../../ISnapshotable";
+import { ISnapshotable } from "../../ISnapshotable";
 import { EntityState } from "../EntityState";
 import { IntrptBase } from "./IntrptBase";
 

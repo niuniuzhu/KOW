@@ -3,7 +3,7 @@ import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
-import { IntersectInfo } from "../IntersectInfo";
+import { IntersectInfo } from "./IntersectInfo";
 import { Skill } from "../Skill";
 import { StateType } from "../StateEnums";
 import { EAttr } from "./Attribute";

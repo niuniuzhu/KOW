@@ -1,5 +1,5 @@
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
-import { InputFlag } from "../FrameAction";
+import { InputFlag } from "./FrameAction";
 import { FVec2 } from "../../RC/FMath/FVec2";
 export var InputType;
 (function (InputType) {

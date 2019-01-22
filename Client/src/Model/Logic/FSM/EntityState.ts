@@ -2,15 +2,15 @@ import * as $protobuf from "../../../Libs/protobufjs";
 import Set from "../../../RC/Collections/Set";
 import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../ISnapshotable";
+import { ISnapshotable } from "../ISnapshotable";
+import { ID_TO_STATE_ACTION, InterruptType, StateType } from "../../StateEnums";
 import { Champion } from "../Champion";
 import { InputType } from "../InputAagent";
-import { EntityStateAction } from "./EntityStateAction";
+import { EntityAction } from "./EntityAction";
 import { IntrptBase } from "./Interrupt/IntrptBase";
 import { IntrptCollider } from "./Interrupt/IntrptCollider";
 import { IntrptInput } from "./Interrupt/IntrptInput";
 import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
-import { ID_TO_STATE_ACTION, InterruptType, StateType } from "../../StateEnums";
 
 export class EntityState extends FSMState implements ISnapshotable {
 	/**
@@ -41,7 +41,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 			for (const actionDef of actionsDef) {
 				const type = Hashtable.GetNumber(actionDef, "id");
 				const ctr = ID_TO_STATE_ACTION.get(type);
-				const action = new ctr(this, type, actionDef);
+				const action = new ctr(this._owner, type, actionDef);
 				this.AddAction(action);
 			}
 		}
@@ -103,7 +103,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.int32(this.time);
 		for (const action of this._actions) {
-			(<EntityStateAction>action).EncodeSnapshot(writer);
+			(<EntityAction>action).EncodeSnapshot(writer);
 		}
 		for (const interrupt of this._interrupts) {
 			interrupt.EncodeSnapshot(writer);
@@ -113,7 +113,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this.time = reader.int32();
 		for (const action of this._actions) {
-			(<EntityStateAction>action).DecodeSnapshot(reader);
+			(<EntityAction>action).DecodeSnapshot(reader);
 		}
 		for (const interrupt of this._interrupts) {
 			interrupt.DecodeSnapshot(reader);
@@ -142,7 +142,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 
 	public UpdatePhysic(dt: number): void {
 		for (const action of this._actions) {
-			(<EntityStateAction>action).UpdatePhysic(dt);
+			(<EntityAction>action).UpdatePhysic(dt);
 		}
 		for (const interrupt of this._interrupts) {
 			interrupt.UpdatePhysic(dt);
@@ -161,7 +161,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 
 	public HandleInput(type: InputType, press: boolean): void {
 		for (const action of this._actions) {
-			(<EntityStateAction>action).HandlInput(type, press);
+			(<EntityAction>action).HandlInput(type, press);
 		}
 		for (const interrupt of this._interrupts) {
 			interrupt.HandleInput(type, press);
@@ -176,7 +176,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 		}
 		str += `action count:${this._actions.length}\n`;
 		for (const action of this._actions) {
-			str += (<EntityStateAction>action).Dump();
+			str += (<EntityAction>action).Dump();
 		}
 		str += `time:${this.time}\n`;
 		return str;

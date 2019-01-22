@@ -1,5 +1,5 @@
 import * as $protobuf from "../../Libs/protobufjs";
-import { ISnapshotable } from "../ISnapshotable";
+import { ISnapshotable } from "./ISnapshotable";
 import { Battle } from "./Battle";
 import { HitUnit } from "./HitUnit";
 import { ItemUnit } from "./ItemUnit";

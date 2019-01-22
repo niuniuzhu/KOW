@@ -9,7 +9,7 @@ import { SceneManager } from "../Scene/SceneManager";
 import { SyncEvent } from "./BattleEvent/SyncEvent";
 import { UIEvent } from "./BattleEvent/UIEvent";
 import { BattleInfo } from "./BattleInfo";
-import { FrameActionGroup } from "./FrameActionGroup";
+import { FrameActionGroup } from "./Logic/FrameActionGroup";
 import { Battle } from "./Logic/Battle";
 import { BattleAssetsMgr } from "./View/BattleAssetsMgr";
 import { VBattle } from "./View/VBattle";

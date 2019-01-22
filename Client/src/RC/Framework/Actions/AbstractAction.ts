@@ -1,14 +1,9 @@
-import { FSMState } from "../FSM/FSMState";
-
-export class AbstractAction {
+export abstract class AbstractAction {
 	public get type(): number { return this._type; }
-	public get state(): FSMState { return this._state; }
 
-	private _state: FSMState;
 	private _type: number;
 
-	constructor(state: FSMState, type: number) {
-		this._state = state;
+	constructor(type: number) {
 		this._type = type;
 	}
 

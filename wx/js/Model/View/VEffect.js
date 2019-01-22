@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Vec2_1 = require("../../RC/Math/Vec2");
-const Hashtable_1 = require("../../RC/Utils/Hashtable");
-const CDefs_1 = require("../CDefs");
-const EntityType_1 = require("../EntityType");
-const VEntity_1 = require("./VEntity");
-const Logger_1 = require("../../RC/Utils/Logger");
-class VEffect extends VEntity_1.VEntity {
+import { Vec2 } from "../../RC/Math/Vec2";
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { CDefs } from "../CDefs";
+import { EntityType } from "../EntityType";
+import { VEntity } from "./VEntity";
+import { Logger } from "../../RC/Utils/Logger";
+export class VEffect extends VEntity {
     constructor(battle, id) {
         super(battle);
         this._followPos = false;
@@ -17,11 +15,11 @@ class VEffect extends VEntity_1.VEntity {
     }
     get lifeTime() { return this._lifeTime; }
     BeforeLoadDefs() {
-        return CDefs_1.CDefs.GetEffect(this._id);
+        return CDefs.GetEffect(this._id);
     }
     AfterLoadDefs(cdefs) {
-        this._animationID = Hashtable_1.Hashtable.GetNumber(cdefs, "animation");
-        this._lifeTime = Hashtable_1.Hashtable.GetNumber(cdefs, "lifetime");
+        this._animationID = Hashtable.GetNumber(cdefs, "animation");
+        this._lifeTime = Hashtable.GetNumber(cdefs, "lifetime");
         if (this._lifeTime == 0) {
             const setting = this._animationProxy.GetSetting(this._animationID);
             this._lifeTime = setting.length * setting.interval;
@@ -50,20 +48,20 @@ class VEffect extends VEntity_1.VEntity {
         if (this._followTarget != null) {
             let target;
             switch (this._followType) {
-                case EntityType_1.EntityType.Bullet:
+                case EntityType.Bullet:
                     target = this.battle.GetBullet(this._followTarget);
                     break;
-                case EntityType_1.EntityType.Champion:
+                case EntityType.Champion:
                     target = this.battle.GetChampion(this._followTarget);
                     break;
                 default:
-                    Logger_1.Logger.Error(`follow type:${this._followType} not supported`);
+                    Logger.Error(`follow type:${this._followType} not supported`);
                     break;
             }
             if (target != null) {
                 if (this._followPos) {
-                    const offset = Vec2_1.Vec2.Rotate(this._followOffset, target.rotation);
-                    this.position = Vec2_1.Vec2.Add(target.position, offset);
+                    const offset = Vec2.Rotate(this._followOffset, target.rotation);
+                    this.position = Vec2.Add(target.position, offset);
                 }
                 if (this._followRot) {
                     this.rotation = target.rotation;
@@ -83,4 +81,3 @@ class VEffect extends VEntity_1.VEntity {
         this._root.removeFromParent();
     }
 }
-exports.VEffect = VEffect;

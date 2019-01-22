@@ -1,10 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Heap_1 = require("./Heap");
-const index_1 = require("./index");
-class PriorityQueue {
+import Heap from "./Heap";
+import { util } from "./index";
+export default class PriorityQueue {
     constructor(compareFunction) {
-        this.heap = new Heap_1.default(index_1.util.reverseCompareFunction(compareFunction));
+        this.heap = new Heap(util.reverseCompareFunction(compareFunction));
     }
     enqueue(element) {
         return this.heap.add(element);
@@ -42,4 +40,3 @@ class PriorityQueue {
         this.heap.update();
     }
 }
-exports.default = PriorityQueue;

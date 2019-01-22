@@ -1,29 +1,27 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../Global");
-const protos_1 = require("../Libs/protos");
-const BattleInfo_1 = require("../Model/BattleInfo");
-const ProtoHelper_1 = require("../Net/ProtoHelper");
-const Logger_1 = require("../RC/Utils/Logger");
-const SceneManager_1 = require("./SceneManager");
-const SceneState_1 = require("./SceneState");
-class LoadingState extends SceneState_1.SceneState {
+import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
+import { BattleInfo } from "../Model/BattleInfo";
+import { ProtoCreator } from "../Net/ProtoHelper";
+import { Logger } from "../RC/Utils/Logger";
+import { SceneManager } from "./SceneManager";
+import { SceneState } from "./SceneState";
+export class LoadingState extends SceneState {
     constructor(type) {
         super(type);
-        this.__ui = this._ui = Global_1.Global.uiManager.loading;
-        this._battleInfo = new BattleInfo_1.BattleInfo();
+        this.__ui = this._ui = Global.uiManager.loading;
+        this._battleInfo = new BattleInfo();
     }
     ConnectToBS(gcNID, ip, port) {
-        const connector = Global_1.Global.connector.bsConnector;
+        const connector = Global.connector.bsConnector;
         connector.onopen = () => {
-            Logger_1.Logger.Log("BS Connected");
-            const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2BS_AskLogin();
+            Logger.Log("BS Connected");
+            const askLogin = ProtoCreator.Q_GC2BS_AskLogin();
             askLogin.sessionID = gcNID;
-            connector.Send(protos_1.Protos.GC2BS_AskLogin, askLogin, message => {
+            connector.Send(Protos.GC2BS_AskLogin, askLogin, message => {
                 const resp = message;
-                this._ui.OnLoginBSResut(resp.result, () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login));
+                this._ui.OnLoginBSResut(resp.result, () => Global.sceneManager.ChangeState(SceneManager.State.Login));
                 switch (resp.result) {
-                    case protos_1.Protos.Global.ECommon.Success:
+                    case Protos.Global.ECommon.Success:
                         this._battleInfo.playerID = resp.playerID;
                         this._battleInfo.rndSeed = resp.rndSeed;
                         this._battleInfo.frameRate = resp.frameRate;
@@ -33,10 +31,10 @@ class LoadingState extends SceneState_1.SceneState {
                         this._battleInfo.mapID = resp.mapID;
                         this._battleInfo.playerInfos = resp.playerInfos;
                         this._battleInfo.serverFrame = resp.curFrame;
-                        Global_1.Global.battleManager.Start(this._battleInfo, this, () => {
+                        Global.battleManager.Start(this._battleInfo, this, () => {
                             this._ui.OnLoadComplete();
-                            Global_1.Global.battleManager.SetBattleInfo(this._battleInfo, () => {
-                                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Battle, this._battleInfo);
+                            Global.battleManager.SetBattleInfo(this._battleInfo, () => {
+                                Global.sceneManager.ChangeState(SceneManager.State.Battle, this._battleInfo);
                             });
                         }, p => {
                             this._ui.OnLoadProgress(p);
@@ -45,7 +43,7 @@ class LoadingState extends SceneState_1.SceneState {
                 }
             });
         };
-        if (Global_1.Global.local) {
+        if (Global.local) {
             connector.Connect("localhost", port);
         }
         else {
@@ -53,4 +51,3 @@ class LoadingState extends SceneState_1.SceneState {
         }
     }
 }
-exports.LoadingState = LoadingState;

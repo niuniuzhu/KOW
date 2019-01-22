@@ -1,18 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const FMathUtils_1 = require("./FMathUtils");
-const FVec2_1 = require("./FVec2");
-var IntersectionType;
+import { FMathUtils } from "./FMathUtils";
+import { FVec2 } from "./FVec2";
+export var IntersectionType;
 (function (IntersectionType) {
     IntersectionType[IntersectionType["Outside"] = 0] = "Outside";
     IntersectionType[IntersectionType["Inside"] = 1] = "Inside";
     IntersectionType[IntersectionType["Cling"] = 2] = "Cling";
-})(IntersectionType = exports.IntersectionType || (exports.IntersectionType = {}));
-class Intersection {
+})(IntersectionType || (IntersectionType = {}));
+export class Intersection {
     static IntersectsCC(center0, radius0, center1, radius1) {
-        const a = FVec2_1.FVec2.Sub(center1, center0).SqrMagnitude();
-        let r = FMathUtils_1.FMathUtils.Add(radius0, radius1);
-        r = FMathUtils_1.FMathUtils.Mul(r, r);
+        const a = FVec2.Sub(center1, center0).SqrMagnitude();
+        let r = FMathUtils.Add(radius0, radius1);
+        r = FMathUtils.Mul(r, r);
         if (a > r)
             return IntersectionType.Outside;
         if (a < r)
@@ -20,16 +18,15 @@ class Intersection {
         return IntersectionType.Cling;
     }
     static IntersectsMovingCC(mCenter, mRadius, sCenter, sRadius, direction) {
-        const e = FVec2_1.FVec2.Sub(sCenter, mCenter);
-        const r = FMathUtils_1.FMathUtils.Add(mRadius, sRadius);
-        const rSqrt = FMathUtils_1.FMathUtils.Mul(r, r);
+        const e = FVec2.Sub(sCenter, mCenter);
+        const r = FMathUtils.Add(mRadius, sRadius);
+        const rSqrt = FMathUtils.Mul(r, r);
         const edotd = e.Dot(direction);
         const edote = e.Dot(e);
-        const s = FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Sub(FMathUtils_1.FMathUtils.Mul(edotd, edotd), edote), rSqrt);
+        const s = FMathUtils.Add(FMathUtils.Sub(FMathUtils.Mul(edotd, edotd), edote), rSqrt);
         if (s < 0)
             return -1;
-        const t = FMathUtils_1.FMathUtils.Sub(edotd, FMathUtils_1.FMathUtils.Sqrt(s));
+        const t = FMathUtils.Sub(edotd, FMathUtils.Sqrt(s));
         return t * 1000;
     }
 }
-exports.Intersection = Intersection;

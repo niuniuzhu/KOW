@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../Global");
-const SceneState_1 = require("./SceneState");
-class BattleState extends SceneState_1.SceneState {
+import { Global } from "../Global";
+import { SceneState } from "./SceneState";
+export class BattleState extends SceneState {
     constructor(type) {
         super(type);
-        this.__ui = this._ui = Global_1.Global.uiManager.battle;
+        this.__ui = this._ui = Global.uiManager.battle;
     }
     OnEnter(param) {
         super.OnEnter(param);
@@ -17,4 +15,3 @@ class BattleState extends SceneState_1.SceneState {
         super.OnUpdate(dt);
     }
 }
-exports.BattleState = BattleState;

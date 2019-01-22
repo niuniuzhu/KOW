@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../../Global");
-const Queue_1 = require("../../RC/Collections/Queue");
-class HUD {
+import { Global } from "../../Global";
+import Queue from "../../RC/Collections/Queue";
+export class HUD {
     constructor(owner) {
         this._owner = owner;
     }
@@ -13,12 +11,11 @@ class HUD {
         popText.Show(type, value, this._owner.position.x, this._owner.position.y);
     }
 }
-exports.HUD = HUD;
-var PopTextType;
+export var PopTextType;
 (function (PopTextType) {
     PopTextType[PopTextType["Hurt"] = 0] = "Hurt";
     PopTextType[PopTextType["Heal"] = 1] = "Heal";
-})(PopTextType = exports.PopTextType || (exports.PopTextType = {}));
+})(PopTextType || (PopTextType = {}));
 class PopText {
     constructor() {
         this._hurt = fairygui.UIPackage.createObject("battle", "hurt_text").asCom;
@@ -44,14 +41,14 @@ class PopText {
                 str = "+" + value;
                 break;
         }
-        Global_1.Global.graphic.hudRoot.addChild(this._root);
+        Global.graphic.hudRoot.addChild(this._root);
         this._root.setXY(x, y);
         this._root.getChild("n0").asTextField.text = str;
         this._root.getTransition("t0").play(new laya.utils.Handler(this, this.OnTransitionComplete), 1, 0, 0, -1);
     }
     OnTransitionComplete() {
-        Global_1.Global.graphic.hudRoot.removeChild(this._root);
+        Global.graphic.hudRoot.removeChild(this._root);
         PopText.Push(this);
     }
 }
-PopText.POOL = new Queue_1.default();
+PopText.POOL = new Queue();

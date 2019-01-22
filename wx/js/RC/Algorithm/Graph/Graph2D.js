@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const GraphBase_1 = require("./GraphBase");
-const MathUtils_1 = require("../../Math/MathUtils");
-class Graph2D extends GraphBase_1.GraphBase {
+import { GraphBase } from "./GraphBase";
+import { MathUtils } from "../../Math/MathUtils";
+export class Graph2D extends GraphBase {
     get row() { return this._row; }
     get col() { return this._col; }
     constructor(row, col) {
@@ -67,8 +65,7 @@ class Graph2D extends GraphBase_1.GraphBase {
     IndexToCoord(index) {
         let coord = [];
         coord[0] = index % this.col;
-        coord[1] = MathUtils_1.MathUtils.Floor(index / this.col);
+        coord[1] = MathUtils.Floor(index / this.col);
         return coord;
     }
 }
-exports.Graph2D = Graph2D;

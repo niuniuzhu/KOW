@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class FSM {
+export class FSM {
     constructor() {
         this._typeToState = new Map();
         this._states = [];
@@ -49,4 +47,3 @@ class FSM {
             this._currentState.Update(dt);
     }
 }
-exports.FSM = FSM;

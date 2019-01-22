@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const MathUtils_1 = require("./MathUtils");
-class Vec2 {
+import { MathUtils } from "./MathUtils";
+export class Vec2 {
     static get one() {
         return new Vec2(1, 1);
     }
@@ -54,8 +52,8 @@ class Vec2 {
         this.y = v.y;
     }
     Clamp(min, max) {
-        this.x = MathUtils_1.MathUtils.Clamp(this.x, min.x, max.x);
-        this.y = MathUtils_1.MathUtils.Clamp(this.y, min.y, max.y);
+        this.x = MathUtils.Clamp(this.x, min.x, max.x);
+        this.y = MathUtils.Clamp(this.y, min.y, max.y);
         return this;
     }
     Add(v) {
@@ -132,13 +130,13 @@ class Vec2 {
     ClampMagnitude(maxLength) {
         let sqrMagnitude = this.SqrMagnitude();
         if (sqrMagnitude > (maxLength * maxLength)) {
-            let f = maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude);
+            let f = maxLength / MathUtils.Sqrt(sqrMagnitude);
             this.x *= f;
             this.y *= f;
         }
     }
     Magnitude() {
-        return MathUtils_1.MathUtils.Sqrt(this.x * this.x + this.y * this.y);
+        return MathUtils.Sqrt(this.x * this.x + this.y * this.y);
     }
     SqrMagnitude() {
         return this.x * this.x + this.y * this.y;
@@ -150,8 +148,8 @@ class Vec2 {
         return Vec2.Sub(vector, this).SqrMagnitude();
     }
     AproxEqualsBox(vector, tolerance) {
-        return (MathUtils_1.MathUtils.Abs(this.x - vector.x) <= tolerance) &&
-            (MathUtils_1.MathUtils.Abs(this.y - vector.y) <= tolerance);
+        return (MathUtils.Abs(this.x - vector.x) <= tolerance) &&
+            (MathUtils.Abs(this.y - vector.y) <= tolerance);
     }
     ApproxEquals(vector, tolerance) {
         return this.Distance(vector) <= tolerance;
@@ -161,19 +159,19 @@ class Vec2 {
         let val = vec.Dot(Vec2.Normalize(vector));
         val = val > 1 ? 1 : val;
         val = val < -1 ? -1 : val;
-        return MathUtils_1.MathUtils.Acos(val);
+        return MathUtils.Acos(val);
     }
     static Angle(v1, v2) {
         return v1.Angle(v2);
     }
     Rotate(angle) {
-        const x = this.x * MathUtils_1.MathUtils.Cos(angle) - this.y * MathUtils_1.MathUtils.Sin(angle);
-        const y = this.x * MathUtils_1.MathUtils.Sin(angle) + this.y * MathUtils_1.MathUtils.Cos(angle);
+        const x = this.x * MathUtils.Cos(angle) - this.y * MathUtils.Sin(angle);
+        const y = this.x * MathUtils.Sin(angle) + this.y * MathUtils.Cos(angle);
         this.Set(x, y);
     }
     static Rotate(v, angle) {
-        const x = v.x * MathUtils_1.MathUtils.Cos(angle) - v.y * MathUtils_1.MathUtils.Sin(angle);
-        const y = v.x * MathUtils_1.MathUtils.Sin(angle) + v.y * MathUtils_1.MathUtils.Cos(angle);
+        const x = v.x * MathUtils.Cos(angle) - v.y * MathUtils.Sin(angle);
+        const y = v.x * MathUtils.Sin(angle) + v.y * MathUtils.Cos(angle);
         return new Vec2(x, y);
     }
     EqualsTo(v) {
@@ -248,7 +246,7 @@ class Vec2 {
         let nor = v.Clone();
         let sqrMagnitude = nor.SqrMagnitude();
         if (sqrMagnitude > (maxLength * maxLength))
-            nor.MulN(maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude));
+            nor.MulN(maxLength / MathUtils.Sqrt(sqrMagnitude));
         return nor;
     }
     static LerpUnclamped(from, to, t) {
@@ -264,22 +262,22 @@ class Vec2 {
         return v.y / v.x;
     }
     static DegToRad(v) {
-        return new Vec2(MathUtils_1.MathUtils.DegToRad(v.x), MathUtils_1.MathUtils.DegToRad(v.y));
+        return new Vec2(MathUtils.DegToRad(v.x), MathUtils.DegToRad(v.y));
     }
     static RadToDeg(v) {
-        return new Vec2(MathUtils_1.MathUtils.RadToDeg(v.x), MathUtils_1.MathUtils.RadToDeg(v.y));
+        return new Vec2(MathUtils.RadToDeg(v.x), MathUtils.RadToDeg(v.y));
     }
     static Abs(v) {
-        return new Vec2(MathUtils_1.MathUtils.Abs(v.x), MathUtils_1.MathUtils.Abs(v.y));
+        return new Vec2(MathUtils.Abs(v.x), MathUtils.Abs(v.y));
     }
     static Pow(v, value) {
-        return new Vec2(MathUtils_1.MathUtils.Pow(v.x, value), MathUtils_1.MathUtils.Pow(v.y, value));
+        return new Vec2(MathUtils.Pow(v.x, value), MathUtils.Pow(v.y, value));
     }
     static Floor(v) {
-        return new Vec2(MathUtils_1.MathUtils.Floor(v.x), MathUtils_1.MathUtils.Floor(v.y));
+        return new Vec2(MathUtils.Floor(v.x), MathUtils.Floor(v.y));
     }
     static Round(v) {
-        return new Vec2(MathUtils_1.MathUtils.Round(v.x), MathUtils_1.MathUtils.Round(v.y));
+        return new Vec2(MathUtils.Round(v.x), MathUtils.Round(v.y));
     }
     static Equals(v1, v2) {
         if (v1 == null || v2 == null)
@@ -287,4 +285,3 @@ class Vec2 {
         return v1.x == v2.x && v1.y == v2.y;
     }
 }
-exports.Vec2 = Vec2;

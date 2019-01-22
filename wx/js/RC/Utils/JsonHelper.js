@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class JsonHelper {
+export class JsonHelper {
     static Parse(json) {
         json = json.replace("\/\*+[^\*]*\*+/\g", "");
         return JSON.parse(json);
     }
 }
-exports.JsonHelper = JsonHelper;

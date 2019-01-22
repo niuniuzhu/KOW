@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const FVec2_1 = require("./FVec2");
-const FMathUtils_1 = require("./FMathUtils");
-class FRect {
+import { FVec2 } from "./FVec2";
+import { FMathUtils } from "./FMathUtils";
+export class FRect {
     static get zero() {
         return new FRect();
     }
@@ -10,24 +8,24 @@ class FRect {
     set x(value) { this._xMin = value; }
     get y() { return this._yMin; }
     set y(value) { this._yMin = value; }
-    get position() { return new FVec2_1.FVec2(this._xMin, this._yMin); }
+    get position() { return new FVec2(this._xMin, this._yMin); }
     set position(value) {
         this._xMin = value.x;
         this._yMin = value.y;
     }
     get center() {
-        return new FVec2_1.FVec2(FMathUtils_1.FMathUtils.Add(this.x, FMathUtils_1.FMathUtils.Div(this._width, 2)), FMathUtils_1.FMathUtils.Add(this.y, FMathUtils_1.FMathUtils.Div(this._height, 2)));
+        return new FVec2(FMathUtils.Add(this.x, FMathUtils.Div(this._width, 2)), FMathUtils.Add(this.y, FMathUtils.Div(this._height, 2)));
     }
     set center(value) {
-        this._xMin = FMathUtils_1.FMathUtils.Sub(value.x, FMathUtils_1.FMathUtils.Div(this._width, 2));
-        this._yMin = FMathUtils_1.FMathUtils.Sub(value.y, FMathUtils_1.FMathUtils.Div(this._height, 2));
+        this._xMin = FMathUtils.Sub(value.x, FMathUtils.Div(this._width, 2));
+        this._yMin = FMathUtils.Sub(value.y, FMathUtils.Div(this._height, 2));
     }
-    get min() { return new FVec2_1.FVec2(this.xMin, this.yMin); }
+    get min() { return new FVec2(this.xMin, this.yMin); }
     set min(value) {
         this.xMin = value.x;
         this.yMin = value.y;
     }
-    get max() { return new FVec2_1.FVec2(this.xMax, this.yMax); }
+    get max() { return new FVec2(this.xMax, this.yMax); }
     set max(value) {
         this.xMax = value.x;
         this.yMax = value.y;
@@ -36,7 +34,7 @@ class FRect {
     set width(value) { this._width = value; }
     get height() { return this._height; }
     set height(value) { this.height = value; }
-    get size() { return new FVec2_1.FVec2(this._width, this._height); }
+    get size() { return new FVec2(this._width, this._height); }
     set size(value) {
         this._width = value.x;
         this._height = value.y;
@@ -45,21 +43,21 @@ class FRect {
     set xMin(value) {
         let xMax = this.xMax;
         this._xMin = value;
-        this._width = FMathUtils_1.FMathUtils.Sub(xMax, this._xMin);
+        this._width = FMathUtils.Sub(xMax, this._xMin);
     }
     get yMin() { return this._yMin; }
     set yMin(value) {
         let yMax = this.yMax;
         this._yMin = value;
-        this._height = FMathUtils_1.FMathUtils.Sub(yMax, this._yMin);
+        this._height = FMathUtils.Sub(yMax, this._yMin);
     }
-    get xMax() { return FMathUtils_1.FMathUtils.Add(this._width, this._xMin); }
+    get xMax() { return FMathUtils.Add(this._width, this._xMin); }
     set xMax(value) {
-        this._width = FMathUtils_1.FMathUtils.Sub(value, this._xMin);
+        this._width = FMathUtils.Sub(value, this._xMin);
     }
-    get yMax() { return FMathUtils_1.FMathUtils.Add(this._height, this._yMin); }
+    get yMax() { return FMathUtils.Add(this._height, this._yMin); }
     set yMax(value) {
-        this._height = FMathUtils_1.FMathUtils.Sub(value, this._yMin);
+        this._height = FMathUtils.Sub(value, this._yMin);
     }
     constructor(x = 0, y = 0, width = 0, height = 0) {
         this._xMin = x;
@@ -82,7 +80,7 @@ class FRect {
         return rect;
     }
     static MinMaxRect(xmin, ymin, xmax, ymax) {
-        return new FRect(xmin, ymin, FMathUtils_1.FMathUtils.Sub(xmax, xmin), FMathUtils_1.FMathUtils.Sub(ymax, ymin));
+        return new FRect(xmin, ymin, FMathUtils.Sub(xmax, xmin), FMathUtils.Sub(ymax, ymin));
     }
     Set(x, y, width, height) {
         this._xMin = x;
@@ -126,10 +124,9 @@ class FRect {
         return other.xMax > rect.xMin && other.xMin < rect.xMax && other.yMax > rect.yMin && other.yMin < rect.yMax;
     }
     static NormalizedToPoint(rectangle, normalizedRectCoordinates) {
-        return new FVec2_1.FVec2(FMathUtils_1.FMathUtils.Lerp(rectangle.x, rectangle.xMax, normalizedRectCoordinates.x), FMathUtils_1.FMathUtils.Lerp(rectangle.y, rectangle.yMax, normalizedRectCoordinates.y));
+        return new FVec2(FMathUtils.Lerp(rectangle.x, rectangle.xMax, normalizedRectCoordinates.x), FMathUtils.Lerp(rectangle.y, rectangle.yMax, normalizedRectCoordinates.y));
     }
     static PointToNormalized(rectangle, point) {
-        return new FVec2_1.FVec2(FMathUtils_1.FMathUtils.InverseLerp(rectangle.x, rectangle.xMax, point.x), FMathUtils_1.FMathUtils.InverseLerp(rectangle.y, rectangle.yMax, point.y));
+        return new FVec2(FMathUtils.InverseLerp(rectangle.x, rectangle.xMax, point.x), FMathUtils.InverseLerp(rectangle.y, rectangle.yMax, point.y));
     }
 }
-exports.FRect = FRect;

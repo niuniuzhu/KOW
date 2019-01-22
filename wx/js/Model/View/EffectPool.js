@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const VEffect_1 = require("./VEffect");
-const Stack_1 = require("../../RC/Collections/Stack");
-class EffectPool {
+import { VEffect } from "./VEffect";
+import Stack from "../../RC/Collections/Stack";
+export class EffectPool {
     constructor(battle) {
         this.POOL = new Map();
         this._battle = battle;
@@ -21,11 +19,11 @@ class EffectPool {
                 fx = stack.pop();
             }
             else {
-                fx = new VEffect_1.VEffect(this._battle, id);
+                fx = new VEffect(this._battle, id);
             }
         }
         else {
-            fx = new VEffect_1.VEffect(this._battle, id);
+            fx = new VEffect(this._battle, id);
         }
         fx.OnSpawn();
         return fx;
@@ -38,10 +36,9 @@ class EffectPool {
             stack = this.POOL.get(id);
         }
         else {
-            stack = new Stack_1.default();
+            stack = new Stack();
             this.POOL.set(id, stack);
         }
         stack.push(fx);
     }
 }
-exports.EffectPool = EffectPool;

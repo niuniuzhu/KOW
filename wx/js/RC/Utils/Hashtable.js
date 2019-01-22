@@ -1,10 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const FVec2_1 = require("../FMath/FVec2");
-const Vec2_1 = require("../Math/Vec2");
-const Vec3_1 = require("../Math/Vec3");
-const Vec4_1 = require("../Math/Vec4");
-class Hashtable {
+import { FVec2 } from "../FMath/FVec2";
+import { Vec2 } from "../Math/Vec2";
+import { Vec3 } from "../Math/Vec3";
+import { Vec4 } from "../Math/Vec4";
+export class Hashtable {
     static Concat(map, map2) {
         for (let k in map2) {
             if (map[k] == undefined) {
@@ -54,7 +52,7 @@ class Hashtable {
             return null;
         let result = [];
         for (let arr of arrs) {
-            result.push(new Vec2_1.Vec2(arr[0], arr[1]));
+            result.push(new Vec2(arr[0], arr[1]));
         }
         return result;
     }
@@ -64,7 +62,7 @@ class Hashtable {
             return null;
         let result = [];
         for (let arr of arrs) {
-            result.push(new Vec3_1.Vec3(arr[0], arr[1], arr[2]));
+            result.push(new Vec3(arr[0], arr[1], arr[2]));
         }
         return result;
     }
@@ -74,7 +72,7 @@ class Hashtable {
             return null;
         let result = [];
         for (let arr of arrs) {
-            result.push(new Vec4_1.Vec4(arr[0], arr[1], arr[2], arr[3]));
+            result.push(new Vec4(arr[0], arr[1], arr[2], arr[3]));
         }
         return result;
     }
@@ -82,25 +80,24 @@ class Hashtable {
         let arr = this.GetArray(map, key);
         if (arr == null)
             return null;
-        return new Vec2_1.Vec2(arr[0], arr[1]);
+        return new Vec2(arr[0], arr[1]);
     }
     static GetVec3(map, key) {
         let arr = this.GetArray(map, key);
         if (arr == null)
             return null;
-        return new Vec3_1.Vec3(arr[0], arr[1], arr[2]);
+        return new Vec3(arr[0], arr[1], arr[2]);
     }
     static GetVec4(map, key) {
         let arr = this.GetArray(map, key);
         if (arr == null)
             return null;
-        return new Vec4_1.Vec4(arr[0], arr[1], arr[2], arr[3]);
+        return new Vec4(arr[0], arr[1], arr[2], arr[3]);
     }
     static GetFVec2(map, key) {
         let arr = this.GetArray(map, key);
         if (arr == null)
             return null;
-        return new FVec2_1.FVec2(arr[0], arr[1]);
+        return new FVec2(arr[0], arr[1]);
     }
 }
-exports.Hashtable = Hashtable;

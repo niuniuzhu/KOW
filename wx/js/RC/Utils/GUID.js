@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class GUID {
+export class GUID {
     constructor(guid) {
         if (!guid) {
             throw new TypeError("Invalid argument; `value` has no value.");
@@ -50,4 +48,3 @@ class GUID {
 }
 GUID.validator = new RegExp("^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$", "i");
 GUID.EMPTY = "00000000-0000-0000-0000-000000000000";
-exports.GUID = GUID;

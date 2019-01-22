@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Quat_1 = require("./Quat");
-const Vec2_1 = require("./Vec2");
-class MathUtils {
+import { Quat } from "./Quat";
+import { Vec2 } from "./Vec2";
+export class MathUtils {
     static Random(min = 0, max = 1) {
         return Math.random() * (max - min) + min;
     }
@@ -156,9 +154,9 @@ class MathUtils {
         return result;
     }
     static FromToDirection(from, to, t, forward) {
-        let q1 = Quat_1.Quat.FromToRotation(forward, from);
-        let q2 = Quat_1.Quat.FromToRotation(forward, to);
-        let q3 = Quat_1.Quat.Lerp(q1, q2, t);
+        let q1 = Quat.FromToRotation(forward, from);
+        let q2 = Quat.FromToRotation(forward, to);
+        let q3 = Quat.Lerp(q1, q2, t);
         return q3.Transform(forward);
     }
     static SmoothStep(from, to, t) {
@@ -235,7 +233,7 @@ class MathUtils {
             let num6 = p3.x - p1.x;
             let num7 = p3.y - p1.y;
             let num8 = (num6 * num4 - num7 * num3) / num5;
-            result[0] = new Vec2_1.Vec2(p1.x + num8 * num, p1.y + num8 * num2);
+            result[0] = new Vec2(p1.x + num8 * num, p1.y + num8 * num2);
             result2 = true;
         }
         return result2;
@@ -263,7 +261,7 @@ class MathUtils {
                     result2 = false;
                 }
                 else {
-                    result[0] = new Vec2_1.Vec2(p1.x + num8 * num, p1.y + num8 * num2);
+                    result[0] = new Vec2(p1.x + num8 * num, p1.y + num8 * num2);
                     result2 = true;
                 }
             }
@@ -301,4 +299,3 @@ MathUtils.DEG_TO_RAD = MathUtils.PI / 180;
 MathUtils.RAD_TO_DEG = 180 / MathUtils.PI;
 MathUtils.INFINITY = Number.POSITIVE_INFINITY;
 MathUtils.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
-exports.MathUtils = MathUtils;

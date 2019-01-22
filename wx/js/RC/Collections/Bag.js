@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const util = require("./util");
-const Dictionary_1 = require("./Dictionary");
-const Set_1 = require("./Set");
-class Bag {
+import * as util from './util';
+import Dictionary from './Dictionary';
+import Set from './Set';
+export default class Bag {
     constructor(toStrFunction) {
         this.toStrF = toStrFunction || util.defaultToString;
-        this.dictionary = new Dictionary_1.default(this.toStrF);
+        this.dictionary = new Dictionary(this.toStrF);
         this.nElements = 0;
     }
     add(element, nCopies = 1) {
@@ -72,7 +70,7 @@ class Bag {
         return a;
     }
     toSet() {
-        const toret = new Set_1.default(this.toStrF);
+        const toret = new Set(this.toStrF);
         const elements = this.dictionary.values();
         for (const ele of elements) {
             const value = ele.value;
@@ -103,4 +101,3 @@ class Bag {
         this.dictionary.clear();
     }
 }
-exports.default = Bag;

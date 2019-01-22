@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const LinkedList_1 = require("./LinkedList");
-class Queue {
+import LinkedList from './LinkedList';
+export default class Queue {
     constructor() {
-        this.list = new LinkedList_1.default();
+        this.list = new LinkedList();
     }
     enqueue(elem) {
         return this.list.add(elem);
@@ -41,4 +39,3 @@ class Queue {
         this.list.forEach(callback);
     }
 }
-exports.default = Queue;

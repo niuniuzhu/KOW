@@ -23,8 +23,8 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Ne
             const info = new protos_1.Protos.GC2BS_FrameActionInfo();
             info.frame = 0;
             info.inputFlag = InputFlag.Move;
-            info.v0 = direction.x;
-            info.v1 = direction.y;
+            info.v0 = Math.floor(direction.x * 1000);
+            info.v1 = Math.floor(direction.y * 1000);
             this._infos.push(info);
         }
         SetS1(press) {
@@ -33,7 +33,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Ne
             const info = new protos_1.Protos.GC2BS_FrameActionInfo();
             info.frame = 0;
             info.inputFlag = InputFlag.S1;
-            info.v0 = press ? 1 : 0;
+            info.v0 = press ? 1000 : 0;
             this._infos.push(info);
         }
         SetS2(press) {
@@ -42,7 +42,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Ne
             const info = new protos_1.Protos.GC2BS_FrameActionInfo();
             info.frame = 0;
             info.inputFlag = InputFlag.S2;
-            info.v0 = press ? 1 : 0;
+            info.v0 = press ? 1000 : 0;
             this._infos.push(info);
         }
         Update(dt) {

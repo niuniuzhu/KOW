@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Set_1 = require("../../../RC/Collections/Set");
-const FSMState_1 = require("../../../RC/FSM/FSMState");
-const Hashtable_1 = require("../../../RC/Utils/Hashtable");
-const IntrptCollider_1 = require("./Interrupt/IntrptCollider");
-const IntrptInput_1 = require("./Interrupt/IntrptInput");
-const IntrptTimeup_1 = require("./Interrupt/IntrptTimeup");
-const StateEnums_1 = require("../../StateEnums");
-class EntityState extends FSMState_1.FSMState {
+import Set from "../../../RC/Collections/Set";
+import { FSMState } from "../../../RC/FSM/FSMState";
+import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { IntrptCollider } from "./Interrupt/IntrptCollider";
+import { IntrptInput } from "./Interrupt/IntrptInput";
+import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
+import { ID_TO_STATE_ACTION, InterruptType } from "../../StateEnums";
+export class EntityState extends FSMState {
     constructor(type, owner) {
         super(type);
         this.time = 0;
@@ -17,24 +15,24 @@ class EntityState extends FSMState_1.FSMState {
     }
     get owner() { return this._owner; }
     Init(statesDef) {
-        const def = Hashtable_1.Hashtable.GetMap(statesDef, this.type.toString());
-        const actionsDef = Hashtable_1.Hashtable.GetMapArray(def, "actions");
+        const def = Hashtable.GetMap(statesDef, this.type.toString());
+        const actionsDef = Hashtable.GetMapArray(def, "actions");
         if (actionsDef != null) {
             for (const actionDef of actionsDef) {
-                const type = Hashtable_1.Hashtable.GetNumber(actionDef, "id");
-                const ctr = StateEnums_1.ID_TO_STATE_ACTION.get(type);
+                const type = Hashtable.GetNumber(actionDef, "id");
+                const ctr = ID_TO_STATE_ACTION.get(type);
                 const action = new ctr(this, type, actionDef);
                 this.AddAction(action);
             }
         }
-        const sa = Hashtable_1.Hashtable.GetNumberArray(def, "states_available");
+        const sa = Hashtable.GetNumberArray(def, "states_available");
         if (sa != null) {
-            this._statesAvailable = new Set_1.default();
+            this._statesAvailable = new Set();
             for (const type of sa) {
                 this._statesAvailable.add(type);
             }
         }
-        const interruptDefs = Hashtable_1.Hashtable.GetMapArray(def, "interrupts");
+        const interruptDefs = Hashtable.GetMapArray(def, "interrupts");
         if (interruptDefs) {
             for (const interruptDef of interruptDefs) {
                 this.CreateInturrupt(interruptDef);
@@ -42,17 +40,17 @@ class EntityState extends FSMState_1.FSMState {
         }
     }
     CreateInturrupt(def) {
-        const id = Hashtable_1.Hashtable.GetNumber(def, "id");
+        const id = Hashtable.GetNumber(def, "id");
         let interrupt;
         switch (id) {
-            case StateEnums_1.InterruptType.Timeup:
-                interrupt = new IntrptTimeup_1.IntrptTimeup(this, def);
+            case InterruptType.Timeup:
+                interrupt = new IntrptTimeup(this, def);
                 break;
-            case StateEnums_1.InterruptType.Collision:
-                interrupt = new IntrptCollider_1.IntrptCollider(this, def);
+            case InterruptType.Collision:
+                interrupt = new IntrptCollider(this, def);
                 break;
-            case StateEnums_1.InterruptType.Input:
-                interrupt = new IntrptInput_1.IntrptInput(this, def);
+            case InterruptType.Input:
+                interrupt = new IntrptInput(this, def);
                 break;
         }
         this._interrupts.push(interrupt);
@@ -136,4 +134,3 @@ class EntityState extends FSMState_1.FSMState {
         return str;
     }
 }
-exports.EntityState = EntityState;

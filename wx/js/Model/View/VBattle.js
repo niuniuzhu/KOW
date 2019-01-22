@@ -1,24 +1,22 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Consts_1 = require("../../Consts");
-const Global_1 = require("../../Global");
-const $protobuf = require("../../Libs/protobufjs");
-const Hashtable_1 = require("../../RC/Utils/Hashtable");
-const SyncEvent_1 = require("../BattleEvent/SyncEvent");
-const Defs_1 = require("../Defs");
-const EntityType_1 = require("../EntityType");
-const BattleAssetsMgr_1 = require("./BattleAssetsMgr");
-const Camera_1 = require("./Camera");
-const EffectPool_1 = require("./EffectPool");
-const HUD_1 = require("./HUD");
-const VBullet_1 = require("./VBullet");
-const VChampion_1 = require("./VChampion");
-const VSceneItem_1 = require("./VSceneItem");
-class VBattle {
+import { Consts } from "../../Consts";
+import { Global } from "../../Global";
+import * as $protobuf from "../../Libs/protobufjs";
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
+import { Defs } from "../Defs";
+import { EntityType } from "../EntityType";
+import { BattleAssetsMgr } from "./BattleAssetsMgr";
+import { Camera } from "./Camera";
+import { EffectPool } from "./EffectPool";
+import { PopTextType } from "./HUD";
+import { VBullet } from "./VBullet";
+import { VChampion } from "./VChampion";
+import { VSceneItem } from "./VSceneItem";
+export class VBattle {
     constructor() {
         this._mapID = 0;
-        this._camera = new Camera_1.Camera();
-        this._assetsManager = new BattleAssetsMgr_1.BattleAssetsMgr();
+        this._camera = new Camera();
+        this._assetsManager = new BattleAssetsMgr();
         this._champions = [];
         this._idToChampion = new Map();
         this._bullets = [];
@@ -27,7 +25,7 @@ class VBattle {
         this._items = [];
         this._idToItem = new Map();
         this._destroied = true;
-        this._effectPool = new EffectPool_1.EffectPool(this);
+        this._effectPool = new EffectPool(this);
     }
     get mapID() { return this._mapID; }
     get camera() { return this._camera; }
@@ -36,13 +34,13 @@ class VBattle {
         if (this._destroied)
             return;
         this._destroied = true;
-        SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT);
-        SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_ENTITY_CREATED);
-        SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SNAPSHOT);
-        SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_HIT);
-        SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_BULLET_COLLISION);
-        SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_COLLISION);
-        SyncEvent_1.SyncEvent.RemoveListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_TRIGGER);
+        SyncEvent.RemoveListener(SyncEvent.E_BATTLE_INIT);
+        SyncEvent.RemoveListener(SyncEvent.E_ENTITY_CREATED);
+        SyncEvent.RemoveListener(SyncEvent.E_SNAPSHOT);
+        SyncEvent.RemoveListener(SyncEvent.E_HIT);
+        SyncEvent.RemoveListener(SyncEvent.E_BULLET_COLLISION);
+        SyncEvent.RemoveListener(SyncEvent.E_SCENE_ITEM_COLLISION);
+        SyncEvent.RemoveListener(SyncEvent.E_SCENE_ITEM_TRIGGER);
         for (let i = 0, count = this._champions.length; i < count; ++i) {
             this._champions[i].Destroy();
         }
@@ -72,21 +70,21 @@ class VBattle {
         this._assetsManager.Preload(battleInfo, caller, onComplete, onProgress);
     }
     SetBattleInfo(battleInfo) {
-        SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
-        SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_ENTITY_CREATED, this.OnEntityCreated.bind(this));
-        SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
-        SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_HIT, this.OnHit.bind(this));
-        SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
-        SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_COLLISION, this.OnItemCollision.bind(this));
-        SyncEvent_1.SyncEvent.AddListener(SyncEvent_1.SyncEvent.E_SCENE_ITEM_TRIGGER, this.OnItemTrigger.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_BATTLE_INIT, this.OnBattleInit.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_ENTITY_CREATED, this.OnEntityCreated.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_SNAPSHOT, this.OnSnapshot.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_HIT, this.OnHit.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_BULLET_COLLISION, this.OnBulletCollision.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_SCENE_ITEM_COLLISION, this.OnItemCollision.bind(this));
+        SyncEvent.AddListener(SyncEvent.E_SCENE_ITEM_TRIGGER, this.OnItemTrigger.bind(this));
         this._destroied = false;
         this._mapID = battleInfo.mapID;
-        const def = Defs_1.Defs.GetMap(this._mapID);
-        this._camera.SetBounds(Hashtable_1.Hashtable.GetNumber(def, "width") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO, Hashtable_1.Hashtable.GetNumber(def, "height") * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO);
+        const def = Defs.GetMap(this._mapID);
+        this._camera.SetBounds(Hashtable.GetNumber(def, "width") * Consts.LOGIC_TO_PIXEL_RATIO, Hashtable.GetNumber(def, "height") * Consts.LOGIC_TO_PIXEL_RATIO);
         fairygui.UIPackage.addPackage("res/ui/assets");
-        this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
+        this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
         this._root.touchable = false;
-        Global_1.Global.graphic.mapRoot.addChild(this._root);
+        Global.graphic.mapRoot.addChild(this._root);
     }
     Update(dt) {
         this._camera.Update(dt);
@@ -176,11 +174,11 @@ class VBattle {
         }
     }
     CreateChampion(rid, reader) {
-        const champion = new VChampion_1.VChampion(this);
+        const champion = new VChampion(this);
         champion.DecodeSync(rid, reader, true);
         this._champions.push(champion);
         this._idToChampion.set(champion.rid.toString(), champion);
-        const isSelf = champion.rid.equals(Global_1.Global.battleManager.playerID);
+        const isSelf = champion.rid.equals(Global.battleManager.playerID);
         if (isSelf) {
             this._camera.lookAt = champion;
         }
@@ -201,7 +199,7 @@ class VBattle {
         return this._idToChampion.get(rid.toString());
     }
     CreateBullet(rid, reader) {
-        const bullet = new VBullet_1.VBullet(this);
+        const bullet = new VBullet(this);
         bullet.DecodeSync(rid, reader, true);
         this._bullets.push(bullet);
         this._idToBullet.set(bullet.rid.toString(), bullet);
@@ -222,7 +220,7 @@ class VBattle {
         return this._idToBullet.get(rid.toString());
     }
     CreateSceneItem(rid, reader) {
-        const item = new VSceneItem_1.VSceneItem(this);
+        const item = new VSceneItem(this);
         item.DecodeSync(rid, reader, true);
         this._items.push(item);
         this._idToItem.set(item.rid.toString(), item);
@@ -264,13 +262,13 @@ class VBattle {
         const reader = $protobuf.Reader.create(e.data);
         const rid = reader.uint64();
         switch (e.entityType) {
-            case EntityType_1.EntityType.Champion:
+            case EntityType.Champion:
                 this.CreateChampion(rid, reader);
                 break;
-            case EntityType_1.EntityType.Bullet:
+            case EntityType.Bullet:
                 this.CreateBullet(rid, reader);
                 break;
-            case EntityType_1.EntityType.SceneItem:
+            case EntityType.SceneItem:
                 this.CreateSceneItem(rid, reader);
                 break;
         }
@@ -281,7 +279,7 @@ class VBattle {
     }
     OnHit(e) {
         const target = this.GetChampion(e.rid1);
-        target.hud.PopText(HUD_1.PopTextType.Hurt, e.v0);
+        target.hud.PopText(PopTextType.Hurt, e.v0);
     }
     OnItemCollision(e) {
     }
@@ -294,4 +292,3 @@ class VBattle {
         bullet.OnCollision(caster, target);
     }
 }
-exports.VBattle = VBattle;

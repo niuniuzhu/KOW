@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const FVec2_1 = require("../../RC/FMath/FVec2");
-class EntityInitParams {
+import { FVec2 } from "../../RC/FMath/FVec2";
+export class EntityInitParams {
 }
-exports.EntityInitParams = EntityInitParams;
-class Entity {
+export class Entity {
     constructor(battle) {
-        this.position = FVec2_1.FVec2.zero;
-        this.direction = FVec2_1.FVec2.zero;
+        this.position = FVec2.zero;
+        this.direction = FVec2.zero;
         this._battle = battle;
     }
     get battle() { return this._battle; }
@@ -58,4 +55,3 @@ class Entity {
         return str;
     }
 }
-exports.Entity = Entity;

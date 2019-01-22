@@ -1,17 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Vec3_1 = require("./Vec3");
-const Vec2_1 = require("./Vec2");
-const MathUtils_1 = require("./MathUtils");
-const Mat2_1 = require("./Mat2");
-const Quat_1 = require("./Quat");
-const Vec4_1 = require("./Vec4");
-class Mat3 {
+import { Vec3 } from "./Vec3";
+import { Vec2 } from "./Vec2";
+import { MathUtils } from "./MathUtils";
+import { Mat2 } from "./Mat2";
+import { Quat } from "./Quat";
+import { Vec4 } from "./Vec4";
+export class Mat3 {
     static get identity() {
-        return new Mat3(new Vec3_1.Vec3(1, 0, 0), new Vec3_1.Vec3(0, 1, 0), new Vec3_1.Vec3(0, 0, 1));
+        return new Mat3(new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 1));
     }
     ;
-    constructor(x = Vec3_1.Vec3.zero, y = Vec3_1.Vec3.zero, z = Vec3_1.Vec3.zero) {
+    constructor(x = Vec3.zero, y = Vec3.zero, z = Vec3.zero) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -125,13 +123,13 @@ class Mat3 {
         return this;
     }
     Transform(v) {
-        return new Vec3_1.Vec3(v.x * this.x.x + v.y * this.y.x + v.z * this.z.x, v.x * this.x.y + v.y * this.y.y + v.z * this.z.y, v.x * this.x.z + v.y * this.y.z + v.z * this.z.z);
+        return new Vec3(v.x * this.x.x + v.y * this.y.x + v.z * this.z.x, v.x * this.x.y + v.y * this.y.y + v.z * this.z.y, v.x * this.x.z + v.y * this.y.z + v.z * this.z.z);
     }
     TransformPoint(v) {
-        return new Vec2_1.Vec2(v.x * this.x.x + v.y * this.y.x + this.z.x, v.x * this.x.y + v.y * this.y.y + this.z.y);
+        return new Vec2(v.x * this.x.x + v.y * this.y.x + this.z.x, v.x * this.x.y + v.y * this.y.y + this.z.y);
     }
     TransformVector(v) {
-        return new Vec2_1.Vec2(v.x * this.x.x + v.y * this.y.x, v.x * this.x.y + v.y * this.y.y);
+        return new Vec2(v.x * this.x.x + v.y * this.y.x, v.x * this.x.y + v.y * this.y.y);
     }
     Identity() {
         this.x.x = 1;
@@ -148,11 +146,11 @@ class Mat3 {
     Euler() {
         if (this.z.x < 1) {
             if (this.z.x > -1) {
-                return new Vec3_1.Vec3(MathUtils_1.MathUtils.Atan2(this.z.y, this.z.z), MathUtils_1.MathUtils.Asin(-this.z.x), MathUtils_1.MathUtils.Atan2(this.y.x, this.x.x));
+                return new Vec3(MathUtils.Atan2(this.z.y, this.z.z), MathUtils.Asin(-this.z.x), MathUtils.Atan2(this.y.x, this.x.x));
             }
-            return new Vec3_1.Vec3(0, MathUtils_1.MathUtils.PI_HALF, -MathUtils_1.MathUtils.Atan2(this.y.z, this.y.y));
+            return new Vec3(0, MathUtils.PI_HALF, -MathUtils.Atan2(this.y.z, this.y.y));
         }
-        return new Vec3_1.Vec3(0, -MathUtils_1.MathUtils.PI_HALF, MathUtils_1.MathUtils.Atan2(-this.y.z, this.y.y));
+        return new Vec3(0, -MathUtils.PI_HALF, MathUtils.Atan2(-this.y.z, this.y.y));
     }
     Transpose() {
         let m00 = this.x.x;
@@ -176,14 +174,14 @@ class Mat3 {
         return this;
     }
     MultiplyTransposed(matrix) {
-        return new Mat3(new Vec3_1.Vec3(this.x.x * matrix.x.x + this.y.x * matrix.y.x + this.z.x * matrix.z.x, this.x.x * matrix.x.y + this.y.x * matrix.y.y + this.z.x * matrix.z.y, this.x.x * matrix.x.z + this.y.x * matrix.y.z + this.z.x * matrix.z.z), new Vec3_1.Vec3(this.x.y * matrix.x.x + this.y.y * matrix.y.x + this.z.y * matrix.z.x, this.x.y * matrix.x.y + this.y.y * matrix.y.y + this.z.y * matrix.z.y, this.x.y * matrix.x.z + this.y.y * matrix.y.z + this.z.y * matrix.z.z), new Vec3_1.Vec3(this.x.z * matrix.x.x + this.y.z * matrix.y.x + this.z.z * matrix.z.x, this.x.z * matrix.x.y + this.y.z * matrix.y.y + this.z.z * matrix.z.y, this.x.z * matrix.x.z + this.y.z * matrix.y.z + this.z.z * matrix.z.z));
+        return new Mat3(new Vec3(this.x.x * matrix.x.x + this.y.x * matrix.y.x + this.z.x * matrix.z.x, this.x.x * matrix.x.y + this.y.x * matrix.y.y + this.z.x * matrix.z.y, this.x.x * matrix.x.z + this.y.x * matrix.y.z + this.z.x * matrix.z.z), new Vec3(this.x.y * matrix.x.x + this.y.y * matrix.y.x + this.z.y * matrix.z.x, this.x.y * matrix.x.y + this.y.y * matrix.y.y + this.z.y * matrix.z.y, this.x.y * matrix.x.z + this.y.y * matrix.y.z + this.z.y * matrix.z.z), new Vec3(this.x.z * matrix.x.x + this.y.z * matrix.y.x + this.z.z * matrix.z.x, this.x.z * matrix.x.y + this.y.z * matrix.y.y + this.z.z * matrix.z.y, this.x.z * matrix.x.z + this.y.z * matrix.y.z + this.z.z * matrix.z.z));
     }
     Determinant() {
         return this.x.x * this.y.y * this.z.z + this.x.y * this.y.z * this.z.x + this.x.z * this.y.x * this.z.y -
             this.z.x * this.y.y * this.x.z - this.z.y * this.y.z * this.x.x - this.z.z * this.y.x * this.x.y;
     }
     NonhomogeneousInvert() {
-        let m2 = new Mat2_1.Mat2();
+        let m2 = new Mat2();
         m2.x.x = this.x.x;
         m2.x.y = this.x.y;
         m2.y.x = this.y.x;
@@ -194,7 +192,7 @@ class Mat3 {
         this.x.y = m2.x.y;
         this.y.x = m2.y.x;
         this.y.y = m2.y.y;
-        let v = m2.Transform(new Vec2_1.Vec2(this.z.x, this.z.y));
+        let v = m2.Transform(new Vec2(this.z.x, this.z.y));
         this.z.x = -v.x;
         this.z.y = -v.y;
         return this;
@@ -222,9 +220,9 @@ class Mat3 {
         return this;
     }
     RotateAroundAxisX(angle) {
-        angle = MathUtils_1.MathUtils.DegToRad(angle);
-        let tCos = MathUtils_1.MathUtils.Cos(angle);
-        let tSin = MathUtils_1.MathUtils.Sin(angle);
+        angle = MathUtils.DegToRad(angle);
+        let tCos = MathUtils.Cos(angle);
+        let tSin = MathUtils.Sin(angle);
         let m00 = this.x.x;
         let m01 = this.y.x * tCos - this.z.x * tSin;
         let m02 = this.y.x * tSin + this.z.x * tCos;
@@ -246,9 +244,9 @@ class Mat3 {
         return this;
     }
     RotateAroundAxisY(angle) {
-        angle = MathUtils_1.MathUtils.DegToRad(angle);
-        let tCos = MathUtils_1.MathUtils.Cos(angle);
-        let tSin = MathUtils_1.MathUtils.Sin(angle);
+        angle = MathUtils.DegToRad(angle);
+        let tCos = MathUtils.Cos(angle);
+        let tSin = MathUtils.Sin(angle);
         let m00 = this.z.x * tSin + this.x.x * tCos;
         let m01 = this.y.x;
         let m02 = this.z.x * tCos - this.x.x * tSin;
@@ -270,9 +268,9 @@ class Mat3 {
         return this;
     }
     RotateAroundAxisZ(angle) {
-        angle = MathUtils_1.MathUtils.DegToRad(angle);
-        let tCos = MathUtils_1.MathUtils.Cos(angle);
-        let tSin = MathUtils_1.MathUtils.Sin(angle);
+        angle = MathUtils.DegToRad(angle);
+        let tCos = MathUtils.Cos(angle);
+        let tSin = MathUtils.Sin(angle);
         let m00 = this.x.x * tCos - this.y.x * tSin;
         let m01 = this.x.x * tSin + this.y.x * tCos;
         let m02 = this.z.x;
@@ -294,10 +292,10 @@ class Mat3 {
         return this;
     }
     RotateAroundWorldAxisX(angle) {
-        angle = MathUtils_1.MathUtils.DegToRad(angle);
+        angle = MathUtils.DegToRad(angle);
         angle = -angle;
-        let tCos = MathUtils_1.MathUtils.Cos(angle);
-        let tSin = MathUtils_1.MathUtils.Sin(angle);
+        let tCos = MathUtils.Cos(angle);
+        let tSin = MathUtils.Sin(angle);
         let m00 = this.x.x;
         let m01 = this.y.x;
         let m02 = this.z.x;
@@ -319,10 +317,10 @@ class Mat3 {
         return this;
     }
     RotateAroundWorldAxisY(angle) {
-        angle = MathUtils_1.MathUtils.DegToRad(angle);
+        angle = MathUtils.DegToRad(angle);
         angle = -angle;
-        let tCos = MathUtils_1.MathUtils.Cos(angle);
-        let tSin = MathUtils_1.MathUtils.Sin(angle);
+        let tCos = MathUtils.Cos(angle);
+        let tSin = MathUtils.Sin(angle);
         let m00 = this.x.z * tSin + this.x.x * tCos;
         let m01 = this.y.z * tSin + this.y.x * tCos;
         let m02 = this.z.z * tSin + this.z.x * tCos;
@@ -344,10 +342,10 @@ class Mat3 {
         return this;
     }
     RotateAroundWorldAxisZ(angle) {
-        angle = MathUtils_1.MathUtils.DegToRad(angle);
+        angle = MathUtils.DegToRad(angle);
         angle = -angle;
-        let tCos = MathUtils_1.MathUtils.Cos(angle);
-        let tSin = MathUtils_1.MathUtils.Sin(angle);
+        let tCos = MathUtils.Cos(angle);
+        let tSin = MathUtils.Sin(angle);
         let m00 = this.x.x * tCos - this.x.y * tSin;
         let m01 = this.y.x * tCos - this.y.y * tSin;
         let m02 = this.z.x * tCos - this.z.y * tSin;
@@ -369,9 +367,9 @@ class Mat3 {
         return this;
     }
     RotateAround(angle, axis) {
-        let quaternion = Quat_1.Quat.AngleAxis(0, axis).Conjugate();
+        let quaternion = Quat.AngleAxis(0, axis).Conjugate();
         this.Mul2(Mat3.FromQuaternion(quaternion));
-        quaternion = Quat_1.Quat.AngleAxis(angle, axis);
+        quaternion = Quat.AngleAxis(angle, axis);
         let qMat = Mat3.FromQuaternion(quaternion);
         this.Mul2(qMat);
         return this;
@@ -383,25 +381,25 @@ class Mat3 {
         return `(${this.x.ToString()}, ${this.y.ToString()}, ${this.z.ToString()})`;
     }
     static FromScale(scale) {
-        return new Mat3(new Vec3_1.Vec3(scale.x, 0, 0), new Vec3_1.Vec3(0, scale.y, 0), new Vec3_1.Vec3(0, 0, scale.z));
+        return new Mat3(new Vec3(scale.x, 0, 0), new Vec3(0, scale.y, 0), new Vec3(0, 0, scale.z));
     }
     static FromOuterProduct(vector1, vector2) {
-        return new Mat3(new Vec3_1.Vec3(vector1.x * vector2.x, vector1.x * vector2.y, vector1.x * vector2.z), new Vec3_1.Vec3(vector1.y * vector2.x, vector1.y * vector2.y, vector1.y * vector2.z), new Vec3_1.Vec3(vector1.z * vector2.x, vector1.z * vector2.y, vector1.z * vector2.z));
+        return new Mat3(new Vec3(vector1.x * vector2.x, vector1.x * vector2.y, vector1.x * vector2.z), new Vec3(vector1.y * vector2.x, vector1.y * vector2.y, vector1.y * vector2.z), new Vec3(vector1.z * vector2.x, vector1.z * vector2.y, vector1.z * vector2.z));
     }
     static FromEuler(euler) {
-        let x = MathUtils_1.MathUtils.DegToRad(euler.x);
-        let y = MathUtils_1.MathUtils.DegToRad(euler.y);
-        let z = MathUtils_1.MathUtils.DegToRad(euler.z);
-        let cx = MathUtils_1.MathUtils.Cos(x);
-        let sx = MathUtils_1.MathUtils.Sin(x);
-        let cy = MathUtils_1.MathUtils.Cos(y);
-        let sy = MathUtils_1.MathUtils.Sin(y);
-        let cz = MathUtils_1.MathUtils.Cos(z);
-        let sz = MathUtils_1.MathUtils.Sin(z);
-        return new Mat3(new Vec3_1.Vec3(cy * cz, cy * sz, -sy), new Vec3_1.Vec3(cz * sx * sy - cx * sz, cx * cz + sx * sy * sz, cy * sx), new Vec3_1.Vec3(cx * cz * sy + sx * sz, -cz * sx + cx * sy * sz, cx * cy));
+        let x = MathUtils.DegToRad(euler.x);
+        let y = MathUtils.DegToRad(euler.y);
+        let z = MathUtils.DegToRad(euler.z);
+        let cx = MathUtils.Cos(x);
+        let sx = MathUtils.Sin(x);
+        let cy = MathUtils.Cos(y);
+        let sy = MathUtils.Sin(y);
+        let cz = MathUtils.Cos(z);
+        let sz = MathUtils.Sin(z);
+        return new Mat3(new Vec3(cy * cz, cy * sz, -sy), new Vec3(cz * sx * sy - cx * sz, cx * cz + sx * sy * sz, cy * sx), new Vec3(cx * cz * sy + sx * sz, -cz * sx + cx * sy * sz, cx * cy));
     }
     static FromQuaternion(quaternion) {
-        let squared = new Vec4_1.Vec4(quaternion.x * quaternion.x, quaternion.y * quaternion.y, quaternion.z * quaternion.z, quaternion.w * quaternion.w);
+        let squared = new Vec4(quaternion.x * quaternion.x, quaternion.y * quaternion.y, quaternion.z * quaternion.z, quaternion.w * quaternion.w);
         let invSqLength = 1 / (squared.x + squared.y + squared.z + squared.w);
         let temp1 = quaternion.x * quaternion.y;
         let temp2 = quaternion.z * quaternion.w;
@@ -409,15 +407,15 @@ class Mat3 {
         let temp4 = quaternion.y * quaternion.w;
         let temp5 = quaternion.y * quaternion.z;
         let temp6 = quaternion.x * quaternion.w;
-        return new Mat3(new Vec3_1.Vec3((squared.x - squared.y - squared.z + squared.w) * invSqLength, 2 * (temp1 + temp2) * invSqLength, 2 * (temp3 - temp4) * invSqLength), new Vec3_1.Vec3(2 * (temp1 - temp2) * invSqLength, (-squared.x + squared.y - squared.z + squared.w) * invSqLength, 2 * (temp5 + temp6) * invSqLength), new Vec3_1.Vec3(2 * (temp3 + temp4) * invSqLength, 2 * (temp5 - temp6) * invSqLength, (-squared.x - squared.y + squared.z + squared.w) * invSqLength));
+        return new Mat3(new Vec3((squared.x - squared.y - squared.z + squared.w) * invSqLength, 2 * (temp1 + temp2) * invSqLength, 2 * (temp3 - temp4) * invSqLength), new Vec3(2 * (temp1 - temp2) * invSqLength, (-squared.x + squared.y - squared.z + squared.w) * invSqLength, 2 * (temp5 + temp6) * invSqLength), new Vec3(2 * (temp3 + temp4) * invSqLength, 2 * (temp5 - temp6) * invSqLength, (-squared.x - squared.y + squared.z + squared.w) * invSqLength));
     }
     static FromRotationAxis(angle, axis) {
-        let quaternion = Quat_1.Quat.AngleAxis(angle, axis);
+        let quaternion = Quat.AngleAxis(angle, axis);
         return Mat3.FromQuaternion(quaternion);
     }
     static LookAt(forward, up) {
-        let z = Vec3_1.Vec3.Normalize(forward);
-        let x = Vec3_1.Vec3.Normalize(up.Cross(z));
+        let z = Vec3.Normalize(forward);
+        let x = Vec3.Normalize(up.Cross(z));
         let y = z.Cross(x);
         return new Mat3(x, y, z);
     }
@@ -448,7 +446,7 @@ class Mat3 {
         return m.Transpose();
     }
     static Abs(m) {
-        return new Mat3(Vec3_1.Vec3.Abs(m.x), Vec3_1.Vec3.Abs(m.y), Vec3_1.Vec3.Abs(m.z));
+        return new Mat3(Vec3.Abs(m.x), Vec3.Abs(m.y), Vec3.Abs(m.z));
     }
     static Add(m1, m2) {
         m1 = m1.Clone();
@@ -500,4 +498,3 @@ class Mat3 {
         return m1.x.EqualsTo(m2.x) && m1.y.EqualsTo(m2.y) && m1.z.EqualsTo(m2.z);
     }
 }
-exports.Mat3 = Mat3;

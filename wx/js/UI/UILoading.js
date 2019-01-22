@@ -1,15 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../Global");
-const protos_1 = require("../Libs/protos");
-const UIAlert_1 = require("./UIAlert");
-class UILoading {
+import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
+import { UIAlert } from "./UIAlert";
+export class UILoading {
     get root() { return this._root; }
     constructor() {
         fairygui.UIPackage.addPackage("res/ui/loading");
         this._root = fairygui.UIPackage.createObject("loading", "Main").asCom;
-        this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
-        this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
+        this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
+        this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._progressBar = this._root.getChild("progress").asProgress;
         this._progressBar.max = 100;
         this._progressBar.value = 0;
@@ -18,10 +16,10 @@ class UILoading {
         this._root.dispose();
     }
     Enter(param) {
-        Global_1.Global.graphic.uiRoot.addChild(this._root);
+        Global.graphic.uiRoot.addChild(this._root);
     }
     Exit() {
-        Global_1.Global.graphic.uiRoot.removeChild(this._root);
+        Global.graphic.uiRoot.removeChild(this._root);
     }
     Update(dt) {
     }
@@ -29,10 +27,10 @@ class UILoading {
     }
     OnLoginBSResut(result, onConfirm) {
         switch (result) {
-            case protos_1.Protos.Global.ECommon.Success:
+            case Protos.Global.ECommon.Success:
                 break;
             default:
-                UIAlert_1.UIAlert.Show("无法进入战场", onConfirm);
+                UIAlert.Show("无法进入战场", onConfirm);
                 break;
         }
     }
@@ -43,4 +41,3 @@ class UILoading {
         this._progressBar.value = 100;
     }
 }
-exports.UILoading = UILoading;

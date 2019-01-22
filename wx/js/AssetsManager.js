@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var AssetType;
+export var AssetType;
 (function (AssetType) {
     AssetType[AssetType["Text"] = 0] = "Text";
     AssetType[AssetType["Json"] = 1] = "Json";
@@ -10,8 +8,8 @@ var AssetType;
     AssetType[AssetType["Sound"] = 5] = "Sound";
     AssetType[AssetType["Font"] = 6] = "Font";
     AssetType[AssetType["Atlas"] = 7] = "Atlas";
-})(AssetType = exports.AssetType || (exports.AssetType = {}));
-class AssetsManager {
+})(AssetType || (AssetType = {}));
+export class AssetsManager {
     static Load(url, type, caller, completeHandler, progressHandler) {
         const strType = this.ConvertType(type);
         Laya.loader.load(url, completeHandler ? Laya.Handler.create(caller, completeHandler) : null, progressHandler ? new Laya.Handler(caller, progressHandler) : null, strType, 0, true);
@@ -55,4 +53,3 @@ class AssetsManager {
         }
     }
 }
-exports.AssetsManager = AssetsManager;

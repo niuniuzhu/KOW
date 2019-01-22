@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const util = require("./util");
-const Queue_1 = require("./Queue");
-class BSTree {
+import * as util from './util';
+import Queue from './Queue';
+export default class BSTree {
     constructor(compareFunction) {
         this.root = null;
         this.compare = compareFunction || util.defaultCompare;
@@ -148,7 +146,7 @@ class BSTree {
         this.inorderTraversalAux(node.rightCh, callback, signal);
     }
     levelTraversalAux(node, callback) {
-        const queue = new Queue_1.default();
+        const queue = new Queue();
         if (node !== null) {
             queue.enqueue(node);
         }
@@ -250,4 +248,3 @@ class BSTree {
         };
     }
 }
-exports.default = BSTree;

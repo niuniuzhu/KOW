@@ -6,6 +6,6 @@ call pbts --no-comments -n -o ..\..\Client\src\libs\protos.d.ts ..\..\Client\bin
 call uglifyjs ..\..\Client\bin\js\libs\protos.js -o ..\..\Client\bin\js\libs\protos.js -c -m
 
 echo generating for wx_mini
-call pbjs -t static-module -w commonjs --no-comments --dependency ./protobufjs --force-long -o ..\..\wx\js\Libs\protos.js .\ProtoFile\*.proto
+call pbjs -t static-module -w es6 --no-comments --dependency ./protobufjs --force-long -o ..\..\wx\js\Libs\protos.js .\ProtoFile\*.proto
 echo done
 pause

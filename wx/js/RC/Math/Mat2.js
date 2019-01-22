@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Vec2_1 = require("./Vec2");
-class Mat2 {
+import { Vec2 } from "./Vec2";
+export class Mat2 {
     static get identity() {
-        return new Mat2(new Vec2_1.Vec2(1, 0), new Vec2_1.Vec2(0, 1));
+        return new Mat2(new Vec2(1, 0), new Vec2(0, 1));
     }
-    constructor(x = Vec2_1.Vec2.zero, y = Vec2_1.Vec2.zero) {
+    constructor(x = Vec2.zero, y = Vec2.zero) {
         this.x = x;
         this.y = y;
     }
@@ -93,7 +91,7 @@ class Mat2 {
         this.y.y = 1;
     }
     Transform(v) {
-        return new Vec2_1.Vec2(v.x * this.x.x + v.y * this.y.x, v.x * this.x.y + v.y * this.y.y);
+        return new Vec2(v.x * this.x.x + v.y * this.y.x, v.x * this.x.y + v.y * this.y.y);
     }
     Transpose() {
         let m00 = this.x.x;
@@ -128,10 +126,10 @@ class Mat2 {
         return `(${this.x.ToString()}, ${this.y.ToString()})`;
     }
     static FromCross(xVector) {
-        return new Mat2(xVector, new Vec2_1.Vec2(-xVector.y, xVector.x));
+        return new Mat2(xVector, new Vec2(-xVector.y, xVector.x));
     }
     static Abs(m) {
-        return new Mat2(Vec2_1.Vec2.Abs(m.x), Vec2_1.Vec2.Abs(m.y));
+        return new Mat2(Vec2.Abs(m.x), Vec2.Abs(m.y));
     }
     static Transpose(m) {
         m = m.Clone();
@@ -187,4 +185,3 @@ class Mat2 {
         return m1.x.EqualsTo(m2.x) && m1.y.EqualsTo(m2.y);
     }
 }
-exports.Mat2 = Mat2;

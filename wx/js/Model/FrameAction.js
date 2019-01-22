@@ -1,14 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Long = require("../Libs/long");
-var InputFlag;
+import * as Long from "../Libs/long";
+export var InputFlag;
 (function (InputFlag) {
     InputFlag[InputFlag["None"] = 0] = "None";
     InputFlag[InputFlag["Move"] = 1] = "Move";
     InputFlag[InputFlag["S1"] = 2] = "S1";
     InputFlag[InputFlag["S2"] = 4] = "S2";
-})(InputFlag = exports.InputFlag || (exports.InputFlag = {}));
-class FrameInfo {
+})(InputFlag || (InputFlag = {}));
+export class FrameInfo {
     get frame() { return this._frame; }
     get inputFlag() { return this._inputFlag; }
     get v0() { return this._v0; }
@@ -25,8 +23,7 @@ class FrameInfo {
         }
     }
 }
-exports.FrameInfo = FrameInfo;
-class FrameAction {
+export class FrameAction {
     constructor() {
         this._infos = [];
     }
@@ -44,4 +41,3 @@ class FrameAction {
         }
     }
 }
-exports.FrameAction = FrameAction;

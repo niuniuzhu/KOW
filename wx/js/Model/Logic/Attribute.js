@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var EAttr;
+export var EAttr;
 (function (EAttr) {
     EAttr[EAttr["MHP"] = 0] = "MHP";
     EAttr[EAttr["HP"] = 1] = "HP";
@@ -23,4 +21,4 @@ var EAttr;
     EAttr[EAttr["S_ATK_ADD"] = 602] = "S_ATK_ADD";
     EAttr[EAttr["S_DEF_ADD"] = 603] = "S_DEF_ADD";
     EAttr[EAttr["S_SPEED_ADD"] = 604] = "S_SPEED_ADD";
-})(EAttr = exports.EAttr || (exports.EAttr = {}));
+})(EAttr || (EAttr = {}));

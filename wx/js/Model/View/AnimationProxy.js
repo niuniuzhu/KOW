@@ -1,37 +1,34 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Consts_1 = require("../../Consts");
-const Vec2_1 = require("../../RC/Math/Vec2");
-const Hashtable_1 = require("../../RC/Utils/Hashtable");
-const CDefs_1 = require("../CDefs");
-var AnimationPlayMode;
+import { Consts } from "../../Consts";
+import { Vec2 } from "../../RC/Math/Vec2";
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { CDefs } from "../CDefs";
+export var AnimationPlayMode;
 (function (AnimationPlayMode) {
     AnimationPlayMode[AnimationPlayMode["Loop"] = 0] = "Loop";
     AnimationPlayMode[AnimationPlayMode["Clamp"] = 1] = "Clamp";
     AnimationPlayMode[AnimationPlayMode["Pingpong"] = 2] = "Pingpong";
-})(AnimationPlayMode = exports.AnimationPlayMode || (exports.AnimationPlayMode = {}));
-class AnimationSetting {
+})(AnimationPlayMode || (AnimationPlayMode = {}));
+export class AnimationSetting {
 }
-exports.AnimationSetting = AnimationSetting;
-class AnimationProxy extends fairygui.GGraph {
+export class AnimationProxy extends fairygui.GGraph {
     constructor(owner, id) {
         super();
         this._aniSettings = new Map();
         this._playingID = -1;
-        const def = CDefs_1.CDefs.GetModel(id);
-        const model = Consts_1.Consts.ASSETS_MODEL_PREFIX + id;
-        const aniDefs = Hashtable_1.Hashtable.GetMapArray(def, "animations");
+        const def = CDefs.GetModel(id);
+        const model = Consts.ASSETS_MODEL_PREFIX + id;
+        const aniDefs = Hashtable.GetMapArray(def, "animations");
         if (aniDefs == null) {
             return;
         }
         for (const aniDef of aniDefs) {
-            const id = Hashtable_1.Hashtable.GetNumber(aniDef, "id");
+            const id = Hashtable.GetNumber(aniDef, "id");
             const alias = `${model}_${id}`;
-            const aniName = Hashtable_1.Hashtable.GetString(aniDef, "name");
-            const length = Hashtable_1.Hashtable.GetNumber(aniDef, "length");
+            const aniName = Hashtable.GetString(aniDef, "name");
+            const length = Hashtable.GetNumber(aniDef, "length");
             let setting = owner.battle.assetsManager.GetAniSetting(alias);
             if (setting == null) {
-                const startFrame = Hashtable_1.Hashtable.GetNumber(aniDef, "start_frame");
+                const startFrame = Hashtable.GetNumber(aniDef, "start_frame");
                 const urls = [];
                 for (let i = startFrame; i < length; ++i) {
                     urls.push(`${model}/${aniName}${i}.png`);
@@ -50,10 +47,10 @@ class AnimationProxy extends fairygui.GGraph {
                 setting = new AnimationSetting();
                 setting.id = id;
                 setting.alias = alias;
-                setting.size = new Vec2_1.Vec2(mw, mh);
-                setting.playMode = Hashtable_1.Hashtable.GetNumber(aniDef, "play_mode");
+                setting.size = new Vec2(mw, mh);
+                setting.playMode = Hashtable.GetNumber(aniDef, "play_mode");
                 setting.length = length;
-                setting.interval = Hashtable_1.Hashtable.GetNumber(aniDef, "interval");
+                setting.interval = Hashtable.GetNumber(aniDef, "interval");
                 owner.battle.assetsManager.AddAniSetting(alias, setting);
             }
             this._aniSettings.set(id, owner.battle.assetsManager.GetAniSetting(alias));
@@ -89,4 +86,3 @@ class AnimationProxy extends fairygui.GGraph {
         super.dispose();
     }
 }
-exports.AnimationProxy = AnimationProxy;

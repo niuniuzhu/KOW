@@ -1,16 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Vec4_1 = require("./Vec4");
-const Vec3_1 = require("./Vec3");
-const Quat_1 = require("./Quat");
-const Mat3_1 = require("./Mat3");
-const MathUtils_1 = require("./MathUtils");
-class Mat4 {
+import { Vec4 } from "./Vec4";
+import { Vec3 } from "./Vec3";
+import { Quat } from "./Quat";
+import { Mat3 } from "./Mat3";
+import { MathUtils } from "./MathUtils";
+export class Mat4 {
     static get identity() {
-        return new Mat4(new Vec4_1.Vec4(1, 0, 0, 0), new Vec4_1.Vec4(0, 1, 0, 0), new Vec4_1.Vec4(0, 0, 1, 0), new Vec4_1.Vec4(0, 0, 0, 1));
+        return new Mat4(new Vec4(1, 0, 0, 0), new Vec4(0, 1, 0, 0), new Vec4(0, 0, 1, 0), new Vec4(0, 0, 0, 1));
     }
     ;
-    constructor(x = Vec4_1.Vec4.zero, y = Vec4_1.Vec4.zero, z = Vec4_1.Vec4.zero, w = Vec4_1.Vec4.zero) {
+    constructor(x = Vec4.zero, y = Vec4.zero, z = Vec4.zero, w = Vec4.zero) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -164,13 +162,13 @@ class Mat4 {
         return this;
     }
     Transform(v) {
-        return new Vec4_1.Vec4(v.x * this.x.x + v.y * this.y.x + v.z * this.z.x + v.w * this.w.x, v.x * this.x.y + v.y * this.y.y + v.z * this.z.y + v.w * this.w.y, v.x * this.x.z + v.y * this.y.z + v.z * this.z.z + v.w * this.w.z, v.x * this.x.w + v.y * this.y.w + v.z * this.z.w + v.w * this.w.w);
+        return new Vec4(v.x * this.x.x + v.y * this.y.x + v.z * this.z.x + v.w * this.w.x, v.x * this.x.y + v.y * this.y.y + v.z * this.z.y + v.w * this.w.y, v.x * this.x.z + v.y * this.y.z + v.z * this.z.z + v.w * this.w.z, v.x * this.x.w + v.y * this.y.w + v.z * this.z.w + v.w * this.w.w);
     }
     TransformPoint(v) {
-        return new Vec3_1.Vec3(v.x * this.x.x + v.y * this.y.x + v.z * this.z.x + this.w.x, v.x * this.x.y + v.y * this.y.y + v.z * this.z.y + this.w.y, v.x * this.x.z + v.y * this.y.z + v.z * this.z.z + this.w.z);
+        return new Vec3(v.x * this.x.x + v.y * this.y.x + v.z * this.z.x + this.w.x, v.x * this.x.y + v.y * this.y.y + v.z * this.z.y + this.w.y, v.x * this.x.z + v.y * this.y.z + v.z * this.z.z + this.w.z);
     }
     TransformVector(v) {
-        return new Vec3_1.Vec3(v.x * this.x.x + v.y * this.y.x + v.z * this.z.x, v.x * this.x.y + v.y * this.y.y + v.z * this.z.y, v.x * this.x.z + v.y * this.y.z + v.z * this.z.z);
+        return new Vec3(v.x * this.x.x + v.y * this.y.x + v.z * this.z.x, v.x * this.x.y + v.y * this.y.y + v.z * this.z.y, v.x * this.x.z + v.y * this.y.z + v.z * this.z.z);
     }
     Identity() {
         this.x.x = 1;
@@ -217,7 +215,7 @@ class Mat4 {
         return this;
     }
     SetRotation(quaternion) {
-        let squared = new Vec4_1.Vec4(quaternion.x * quaternion.x, quaternion.y * quaternion.y, quaternion.z * quaternion.z, quaternion.w * quaternion.w);
+        let squared = new Vec4(quaternion.x * quaternion.x, quaternion.y * quaternion.y, quaternion.z * quaternion.z, quaternion.w * quaternion.w);
         let invSqLength = 1 / (squared.x + squared.y + squared.z + squared.w);
         let temp1 = quaternion.x * quaternion.y;
         let temp2 = quaternion.z * quaternion.w;
@@ -291,7 +289,7 @@ class Mat4 {
             this.x.w * (this.y.x * det3 - this.y.y * det5 + this.y.z * det6);
     }
     NonhomogeneousInvert() {
-        let m3 = new Mat3_1.Mat3();
+        let m3 = new Mat3();
         m3.x.x = this.x.x;
         m3.x.y = this.x.y;
         m3.x.z = this.x.z;
@@ -312,7 +310,7 @@ class Mat4 {
         this.z.x = m3.z.x;
         this.z.y = m3.z.y;
         this.z.z = m3.z.z;
-        let v = m3.Transform(new Vec3_1.Vec3(this.w.x, this.w.y, this.w.z));
+        let v = m3.Transform(new Vec3(this.w.x, this.w.y, this.w.z));
         this.w.x = -v.x;
         this.w.y = -v.y;
         this.w.z = -v.z;
@@ -377,22 +375,22 @@ class Mat4 {
         return `(${this.x.ToString()}, ${this.y.ToString()}, ${this.z.ToString()}, ${this.w.ToString()})`;
     }
     static FromScale(scale) {
-        return new Mat4(new Vec4_1.Vec4(scale.x, 0, 0, 0), new Vec4_1.Vec4(0, scale.y, 0, 0), new Vec4_1.Vec4(0, 0, scale.z, 0), new Vec4_1.Vec4(0, 0, 0, 1));
+        return new Mat4(new Vec4(scale.x, 0, 0, 0), new Vec4(0, scale.y, 0, 0), new Vec4(0, 0, scale.z, 0), new Vec4(0, 0, 0, 1));
     }
     static FromEuler(euler) {
-        let eulerX = MathUtils_1.MathUtils.DegToRad(euler.x);
-        let eulerY = MathUtils_1.MathUtils.DegToRad(euler.y);
-        let eulerZ = MathUtils_1.MathUtils.DegToRad(euler.z);
-        let cx = MathUtils_1.MathUtils.Cos(eulerX);
-        let sx = MathUtils_1.MathUtils.Sin(eulerX);
-        let cy = MathUtils_1.MathUtils.Cos(eulerY);
-        let sy = MathUtils_1.MathUtils.Sin(eulerY);
-        let cz = MathUtils_1.MathUtils.Cos(eulerZ);
-        let sz = MathUtils_1.MathUtils.Sin(eulerZ);
-        return new Mat4(new Vec4_1.Vec4(cy * cz, cy * sz, -sy, 0), new Vec4_1.Vec4(cz * sx * sy - cx * sz, cx * cz + sx * sy * sz, cy * sx, 0), new Vec4_1.Vec4(cx * cz * sy + sx * sz, -cz * sx + cx * sy * sz, cx * cy, 0), new Vec4_1.Vec4(0, 0, 0, 1));
+        let eulerX = MathUtils.DegToRad(euler.x);
+        let eulerY = MathUtils.DegToRad(euler.y);
+        let eulerZ = MathUtils.DegToRad(euler.z);
+        let cx = MathUtils.Cos(eulerX);
+        let sx = MathUtils.Sin(eulerX);
+        let cy = MathUtils.Cos(eulerY);
+        let sy = MathUtils.Sin(eulerY);
+        let cz = MathUtils.Cos(eulerZ);
+        let sz = MathUtils.Sin(eulerZ);
+        return new Mat4(new Vec4(cy * cz, cy * sz, -sy, 0), new Vec4(cz * sx * sy - cx * sz, cx * cz + sx * sy * sz, cy * sx, 0), new Vec4(cx * cz * sy + sx * sz, -cz * sx + cx * sy * sz, cx * cy, 0), new Vec4(0, 0, 0, 1));
     }
     static FromQuaternion(quaternion) {
-        let squared = new Vec4_1.Vec4(quaternion.x * quaternion.x, quaternion.y * quaternion.y, quaternion.z * quaternion.z, quaternion.w * quaternion.w);
+        let squared = new Vec4(quaternion.x * quaternion.x, quaternion.y * quaternion.y, quaternion.z * quaternion.z, quaternion.w * quaternion.w);
         let invSqLength = 1 / (squared.x + squared.y + squared.z + squared.w);
         let temp1 = quaternion.x * quaternion.y;
         let temp2 = quaternion.z * quaternion.w;
@@ -400,10 +398,10 @@ class Mat4 {
         let temp4 = quaternion.y * quaternion.w;
         let temp5 = quaternion.y * quaternion.z;
         let temp6 = quaternion.x * quaternion.w;
-        return new Mat4(new Vec4_1.Vec4((squared.x - squared.y - squared.z + squared.w) * invSqLength, 2 * (temp1 + temp2) * invSqLength, 2 * (temp3 - temp4) * invSqLength, 0), new Vec4_1.Vec4(2 * (temp1 - temp2) * invSqLength, (-squared.x + squared.y - squared.z + squared.w) * invSqLength, 2 * (temp5 + temp6) * invSqLength, 0), new Vec4_1.Vec4(2 * (temp3 + temp4) * invSqLength, 2 * (temp5 - temp6) * invSqLength, (-squared.x - squared.y + squared.z + squared.w) * invSqLength, 0), new Vec4_1.Vec4(0, 0, 0, 1));
+        return new Mat4(new Vec4((squared.x - squared.y - squared.z + squared.w) * invSqLength, 2 * (temp1 + temp2) * invSqLength, 2 * (temp3 - temp4) * invSqLength, 0), new Vec4(2 * (temp1 - temp2) * invSqLength, (-squared.x + squared.y - squared.z + squared.w) * invSqLength, 2 * (temp5 + temp6) * invSqLength, 0), new Vec4(2 * (temp3 + temp4) * invSqLength, 2 * (temp5 - temp6) * invSqLength, (-squared.x - squared.y + squared.z + squared.w) * invSqLength, 0), new Vec4(0, 0, 0, 1));
     }
     static FromRotationAxis(angle, axis) {
-        let quaternion = Quat_1.Quat.AngleAxis(angle, axis);
+        let quaternion = Quat.AngleAxis(angle, axis);
         return Mat4.FromQuaternion(quaternion);
     }
     static FromTRS(pos, q, scale) {
@@ -432,7 +430,7 @@ class Mat4 {
         return m1.x.EqualsTo(m2.x) && m1.y.EqualsTo(m2.y) && m1.z.EqualsTo(m2.z) && m1.w.EqualsTo(m2.w);
     }
     static Abs(m) {
-        return new Mat4(Vec4_1.Vec4.Abs(m.x), Vec4_1.Vec4.Abs(m.y), Vec4_1.Vec4.Abs(m.z), Vec4_1.Vec4.Abs(m.w));
+        return new Mat4(Vec4.Abs(m.x), Vec4.Abs(m.y), Vec4.Abs(m.z), Vec4.Abs(m.w));
     }
     static Add(m1, m2) {
         m1 = m1.Clone();
@@ -479,22 +477,22 @@ class Mat4 {
         return m.DivN2(n);
     }
     static View(position, lookAt, upVector) {
-        let forward = Vec3_1.Vec3.Normalize(Vec3_1.Vec3.Sub(lookAt, position));
-        let xVec = Vec3_1.Vec3.Normalize(forward.Cross(upVector));
+        let forward = Vec3.Normalize(Vec3.Sub(lookAt, position));
+        let xVec = Vec3.Normalize(forward.Cross(upVector));
         let up = xVec.Cross(forward);
         let result = new Mat4();
         result.x.x = xVec.x;
         result.x.y = xVec.y;
         result.x.z = xVec.z;
-        result.x.w = Vec3_1.Vec3.Dot(position, Vec3_1.Vec3.Negate(xVec));
+        result.x.w = Vec3.Dot(position, Vec3.Negate(xVec));
         result.y.x = up.x;
         result.y.y = up.y;
         result.y.z = up.z;
-        result.y.w = Vec3_1.Vec3.Dot(position, Vec3_1.Vec3.Negate(up));
+        result.y.w = Vec3.Dot(position, Vec3.Negate(up));
         result.z.x = -forward.x;
         result.z.y = -forward.y;
         result.z.z = -forward.z;
-        result.z.w = Vec3_1.Vec3.Dot(position, forward);
+        result.z.w = Vec3.Dot(position, forward);
         result.w.x = 0;
         result.w.y = 0;
         result.w.z = 0;
@@ -502,7 +500,7 @@ class Mat4 {
         return result;
     }
     static Perspective(fov, aspect, near, far) {
-        let top = near * MathUtils_1.MathUtils.Tan(fov * .5);
+        let top = near * MathUtils.Tan(fov * .5);
         let bottom = -top;
         let right = top * aspect;
         let left = -right;
@@ -581,4 +579,3 @@ class Mat4 {
         return result;
     }
 }
-exports.Mat4 = Mat4;

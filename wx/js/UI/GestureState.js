@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Vec2_1 = require("../RC/Math/Vec2");
-class GestureState {
+import { Vec2 } from "../RC/Math/Vec2";
+export class GestureState {
     constructor() {
         this.showDuration = 20;
         this.hideDuration = 50;
@@ -31,7 +29,7 @@ class GestureState {
     OnTouchBegin(px, py) {
         this._active = true;
         this._touchTime = 0;
-        this._touchPosition = new Vec2_1.Vec2(px, py);
+        this._touchPosition = new Vec2(px, py);
     }
     OnTouchEnd() {
         this._active = false;
@@ -42,7 +40,7 @@ class GestureState {
         this.ShowJoystick(this._touchPosition);
         let point = new laya.maths.Point();
         this._joystick.globalToLocal(px, py, point);
-        this._joystick.touchPosition = new Vec2_1.Vec2(point.x, point.y);
+        this._joystick.touchPosition = new Vec2(point.x, point.y);
     }
     ShowJoystick(point) {
         this._joystick.visible = true;
@@ -73,4 +71,3 @@ class GestureState {
     }
 }
 GestureState.TIME_TO_SHOW_JOYSTICK = 500;
-exports.GestureState = GestureState;

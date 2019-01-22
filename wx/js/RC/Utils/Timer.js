@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Timer {
+export class Timer {
     static get utcTime() {
         let d1 = new Date();
         return new Date(d1.getUTCFullYear(), d1.getUTCMonth(), d1.getUTCDate(), d1.getUTCHours(), d1.getUTCMinutes(), d1.getUTCSeconds(), d1.getUTCMilliseconds()).getTime();
@@ -11,4 +9,3 @@ class Timer {
         return d2.toLocaleString();
     }
 }
-exports.Timer = Timer;

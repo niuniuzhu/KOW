@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const MathUtils_1 = require("../Math/MathUtils");
+import { MathUtils } from "../Math/MathUtils";
 var Endian;
 (function (Endian) {
     Endian[Endian["Little"] = 0] = "Little";
     Endian[Endian["Big"] = 1] = "Big";
 })(Endian || (Endian = {}));
-class ByteBuffer {
+export class ByteBuffer {
     constructor(innerBuffer, endian = Endian.Little) {
         this._position = 0;
         this._innerBuffer = innerBuffer;
@@ -16,7 +14,7 @@ class ByteBuffer {
     get endian() { return this._endian; }
     get position() { return this._position; }
     set position(value) {
-        value = MathUtils_1.MathUtils.Clamp(value, 0, this.length);
+        value = MathUtils.Clamp(value, 0, this.length);
         if (value == this._position)
             return;
         this._position = value;
@@ -100,4 +98,3 @@ class ByteBuffer {
     }
 }
 ByteBuffer.Endian = Endian;
-exports.ByteBuffer = ByteBuffer;

@@ -1,31 +1,29 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Intersection_1 = require("../../RC/FMath/Intersection");
-const Hashtable_1 = require("../../RC/Utils/Hashtable");
-const SyncEvent_1 = require("../BattleEvent/SyncEvent");
-const Defs_1 = require("../Defs");
-const EntityType_1 = require("../EntityType");
-const Entity_1 = require("./Entity");
-var SceneItemAttrOp;
+import { Intersection, IntersectionType } from "../../RC/FMath/Intersection";
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { SyncEvent } from "../BattleEvent/SyncEvent";
+import { Defs } from "../Defs";
+import { EntityType } from "../EntityType";
+import { Entity } from "./Entity";
+export var SceneItemAttrOp;
 (function (SceneItemAttrOp) {
     SceneItemAttrOp[SceneItemAttrOp["Add"] = 0] = "Add";
     SceneItemAttrOp[SceneItemAttrOp["Mul"] = 1] = "Mul";
     SceneItemAttrOp[SceneItemAttrOp["Pow"] = 2] = "Pow";
     SceneItemAttrOp[SceneItemAttrOp["Sin"] = 3] = "Sin";
     SceneItemAttrOp[SceneItemAttrOp["Cos"] = 4] = "Cos";
-})(SceneItemAttrOp = exports.SceneItemAttrOp || (exports.SceneItemAttrOp = {}));
-class SceneItem extends Entity_1.Entity {
-    get type() { return EntityType_1.EntityType.SceneItem; }
+})(SceneItemAttrOp || (SceneItemAttrOp = {}));
+export class SceneItem extends Entity {
+    get type() { return EntityType.SceneItem; }
     get radius() { return this._radius; }
     get attrs() { return this._attrs; }
     get values() { return this._values; }
     get ops() { return this._ops; }
     LoadDefs() {
-        const defs = Defs_1.Defs.GetSceneItem(this._id);
-        this._radius = Hashtable_1.Hashtable.GetNumber(defs, "radius");
-        this._attrs = Hashtable_1.Hashtable.GetNumberArray(defs, "attrs");
-        this._values = Hashtable_1.Hashtable.GetNumberArray(defs, "values");
-        this._ops = Hashtable_1.Hashtable.GetNumberArray(defs, "ops");
+        const defs = Defs.GetSceneItem(this._id);
+        this._radius = Hashtable.GetNumber(defs, "radius");
+        this._attrs = Hashtable.GetNumberArray(defs, "attrs");
+        this._values = Hashtable.GetNumberArray(defs, "values");
+        this._ops = Hashtable.GetNumberArray(defs, "ops");
     }
     EncodeSnapshot(writer) {
         super.EncodeSnapshot(writer);
@@ -42,10 +40,10 @@ class SceneItem extends Entity_1.Entity {
         for (const target of champions) {
             if (target.isDead)
                 continue;
-            const intersectType = Intersection_1.Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
-            if (intersectType == Intersection_1.IntersectionType.Cling || intersectType == Intersection_1.IntersectionType.Inside) {
+            const intersectType = Intersection.IntersectsCC(this.position, this._radius, target.position, target.radius);
+            if (intersectType == IntersectionType.Cling || intersectType == IntersectionType.Inside) {
                 if (!target.battle.chase) {
-                    SyncEvent_1.SyncEvent.ScenItemCollision(this.rid, target.rid);
+                    SyncEvent.ScenItemCollision(this.rid, target.rid);
                 }
                 this._battle.calcManager.AddItemUnit(this.rid, target.rid);
                 hit = true;
@@ -59,4 +57,3 @@ class SceneItem extends Entity_1.Entity {
         }
     }
 }
-exports.SceneItem = SceneItem;

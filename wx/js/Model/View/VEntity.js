@@ -1,18 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Consts_1 = require("../../Consts");
-const Global_1 = require("../../Global");
-const MathUtils_1 = require("../../RC/Math/MathUtils");
-const Vec2_1 = require("../../RC/Math/Vec2");
-const AnimationProxy_1 = require("./AnimationProxy");
-const Hashtable_1 = require("../../RC/Utils/Hashtable");
-const Graphic_1 = require("../../Graphic");
-class VEntity {
+import { Consts } from "../../Consts";
+import { Global } from "../../Global";
+import { MathUtils } from "../../RC/Math/MathUtils";
+import { Vec2 } from "../../RC/Math/Vec2";
+import { AnimationProxy } from "./AnimationProxy";
+import { Hashtable } from "../../RC/Utils/Hashtable";
+import { ModelLayer } from "../../Graphic";
+export class VEntity {
     constructor(battle) {
-        this._position = Vec2_1.Vec2.zero;
-        this._worldPosition = Vec2_1.Vec2.zero;
+        this._position = Vec2.zero;
+        this._worldPosition = Vec2.zero;
         this._rotation = 0;
-        this._logicPos = Vec2_1.Vec2.zero;
+        this._logicPos = Vec2.zero;
         this._logicRot = 0;
         this._root = new fairygui.GComponent();
         this._animationProxy = null;
@@ -31,7 +29,7 @@ class VEntity {
     set position(value) {
         if (this._position.EqualsTo(value))
             return;
-        const delta = Vec2_1.Vec2.Sub(value, this._position);
+        const delta = Vec2.Sub(value, this._position);
         this._position.CopyFrom(value);
         this.OnPositionChanged(delta);
     }
@@ -53,27 +51,27 @@ class VEntity {
     }
     LoadDefs() {
         const cdefs = this.BeforeLoadDefs();
-        const modelID = Hashtable_1.Hashtable.GetNumber(cdefs, "model", -1);
+        const modelID = Hashtable.GetNumber(cdefs, "model", -1);
         if (modelID >= 0) {
-            this._animationProxy = new AnimationProxy_1.AnimationProxy(this, modelID);
+            this._animationProxy = new AnimationProxy(this, modelID);
             this._root.addChild(this._animationProxy);
         }
-        this._modelLevel = Hashtable_1.Hashtable.GetNumber(cdefs, "model_layer");
+        this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
         this.AfterLoadDefs(cdefs);
     }
     DisplayRoot() {
         switch (this._modelLevel) {
-            case Graphic_1.ModelLayer.EntityLow:
-                Global_1.Global.graphic.entityLow.addChild(this._root);
+            case ModelLayer.EntityLow:
+                Global.graphic.entityLow.addChild(this._root);
                 break;
-            case Graphic_1.ModelLayer.EntityHigh:
-                Global_1.Global.graphic.entityHigh.addChild(this._root);
+            case ModelLayer.EntityHigh:
+                Global.graphic.entityHigh.addChild(this._root);
                 break;
-            case Graphic_1.ModelLayer.EffectLow:
-                Global_1.Global.graphic.lowEffectRoot.addChild(this._root);
+            case ModelLayer.EffectLow:
+                Global.graphic.lowEffectRoot.addChild(this._root);
                 break;
-            case Graphic_1.ModelLayer.EffectHigh:
-                Global_1.Global.graphic.highEffectRoot.addChild(this._root);
+            case ModelLayer.EffectHigh:
+                Global.graphic.highEffectRoot.addChild(this._root);
                 break;
         }
     }
@@ -84,9 +82,9 @@ class VEntity {
             this.LoadDefs();
         }
         this._markToDestroy = reader.bool();
-        this._logicPos = new Vec2_1.Vec2(reader.double() * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO, reader.double() * Consts_1.Consts.LOGIC_TO_PIXEL_RATIO);
-        const logicDir = new Vec2_1.Vec2(reader.double(), reader.double());
-        this._logicRot = MathUtils_1.MathUtils.RadToDeg(MathUtils_1.MathUtils.Acos(logicDir.Dot(Vec2_1.Vec2.down)));
+        this._logicPos = new Vec2(reader.double() * Consts.LOGIC_TO_PIXEL_RATIO, reader.double() * Consts.LOGIC_TO_PIXEL_RATIO);
+        const logicDir = new Vec2(reader.double(), reader.double());
+        this._logicRot = MathUtils.RadToDeg(MathUtils.Acos(logicDir.Dot(Vec2.down)));
         if (logicDir.x < 0) {
             this._logicRot = 360 - this._logicRot;
         }
@@ -96,8 +94,8 @@ class VEntity {
         }
     }
     Update(dt) {
-        this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
-        this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
+        this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
+        this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
     }
     OnPositionChanged(delta) {
         this._root.setXY(this._position.x, this._position.y);
@@ -109,4 +107,3 @@ class VEntity {
         this._root.rotation = this._rotation;
     }
 }
-exports.VEntity = VEntity;

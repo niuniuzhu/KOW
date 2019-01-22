@@ -4,8 +4,6 @@ import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Vec2 } from "../RC/Math/Vec2";
 import { Timer } from "../RC/Utils/Timer";
-import { Logger } from "../RC/Utils/Logger";
-import { FMathUtils } from "../RC/FMath/FMathUtils";
 
 enum InputFlag {
 	None = 0,
@@ -35,7 +33,6 @@ export class FrameAciontManager {
 		info.inputFlag = InputFlag.Move;
 		info.v0 = Math.floor(direction.x * 1000);
 		info.v1 = Math.floor(direction.y * 1000);
-		Logger.Log(info.v0 + ":" + info.v1);
 		this._infos.push(info);
 	}
 

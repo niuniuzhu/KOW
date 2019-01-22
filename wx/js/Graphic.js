@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var ModelLayer;
+export var ModelLayer;
 (function (ModelLayer) {
     ModelLayer[ModelLayer["EntityLow"] = 0] = "EntityLow";
     ModelLayer[ModelLayer["EntityHigh"] = 1] = "EntityHigh";
     ModelLayer[ModelLayer["EffectLow"] = 2] = "EffectLow";
     ModelLayer[ModelLayer["EffectHigh"] = 3] = "EffectHigh";
-})(ModelLayer = exports.ModelLayer || (exports.ModelLayer = {}));
-class Graphic {
+})(ModelLayer || (ModelLayer = {}));
+export class Graphic {
     get battleRoot() { return this._battleRoot; }
     get mapRoot() { return this._mapRoot; }
     get lowEffectRoot() { return this._lowEffectRoot; }
@@ -58,4 +56,3 @@ class Graphic {
         fairygui.GRoot.inst.addChild(this._uiRoot);
     }
 }
-exports.Graphic = Graphic;

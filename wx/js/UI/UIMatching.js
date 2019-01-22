@@ -1,16 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../Global");
-const protos_1 = require("../Libs/protos");
-const UIAlert_1 = require("./UIAlert");
-class UIMatching {
+import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
+import { UIAlert } from "./UIAlert";
+export class UIMatching {
     constructor() {
         this._images = [];
         this._nicknames = [];
         fairygui.UIPackage.addPackage("res/ui/matching");
         this._root = fairygui.UIPackage.createObject("matching", "Main").asCom;
-        this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
-        this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
+        this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
+        this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._images.push(this._root.getChild("image0").asCom);
         this._images.push(this._root.getChild("image1").asCom);
         this._nicknames.push(this._root.getChild("nickname0").asTextField);
@@ -20,10 +18,10 @@ class UIMatching {
     Dispose() {
     }
     Enter(param) {
-        Global_1.Global.graphic.uiRoot.addChild(this._root);
+        Global.graphic.uiRoot.addChild(this._root);
     }
     Exit() {
-        Global_1.Global.graphic.uiRoot.removeChild(this._root);
+        Global.graphic.uiRoot.removeChild(this._root);
     }
     Update(dt) {
     }
@@ -31,17 +29,17 @@ class UIMatching {
     }
     OnEnterBattleResult(result, onConfirm) {
         switch (result) {
-            case protos_1.Protos.CS2GC_EnterBattle.Result.Success:
+            case Protos.CS2GC_EnterBattle.Result.Success:
                 break;
-            case protos_1.Protos.CS2GC_EnterBattle.Result.BSLost:
-            case protos_1.Protos.CS2GC_EnterBattle.Result.BSNotFound:
-            case protos_1.Protos.CS2GC_EnterBattle.Result.BattleCreateFailed:
-                UIAlert_1.UIAlert.Show("登录战场失败", onConfirm);
+            case Protos.CS2GC_EnterBattle.Result.BSLost:
+            case Protos.CS2GC_EnterBattle.Result.BSNotFound:
+            case Protos.CS2GC_EnterBattle.Result.BattleCreateFailed:
+                UIAlert.Show("登录战场失败", onConfirm);
                 break;
         }
     }
     OnFail(message, callback = null) {
-        UIAlert_1.UIAlert.Show(message, callback);
+        UIAlert.Show(message, callback);
     }
     UpdateRoomInfo(roomInfo) {
     }
@@ -54,4 +52,3 @@ class UIMatching {
         this._nicknames[index].text = "";
     }
 }
-exports.UIMatching = UIMatching;

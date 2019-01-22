@@ -1,27 +1,24 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const FMathUtils_1 = require("./FMathUtils");
-class FRandom {
+import { FMathUtils } from "./FMathUtils";
+export class FRandom {
     constructor(seed) {
         this._seed = seed || Math.random();
     }
     Next() {
         this._seed = (this._seed * 9301 + 49297) % 233280;
-        const result = FMathUtils_1.FMathUtils.Div(this._seed, 233280.0);
+        const result = FMathUtils.Div(this._seed, 233280.0);
         return result;
     }
     NextD(min, max) {
         const r = this.Next();
-        return FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(r, FMathUtils_1.FMathUtils.Sub(max, min)), min);
+        return FMathUtils.Add(FMathUtils.Mul(r, FMathUtils.Sub(max, min)), min);
     }
     NextFloor(min, max) {
-        return FMathUtils_1.FMathUtils.Floor(this.NextD(min, max));
+        return FMathUtils.Floor(this.NextD(min, max));
     }
     NextRound(min, max) {
-        return FMathUtils_1.FMathUtils.Round(this.NextD(min, max));
+        return FMathUtils.Round(this.NextD(min, max));
     }
     NextCeil(min, max) {
-        return FMathUtils_1.FMathUtils.Ceil(this.NextD(min, max));
+        return FMathUtils.Ceil(this.NextD(min, max));
     }
 }
-exports.FRandom = FRandom;

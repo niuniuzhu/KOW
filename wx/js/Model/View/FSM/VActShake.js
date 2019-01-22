@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const VEntityStateAction_1 = require("./VEntityStateAction");
-class VActShake extends VEntityStateAction_1.VEntityStateAction {
+import { VEntityStateAction } from "./VEntityStateAction";
+export class VActShake extends VEntityStateAction {
     OnInit(def) {
         super.OnInit(def);
     }
@@ -9,4 +7,3 @@ class VActShake extends VEntityStateAction_1.VEntityStateAction {
         super.OnEnter(param);
     }
 }
-exports.VActShake = VActShake;

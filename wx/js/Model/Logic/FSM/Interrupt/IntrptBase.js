@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Hashtable_1 = require("../../../../RC/Utils/Hashtable");
-const StateEnums_1 = require("../../../StateEnums");
-const Logger_1 = require("../../../../RC/Utils/Logger");
+import { Hashtable } from "../../../../RC/Utils/Hashtable";
+import { StateType } from "../../../StateEnums";
+import { Logger } from "../../../../RC/Utils/Logger";
 var FilterType;
 (function (FilterType) {
     FilterType[FilterType["AttrToAttr"] = 0] = "AttrToAttr";
@@ -29,9 +27,9 @@ var IntrptType;
     IntrptType[IntrptType["State"] = 0] = "State";
     IntrptType[IntrptType["Skill"] = 1] = "Skill";
 })(IntrptType || (IntrptType = {}));
-class IntrptBase {
+export class IntrptBase {
     constructor(state, def) {
-        this._connectState = StateEnums_1.StateType.Idle;
+        this._connectState = StateType.Idle;
         this._delay = 0;
         this._isTriggered = false;
         this._intrptFilters = [];
@@ -48,26 +46,26 @@ class IntrptBase {
         this._isTriggered = reader.bool();
     }
     OnInit(def) {
-        this._id = Hashtable_1.Hashtable.GetNumber(def, "id");
-        this._intrptType = Hashtable_1.Hashtable.GetNumber(def, "type");
-        this._connectState = Hashtable_1.Hashtable.GetNumber(def, "connect_state");
-        this._skillID = Hashtable_1.Hashtable.GetNumber(def, "skill", null);
-        this._skillIDs = Hashtable_1.Hashtable.GetNumberArray(def, "skills");
-        this._delay = Hashtable_1.Hashtable.GetNumber(def, "delay");
-        const filterDefs = Hashtable_1.Hashtable.GetMapArray(def, "filters");
+        this._id = Hashtable.GetNumber(def, "id");
+        this._intrptType = Hashtable.GetNumber(def, "type");
+        this._connectState = Hashtable.GetNumber(def, "connect_state");
+        this._skillID = Hashtable.GetNumber(def, "skill", null);
+        this._skillIDs = Hashtable.GetNumberArray(def, "skills");
+        this._delay = Hashtable.GetNumber(def, "delay");
+        const filterDefs = Hashtable.GetMapArray(def, "filters");
         if (filterDefs != null) {
             for (const filterDef of filterDefs) {
                 const intrptFilter = new IntrptFilter();
-                intrptFilter.filterType = Hashtable_1.Hashtable.GetNumber(filterDef, "filter_type");
-                intrptFilter.attr0 = Hashtable_1.Hashtable.GetNumber(filterDef, "attr0");
-                intrptFilter.attr1 = Hashtable_1.Hashtable.GetNumber(filterDef, "attr1");
-                intrptFilter.value = Hashtable_1.Hashtable.GetNumber(filterDef, "value");
-                intrptFilter.op = Hashtable_1.Hashtable.GetNumber(filterDef, "op");
-                intrptFilter.skillID = Hashtable_1.Hashtable.GetNumber(filterDef, "skill");
+                intrptFilter.filterType = Hashtable.GetNumber(filterDef, "filter_type");
+                intrptFilter.attr0 = Hashtable.GetNumber(filterDef, "attr0");
+                intrptFilter.attr1 = Hashtable.GetNumber(filterDef, "attr1");
+                intrptFilter.value = Hashtable.GetNumber(filterDef, "value");
+                intrptFilter.op = Hashtable.GetNumber(filterDef, "op");
+                intrptFilter.skillID = Hashtable.GetNumber(filterDef, "skill");
                 this._intrptFilters.push(intrptFilter);
             }
         }
-        this._rel = Hashtable_1.Hashtable.GetNumber(def, "rel");
+        this._rel = Hashtable.GetNumber(def, "rel");
     }
     Enter() {
         this._isTriggered = false;
@@ -169,7 +167,7 @@ class IntrptBase {
                 let skill;
                 if (this._skillID == null) {
                     if (this._skillIDs == null || this._skillIDs.length == 0) {
-                        Logger_1.Logger.Warn("invalid skill id");
+                        Logger.Warn("invalid skill id");
                         return;
                     }
                     const index = owner.battle.random.NextFloor(0, this._skillIDs.length);
@@ -179,7 +177,7 @@ class IntrptBase {
                     skill = owner.GetSkill(this._skillID);
                 }
                 if (skill == null) {
-                    Logger_1.Logger.Warn("invalid skill");
+                    Logger.Warn("invalid skill");
                     return;
                 }
                 const meet = owner.mp >= skill.mpCost;
@@ -196,4 +194,3 @@ class IntrptBase {
         return str;
     }
 }
-exports.IntrptBase = IntrptBase;

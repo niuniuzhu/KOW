@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const MathUtils_1 = require("./MathUtils");
-class Vec4 {
+import { MathUtils } from "./MathUtils";
+export class Vec4 {
     static get one() {
         return new Vec4(1, 1, 1, 1);
     }
@@ -78,10 +76,10 @@ class Vec4 {
         this.w = w;
     }
     Clamp(min, max) {
-        this.x = MathUtils_1.MathUtils.Clamp(this.x, min.x, max.x);
-        this.y = MathUtils_1.MathUtils.Clamp(this.y, min.y, max.y);
-        this.z = MathUtils_1.MathUtils.Clamp(this.z, min.z, max.z);
-        this.w = MathUtils_1.MathUtils.Clamp(this.w, min.w, max.w);
+        this.x = MathUtils.Clamp(this.x, min.x, max.x);
+        this.y = MathUtils.Clamp(this.y, min.y, max.y);
+        this.z = MathUtils.Clamp(this.z, min.z, max.z);
+        this.w = MathUtils.Clamp(this.w, min.w, max.w);
         return this;
     }
     Add(v) {
@@ -164,7 +162,7 @@ class Vec4 {
     ClampMagnitude(maxLength) {
         let sqrMagnitude = this.SqrMagnitude();
         if (sqrMagnitude > (maxLength * maxLength)) {
-            let f = maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude);
+            let f = maxLength / MathUtils.Sqrt(sqrMagnitude);
             this.x *= f;
             this.y *= f;
             this.z *= f;
@@ -172,7 +170,7 @@ class Vec4 {
         }
     }
     Magnitude() {
-        return MathUtils_1.MathUtils.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+        return MathUtils.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
     }
     SqrMagnitude() {
         return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
@@ -209,10 +207,10 @@ class Vec4 {
         this.w *= f;
     }
     AproxEqualsBox(vector, tolerance) {
-        return (MathUtils_1.MathUtils.Abs(this.x - vector.x) <= tolerance) &&
-            (MathUtils_1.MathUtils.Abs(this.y - vector.y) <= tolerance) &&
-            (MathUtils_1.MathUtils.Abs(this.z - vector.z) <= tolerance) &&
-            (MathUtils_1.MathUtils.Abs(this.w - vector.w) <= tolerance);
+        return (MathUtils.Abs(this.x - vector.x) <= tolerance) &&
+            (MathUtils.Abs(this.y - vector.y) <= tolerance) &&
+            (MathUtils.Abs(this.z - vector.z) <= tolerance) &&
+            (MathUtils.Abs(this.w - vector.w) <= tolerance);
     }
     ApproxEquals(vector, tolerance) {
         return this.Distance(vector) <= tolerance;
@@ -278,7 +276,7 @@ class Vec4 {
         let nor = v.Clone();
         let sqrMagnitude = nor.SqrMagnitude();
         if (sqrMagnitude > (maxLength * maxLength))
-            nor = Vec4.MulN(nor, (maxLength / MathUtils_1.MathUtils.Sqrt(sqrMagnitude)));
+            nor = Vec4.MulN(nor, (maxLength / MathUtils.Sqrt(sqrMagnitude)));
         return nor;
     }
     static Normalize(v) {
@@ -297,16 +295,15 @@ class Vec4 {
         return t <= 0 ? from.Clone() : (t >= 1 ? to.Clone() : Vec4.LerpUnclamped(from, to, t));
     }
     static Abs(v) {
-        return new Vec4(MathUtils_1.MathUtils.Abs(v.x), MathUtils_1.MathUtils.Abs(v.y), MathUtils_1.MathUtils.Abs(v.z), MathUtils_1.MathUtils.Abs(v.w));
+        return new Vec4(MathUtils.Abs(v.x), MathUtils.Abs(v.y), MathUtils.Abs(v.z), MathUtils.Abs(v.w));
     }
     static Pow(v, power) {
-        return new Vec4(MathUtils_1.MathUtils.Pow(v.x, power), MathUtils_1.MathUtils.Pow(v.y, power), MathUtils_1.MathUtils.Pow(v.z, power), MathUtils_1.MathUtils.Pow(v.w, power));
+        return new Vec4(MathUtils.Pow(v.x, power), MathUtils.Pow(v.y, power), MathUtils.Pow(v.z, power), MathUtils.Pow(v.w, power));
     }
     static Floor(v) {
-        return new Vec4(MathUtils_1.MathUtils.Floor(v.x), MathUtils_1.MathUtils.Floor(v.y), MathUtils_1.MathUtils.Floor(v.z), MathUtils_1.MathUtils.Floor(v.w));
+        return new Vec4(MathUtils.Floor(v.x), MathUtils.Floor(v.y), MathUtils.Floor(v.z), MathUtils.Floor(v.w));
     }
     static Round(v) {
-        return new Vec4(MathUtils_1.MathUtils.Round(v.x), MathUtils_1.MathUtils.Round(v.y), MathUtils_1.MathUtils.Round(v.z), MathUtils_1.MathUtils.Round(v.w));
+        return new Vec4(MathUtils.Round(v.x), MathUtils.Round(v.y), MathUtils.Round(v.z), MathUtils.Round(v.w));
     }
 }
-exports.Vec4 = Vec4;

@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const FMathUtils_1 = require("./FMathUtils");
-class FVec2 {
+import { FMathUtils } from "./FMathUtils";
+export class FVec2 {
     static get one() {
         return new FVec2(1, 1);
     }
@@ -45,57 +43,57 @@ class FVec2 {
         this.y = v.y;
     }
     Clamp(min, max) {
-        this.Set(FMathUtils_1.FMathUtils.Clamp(this.x, min.x, max.x), FMathUtils_1.FMathUtils.Clamp(this.y, min.y, max.y));
+        this.Set(FMathUtils.Clamp(this.x, min.x, max.x), FMathUtils.Clamp(this.y, min.y, max.y));
         return this;
     }
     Add(v) {
-        this.x = FMathUtils_1.FMathUtils.Add(this.x, v.x);
-        this.y = FMathUtils_1.FMathUtils.Add(this.y, v.y);
+        this.x = FMathUtils.Add(this.x, v.x);
+        this.y = FMathUtils.Add(this.y, v.y);
         return this;
     }
     AddN(n) {
-        this.x = FMathUtils_1.FMathUtils.Add(this.x, n);
-        this.y = FMathUtils_1.FMathUtils.Add(this.y, n);
+        this.x = FMathUtils.Add(this.x, n);
+        this.y = FMathUtils.Add(this.y, n);
         return this;
     }
     Sub(v) {
-        this.x = FMathUtils_1.FMathUtils.Sub(this.x, v.x);
-        this.y = FMathUtils_1.FMathUtils.Sub(this.y, v.y);
+        this.x = FMathUtils.Sub(this.x, v.x);
+        this.y = FMathUtils.Sub(this.y, v.y);
         return this;
     }
     SubN(n) {
-        this.x = FMathUtils_1.FMathUtils.Sub(this.x, n);
-        this.y = FMathUtils_1.FMathUtils.Sub(this.y, n);
+        this.x = FMathUtils.Sub(this.x, n);
+        this.y = FMathUtils.Sub(this.y, n);
         return this;
     }
     SubN2(n) {
-        this.x = FMathUtils_1.FMathUtils.Sub(n, this.x);
-        this.y = FMathUtils_1.FMathUtils.Sub(n, this.y);
+        this.x = FMathUtils.Sub(n, this.x);
+        this.y = FMathUtils.Sub(n, this.y);
         return this;
     }
     Mul(v) {
-        this.x = FMathUtils_1.FMathUtils.Mul(this.x, v.x);
-        this.y = FMathUtils_1.FMathUtils.Mul(this.y, v.y);
+        this.x = FMathUtils.Mul(this.x, v.x);
+        this.y = FMathUtils.Mul(this.y, v.y);
         return this;
     }
     MulN(n) {
-        this.x = FMathUtils_1.FMathUtils.Mul(this.x, n);
-        this.y = FMathUtils_1.FMathUtils.Mul(this.y, n);
+        this.x = FMathUtils.Mul(this.x, n);
+        this.y = FMathUtils.Mul(this.y, n);
         return this;
     }
     Div(v) {
-        this.x = FMathUtils_1.FMathUtils.Div(this.x, v.x);
-        this.y = FMathUtils_1.FMathUtils.Div(this.y, v.y);
+        this.x = FMathUtils.Div(this.x, v.x);
+        this.y = FMathUtils.Div(this.y, v.y);
         return this;
     }
     DivN(n) {
-        this.x = FMathUtils_1.FMathUtils.Div(this.x, n);
-        this.y = FMathUtils_1.FMathUtils.Div(this.y, n);
+        this.x = FMathUtils.Div(this.x, n);
+        this.y = FMathUtils.Div(this.y, n);
         return this;
     }
     DivN2(n) {
-        this.x = FMathUtils_1.FMathUtils.Div(n, this.x);
-        this.y = FMathUtils_1.FMathUtils.Div(n, this.y);
+        this.x = FMathUtils.Div(n, this.x);
+        this.y = FMathUtils.Div(n, this.y);
         return this;
     }
     Negate() {
@@ -104,29 +102,29 @@ class FVec2 {
         return this;
     }
     Dot(v) {
-        return FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(this.x, v.x), FMathUtils_1.FMathUtils.Mul(this.y, v.y));
+        return FMathUtils.Add(FMathUtils.Mul(this.x, v.x), FMathUtils.Mul(this.y, v.y));
     }
     Magnitude() {
-        return FMathUtils_1.FMathUtils.Sqrt(this.SqrMagnitude());
+        return FMathUtils.Sqrt(this.SqrMagnitude());
     }
     SqrMagnitude() {
-        return FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(this.x, this.x), FMathUtils_1.FMathUtils.Mul(this.y, this.y));
+        return FMathUtils.Add(FMathUtils.Mul(this.x, this.x), FMathUtils.Mul(this.y, this.y));
     }
     Normalize() {
-        let f = FMathUtils_1.FMathUtils.Div(1, this.Magnitude());
+        let f = FMathUtils.Div(1, this.Magnitude());
         this.MulN(f);
     }
     NormalizeSafe() {
         let f = this.Magnitude();
         if (f == 0)
             return;
-        f = FMathUtils_1.FMathUtils.Div(1, f);
+        f = FMathUtils.Div(1, f);
         this.MulN(f);
     }
     ClampMagnitude(maxLength) {
         let sqrMagnitude = this.SqrMagnitude();
-        if (sqrMagnitude > FMathUtils_1.FMathUtils.Mul(maxLength, maxLength)) {
-            let f = FMathUtils_1.FMathUtils.Div(maxLength, FMathUtils_1.FMathUtils.Sqrt(sqrMagnitude));
+        if (sqrMagnitude > FMathUtils.Mul(maxLength, maxLength)) {
+            let f = FMathUtils.Div(maxLength, FMathUtils.Sqrt(sqrMagnitude));
             this.MulN(f);
         }
     }
@@ -137,8 +135,8 @@ class FVec2 {
         return FVec2.Sub(vector, this).SqrMagnitude();
     }
     AproxEqualsBox(vector, tolerance) {
-        return FMathUtils_1.FMathUtils.Abs(FMathUtils_1.FMathUtils.Sub(this.x, vector.x)) <= tolerance &&
-            FMathUtils_1.FMathUtils.Abs(FMathUtils_1.FMathUtils.Sub(this.y, vector.y)) <= tolerance;
+        return FMathUtils.Abs(FMathUtils.Sub(this.x, vector.x)) <= tolerance &&
+            FMathUtils.Abs(FMathUtils.Sub(this.y, vector.y)) <= tolerance;
     }
     ApproxEquals(vector, tolerance) {
         return this.Distance(vector) <= tolerance;
@@ -148,19 +146,19 @@ class FVec2 {
         let val = vec.Dot(FVec2.Normalize(vector));
         val = val > 1 ? 1 : val;
         val = val < -1 ? -1 : val;
-        return FMathUtils_1.FMathUtils.Acos(val);
+        return FMathUtils.Acos(val);
     }
     static Angle(v1, v2) {
         return v1.Angle(v2);
     }
     Rotate(angle) {
-        const x = FMathUtils_1.FMathUtils.Sub(FMathUtils_1.FMathUtils.Mul(this.x, FMathUtils_1.FMathUtils.Cos(angle)), FMathUtils_1.FMathUtils.Mul(this.y, FMathUtils_1.FMathUtils.Sin(angle)));
-        const y = FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(this.x, FMathUtils_1.FMathUtils.Sin(angle)), FMathUtils_1.FMathUtils.Mul(this.y, FMathUtils_1.FMathUtils.Cos(angle)));
+        const x = FMathUtils.Sub(FMathUtils.Mul(this.x, FMathUtils.Cos(angle)), FMathUtils.Mul(this.y, FMathUtils.Sin(angle)));
+        const y = FMathUtils.Add(FMathUtils.Mul(this.x, FMathUtils.Sin(angle)), FMathUtils.Mul(this.y, FMathUtils.Cos(angle)));
         this.Set(x, y);
     }
     static Rotate(v, angle) {
-        const x = FMathUtils_1.FMathUtils.Sub(FMathUtils_1.FMathUtils.Mul(v.x, FMathUtils_1.FMathUtils.Cos(angle)), FMathUtils_1.FMathUtils.Mul(v.y, FMathUtils_1.FMathUtils.Sin(angle)));
-        const y = FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(v.x, FMathUtils_1.FMathUtils.Sin(angle)), FMathUtils_1.FMathUtils.Mul(v.y, FMathUtils_1.FMathUtils.Cos(angle)));
+        const x = FMathUtils.Sub(FMathUtils.Mul(v.x, FMathUtils.Cos(angle)), FMathUtils.Mul(v.y, FMathUtils.Sin(angle)));
+        const y = FMathUtils.Add(FMathUtils.Mul(v.x, FMathUtils.Sin(angle)), FMathUtils.Mul(v.y, FMathUtils.Cos(angle)));
         return new FVec2(x, y);
     }
     EqualsTo(v) {
@@ -214,13 +212,13 @@ class FVec2 {
         return v.Negate();
     }
     static Normalize(v) {
-        return FVec2.MulN(v, FMathUtils_1.FMathUtils.Div(1, v.Magnitude()));
+        return FVec2.MulN(v, FMathUtils.Div(1, v.Magnitude()));
     }
     static NormalizeSafe(v) {
         let dis = v.Magnitude();
         if (dis == 0)
             return new FVec2();
-        return FVec2.MulN(v, FMathUtils_1.FMathUtils.Div(1, dis));
+        return FVec2.MulN(v, FMathUtils.Div(1, dis));
     }
     static Dot(v0, v1) {
         return v0.Dot(v1);
@@ -234,41 +232,41 @@ class FVec2 {
     static ClampMagnitude(v, maxLength) {
         let nor = v.Clone();
         let sqrMagnitude = nor.SqrMagnitude();
-        if (sqrMagnitude > FMathUtils_1.FMathUtils.Mul(maxLength, maxLength)) {
-            let f = FMathUtils_1.FMathUtils.Div(maxLength, FMathUtils_1.FMathUtils.Sqrt(sqrMagnitude));
+        if (sqrMagnitude > FMathUtils.Mul(maxLength, maxLength)) {
+            let f = FMathUtils.Div(maxLength, FMathUtils.Sqrt(sqrMagnitude));
             nor.MulN(f);
         }
         return nor;
     }
     static LerpUnclamped(from, to, t) {
-        return new FVec2(FMathUtils_1.FMathUtils.Add(from.x, FMathUtils_1.FMathUtils.Mul(FMathUtils_1.FMathUtils.Sub(to.x, from.x), t)), FMathUtils_1.FMathUtils.Add(from.y, FMathUtils_1.FMathUtils.Mul(FMathUtils_1.FMathUtils.Sub(to.y, from.y), t)));
+        return new FVec2(FMathUtils.Add(from.x, FMathUtils.Mul(FMathUtils.Sub(to.x, from.x), t)), FMathUtils.Add(from.y, FMathUtils.Mul(FMathUtils.Sub(to.y, from.y), t)));
     }
     static Lerp(from, to, t) {
         return t <= 0 ? from.Clone() : (t >= 1 ? to.Clone() : FVec2.LerpUnclamped(from, to, t));
     }
     static SlopeXy(v) {
-        return FMathUtils_1.FMathUtils.Div(v.x, v.y);
+        return FMathUtils.Div(v.x, v.y);
     }
     static SlopeYx(v) {
-        return FMathUtils_1.FMathUtils.Div(v.y, v.x);
+        return FMathUtils.Div(v.y, v.x);
     }
     static DegToRad(v) {
-        return new FVec2(FMathUtils_1.FMathUtils.DegToRad(v.x), FMathUtils_1.FMathUtils.DegToRad(v.y));
+        return new FVec2(FMathUtils.DegToRad(v.x), FMathUtils.DegToRad(v.y));
     }
     static RadToDeg(v) {
-        return new FVec2(FMathUtils_1.FMathUtils.RadToDeg(v.x), FMathUtils_1.FMathUtils.RadToDeg(v.y));
+        return new FVec2(FMathUtils.RadToDeg(v.x), FMathUtils.RadToDeg(v.y));
     }
     static Abs(v) {
-        return new FVec2(FMathUtils_1.FMathUtils.Abs(v.x), FMathUtils_1.FMathUtils.Abs(v.y));
+        return new FVec2(FMathUtils.Abs(v.x), FMathUtils.Abs(v.y));
     }
     static Pow(v, value) {
-        return new FVec2(FMathUtils_1.FMathUtils.Pow(v.x, value), FMathUtils_1.FMathUtils.Pow(v.y, value));
+        return new FVec2(FMathUtils.Pow(v.x, value), FMathUtils.Pow(v.y, value));
     }
     static Floor(v) {
-        return new FVec2(FMathUtils_1.FMathUtils.Floor(v.x), FMathUtils_1.FMathUtils.Floor(v.y));
+        return new FVec2(FMathUtils.Floor(v.x), FMathUtils.Floor(v.y));
     }
     static Round(v) {
-        return new FVec2(FMathUtils_1.FMathUtils.Round(v.x), FMathUtils_1.FMathUtils.Round(v.y));
+        return new FVec2(FMathUtils.Round(v.x), FMathUtils.Round(v.y));
     }
     static Equals(v1, v2) {
         if (v1 == null || v2 == null)
@@ -276,4 +274,3 @@ class FVec2 {
         return v1.x == v2.x && v1.y == v2.y;
     }
 }
-exports.FVec2 = FVec2;

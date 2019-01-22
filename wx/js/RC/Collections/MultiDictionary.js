@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const util = require("./util");
-const Dictionary_1 = require("./Dictionary");
-const arrays = require("./arrays");
-class MultiDictionary {
+import * as util from './util';
+import Dictionary from './Dictionary';
+import * as arrays from './arrays';
+export default class MultiDictionary {
     constructor(toStrFunction, valuesEqualsFunction, allowDuplicateValues = false) {
-        this.dict = new Dictionary_1.default(toStrFunction);
+        this.dict = new Dictionary(toStrFunction);
         this.equalsF = valuesEqualsFunction || util.defaultEquals;
         this.allowDuplicate = allowDuplicateValues;
     }
@@ -73,4 +71,3 @@ class MultiDictionary {
         return this.dict.isEmpty();
     }
 }
-exports.default = MultiDictionary;

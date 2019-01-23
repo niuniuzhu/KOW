@@ -818,6 +818,8 @@ export class Battle implements ISnapshotable {
 		let str = "";
 		//frame
 		reader.int32();
+		//mark to end
+		reader.bool();
 		//champions
 		let count = reader.int32();
 		for (let i = 0; i < count; i++) {
@@ -850,7 +852,7 @@ export class Battle implements ISnapshotable {
 		for (let i = 0; i < count; i++) {
 			const item = new SceneItem(this);
 			item.DecodeSnapshot(reader);
-			str += "======bullet======\n";
+			str += "======scene_item======\n";
 			str += item.Dump();
 		}
 		return str;

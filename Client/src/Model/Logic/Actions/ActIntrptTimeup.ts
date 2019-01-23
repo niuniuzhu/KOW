@@ -27,10 +27,12 @@ export class ActIntrptTimeup extends ActIntrptBase implements ISnapshotable {
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		super.EncodeSnapshot(writer);
 		writer.int32(this.duration);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		super.DecodeSnapshot(reader);
 		this.duration = reader.int32();
 	}
 }

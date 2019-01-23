@@ -538,6 +538,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         Dump(reader) {
             let str = "";
             reader.int32();
+            reader.bool();
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const champion = new Champion_1.Champion(this);
@@ -563,7 +564,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             for (let i = 0; i < count; i++) {
                 const item = new SceneItem_1.SceneItem(this);
                 item.DecodeSnapshot(reader);
-                str += "======bullet======\n";
+                str += "======scene_item======\n";
                 str += item.Dump();
             }
             return str;

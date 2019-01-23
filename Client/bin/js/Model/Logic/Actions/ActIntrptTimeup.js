@@ -15,9 +15,11 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./ActIntrptBase"],
             }
         }
         EncodeSnapshot(writer) {
+            super.EncodeSnapshot(writer);
             writer.int32(this.duration);
         }
         DecodeSnapshot(reader) {
+            super.DecodeSnapshot(reader);
             this.duration = reader.int32();
         }
     }

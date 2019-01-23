@@ -53,9 +53,11 @@ define(["require", "exports", "../../../RC/Framework/Actions/AbstractAction", ".
         OnInput(type, press) {
         }
         EncodeSnapshot(writer) {
+            writer.int32(this._time);
             writer.bool(this._isTriggered);
         }
         DecodeSnapshot(reader) {
+            this._time = reader.int32();
             this._isTriggered = reader.bool();
         }
         Dump() {

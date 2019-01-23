@@ -89,10 +89,12 @@ export class EntityAction extends AbstractAction implements ISnapshotable {
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		writer.int32(this._time);
 		writer.bool(this._isTriggered);
 	}
 
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this._time = reader.int32();
 		this._isTriggered = reader.bool();
 	}
 

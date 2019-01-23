@@ -7,11 +7,18 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "./ActIntrptBase"],
             this.duration = Hashtable_1.Hashtable.GetNumber(def, "duration", -1);
         }
         OnUpdate(dt) {
+            super.OnUpdate(dt);
             if (this.duration >= 0 &&
                 this.time >= this.duration &&
                 this.CheckFilter()) {
                 this.ChangeState();
             }
+        }
+        EncodeSnapshot(writer) {
+            writer.int32(this.duration);
+        }
+        DecodeSnapshot(reader) {
+            this.duration = reader.int32();
         }
     }
     exports.ActIntrptTimeup = ActIntrptTimeup;

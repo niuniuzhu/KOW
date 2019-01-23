@@ -1,3 +1,4 @@
+import * as $protobuf from "../../../Libs/protobufjs";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
 import { ActIntrptBase } from "./ActIntrptBase";
@@ -17,10 +18,19 @@ export class ActIntrptTimeup extends ActIntrptBase implements ISnapshotable {
 	}
 
 	protected OnUpdate(dt: number): void {
+		super.OnUpdate(dt);
 		if (this.duration >= 0 &&
 			this.time >= this.duration &&
 			this.CheckFilter()) {
 			this.ChangeState();
 		}
+	}
+
+	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
+		writer.int32(this.duration);
+	}
+
+	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
+		this.duration = reader.int32();
 	}
 }

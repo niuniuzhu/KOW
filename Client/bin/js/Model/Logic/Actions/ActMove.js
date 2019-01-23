@@ -15,8 +15,7 @@ define(["require", "exports", "../InputAagent", "./EntityAction"], function (req
             if (type != InputAagent_1.InputType.Move)
                 return;
             const inputAgent = this.owner.inputAgent;
-            if (inputAgent.GetInputState(InputAagent_1.InputType.Move))
-                this.owner.moveDirection.CopyFrom(inputAgent.GetInputValue(InputAagent_1.InputType.Move));
+            this.owner.moveDirection.CopyFrom(inputAgent.GetInputValue(InputAagent_1.InputType.Move));
         }
     }
     exports.ActMove = ActMove;

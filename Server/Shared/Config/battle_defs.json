@@ -16,7 +16,7 @@
 			"max_hp_packet": 1,
 			"hp_packet_padding": 2,
 			"hp_packet_refresh_interval": 5000,
-			"max_players": 2,
+			"max_players": 1,
 			"born_pos": [
 				[
 					0,
@@ -209,6 +209,9 @@
 					"states_available": [],
 					"actions": [
 						{
+							"id":3
+						},
+						{
 							/*改变实体属性行为*/
 							"id": 1,
 							"attrs": [
@@ -397,9 +400,9 @@
 			],
 			"angle": 0,
 			"follow": false,
-			"frequency": 100,
+			"frequency": 10000,
 			"max_bullet_count": 1,
-			"life_time": 100,
+			"life_time": 10000,
 			"emit_type": 0,
 			"destroy_type": 0
 		},

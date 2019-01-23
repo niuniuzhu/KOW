@@ -6,6 +6,7 @@ import { ActIntrptCollider } from "./Logic/Actions/ActIntrptCollider";
 import { ActIntrptInput } from "./Logic/Actions/ActIntrptInput";
 import { ActIntrptTimeup } from "./Logic/Actions/ActIntrptTimeup";
 import { ActMove } from "./Logic/Actions/ActMove";
+import { ActShake } from "./Logic/Actions/ActShake";
 import { ActSprint } from "./Logic/Actions/ActSprint";
 import { ActVelocity } from "./Logic/Actions/ActVelocity";
 import { BulletAction } from "./Logic/Actions/BulletAction";
@@ -59,7 +60,7 @@ export enum BulletActionType {
 export const STATE_ACTION_CTOR_MAP = new Map<number, new (owner: Champion, type: ActionType) => EntityAction>();
 STATE_ACTION_CTOR_MAP.set(ActionType.ChangeAttrs, ActChangeAttrs);
 STATE_ACTION_CTOR_MAP.set(ActionType.Velocity, ActVelocity);
-STATE_ACTION_CTOR_MAP.set(ActionType.Shake, EntityAction);
+STATE_ACTION_CTOR_MAP.set(ActionType.Shake, ActShake);
 STATE_ACTION_CTOR_MAP.set(ActionType.Attack, ActAttack);
 STATE_ACTION_CTOR_MAP.set(ActionType.Move, ActMove);
 STATE_ACTION_CTOR_MAP.set(ActionType.Sprint, ActSprint);

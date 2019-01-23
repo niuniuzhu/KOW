@@ -18,10 +18,6 @@ define(["require", "exports", "../../../RC/FMath/FVec2", "../../../RC/Math/MathU
             const s = FVec2_1.FVec2.Rotate(this._speed, rot);
             this.owner.phyxSpeed.CopyFrom(s);
         }
-        EncodeSnapshot(writer) {
-        }
-        DecodeSnapshot(reader) {
-        }
     }
     exports.ActVelocity = ActVelocity;
 });

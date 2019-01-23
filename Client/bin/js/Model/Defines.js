@@ -1,4 +1,4 @@
-define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActBulletChangeAttrs", "./Logic/Actions/ActBulletIntrptState", "./Logic/Actions/ActChangeAttrs", "./Logic/Actions/ActIntrptCollider", "./Logic/Actions/ActIntrptInput", "./Logic/Actions/ActIntrptTimeup", "./Logic/Actions/ActMove", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./Logic/Actions/EntityAction", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActBulletChangeAttrs_1, ActBulletIntrptState_1, ActChangeAttrs_1, ActIntrptCollider_1, ActIntrptInput_1, ActIntrptTimeup_1, ActMove_1, ActSprint_1, ActVelocity_1, EntityAction_1, VActAnimation_1, VActEffect_1, VActShake_1) {
+define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActBulletChangeAttrs", "./Logic/Actions/ActBulletIntrptState", "./Logic/Actions/ActChangeAttrs", "./Logic/Actions/ActIntrptCollider", "./Logic/Actions/ActIntrptInput", "./Logic/Actions/ActIntrptTimeup", "./Logic/Actions/ActMove", "./Logic/Actions/ActShake", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActBulletChangeAttrs_1, ActBulletIntrptState_1, ActChangeAttrs_1, ActIntrptCollider_1, ActIntrptInput_1, ActIntrptTimeup_1, ActMove_1, ActShake_1, ActSprint_1, ActVelocity_1, VActAnimation_1, VActEffect_1, VActShake_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;
@@ -41,7 +41,7 @@ define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActB
     exports.STATE_ACTION_CTOR_MAP = new Map();
     exports.STATE_ACTION_CTOR_MAP.set(ActionType.ChangeAttrs, ActChangeAttrs_1.ActChangeAttrs);
     exports.STATE_ACTION_CTOR_MAP.set(ActionType.Velocity, ActVelocity_1.ActVelocity);
-    exports.STATE_ACTION_CTOR_MAP.set(ActionType.Shake, EntityAction_1.EntityAction);
+    exports.STATE_ACTION_CTOR_MAP.set(ActionType.Shake, ActShake_1.ActShake);
     exports.STATE_ACTION_CTOR_MAP.set(ActionType.Attack, ActAttack_1.ActAttack);
     exports.STATE_ACTION_CTOR_MAP.set(ActionType.Move, ActMove_1.ActMove);
     exports.STATE_ACTION_CTOR_MAP.set(ActionType.Sprint, ActSprint_1.ActSprint);

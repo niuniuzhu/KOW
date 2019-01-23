@@ -1,4 +1,3 @@
-import * as $protobuf from "../../../Libs/protobufjs";
 import { FVec2 } from "../../../RC/FMath/FVec2";
 import { MathUtils } from "../../../RC/Math/MathUtils";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
@@ -28,11 +27,5 @@ export class ActVelocity extends EntityAction implements ISnapshotable {
 		}
 		const s = FVec2.Rotate(this._speed, rot);
 		this.owner.phyxSpeed.CopyFrom(s);
-	}
-
-	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
-	}
-
-	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 	}
 }

@@ -5,9 +5,11 @@ define(["require", "exports", "../../../RC/Framework/Actions/AbstractAction", ".
         get owner() { return this._owner; }
         get time() { return this._time; }
         get intrptTime() { return this._time - this._triggerTime; }
-        constructor(owner, type, def) {
+        constructor(owner, type) {
             super(type);
             this._owner = owner;
+        }
+        Init(def) {
             this.OnInit(def);
         }
         OnInit(def) {
@@ -46,6 +48,9 @@ define(["require", "exports", "../../../RC/Framework/Actions/AbstractAction", ".
         OnTrigger() {
         }
         HandlInput(type, press) {
+            this.OnInput(type, press);
+        }
+        OnInput(type, press) {
         }
         EncodeSnapshot(writer) {
             writer.bool(this._isTriggered);

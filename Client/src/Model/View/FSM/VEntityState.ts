@@ -37,16 +37,15 @@ export class VEntityState extends FSMState {
 		this._owner = owner;
 	}
 
-	public Init(statesDef: Hashtable): void {
-		const def = Hashtable.GetMap(statesDef, this.type.toString());
-
+	public Init(def: Hashtable): void {
 		//初始化状态行为
 		const actionsDef = Hashtable.GetMapArray(def, "actions");
 		if (actionsDef != null) {
 			for (const actionDef of actionsDef) {
 				const type = Hashtable.GetNumber(actionDef, "id");
 				const ctr = V_ID_TO_STATE_ACTION.get(type);
-				const action = new ctr(this._owner, type, actionDef);
+				const action = new ctr(this._owner, type);
+				action.Init(actionDef);
 				this.AddAction(action);
 			}
 		}

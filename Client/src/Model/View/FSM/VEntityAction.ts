@@ -16,9 +16,12 @@ export class VEntityAction extends AbstractAction {
 	private _triggerTime: number;
 	private _isTriggered: boolean;
 
-	constructor(owner: VChampion, type: VActionType, def: Hashtable) {
+	constructor(owner: VChampion, type: VActionType) {
 		super(type);
 		this._owner = owner;
+	}
+
+	public Init(def: Hashtable): void {
 		this.OnInit(def);
 	}
 
@@ -27,6 +30,7 @@ export class VEntityAction extends AbstractAction {
 	}
 
 	protected OnEnter(param: any): void {
+		this._time = 0;
 		this._isTriggered = false;
 		if (this._triggerTime <= 0) {
 			this.Trigger();

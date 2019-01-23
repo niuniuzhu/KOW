@@ -3,7 +3,6 @@ import { AbstractAction } from "../Actions/AbstractAction";
 export class FSMState {
 	protected readonly _type: number;
 	protected readonly _actions: AbstractAction[] = [];
-	protected readonly _typeToAction = new Map<number, AbstractAction>();
 
 	public get type(): number { return this._type; }
 
@@ -12,23 +11,21 @@ export class FSMState {
 	}
 
 	public AddAction(action: AbstractAction): boolean {
-		if (this._typeToAction.has(action.type))
-			return false;
-		this._typeToAction.set(action.type, action);
 		this._actions.push(action);
 		return true;
 	}
 
-	public RemoveAction(type: number): boolean {
-		const action = this._typeToAction.get(type);
-		if (!action == null)
-			return false;
-		this._typeToAction.delete(type);
+	public RemoveAction(action: AbstractAction): void {
 		this._actions.splice(this._actions.indexOf(action), 1);
 	}
 
 	public GetAction(type: number): AbstractAction {
-		return this._typeToAction.get(type);
+		for (const action of this._actions) {
+			if (action.type == type) {
+				return action;
+			}
+		}
+		return null;
 	}
 
 	public Enter(param: any): void {

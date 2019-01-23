@@ -1,10 +1,10 @@
 import { ExpressionEvaluator } from "../../../RC/Utils/ExpressionEvaluator";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { StringUtils } from "../../../RC/Utils/TextUtils";
+import { ActionType } from "../../StateEnums";
+import { ActIntrptTimeup } from "./ActIntrptTimeup";
 import { ISnapshotable } from "../ISnapshotable";
 import { ActVelocity } from "./ActVelocity";
-import { EntityState } from "../FSM/EntityState";
-import { IntrptTimeup } from "../FSM/Interrupt/IntrptTimeup";
 
 export class ActSprint extends ActVelocity implements ISnapshotable {
 	private _formula: string;
@@ -21,7 +21,7 @@ export class ActSprint extends ActVelocity implements ISnapshotable {
 		//获取上一状态的持续时间
 		const lastDuration = this.owner.fsm.previousEntityState.time;
 		const formula = StringUtils.Format(this._formula, "" + lastDuration);
-		const intrpt = <IntrptTimeup>this.owner.fsm.currentEntityState.GetInterrupt(0);
+		const intrpt = <ActIntrptTimeup>this.owner.fsm.currentEntityState.GetAction(ActionType.Timeup);
 		intrpt.duration = this._ee.evaluate(formula);
 		this.owner.fsm.context.shakeTime = lastDuration;
 	}

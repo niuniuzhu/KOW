@@ -110,8 +110,8 @@ export class VChampion extends VEntity {
 		if (statesDef != null) {
 			for (const type in statesDef) {
 				const state = new VEntityState(Number.parseInt(type), this);
+				state.Init(statesDef[type]);
 				this._fsm.AddState(state);
-				state.Init(statesDef);
 			}
 		}
 		this.DisplayRoot();

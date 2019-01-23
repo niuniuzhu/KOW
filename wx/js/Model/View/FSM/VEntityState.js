@@ -14,14 +14,14 @@ export class VEntityState extends FSMState {
         super(type);
         this._owner = owner;
     }
-    Init(statesDef) {
-        const def = Hashtable.GetMap(statesDef, this.type.toString());
+    Init(def) {
         const actionsDef = Hashtable.GetMapArray(def, "actions");
         if (actionsDef != null) {
             for (const actionDef of actionsDef) {
                 const type = Hashtable.GetNumber(actionDef, "id");
                 const ctr = V_ID_TO_STATE_ACTION.get(type);
-                const action = new ctr(this._owner, type, actionDef);
+                const action = new ctr(this._owner, type);
+                action.Init(actionDef);
                 this.AddAction(action);
             }
         }

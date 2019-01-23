@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../../RC/Utils/Hashtable", "./IntrptBase"], function (require, exports, Hashtable_1, IntrptBase_1) {
+define(["require", "exports", "../../../RC/Utils/Hashtable", "./ActIntrptBase"], function (require, exports, Hashtable_1, ActIntrptBase_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var InputTriggerType;
@@ -7,7 +7,7 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "./IntrptBase"],
         InputTriggerType[InputTriggerType["Release"] = 1] = "Release";
         InputTriggerType[InputTriggerType["Hold"] = 2] = "Hold";
     })(InputTriggerType || (InputTriggerType = {}));
-    class IntrptInput extends IntrptBase_1.IntrptBase {
+    class ActIntrptInput extends ActIntrptBase_1.ActIntrptBase {
         OnInit(def) {
             super.OnInit(def);
             this._inputTypes = Hashtable_1.Hashtable.GetNumberArray(def, "input_types");
@@ -20,8 +20,7 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "./IntrptBase"],
                 const triggerType = this._triggerTypes[i];
                 if (triggerType != InputTriggerType.Hold)
                     continue;
-                const inputAgent = this._state.owner.inputAgent;
-                if (inputAgent.GetInputState(inputType) && this.CheckFilter()) {
+                if (this.owner.inputAgent.GetInputState(inputType) && this.CheckFilter()) {
                     this.ChangeState();
                 }
             }
@@ -64,6 +63,6 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "./IntrptBase"],
             }
         }
     }
-    exports.IntrptInput = IntrptInput;
+    exports.ActIntrptInput = ActIntrptInput;
 });
-//# sourceMappingURL=IntrptInput.js.map
+//# sourceMappingURL=ActIntrptInput.js.map

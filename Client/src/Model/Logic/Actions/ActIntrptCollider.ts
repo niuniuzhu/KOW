@@ -1,7 +1,6 @@
-import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../ISnapshotable";
-import { EntityState } from "../EntityState";
-import { IntrptBase } from "./IntrptBase";
+import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { ISnapshotable } from "../ISnapshotable";
+import { ActIntrptBase } from "./ActIntrptBase";
 
 enum IntrptColliderTargetType {
 	Opponent,
@@ -12,7 +11,7 @@ enum IntrptColliderTargetType {
 /**
  * 碰撞中断
  */
-export class IntrptCollider extends IntrptBase implements ISnapshotable {
+export class ActIntrptCollider extends ActIntrptBase implements ISnapshotable {
 	private _targetType: IntrptColliderTargetType;
 
 	protected OnInit(def: Hashtable) {
@@ -22,15 +21,14 @@ export class IntrptCollider extends IntrptBase implements ISnapshotable {
 
 	protected OnUpdatePhysic(dt: number): void {
 		super.OnUpdatePhysic(dt);
-		const owner = (<EntityState>this._state).owner;
-		if (owner.intersectionCache.length == 0) {
+		if (this.owner.intersectionCache.length == 0) {
 			return;
 		}
 		switch (this._targetType) {
 			case IntrptColliderTargetType.Opponent: {
-				for (const intersestion of owner.intersectionCache) {
-					const target = owner.battle.GetChampion(intersestion.rid);
-					if (target.team != owner.team) {
+				for (const intersestion of this.owner.intersectionCache) {
+					const target = this.owner.battle.GetChampion(intersestion.rid);
+					if (target.team != this.owner.team) {
 						this.DoCollision();
 						return;
 					}
@@ -39,9 +37,9 @@ export class IntrptCollider extends IntrptBase implements ISnapshotable {
 			}
 
 			case IntrptColliderTargetType.Teamate: {
-				for (const intersestion of owner.intersectionCache) {
-					const target = owner.battle.GetChampion(intersestion.rid);
-					if (target.team == owner.team) {
+				for (const intersestion of this.owner.intersectionCache) {
+					const target = this.owner.battle.GetChampion(intersestion.rid);
+					if (target.team == this.owner.team) {
 						this.DoCollision();
 						return;
 					}

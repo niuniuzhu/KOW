@@ -14,14 +14,14 @@ define(["require", "exports", "../../../RC/Framework/FSM/FSMState", "../../../RC
             super(type);
             this._owner = owner;
         }
-        Init(statesDef) {
-            const def = Hashtable_1.Hashtable.GetMap(statesDef, this.type.toString());
+        Init(def) {
             const actionsDef = Hashtable_1.Hashtable.GetMapArray(def, "actions");
             if (actionsDef != null) {
                 for (const actionDef of actionsDef) {
                     const type = Hashtable_1.Hashtable.GetNumber(actionDef, "id");
                     const ctr = StateEnums_1.V_ID_TO_STATE_ACTION.get(type);
-                    const action = new ctr(this._owner, type, actionDef);
+                    const action = new ctr(this._owner, type);
+                    action.Init(actionDef);
                     this.AddAction(action);
                 }
             }

@@ -1,4 +1,4 @@
-define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActEntityAttrs", "./Logic/Actions/ActMove", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./Logic/Actions/EntityAction", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActEntityAttrs_1, ActMove_1, ActSprint_1, ActVelocity_1, EntityAction_1, VActAnimation_1, VActEffect_1, VActShake_1) {
+define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActEntityAttrs", "./Logic/Actions/ActMove", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./Logic/Actions/EntityAction", "./Logic/Actions/ActIntrptCollider", "./Logic/Actions/ActIntrptInput", "./Logic/Actions/ActIntrptTimeup", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActEntityAttrs_1, ActMove_1, ActSprint_1, ActVelocity_1, EntityAction_1, ActIntrptCollider_1, ActIntrptInput_1, ActIntrptTimeup_1, VActAnimation_1, VActEffect_1, VActShake_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;
@@ -21,13 +21,10 @@ define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActE
         ActionType[ActionType["Attack"] = 4] = "Attack";
         ActionType[ActionType["Move"] = 5] = "Move";
         ActionType[ActionType["Sprint"] = 6] = "Sprint";
+        ActionType[ActionType["Timeup"] = 100] = "Timeup";
+        ActionType[ActionType["Collision"] = 101] = "Collision";
+        ActionType[ActionType["Input"] = 102] = "Input";
     })(ActionType = exports.ActionType || (exports.ActionType = {}));
-    var InterruptType;
-    (function (InterruptType) {
-        InterruptType[InterruptType["Timeup"] = 0] = "Timeup";
-        InterruptType[InterruptType["Collision"] = 1] = "Collision";
-        InterruptType[InterruptType["Input"] = 2] = "Input";
-    })(InterruptType = exports.InterruptType || (exports.InterruptType = {}));
     exports.ID_TO_STATE_ACTION = new Map();
     exports.ID_TO_STATE_ACTION.set(ActionType.EntityAttrs, ActEntityAttrs_1.ActEntityAttrs);
     exports.ID_TO_STATE_ACTION.set(ActionType.Velocity, ActVelocity_1.ActVelocity);
@@ -35,6 +32,9 @@ define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActE
     exports.ID_TO_STATE_ACTION.set(ActionType.Attack, ActAttack_1.ActAttack);
     exports.ID_TO_STATE_ACTION.set(ActionType.Move, ActMove_1.ActMove);
     exports.ID_TO_STATE_ACTION.set(ActionType.Sprint, ActSprint_1.ActSprint);
+    exports.ID_TO_STATE_ACTION.set(ActionType.Timeup, ActIntrptTimeup_1.ActIntrptTimeup);
+    exports.ID_TO_STATE_ACTION.set(ActionType.Collision, ActIntrptCollider_1.ActIntrptCollider);
+    exports.ID_TO_STATE_ACTION.set(ActionType.Input, ActIntrptInput_1.ActIntrptInput);
     var VActionType;
     (function (VActionType) {
         VActionType[VActionType["None"] = -1] = "None";

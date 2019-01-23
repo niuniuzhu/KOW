@@ -25,9 +25,12 @@ export class EntityAction extends AbstractAction implements ISnapshotable {
 	private _triggerTime: number;
 	private _isTriggered: boolean;
 
-	constructor(owner: Champion, type: ActionType, def: Hashtable) {
+	constructor(owner: Champion, type: ActionType, ) {
 		super(type);
 		this._owner = owner;
+	}
+
+	public Init(def: Hashtable): void {
 		this.OnInit(def);
 	}
 
@@ -79,6 +82,10 @@ export class EntityAction extends AbstractAction implements ISnapshotable {
 	 * @param press 是按下还是弹起
 	 */
 	public HandlInput(type: InputType, press: boolean): void {
+		this.OnInput(type, press);
+	}
+
+	protected OnInput(type: InputType, press: boolean): void {
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {

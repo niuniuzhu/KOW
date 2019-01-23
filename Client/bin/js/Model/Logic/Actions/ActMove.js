@@ -11,7 +11,7 @@ define(["require", "exports", "../InputAagent", "./EntityAction"], function (req
             super.OnExit();
             this.owner.moveDirection.Set(0, 0);
         }
-        HandlInput(type, press) {
+        OnInput(type, press) {
             if (type != InputAagent_1.InputType.Move)
                 return;
             const inputAgent = this.owner.inputAgent;

@@ -62,9 +62,10 @@ export class Champion extends Entity {
         const statesDef = Hashtable.GetMap(defs, "states");
         if (statesDef != null) {
             for (const type in statesDef) {
-                this._fsm.AddState(new EntityState(Number.parseInt(type), this));
+                const state = new EntityState(Number.parseInt(type), this);
+                state.Init(statesDef[type]);
+                this._fsm.AddState(state);
             }
-            this._fsm.Init(statesDef);
             this._fsm.ChangeState(Hashtable.GetNumber(defs, "default_state"));
         }
         this.hp = this.mhp = Hashtable.GetNumber(defs, "mhp");

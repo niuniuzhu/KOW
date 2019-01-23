@@ -1,14 +1,13 @@
-import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { IntrptBase } from "./IntrptBase";
-export class IntrptTimeup extends IntrptBase {
+import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { ActIntrptBase } from "./ActIntrptBase";
+export class ActIntrptTimeup extends ActIntrptBase {
     OnInit(def) {
         super.OnInit(def);
         this.duration = Hashtable.GetNumber(def, "duration", -1);
     }
     OnUpdate(dt) {
-        const state = this._state;
         if (this.duration >= 0 &&
-            state.time >= this.duration &&
+            this.time >= this.duration &&
             this.CheckFilter()) {
             this.ChangeState();
         }

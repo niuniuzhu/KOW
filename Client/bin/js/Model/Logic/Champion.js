@@ -52,9 +52,10 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             const statesDef = Hashtable_1.Hashtable.GetMap(defs, "states");
             if (statesDef != null) {
                 for (const type in statesDef) {
-                    this._fsm.AddState(new EntityState_1.EntityState(Number.parseInt(type), this));
+                    const state = new EntityState_1.EntityState(Number.parseInt(type), this);
+                    state.Init(statesDef[type]);
+                    this._fsm.AddState(state);
                 }
-                this._fsm.Init(statesDef);
                 this._fsm.ChangeState(Hashtable_1.Hashtable.GetNumber(defs, "default_state"));
             }
             this.hp = this.mhp = Hashtable_1.Hashtable.GetNumber(defs, "mhp");

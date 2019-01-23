@@ -1,9 +1,8 @@
 import * as $protobuf from "../../../Libs/protobufjs";
 import { FSM } from "../../../RC/Framework/FSM/FSM";
-import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../ISnapshotable";
 import { StateType } from "../../StateEnums";
 import { InputType } from "../InputAagent";
+import { ISnapshotable } from "../ISnapshotable";
 import { EntityState } from "./EntityState";
 import { EntityStateContext } from "./EntityStateContext";
 
@@ -12,13 +11,6 @@ export class EntityFSM extends FSM implements ISnapshotable {
 	public get currentEntityState(): EntityState { return <EntityState>this.currentState; }
 	public get previousEntityState(): EntityState { return <EntityState>this.previousState; }
 	public get globalEntityState(): EntityState { return <EntityState>this.globalState; }
-
-	public Init(statesDef: Hashtable) {
-		for (const state of this._states) {
-			const entityFSM = <EntityState>state;
-			entityFSM.Init(statesDef);
-		}
-	}
 
 	public UpdatePhysic(dt: number): void {
 		if (this.globalEntityState != null)

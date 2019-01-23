@@ -16,7 +16,7 @@
 			"max_hp_packet": 1,
 			"hp_packet_padding": 2,
 			"hp_packet_refresh_interval": 5000,
-			"max_players": 1,
+			"max_players": 2,
 			"born_pos": [
 				[
 					0,
@@ -44,7 +44,7 @@
 			"name": "熊",
 			"mhp": 1000,
 			"mmp": 100,
-			"mp_recover": 5,
+			"mp_recover": 50,
 			"atk": 0,
 			"def": 0,
 			"move_speed": 2,
@@ -58,10 +58,9 @@
 			"states": {
 				/*休闲*/
 				"0": {
-					"actions": [],
-					"interrupts": [
+					"actions": [
 						{
-							"id": 2, /*按键中断*/
+							"id": 102, /*按键中断*/
 							"connect_state": 1,
 							"input_types": [
 								0 /*方向键*/
@@ -71,7 +70,7 @@
 							]
 						},
 						{
-							"id": 2, /*按键中断*/
+							"id": 102, /*按键中断*/
 							"connect_state": 1,
 							"input_types": [
 								0 /*方向键*/
@@ -81,16 +80,16 @@
 							]
 						},
 						{
-							"id": 2, /*按键中断*/
-							"type": 1, /*中断类型为技能*/
-							"skills": [
+							"id": 102, /*按键中断*/
+							"intrpt_type": 1, /*中断类型为技能*/
+							"intrpt_skills": [
 								0,
 								1
 							], /*触发的技能id*/
 							"connect_state": 2,
-							"filters": [
+							"intrpt_filters": [
 								{
-									"filter_type": 0, /*过滤类型*/
+									"type": 0, /*过滤类型*/
 									"attr0": 0,
 									"attr1": 0,
 									"value": 0,
@@ -107,9 +106,9 @@
 							]
 						},
 						{
-							"id": 2, /*按键中断*/
-							"type": 1, /*中断类型为技能*/
-							"skill": 2, /*触发的技能id*/
+							"id": 102, /*按键中断*/
+							"intrpt_type": 1, /*中断类型为技能*/
+							"intrpt_skill": 2, /*触发的技能id*/
 							"connect_state": 3,
 							"input_types": [
 								2 /*技能2*/
@@ -126,11 +125,9 @@
 						{
 							/*移动行为*/
 							"id": 5
-						}
-					],
-					"interrupts": [
+						},
 						{
-							"id": 2, /*按键中断*/
+							"id": 102, /*按键中断*/
 							"connect_state": 0,
 							"input_types": [
 								0 /*方向键*/
@@ -140,16 +137,16 @@
 							]
 						},
 						{
-							"id": 2, /*按键中断*/
-							"type": 1, /*中断类型为技能*/
-							"skills": [
+							"id": 102, /*按键中断*/
+							"intrpt_type": 1, /*中断类型为技能*/
+							"intrpt_skills": [
 								0,
 								1
 							], /*触发的技能id*/
 							"connect_state": 2,
-							"filters": [
+							"intrpt_filters": [
 								{
-									"filter_type": 0, /*过滤类型*/
+									"type": 0, /*过滤类型*/
 									"attr0": 0,
 									"attr1": 0,
 									"value": 0,
@@ -166,9 +163,9 @@
 							]
 						},
 						{
-							"id": 2, /*按键中断*/
-							"type": 1, /*中断类型为技能*/
-							"skill": 2, /*触发的技能id*/
+							"id": 102, /*按键中断*/
+							"intrpt_type": 1, /*中断类型为技能*/
+							"intrpt_skill": 2, /*触发的技能id*/
 							"connect_state": 3,
 							"input_types": [
 								2 /*技能2*/
@@ -185,7 +182,7 @@
 					"actions": [
 						{
 							/*改变实体属性行为*/
-							"id": 1,
+							"id": 101,
 							"attrs": [
 								500, /*禁止移动*/
 								501, /*禁止转身*/
@@ -201,11 +198,9 @@
 							/*攻击行为*/
 							"id": 4,
 							"trigger_time": 500
-						}
-					],
-					"interrupts": [
+						},
 						{
-							"id": 0, /*计时中断*/
+							"id": 100, /*计时中断*/
 							"connect_state": 0,
 							"duration": 600
 						}
@@ -228,16 +223,14 @@
 								1,
 								1
 							]
-						}
-					],
-					"interrupts": [
+						},
 						{
-							"id": 0, /*计时中断*/
+							"id": 100, /*计时中断*/
 							"connect_state": 4,
 							"duration": 3000
 						},
 						{
-							"id": 2, /*按键中断*/
+							"id": 102, /*按键中断*/
 							"connect_state": 4,
 							"input_types": [
 								2 /*技能2*/
@@ -273,16 +266,14 @@
 								30
 							],
 							"formula": "50+{0}*0.03" /*冲刺时间公式*/
-						}
-					],
-					"interrupts": [
+						},
 						{
-							"id": 0, /*计时中断*/
+							"id": 100, /*计时中断*/
 							"connect_state": 5,
 							"duration": 150
 						},
 						{
-							"id": 1, /*碰撞中断*/
+							"id": 101, /*碰撞中断*/
 							"connect_state": 5,
 							"target_type": 0 /*目标类型0-对手,1-队友,2-子弹*/
 						}
@@ -309,11 +300,9 @@
 							/*攻击行为*/
 							"id": 4,
 							"trigger_time": 400
-						}
-					],
-					"interrupts": [
+						},
 						{
-							"id": 0, /*计时中断*/
+							"id": 100, /*计时中断*/
 							"connect_state": 0,
 							"duration": 500
 						}
@@ -360,11 +349,9 @@
 							/*攻击行为*/
 							"id": 4,
 							"trigger_time": 500
-						}
-					],
-					"interrupts": [
+						},
 						{
-							"id": 0, /*计时中断*/
+							"id": 100, /*计时中断*/
 							"connect_state": 0,
 							"duration": 600
 						}

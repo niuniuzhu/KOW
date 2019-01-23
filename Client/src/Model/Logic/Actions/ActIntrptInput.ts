@@ -1,8 +1,8 @@
-import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { ISnapshotable } from "../../ISnapshotable";
-import { InputType } from "../../../Logic/InputAagent";
-import { EntityState } from "../EntityState";
-import { IntrptBase } from "./IntrptBase";
+import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { ISnapshotable } from "../ISnapshotable";
+import { InputType } from "../InputAagent";
+import { EntityState } from "../FSM/EntityState";
+import { ActIntrptBase } from "./ActIntrptBase";
 
 enum InputTriggerType {
 	Press,
@@ -13,7 +13,7 @@ enum InputTriggerType {
 /**
  * 按键中断
  */
-export class IntrptInput extends IntrptBase implements ISnapshotable {
+export class ActIntrptInput extends ActIntrptBase implements ISnapshotable {
 	/**
 	 * 按键标记
 	 */
@@ -40,9 +40,8 @@ export class IntrptInput extends IntrptBase implements ISnapshotable {
 			const triggerType = this._triggerTypes[i];
 			if (triggerType != InputTriggerType.Hold)
 				continue;
-			const inputAgent = (<EntityState>this._state).owner.inputAgent;
 			//检测按键是否按下状态
-			if (inputAgent.GetInputState(inputType) && this.CheckFilter()) {
+			if (this.owner.inputAgent.GetInputState(inputType) && this.CheckFilter()) {
 				this.ChangeState();
 			}
 		}

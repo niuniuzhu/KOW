@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../../RC/Utils/Logger", "../../../StateEnums"], function (require, exports, Hashtable_1, Logger_1, StateEnums_1) {
+define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/Logger", "../../StateEnums", "./EntityAction"], function (require, exports, Hashtable_1, Logger_1, StateEnums_1, EntityAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var FilterType;
@@ -29,36 +29,23 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../../RC/
         IntrptType[IntrptType["Skill"] = 1] = "Skill";
         IntrptType[IntrptType["State"] = 2] = "State";
     })(IntrptType || (IntrptType = {}));
-    class IntrptBase {
-        constructor(state, def) {
+    class ActIntrptBase extends EntityAction_1.EntityAction {
+        constructor() {
+            super(...arguments);
             this._connectState = StateEnums_1.StateType.Idle;
-            this._delay = 0;
-            this._isTriggered = false;
-            this._intrptFilters = [];
-            this._state = state;
-            this.OnInit(def);
-        }
-        get id() { return this._id; }
-        get time() { return this._state.time; }
-        get intrptTime() { return this._state.time - this._delay; }
-        EncodeSnapshot(writer) {
-            writer.bool(this._isTriggered);
-        }
-        DecodeSnapshot(reader) {
-            this._isTriggered = reader.bool();
         }
         OnInit(def) {
-            this._id = Hashtable_1.Hashtable.GetNumber(def, "id");
-            this._intrptType = Hashtable_1.Hashtable.GetNumber(def, "type");
+            super.OnInit(def);
+            this._intrptType = Hashtable_1.Hashtable.GetNumber(def, "intrpt_type");
             this._connectState = Hashtable_1.Hashtable.GetNumber(def, "connect_state");
-            this._skillID = Hashtable_1.Hashtable.GetNumber(def, "skill", null);
-            this._skillIDs = Hashtable_1.Hashtable.GetNumberArray(def, "skills");
-            this._delay = Hashtable_1.Hashtable.GetNumber(def, "delay");
-            const filterDefs = Hashtable_1.Hashtable.GetMapArray(def, "filters");
-            if (filterDefs != null) {
+            this._skillID = Hashtable_1.Hashtable.GetNumber(def, "intrpt_skill", null);
+            this._skillIDs = Hashtable_1.Hashtable.GetNumberArray(def, "intrpt_skills");
+            const filterDefs = Hashtable_1.Hashtable.GetMapArray(def, "intrpt_filters");
+            if (filterDefs != null && filterDefs.length > 0) {
+                this._intrptFilters = [];
                 for (const filterDef of filterDefs) {
                     const intrptFilter = new IntrptFilter();
-                    intrptFilter.filterType = Hashtable_1.Hashtable.GetNumber(filterDef, "filter_type");
+                    intrptFilter.filterType = Hashtable_1.Hashtable.GetNumber(filterDef, "type");
                     intrptFilter.attr0 = Hashtable_1.Hashtable.GetNumber(filterDef, "attr0");
                     intrptFilter.attr1 = Hashtable_1.Hashtable.GetNumber(filterDef, "attr1");
                     intrptFilter.value = Hashtable_1.Hashtable.GetNumber(filterDef, "value");
@@ -69,57 +56,10 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../../RC/
             }
             this._rel = Hashtable_1.Hashtable.GetNumber(def, "rel");
         }
-        Enter() {
-            this._isTriggered = false;
-            if (this._delay <= 0) {
-                this.Trigger();
-            }
-            this.OnEnter();
-        }
-        Exit() {
-            this.OnExit();
-        }
-        Update(dt) {
-            const time = this._state.time;
-            if (!this._isTriggered) {
-                if (time >= this._delay) {
-                    this.Trigger();
-                }
-            }
-            else {
-                this.OnUpdate(dt);
-            }
-        }
-        UpdatePhysic(dt) {
-            if (!this._isTriggered) {
-                return;
-            }
-            this.OnUpdatePhysic(dt);
-        }
-        HandleInput(type, press) {
-            this.OnInput(type, press);
-        }
-        Trigger() {
-            this._isTriggered = true;
-            this.OnTrigger();
-        }
-        OnTrigger() {
-        }
-        OnEnter() {
-        }
-        OnExit() {
-        }
-        OnUpdate(dt) {
-        }
-        OnUpdatePhysic(dt) {
-        }
-        OnInput(type, press) {
-        }
         CheckFilter() {
-            if (this._intrptFilters.length == 0) {
+            if (this._intrptFilters == null || this._intrptFilters.length == 0) {
                 return true;
             }
-            const owner = this._state.owner;
             let result = this._rel == FilterRel.And ? true : false;
             for (const intrptFilter of this._intrptFilters) {
                 let v0;
@@ -127,15 +67,15 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../../RC/
                 let meet;
                 switch (intrptFilter.filterType) {
                     case FilterType.AttrToAttr:
-                        v0 = owner.GetAttr(intrptFilter.attr0);
-                        v1 = owner.GetAttr(intrptFilter.attr1);
+                        v0 = this.owner.GetAttr(intrptFilter.attr0);
+                        v1 = this.owner.GetAttr(intrptFilter.attr1);
                         break;
                     case FilterType.AttrToValue:
-                        v0 = owner.GetAttr(intrptFilter.attr0);
+                        v0 = this.owner.GetAttr(intrptFilter.attr0);
                         v1 = intrptFilter.value;
                         break;
                     case FilterType.State:
-                        v0 = owner.fsm.currentEntityState.type;
+                        v0 = this.owner.fsm.currentEntityState.type;
                         v1 = intrptFilter.value;
                         break;
                 }
@@ -164,10 +104,9 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../../RC/
             return result;
         }
         ChangeState(igroneIntrptList = true, force = true) {
-            const owner = this._state.owner;
             switch (this._intrptType) {
                 case IntrptType.Attr:
-                    owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
+                    this.owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
                     break;
                 case IntrptType.Skill:
                     let skill;
@@ -176,30 +115,25 @@ define(["require", "exports", "../../../../RC/Utils/Hashtable", "../../../../RC/
                             Logger_1.Logger.Warn("invalid skill id");
                             return;
                         }
-                        const index = owner.battle.random.NextFloor(0, this._skillIDs.length);
-                        skill = owner.GetSkill(this._skillIDs[index]);
+                        const index = this.owner.battle.random.NextFloor(0, this._skillIDs.length);
+                        skill = this.owner.GetSkill(this._skillIDs[index]);
                     }
                     else {
-                        skill = owner.GetSkill(this._skillID);
+                        skill = this.owner.GetSkill(this._skillID);
                     }
                     if (skill == null) {
                         Logger_1.Logger.Warn("invalid skill");
                         return;
                     }
-                    const meet = owner.mp >= skill.mpCost;
+                    const meet = this.owner.mp >= skill.mpCost;
                     if (meet) {
-                        owner.fsm.context.skillID = skill.id;
-                        owner.fsm.ChangeState(skill.connectState, null, igroneIntrptList, force);
+                        this.owner.fsm.context.skillID = skill.id;
+                        this.owner.fsm.ChangeState(skill.connectState, null, igroneIntrptList, force);
                     }
                     break;
             }
         }
-        Dump() {
-            let str = "";
-            str += `istriggered:${this._isTriggered}\n`;
-            return str;
-        }
     }
-    exports.IntrptBase = IntrptBase;
+    exports.ActIntrptBase = ActIntrptBase;
 });
-//# sourceMappingURL=IntrptBase.js.map
+//# sourceMappingURL=ActIntrptBase.js.map

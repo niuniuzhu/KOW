@@ -17,7 +17,7 @@ export class ActMove extends EntityAction implements ISnapshotable {
 		this.owner.moveDirection.Set(0, 0);
 	}
 
-	public HandlInput(type: InputType, press: boolean): void {
+	protected OnInput(type: InputType, press: boolean): void {
 		if (type != InputType.Move)
 			return;
 		const inputAgent = this.owner.inputAgent;

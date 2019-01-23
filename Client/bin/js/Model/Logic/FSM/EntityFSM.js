@@ -9,12 +9,6 @@ define(["require", "exports", "../../../RC/Framework/FSM/FSM", "./EntityStateCon
         get currentEntityState() { return this.currentState; }
         get previousEntityState() { return this.previousState; }
         get globalEntityState() { return this.globalState; }
-        Init(statesDef) {
-            for (const state of this._states) {
-                const entityFSM = state;
-                entityFSM.Init(statesDef);
-            }
-        }
         UpdatePhysic(dt) {
             if (this.globalEntityState != null)
                 this.globalEntityState.UpdatePhysic(dt);

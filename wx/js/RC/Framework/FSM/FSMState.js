@@ -1,26 +1,23 @@
 export class FSMState {
     constructor(type) {
         this._actions = [];
-        this._typeToAction = new Map();
         this._type = type;
     }
     get type() { return this._type; }
     AddAction(action) {
-        if (this._typeToAction.has(action.type))
-            return false;
-        this._typeToAction.set(action.type, action);
         this._actions.push(action);
         return true;
     }
-    RemoveAction(type) {
-        const action = this._typeToAction.get(type);
-        if (!action == null)
-            return false;
-        this._typeToAction.delete(type);
+    RemoveAction(action) {
         this._actions.splice(this._actions.indexOf(action), 1);
     }
     GetAction(type) {
-        return this._typeToAction.get(type);
+        for (const action of this._actions) {
+            if (action.type == type) {
+                return action;
+            }
+        }
+        return null;
     }
     Enter(param) {
         this.OnEnter(param);

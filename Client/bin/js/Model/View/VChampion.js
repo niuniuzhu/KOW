@@ -91,8 +91,8 @@ define(["require", "exports", "../../RC/Framework/FSM/FSM", "../../RC/Math/Vec2"
             if (statesDef != null) {
                 for (const type in statesDef) {
                     const state = new VEntityState_1.VEntityState(Number.parseInt(type), this);
+                    state.Init(statesDef[type]);
                     this._fsm.AddState(state);
-                    state.Init(statesDef);
                 }
             }
             this.DisplayRoot();

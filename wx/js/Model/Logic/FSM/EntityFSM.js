@@ -8,12 +8,6 @@ export class EntityFSM extends FSM {
     get currentEntityState() { return this.currentState; }
     get previousEntityState() { return this.previousState; }
     get globalEntityState() { return this.globalState; }
-    Init(statesDef) {
-        for (const state of this._states) {
-            const entityFSM = state;
-            entityFSM.Init(statesDef);
-        }
-    }
     UpdatePhysic(dt) {
         if (this.globalEntityState != null)
             this.globalEntityState.UpdatePhysic(dt);

@@ -1,12 +1,12 @@
-import { Hashtable } from "../../../../RC/Utils/Hashtable";
-import { IntrptBase } from "./IntrptBase";
+import { Hashtable } from "../../../RC/Utils/Hashtable";
+import { ActIntrptBase } from "./ActIntrptBase";
 var InputTriggerType;
 (function (InputTriggerType) {
     InputTriggerType[InputTriggerType["Press"] = 0] = "Press";
     InputTriggerType[InputTriggerType["Release"] = 1] = "Release";
     InputTriggerType[InputTriggerType["Hold"] = 2] = "Hold";
 })(InputTriggerType || (InputTriggerType = {}));
-export class IntrptInput extends IntrptBase {
+export class ActIntrptInput extends ActIntrptBase {
     OnInit(def) {
         super.OnInit(def);
         this._inputTypes = Hashtable.GetNumberArray(def, "input_types");
@@ -19,8 +19,7 @@ export class IntrptInput extends IntrptBase {
             const triggerType = this._triggerTypes[i];
             if (triggerType != InputTriggerType.Hold)
                 continue;
-            const inputAgent = this._state.owner.inputAgent;
-            if (inputAgent.GetInputState(inputType) && this.CheckFilter()) {
+            if (this.owner.inputAgent.GetInputState(inputType) && this.CheckFilter()) {
                 this.ChangeState();
             }
         }

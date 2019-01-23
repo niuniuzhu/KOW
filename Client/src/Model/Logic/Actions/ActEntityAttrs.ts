@@ -1,6 +1,6 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
-import { EAttr } from "../../Logic/Attribute";
+import { EAttr } from "../Attribute";
 import { EntityAction } from "./EntityAction";
 
 /**

@@ -3,8 +3,8 @@ import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { StringUtils } from "../../../RC/Utils/TextUtils";
 import { ISnapshotable } from "../ISnapshotable";
 import { ActVelocity } from "./ActVelocity";
-import { EntityState } from "./EntityState";
-import { IntrptTimeup } from "./Interrupt/IntrptTimeup";
+import { EntityState } from "../FSM/EntityState";
+import { IntrptTimeup } from "../FSM/Interrupt/IntrptTimeup";
 
 export class ActSprint extends ActVelocity implements ISnapshotable {
 	private _formula: string;

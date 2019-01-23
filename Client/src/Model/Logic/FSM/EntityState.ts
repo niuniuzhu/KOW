@@ -6,7 +6,7 @@ import { ISnapshotable } from "../ISnapshotable";
 import { ID_TO_STATE_ACTION, InterruptType, StateType } from "../../StateEnums";
 import { Champion } from "../Champion";
 import { InputType } from "../InputAagent";
-import { EntityAction } from "./EntityAction";
+import { EntityAction } from "../Actions/EntityAction";
 import { IntrptBase } from "./Interrupt/IntrptBase";
 import { IntrptCollider } from "./Interrupt/IntrptCollider";
 import { IntrptInput } from "./Interrupt/IntrptInput";

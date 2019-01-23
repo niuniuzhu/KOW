@@ -1,4 +1,4 @@
-define(["require", "exports", "./Logic/FSM/ActAttack", "./Logic/FSM/ActEntityAttrs", "./Logic/FSM/ActMove", "./Logic/FSM/ActSprint", "./Logic/FSM/ActVelocity", "./Logic/FSM/EntityAction", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActEntityAttrs_1, ActMove_1, ActSprint_1, ActVelocity_1, EntityAction_1, VActAnimation_1, VActEffect_1, VActShake_1) {
+define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActEntityAttrs", "./Logic/Actions/ActMove", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./Logic/Actions/EntityAction", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActEntityAttrs_1, ActMove_1, ActSprint_1, ActVelocity_1, EntityAction_1, VActAnimation_1, VActEffect_1, VActShake_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;

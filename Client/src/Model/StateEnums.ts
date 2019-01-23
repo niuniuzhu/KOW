@@ -1,11 +1,11 @@
 import { Hashtable } from "../RC/Utils/Hashtable";
 import { Champion } from "./Logic/Champion";
-import { ActAttack } from "./Logic/FSM/ActAttack";
-import { ActEntityAttrs } from "./Logic/FSM/ActEntityAttrs";
-import { ActMove } from "./Logic/FSM/ActMove";
-import { ActSprint } from "./Logic/FSM/ActSprint";
-import { ActVelocity } from "./Logic/FSM/ActVelocity";
-import { EntityAction } from "./Logic/FSM/EntityAction";
+import { ActAttack } from "./Logic/Actions/ActAttack";
+import { ActEntityAttrs } from "./Logic/Actions/ActEntityAttrs";
+import { ActMove } from "./Logic/Actions/ActMove";
+import { ActSprint } from "./Logic/Actions/ActSprint";
+import { ActVelocity } from "./Logic/Actions/ActVelocity";
+import { EntityAction } from "./Logic/Actions/EntityAction";
 import { VActAnimation } from "./View/FSM/VActAnimation";
 import { VActEffect } from "./View/FSM/VActEffect";
 import { VActShake } from "./View/FSM/VActShake";

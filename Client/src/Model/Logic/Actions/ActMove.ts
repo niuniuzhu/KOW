@@ -1,5 +1,5 @@
 import { ISnapshotable } from "../ISnapshotable";
-import { InputType } from "../../Logic/InputAagent";
+import { InputType } from "../InputAagent";
 import { EntityAction } from "./EntityAction";
 
 /**

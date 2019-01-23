@@ -338,6 +338,7 @@ export class Battle implements ISnapshotable {
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.int32(this._frame);
 		writer.bool(this._markToEnd);
+		writer.double(this._random.seed);
 
 		//champions
 		let count = this._champions.length;
@@ -380,6 +381,8 @@ export class Battle implements ISnapshotable {
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._frame = reader.int32();
 		this._markToEnd = reader.bool();
+		this._random.seed = reader.double();
+
 		//champions
 		let count = reader.int32();
 		for (let i = 0; i < count; i++) {
@@ -820,6 +823,9 @@ export class Battle implements ISnapshotable {
 		reader.int32();
 		//mark to end
 		reader.bool();
+		//seed
+		reader.double();
+		
 		//champions
 		let count = reader.int32();
 		for (let i = 0; i < count; i++) {

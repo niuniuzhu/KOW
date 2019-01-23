@@ -220,6 +220,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         EncodeSnapshot(writer) {
             writer.int32(this._frame);
             writer.bool(this._markToEnd);
+            writer.double(this._random.seed);
             let count = this._champions.length;
             writer.int32(count);
             for (let i = 0; i < count; i++) {
@@ -249,6 +250,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
             this._markToEnd = reader.bool();
+            this._random.seed = reader.double();
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const champion = new Champion_1.Champion(this);
@@ -539,6 +541,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             let str = "";
             reader.int32();
             reader.bool();
+            reader.double();
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
                 const champion = new Champion_1.Champion(this);

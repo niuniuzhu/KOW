@@ -93,7 +93,8 @@ export class EntityState extends FSMState implements ISnapshotable {
 	}
 
 	public Dump(): string {
-		let str = "";
+		let str = "========";
+		str += `type:${this.type}\n`;
 		str += `action count:${this._actions.length}\n`;
 		for (const action of this._actions) {
 			str += (<EntityAction>action).Dump();

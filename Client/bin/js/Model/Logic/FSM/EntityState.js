@@ -60,7 +60,8 @@ define(["require", "exports", "../../../RC/Collections/Set", "../../../RC/Framew
             return this._statesAvailable == null || this._statesAvailable.contains(type);
         }
         Dump() {
-            let str = "";
+            let str = "========";
+            str += `type:${this.type}\n`;
             str += `action count:${this._actions.length}\n`;
             for (const action of this._actions) {
                 str += action.Dump();

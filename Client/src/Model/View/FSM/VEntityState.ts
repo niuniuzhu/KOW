@@ -1,6 +1,6 @@
 import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { V_ID_TO_STATE_ACTION } from "../../StateEnums";
+import { V_STATE_ACTION_CTOR_MAP } from "../../Defines";
 import { VChampion } from "../VChampion";
 import { VEntity } from "../VEntity";
 
@@ -43,7 +43,7 @@ export class VEntityState extends FSMState {
 		if (actionsDef != null) {
 			for (const actionDef of actionsDef) {
 				const type = Hashtable.GetNumber(actionDef, "id");
-				const ctr = V_ID_TO_STATE_ACTION.get(type);
+				const ctr = V_STATE_ACTION_CTOR_MAP.get(type);
 				const action = new ctr(this._owner, type);
 				action.Init(actionDef);
 				this.AddAction(action);

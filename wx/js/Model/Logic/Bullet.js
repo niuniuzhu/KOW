@@ -8,6 +8,7 @@ import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
 import { EAttr } from "./Attribute";
 import { Entity } from "./Entity";
+import { BULLET_ACTION_CTOR_MAP } from "../Defines";
 var BulletMoveType;
 (function (BulletMoveType) {
     BulletMoveType[BulletMoveType["Linear"] = 0] = "Linear";
@@ -57,12 +58,17 @@ export class Bullet extends Entity {
         this._nextCollisionTime = 0;
         this._collisionCount = 0;
         this._targetToCollisionCount = new Map();
+        this._actions = [];
     }
     get type() { return EntityType.Bullet; }
+    get casterID() { return this._casterID; }
     Init(params) {
         super.Init(params);
         this._casterID = params.casterID;
         this._skillID = params.skillID;
+        for (const action of this._actions) {
+            action.BulletCreated();
+        }
     }
     LoadDefs() {
         const defs = Defs.GetBullet(this._id);
@@ -82,7 +88,23 @@ export class Bullet extends Entity {
         this._attrTypes = Hashtable.GetNumberArray(defs, "attr_types");
         this._attrFilterOPs = Hashtable.GetNumberArray(defs, "attr_filter_ops");
         this._attrCompareValues = Hashtable.GetNumberArray(defs, "attr_compare_values");
+        const actionsDef = Hashtable.GetMapArray(defs, "actions");
+        if (actionsDef != null) {
+            for (const actionDef of actionsDef) {
+                const type = Hashtable.GetNumber(actionDef, "id");
+                const ctr = BULLET_ACTION_CTOR_MAP.get(type);
+                const action = new ctr(this, type);
+                action.Init(actionDef);
+                this._actions.push(action);
+            }
+        }
         this._nextCollisionTime = this._delay;
+    }
+    Destroy() {
+        for (const action of this._actions) {
+            action.BulletDestroy();
+        }
+        super.Destroy();
     }
     EncodeSnapshot(writer) {
         super.EncodeSnapshot(writer);
@@ -164,6 +186,9 @@ export class Bullet extends Entity {
                 if (this._maxCollisionPerTarget >= 0 &&
                     count == this._maxCollisionPerTarget)
                     continue;
+                for (const action of this._actions) {
+                    action.BulletCollision(target);
+                }
                 if (!target.battle.chase) {
                     SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
                 }

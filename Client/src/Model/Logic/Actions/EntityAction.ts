@@ -2,7 +2,7 @@ import * as $protobuf from "../../../Libs/protobufjs";
 import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
-import { ActionType } from "../../StateEnums";
+import { ActionType } from "../../Defines";
 import { InputType } from "../InputAagent";
 import { Champion } from "../Champion";
 
@@ -25,7 +25,7 @@ export class EntityAction extends AbstractAction implements ISnapshotable {
 	private _triggerTime: number;
 	private _isTriggered: boolean;
 
-	constructor(owner: Champion, type: ActionType, ) {
+	constructor(owner: Champion, type: ActionType) {
 		super(type);
 		this._owner = owner;
 	}

@@ -7,14 +7,7 @@
 		"inlineSources": false,
 		"sourceMap": false,
 		"removeComments": true,
-		"alwaysStrict": true,
-		"baseUrl": "bin/",
-		"paths": {
-			"*": [
-				"*",
-				"./Libs/*"
-			]
-		}
+		"alwaysStrict": true
 	},
 	"include": [
 		"./src/**/*"

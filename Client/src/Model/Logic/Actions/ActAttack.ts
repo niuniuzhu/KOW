@@ -3,7 +3,7 @@ import * as $protobuf from "../../../Libs/protobufjs";
 import { FMathUtils } from "../../../RC/FMath/FMathUtils";
 import { Logger } from "../../../RC/Utils/Logger";
 import { ISnapshotable } from "../ISnapshotable";
-import { StateType } from "../../StateEnums";
+import { StateType } from "../../Defines";
 import { EAttr } from "../Attribute";
 import { EntityAction } from "./EntityAction";
 

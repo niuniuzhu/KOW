@@ -2,7 +2,7 @@ import * as $protobuf from "../../../Libs/protobufjs";
 import Set from "../../../RC/Collections/Set";
 import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { ID_TO_STATE_ACTION, StateType } from "../../StateEnums";
+import { StateType, STATE_ACTION_CTOR_MAP } from "../../Defines";
 import { EntityAction } from "../Actions/EntityAction";
 import { Champion } from "../Champion";
 import { InputType } from "../InputAagent";
@@ -33,7 +33,7 @@ export class EntityState extends FSMState implements ISnapshotable {
 		if (actionsDef != null) {
 			for (const actionDef of actionsDef) {
 				const type = Hashtable.GetNumber(actionDef, "id");
-				const ctr = ID_TO_STATE_ACTION.get(type);
+				const ctr = STATE_ACTION_CTOR_MAP.get(type);
 				const action = new ctr(this._owner, type);
 				action.Init(actionDef);
 				this.AddAction(action);

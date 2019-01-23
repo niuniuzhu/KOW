@@ -2,11 +2,12 @@ import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { ISnapshotable } from "../ISnapshotable";
 import { EAttr } from "../Attribute";
 import { EntityAction } from "./EntityAction";
+import { FMathUtils } from "../../../RC/FMath/FMathUtils";
 
 /**
- * 设置实体属性行为
+ * 设置实体属性
  */
-export class ActEntityAttrs extends EntityAction implements ISnapshotable {
+export class ActChangeAttrs extends EntityAction implements ISnapshotable {
 	private _attrs: EAttr[];
 	private _values: number[];
 
@@ -20,7 +21,7 @@ export class ActEntityAttrs extends EntityAction implements ISnapshotable {
 		super.OnTrigger();
 		const count = this._attrs.length;
 		for (let i = 0; i < count; ++i) {
-			this.ActiveAttr(this._attrs[i], this._values[i]);
+			this.owner.SetAttr(this._attrs[i], FMathUtils.Add(this.owner.GetAttr(this._attrs[i]), this._values[i]));
 		}
 	}
 
@@ -29,14 +30,10 @@ export class ActEntityAttrs extends EntityAction implements ISnapshotable {
 		super.OnExit();
 	}
 
-	private ActiveAttr(attr: EAttr, value: number): void {
-		this.owner.SetAttr(attr, this.owner.GetAttr(attr) + value);
-	}
-
 	private DeactiveAttrs(): void {
 		const count = this._attrs.length;
 		for (let i = 0; i < count; ++i) {
-			this.owner.SetAttr(this._attrs[i], this.owner.GetAttr(this._attrs[i]) - this._values[i]);
+			this.owner.SetAttr(this._attrs[i], FMathUtils.Sub(this.owner.GetAttr(this._attrs[i]), this._values[i]));
 		}
 	}
 }

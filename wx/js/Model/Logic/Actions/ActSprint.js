@@ -1,7 +1,7 @@
 import { ExpressionEvaluator } from "../../../RC/Utils/ExpressionEvaluator";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { StringUtils } from "../../../RC/Utils/TextUtils";
-import { ActionType } from "../../StateEnums";
+import { ActionType } from "../../Defines";
 import { ActVelocity } from "./ActVelocity";
 export class ActSprint extends ActVelocity {
     constructor() {

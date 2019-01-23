@@ -5,7 +5,7 @@ import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
 import { IntersectInfo } from "./IntersectInfo";
 import { Skill } from "../Skill";
-import { StateType } from "../StateEnums";
+import { StateType } from "../Defines";
 import { EAttr } from "./Attribute";
 import { Entity } from "./Entity";
 import { EntityFSM } from "./FSM/EntityFSM";

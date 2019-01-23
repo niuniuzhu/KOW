@@ -1,6 +1,6 @@
 import * as $protobuf from "../../../Libs/protobufjs";
 import { FSM } from "../../../RC/Framework/FSM/FSM";
-import { StateType } from "../../StateEnums";
+import { StateType } from "../../Defines";
 import { InputType } from "../InputAagent";
 import { ISnapshotable } from "../ISnapshotable";
 import { EntityState } from "./EntityState";

@@ -1,7 +1,7 @@
 import * as Long from "../../../Libs/long";
 import { FMathUtils } from "../../../RC/FMath/FMathUtils";
 import { Logger } from "../../../RC/Utils/Logger";
-import { StateType } from "../../StateEnums";
+import { StateType } from "../../Defines";
 import { EAttr } from "../Attribute";
 import { EntityAction } from "./EntityAction";
 export class ActAttack extends EntityAction {

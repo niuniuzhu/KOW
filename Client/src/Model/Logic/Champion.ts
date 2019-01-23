@@ -8,7 +8,7 @@ import { FrameAction } from "./FrameAction";
 import { IntersectInfo } from "./IntersectInfo";
 import { ISnapshotable } from "./ISnapshotable";
 import { Skill } from "../Skill";
-import { StateType } from "../StateEnums";
+import { StateType } from "../Defines";
 import { EAttr } from "./Attribute";
 import { Battle } from "./Battle";
 import { Entity, EntityInitParams } from "./Entity";

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/Utils/ExpressionEvaluator", "../../../RC/Utils/Hashtable", "../../../RC/Utils/TextUtils", "../../StateEnums", "./ActVelocity"], function (require, exports, ExpressionEvaluator_1, Hashtable_1, TextUtils_1, StateEnums_1, ActVelocity_1) {
+define(["require", "exports", "../../../RC/Utils/ExpressionEvaluator", "../../../RC/Utils/Hashtable", "../../../RC/Utils/TextUtils", "../../Defines", "./ActVelocity"], function (require, exports, ExpressionEvaluator_1, Hashtable_1, TextUtils_1, Defines_1, ActVelocity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActSprint extends ActVelocity_1.ActVelocity {
@@ -14,7 +14,7 @@ define(["require", "exports", "../../../RC/Utils/ExpressionEvaluator", "../../..
             super.OnEnter(param);
             const lastDuration = this.owner.fsm.previousEntityState.time;
             const formula = TextUtils_1.StringUtils.Format(this._formula, "" + lastDuration);
-            const intrpt = this.owner.fsm.currentEntityState.GetAction(StateEnums_1.ActionType.Timeup);
+            const intrpt = this.owner.fsm.currentEntityState.GetAction(Defines_1.ActionType.Timeup);
             intrpt.duration = this._ee.evaluate(formula);
             this.owner.fsm.context.shakeTime = lastDuration;
         }

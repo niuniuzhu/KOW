@@ -1,9 +1,8 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { Logger } from "../../../RC/Utils/Logger";
-import { StateType } from "../../Defines";
-import { EntityAction } from "./EntityAction";
+import { BulletActionType } from "../../Defines";
 import { EAttr } from "../Attribute";
-import { ISnapshotable } from "../ISnapshotable";
+import { Bullet } from "../Bullet";
+import { Champion } from "../Champion";
 
 /**
  * 过滤类型
@@ -47,33 +46,30 @@ enum FilterRel {
 }
 
 /**
- * 中断类型
+ * 子弹行为的触发阶段
  */
-enum IntrptType {
-	Attr,
-	Skill
+export enum BulletActionPhase {
+	Create = 1 << 0,
+	Collision = 1 << 1,
+	Destroy = 1 << 2
 }
 
 /**
- * 中断器
+ * 子弹行为
  */
-export class ActIntrptBase extends EntityAction implements ISnapshotable {
+export abstract class BulletAction {
 	/**
-	 * 中断类型
+	 * 类型
 	 */
-	private _intrptType: IntrptType;
+	public get type(): BulletActionType { return this._type; }
 	/**
-	 * 连接状态
+	 * 所属实体
 	 */
-	private _connectState: StateType = StateType.Idle;
-	/**
-	 * 连接的技能ID
-	 */
-	private _skillID: number;
-	/**
-	 * 连接的技能ID(随机选择数组中其中一个)
-	 */
-	private _skillIDs: number[];
+	public get owner(): Bullet { return this._owner; }
+
+	private _type: BulletActionType;
+	private _owner: Bullet;
+	protected _phase: BulletActionPhase;
 	/**
 	 * 条件过滤
 	 */
@@ -83,12 +79,17 @@ export class ActIntrptBase extends EntityAction implements ISnapshotable {
 	 */
 	private _rel: FilterRel;
 
+	constructor(owner: Bullet, type: BulletActionType) {
+		this._owner = owner;
+		this._type = type;
+	}
+
+	public Init(def: Hashtable): void {
+		this.OnInit(def);
+	}
+
 	protected OnInit(def: Hashtable): void {
-		super.OnInit(def);
-		this._intrptType = Hashtable.GetNumber(def, "intrpt_type");
-		this._connectState = Hashtable.GetNumber(def, "connect_state");
-		this._skillID = Hashtable.GetNumber(def, "intrpt_skill", null);
-		this._skillIDs = Hashtable.GetNumberArray(def, "intrpt_skills");
+		this._phase = Hashtable.GetNumber(def, "phase");
 		const filterDefs = Hashtable.GetMapArray(def, "intrpt_filters");
 		if (filterDefs != null && filterDefs.length > 0) {
 			this._intrptFilters = [];
@@ -106,9 +107,51 @@ export class ActIntrptBase extends EntityAction implements ISnapshotable {
 	}
 
 	/**
+	 * 子弹产生时调用
+	 */
+	public BulletCreated(): void {
+		if ((this._phase & BulletActionPhase.Create) == 0) {
+			return;
+		}
+		this.OnBulletCreated();
+	}
+
+	/**
+	 * 子弹碰撞时调用
+	 */
+	public BulletCollision(target: Champion): void {
+		if ((this._phase & BulletActionPhase.Collision) == 0) {
+			return;
+		}
+		if (!this.CheckFilter(target)) {
+			return;
+		}
+		this.OnBulletCollision(target);
+	}
+
+	/**
+	 * 子弹销毁时调用
+	 */
+	public BulletDestroy(): void {
+		if ((this._phase & BulletActionPhase.Destroy) == 0) {
+			return;
+		}
+		this.OnBulletDestroy();
+	}
+
+	protected OnBulletCreated(): void {
+	}
+
+	protected OnBulletCollision(target: Champion): void {
+	}
+
+	protected OnBulletDestroy(): void {
+	}
+
+	/**
 	 * 检查过滤条件
 	 */
-	protected CheckFilter(): boolean {
+	protected CheckFilter(target: Champion): boolean {
 		if (this._intrptFilters == null || this._intrptFilters.length == 0) {
 			return true;
 		}
@@ -119,17 +162,17 @@ export class ActIntrptBase extends EntityAction implements ISnapshotable {
 			let meet: boolean;
 			switch (intrptFilter.filterType) {
 				case FilterType.AttrToAttr://两属性值比较
-					v0 = this.owner.GetAttr(intrptFilter.attr0);
-					v1 = this.owner.GetAttr(intrptFilter.attr1);
+					v0 = target.GetAttr(intrptFilter.attr0);
+					v1 = target.GetAttr(intrptFilter.attr1);
 					break;
 
 				case FilterType.AttrToValue://属性值与给定值比较
-					v0 = this.owner.GetAttr(intrptFilter.attr0);
+					v0 = target.GetAttr(intrptFilter.attr0);
 					v1 = intrptFilter.value;
 					break;
 
 				case FilterType.State://状态比较
-					v0 = this.owner.fsm.currentEntityState.type;
+					v0 = target.fsm.currentEntityState.type;
 					v1 = intrptFilter.value;
 					break;
 			}
@@ -161,43 +204,5 @@ export class ActIntrptBase extends EntityAction implements ISnapshotable {
 			result = this._rel == FilterRel.And ? result && meet : result || meet;
 		}
 		return result;
-	}
-
-	/**
-	 * 转换状态
-	 * @param igroneIntrptList 是否忽略中断列表
-	 * @param force 是否强制转换
-	 */
-	protected ChangeState(igroneIntrptList: boolean = true, force: boolean = true): void {
-		switch (this._intrptType) {
-			case IntrptType.Attr://中断到状态
-				this.owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
-				break;
-
-			case IntrptType.Skill://中断到技能
-				let skill;
-				if (this._skillID == null) {
-					if (this._skillIDs == null || this._skillIDs.length == 0) {
-						Logger.Warn("invalid skill id");
-						return;
-					}
-					const index = this.owner.battle.random.NextFloor(0, this._skillIDs.length);
-					skill = this.owner.GetSkill(this._skillIDs[index]);
-				}
-				else {
-					skill = this.owner.GetSkill(this._skillID);
-				}
-				if (skill == null) {
-					Logger.Warn("invalid skill");
-					return;
-				}
-				const meet = this.owner.mp >= skill.mpCost;
-				if (meet) {//成功使用技能
-					//在上下文中记录技能id
-					this.owner.fsm.context.skillID = skill.id;
-					this.owner.fsm.ChangeState(skill.connectState, null, igroneIntrptList, force);
-				}
-				break;
-		}
 	}
 }

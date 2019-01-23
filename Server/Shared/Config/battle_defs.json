@@ -93,8 +93,7 @@
 									"attr0": 0,
 									"attr1": 0,
 									"value": 0,
-									"op": 0,
-									"skill": 0
+									"op": 0
 								}
 							],
 							"rel": 0, /*过滤器的关系*/
@@ -150,8 +149,7 @@
 									"attr0": 0,
 									"attr1": 0,
 									"value": 0,
-									"op": 0,
-									"skill": 0
+									"op": 0
 								}
 							],
 							"rel": 0, /*过滤器的关系*/
@@ -461,7 +459,43 @@
 			"max_collision_per_target": -1, /*与每个目标最大碰撞次数*/
 			"max_collision": -1, /*总碰撞次数*/
 			"target_type": 0,
-			"whipping": false
+			"whipping": false,
+			"actions": [
+				{
+					"id": 1, /*改变目标属性*/
+					"phase": 1, /*碰撞阶段*/
+					"intrpt_filters": [
+						{
+							"type": 2, /*属性状态比较*/
+							"op": 0, /*等于*/
+							"value": 3, /*当目标处在前摇阶段*/
+							"rel": 1 /*或关系*/
+						}
+					],
+					"attrs": [
+						3 /*mp*/
+					],
+					"values": [
+						-100
+					],
+					"ops": [
+						1 /*操作为Add*/
+					]
+				},
+				{
+					"id": 0, /*中断目标状态*/
+					"phase": 1, /*碰撞阶段*/
+					"dest_state": 0, /*中断到idle*/
+					"intrpt_filters": [
+						{
+							"type": 2, /*属性状态比较*/
+							"op": 0, /*等于*/
+							"value": 3, /*当目标处在前摇阶段*/
+							"rel": 1 /*或关系*/
+						}
+					]
+				}
+			]
 		}
 	},
 	"scene_item": {

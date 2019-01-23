@@ -11,6 +11,8 @@ import { ISnapshotable } from "./ISnapshotable";
 import { EAttr } from "./Attribute";
 import { Champion } from "./Champion";
 import { Entity, EntityInitParams } from "./Entity";
+import { BulletAction } from "./Actions/BulletAction";
+import { BULLET_ACTION_CTOR_MAP } from "../Defines";
 
 enum BulletMoveType {
 	Linear,
@@ -52,6 +54,11 @@ enum DestroyType {
 
 export class Bullet extends Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Bullet; }
+
+	/**
+	 * 产生者3ID
+	 */
+	public get casterID(): Long { return this._casterID; }
 
 	//static properties
 	private _radius: number;
@@ -99,11 +106,18 @@ export class Bullet extends Entity implements ISnapshotable {
 	 * 记录每个目标的碰撞次数
 	 */
 	private readonly _targetToCollisionCount = new Map<Long, number>();//todo 无序?
+	/**
+	 * 子弹行为
+	 */
+	private readonly _actions: BulletAction[] = [];
 
 	public Init(params: EntityInitParams): void {
 		super.Init(params);
 		this._casterID = params.casterID;
 		this._skillID = params.skillID;
+		for (const action of this._actions) {
+			action.BulletCreated();
+		}
 	}
 
 	protected LoadDefs(): void {
@@ -124,7 +138,24 @@ export class Bullet extends Entity implements ISnapshotable {
 		this._attrTypes = Hashtable.GetNumberArray(defs, "attr_types");
 		this._attrFilterOPs = Hashtable.GetNumberArray(defs, "attr_filter_ops");
 		this._attrCompareValues = Hashtable.GetNumberArray(defs, "attr_compare_values");
+		const actionsDef = Hashtable.GetMapArray(defs, "actions");
+		if (actionsDef != null) {
+			for (const actionDef of actionsDef) {
+				const type = Hashtable.GetNumber(actionDef, "id");
+				const ctr = BULLET_ACTION_CTOR_MAP.get(type);
+				const action = new ctr(this, type);
+				action.Init(actionDef);
+				this._actions.push(action);
+			}
+		}
 		this._nextCollisionTime = this._delay;
+	}
+
+	public Destroy(): void {
+		for (const action of this._actions) {
+			action.BulletDestroy();
+		}
+		super.Destroy();
 	}
 
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
@@ -227,6 +258,9 @@ export class Bullet extends Entity implements ISnapshotable {
 				if (this._maxCollisionPerTarget >= 0 &&
 					count == this._maxCollisionPerTarget)
 					continue;
+				for (const action of this._actions) {
+					action.BulletCollision(target);
+				}
 				//派发子弹碰撞通知
 				if (!target.battle.chase) {
 					SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);

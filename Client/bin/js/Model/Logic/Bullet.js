@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./Attribute", "./Entity"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, Attribute_1, Entity_1) {
+define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2", "../../RC/FMath/Intersection", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./Attribute", "./Entity", "../Defines"], function (require, exports, Long, FMathUtils_1, FVec2_1, Intersection_1, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, Attribute_1, Entity_1, Defines_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BulletMoveType;
@@ -50,12 +50,17 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._nextCollisionTime = 0;
             this._collisionCount = 0;
             this._targetToCollisionCount = new Map();
+            this._actions = [];
         }
         get type() { return EntityType_1.EntityType.Bullet; }
+        get casterID() { return this._casterID; }
         Init(params) {
             super.Init(params);
             this._casterID = params.casterID;
             this._skillID = params.skillID;
+            for (const action of this._actions) {
+                action.BulletCreated();
+            }
         }
         LoadDefs() {
             const defs = Defs_1.Defs.GetBullet(this._id);
@@ -75,7 +80,23 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             this._attrTypes = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_types");
             this._attrFilterOPs = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_filter_ops");
             this._attrCompareValues = Hashtable_1.Hashtable.GetNumberArray(defs, "attr_compare_values");
+            const actionsDef = Hashtable_1.Hashtable.GetMapArray(defs, "actions");
+            if (actionsDef != null) {
+                for (const actionDef of actionsDef) {
+                    const type = Hashtable_1.Hashtable.GetNumber(actionDef, "id");
+                    const ctr = Defines_1.BULLET_ACTION_CTOR_MAP.get(type);
+                    const action = new ctr(this, type);
+                    action.Init(actionDef);
+                    this._actions.push(action);
+                }
+            }
             this._nextCollisionTime = this._delay;
+        }
+        Destroy() {
+            for (const action of this._actions) {
+                action.BulletDestroy();
+            }
+            super.Destroy();
         }
         EncodeSnapshot(writer) {
             super.EncodeSnapshot(writer);
@@ -157,6 +178,9 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                     if (this._maxCollisionPerTarget >= 0 &&
                         count == this._maxCollisionPerTarget)
                         continue;
+                    for (const action of this._actions) {
+                        action.BulletCollision(target);
+                    }
                     if (!target.battle.chase) {
                         SyncEvent_1.SyncEvent.BulletCollision(this.rid, this._casterID, target.rid);
                     }

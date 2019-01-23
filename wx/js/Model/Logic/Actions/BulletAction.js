@@ -1,7 +1,4 @@
 import { Hashtable } from "../../../RC/Utils/Hashtable";
-import { Logger } from "../../../RC/Utils/Logger";
-import { StateType } from "../../Defines";
-import { EntityAction } from "./EntityAction";
 var FilterType;
 (function (FilterType) {
     FilterType[FilterType["AttrToAttr"] = 0] = "AttrToAttr";
@@ -24,22 +21,24 @@ var FilterRel;
     FilterRel[FilterRel["And"] = 0] = "And";
     FilterRel[FilterRel["Or"] = 1] = "Or";
 })(FilterRel || (FilterRel = {}));
-var IntrptType;
-(function (IntrptType) {
-    IntrptType[IntrptType["Attr"] = 0] = "Attr";
-    IntrptType[IntrptType["Skill"] = 1] = "Skill";
-})(IntrptType || (IntrptType = {}));
-export class ActIntrptBase extends EntityAction {
-    constructor() {
-        super(...arguments);
-        this._connectState = StateType.Idle;
+export var BulletActionPhase;
+(function (BulletActionPhase) {
+    BulletActionPhase[BulletActionPhase["Create"] = 1] = "Create";
+    BulletActionPhase[BulletActionPhase["Collision"] = 2] = "Collision";
+    BulletActionPhase[BulletActionPhase["Destroy"] = 4] = "Destroy";
+})(BulletActionPhase || (BulletActionPhase = {}));
+export class BulletAction {
+    get type() { return this._type; }
+    get owner() { return this._owner; }
+    constructor(owner, type) {
+        this._owner = owner;
+        this._type = type;
+    }
+    Init(def) {
+        this.OnInit(def);
     }
     OnInit(def) {
-        super.OnInit(def);
-        this._intrptType = Hashtable.GetNumber(def, "intrpt_type");
-        this._connectState = Hashtable.GetNumber(def, "connect_state");
-        this._skillID = Hashtable.GetNumber(def, "intrpt_skill", null);
-        this._skillIDs = Hashtable.GetNumberArray(def, "intrpt_skills");
+        this._phase = Hashtable.GetNumber(def, "phase");
         const filterDefs = Hashtable.GetMapArray(def, "intrpt_filters");
         if (filterDefs != null && filterDefs.length > 0) {
             this._intrptFilters = [];
@@ -55,7 +54,34 @@ export class ActIntrptBase extends EntityAction {
         }
         this._rel = Hashtable.GetNumber(def, "rel");
     }
-    CheckFilter() {
+    BulletCreated() {
+        if ((this._phase & BulletActionPhase.Create) == 0) {
+            return;
+        }
+        this.OnBulletCreated();
+    }
+    BulletCollision(target) {
+        if ((this._phase & BulletActionPhase.Collision) == 0) {
+            return;
+        }
+        if (!this.CheckFilter(target)) {
+            return;
+        }
+        this.OnBulletCollision(target);
+    }
+    BulletDestroy() {
+        if ((this._phase & BulletActionPhase.Destroy) == 0) {
+            return;
+        }
+        this.OnBulletDestroy();
+    }
+    OnBulletCreated() {
+    }
+    OnBulletCollision(target) {
+    }
+    OnBulletDestroy() {
+    }
+    CheckFilter(target) {
         if (this._intrptFilters == null || this._intrptFilters.length == 0) {
             return true;
         }
@@ -66,15 +92,15 @@ export class ActIntrptBase extends EntityAction {
             let meet;
             switch (intrptFilter.filterType) {
                 case FilterType.AttrToAttr:
-                    v0 = this.owner.GetAttr(intrptFilter.attr0);
-                    v1 = this.owner.GetAttr(intrptFilter.attr1);
+                    v0 = target.GetAttr(intrptFilter.attr0);
+                    v1 = target.GetAttr(intrptFilter.attr1);
                     break;
                 case FilterType.AttrToValue:
-                    v0 = this.owner.GetAttr(intrptFilter.attr0);
+                    v0 = target.GetAttr(intrptFilter.attr0);
                     v1 = intrptFilter.value;
                     break;
                 case FilterType.State:
-                    v0 = this.owner.fsm.currentEntityState.type;
+                    v0 = target.fsm.currentEntityState.type;
                     v1 = intrptFilter.value;
                     break;
             }
@@ -101,35 +127,5 @@ export class ActIntrptBase extends EntityAction {
             result = this._rel == FilterRel.And ? result && meet : result || meet;
         }
         return result;
-    }
-    ChangeState(igroneIntrptList = true, force = true) {
-        switch (this._intrptType) {
-            case IntrptType.Attr:
-                this.owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
-                break;
-            case IntrptType.Skill:
-                let skill;
-                if (this._skillID == null) {
-                    if (this._skillIDs == null || this._skillIDs.length == 0) {
-                        Logger.Warn("invalid skill id");
-                        return;
-                    }
-                    const index = this.owner.battle.random.NextFloor(0, this._skillIDs.length);
-                    skill = this.owner.GetSkill(this._skillIDs[index]);
-                }
-                else {
-                    skill = this.owner.GetSkill(this._skillID);
-                }
-                if (skill == null) {
-                    Logger.Warn("invalid skill");
-                    return;
-                }
-                const meet = this.owner.mp >= skill.mpCost;
-                if (meet) {
-                    this.owner.fsm.context.skillID = skill.id;
-                    this.owner.fsm.ChangeState(skill.connectState, null, igroneIntrptList, force);
-                }
-                break;
-        }
     }
 }

@@ -1,4 +1,7 @@
 export abstract class AbstractAction {
+	/**
+	 * 类型
+	 */
 	public get type(): number { return this._type; }
 
 	private _type: number;

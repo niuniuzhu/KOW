@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/Collections/Set", "../../../RC/Framework/FSM/FSMState", "../../../RC/Utils/Hashtable", "../../StateEnums"], function (require, exports, Set_1, FSMState_1, Hashtable_1, StateEnums_1) {
+define(["require", "exports", "../../../RC/Collections/Set", "../../../RC/Framework/FSM/FSMState", "../../../RC/Utils/Hashtable", "../../Defines"], function (require, exports, Set_1, FSMState_1, Hashtable_1, Defines_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class EntityState extends FSMState_1.FSMState {
@@ -14,7 +14,7 @@ define(["require", "exports", "../../../RC/Collections/Set", "../../../RC/Framew
             if (actionsDef != null) {
                 for (const actionDef of actionsDef) {
                     const type = Hashtable_1.Hashtable.GetNumber(actionDef, "id");
-                    const ctr = StateEnums_1.ID_TO_STATE_ACTION.get(type);
+                    const ctr = Defines_1.STATE_ACTION_CTOR_MAP.get(type);
                     const action = new ctr(this._owner, type);
                     action.Init(actionDef);
                     this.AddAction(action);

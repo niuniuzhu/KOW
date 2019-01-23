@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/Logger", "../../Defines", "./EntityAction"], function (require, exports, Hashtable_1, Logger_1, Defines_1, EntityAction_1) {
+define(["require", "exports", "../../../RC/Utils/Hashtable"], function (require, exports, Hashtable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var FilterType;
@@ -23,22 +23,24 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
         FilterRel[FilterRel["And"] = 0] = "And";
         FilterRel[FilterRel["Or"] = 1] = "Or";
     })(FilterRel || (FilterRel = {}));
-    var IntrptType;
-    (function (IntrptType) {
-        IntrptType[IntrptType["Attr"] = 0] = "Attr";
-        IntrptType[IntrptType["Skill"] = 1] = "Skill";
-    })(IntrptType || (IntrptType = {}));
-    class ActIntrptBase extends EntityAction_1.EntityAction {
-        constructor() {
-            super(...arguments);
-            this._connectState = Defines_1.StateType.Idle;
+    var BulletActionPhase;
+    (function (BulletActionPhase) {
+        BulletActionPhase[BulletActionPhase["Create"] = 1] = "Create";
+        BulletActionPhase[BulletActionPhase["Collision"] = 2] = "Collision";
+        BulletActionPhase[BulletActionPhase["Destroy"] = 4] = "Destroy";
+    })(BulletActionPhase = exports.BulletActionPhase || (exports.BulletActionPhase = {}));
+    class BulletAction {
+        get type() { return this._type; }
+        get owner() { return this._owner; }
+        constructor(owner, type) {
+            this._owner = owner;
+            this._type = type;
+        }
+        Init(def) {
+            this.OnInit(def);
         }
         OnInit(def) {
-            super.OnInit(def);
-            this._intrptType = Hashtable_1.Hashtable.GetNumber(def, "intrpt_type");
-            this._connectState = Hashtable_1.Hashtable.GetNumber(def, "connect_state");
-            this._skillID = Hashtable_1.Hashtable.GetNumber(def, "intrpt_skill", null);
-            this._skillIDs = Hashtable_1.Hashtable.GetNumberArray(def, "intrpt_skills");
+            this._phase = Hashtable_1.Hashtable.GetNumber(def, "phase");
             const filterDefs = Hashtable_1.Hashtable.GetMapArray(def, "intrpt_filters");
             if (filterDefs != null && filterDefs.length > 0) {
                 this._intrptFilters = [];
@@ -54,7 +56,34 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
             }
             this._rel = Hashtable_1.Hashtable.GetNumber(def, "rel");
         }
-        CheckFilter() {
+        BulletCreated() {
+            if ((this._phase & BulletActionPhase.Create) == 0) {
+                return;
+            }
+            this.OnBulletCreated();
+        }
+        BulletCollision(target) {
+            if ((this._phase & BulletActionPhase.Collision) == 0) {
+                return;
+            }
+            if (!this.CheckFilter(target)) {
+                return;
+            }
+            this.OnBulletCollision(target);
+        }
+        BulletDestroy() {
+            if ((this._phase & BulletActionPhase.Destroy) == 0) {
+                return;
+            }
+            this.OnBulletDestroy();
+        }
+        OnBulletCreated() {
+        }
+        OnBulletCollision(target) {
+        }
+        OnBulletDestroy() {
+        }
+        CheckFilter(target) {
             if (this._intrptFilters == null || this._intrptFilters.length == 0) {
                 return true;
             }
@@ -65,15 +94,15 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
                 let meet;
                 switch (intrptFilter.filterType) {
                     case FilterType.AttrToAttr:
-                        v0 = this.owner.GetAttr(intrptFilter.attr0);
-                        v1 = this.owner.GetAttr(intrptFilter.attr1);
+                        v0 = target.GetAttr(intrptFilter.attr0);
+                        v1 = target.GetAttr(intrptFilter.attr1);
                         break;
                     case FilterType.AttrToValue:
-                        v0 = this.owner.GetAttr(intrptFilter.attr0);
+                        v0 = target.GetAttr(intrptFilter.attr0);
                         v1 = intrptFilter.value;
                         break;
                     case FilterType.State:
-                        v0 = this.owner.fsm.currentEntityState.type;
+                        v0 = target.fsm.currentEntityState.type;
                         v1 = intrptFilter.value;
                         break;
                 }
@@ -101,37 +130,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
             }
             return result;
         }
-        ChangeState(igroneIntrptList = true, force = true) {
-            switch (this._intrptType) {
-                case IntrptType.Attr:
-                    this.owner.fsm.ChangeState(this._connectState, null, igroneIntrptList, force);
-                    break;
-                case IntrptType.Skill:
-                    let skill;
-                    if (this._skillID == null) {
-                        if (this._skillIDs == null || this._skillIDs.length == 0) {
-                            Logger_1.Logger.Warn("invalid skill id");
-                            return;
-                        }
-                        const index = this.owner.battle.random.NextFloor(0, this._skillIDs.length);
-                        skill = this.owner.GetSkill(this._skillIDs[index]);
-                    }
-                    else {
-                        skill = this.owner.GetSkill(this._skillID);
-                    }
-                    if (skill == null) {
-                        Logger_1.Logger.Warn("invalid skill");
-                        return;
-                    }
-                    const meet = this.owner.mp >= skill.mpCost;
-                    if (meet) {
-                        this.owner.fsm.context.skillID = skill.id;
-                        this.owner.fsm.ChangeState(skill.connectState, null, igroneIntrptList, force);
-                    }
-                    break;
-            }
-        }
     }
-    exports.ActIntrptBase = ActIntrptBase;
+    exports.BulletAction = BulletAction;
 });
-//# sourceMappingURL=ActIntrptBase.js.map
+//# sourceMappingURL=BulletAction.js.map

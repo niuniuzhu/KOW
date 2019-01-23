@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../Libs/long", "../../../RC/FMath/FMathUtils", "../../../RC/Utils/Logger", "../../StateEnums", "../Attribute", "./EntityAction"], function (require, exports, Long, FMathUtils_1, Logger_1, StateEnums_1, Attribute_1, EntityAction_1) {
+define(["require", "exports", "../../../Libs/long", "../../../RC/FMath/FMathUtils", "../../../RC/Utils/Logger", "../../Defines", "../Attribute", "./EntityAction"], function (require, exports, Long, FMathUtils_1, Logger_1, Defines_1, Attribute_1, EntityAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class ActAttack extends EntityAction_1.EntityAction {
@@ -25,7 +25,7 @@ define(["require", "exports", "../../../Libs/long", "../../../RC/FMath/FMathUtil
             skill.shakeTime = this.owner.fsm.context.shakeTime;
             if (skill == null) {
                 Logger_1.Logger.Warn(`can not find skill:${this._skillID}`);
-                this.owner.fsm.ChangeState(StateEnums_1.StateType.Idle);
+                this.owner.fsm.ChangeState(Defines_1.StateType.Idle);
             }
         }
         OnTrigger() {

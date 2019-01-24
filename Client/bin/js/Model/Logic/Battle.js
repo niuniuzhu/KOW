@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/Collections/Queue", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "./FrameActionGroup", "./Bullet", "./CalcationManager", "./Champion", "./Emitter", "./Entity", "./HPPacket", "./SceneItem"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, Queue_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, CalcationManager_1, Champion_1, Emitter_1, Entity_1, HPPacket_1, SceneItem_1) {
+define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "./FrameActionGroup", "./Bullet", "./CalcationManager", "./Champion", "./Emitter", "./Entity", "./HPPacket", "./SceneItem"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, CalcationManager_1, Champion_1, Emitter_1, Entity_1, HPPacket_1, SceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -14,7 +14,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._bornDirs = [];
             this._destroied = true;
             this._markToEnd = false;
-            this._frameActionGroups = new Queue_1.default();
+            this._frameActionGroups = [];
             this._champions = [];
             this._idToChampion = new Map();
             this._emitters = [];
@@ -43,7 +43,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 return;
             this._destroied = true;
             this._bounds = null;
-            this._frameActionGroups.clear();
+            this._frameActionGroups.splice(0);
             this._calcManager.Destroy();
             for (let i = 0, count = this._champions.length; i < count; i++)
                 this._champions[i].Destroy();
@@ -315,10 +315,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             SyncEvent_1.SyncEvent.Snapshot(data);
         }
         Chase(frameActionGroups) {
-            if (frameActionGroups == null)
-                return;
-            while (!frameActionGroups.isEmpty()) {
-                const frameActionGroup = frameActionGroups.dequeue();
+            for (const frameActionGroup of frameActionGroups) {
                 let length = frameActionGroup.frame - this.frame;
                 while (length > 0) {
                     this.UpdateLogic(this._msPerFrame);
@@ -327,6 +324,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 this.ApplyFrameActionGroup(frameActionGroup);
                 this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
             }
+            frameActionGroups.splice(0);
         }
         MakeRid(id) {
             const rnd = this._random.NextFloor(0, 0xfffff);
@@ -466,12 +464,10 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         }
         ApplyFrameActionGroup(frameActionGroup) {
             for (let i = 0; i < frameActionGroup.numActions; i++) {
-                this.ApplyFrameAction(frameActionGroup.Get(i));
+                const frameAction = frameActionGroup.Get(i);
+                const champion = this.GetChampion(frameAction.gcNID);
+                champion.FrameAction(frameAction);
             }
-        }
-        ApplyFrameAction(frameAction) {
-            const champion = this.GetChampion(frameAction.gcNID);
-            champion.FrameAction(frameAction);
         }
         CheckBattleEnd() {
             if (this._markToEnd)
@@ -526,7 +522,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         HandleFrameAction(frame, data) {
             const frameActionGroup = new FrameActionGroup_1.FrameActionGroup(frame);
             frameActionGroup.Deserialize(data);
-            this._frameActionGroups.enqueue(frameActionGroup);
+            this._frameActionGroups.push(frameActionGroup);
         }
         HandleOutOfSync(msg) {
             let str = "===============data1===============";

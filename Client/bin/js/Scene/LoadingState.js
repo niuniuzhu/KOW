@@ -8,6 +8,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleInf
             this._battleInfo = new BattleInfo_1.BattleInfo();
         }
         ConnectToBS(gcNID, ip, port) {
+            Global_1.Global.battleManager.AddListaners();
             const connector = Global_1.Global.connector.bsConnector;
             connector.onopen = () => {
                 Logger_1.Logger.Log("BS Connected");

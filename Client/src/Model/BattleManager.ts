@@ -9,15 +9,25 @@ import { SceneManager } from "../Scene/SceneManager";
 import { SyncEvent } from "./BattleEvent/SyncEvent";
 import { UIEvent } from "./BattleEvent/UIEvent";
 import { BattleInfo } from "./BattleInfo";
-import { FrameActionGroup } from "./Logic/FrameActionGroup";
 import { Battle } from "./Logic/Battle";
-import { BattleAssetsMgr } from "./View/BattleAssetsMgr";
+import { FrameActionGroup } from "./Logic/FrameActionGroup";
 import { VBattle } from "./View/VBattle";
+
+interface IMessageInfo {
+	message: any;
+	handler: (message: any) => void;
+}
 
 /**
  * 战场管理器
  */
 export class BattleManager {
+	/**
+	 * 消息队列
+	 * 由于在某些情况下无法收到消息马上处理(例如在载入恢复快照和追帧前收到的消息就不能马上处理)
+	 * 这里必须把消息放进缓冲队列,等待适当时机调用
+	 */
+	private readonly _messageQueue: IMessageInfo[] = [];
 	/**
 	 * 逻辑战场
 	 */
@@ -56,16 +66,23 @@ export class BattleManager {
 
 		this._lBattle.Destroy();
 		this._vBattle.Destroy();
+		this._messageQueue.splice(0);
+	}
+
+	/**
+	 * 在连接BS前就监听消息,由于一连接到BS就可能马上收到消息
+	 */
+	public AddListaners(): void {
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 	}
 
 	/**
 	 * 资源加载前调用
 	 */
 	public Start(battleInfo: BattleInfo, caller: any, onComplete: () => void, onProgress: (p: number) => void): void {
-		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 		this._destroied = false;
 		this._lBattle.Start();
 		this._vBattle.Start(battleInfo, caller, onComplete, onProgress);
@@ -80,30 +97,34 @@ export class BattleManager {
 		this._vBattle.SetBattleInfo(battleInfo);
 		this._lBattle.SetBattleInfo(battleInfo);
 
-		const curFrame = battleInfo.serverFrame;
+		const serverFrame = battleInfo.serverFrame;
+		const playerInfos = battleInfo.playerInfos;
 		//请求最新战场快照
-		this.RequestSnapshot(success => {
+		this.RequestSnapshot(serverFrame, success => {
 			if (this._destroied)
 				return;
 			if (!success) {
 				//如果没有快照,则创建初始战场状态
-				this._lBattle.CreatePlayers(battleInfo.playerInfos);
+				this._lBattle.CreatePlayers(playerInfos);
 			}
 			//请求帧行为历史记录
 			const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
 			request.from = this._lBattle.frame;
-			request.to = curFrame;
+			request.to = serverFrame;
 			Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
 				if (this._destroied)
 					return;
 				const ret = <Protos.BS2GC_RequestFrameActionsRet>msg;
 				//处理历史记录
 				const frameActionGroups = this.HandleRequestFrameActions(ret.frames, ret.actions);
-				//标记追帧状态
-				this._lBattle.chase = true;
-				//追赶服务端帧数
-				this._lBattle.Chase(frameActionGroups);
-				this._lBattle.chase = false;
+				//开始追帧
+				if (frameActionGroups != null) {
+					//标记追帧状态
+					this._lBattle.chase = true;
+					//追赶服务端帧数
+					this._lBattle.Chase(frameActionGroups);
+					this._lBattle.chase = false;
+				}
 				//同步到表现层
 				this._lBattle.SyncInitToView();
 
@@ -115,20 +136,12 @@ export class BattleManager {
 		});
 	}
 
-	public Update(dt: number): void {
-		if (!this._init)
-			return;
-		this._lBattle.Update(FMathUtils.ToFixed(dt));
-		SyncEvent.Update();
-		this._vBattle.Update(dt);
-	}
-
 	/**
 	 * 请求快照
 	 */
-	private RequestSnapshot(callback: (success: boolean) => void): void {
+	private RequestSnapshot(serverFrame: number, callback: (success: boolean) => void): void {
 		const requestState = ProtoCreator.Q_GC2BS_RequestSnapshot();
-		requestState.frame = -1;
+		requestState.frame = serverFrame;
 		Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
 			const ret = <Protos.BS2GC_RequestSnapshotRet>msg;
 			if (ret.snapshot.length == 0) {//没有数据,说明没有快照
@@ -141,14 +154,36 @@ export class BattleManager {
 		});
 	}
 
+	public Update(dt: number): void {
+		if (!this._init)
+			return;
+		this.HandleMessageQueue();
+		this._lBattle.Update(FMathUtils.ToFixed(dt));
+		SyncEvent.Update();
+		this._vBattle.Update(dt);
+	}
+
+	private QueueMessage(message: any, handler: (message: any) => void): void {
+		this._messageQueue.push({ message: message, handler: handler });
+	}
+
+	private HandleMessageQueue(): void {
+		for (const messageInfo of this._messageQueue) {
+			messageInfo.handler(messageInfo.message);
+		}
+		this._messageQueue.splice(0);
+	}
+
 	/**
 	 * 处理BS丢失
 	 * @param message 协议
 	 */
 	private HandleBSLose(message: any): void {
-		Logger.Log("bs lose");
-		this.Destroy();
-		Global.sceneManager.ChangeState(SceneManager.State.Main);
+		this.QueueMessage(message, msg => {
+			Logger.Log("bs lose");
+			this.Destroy();
+			Global.sceneManager.ChangeState(SceneManager.State.Main);
+		});
 	}
 
 	/**
@@ -156,10 +191,12 @@ export class BattleManager {
 	 * @param message 协议
 	 */
 	private HandleBattleEnd(message: any): void {
-		const msg = <Protos.CS2GC_BattleEnd>message;
-		UIEvent.EndBattle(msg.win, msg.honour, () => {
-			this.Destroy();
-			Global.sceneManager.ChangeState(SceneManager.State.Main);
+		this.QueueMessage(message, msg => {
+			const battleEnd = <Protos.CS2GC_BattleEnd>msg;
+			UIEvent.EndBattle(battleEnd.win, battleEnd.honour, () => {
+				this.Destroy();
+				Global.sceneManager.ChangeState(SceneManager.State.Main);
+			});
 		});
 	}
 
@@ -168,8 +205,10 @@ export class BattleManager {
 	 * @param message 协议
 	 */
 	private HandleFrameAction(message: any): void {
-		const frameAction = <Protos.BS2GC_FrameAction>message;
-		this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
+		this.QueueMessage(message, msg => {
+			const frameAction = <Protos.BS2GC_FrameAction>msg;
+			this._lBattle.HandleFrameAction(frameAction.frame, frameAction.action);
+		});
 	}
 
 	/**
@@ -177,8 +216,10 @@ export class BattleManager {
 	 * @param message 协议
 	 */
 	private HandleOutOfSync(message: any): void {
-		const outOfSync = <Protos.BS2GC_OutOfSync>message;
-		this._lBattle.HandleOutOfSync(outOfSync);
+		this.QueueMessage(message, msg => {
+			const outOfSync = <Protos.BS2GC_OutOfSync>msg;
+			this._lBattle.HandleOutOfSync(outOfSync);
+		});
 	}
 
 	/**
@@ -186,15 +227,15 @@ export class BattleManager {
 	 * @param frames 帧数列表
 	 * @param actions 帧行为列表
 	 */
-	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): Queue<FrameActionGroup> {
+	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): FrameActionGroup[] {
 		const count = frames.length;
 		if (count == 0)
 			return null;
-		const frameActionGroups = new Queue<FrameActionGroup>();
+		const frameActionGroups: FrameActionGroup[] = [];
 		for (let i = 0; i < count; ++i) {
 			const frameActionGroup = new FrameActionGroup(frames[i]);
 			frameActionGroup.Deserialize(actions[i]);
-			frameActionGroups.enqueue(frameActionGroup);
+			frameActionGroups.push(frameActionGroup);
 		}
 		return frameActionGroups;
 	}

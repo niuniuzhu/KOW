@@ -16,20 +16,20 @@ export class GlobalState extends SceneState {
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
     }
     OnGSDisconnect(e) {
-        Logger.Log("gs connection closed.");
+        Logger.Log(`gs connection closed:${e.toString()}`);
     }
     OnGSError(e) {
-        Logger.Log("gs connection error.");
+        Logger.Log(`gs connection error:${e.toString()}`);
         if (fairygui.GRoot.inst.modalWaiting) {
             fairygui.GRoot.inst.closeModalWait();
         }
         UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
     }
     OnBSDisconnect(e) {
-        Logger.Log("bs connection closed.");
+        Logger.Log(`bs connection closed:${e.toString()}`);
     }
     OnBSError(e) {
-        Logger.Log("bs connection error.");
+        Logger.Log(`bs connection error:${e.toString()}`);
         if (fairygui.GRoot.inst.modalWaiting) {
             fairygui.GRoot.inst.closeModalWait();
         }

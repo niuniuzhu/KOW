@@ -19,8 +19,4 @@ export class ActVelocity extends EntityAction {
         const s = FVec2.Rotate(this._speed, rot);
         this.owner.phyxSpeed.CopyFrom(s);
     }
-    EncodeSnapshot(writer) {
-    }
-    DecodeSnapshot(reader) {
-    }
 }

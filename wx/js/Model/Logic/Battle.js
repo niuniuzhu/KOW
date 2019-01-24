@@ -3,7 +3,6 @@ import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
 import { ProtoCreator } from "../../Net/ProtoHelper";
-import Queue from "../../RC/Collections/Queue";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FRandom } from "../../RC/FMath/FRandom";
 import { FRect } from "../../RC/FMath/FRect";
@@ -33,7 +32,7 @@ export class Battle {
         this._bornDirs = [];
         this._destroied = true;
         this._markToEnd = false;
-        this._frameActionGroups = new Queue();
+        this._frameActionGroups = [];
         this._champions = [];
         this._idToChampion = new Map();
         this._emitters = [];
@@ -62,7 +61,7 @@ export class Battle {
             return;
         this._destroied = true;
         this._bounds = null;
-        this._frameActionGroups.clear();
+        this._frameActionGroups.splice(0);
         this._calcManager.Destroy();
         for (let i = 0, count = this._champions.length; i < count; i++)
             this._champions[i].Destroy();
@@ -239,6 +238,7 @@ export class Battle {
     EncodeSnapshot(writer) {
         writer.int32(this._frame);
         writer.bool(this._markToEnd);
+        writer.double(this._random.seed);
         let count = this._champions.length;
         writer.int32(count);
         for (let i = 0; i < count; i++) {
@@ -268,6 +268,7 @@ export class Battle {
     DecodeSnapshot(reader) {
         this._frame = reader.int32();
         this._markToEnd = reader.bool();
+        this._random.seed = reader.double();
         let count = reader.int32();
         for (let i = 0; i < count; i++) {
             const champion = new Champion(this);
@@ -332,10 +333,7 @@ export class Battle {
         SyncEvent.Snapshot(data);
     }
     Chase(frameActionGroups) {
-        if (frameActionGroups == null)
-            return;
-        while (!frameActionGroups.isEmpty()) {
-            const frameActionGroup = frameActionGroups.dequeue();
+        for (const frameActionGroup of frameActionGroups) {
             let length = frameActionGroup.frame - this.frame;
             while (length > 0) {
                 this.UpdateLogic(this._msPerFrame);
@@ -344,6 +342,7 @@ export class Battle {
             this.ApplyFrameActionGroup(frameActionGroup);
             this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
         }
+        frameActionGroups.splice(0);
     }
     MakeRid(id) {
         const rnd = this._random.NextFloor(0, 0xfffff);
@@ -483,12 +482,10 @@ export class Battle {
     }
     ApplyFrameActionGroup(frameActionGroup) {
         for (let i = 0; i < frameActionGroup.numActions; i++) {
-            this.ApplyFrameAction(frameActionGroup.Get(i));
+            const frameAction = frameActionGroup.Get(i);
+            const champion = this.GetChampion(frameAction.gcNID);
+            champion.FrameAction(frameAction);
         }
-    }
-    ApplyFrameAction(frameAction) {
-        const champion = this.GetChampion(frameAction.gcNID);
-        champion.FrameAction(frameAction);
     }
     CheckBattleEnd() {
         if (this._markToEnd)
@@ -543,7 +540,7 @@ export class Battle {
     HandleFrameAction(frame, data) {
         const frameActionGroup = new FrameActionGroup(frame);
         frameActionGroup.Deserialize(data);
-        this._frameActionGroups.enqueue(frameActionGroup);
+        this._frameActionGroups.push(frameActionGroup);
     }
     HandleOutOfSync(msg) {
         let str = "===============data1===============";
@@ -557,6 +554,8 @@ export class Battle {
     Dump(reader) {
         let str = "";
         reader.int32();
+        reader.bool();
+        reader.double();
         let count = reader.int32();
         for (let i = 0; i < count; i++) {
             const champion = new Champion(this);
@@ -582,7 +581,7 @@ export class Battle {
         for (let i = 0; i < count; i++) {
             const item = new SceneItem(this);
             item.DecodeSnapshot(reader);
-            str += "======bullet======\n";
+            str += "======scene_item======\n";
             str += item.Dump();
         }
         return str;

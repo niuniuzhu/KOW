@@ -12,6 +12,7 @@ export class LoadingState extends SceneState {
         this._battleInfo = new BattleInfo();
     }
     ConnectToBS(gcNID, ip, port) {
+        Global.battleManager.AddListaners();
         const connector = Global.connector.bsConnector;
         connector.onopen = () => {
             Logger.Log("BS Connected");

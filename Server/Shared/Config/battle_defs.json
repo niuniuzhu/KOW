@@ -47,7 +47,7 @@
 			"mp_recover": 50,
 			"atk": 0,
 			"def": 0,
-			"move_speed": 2,
+			"move_speed": 2.3,
 			"radius": 1,
 			"skills": [
 				0,

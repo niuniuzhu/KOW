@@ -1,3 +1,4 @@
+import { FMathUtils } from "../../../RC/FMath/FMathUtils";
 import { ExpressionEvaluator } from "../../../RC/Utils/ExpressionEvaluator";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { StringUtils } from "../../../RC/Utils/TextUtils";
@@ -14,10 +15,8 @@ export class ActSprint extends ActVelocity {
     }
     OnEnter(param) {
         super.OnEnter(param);
-        const lastDuration = this.owner.fsm.previousEntityState.time;
-        const formula = StringUtils.Format(this._formula, "" + lastDuration);
+        const formula = StringUtils.Format(this._formula, "" + this.owner.fsm.context.shakeTime);
         const intrpt = this.owner.fsm.currentEntityState.GetAction(ActionType.Timeup);
-        intrpt.duration = this._ee.evaluate(formula);
-        this.owner.fsm.context.shakeTime = lastDuration;
+        intrpt.duration = FMathUtils.Floor(this._ee.evaluate(formula));
     }
 }

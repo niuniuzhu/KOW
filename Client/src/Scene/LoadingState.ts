@@ -31,6 +31,8 @@ export class LoadingState extends SceneState {
 	 * @param port BS port
 	 */
 	public ConnectToBS(gcNID: Long, ip: string, port: number) {
+		//在连接BS前就监听消息,由于一连接到BS就可能马上收到消息
+		Global.battleManager.AddListaners();
 		const connector = Global.connector.bsConnector;
 		connector.onopen = () => {
 			Logger.Log("BS Connected");

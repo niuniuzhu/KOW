@@ -18,12 +18,12 @@ export class GlobalState extends SceneState {
 	}
 
 	private OnGSDisconnect(e: Event): void {
-		Logger.Log("gs connection closed.");
+		Logger.Log(`gs connection closed:${e.toString()}`);
 		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 	}
 
 	private OnGSError(e: Event): void {
-		Logger.Log("gs connection error.");
+		Logger.Log(`gs connection error:${e.toString()}`);
 		if (fairygui.GRoot.inst.modalWaiting) {
 			fairygui.GRoot.inst.closeModalWait();
 		}
@@ -31,12 +31,12 @@ export class GlobalState extends SceneState {
 	}
 
 	private OnBSDisconnect(e: Event): void {
-		Logger.Log("bs connection closed.");
+		Logger.Log(`bs connection closed:${e.toString()}`);
 		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 	}
 
 	private OnBSError(e: Event): void {
-		Logger.Log("bs connection error.");
+		Logger.Log(`bs connection error:${e.toString()}`);
 		if (fairygui.GRoot.inst.modalWaiting) {
 			fairygui.GRoot.inst.closeModalWait();
 		}

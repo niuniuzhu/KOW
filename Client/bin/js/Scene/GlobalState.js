@@ -12,20 +12,20 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
         }
         OnGSDisconnect(e) {
-            Logger_1.Logger.Log("gs connection closed.");
+            Logger_1.Logger.Log(`gs connection closed:${e.toString()}`);
         }
         OnGSError(e) {
-            Logger_1.Logger.Log("gs connection error.");
+            Logger_1.Logger.Log(`gs connection error:${e.toString()}`);
             if (fairygui.GRoot.inst.modalWaiting) {
                 fairygui.GRoot.inst.closeModalWait();
             }
             UIAlert_1.UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
         }
         OnBSDisconnect(e) {
-            Logger_1.Logger.Log("bs connection closed.");
+            Logger_1.Logger.Log(`bs connection closed:${e.toString()}`);
         }
         OnBSError(e) {
-            Logger_1.Logger.Log("bs connection error.");
+            Logger_1.Logger.Log(`bs connection error:${e.toString()}`);
             if (fairygui.GRoot.inst.modalWaiting) {
                 fairygui.GRoot.inst.closeModalWait();
             }

@@ -62,7 +62,7 @@ export class Battle implements ISnapshotable {
 	private _destroied: boolean = true;
 	private _markToEnd: boolean = false;
 
-	private readonly _frameActionGroups: Queue<FrameActionGroup> = new Queue<FrameActionGroup>();
+	private readonly _frameActionGroups: FrameActionGroup[] = [];
 	private readonly _champions: Champion[] = [];
 	private readonly _idToChampion: Map<string, Champion> = new Map<string, Champion>();
 	private readonly _emitters: Emitter[] = [];
@@ -87,7 +87,7 @@ export class Battle implements ISnapshotable {
 			return;
 		this._destroied = true;
 		this._bounds = null;
-		this._frameActionGroups.clear();
+		this._frameActionGroups.splice(0);
 		this._calcManager.Destroy();
 
 		for (let i = 0, count = this._champions.length; i < count; i++)
@@ -476,11 +476,8 @@ export class Battle implements ISnapshotable {
 	/**
 	 * 追赶服务端帧数
 	 */
-	public Chase(frameActionGroups: Queue<FrameActionGroup>): void {
-		if (frameActionGroups == null)
-			return;
-		while (!frameActionGroups.isEmpty()) {
-			const frameActionGroup = frameActionGroups.dequeue();
+	public Chase(frameActionGroups: FrameActionGroup[]): void {
+		for (const frameActionGroup of frameActionGroups) {
 			let length = frameActionGroup.frame - this.frame;
 			while (length > 0) {
 				this.UpdateLogic(this._msPerFrame);
@@ -489,6 +486,7 @@ export class Battle implements ISnapshotable {
 			this.ApplyFrameActionGroup(frameActionGroup);
 			this._nextKeyFrame = frameActionGroup.frame + this.keyframeStep;
 		}
+		frameActionGroups.splice(0);
 	}
 
 	/**
@@ -714,13 +712,10 @@ export class Battle implements ISnapshotable {
 	 */
 	private ApplyFrameActionGroup(frameActionGroup: FrameActionGroup): void {
 		for (let i = 0; i < frameActionGroup.numActions; i++) {
-			this.ApplyFrameAction(frameActionGroup.Get(i));
+			const frameAction = frameActionGroup.Get(i);
+			const champion = this.GetChampion(frameAction.gcNID);
+			champion.FrameAction(frameAction);
 		}
-	}
-
-	private ApplyFrameAction(frameAction: FrameAction): void {
-		const champion = this.GetChampion(frameAction.gcNID);
-		champion.FrameAction(frameAction);
 	}
 
 	/**
@@ -800,7 +795,7 @@ export class Battle implements ISnapshotable {
 	public HandleFrameAction(frame: number, data: Uint8Array): void {
 		const frameActionGroup = new FrameActionGroup(frame);
 		frameActionGroup.Deserialize(data);
-		this._frameActionGroups.enqueue(frameActionGroup);
+		this._frameActionGroups.push(frameActionGroup);
 	}
 
 	/**
@@ -825,7 +820,7 @@ export class Battle implements ISnapshotable {
 		reader.bool();
 		//seed
 		reader.double();
-		
+
 		//champions
 		let count = reader.int32();
 		for (let i = 0; i < count; i++) {

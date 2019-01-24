@@ -1,11 +1,11 @@
 import { FMathUtils } from "./FMathUtils";
 export class FRandom {
     constructor(seed) {
-        this._seed = seed || Math.random();
+        this.seed = seed || Math.random();
     }
     Next() {
-        this._seed = (this._seed * 9301 + 49297) % 233280;
-        const result = FMathUtils.Div(this._seed, 233280.0);
+        this.seed = (this.seed * 9301 + 49297) % 233280;
+        const result = FMathUtils.Div(this.seed, 233280.0);
         return result;
     }
     NextD(min, max) {

@@ -594,7 +594,6 @@ export class Champion extends Entity implements ISnapshotable {
 		let str = super.Dump();
 		str += `team:${this.team}\n`;
 		str += `name:${this.name}\n`;
-		str += `position:${this.position.ToString()}\n`;
 		str += `moveDirection:${this.moveDirection.ToString()}\n`;
 		str += `phyxSpeed:${this.phyxSpeed.ToString()}\n`;
 		str += `velocity:${this.velocity}\n`;

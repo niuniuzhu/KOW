@@ -52,14 +52,17 @@ export class EntityAction extends AbstractAction {
     OnInput(type, press) {
     }
     EncodeSnapshot(writer) {
+        writer.int32(this._time);
         writer.bool(this._isTriggered);
     }
     DecodeSnapshot(reader) {
+        this._time = reader.int32();
         this._isTriggered = reader.bool();
     }
     Dump() {
-        let str = "";
-        str += `istriggered:${this._isTriggered}\n`;
+        let str = "\t========";
+        str += `\ttype:${this.type}\n`;
+        str += `\tistriggered:${this._isTriggered}\n`;
         return str;
     }
 }

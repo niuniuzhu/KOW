@@ -14,7 +14,6 @@ export class ActMove extends EntityAction {
         if (type != InputType.Move)
             return;
         const inputAgent = this.owner.inputAgent;
-        if (inputAgent.GetInputState(InputType.Move))
-            this.owner.moveDirection.CopyFrom(inputAgent.GetInputValue(InputType.Move));
+        this.owner.moveDirection.CopyFrom(inputAgent.GetInputValue(InputType.Move));
     }
 }

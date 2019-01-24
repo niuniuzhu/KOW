@@ -16,7 +16,7 @@
 			"max_hp_packet": 1,
 			"hp_packet_padding": 2,
 			"hp_packet_refresh_interval": 5000,
-			"max_players": 2,
+			"max_players": 1,
 			"born_pos": [
 				[
 					0,

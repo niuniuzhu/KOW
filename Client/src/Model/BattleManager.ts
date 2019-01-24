@@ -43,6 +43,7 @@ export class BattleManager {
 	public get playerID(): Long { return this._playerID; }
 	public get lBattle(): Battle { return this._lBattle; }
 	public get vBattle(): VBattle { return this._vBattle; }
+	public get destroied(): boolean { return this._destroied; }
 
 	/**
 	 * 初始化
@@ -72,7 +73,8 @@ export class BattleManager {
 	/**
 	 * 在连接BS前就监听消息,由于一连接到BS就可能马上收到消息
 	 */
-	public AddListaners(): void {
+	public Start(): void {
+		this._destroied = false;
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
@@ -82,10 +84,8 @@ export class BattleManager {
 	/**
 	 * 资源加载前调用
 	 */
-	public Start(battleInfo: BattleInfo, caller: any, onComplete: () => void, onProgress: (p: number) => void): void {
-		this._destroied = false;
-		this._lBattle.Start();
-		this._vBattle.Start(battleInfo, caller, onComplete, onProgress);
+	public Preload(battleInfo: BattleInfo, caller: any, onComplete: () => void, onProgress: (p: number) => void): void {
+		this._vBattle.Preload(battleInfo, caller, onComplete, onProgress);
 	}
 
 	/**

@@ -107,7 +107,7 @@ export class VBattle {
 	/**
 	 * 预加载资源前调用
 	 */
-	public Start(battleInfo: BattleInfo, caller: any, onComplete: () => void, onProgress: (p: number) => void): void {
+	public Preload(battleInfo: BattleInfo, caller: any, onComplete: () => void, onProgress: (p: number) => void): void {
 		this._assetsManager.Preload(battleInfo, caller, onComplete, onProgress);
 	}
 

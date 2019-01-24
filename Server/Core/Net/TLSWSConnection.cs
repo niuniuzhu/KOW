@@ -81,10 +81,11 @@ namespace Core.Net
                     cache.Strip( len, cache.length - len );
                     if ( isEof )//分片已结束
                     {
-                        if ( op != WSOPCode.Binary && op != WSOPCode.Continuation )
+                        if ( op == WSOPCode.Close )
                         {
                             //到这里代表连接关闭了
                             this._readState.Clear();
+							this.OnError("client closed");
                             break;
                         }
 

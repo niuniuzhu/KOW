@@ -8,6 +8,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         get playerID() { return this._playerID; }
         get lBattle() { return this._lBattle; }
         get vBattle() { return this._vBattle; }
+        get destroied() { return this._destroied; }
         Init() {
             this._lBattle = new Battle_1.Battle();
             this._vBattle = new VBattle_1.VBattle();
@@ -25,16 +26,15 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             this._vBattle.Destroy();
             this._messageQueue.splice(0);
         }
-        AddListaners() {
+        Start() {
+            this._destroied = false;
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
         }
-        Start(battleInfo, caller, onComplete, onProgress) {
-            this._destroied = false;
-            this._lBattle.Start();
-            this._vBattle.Start(battleInfo, caller, onComplete, onProgress);
+        Preload(battleInfo, caller, onComplete, onProgress) {
+            this._vBattle.Preload(battleInfo, caller, onComplete, onProgress);
         }
         SetBattleInfo(battleInfo, completeHandler) {
             this._playerID = battleInfo.playerID;

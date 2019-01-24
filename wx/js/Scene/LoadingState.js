@@ -12,7 +12,7 @@ export class LoadingState extends SceneState {
         this._battleInfo = new BattleInfo();
     }
     ConnectToBS(gcNID, ip, port) {
-        Global.battleManager.AddListaners();
+        Global.battleManager.Start();
         const connector = Global.connector.bsConnector;
         connector.onopen = () => {
             Logger.Log("BS Connected");
@@ -32,7 +32,7 @@ export class LoadingState extends SceneState {
                         this._battleInfo.mapID = resp.mapID;
                         this._battleInfo.playerInfos = resp.playerInfos;
                         this._battleInfo.serverFrame = resp.curFrame;
-                        Global.battleManager.Start(this._battleInfo, this, () => {
+                        Global.battleManager.Preload(this._battleInfo, this, () => {
                             this._ui.OnLoadComplete();
                             Global.battleManager.SetBattleInfo(this._battleInfo, () => {
                                 Global.sceneManager.ChangeState(SceneManager.State.Battle, this._battleInfo);

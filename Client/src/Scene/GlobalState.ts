@@ -9,42 +9,46 @@ import { SceneState } from "./SceneState";
 export class GlobalState extends SceneState {
 	constructor(type: number) {
 		super(type);
-		Global.connector.gsConnector.onclose = this.OnGSDisconnect.bind(this);
-		Global.connector.gsConnector.onerror = this.OnGSError.bind(this);
-		Global.connector.bsConnector.onclose = this.OnBSDisconnect.bind(this);
-		Global.connector.bsConnector.onerror = this.OnBSError.bind(this);
+		Global.connector.gsConnector.onclose = this.OnGSLost.bind(this);
+		Global.connector.gsConnector.onerror = this.OnGSLost.bind(this);
+		Global.connector.bsConnector.onclose = this.OnBSLost.bind(this);
+		Global.connector.bsConnector.onerror = this.OnBSLost.bind(this);
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
 	}
 
-	private OnGSDisconnect(e: Event): void {
-		Logger.Log(`gs connection closed:${e.toString()}`);
-		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
-	}
-
-	private OnGSError(e: Event): void {
-		Logger.Log(`gs connection error:${e.toString()}`);
+	private OnGSLost(e: Event): void {
 		if (fairygui.GRoot.inst.modalWaiting) {
 			fairygui.GRoot.inst.closeModalWait();
 		}
-		UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
+		//断开BS
+		if (Global.connector.bsConnector.connected) {
+			Global.connector.bsConnector.Close();
+		}
+		if (e instanceof CloseEvent) {
+			Logger.Log(`gs lost,code:${e.code},reason:${e.reason}`);
+		}
+		else {
+			Logger.Log(`gs error`);
+		}
+		UIAlert.Show("与服务器断开连接", this.BackToLogin.bind(this));
 	}
 
-	private OnBSDisconnect(e: Event): void {
-		Logger.Log(`bs connection closed:${e.toString()}`);
-		// UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
-	}
-
-	private OnBSError(e: Event): void {
-		Logger.Log(`bs connection error:${e.toString()}`);
-		if (fairygui.GRoot.inst.modalWaiting) {
-			fairygui.GRoot.inst.closeModalWait();
+	private OnBSLost(e: Event): void {
+		//如果战场已经销毁,说明BS是正常断开的,不用处理
+		if (Global.battleManager.destroied) {
+			return;
+		}
+		if (e instanceof CloseEvent) {
+			Logger.Log(`bs lost,code:${e.code},reason:${e.reason}`);
+		}
+		else {
+			Logger.Log(`bs error`);
 		}
 		//断开GS
 		if (Global.connector.gsConnector.connected) {
 			Global.connector.gsConnector.Close();
 		}
-		UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
 	}
 
 	/**
@@ -70,20 +74,10 @@ export class GlobalState extends SceneState {
 	}
 
 	private BackToLogin(): void {
-		//断开GS
-		if (Global.connector.bsConnector.connected) {
-			Global.connector.bsConnector.Close();
-		}
 		Global.battleManager.Destroy();
 		Global.sceneManager.ChangeState(SceneManager.State.Login);
 	}
 
-	/**
-	 * 处理CS丢失连接
-	 * @param message 协议
-	 */
 	private HandleCSLost(message: any): void {
-		Logger.Error("cs lost");
-		UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
 	}
 }

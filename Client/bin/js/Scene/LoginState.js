@@ -225,7 +225,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
         LoginGS(ip, port, pwd, gcNID) {
             const connector = Global_1.Global.connector.gsConnector;
             connector.onopen = (e) => {
-                Logger_1.Logger.Log("GS Connected");
+                Logger_1.Logger.Log("gs connected");
                 const askLogin = ProtoHelper_1.ProtoCreator.Q_GC2GS_AskLogin();
                 askLogin.pwd = pwd;
                 askLogin.sessionID = gcNID;
@@ -234,6 +234,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                     const resp = message;
                     switch (resp.result) {
                         case protos_1.Protos.GS2GC_LoginRet.EResult.Success:
+                            Logger_1.Logger.Log("login cs");
                             const json = JsonHelper_1.JsonHelper.Parse(TextUtils_1.StringUtils.DecodeUTF8(resp.defs));
                             Defs_1.Defs.Init(json);
                             if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {

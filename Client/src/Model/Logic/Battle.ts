@@ -112,13 +112,6 @@ export class Battle implements ISnapshotable {
 	}
 
 	/**
-	 * 预加载资源前调用
-	 */
-	public Start(): void {
-
-	}
-
-	/**
 	 * 设置战场信息,资源预加载后调用
 	 * @param battleInfo 战场信息
 	 */

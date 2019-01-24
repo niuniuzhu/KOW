@@ -62,8 +62,6 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._items.splice(0);
             this._idToItem.clear();
         }
-        Start() {
-        }
         SetBattleInfo(battleInfo) {
             this._destroied = false;
             this._frameRate = battleInfo.frameRate;

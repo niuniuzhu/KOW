@@ -55,7 +55,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._logicFrame = 0;
             this._assetsManager.Destroy();
         }
-        Start(battleInfo, caller, onComplete, onProgress) {
+        Preload(battleInfo, caller, onComplete, onProgress) {
             this._assetsManager.Preload(battleInfo, caller, onComplete, onProgress);
         }
         SetBattleInfo(battleInfo) {

@@ -32,7 +32,7 @@ export class LoadingState extends SceneState {
 	 */
 	public ConnectToBS(gcNID: Long, ip: string, port: number) {
 		//在连接BS前就监听消息,由于一连接到BS就可能马上收到消息
-		Global.battleManager.AddListaners();
+		Global.battleManager.Start();
 		const connector = Global.connector.bsConnector;
 		connector.onopen = () => {
 			Logger.Log("BS Connected");
@@ -57,7 +57,7 @@ export class LoadingState extends SceneState {
 						this._battleInfo.serverFrame = resp.curFrame;
 
 						//战场开始,预加载资源
-						Global.battleManager.Start(this._battleInfo, this, () => {
+						Global.battleManager.Preload(this._battleInfo, this, () => {
 							this._ui.OnLoadComplete();
 							//资源预加载后调用
 							Global.battleManager.SetBattleInfo(this._battleInfo, () => {

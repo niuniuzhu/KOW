@@ -8,7 +8,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleInf
             this._battleInfo = new BattleInfo_1.BattleInfo();
         }
         ConnectToBS(gcNID, ip, port) {
-            Global_1.Global.battleManager.AddListaners();
+            Global_1.Global.battleManager.Start();
             const connector = Global_1.Global.connector.bsConnector;
             connector.onopen = () => {
                 Logger_1.Logger.Log("BS Connected");
@@ -28,7 +28,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleInf
                             this._battleInfo.mapID = resp.mapID;
                             this._battleInfo.playerInfos = resp.playerInfos;
                             this._battleInfo.serverFrame = resp.curFrame;
-                            Global_1.Global.battleManager.Start(this._battleInfo, this, () => {
+                            Global_1.Global.battleManager.Preload(this._battleInfo, this, () => {
                                 this._ui.OnLoadComplete();
                                 Global_1.Global.battleManager.SetBattleInfo(this._battleInfo, () => {
                                     Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Battle, this._battleInfo);

@@ -79,13 +79,14 @@ namespace Core.Net
                     //截断当前缓冲区
                     cache.Strip( len, cache.length - len );
                     if ( isEof )//分片已结束
-                    {
-                        if ( op != WSOPCode.Binary && op != WSOPCode.Continuation )
-                        {
-                            //到这里代表连接关闭了
-                            this._readState.Clear();
-                            break;
-                        }
+					{
+						if ( op == WSOPCode.Close )
+						{
+							//到这里代表连接关闭了
+							this._readState.Clear();
+							this.OnError( "client closed" );
+							break;
+						}
 
                         byte[] data = this._readState.ToArray();
                         this._readState.Clear();

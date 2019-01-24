@@ -1,5 +1,5 @@
-import { SceneState } from "./SceneState";
 import { Global } from "../Global";
+import { SceneState } from "./SceneState";
 export class MainState extends SceneState {
     constructor(type) {
         super(type);

@@ -234,7 +234,7 @@ export class LoginState extends SceneState {
     LoginGS(ip, port, pwd, gcNID) {
         const connector = Global.connector.gsConnector;
         connector.onopen = (e) => {
-            Logger.Log("GS Connected");
+            Logger.Log("gs connected");
             const askLogin = ProtoCreator.Q_GC2GS_AskLogin();
             askLogin.pwd = pwd;
             askLogin.sessionID = gcNID;
@@ -243,6 +243,7 @@ export class LoginState extends SceneState {
                 const resp = message;
                 switch (resp.result) {
                     case Protos.GS2GC_LoginRet.EResult.Success:
+                        Logger.Log("login cs");
                         const json = JsonHelper.Parse(StringUtils.DecodeUTF8(resp.defs));
                         Defs.Init(json);
                         if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {

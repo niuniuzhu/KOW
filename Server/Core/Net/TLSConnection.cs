@@ -214,7 +214,7 @@ namespace Core.Net
         {
         }
 
-        private void OnError( string error )
+        protected void OnError( string error )
         {
             NetEvent netEvent = NetworkMgr.instance.PopEvent();
             netEvent.type = NetEvent.Type.Error;

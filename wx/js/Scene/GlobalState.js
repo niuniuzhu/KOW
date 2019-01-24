@@ -8,35 +8,41 @@ import { SceneState } from "./SceneState";
 export class GlobalState extends SceneState {
     constructor(type) {
         super(type);
-        Global.connector.gsConnector.onclose = this.OnGSDisconnect.bind(this);
-        Global.connector.gsConnector.onerror = this.OnGSError.bind(this);
-        Global.connector.bsConnector.onclose = this.OnBSDisconnect.bind(this);
-        Global.connector.bsConnector.onerror = this.OnBSError.bind(this);
+        Global.connector.gsConnector.onclose = this.OnGSLost.bind(this);
+        Global.connector.gsConnector.onerror = this.OnGSLost.bind(this);
+        Global.connector.bsConnector.onclose = this.OnBSLost.bind(this);
+        Global.connector.bsConnector.onerror = this.OnBSLost.bind(this);
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
     }
-    OnGSDisconnect(e) {
-        Logger.Log(`gs connection closed:${e.toString()}`);
-    }
-    OnGSError(e) {
-        Logger.Log(`gs connection error:${e.toString()}`);
+    OnGSLost(e) {
         if (fairygui.GRoot.inst.modalWaiting) {
             fairygui.GRoot.inst.closeModalWait();
         }
-        UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
+        if (Global.connector.bsConnector.connected) {
+            Global.connector.bsConnector.Close();
+        }
+        if (e instanceof CloseEvent) {
+            Logger.Log(`gs lost,code:${e.code},reason:${e.reason}`);
+        }
+        else {
+            Logger.Log(`gs error`);
+        }
+        UIAlert.Show("与服务器断开连接", this.BackToLogin.bind(this));
     }
-    OnBSDisconnect(e) {
-        Logger.Log(`bs connection closed:${e.toString()}`);
-    }
-    OnBSError(e) {
-        Logger.Log(`bs connection error:${e.toString()}`);
-        if (fairygui.GRoot.inst.modalWaiting) {
-            fairygui.GRoot.inst.closeModalWait();
+    OnBSLost(e) {
+        if (Global.battleManager.destroied) {
+            return;
+        }
+        if (e instanceof CloseEvent) {
+            Logger.Log(`bs lost,code:${e.code},reason:${e.reason}`);
+        }
+        else {
+            Logger.Log(`bs error`);
         }
         if (Global.connector.gsConnector.connected) {
             Global.connector.gsConnector.Close();
         }
-        UIAlert.Show("与服务器断开连接[" + e.toString() + "]", this.BackToLogin.bind(this));
     }
     HandleKick(message) {
         Logger.Warn("kick by gs");
@@ -54,14 +60,9 @@ export class GlobalState extends SceneState {
         }
     }
     BackToLogin() {
-        if (Global.connector.bsConnector.connected) {
-            Global.connector.bsConnector.Close();
-        }
         Global.battleManager.Destroy();
         Global.sceneManager.ChangeState(SceneManager.State.Login);
     }
     HandleCSLost(message) {
-        Logger.Error("cs lost");
-        UIAlert.Show("与服务器断开连接", () => Global.sceneManager.ChangeState(SceneManager.State.Login));
     }
 }

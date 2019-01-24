@@ -296,7 +296,7 @@ export class LoginState extends SceneState {
 	public LoginGS(ip: string, port: number, pwd: string, gcNID: Long): void {
 		const connector = Global.connector.gsConnector;
 		connector.onopen = (e) => {
-			Logger.Log("GS Connected");
+			Logger.Log("gs connected");
 			const askLogin = ProtoCreator.Q_GC2GS_AskLogin();
 			askLogin.pwd = pwd;
 			askLogin.sessionID = gcNID;
@@ -305,6 +305,7 @@ export class LoginState extends SceneState {
 				const resp: Protos.GS2GC_LoginRet = <Protos.GS2GC_LoginRet>message;
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
+					Logger.Log("login cs")
 						//处理定义文件
 						const json = JsonHelper.Parse(StringUtils.DecodeUTF8(resp.defs));
 						Defs.Init(json);

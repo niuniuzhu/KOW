@@ -1,11 +1,9 @@
-define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/View/FrameActionManager", "../Model/Logic/Attribute", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState", "./Joystick"], function (require, exports, Global_1, UIEvent_1, FrameActionManager_1, Attribute_1, MathUtils_1, Vec2_1, GestureState_1, Joystick_1) {
+define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick"], function (require, exports, Global_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
         constructor() {
-            this._gestureState = new GestureState_1.GestureState();
             this._frameActionManager = new FrameActionManager_1.FrameAciontManager();
-            this._touchID = -1;
             this._markToEnd = false;
             this._keyInput = Vec2_1.Vec2.zero;
             this._lastKeyInput = Vec2_1.Vec2.zero;
@@ -31,11 +29,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
             this._endBattle.setSize(this._root.width, this._root.height);
             this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
-            this._gestureState.joystick = this._root.getChild("joystick");
-            this._gestureState.joystick.core = this._root.getChild("joystick").asCom.getChild("n1").asCom;
-            this._gestureState.joystick.cen = new Vec2_1.Vec2(100, 100);
-            this._gestureState.joystick.radius = 100;
-            this._gestureState.joystick.resetDuration = 60;
+            this._gestureState = new GestureState2_1.GestureState2(this._root);
             this._gestureState.onChanged = this.HandleAxisInput.bind(this);
         }
         get root() { return this._root; }
@@ -44,11 +38,10 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._root.dispose();
         }
         Enter(param) {
-            this._touchID = -1;
             this._markToEnd = false;
             Global_1.Global.graphic.uiRoot.addChild(this._root);
             this._frameActionManager.Reset();
-            this._root.on(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
+            this._gestureState.OnEnter();
             Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
             Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
             const battleInfo = param;
@@ -67,6 +60,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ENTITY_INIT);
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_END_BATTLE);
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ATTR_CHANGE);
+            this._gestureState.OnExit();
             this.GestureOff();
             if (this._endBattle.parent != null) {
                 this._endBattle.removeFromParent();
@@ -74,16 +68,11 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             this._root.removeFromParent();
         }
         GestureOff() {
-            this._gestureState.OnTouchEnd();
-            this._touchID = -1;
-            this._root.off(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
-            this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
-            this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
             Laya.stage.off(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
             Laya.stage.off(Laya.Event.KEY_UP, this, this.OnKeyUp);
         }
         Update(dt) {
-            this._gestureState.Update(dt);
+            this._gestureState.OnUpdate(dt);
             this._frameActionManager.Update(dt);
             this._hpbarBg.width = MathUtils_1.MathUtils.Lerp(this._hpbarBg.width, this._hpbar.width, dt * 0.0015);
         }
@@ -179,28 +168,6 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             if (this._markToEnd)
                 return;
             this._frameActionManager.SetInputDirection(value);
-        }
-        OnDragStart(e) {
-            if (this._touchID != -1 ||
-                fairygui.GComponent.cast(e.currentTarget) != this._root)
-                return;
-            this._touchID = e.touchId;
-            this._root.on(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
-            this._root.on(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
-            this._gestureState.OnTouchBegin(e.stageX, e.stageY);
-        }
-        OnDragEnd(e) {
-            if (e.touchId == this._touchID) {
-                this._touchID = -1;
-                this._gestureState.OnTouchEnd();
-                this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
-                this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
-            }
-        }
-        OnDrag(e) {
-            if (e.touchId == this._touchID) {
-                this._gestureState.OnDrag(e.stageX, e.stageY);
-            }
         }
         OnKeyDown(e) {
             if (this._markToEnd)

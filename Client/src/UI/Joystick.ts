@@ -40,13 +40,6 @@ export class Joystick extends fairygui.GComponent {
 	public core: fairygui.GComponent;
 
 	private _axis: Vec2 = Vec2.zero;
-	private readonly _tween: laya.utils.Tween;
-
-	public constructor() {
-		super();
-		this.draggable = true;
-		this._tween = new laya.utils.Tween();
-	}
 
 	public constructFromXML(xml: Object): void {
 		super.constructFromXML(xml)
@@ -54,13 +47,14 @@ export class Joystick extends fairygui.GComponent {
 	}
 
 	public dispose(): void {
-		this._tween.clear();
+		fairygui.tween.GTween.kill(this, true);
+		fairygui.tween.GTween.kill(this._axis, true);
 		super.dispose();
 	}
 
 	public Reset(fadeOut: boolean = false): void {
 		if (fadeOut) {
-			this._tween.to(this.axis, { x: 0, y: 0 }, this.resetDuration, laya.utils.Ease.quadOut);
+			fairygui.tween.GTween.to(0, 0, this.resetDuration).setEase(fairygui.tween.EaseType.QuadOut).setTarget(this._axis);
 		}
 		else {
 			this.axis = Vec2.zero;
@@ -71,5 +65,15 @@ export class Joystick extends fairygui.GComponent {
 		let point = new laya.maths.Point();
 		this.globalToLocal(position.x, position.y, point);
 		this.touchPosition = new Vec2(point.x, point.y);
+	}
+
+	public TweenAlpha(from: number, to: number, duration: number, ease?: number, completeHandler?: () => void, caller?: any): void {
+		fairygui.tween.GTween.kill(this, true);
+		if (from == null || from == undefined) {
+			from = this.displayObject.alpha;
+		}
+		fairygui.tween.GTween.to(from, to, duration).setEase(ease || fairygui.tween.EaseType.Linear).onUpdate(t => {
+			this.displayObject.alpha = t.value.x;
+		}, this).onComplete(completeHandler, caller).setTarget(this);
 	}
 }

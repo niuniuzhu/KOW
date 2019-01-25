@@ -1,13 +1,13 @@
 import { Global } from "../Global";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { BattleInfo } from "../Model/BattleInfo";
-import { FrameAciontManager } from "../Model/View/FrameActionManager";
 import { EAttr } from "../Model/Logic/Attribute";
 import { Skill } from "../Model/Skill";
+import { FrameAciontManager } from "../Model/View/FrameActionManager";
 import { VChampion } from "../Model/View/VChampion";
 import { MathUtils } from "../RC/Math/MathUtils";
 import { Vec2 } from "../RC/Math/Vec2";
-import { GestureState } from "./GestureState";
+import { GestureState2 } from "./GestureState2";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
 
@@ -24,10 +24,9 @@ export class UIBattle implements IUIModule {
 	private readonly _time0: fairygui.GTextField;
 	private readonly _time1: fairygui.GTextField;
 	private readonly _endBattle: fairygui.GComponent;
-	private readonly _gestureState: GestureState = new GestureState();
+	private readonly _gestureState: GestureState2;
 	private readonly _frameActionManager: FrameAciontManager = new FrameAciontManager();
 
-	private _touchID: number = -1;
 	private _markToEnd: boolean = false;
 	private _keyInput = Vec2.zero;
 	private _lastKeyInput = Vec2.zero;
@@ -59,11 +58,7 @@ export class UIBattle implements IUIModule {
 		this._endBattle.setSize(this._root.width, this._root.height);
 		this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
 
-		this._gestureState.joystick = <Joystick>this._root.getChild("joystick");
-		this._gestureState.joystick.core = this._root.getChild("joystick").asCom.getChild("n1").asCom;
-		this._gestureState.joystick.cen = new Vec2(100, 100);
-		this._gestureState.joystick.radius = 100;
-		this._gestureState.joystick.resetDuration = 60;
+		this._gestureState = new GestureState2(this._root);
 		this._gestureState.onChanged = this.HandleAxisInput.bind(this);
 	}
 
@@ -73,13 +68,12 @@ export class UIBattle implements IUIModule {
 	}
 
 	public Enter(param: any): void {
-		this._touchID = -1;
 		this._markToEnd = false;
 
 		Global.graphic.uiRoot.addChild(this._root);
 		this._frameActionManager.Reset();
+		this._gestureState.OnEnter();
 
-		this._root.on(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
 		Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
 		Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
 
@@ -102,6 +96,7 @@ export class UIBattle implements IUIModule {
 		UIEvent.RemoveListener(UIEvent.E_END_BATTLE);
 		UIEvent.RemoveListener(UIEvent.E_ATTR_CHANGE);
 
+		this._gestureState.OnExit();
 		this.GestureOff();
 
 		if (this._endBattle.parent != null) {
@@ -111,17 +106,12 @@ export class UIBattle implements IUIModule {
 	}
 
 	private GestureOff(): void {
-		this._gestureState.OnTouchEnd();
-		this._touchID = -1;
-		this._root.off(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
-		this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
-		this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
 		Laya.stage.off(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
 		Laya.stage.off(Laya.Event.KEY_UP, this, this.OnKeyUp);
 	}
 
 	public Update(dt: number): void {
-		this._gestureState.Update(dt);
+		this._gestureState.OnUpdate(dt);
 		this._frameActionManager.Update(dt);
 		this._hpbarBg.width = MathUtils.Lerp(this._hpbarBg.width, this._hpbar.width, dt * 0.0015);
 	}
@@ -233,31 +223,6 @@ export class UIBattle implements IUIModule {
 		if (this._markToEnd)
 			return;
 		this._frameActionManager.SetInputDirection(value);
-	}
-
-	private OnDragStart(e: laya.events.Event): void {
-		if (this._touchID != -1 ||
-			fairygui.GComponent.cast(e.currentTarget) != this._root)
-			return;
-		this._touchID = e.touchId;
-		this._root.on(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
-		this._root.on(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
-		this._gestureState.OnTouchBegin(e.stageX, e.stageY);
-	}
-
-	private OnDragEnd(e: laya.events.Event): void {
-		if (e.touchId == this._touchID) {
-			this._touchID = -1;
-			this._gestureState.OnTouchEnd();
-			this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
-			this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
-		}
-	}
-
-	private OnDrag(e: laya.events.Event): void {
-		if (e.touchId == this._touchID) {
-			this._gestureState.OnDrag(e.stageX, e.stageY);
-		}
 	}
 
 	private OnKeyDown(e: laya.events.Event): void {

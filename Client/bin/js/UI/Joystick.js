@@ -3,13 +3,11 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
     Object.defineProperty(exports, "__esModule", { value: true });
     class Joystick extends fairygui.GComponent {
         constructor() {
-            super();
+            super(...arguments);
             this.radius = 100;
             this.cen = Vec2_1.Vec2.zero;
             this.resetDuration = 60;
             this._axis = Vec2_1.Vec2.zero;
-            this.draggable = true;
-            this._tween = new laya.utils.Tween();
         }
         set touchPosition(value) { this.axis = Vec2_1.Vec2.Sub(value, this.cen); }
         get axis() { return this._axis; }
@@ -41,12 +39,13 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
             this.cen = new Vec2_1.Vec2(this.width * 0.5, this.height * 0.5);
         }
         dispose() {
-            this._tween.clear();
+            fairygui.tween.GTween.kill(this, true);
+            fairygui.tween.GTween.kill(this._axis, true);
             super.dispose();
         }
         Reset(fadeOut = false) {
             if (fadeOut) {
-                this._tween.to(this.axis, { x: 0, y: 0 }, this.resetDuration, laya.utils.Ease.quadOut);
+                fairygui.tween.GTween.to(0, 0, this.resetDuration).setEase(fairygui.tween.EaseType.QuadOut).setTarget(this._axis);
             }
             else {
                 this.axis = Vec2_1.Vec2.zero;
@@ -56,6 +55,15 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
             let point = new laya.maths.Point();
             this.globalToLocal(position.x, position.y, point);
             this.touchPosition = new Vec2_1.Vec2(point.x, point.y);
+        }
+        TweenAlpha(from, to, duration, ease, completeHandler, caller) {
+            fairygui.tween.GTween.kill(this, true);
+            if (from == null || from == undefined) {
+                from = this.displayObject.alpha;
+            }
+            fairygui.tween.GTween.to(from, to, duration).setEase(ease || fairygui.tween.EaseType.Linear).onUpdate(t => {
+                this.displayObject.alpha = t.value.x;
+            }, this).onComplete(completeHandler, caller).setTarget(this);
         }
     }
     exports.Joystick = Joystick;

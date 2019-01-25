@@ -15,7 +15,7 @@ import { Bullet } from "./Logic/Bullet";
 import { Champion } from "./Logic/Champion";
 import { VActAnimation } from "./View/FSM/VActAnimation";
 import { VActEffect } from "./View/FSM/VActEffect";
-import { VActShake } from "./View/FSM/VActShake";
+import { VActShakeEffect } from "./View/FSM/VActShakeEffect";
 import { VEntityAction } from "./View/FSM/VEntityAction";
 import { VChampion } from "./View/VChampion";
 
@@ -41,14 +41,16 @@ export enum ActionType {
 	//打断
 	Timeup = 100,//指定时间
 	Collision = 101,//碰撞
-	Input = 102
+	Input = 102,
+	Custom = 999
 }
 
 export enum VActionType {
 	None = -1,
 	Animation = 0,
-	Shake = 4,
-	Effect = 5
+	ShakeEffect = 4,
+	Effect = 5,
+	Custom = 999
 }
 
 export enum BulletActionType {
@@ -70,7 +72,7 @@ STATE_ACTION_CTOR_MAP.set(ActionType.Input, ActIntrptInput);
 
 export const V_STATE_ACTION_CTOR_MAP = new Map<number, new (owner: VChampion, type: VActionType) => VEntityAction>();
 V_STATE_ACTION_CTOR_MAP.set(VActionType.Animation, VActAnimation);
-V_STATE_ACTION_CTOR_MAP.set(VActionType.Shake, VActShake);
+V_STATE_ACTION_CTOR_MAP.set(VActionType.ShakeEffect, VActShakeEffect);
 V_STATE_ACTION_CTOR_MAP.set(VActionType.Effect, VActEffect);
 
 export const BULLET_ACTION_CTOR_MAP = new Map<number, new (owner: Bullet, type: BulletActionType) => BulletAction>();

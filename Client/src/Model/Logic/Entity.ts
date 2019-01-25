@@ -43,10 +43,10 @@ export abstract class Entity implements ISnapshotable {
 		this._markToDestroy = false;
 		this.position.CopyFrom(params.position);
 		this.direction.CopyFrom(params.direction);
-		this.LoadDefs();
+		this.LoadDef();
 	}
 
-	protected abstract LoadDefs(): void;
+	protected abstract LoadDef(): void;
 
 	public Destroy(): void {
 	}
@@ -68,7 +68,7 @@ export abstract class Entity implements ISnapshotable {
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._rid = <Long>reader.uint64();
 		this._id = reader.int32();
-		this.LoadDefs();
+		this.LoadDef();
 		this._markToDestroy = reader.bool();
 		this.position.Set(reader.double(), reader.double());
 		this.direction.Set(reader.double(), reader.double());

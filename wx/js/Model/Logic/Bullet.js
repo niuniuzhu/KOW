@@ -70,7 +70,7 @@ export class Bullet extends Entity {
             action.BulletCreated();
         }
     }
-    LoadDefs() {
+    LoadDef() {
         const defs = Defs.GetBullet(this._id);
         this._radius = Hashtable.GetNumber(defs, "radius");
         this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");

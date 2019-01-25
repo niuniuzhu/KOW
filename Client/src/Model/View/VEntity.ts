@@ -37,9 +37,13 @@ export abstract class VEntity {
 
 	public get worldPosition(): Vec2 { return this._worldPosition; }
 
-	protected readonly _battle: VBattle;
-	protected _rid: Long;
+	private readonly _battle: VBattle;
+	private _rid: Long;
 	protected _id: number;
+	private _modelLevel: ModelLayer;
+	private _pivot: Vec2;
+	protected readonly _root = new fairygui.GComponent();
+	protected _animationProxy: AnimationProxy = null;
 
 	private readonly _position: Vec2 = Vec2.zero;
 	private readonly _worldPosition: Vec2 = Vec2.zero;
@@ -47,10 +51,6 @@ export abstract class VEntity {
 	private _logicPos: Vec2 = Vec2.zero;
 	private _logicRot: number = 0;
 	private _markToDestroy: boolean;
-	private _modelLevel: ModelLayer;
-
-	protected readonly _root = new fairygui.GComponent();
-	protected _animationProxy: AnimationProxy = null;
 
 	constructor(battle: VBattle) {
 		this._battle = battle;
@@ -67,20 +67,35 @@ export abstract class VEntity {
 	}
 
 	protected LoadDefs(): void {
-		const cdefs = this.BeforeLoadDefs();
+		const defs = this.LoadDef();
+		this.AfterLoadDef(defs);
+
+		const cdefs = this.LoadCDef();
+		this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
+		this._pivot = Hashtable.GetVec2(cdefs, "pivot") || new Vec2(0.5, 0.5);
 		//加载动画数据
 		const modelID = Hashtable.GetNumber(cdefs, "model", -1);
 		if (modelID >= 0) {
 			this._animationProxy = new AnimationProxy(this, modelID);
+			this._animationProxy.setPivot(this._pivot.x, this._pivot.y);
 			this._root.addChild(this._animationProxy);
 		}
-		this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
-		this.AfterLoadDefs(cdefs);
+		this.AfterLoadCDef(cdefs);
 	}
 
-	protected abstract BeforeLoadDefs(): Hashtable;
+	protected LoadDef(): Hashtable {
+		return null;
+	}
 
-	protected abstract AfterLoadDefs(cdefs: Hashtable): void;
+	protected AfterLoadDef(defs: Hashtable): void {
+	}
+
+	protected LoadCDef(): Hashtable {
+		return null;
+	}
+
+	protected AfterLoadCDef(cdefs: Hashtable): void {
+	}
 
 	protected DisplayRoot(): void {
 		switch (this._modelLevel) {

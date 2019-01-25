@@ -48,7 +48,7 @@ export class Champion extends Entity {
         this.team = params.team;
         this.name = params.name;
     }
-    LoadDefs() {
+    LoadDef() {
         const defs = Defs.GetEntity(this._id);
         this._radius = Hashtable.GetNumber(defs, "radius");
         this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");

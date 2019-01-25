@@ -5,6 +5,7 @@ import { EntityType } from "../EntityType";
 import { VChampion } from "./VChampion";
 import { VEffect } from "./VEffect";
 import { VEntity } from "./VEntity";
+import { Defs } from "../Defs";
 
 enum FxAttachType {
 	None,
@@ -34,11 +35,11 @@ export class VBullet extends VEntity {
 	private _triggered: boolean;
 	private _fx: VEffect;
 
-	protected BeforeLoadDefs(): Hashtable {
-		return CDefs.GetBullet(this._id);
+	protected LoadCDef(): Hashtable {
+		return CDefs.GetBullet(this.id);
 	}
 
-	protected AfterLoadDefs(cdefs: Hashtable): void {
+	protected AfterLoadCDef(cdefs: Hashtable): void {
 		this._hitFxID = Hashtable.GetNumber(cdefs, "hit_effect");
 		this._hitFxDelay = Hashtable.GetNumber(cdefs, "hit_fx_delay");
 		this._hitFxOffset = Hashtable.GetVec2(cdefs, "offset");
@@ -84,18 +85,18 @@ export class VBullet extends VEntity {
 
 	private Trigger(): void {
 		this._triggered = true;
-		this._fx = this._battle.SpawnEffect(this._hitFxID);
+		this._fx = this.battle.SpawnEffect(this._hitFxID);
 		if (this._hitFxDestroyType != FxDestroyType.Effect &&
 			this._fx.lifeTime >= 0) {
 			throw new Error(`fx:${this._fx.id}'s lifetime greater then zero, can only set destroy type to FxDestroyType.Effect`);
 		}
 		switch (this._hitFxAttachType) {
 			case FxAttachType.Bullet:
-				this._fx.SetTarget(EntityType.Bullet, this.rid, this._hitFxOffset,
+				this._fx.Set(this._caster.rid, this.rid, EntityType.Bullet, this._hitFxOffset,
 					this._hitFxFollowPos, this._hitFxFollowRot, this._hitFxAlwaysFollow);
 				break;
 			case FxAttachType.Target:
-				this._fx.SetTarget(EntityType.Champion, this._target.rid, this._hitFxOffset,
+				this._fx.Set(this._caster.rid, this._target.rid, EntityType.Champion, this._hitFxOffset,
 					this._hitFxFollowPos, this._hitFxFollowRot, this._hitFxAlwaysFollow);
 				break;
 		}

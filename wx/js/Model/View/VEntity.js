@@ -7,13 +7,13 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { ModelLayer } from "../../Graphic";
 export class VEntity {
     constructor(battle) {
+        this._root = new fairygui.GComponent();
+        this._animationProxy = null;
         this._position = Vec2.zero;
         this._worldPosition = Vec2.zero;
         this._rotation = 0;
         this._logicPos = Vec2.zero;
         this._logicRot = 0;
-        this._root = new fairygui.GComponent();
-        this._animationProxy = null;
         this._battle = battle;
         this._root.setSize(0, 0);
         this._root.setPivot(0.5, 0.5, true);
@@ -50,14 +50,28 @@ export class VEntity {
         this._root.dispose();
     }
     LoadDefs() {
-        const cdefs = this.BeforeLoadDefs();
+        const defs = this.LoadDef();
+        this.AfterLoadDef(defs);
+        const cdefs = this.LoadCDef();
+        this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
+        this._pivot = Hashtable.GetVec2(cdefs, "pivot") || new Vec2(0.5, 0.5);
         const modelID = Hashtable.GetNumber(cdefs, "model", -1);
         if (modelID >= 0) {
             this._animationProxy = new AnimationProxy(this, modelID);
+            this._animationProxy.setPivot(this._pivot.x, this._pivot.y);
             this._root.addChild(this._animationProxy);
         }
-        this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
-        this.AfterLoadDefs(cdefs);
+        this.AfterLoadCDef(cdefs);
+    }
+    LoadDef() {
+        return null;
+    }
+    AfterLoadDef(defs) {
+    }
+    LoadCDef() {
+        return null;
+    }
+    AfterLoadCDef(cdefs) {
     }
     DisplayRoot() {
         switch (this._modelLevel) {

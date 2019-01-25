@@ -62,7 +62,7 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
                 action.BulletCreated();
             }
         }
-        LoadDefs() {
+        LoadDef() {
             const defs = Defs_1.Defs.GetBullet(this._id);
             this._radius = Hashtable_1.Hashtable.GetNumber(defs, "radius");
             this._moveSpeed = Hashtable_1.Hashtable.GetNumber(defs, "move_speed");

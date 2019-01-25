@@ -1,4 +1,4 @@
-define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActBulletChangeAttrs", "./Logic/Actions/ActBulletIntrptState", "./Logic/Actions/ActChangeAttrs", "./Logic/Actions/ActIntrptCollider", "./Logic/Actions/ActIntrptInput", "./Logic/Actions/ActIntrptTimeup", "./Logic/Actions/ActMove", "./Logic/Actions/ActShake", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShake"], function (require, exports, ActAttack_1, ActBulletChangeAttrs_1, ActBulletIntrptState_1, ActChangeAttrs_1, ActIntrptCollider_1, ActIntrptInput_1, ActIntrptTimeup_1, ActMove_1, ActShake_1, ActSprint_1, ActVelocity_1, VActAnimation_1, VActEffect_1, VActShake_1) {
+define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActBulletChangeAttrs", "./Logic/Actions/ActBulletIntrptState", "./Logic/Actions/ActChangeAttrs", "./Logic/Actions/ActIntrptCollider", "./Logic/Actions/ActIntrptInput", "./Logic/Actions/ActIntrptTimeup", "./Logic/Actions/ActMove", "./Logic/Actions/ActShake", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./View/FSM/VActAnimation", "./View/FSM/VActEffect", "./View/FSM/VActShakeEffect"], function (require, exports, ActAttack_1, ActBulletChangeAttrs_1, ActBulletIntrptState_1, ActChangeAttrs_1, ActIntrptCollider_1, ActIntrptInput_1, ActIntrptTimeup_1, ActMove_1, ActShake_1, ActSprint_1, ActVelocity_1, VActAnimation_1, VActEffect_1, VActShakeEffect_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;
@@ -24,13 +24,15 @@ define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActB
         ActionType[ActionType["Timeup"] = 100] = "Timeup";
         ActionType[ActionType["Collision"] = 101] = "Collision";
         ActionType[ActionType["Input"] = 102] = "Input";
+        ActionType[ActionType["Custom"] = 999] = "Custom";
     })(ActionType = exports.ActionType || (exports.ActionType = {}));
     var VActionType;
     (function (VActionType) {
         VActionType[VActionType["None"] = -1] = "None";
         VActionType[VActionType["Animation"] = 0] = "Animation";
-        VActionType[VActionType["Shake"] = 4] = "Shake";
+        VActionType[VActionType["ShakeEffect"] = 4] = "ShakeEffect";
         VActionType[VActionType["Effect"] = 5] = "Effect";
+        VActionType[VActionType["Custom"] = 999] = "Custom";
     })(VActionType = exports.VActionType || (exports.VActionType = {}));
     var BulletActionType;
     (function (BulletActionType) {
@@ -50,7 +52,7 @@ define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActB
     exports.STATE_ACTION_CTOR_MAP.set(ActionType.Input, ActIntrptInput_1.ActIntrptInput);
     exports.V_STATE_ACTION_CTOR_MAP = new Map();
     exports.V_STATE_ACTION_CTOR_MAP.set(VActionType.Animation, VActAnimation_1.VActAnimation);
-    exports.V_STATE_ACTION_CTOR_MAP.set(VActionType.Shake, VActShake_1.VActShake);
+    exports.V_STATE_ACTION_CTOR_MAP.set(VActionType.ShakeEffect, VActShakeEffect_1.VActShakeEffect);
     exports.V_STATE_ACTION_CTOR_MAP.set(VActionType.Effect, VActEffect_1.VActEffect);
     exports.BULLET_ACTION_CTOR_MAP = new Map();
     exports.BULLET_ACTION_CTOR_MAP.set(BulletActionType.IntrptState, ActBulletIntrptState_1.ActBulletIntrptState);

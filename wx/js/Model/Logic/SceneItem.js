@@ -18,7 +18,7 @@ export class SceneItem extends Entity {
     get attrs() { return this._attrs; }
     get values() { return this._values; }
     get ops() { return this._ops; }
-    LoadDefs() {
+    LoadDef() {
         const defs = Defs.GetSceneItem(this._id);
         this._radius = Hashtable.GetNumber(defs, "radius");
         this._attrs = Hashtable.GetNumberArray(defs, "attrs");

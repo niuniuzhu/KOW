@@ -2,6 +2,7 @@ import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 export class VEntityAction extends AbstractAction {
     get owner() { return this._owner; }
+    get time() { return this._time; }
     constructor(owner, type) {
         super(type);
         this._owner = owner;

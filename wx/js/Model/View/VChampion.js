@@ -24,6 +24,8 @@ export class VChampion extends VEntity {
     }
     get hud() { return this._hud; }
     get fsm() { return this._fsm; }
+    get radius() { return this._radius; }
+    get moveSpeed() { return this._moveSpeed; }
     get hp() { return this._hp; }
     get mhp() { return this._mhp; }
     get mp() { return this._mp; }
@@ -84,17 +86,23 @@ export class VChampion extends VEntity {
         return; this._t_def_add = value; this.OnAttrChange(EAttr.S_DEF_ADD, value); }
     set t_speed_add(value) { if (this._t_speed_add == value)
         return; this._t_speed_add = value; this.OnAttrChange(EAttr.S_SPEED_ADD, value); }
-    BeforeLoadDefs() {
-        return CDefs.GetEntity(this._id);
+    LoadDef() {
+        return Defs.GetEntity(this.id);
     }
-    AfterLoadDefs(cdefs) {
-        const defs = Defs.GetEntity(this._id);
+    AfterLoadDef(defs) {
+        this._radius = Hashtable.GetNumber(defs, "radius");
+        this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
         const skillsDef = Hashtable.GetNumberArray(defs, "skills");
         for (const sid of skillsDef) {
             const skill = new Skill();
             skill.Init(sid);
             this._skills.push(skill);
         }
+    }
+    LoadCDef() {
+        return CDefs.GetEntity(this.id);
+    }
+    AfterLoadCDef(cdefs) {
         const statesDef = Hashtable.GetMap(cdefs, "states");
         if (statesDef != null) {
             for (const type in statesDef) {

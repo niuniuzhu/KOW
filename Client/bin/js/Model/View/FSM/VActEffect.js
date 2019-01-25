@@ -1,4 +1,4 @@
-define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/Logger", "../../EntityType", "./VEntityAction"], function (require, exports, Hashtable_1, Logger_1, EntityType_1, VEntityAction_1) {
+define(["require", "exports", "../../../RC/Math/Vec2", "../../../RC/Utils/Hashtable", "../../EntityType", "./VEntityAction"], function (require, exports, Vec2_1, Hashtable_1, EntityType_1, VEntityAction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var FxAttachType;
@@ -15,7 +15,7 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
         OnInit(def) {
             super.OnInit(def);
             this._effectID = Hashtable_1.Hashtable.GetNumber(def, "effect");
-            this._offset = Hashtable_1.Hashtable.GetVec2(def, "offset");
+            this._offset = Hashtable_1.Hashtable.GetVec2(def, "offset") || Vec2_1.Vec2.zero;
             this._attachType = Hashtable_1.Hashtable.GetNumber(def, "attach_type");
             this._followPos = Hashtable_1.Hashtable.GetBool(def, "follow_pos");
             this._followRot = Hashtable_1.Hashtable.GetBool(def, "follow_rot");
@@ -33,17 +33,13 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
         }
         OnTrigger() {
             super.OnTrigger();
+            this._fx = this.owner.battle.SpawnEffect(this._effectID);
             switch (this._attachType) {
                 case FxAttachType.Caster:
-                    this._fx = this.owner.battle.SpawnEffect(this._effectID);
-                    this._fx.SetTarget(EntityType_1.EntityType.Champion, this.owner.rid, this._offset, this._followPos, this._followRot, this._alwaysFollow);
-                    break;
-                default:
-                    Logger_1.Logger.Error(`attach type:${this._attachType} not supported`);
+                    this._fx.Set(this.owner.rid, this.owner.rid, EntityType_1.EntityType.Champion, this._offset, this._followPos, this._followRot, this._alwaysFollow);
                     break;
             }
-            if (this._fx != null &&
-                this._destroyType != FxDestroyType.Effect &&
+            if (this._destroyType != FxDestroyType.Effect &&
                 this._fx.lifeTime >= 0) {
                 throw new Error(`fx:${this._fx.id}'s lifetime greater then zero, can only set destroy type to FxDestroyType.Effect`);
             }

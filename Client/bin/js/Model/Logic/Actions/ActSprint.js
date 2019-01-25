@@ -12,9 +12,11 @@ define(["require", "exports", "../../../RC/FMath/FMathUtils", "../../../RC/Utils
         }
         OnEnter(param) {
             super.OnEnter(param);
-            const formula = TextUtils_1.StringUtils.Format(this._formula, "" + this.owner.fsm.context.shakeTime);
-            const intrpt = this.owner.fsm.currentEntityState.GetAction(Defines_1.ActionType.Timeup);
-            intrpt.duration = FMathUtils_1.FMathUtils.Floor(this._ee.evaluate(formula));
+            if (this._formula != null) {
+                const result = TextUtils_1.StringUtils.Format(this._formula, "" + this.owner.fsm.context.shakeTime);
+                const intrpt = this.owner.fsm.currentEntityState.GetAction(Defines_1.ActionType.Timeup);
+                intrpt.duration = FMathUtils_1.FMathUtils.Floor(this._ee.evaluate(result));
+            }
         }
     }
     exports.ActSprint = ActSprint;

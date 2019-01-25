@@ -8,14 +8,24 @@ import { VEntity } from "./VEntity";
 import { Logger } from "../../RC/Utils/Logger";
 
 export class VEffect extends VEntity {
+	public get casterID(): Long { return this._casterID; }
+	public get targetID(): Long { return this._targetID; }
+	public get followType(): EntityType { return this._followType; }
+	public get followOffset(): Vec2 { return this.followOffset; }
+	public get followPos(): boolean { return this._followPos; }
+	public get followRot(): boolean { return this._followRot; }
+	public get alwaysFollow(): boolean { return this._alwaysFollow; }
+	public get animationID(): number { return this._animationID; }
 	public get lifeTime(): number { return this._lifeTime; }
+	public get time(): number { return this._time; }
 
 	private _animationID: number;
 	private _lifeTime: number;
 	private _time: number;
 
+	private _casterID: Long;
+	private _targetID: Long;
 	private _followType: EntityType;
-	private _followTarget: Long;
 	private _followOffset: Vec2;
 	private _followPos: boolean = false;
 	private _followRot: boolean = false;
@@ -27,11 +37,11 @@ export class VEffect extends VEntity {
 		this.LoadDefs();
 	}
 
-	protected BeforeLoadDefs(): Hashtable {
+	protected LoadCDef(): Hashtable {
 		return CDefs.GetEffect(this._id);
 	}
 
-	protected AfterLoadDefs(cdefs: Hashtable): void {
+	protected AfterLoadCDef(cdefs: Hashtable): void {
 		this._animationID = Hashtable.GetNumber(cdefs, "animation");
 		this._lifeTime = Hashtable.GetNumber(cdefs, "lifetime");
 		if (this._lifeTime == 0) {
@@ -40,10 +50,12 @@ export class VEffect extends VEntity {
 		}
 	}
 
-	public SetTarget(followType: EntityType, followTarget: Long, followOffset: Vec2, followPos: boolean,
+	public Set(casterID: Long, targetID: Long,
+		followType: EntityType, followOffset: Vec2, followPos: boolean,
 		followRot: boolean, alwaysFollow: boolean): void {
+		this._casterID = casterID;
+		this._targetID = targetID;
 		this._followType = followType;
-		this._followTarget = followTarget;
 		this._followOffset = followOffset;
 		this._followPos = followPos;
 		this._followRot = followRot;
@@ -63,14 +75,14 @@ export class VEffect extends VEntity {
 	}
 
 	private UpdateFollow(): void {
-		if (this._followTarget != null) {
+		if (this._targetID != null) {
 			let target: VEntity;
 			switch (this._followType) {
 				case EntityType.Bullet:
-					target = this.battle.GetBullet(this._followTarget);
+					target = this.battle.GetBullet(this._targetID);
 					break;
 				case EntityType.Champion:
-					target = this.battle.GetChampion(this._followTarget);
+					target = this.battle.GetChampion(this._targetID);
 					break;
 				default:
 					Logger.Error(`follow type:${this._followType} not supported`);
@@ -97,7 +109,7 @@ export class VEffect extends VEntity {
 
 	public OnDespawn(): void {
 		this._followOffset = null;
-		this._followTarget = null;
+		this._targetID = null;
 		this._root.removeFromParent();
 	}
 }

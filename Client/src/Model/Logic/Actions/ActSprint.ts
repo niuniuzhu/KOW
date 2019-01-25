@@ -18,10 +18,11 @@ export class ActSprint extends ActVelocity implements ISnapshotable {
 
 	protected OnEnter(param: any): void {
 		super.OnEnter(param);
-
-		//获取上一状态的持续时间
-		const formula = StringUtils.Format(this._formula, "" + this.owner.fsm.context.shakeTime);
-		const intrpt = <ActIntrptTimeup>this.owner.fsm.currentEntityState.GetAction(ActionType.Timeup);
-		intrpt.duration = FMathUtils.Floor(this._ee.evaluate(formula));
+		if (this._formula != null) {
+			//获取上一状态的持续时间
+			const result = StringUtils.Format(this._formula, "" + this.owner.fsm.context.shakeTime);
+			const intrpt = <ActIntrptTimeup>this.owner.fsm.currentEntityState.GetAction(ActionType.Timeup);
+			intrpt.duration = FMathUtils.Floor(this._ee.evaluate(result));
+		}
 	}
 }

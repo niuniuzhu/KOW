@@ -120,7 +120,7 @@ export class Bullet extends Entity implements ISnapshotable {
 		}
 	}
 
-	protected LoadDefs(): void {
+	protected LoadDef(): void {
 		const defs = Defs.GetBullet(this._id);
 		this._radius = Hashtable.GetNumber(defs, "radius");
 		this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");

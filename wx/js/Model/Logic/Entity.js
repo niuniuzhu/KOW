@@ -17,7 +17,7 @@ export class Entity {
         this._markToDestroy = false;
         this.position.CopyFrom(params.position);
         this.direction.CopyFrom(params.direction);
-        this.LoadDefs();
+        this.LoadDef();
     }
     Destroy() {
     }
@@ -31,7 +31,7 @@ export class Entity {
     DecodeSnapshot(reader) {
         this._rid = reader.uint64();
         this._id = reader.int32();
-        this.LoadDefs();
+        this.LoadDef();
         this._markToDestroy = reader.bool();
         this.position.Set(reader.double(), reader.double());
         this.direction.Set(reader.double(), reader.double());

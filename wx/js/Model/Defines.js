@@ -11,7 +11,7 @@ import { ActSprint } from "./Logic/Actions/ActSprint";
 import { ActVelocity } from "./Logic/Actions/ActVelocity";
 import { VActAnimation } from "./View/FSM/VActAnimation";
 import { VActEffect } from "./View/FSM/VActEffect";
-import { VActShake } from "./View/FSM/VActShake";
+import { VActShakeEffect } from "./View/FSM/VActShakeEffect";
 export var StateType;
 (function (StateType) {
     StateType[StateType["Idle"] = 0] = "Idle";
@@ -35,13 +35,15 @@ export var ActionType;
     ActionType[ActionType["Timeup"] = 100] = "Timeup";
     ActionType[ActionType["Collision"] = 101] = "Collision";
     ActionType[ActionType["Input"] = 102] = "Input";
+    ActionType[ActionType["Custom"] = 999] = "Custom";
 })(ActionType || (ActionType = {}));
 export var VActionType;
 (function (VActionType) {
     VActionType[VActionType["None"] = -1] = "None";
     VActionType[VActionType["Animation"] = 0] = "Animation";
-    VActionType[VActionType["Shake"] = 4] = "Shake";
+    VActionType[VActionType["ShakeEffect"] = 4] = "ShakeEffect";
     VActionType[VActionType["Effect"] = 5] = "Effect";
+    VActionType[VActionType["Custom"] = 999] = "Custom";
 })(VActionType || (VActionType = {}));
 export var BulletActionType;
 (function (BulletActionType) {
@@ -61,7 +63,7 @@ STATE_ACTION_CTOR_MAP.set(ActionType.Collision, ActIntrptCollider);
 STATE_ACTION_CTOR_MAP.set(ActionType.Input, ActIntrptInput);
 export const V_STATE_ACTION_CTOR_MAP = new Map();
 V_STATE_ACTION_CTOR_MAP.set(VActionType.Animation, VActAnimation);
-V_STATE_ACTION_CTOR_MAP.set(VActionType.Shake, VActShake);
+V_STATE_ACTION_CTOR_MAP.set(VActionType.ShakeEffect, VActShakeEffect);
 V_STATE_ACTION_CTOR_MAP.set(VActionType.Effect, VActEffect);
 export const BULLET_ACTION_CTOR_MAP = new Map();
 BULLET_ACTION_CTOR_MAP.set(BulletActionType.IntrptState, ActBulletIntrptState);

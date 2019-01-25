@@ -26,11 +26,11 @@ export class Champion extends Entity implements ISnapshotable {
 	public get isInGladiator(): boolean { return FVec2.DistanceSquared(this.position, this._battle.gladiatorPos) <= FMathUtils.Mul(this._battle.gladiatorRadius, this._battle.gladiatorRadius); }
 
 	//static properties
-	private _radius: number;
-	private _moveSpeed: number;
 	private readonly _skills: Skill[] = [];
 	private readonly _fsm = new EntityFSM();
 	private readonly _inputAgent = new InputAgent();
+	private _radius: number;
+	private _moveSpeed: number;
 
 	//run time properties
 	/**
@@ -145,7 +145,7 @@ export class Champion extends Entity implements ISnapshotable {
 	/**
 	 * 在初始化或解码快照后执行
 	 */
-	protected LoadDefs(): void {
+	protected LoadDef(): void {
 		const defs = Defs.GetEntity(this._id);
 		this._radius = Hashtable.GetNumber(defs, "radius");
 		this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");

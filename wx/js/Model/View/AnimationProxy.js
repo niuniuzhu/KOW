@@ -56,7 +56,6 @@ export class AnimationProxy extends fairygui.GGraph {
             this._aniSettings.set(id, owner.battle.assetsManager.GetAniSetting(alias));
         }
         this._animation = new Laya.Animation();
-        this.setPivot(0.5, 0.5, true);
         this.setNativeObject(this._animation);
     }
     get available() { return this._aniSettings != null && this._animation != null; }

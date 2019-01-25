@@ -173,21 +173,19 @@
 							"animation": 3
 						},
 						{
-							"id": 4
-						},
-						{
-							"id": 5,
+							"id": 4,
 							"effect": 3,
 							"offset": [
 								0,
 								0
 							],
-							"trigger_time": 400,
+							"trigger_time": 0,
 							"attach_type": 1,
 							"follow_pos": true,
 							"follow_rot": true,
 							"always_follow": false,
-							"destroy_type": 1
+							"destroy_type": 1,
+							"formula": "3000*(50+{0}*0.03)"
 						}
 					]
 				},
@@ -280,6 +278,10 @@
 		"fx3": {
 			"model": 0,
 			"model_layer": 2,
+			"pivot": [
+				0.5,
+				1
+			],
 			"animation": 11,
 			"lifetime": -1
 		}

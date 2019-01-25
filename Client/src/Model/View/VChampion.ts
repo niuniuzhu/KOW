@@ -13,13 +13,17 @@ import { VBattle } from "./VBattle";
 import { VEntity } from "./VEntity";
 
 export class VChampion extends VEntity {
+	public get hud(): HUD { return this._hud; }
+	public get fsm(): FSM { return this._fsm; }
+	public get radius(): number { return this._radius; }
+	public get moveSpeed(): number { return this._moveSpeed; }
+
 	//static properties
 	private readonly _hud: HUD;
 	private readonly _skills: Skill[] = [];
 	private readonly _fsm: FSM = new FSM();
-
-	public get hud(): HUD { return this._hud; }
-	public get fsm(): FSM { return this._fsm; }
+	private _radius: number;
+	private _moveSpeed: number;
 
 	//runtime properties
 	public team: number;
@@ -93,19 +97,26 @@ export class VChampion extends VEntity {
 		this._hud = new HUD(this);
 	}
 
-	protected BeforeLoadDefs(): Hashtable {
-		return CDefs.GetEntity(this._id);
+	protected LoadDef(): Hashtable {
+		return Defs.GetEntity(this.id);
 	}
 
-	protected AfterLoadDefs(cdefs: Hashtable): void {
-		const defs = Defs.GetEntity(this._id);
+	protected AfterLoadDef(defs: Hashtable): void {
+		this._radius = Hashtable.GetNumber(defs, "radius");
+		this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
 		const skillsDef = Hashtable.GetNumberArray(defs, "skills");
 		for (const sid of skillsDef) {
 			const skill = new Skill();
 			skill.Init(sid);
 			this._skills.push(skill);
 		}
+	}
 
+	protected LoadCDef(): Hashtable {
+		return CDefs.GetEntity(this.id);
+	}
+
+	protected AfterLoadCDef(cdefs: Hashtable): void {
 		const statesDef = Hashtable.GetMap(cdefs, "states");
 		if (statesDef != null) {
 			for (const type in statesDef) {

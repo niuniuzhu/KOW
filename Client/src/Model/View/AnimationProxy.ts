@@ -24,7 +24,7 @@ export class AnimationProxy extends fairygui.GGraph {
 	public get animation(): Laya.Animation { return this._animation; }
 
 	private readonly _aniSettings = new Map<number, AnimationSetting>();
-	private _animation: Laya.Animation;
+	private readonly _animation: Laya.Animation;
 	private _playingID: number = -1;
 
 	constructor(owner: VEntity, id: number) {
@@ -77,12 +77,7 @@ export class AnimationProxy extends fairygui.GGraph {
 		}
 
 		this._animation = new Laya.Animation();
-		// this._animation.autoSize = true;
-
-		this.setPivot(0.5, 0.5, true);
 		this.setNativeObject(this._animation);
-		//计算所有graphic的大小,选取最大一个为该动画的大小
-		// this.setSize(0, 0);
 	}
 
 	public GetSetting(id: number): AnimationSetting {

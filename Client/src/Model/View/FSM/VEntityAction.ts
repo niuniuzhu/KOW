@@ -11,6 +11,8 @@ export class VEntityAction extends AbstractAction {
 	 */
 	public get owner(): VChampion { return this._owner; }
 
+	public get time(): number { return this._time; }
+
 	private _owner: VChampion;
 	private _time: number;
 	private _triggerTime: number;

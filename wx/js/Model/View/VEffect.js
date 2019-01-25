@@ -13,11 +13,20 @@ export class VEffect extends VEntity {
         this._id = id;
         this.LoadDefs();
     }
+    get casterID() { return this._casterID; }
+    get targetID() { return this._targetID; }
+    get followType() { return this._followType; }
+    get followOffset() { return this.followOffset; }
+    get followPos() { return this._followPos; }
+    get followRot() { return this._followRot; }
+    get alwaysFollow() { return this._alwaysFollow; }
+    get animationID() { return this._animationID; }
     get lifeTime() { return this._lifeTime; }
-    BeforeLoadDefs() {
+    get time() { return this._time; }
+    LoadCDef() {
         return CDefs.GetEffect(this._id);
     }
-    AfterLoadDefs(cdefs) {
+    AfterLoadCDef(cdefs) {
         this._animationID = Hashtable.GetNumber(cdefs, "animation");
         this._lifeTime = Hashtable.GetNumber(cdefs, "lifetime");
         if (this._lifeTime == 0) {
@@ -25,9 +34,10 @@ export class VEffect extends VEntity {
             this._lifeTime = setting.length * setting.interval;
         }
     }
-    SetTarget(followType, followTarget, followOffset, followPos, followRot, alwaysFollow) {
+    Set(casterID, targetID, followType, followOffset, followPos, followRot, alwaysFollow) {
+        this._casterID = casterID;
+        this._targetID = targetID;
         this._followType = followType;
-        this._followTarget = followTarget;
         this._followOffset = followOffset;
         this._followPos = followPos;
         this._followRot = followRot;
@@ -45,14 +55,14 @@ export class VEffect extends VEntity {
             this.UpdateFollow();
     }
     UpdateFollow() {
-        if (this._followTarget != null) {
+        if (this._targetID != null) {
             let target;
             switch (this._followType) {
                 case EntityType.Bullet:
-                    target = this.battle.GetBullet(this._followTarget);
+                    target = this.battle.GetBullet(this._targetID);
                     break;
                 case EntityType.Champion:
-                    target = this.battle.GetChampion(this._followTarget);
+                    target = this.battle.GetChampion(this._targetID);
                     break;
                 default:
                     Logger.Error(`follow type:${this._followType} not supported`);
@@ -77,7 +87,7 @@ export class VEffect extends VEntity {
     }
     OnDespawn() {
         this._followOffset = null;
-        this._followTarget = null;
+        this._targetID = null;
         this._root.removeFromParent();
     }
 }

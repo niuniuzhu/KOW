@@ -38,7 +38,7 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
             this.team = params.team;
             this.name = params.name;
         }
-        LoadDefs() {
+        LoadDef() {
             const defs = Defs_1.Defs.GetEntity(this._id);
             this._radius = Hashtable_1.Hashtable.GetNumber(defs, "radius");
             this._moveSpeed = Hashtable_1.Hashtable.GetNumber(defs, "move_speed");

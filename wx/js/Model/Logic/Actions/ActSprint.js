@@ -15,8 +15,10 @@ export class ActSprint extends ActVelocity {
     }
     OnEnter(param) {
         super.OnEnter(param);
-        const formula = StringUtils.Format(this._formula, "" + this.owner.fsm.context.shakeTime);
-        const intrpt = this.owner.fsm.currentEntityState.GetAction(ActionType.Timeup);
-        intrpt.duration = FMathUtils.Floor(this._ee.evaluate(formula));
+        if (this._formula != null) {
+            const result = StringUtils.Format(this._formula, "" + this.owner.fsm.context.shakeTime);
+            const intrpt = this.owner.fsm.currentEntityState.GetAction(ActionType.Timeup);
+            intrpt.duration = FMathUtils.Floor(this._ee.evaluate(result));
+        }
     }
 }

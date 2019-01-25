@@ -28,7 +28,7 @@ export class SceneItem extends Entity implements ISnapshotable {
 	private _values: number[];
 	private _ops: SceneItemAttrOp[];
 
-	protected LoadDefs(): void {
+	protected LoadDef(): void {
 		const defs = Defs.GetSceneItem(this._id);
 		this._radius = Hashtable.GetNumber(defs, "radius");
 		this._attrs = Hashtable.GetNumberArray(defs, "attrs");

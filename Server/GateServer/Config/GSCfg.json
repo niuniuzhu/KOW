@@ -10,6 +10,6 @@
     "csIP": "127.0.0.1",
     "csPort": 10002,
     "reportInterval": 10000,
-    "pingInterval": 10000,
-    "gcLive": 15000
+    "pingInterval": 20000,
+    "gcLive": 25000
 }

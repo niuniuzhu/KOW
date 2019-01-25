@@ -99,6 +99,13 @@
 					"length": 6,
 					"play_mode": 1,
 					"interval": 100
+				},
+				{
+					"id": 11,
+					"name": "dazhaodutiao",
+					"length": 1,
+					"play_mode": 1,
+					"interval": 100
 				}
 			]
 		},
@@ -154,7 +161,8 @@
 							"attach_type": 1,
 							"follow_pos": true,
 							"follow_rot": true,
-							"always_follow": false
+							"always_follow": false,
+							"destroy_type": 0
 						}
 					]
 				},
@@ -166,6 +174,20 @@
 						},
 						{
 							"id": 4
+						},
+						{
+							"id": 5,
+							"effect": 3,
+							"offset": [
+								0,
+								0
+							],
+							"trigger_time": 400,
+							"attach_type": 1,
+							"follow_pos": true,
+							"follow_rot": true,
+							"always_follow": false,
+							"destroy_type": 1
 						}
 					]
 				},
@@ -254,6 +276,12 @@
 			"model": 0,
 			"model_layer": 3,
 			"animation": 10
+		},
+		"fx3": {
+			"model": 0,
+			"model_layer": 2,
+			"animation": 11,
+			"lifetime": -1
 		}
 	},
 	"scene_item": {

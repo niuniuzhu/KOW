@@ -7,7 +7,7 @@
     "csPort": 10003,
     "shellPort": 50003,
     "reportInterval": 10000,
-    "pingInterval": 10000,
-    "gcLive": 15000,
+    "pingInterval": 20000,
+    "gcLive": 25000,
     "waitUserCommitSSTimeout": 2000
 }

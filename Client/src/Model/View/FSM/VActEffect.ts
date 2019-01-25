@@ -10,6 +10,11 @@ enum FxAttachType {
 	Caster
 }
 
+enum FxDestroyType {
+	Effect,
+	State
+}
+
 export class VActEffect extends VEntityAction {
 	private _effectID: number;
 	private _offset: Vec2;
@@ -17,6 +22,7 @@ export class VActEffect extends VEntityAction {
 	private _followPos: boolean;
 	private _followRot: boolean;
 	private _alwaysFollow: boolean;
+	private _destroyType: FxDestroyType;
 
 	private _fx: VEffect;
 
@@ -28,11 +34,17 @@ export class VActEffect extends VEntityAction {
 		this._followPos = Hashtable.GetBool(def, "follow_pos");
 		this._followRot = Hashtable.GetBool(def, "follow_rot");
 		this._alwaysFollow = Hashtable.GetBool(def, "always_follow");
+		this._destroyType = Hashtable.GetNumber(def, "destroy_type");
 	}
 
 	protected OnExit(): void {
 		super.OnExit();
-		this._fx = null;
+		if (this._fx != null) {
+			if (this._destroyType == FxDestroyType.State) {
+				this._fx.markToDestroy = true;
+			}
+			this._fx = null;
+		}
 	}
 
 	protected OnTrigger(): void {
@@ -46,6 +58,11 @@ export class VActEffect extends VEntityAction {
 			default:
 				Logger.Error(`attach type:${this._attachType} not supported`);
 				break;
+		}
+		if (this._fx != null &&
+			this._destroyType != FxDestroyType.Effect &&
+			this._fx.lifeTime >= 0) {
+			throw new Error(`fx:${this._fx.id}'s lifetime greater then zero, can only set destroy type to FxDestroyType.Effect`);
 		}
 	}
 }

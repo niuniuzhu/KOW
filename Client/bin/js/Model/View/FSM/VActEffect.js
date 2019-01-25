@@ -6,6 +6,11 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
         FxAttachType[FxAttachType["None"] = 0] = "None";
         FxAttachType[FxAttachType["Caster"] = 1] = "Caster";
     })(FxAttachType || (FxAttachType = {}));
+    var FxDestroyType;
+    (function (FxDestroyType) {
+        FxDestroyType[FxDestroyType["Effect"] = 0] = "Effect";
+        FxDestroyType[FxDestroyType["State"] = 1] = "State";
+    })(FxDestroyType || (FxDestroyType = {}));
     class VActEffect extends VEntityAction_1.VEntityAction {
         OnInit(def) {
             super.OnInit(def);
@@ -15,10 +20,16 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
             this._followPos = Hashtable_1.Hashtable.GetBool(def, "follow_pos");
             this._followRot = Hashtable_1.Hashtable.GetBool(def, "follow_rot");
             this._alwaysFollow = Hashtable_1.Hashtable.GetBool(def, "always_follow");
+            this._destroyType = Hashtable_1.Hashtable.GetNumber(def, "destroy_type");
         }
         OnExit() {
             super.OnExit();
-            this._fx = null;
+            if (this._fx != null) {
+                if (this._destroyType == FxDestroyType.State) {
+                    this._fx.markToDestroy = true;
+                }
+                this._fx = null;
+            }
         }
         OnTrigger() {
             super.OnTrigger();
@@ -30,6 +41,11 @@ define(["require", "exports", "../../../RC/Utils/Hashtable", "../../../RC/Utils/
                 default:
                     Logger_1.Logger.Error(`attach type:${this._attachType} not supported`);
                     break;
+            }
+            if (this._fx != null &&
+                this._destroyType != FxDestroyType.Effect &&
+                this._fx.lifeTime >= 0) {
+                throw new Error(`fx:${this._fx.id}'s lifetime greater then zero, can only set destroy type to FxDestroyType.Effect`);
             }
         }
     }

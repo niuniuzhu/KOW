@@ -33,7 +33,7 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "config", _g_get_config);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "netSessionMgr", _g_get_netSessionMgr);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "bizProcessor", _g_get_bizProcessor);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "battleManager", _g_get_battleManager);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "battleMgr", _g_get_battleManager);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "userMgr", _g_get_userMgr);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "state", _g_get_state);
             
@@ -288,7 +288,7 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 BattleServer.BS __cl_gen_to_be_invoked = (BattleServer.BS)translator.FastGetCSObj(L, 1);
-                translator.Push(L, __cl_gen_to_be_invoked.battleManager);
+                translator.Push(L, __cl_gen_to_be_invoked.battleMgr);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }

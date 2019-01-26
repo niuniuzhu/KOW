@@ -113,7 +113,9 @@ export class MatchingState extends SceneState {
 		}
 		else {
 			Global.sceneManager.ChangeState(SceneManager.State.Loading);
-			Global.sceneManager.loading.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+			if (!Global.sceneManager.loading.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port)) {
+				this._ui.OnFail("连接服务器失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+			}
 		}
 	}
 }

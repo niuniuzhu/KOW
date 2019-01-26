@@ -11,7 +11,7 @@
 		private int _frame;
 		private int _msPerFrame;
 		private Battle _battle;
-		private long _elapsed;
+		private long _timestamp;
 
 		public void Init( Battle battle, int frameRate, int keyframeStep )
 		{
@@ -20,7 +20,7 @@
 			this.keyframeStep = keyframeStep;
 			this._msPerFrame = 1000 / this.frameRate;
 			this._frame = 0;
-			this._elapsed = 0;
+			this._timestamp = 0;
 		}
 
 		public void Clear()
@@ -28,17 +28,18 @@
 			this._battle = null;
 		}
 
-		public void Update( long dt )
+		public void Update( long elasped )
 		{
-			this._elapsed += dt;
-			while ( this._elapsed >= this._msPerFrame )
+			long delta = elasped - this._timestamp;
+			while ( delta >= this._msPerFrame )
 			{
-				this._elapsed -= this._msPerFrame;
+				this._timestamp += this._msPerFrame;
+				delta -= this._msPerFrame;
 
 				if ( this._frame % this.keyframeStep == 0 )
-					this._battle.OnKeyframe( this._frame, this._msPerFrame * this.keyframeStep );
+					this._battle.OnKeyframe( this._frame, elasped, this._msPerFrame * this.keyframeStep );
 
-				this._battle.UpdateLogic( this._frame, this._msPerFrame );
+				this._battle.UpdateLogic( this._frame, elasped, this._msPerFrame );
 
 				++this._frame;
 			}

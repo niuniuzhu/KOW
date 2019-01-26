@@ -79,7 +79,9 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             }
             else {
                 Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading);
-                Global_1.Global.sceneManager.loading.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port);
+                if (!Global_1.Global.sceneManager.loading.ConnectToBS(enterBattle.gcNID, enterBattle.ip, enterBattle.port)) {
+                    this._ui.OnFail("连接服务器失败", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
+                }
             }
         }
     }

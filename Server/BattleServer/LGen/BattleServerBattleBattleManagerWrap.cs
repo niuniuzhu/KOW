@@ -91,8 +91,6 @@ namespace XLua.CSObjectWrap
                 {
                     ulong gcNID = LuaAPI.lua_touint64(L, 2);
                     
-                        BattleServer.Battle.Battle __cl_gen_ret = __cl_gen_to_be_invoked.GetValidedBattle( gcNID );
-                        translator.Push(L, __cl_gen_ret);
                     
                     
                     

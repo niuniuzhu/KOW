@@ -2,7 +2,6 @@ import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
 import { ProtoCreator } from "../Net/ProtoHelper";
-import Queue from "../RC/Collections/Queue";
 import { FMathUtils } from "../RC/FMath/FMathUtils";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "../Scene/SceneManager";
@@ -22,33 +21,45 @@ interface IMessageInfo {
  * 战场管理器
  */
 export class BattleManager {
+	private _playerID: Long;
+	private readonly _lBattle: Battle;
+	private readonly _vBattle: VBattle;
+	private _finished: boolean;
+	private _ready: boolean;
+	private _destroied: boolean;
 	/**
 	 * 消息队列
 	 * 由于在某些情况下无法收到消息马上处理(例如在载入恢复快照和追帧前收到的消息就不能马上处理)
 	 * 这里必须把消息放进缓冲队列,等待适当时机调用
 	 */
 	private readonly _messageQueue: IMessageInfo[] = [];
+
+	/**
+	 * 主控ID
+	 */
+	public get playerID(): Long { return this._playerID; }
 	/**
 	 * 逻辑战场
 	 */
-	private _lBattle: Battle;
+	public get lBattle(): Battle { return this._lBattle; }
 	/**
 	 * 表现战场
 	 */
-	private _vBattle: VBattle;
-	private _playerID: Long;
-	private _init: boolean;
-	private _destroied: boolean;
-
-	public get playerID(): Long { return this._playerID; }
-	public get lBattle(): Battle { return this._lBattle; }
 	public get vBattle(): VBattle { return this._vBattle; }
+	/**
+	 * 标记是否已结束战场
+	 */
+	public get finished(): boolean { return this._finished; }
+	/**
+	 * 标记资源,快照,追帧已经完成
+	 */
+	public get ready(): boolean { return this._ready; }
+	/**
+	 * 标记战场是否销毁
+	 */
 	public get destroied(): boolean { return this._destroied; }
 
-	/**
-	 * 初始化
-	 */
-	public Init() {
+	constructor() {
 		this._lBattle = new Battle();
 		this._vBattle = new VBattle();
 	}
@@ -57,12 +68,14 @@ export class BattleManager {
 		if (this._destroied)
 			return;
 
+		this._finished = true;
+		this._ready = false;
 		this._destroied = true;
-		this._init = false;
 
+		Global.connector.bsConnector.onclose = null;
+		Global.connector.bsConnector.onerror = null;
 		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
-		Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
 		Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 
 		this._lBattle.Destroy();
@@ -73,11 +86,14 @@ export class BattleManager {
 	/**
 	 * 在连接BS前就监听消息,由于一连接到BS就可能马上收到消息
 	 */
-	public Start(): void {
+	public Init(): void {
+		this._finished = false;
+		this._ready = false;
 		this._destroied = false;
+		Global.connector.bsConnector.onclose = this.HandleBSLost.bind(this);
+		Global.connector.bsConnector.onerror = this.HandleBSLost.bind(this);
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
-		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLose.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
 	}
 
@@ -128,7 +144,7 @@ export class BattleManager {
 				//同步到表现层
 				this._lBattle.SyncInitToView();
 
-				this._init = true;
+				this._ready = true;
 				Logger.Log("battle inited");
 				//回调函数
 				completeHandler();
@@ -155,9 +171,9 @@ export class BattleManager {
 	}
 
 	public Update(dt: number): void {
-		if (!this._init)
+		if (!this._ready)
 			return;
-		this.HandleMessageQueue();
+		this.ProcessMessageQueue();
 		this._lBattle.Update(FMathUtils.ToFixed(dt));
 		SyncEvent.Update();
 		this._vBattle.Update(dt);
@@ -167,7 +183,7 @@ export class BattleManager {
 		this._messageQueue.push({ message: message, handler: handler });
 	}
 
-	private HandleMessageQueue(): void {
+	private ProcessMessageQueue(): void {
 		for (const messageInfo of this._messageQueue) {
 			messageInfo.handler(messageInfo.message);
 		}
@@ -175,29 +191,21 @@ export class BattleManager {
 	}
 
 	/**
-	 * 处理BS丢失
-	 * @param message 协议
+	 * 处理服务端回应的帧行为历史记录
+	 * @param frames 帧数列表
+	 * @param actions 帧行为列表
 	 */
-	private HandleBSLose(message: any): void {
-		this.QueueMessage(message, msg => {
-			Logger.Log("bs lose");
-			this.Destroy();
-			Global.sceneManager.ChangeState(SceneManager.State.Main);
-		});
-	}
-
-	/**
-	 * 处理战场结束
-	 * @param message 协议
-	 */
-	private HandleBattleEnd(message: any): void {
-		this.QueueMessage(message, msg => {
-			const battleEnd = <Protos.CS2GC_BattleEnd>msg;
-			UIEvent.EndBattle(battleEnd.win, battleEnd.honour, () => {
-				this.Destroy();
-				Global.sceneManager.ChangeState(SceneManager.State.Main);
-			});
-		});
+	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): FrameActionGroup[] {
+		const count = frames.length;
+		if (count == 0)
+			return null;
+		const frameActionGroups: FrameActionGroup[] = [];
+		for (let i = 0; i < count; ++i) {
+			const frameActionGroup = new FrameActionGroup(frames[i]);
+			frameActionGroup.Deserialize(actions[i]);
+			frameActionGroups.push(frameActionGroup);
+		}
+		return frameActionGroups;
 	}
 
 	/**
@@ -223,20 +231,39 @@ export class BattleManager {
 	}
 
 	/**
-	 * 处理服务端回应的帧行为历史记录
-	 * @param frames 帧数列表
-	 * @param actions 帧行为列表
+	 * 处理战场结束
+	 * @param message 协议
 	 */
-	private HandleRequestFrameActions(frames: number[], actions: Uint8Array[]): FrameActionGroup[] {
-		const count = frames.length;
-		if (count == 0)
-			return null;
-		const frameActionGroups: FrameActionGroup[] = [];
-		for (let i = 0; i < count; ++i) {
-			const frameActionGroup = new FrameActionGroup(frames[i]);
-			frameActionGroup.Deserialize(actions[i]);
-			frameActionGroups.push(frameActionGroup);
-		}
-		return frameActionGroups;
+	private HandleBattleEnd(message: any): void {
+		this.QueueMessage(message, msg => {
+			const battleEnd = <Protos.CS2GC_BattleEnd>msg;
+			this._finished = true;
+			UIEvent.EndBattle(battleEnd.win, battleEnd.honour, () => {
+				this.Destroy();
+				Global.sceneManager.ChangeState(SceneManager.State.Main);
+			});
+		});
+	}
+
+	/**
+	 * 处理BS丢失
+	 */
+	private HandleBSLost(e: Event): void {
+		this.QueueMessage(null, msg => {
+			//如果战场结束,说明BS是正常断开的,不用处理
+			if (this._lBattle.finished) {
+				return;
+			}
+			if (e instanceof CloseEvent) {
+				Logger.Log(`bs lost,code:${e.code},reason:${e.reason}`);
+			}
+			else {
+				Logger.Log(`bs error`);
+			}
+			//断开GS
+			if (Global.connector.gsConnector.connected) {
+				Global.connector.gsConnector.Close();
+			}
+		});
 	}
 }

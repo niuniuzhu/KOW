@@ -22,7 +22,7 @@ namespace BattleServer
 
 		public readonly BSNetSessionMgr netSessionMgr = new BSNetSessionMgr();
 		public readonly BizProcessor bizProcessor = new BizProcessor();
-		public readonly BattleManager battleManager = new BattleManager();
+		public readonly BattleManager battleMgr = new BattleManager();
 		public readonly BSUserMgr userMgr = new BSUserMgr();
 
 		private readonly UpdateContext _updateContext = new UpdateContext();
@@ -105,7 +105,7 @@ namespace BattleServer
 		private void OnHeartBeat( int count )
 		{
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
-			this.battleManager.Update( Consts.HEART_BEAT_INTERVAL );
+			this.battleMgr.Update( Consts.HEART_BEAT_INTERVAL );
 		}
 
 #if !DISABLE_LUA

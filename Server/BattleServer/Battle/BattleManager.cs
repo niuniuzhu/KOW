@@ -1,7 +1,7 @@
 ﻿using BattleServer.Battle.Model;
 using BattleServer.Battle.Snapshot;
-using BattleServer.User;
 using Core.Misc;
+using Google.Protobuf;
 using Shared.Net;
 using System;
 using System.Collections.Generic;
@@ -21,28 +21,12 @@ namespace BattleServer.Battle
 		/// 运作中的战场列表
 		/// </summary>
 		private readonly List<Battle> _workingBattles = new List<Battle>();
+		private readonly List<Battle> _finishBattles = new List<Battle>();
 
 		/// <summary>
 		/// 获取战场数量
 		/// </summary>
 		public int numBattles => this._workingBattles.Count;
-
-		/// <summary>
-		/// 检查指定玩家ID所在的战场是否有效
-		/// </summary>
-		public Battle GetValidedBattle( ulong gcNID )
-		{
-			BSUser user = BS.instance.userMgr.GetUser( gcNID );
-			if ( user == null )
-			{
-				Logger.Warn( $"can not find user:{gcNID}" );
-				return null;
-			}
-			Battle battle = user.battle;
-			if ( battle.finished )
-				return null;
-			return battle;
-		}
 
 		/// <summary>
 		/// 创建战场
@@ -79,8 +63,14 @@ namespace BattleServer.Battle
 				battleEntry.players[i] = player;
 			}
 
-			//初始化战场
+			//创建战场
 			Battle battle = POOL.Pop();
+
+			//创建用户
+			foreach ( var player in battleEntry.players )
+				BS.instance.userMgr.CreateUser( player.gcNID, battle );
+
+			//初始化战场
 			battle.Init( battleEntry );
 
 			//回调函数,通知GC创建战场成功
@@ -94,63 +84,6 @@ namespace BattleServer.Battle
 			Logger.Log( $"battle:{battle.id} created" );
 		}
 
-		/// <summary>
-		/// 销毁战场
-		/// 主线程调用
-		/// </summary>
-		private void EndBattle( Battle battle )
-		{
-			int count = battle.numChampions;
-			//通知CS战场结束
-			Protos.BS2CS_BattleEnd battleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
-			battleEnd.Bid = battle.id;
-			for ( int i = 0; i < count; ++i )
-			{
-				Champion champion = battle.GetChampionAt( i );
-				var info = new Protos.BS2CS_BattleEndInfo();
-				info.Win = champion.win;
-				info.Damage = champion.damage;
-				info.Hurt = champion.hurt;
-				info.Heal = champion.heal;
-				info.OccupyTime = champion.occupyTime;
-				info.Skill0Used = champion.skill0Used;
-				info.Skill0Damage = champion.skill0Damage;
-				info.Skill1Used = champion.skill1Used;
-				info.Skill1Damage = champion.skill1Damage;
-				battleEnd.Infos.Add( champion.user.gcNID, info );
-			}
-			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd );
-
-			for ( int i = 0; i < count; i++ )
-			{
-				Champion champion = battle.GetChampionAt( i );
-				if ( champion.user.isOnline )
-				{
-					//断开玩家连接
-					BS.instance.netSessionMgr.DelayCloseSession( champion.user.gcSID, 100, "battle_end" );
-					//玩家下线
-					BS.instance.userMgr.Offline( champion.user );
-				}
-				//销毁玩家
-				BS.instance.userMgr.DestroyUser( champion.user );
-			}
-			//处理战场的身后事
-			battle.End();
-
-			this._workingBattles.Remove( battle );
-			POOL.Push( battle );
-		}
-
-		internal void StopAllBattles()
-		{
-			int count = this._workingBattles.Count;
-			for ( int i = 0; i < count; i++ )
-			{
-				Battle battle = this._workingBattles[i];
-				battle.Interrupt();
-			}
-		}
-
 		internal void Update( long dt )
 		{
 			int count = this._workingBattles.Count;
@@ -160,13 +93,86 @@ namespace BattleServer.Battle
 				//检查战场是否结束
 				if ( battle.finished )
 				{
-					//处理战场结束
-					this.EndBattle( battle );
+					this._workingBattles.RemoveAt( i );
 					--i;
 					--count;
-					Logger.Log( $"battle:{battle.id} destroied" );
+					this._finishBattles.Add( battle );
+					//处理战场结束
+					this.EndBattle( battle );
 				}
 			}
+		}
+
+		/// <summary>
+		/// 销毁战场
+		/// 主线程调用
+		/// </summary>
+		private void EndBattle( Battle battle )
+		{
+			battle.Stop();
+			int count = battle.numChampions;
+			//通知CS战场结束
+			Protos.BS2CS_BattleEnd battleEnd = ProtoCreator.Q_BS2CS_BattleEnd();
+			battleEnd.Bid = battle.id;
+			for ( int i = 0; i < count; ++i )
+			{
+				Champion champion = battle.GetChampionAt( i );
+				var info = new Protos.BS2CS_BattleEndInfo
+				{
+					Win = champion.win,
+					Damage = champion.damage,
+					Hurt = champion.hurt,
+					Heal = champion.heal,
+					OccupyTime = champion.occupyTime,
+					Skill0Used = champion.skill0Used,
+					Skill0Damage = champion.skill0Damage,
+					Skill1Used = champion.skill1Used,
+					Skill1Damage = champion.skill1Damage
+				};
+				battleEnd.Infos.Add( champion.user.gcNID, info );
+			}
+			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd, RPCEntry.Pop( this.OnCSBattleEndRet, battle ) );
+		}
+
+		private void OnCSBattleEndRet( NetSessionBase session, IMessage message, object[] args )
+		{
+			Battle battle = ( Battle )args[0];
+			int count = battle.numChampions;
+			for ( int i = 0; i < count; i++ )
+			{
+				Champion champion = battle.GetChampionAt( i );
+				if ( champion.user.isOnline )
+				{
+					//断开玩家连接
+					BS.instance.netSessionMgr.CloseSession( champion.user.gcSID, "battle_end" );
+					//玩家下线
+					BS.instance.userMgr.Offline( champion.user );
+				}
+				//销毁玩家
+				BS.instance.userMgr.DestroyUser( champion.user );
+			}
+			this._finishBattles.Remove( battle );
+			Logger.Log( $"battle:{battle.id} destroied" );
+			POOL.Push( battle );
+		}
+
+		internal void StopAllBattles()
+		{
+			int count = this._workingBattles.Count;
+			for ( int i = 0; i < count; i++ )
+			{
+				Battle battle = this._workingBattles[i];
+				battle.Stop();
+				POOL.Push( battle );
+			}
+			this._workingBattles.Clear();
+			count = this._finishBattles.Count;
+			for ( int i = 0; i < count; i++ )
+			{
+				Battle battle = this._workingBattles[i];
+				POOL.Push( battle );
+			}
+			this._finishBattles.Clear();
 		}
 
 		/// <summary>
@@ -184,12 +190,8 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 处理玩家提交的帧行为
 		/// </summary>
-		internal void HandleFrameAction( ulong gcNID, Battle battle, Protos.GC2BS_FrameAction message )
-		{
-			if ( battle.finished )
-				return;
+		internal void HandleFrameAction( ulong gcNID, Battle battle, Protos.GC2BS_FrameAction message ) =>
 			battle.HandleFrameAction( gcNID, message );
-		}
 
 		/// <summary>
 		/// 处理玩家请求帧行为的历史数据

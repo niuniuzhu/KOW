@@ -8,7 +8,10 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleInf
             this._battleInfo = new BattleInfo_1.BattleInfo();
         }
         ConnectToBS(gcNID, ip, port) {
-            Global_1.Global.battleManager.Start();
+            if (Global_1.Global.connector.bsConnector.connected) {
+                return false;
+            }
+            Global_1.Global.battleManager.Init();
             const connector = Global_1.Global.connector.bsConnector;
             connector.onopen = () => {
                 Logger_1.Logger.Log("BS Connected");
@@ -46,6 +49,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleInf
             else {
                 connector.Connect(ip, port);
             }
+            return true;
         }
     }
     exports.LoadingState = LoadingState;

@@ -305,14 +305,16 @@ export class LoginState extends SceneState {
 				const resp: Protos.GS2GC_LoginRet = <Protos.GS2GC_LoginRet>message;
 				switch (resp.result) {
 					case Protos.GS2GC_LoginRet.EResult.Success:
-					Logger.Log("login cs")
+						Logger.Log("login cs")
 						//处理定义文件
 						const json = JsonHelper.Parse(StringUtils.DecodeUTF8(resp.defs));
 						Defs.Init(json);
 						if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
 							//玩家处于战场,重新连接到BS
 							Global.sceneManager.ChangeState(SceneManager.State.Loading);
-							Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+							if (!Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort)) {
+								this._ui.OnFail("连接服务器失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+							}
 						}
 						else {
 							//进去主界面

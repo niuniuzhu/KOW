@@ -6,8 +6,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             super(type);
             Global_1.Global.connector.gsConnector.onclose = this.OnGSLost.bind(this);
             Global_1.Global.connector.gsConnector.onerror = this.OnGSLost.bind(this);
-            Global_1.Global.connector.bsConnector.onclose = this.OnBSLost.bind(this);
-            Global_1.Global.connector.bsConnector.onerror = this.OnBSLost.bind(this);
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
         }
@@ -25,20 +23,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                 Logger_1.Logger.Log(`gs error`);
             }
             UIAlert_1.UIAlert.Show("与服务器断开连接", this.BackToLogin.bind(this));
-        }
-        OnBSLost(e) {
-            if (Global_1.Global.battleManager.destroied) {
-                return;
-            }
-            if (e instanceof CloseEvent) {
-                Logger_1.Logger.Log(`bs lost,code:${e.code},reason:${e.reason}`);
-            }
-            else {
-                Logger_1.Logger.Log(`bs error`);
-            }
-            if (Global_1.Global.connector.gsConnector.connected) {
-                Global_1.Global.connector.gsConnector.Close();
-            }
         }
         HandleKick(message) {
             Logger_1.Logger.Warn("kick by gs");

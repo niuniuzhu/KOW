@@ -239,7 +239,9 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                             Defs_1.Defs.Init(json);
                             if (resp.gcState == protos_1.Protos.GS2GC_LoginRet.EGCCState.Battle) {
                                 Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Loading);
-                                Global_1.Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+                                if (!Global_1.Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort)) {
+                                    this._ui.OnFail("连接服务器失败", () => Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Login, null, true));
+                                }
                             }
                             else {
                                 Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main, resp.userInfo);

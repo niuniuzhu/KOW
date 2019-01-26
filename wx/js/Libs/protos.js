@@ -969,6 +969,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[5100] = "eCS2GS_GCLoginRet"] = 5100;
         values[valuesById[5101] = "eCS2GS_KickGC"] = 5101;
         values[valuesById[5200] = "eCS2BS_BattleInfo"] = 5200;
+        values[valuesById[5201] = "eCS2BS_BattleEndRet"] = 5201;
         values[valuesById[5300] = "eCS2GC_BeginMatchRet"] = 5300;
         values[valuesById[5301] = "eCS2GC_PlayerJoin"] = 5301;
         values[valuesById[5302] = "eCS2GC_PlayerLeave"] = 5302;
@@ -2930,6 +2931,98 @@ export const Protos = $root.Protos = (() => {
         };
 
         return CS2BS_BattleInfo;
+    })();
+
+    Protos.CS2BS_BattleEndRet = (function() {
+
+        function CS2BS_BattleEndRet(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2BS_BattleEndRet.prototype.opts = null;
+
+        CS2BS_BattleEndRet.create = function create(properties) {
+            return new CS2BS_BattleEndRet(properties);
+        };
+
+        CS2BS_BattleEndRet.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            return writer;
+        };
+
+        CS2BS_BattleEndRet.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2BS_BattleEndRet.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_BattleEndRet();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2BS_BattleEndRet.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2BS_BattleEndRet.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            return null;
+        };
+
+        CS2BS_BattleEndRet.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2BS_BattleEndRet)
+                return object;
+            let message = new $root.Protos.CS2BS_BattleEndRet();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2BS_BattleEndRet.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            return message;
+        };
+
+        CS2BS_BattleEndRet.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            return object;
+        };
+
+        CS2BS_BattleEndRet.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2BS_BattleEndRet;
     })();
 
     Protos.CS2GC_PlayerInfo = (function() {

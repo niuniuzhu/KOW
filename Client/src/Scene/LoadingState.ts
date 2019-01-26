@@ -30,9 +30,12 @@ export class LoadingState extends SceneState {
 	 * @param ip BS IP
 	 * @param port BS port
 	 */
-	public ConnectToBS(gcNID: Long, ip: string, port: number) {
+	public ConnectToBS(gcNID: Long, ip: string, port: number): boolean {
+		if (Global.connector.bsConnector.connected) {
+			return false;
+		}
 		//在连接BS前就监听消息,由于一连接到BS就可能马上收到消息
-		Global.battleManager.Start();
+		Global.battleManager.Init();
 		const connector = Global.connector.bsConnector;
 		connector.onopen = () => {
 			Logger.Log("BS Connected");
@@ -75,5 +78,6 @@ export class LoadingState extends SceneState {
 		} else {
 			connector.Connect(ip, port);
 		}
+		return true;
 	}
 }

@@ -8,8 +8,10 @@ namespace BattleServer.Biz
 	{
 		public void OnCSSessionClosed( NetSessionBase session )
 		{
+			//清理所有用户
+			BS.instance.userMgr.OfflineAndDestroyAllUsers();
 			//结束所有战场
-			BS.instance.battleManager.StopAllBattles();
+			BS.instance.battleMgr.StopAllBattles();
 		}
 
 		/// <summary>
@@ -19,7 +21,7 @@ namespace BattleServer.Biz
 		{
 			Protos.CS2BS_BattleInfo battleInfo = ( Protos.CS2BS_BattleInfo )message;
 
-			BS.instance.battleManager.CreateBattle( battleInfo, ( bid, success ) =>
+			BS.instance.battleMgr.CreateBattle( battleInfo, ( bid, success ) =>
 			{
 				Protos.BS2CS_BattleInfoRet battleInfoRet = ProtoCreator.R_CS2BS_BattleInfo( battleInfo.Opts.Pid );
 				battleInfoRet.Bid = bid;

@@ -69,6 +69,7 @@ enum MsgID {
 	eCS2GS_KickGC = 5101;
 
 	eCS2BS_BattleInfo = 5200;
+	eCS2BS_BattleEndRet = 5201;
 
 	eCS2GC_BeginMatchRet = 5300;
 	eCS2GC_PlayerJoin = 5301;
@@ -168,6 +169,7 @@ message G_UserInfo {
 		"LS2DB_Exec":"DB2LS_ExecRet",
 		"GC2CS_BeginMatch":"CS2GC_BeginMatchRet",
 		"CS2BS_BattleInfo":"BS2CS_BattleInfoRet",
+		"BS2CS_BattleEnd":"CS2BS_BattleEndRet",
 		"GC2BS_RequestSnapshot":"BS2GC_RequestSnapshotRet",
 		"GC2BS_RequestFrameActions":"BS2GC_RequestFrameActionsRet"
 	}

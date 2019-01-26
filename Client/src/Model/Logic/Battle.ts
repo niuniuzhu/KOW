@@ -45,6 +45,7 @@ export class Battle implements ISnapshotable {
 	public get gladiatorRadius(): number { return this._gladiatorRadius; }
 	public get random(): FRandom { return this._random; }
 	public get calcManager(): CalcationManager { return this._calcManager; }
+	public get finished(): boolean { return this._finished; }
 
 	public chase: boolean = false;
 
@@ -59,8 +60,8 @@ export class Battle implements ISnapshotable {
 	private _gladiatorPos: FVec2;
 	private _gladiatorRadius: number;
 
+	private _finished: boolean = false;
 	private _destroied: boolean = true;
-	private _markToEnd: boolean = false;
 
 	private readonly _frameActionGroups: FrameActionGroup[] = [];
 	private readonly _champions: Champion[] = [];
@@ -128,7 +129,7 @@ export class Battle implements ISnapshotable {
 		this._nextKeyFrame = 0;
 		this._logicElapsed = 0;
 		this._realElapsed = 0;
-		this._markToEnd = false;
+		this._finished = false;
 
 		const defs = Defs.GetMap(this._mapID);
 		let arr = Hashtable.GetArray(defs, "born_pos");
@@ -330,7 +331,7 @@ export class Battle implements ISnapshotable {
 	 */
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.int32(this._frame);
-		writer.bool(this._markToEnd);
+		writer.bool(this._finished);
 		writer.double(this._random.seed);
 
 		//champions
@@ -373,7 +374,7 @@ export class Battle implements ISnapshotable {
 	 */
 	public DecodeSnapshot(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._frame = reader.int32();
-		this._markToEnd = reader.bool();
+		this._finished = reader.bool();
 		this._random.seed = reader.double();
 
 		//champions
@@ -715,7 +716,7 @@ export class Battle implements ISnapshotable {
 	 * 检查战场是否结束
 	 */
 	private CheckBattleEnd(): void {
-		if (this._markToEnd)
+		if (this._finished)
 			return;
 		let team0Win = false;
 		let team1Win = false;
@@ -767,7 +768,7 @@ export class Battle implements ISnapshotable {
 			//发送协议
 			Global.connector.bsConnector.Send(Protos.GC2BS_EndBattle, msg);
 
-			this._markToEnd = true;
+			this._finished = true;
 		}
 	}
 

@@ -3,7 +3,6 @@ using Core.Misc;
 using Google.Protobuf;
 using Shared;
 using Shared.Net;
-using System.Collections.Generic;
 using BSInfo = Shared.BSInfo;
 
 namespace CentralServer.Biz
@@ -17,17 +16,17 @@ namespace CentralServer.Biz
 			CS.instance.UpdateAppropriateBSInfo();
 
 			//通知客户端丢失bs
-			Protos.CS2GC_BSLose gcBattleEnd = ProtoCreator.Q_CS2GC_BSLose();
-			List<CSUser> users = CS.instance.battleStaging.GetUsers( session.logicID );
-			if ( users != null )
-			{
-				int count = users.Count;
-				for ( int i = 0; i < count; i++ )
-				{
-					CSUser user = users[i];
-					CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
-				}
-			}
+			//Protos.CS2GC_BSLose gcBattleEnd = ProtoCreator.Q_CS2GC_BSLose();
+			//List<CSUser> users = CS.instance.battleStaging.GetUsers( session.logicID );
+			//if ( users != null )
+			//{
+			//	int count = users.Count;
+			//	for ( int i = 0; i < count; i++ )
+			//	{
+			//		CSUser user = users[i];
+			//		CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
+			//	}
+			//}
 			//踢出所有连接到该BS的玩家
 			CS.instance.battleStaging.Remove( session.logicID );
 
@@ -90,6 +89,11 @@ namespace CentralServer.Biz
 
 			//移除指定BS里指定战场里的所有玩家
 			CS.instance.battleStaging.Remove( session.logicID, battleEnd.Bid );
+
+			//回应
+			Protos.CS2BS_BattleEndRet battleEndRet = ProtoCreator.R_BS2CS_BattleEnd( battleEnd.Opts.Pid );
+			session.Send( battleEndRet );
+
 			return ErrorCode.Success;
 		}
 

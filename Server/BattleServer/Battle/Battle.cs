@@ -26,9 +26,13 @@ namespace BattleServer.Battle
 		/// </summary>
 		public uint id { get; }
 		/// <summary>
-		/// 标志战场是否结束
+		/// 标记战场是否结束
 		/// </summary>
 		public bool finished { get; private set; }
+		/// <summary>
+		/// 标记战场主循环是否在运行
+		/// </summary>
+		public bool running { get; private set; }
 		/// <summary>
 		/// 帧率
 		/// </summary>
@@ -133,7 +137,15 @@ namespace BattleServer.Battle
 
 		public void Clear()
 		{
-			//在End方法已经清理了
+			int count = this._champions.Count;
+			for ( int i = 0; i < count; i++ )
+				this._champions[i].Dispose();
+			this._champions.Clear();
+			this._idToChampion.Clear();
+			this._frameActionMgr.Clear();
+			this._snapshotMgr.Clear();
+			this._battleEndProcessor.Clear();
+			this._tempSIDs.Clear();
 		}
 
 		/// <summary>
@@ -142,7 +154,6 @@ namespace BattleServer.Battle
 		internal void Init( BattleEntry battleEntry )
 		{
 			this.frame = 0;
-			this.finished = false;
 			this._lastUpdateTime = 0;
 
 			this.battleEntry = battleEntry;
@@ -157,7 +168,7 @@ namespace BattleServer.Battle
 			{
 				Champion champion = new Champion( this );
 				champion.rid = player.gcNID;
-				champion.user = BS.instance.userMgr.CreateUser( player.gcNID, this );
+				champion.user = BS.instance.userMgr.GetUser( player.gcNID );
 				this._champions.Add( champion );
 				this._idToChampion[champion.rid] = champion;
 			}
@@ -169,15 +180,6 @@ namespace BattleServer.Battle
 			this._stepLocker.Init( this, this.frameRate, this.keyframeStep );
 			//初始化战场结束处理器
 			this._battleEndProcessor.Init( this );
-		}
-
-		/// <summary>
-		/// 战场开始
-		/// </summary>
-		internal void Start()
-		{
-			this._sw.Start();
-			this._task = Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
 		}
 
 		/// <summary>
@@ -197,97 +199,94 @@ namespace BattleServer.Battle
 		}
 
 		/// <summary>
-		/// 清理战场
+		/// 战场开始
 		/// </summary>
-		private void Stop()
+		internal void Start()
 		{
-			this.finished = true;
-			if ( this._task != null )
-			{
-				this._task.Wait();
-				this._task = null;
-			}
-			this._sw.Stop();
-			this._sw.Reset();
-			this._stepLocker.Clear();
-		}
-
-		internal void End()
-		{
-			int count = this._champions.Count;
-			for ( int i = 0; i < count; i++ )
-				this._champions[i].Dispose();
-			this._champions.Clear();
-			this._idToChampion.Clear();
-			this._frameActionMgr.Clear();
-			this._snapshotMgr.Clear();
-			this._battleEndProcessor.Clear();
-			this._tempSIDs.Clear();
+			this.running = true;
+			this.finished = false;
+			this._task = Task.Factory.StartNew( this.AsyncLoop, TaskCreationOptions.LongRunning );
+			this._sw.Start();
 		}
 
 		/// <summary>
 		/// 中断战场
 		/// </summary>
-		internal void Interrupt()
+		internal void Stop()
 		{
-			if ( this.finished )
+			if ( !this.running )
 				return;
-			this.Stop();
+			this.running = false;
+			this._task.Wait();
+			this._task = null;
+			this._sw.Stop();
+			this._sw.Reset();
+			this._stepLocker.Clear();
 		}
 
-		private void DecodeSnapshot( Google.Protobuf.ByteString data )
+		/// <summary>
+		/// 战场主循环
+		/// 此函数为异步调用函数
+		/// </summary>
+		private void AsyncLoop()
 		{
-			Google.Protobuf.CodedInputStream reader = new Google.Protobuf.CodedInputStream( data.ToByteArray() );
-			reader.ReadInt32();//frame
-			reader.ReadBool();//marktoend
-
-			int count = reader.ReadInt32();//champions
-			for ( int i = 0; i < count; i++ )
+			while ( this.running )
 			{
-				ulong rid = reader.ReadUInt64();
-				Champion champion = this.GetChampion( rid );
-				champion.DecodeSnapshot( rid, false, reader );
+				long elasped = this._sw.ElapsedMilliseconds;
+				long dt = elasped - this._lastUpdateTime;
+				this._stepLocker.Update( elasped );
+				this._lastUpdateTime = elasped;
+				Thread.Sleep( 1 );
 			}
 		}
 
 		/// <summary>
-		/// 获取指定id实体
+		/// 关键帧调用
 		/// </summary>
-		public Champion GetChampion( ulong id )
+		/// <param name="frame">当前帧数</param>
+		/// <param name="elasped">总流逝时间</param>
+		/// <param name="dt">流逝时间</param>
+		internal void OnKeyframe( int frame, long elasped, int dt )
 		{
-			this._idToChampion.TryGetValue( id, out Champion champion );
-			return champion;
+			//检查是否有玩家提交了结束请求
+			if ( this._battleEndProcessor.hasRecord )
+			{
+				//检查并处理该请求
+				//该方法会设置一个超时时间,时间内将等待所有玩家提交请求
+				Google.Protobuf.ByteString data = this._battleEndProcessor.Process( frame, dt );
+				if ( data != null )//有效的结束请求
+				{
+					//解码快照,把结束状态保存到内存
+					this.DecodeSnapshot( data );
+					//处理战场结果
+					this.ProcessResult();
+					//标记为结束
+					this.finished = true;
+				}
+			}
+			this._frameActionMgr.Save( frame );
+			//把玩家的操作指令广播到所有玩家
+			Protos.BS2GC_FrameAction action = ProtoCreator.Q_BS2GC_FrameAction();
+			action.Frame = frame;
+			action.Action = this._frameActionMgr.latestHistory;
+			this.Broadcast( action );
+
+			if ( elasped >= this.battleTime && !this.finished )
+			{
+				//标记为结束
+				this.finished = true;
+			}
 		}
 
 		/// <summary>
-		/// 获取指定索引的玩家
-		/// 该函数是线程安全的
+		/// 逻辑更新
 		/// </summary>
-		public Champion GetChampionAt( int index )
+		/// <param name="frame">当前帧数</param>
+		/// <param name="elasped">总流逝时间</param>
+		/// <param name="dt">流逝时间</param>
+		internal void UpdateLogic( int frame, long elasped, int dt )
 		{
-			if ( index < 0 || index >= this._champions.Count )
-				return null;
-			return this._champions[index];
-		}
-
-		/// <summary>
-		/// 以字符串形式列出所有实体信息
-		/// </summary>
-		public string ListChampions()
-		{
-			StringBuilder sb = new StringBuilder();
-			foreach ( Champion champion in this._champions )
-				sb.AppendLine( champion.ToString() );
-			return sb.ToString();
-		}
-
-		public string Dump()
-		{
-			string str = string.Empty;
-			str += $"frame:{this.frame}\n";
-			foreach ( Champion champion in this._champions )
-				str += champion.Dump();
-			return str;
+			this.frame = frame;
 		}
 
 		/// <summary>
@@ -397,63 +396,59 @@ namespace BattleServer.Battle
 			this._tempSIDs.Clear();
 		}
 
-		/// <summary>
-		/// 逻辑更新
-		/// </summary>
-		/// <param name="frame">当前帧数</param>
-		/// <param name="dt">流逝时间</param>
-		internal void UpdateLogic( int frame, int dt )
+		private void DecodeSnapshot( Google.Protobuf.ByteString data )
 		{
-			this.frame = frame;
+			Google.Protobuf.CodedInputStream reader = new Google.Protobuf.CodedInputStream( data.ToByteArray() );
+			reader.ReadInt32();//frame
+			reader.ReadBool();//marktoend
+
+			int count = reader.ReadInt32();//champions
+			for ( int i = 0; i < count; i++ )
+			{
+				ulong rid = reader.ReadUInt64();
+				Champion champion = this.GetChampion( rid );
+				champion.DecodeSnapshot( rid, false, reader );
+			}
 		}
 
 		/// <summary>
-		/// 关键帧调用
+		/// 获取指定id实体
 		/// </summary>
-		/// <param name="frame">当前帧数</param>
-		/// <param name="dt">流逝时间</param>
-		internal void OnKeyframe( int frame, int dt )
+		public Champion GetChampion( ulong id )
 		{
-			//检查是否有玩家提交了结束请求
-			if ( this._battleEndProcessor.hasRecord )
-			{
-				//检查并处理该请求
-				//该方法会设置一个超时时间,时间内将等待所有玩家提交请求
-				Google.Protobuf.ByteString data = this._battleEndProcessor.Process( frame, dt );
-				if ( data != null )
-				{
-					this.DecodeSnapshot( data );
-					this.ProcessResult();
-					this.Stop();
-				}
-			}
-			this._frameActionMgr.Save( frame );
-			//把玩家的操作指令广播到所有玩家
-			Protos.BS2GC_FrameAction action = ProtoCreator.Q_BS2GC_FrameAction();
-			action.Frame = frame;
-			action.Action = this._frameActionMgr.latestHistory;
-			this.Broadcast( action );
+			this._idToChampion.TryGetValue( id, out Champion champion );
+			return champion;
 		}
 
 		/// <summary>
-		/// 战场主循环
-		/// 此函数为异步调用函数
+		/// 获取指定索引的玩家
+		/// 该函数是线程安全的
 		/// </summary>
-		private void AsyncLoop()
+		public Champion GetChampionAt( int index )
 		{
-			while ( !this.finished )
-			{
-				long now = this._sw.ElapsedMilliseconds;
-				long dt = now - this._lastUpdateTime;
-				this._stepLocker.Update( dt );
-				this._lastUpdateTime = now;
-				Thread.Sleep( 1 );
-				if ( now >= this.battleTime )
-				{
-					this.finished = true;
-					break;
-				}
-			}
+			if ( index < 0 || index >= this._champions.Count )
+				return null;
+			return this._champions[index];
+		}
+
+		/// <summary>
+		/// 以字符串形式列出所有实体信息
+		/// </summary>
+		public string ListChampions()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( Champion champion in this._champions )
+				sb.AppendLine( champion.ToString() );
+			return sb.ToString();
+		}
+
+		public string Dump()
+		{
+			string str = string.Empty;
+			str += $"frame:{this.frame}\n";
+			foreach ( Champion champion in this._champions )
+				str += champion.Dump();
+			return str;
 		}
 
 		/// <summary>

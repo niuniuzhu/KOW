@@ -11,11 +11,6 @@ namespace BattleServer.User
 		public readonly ulong gcNID;
 
 		/// <summary>
-		/// 玩家所在战场
-		/// </summary>
-		public readonly Battle.Battle battle;
-
-		/// <summary>
 		/// GC连接的sessionID
 		/// </summary>
 		public uint gcSID { get; private set; }
@@ -24,6 +19,11 @@ namespace BattleServer.User
 		/// 是否连线中
 		/// </summary>
 		public bool isOnline { get; private set; }
+
+		/// <summary>
+		/// 玩家所在战场
+		/// </summary>
+		public readonly Battle.Battle battle;
 
 		public BSUser( ulong gcNID, Battle.Battle battle )
 		{

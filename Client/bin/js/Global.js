@@ -13,7 +13,6 @@ define(["require", "exports", "./Graphic", "./Model/BattleManager", "./Net/Conne
             this._graphic.Init();
             this._uiManager.Init();
             this._sceneManager.Init();
-            this._battleManager.Init();
         }
     }
     Global._connector = new Connector_1.Connector();

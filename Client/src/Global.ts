@@ -26,6 +26,5 @@ export class Global {
 		this._graphic.Init();
 		this._uiManager.Init();
 		this._sceneManager.Init();
-		this._battleManager.Init();
 	}
 }

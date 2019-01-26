@@ -12,8 +12,8 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this.chase = false;
             this._bornPoses = [];
             this._bornDirs = [];
+            this._finished = false;
             this._destroied = true;
-            this._markToEnd = false;
             this._frameActionGroups = [];
             this._champions = [];
             this._idToChampion = new Map();
@@ -38,6 +38,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         get gladiatorRadius() { return this._gladiatorRadius; }
         get random() { return this._random; }
         get calcManager() { return this._calcManager; }
+        get finished() { return this._finished; }
         Destroy() {
             if (this._destroied)
                 return;
@@ -75,7 +76,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._nextKeyFrame = 0;
             this._logicElapsed = 0;
             this._realElapsed = 0;
-            this._markToEnd = false;
+            this._finished = false;
             const defs = Defs_1.Defs.GetMap(this._mapID);
             let arr = Hashtable_1.Hashtable.GetArray(defs, "born_pos");
             let count = arr.length;
@@ -217,7 +218,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         }
         EncodeSnapshot(writer) {
             writer.int32(this._frame);
-            writer.bool(this._markToEnd);
+            writer.bool(this._finished);
             writer.double(this._random.seed);
             let count = this._champions.length;
             writer.int32(count);
@@ -247,7 +248,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         }
         DecodeSnapshot(reader) {
             this._frame = reader.int32();
-            this._markToEnd = reader.bool();
+            this._finished = reader.bool();
             this._random.seed = reader.double();
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
@@ -468,7 +469,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             }
         }
         CheckBattleEnd() {
-            if (this._markToEnd)
+            if (this._finished)
                 return;
             let team0Win = false;
             let team1Win = false;
@@ -510,7 +511,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 msg.winTeam = winTeam;
                 msg.snapshot = data;
                 Global_1.Global.connector.bsConnector.Send(protos_1.Protos.GC2BS_EndBattle, msg);
-                this._markToEnd = true;
+                this._finished = true;
             }
         }
         HandleSnapShot(ret) {

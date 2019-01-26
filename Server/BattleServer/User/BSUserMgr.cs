@@ -1,5 +1,6 @@
 ﻿using Core.Misc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BattleServer.User
@@ -73,6 +74,16 @@ namespace BattleServer.User
 		{
 			this._gcNIDToUser.Remove( user.gcNID );
 			Logger.Log( $"destroy user:{user.gcNID}" );
+		}
+
+		public void OfflineAndDestroyAllUsers()
+		{
+			BSUser[] users = this._gcNIDToUser.Values.ToArray();
+			foreach ( BSUser user in users )
+			{
+				this.Offline( user );
+				this.DestroyUser( user );
+			}
 		}
 
 		/// <summary>

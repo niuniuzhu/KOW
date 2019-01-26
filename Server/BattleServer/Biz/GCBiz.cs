@@ -87,7 +87,7 @@ namespace BattleServer.Biz
 			if ( user == null )
 				ret.Result = Protos.BS2GC_RequestSnapshotRet.Types.EResult.InvalidUser;
 			else
-				BS.instance.battleManager.HandleRequestSnapshot( user.battle, request, ret );
+				BS.instance.battleMgr.HandleRequestSnapshot( user.battle, request, ret );
 			BS.instance.netSessionMgr.Send( session.id, ret );
 
 			return ErrorCode.Success;
@@ -97,7 +97,7 @@ namespace BattleServer.Biz
 		{
 			BSUser user = BS.instance.userMgr.GetUser( session.id );
 			if ( user != null )
-				BS.instance.battleManager.HandleFrameAction( user.gcNID, user.battle, ( Protos.GC2BS_FrameAction )message );
+				BS.instance.battleMgr.HandleFrameAction( user.gcNID, user.battle, ( Protos.GC2BS_FrameAction )message );
 			return ErrorCode.Success;
 		}
 
@@ -108,7 +108,7 @@ namespace BattleServer.Biz
 			{
 				Protos.GC2BS_RequestFrameActions request = ( Protos.GC2BS_RequestFrameActions )message;
 				Protos.BS2GC_RequestFrameActionsRet ret = ProtoCreator.R_GC2BS_RequestFrameActions( request.Opts.Pid );
-				BS.instance.battleManager.HandleRequestFrameActions( user.battle, request.From, request.To, ret );
+				BS.instance.battleMgr.HandleRequestFrameActions( user.battle, request.From, request.To, ret );
 				BS.instance.netSessionMgr.Send( user.gcSID, ret );
 			}
 			return ErrorCode.Success;
@@ -120,7 +120,7 @@ namespace BattleServer.Biz
 			if ( user != null )
 			{
 				Protos.GC2BS_CommitSnapshot request = ( Protos.GC2BS_CommitSnapshot )message;
-				BS.instance.battleManager.HandleCommitSnapshot( user.battle, user.gcNID, request.Frame, request.Data );
+				BS.instance.battleMgr.HandleCommitSnapshot( user.battle, user.gcNID, request.Frame, request.Data );
 			}
 			return ErrorCode.Success;
 		}
@@ -131,7 +131,7 @@ namespace BattleServer.Biz
 			if ( user != null )
 			{
 				Protos.GC2BS_EndBattle request = ( Protos.GC2BS_EndBattle )message;
-				BS.instance.battleManager.HandleBattleEnd( user.battle, user.gcNID, request );
+				BS.instance.battleMgr.HandleBattleEnd( user.battle, user.gcNID, request );
 			}
 			return ErrorCode.Success;
 		}

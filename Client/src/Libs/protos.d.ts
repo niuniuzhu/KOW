@@ -210,6 +210,7 @@ export namespace Protos {
         eCS2GS_GCLoginRet = 5100,
         eCS2GS_KickGC = 5101,
         eCS2BS_BattleInfo = 5200,
+        eCS2BS_BattleEndRet = 5201,
         eCS2GC_BeginMatchRet = 5300,
         eCS2GC_PlayerJoin = 5301,
         eCS2GC_PlayerLeave = 5302,
@@ -570,6 +571,24 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleInfo;
         public static toObject(message: Protos.CS2BS_BattleInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface ICS2BS_BattleEndRet {
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    class CS2BS_BattleEndRet implements ICS2BS_BattleEndRet {
+        constructor(properties?: Protos.ICS2BS_BattleEndRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public static create(properties?: Protos.ICS2BS_BattleEndRet): Protos.CS2BS_BattleEndRet;
+        public static encode(message: Protos.ICS2BS_BattleEndRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2BS_BattleEndRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2BS_BattleEndRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2BS_BattleEndRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleEndRet;
+        public static toObject(message: Protos.CS2BS_BattleEndRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

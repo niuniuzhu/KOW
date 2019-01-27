@@ -54,7 +54,7 @@ export class GestureState2 {
 	public OnExit(): void {
 		this._touchID = -1;
 		this._joystick.off(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
-		this._joystick.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
+		this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
 		this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
 	}
 
@@ -65,7 +65,7 @@ export class GestureState2 {
 		if (this._touchID != -1)
 			return;
 		this._touchID = e.touchId;
-		this._joystick.on(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
+		this._root.on(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
 		this._root.on(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
 	}
 
@@ -73,7 +73,7 @@ export class GestureState2 {
 		if (e.touchId == this._touchID) {
 			this._touchID = -1;
 			this._joystick.Reset();
-			this._joystick.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
+			this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
 			this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
 		}
 	}

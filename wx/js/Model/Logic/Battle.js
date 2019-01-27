@@ -1,3 +1,4 @@
+import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
@@ -11,12 +12,12 @@ import { Hashtable } from "../../RC/Utils/Hashtable";
 import { Logger } from "../../RC/Utils/Logger";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { Defs } from "../Defs";
-import { FrameActionGroup } from "./FrameActionGroup";
 import { Bullet } from "./Bullet";
 import { CalcationManager } from "./CalcationManager";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
+import { FrameActionGroup } from "./FrameActionGroup";
 import { HPPacket } from "./HPPacket";
 import { SceneItem } from "./SceneItem";
 export class Battle {
@@ -355,7 +356,7 @@ export class Battle {
             params.rid = playerInfo.gcNID;
             params.id = playerInfo.actorID;
             params.team = playerInfo.team;
-            params.name = playerInfo.nickname;
+            params.name = playerInfo.nickname || Consts.DEFAULT_NICK_NAME;
             params.position = this._bornPoses[params.team];
             params.direction = this._bornDirs[params.team];
             const player = this.CreateChampion(params);

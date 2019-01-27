@@ -43,7 +43,7 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
         OnExit() {
             this._touchID = -1;
             this._joystick.off(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
-            this._joystick.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
+            this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
             this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
         }
         OnUpdate(dt) {
@@ -52,14 +52,14 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
             if (this._touchID != -1)
                 return;
             this._touchID = e.touchId;
-            this._joystick.on(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
+            this._root.on(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
             this._root.on(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
         }
         OnDragEnd(e) {
             if (e.touchId == this._touchID) {
                 this._touchID = -1;
                 this._joystick.Reset();
-                this._joystick.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
+                this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);
                 this._root.off(Laya.Event.MOUSE_UP, this, this.OnDragEnd);
             }
         }

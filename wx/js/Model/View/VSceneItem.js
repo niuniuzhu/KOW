@@ -7,6 +7,6 @@ export class VSceneItem extends VEntity {
     }
     AfterLoadCDef(cdefs) {
         this.DisplayRoot();
-        this._animationProxy.Play(Hashtable.GetNumber(cdefs, "animation"), 0, 1, false);
+        this.animationProxy.Play(Hashtable.GetNumber(cdefs, "animation"), 0, 1, false);
     }
 }

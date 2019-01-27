@@ -22,6 +22,7 @@ export class VEntity {
     get rid() { return this._rid; }
     get id() { return this._id; }
     get battle() { return this._battle; }
+    get hudOffsetY() { return this._hudOffsetY; }
     get root() { return this._root; }
     get animationProxy() { return this._animationProxy; }
     get markToDestroy() { return this._markToDestroy; }
@@ -55,6 +56,7 @@ export class VEntity {
         this.AfterLoadDef(defs);
         const cdefs = this.LoadCDef();
         this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
+        this._hudOffsetY = Hashtable.GetNumber(cdefs, "hud_offset_y");
         this._pivot = Hashtable.GetVec2(cdefs, "pivot") || new Vec2(0.5, 0.5);
         const modelID = Hashtable.GetNumber(cdefs, "model", -1);
         if (modelID >= 0) {

@@ -7,7 +7,7 @@ define(["require", "exports", "../../RC/Utils/Hashtable", "../CDefs", "./VEntity
         }
         AfterLoadCDef(cdefs) {
             this.DisplayRoot();
-            this._animationProxy.Play(Hashtable_1.Hashtable.GetNumber(cdefs, "animation"), 0, 1, false);
+            this.animationProxy.Play(Hashtable_1.Hashtable.GetNumber(cdefs, "animation"), 0, 1, false);
         }
     }
     exports.VSceneItem = VSceneItem;

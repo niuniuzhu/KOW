@@ -1,4 +1,5 @@
 export class Consts {
+	public static readonly DEFAULT_NICK_NAME: string = "guest";
 	public static readonly SCREEN_WIDTH: number = 1280;
 	public static readonly SCREEN_HEIGHT: number = 720;
 	public static readonly FRAME_ACTION_SEND_INTERVAL: number = 60;

@@ -78,6 +78,10 @@ define(["require", "exports", "../../RC/Framework/FSM/FSM", "../../RC/Math/Vec2"
             return; this._t_def_add = value; this.OnAttrChange(Attribute_1.EAttr.S_DEF_ADD, value); }
         set t_speed_add(value) { if (this._t_speed_add == value)
             return; this._t_speed_add = value; this.OnAttrChange(Attribute_1.EAttr.S_SPEED_ADD, value); }
+        Destroy() {
+            this._hud.Destroy();
+            super.Destroy();
+        }
         LoadDef() {
             return Defs_1.Defs.GetEntity(this.id);
         }
@@ -120,6 +124,7 @@ define(["require", "exports", "../../RC/Framework/FSM/FSM", "../../RC/Math/Vec2"
             }
             this.team = reader.int32();
             this.name = reader.string();
+            this._hud.name = this.name;
             this.hp = reader.int32();
             this.mhp = reader.int32();
             this.mp = reader.double();

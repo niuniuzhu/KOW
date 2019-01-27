@@ -1,9 +1,9 @@
+import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
 import { Protos } from "../../Libs/protos";
 import { ProtoCreator } from "../../Net/ProtoHelper";
-import Queue from "../../RC/Collections/Queue";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FRandom } from "../../RC/FMath/FRandom";
 import { FRect } from "../../RC/FMath/FRect";
@@ -13,15 +13,14 @@ import { Logger } from "../../RC/Utils/Logger";
 import { SyncEvent } from "../BattleEvent/SyncEvent";
 import { BattleInfo } from "../BattleInfo";
 import { Defs } from "../Defs";
-import { FrameAction } from "./FrameAction";
-import { FrameActionGroup } from "./FrameActionGroup";
-import { ISnapshotable } from "./ISnapshotable";
 import { Bullet } from "./Bullet";
 import { CalcationManager } from "./CalcationManager";
 import { Champion } from "./Champion";
 import { Emitter } from "./Emitter";
 import { EntityInitParams } from "./Entity";
+import { FrameActionGroup } from "./FrameActionGroup";
 import { HPPacket } from "./HPPacket";
+import { ISnapshotable } from "./ISnapshotable";
 import { SceneItem } from "./SceneItem";
 
 export class Battle implements ISnapshotable {
@@ -503,7 +502,7 @@ export class Battle implements ISnapshotable {
 			params.rid = playerInfo.gcNID;
 			params.id = playerInfo.actorID;
 			params.team = playerInfo.team;
-			params.name = playerInfo.nickname;
+			params.name = playerInfo.nickname || Consts.DEFAULT_NICK_NAME;
 			params.position = this._bornPoses[params.team];
 			params.direction = this._bornDirs[params.team];
 			const player = this.CreateChampion(params);

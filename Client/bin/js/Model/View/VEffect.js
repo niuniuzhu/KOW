@@ -27,7 +27,7 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", 
             this._animationID = Hashtable_1.Hashtable.GetNumber(cdefs, "animation");
             this._lifeTime = Hashtable_1.Hashtable.GetNumber(cdefs, "lifetime");
             if (this._lifeTime == 0) {
-                const setting = this._animationProxy.GetSetting(this._animationID);
+                const setting = this.animationProxy.GetSetting(this._animationID);
                 this._lifeTime = setting.length * setting.interval;
             }
         }
@@ -80,12 +80,12 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", 
             this._time = 0;
             this.markToDestroy = false;
             this.DisplayRoot();
-            this._animationProxy.Play(this._animationID, 0, 1, true);
+            this.animationProxy.Play(this._animationID, 0, 1, true);
         }
         OnDespawn() {
             this._followOffset = null;
             this._targetID = null;
-            this._root.removeFromParent();
+            this.root.removeFromParent();
         }
     }
     exports.VEffect = VEffect;

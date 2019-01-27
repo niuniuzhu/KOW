@@ -97,6 +97,11 @@ export class VChampion extends VEntity {
 		this._hud = new HUD(this);
 	}
 
+	public Destroy(): void {
+		this._hud.Destroy();
+		super.Destroy()
+	}
+
 	protected LoadDef(): Hashtable {
 		return Defs.GetEntity(this.id);
 	}
@@ -145,6 +150,7 @@ export class VChampion extends VEntity {
 		}
 		this.team = reader.int32();
 		this.name = reader.string();
+		this._hud.name = this.name;
 		this.hp = reader.int32();
 		this.mhp = reader.int32();
 		this.mp = reader.double();

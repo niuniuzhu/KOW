@@ -45,7 +45,7 @@ export class VEffect extends VEntity {
 		this._animationID = Hashtable.GetNumber(cdefs, "animation");
 		this._lifeTime = Hashtable.GetNumber(cdefs, "lifetime");
 		if (this._lifeTime == 0) {
-			const setting = this._animationProxy.GetSetting(this._animationID);
+			const setting = this.animationProxy.GetSetting(this._animationID);
 			this._lifeTime = setting.length * setting.interval;
 		}
 	}
@@ -104,12 +104,12 @@ export class VEffect extends VEntity {
 		this._time = 0;
 		this.markToDestroy = false;
 		this.DisplayRoot();
-		this._animationProxy.Play(this._animationID, 0, 1, true);
+		this.animationProxy.Play(this._animationID, 0, 1, true);
 	}
 
 	public OnDespawn(): void {
 		this._followOffset = null;
 		this._targetID = null;
-		this._root.removeFromParent();
+		this.root.removeFromParent();
 	}
 }

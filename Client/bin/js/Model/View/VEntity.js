@@ -17,6 +17,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Graphic", "
         get rid() { return this._rid; }
         get id() { return this._id; }
         get battle() { return this._battle; }
+        get hudOffsetY() { return this._hudOffsetY; }
         get root() { return this._root; }
         get animationProxy() { return this._animationProxy; }
         get markToDestroy() { return this._markToDestroy; }
@@ -50,6 +51,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Graphic", "
             this.AfterLoadDef(defs);
             const cdefs = this.LoadCDef();
             this._modelLevel = Hashtable_1.Hashtable.GetNumber(cdefs, "model_layer");
+            this._hudOffsetY = Hashtable_1.Hashtable.GetNumber(cdefs, "hud_offset_y");
             this._pivot = Hashtable_1.Hashtable.GetVec2(cdefs, "pivot") || new Vec2_1.Vec2(0.5, 0.5);
             const modelID = Hashtable_1.Hashtable.GetNumber(cdefs, "model", -1);
             if (modelID >= 0) {

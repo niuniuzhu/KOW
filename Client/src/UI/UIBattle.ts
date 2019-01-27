@@ -1,3 +1,4 @@
+import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { BattleInfo } from "../Model/BattleInfo";
@@ -81,7 +82,7 @@ export class UIBattle implements IUIModule {
 		for (const playerInfo of battleInfo.playerInfos) {
 			if (playerInfo.gcNID.equals(battleInfo.playerID)) {
 				this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
-				this._root.getChild("nickname").asTextField.text = playerInfo.nickname;
+				this._root.getChild("nickname").asTextField.text = playerInfo.nickname || Consts.DEFAULT_NICK_NAME;
 				break;
 			}
 		}
@@ -144,7 +145,7 @@ export class UIBattle implements IUIModule {
 			com = this._endBattle.getChild("n1").asCom;
 			this._endBattle.getController("c1").selectedIndex = 1;
 		}
-
+		com.getTransition("t0").play();
 		const confirmBtn = com.getChild("confirm");
 		confirmBtn.onClick(this, () => {
 			callback();

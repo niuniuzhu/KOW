@@ -125,6 +125,7 @@
 		"e0": {
 			"model": 0,
 			"model_layer": 1,
+			"hud_offset_y": -100,
 			"states": {
 				"0": {
 					"actions": [

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "./FrameActionGroup", "./Bullet", "./CalcationManager", "./Champion", "./Emitter", "./Entity", "./HPPacket", "./SceneItem"], function (require, exports, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, FrameActionGroup_1, Bullet_1, CalcationManager_1, Champion_1, Emitter_1, Entity_1, HPPacket_1, SceneItem_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/long", "../../Libs/protobufjs", "../../Libs/protos", "../../Net/ProtoHelper", "../../RC/FMath/FMathUtils", "../../RC/FMath/FRandom", "../../RC/FMath/FRect", "../../RC/FMath/FVec2", "../../RC/Utils/Hashtable", "../../RC/Utils/Logger", "../BattleEvent/SyncEvent", "../Defs", "./Bullet", "./CalcationManager", "./Champion", "./Emitter", "./Entity", "./FrameActionGroup", "./HPPacket", "./SceneItem"], function (require, exports, Consts_1, Global_1, Long, $protobuf, protos_1, ProtoHelper_1, FMathUtils_1, FRandom_1, FRect_1, FVec2_1, Hashtable_1, Logger_1, SyncEvent_1, Defs_1, Bullet_1, CalcationManager_1, Champion_1, Emitter_1, Entity_1, FrameActionGroup_1, HPPacket_1, SceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
@@ -337,7 +337,7 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                 params.rid = playerInfo.gcNID;
                 params.id = playerInfo.actorID;
                 params.team = playerInfo.team;
-                params.name = playerInfo.nickname;
+                params.name = playerInfo.nickname || Consts_1.Consts.DEFAULT_NICK_NAME;
                 params.position = this._bornPoses[params.team];
                 params.direction = this._bornDirs[params.team];
                 const player = this.CreateChampion(params);

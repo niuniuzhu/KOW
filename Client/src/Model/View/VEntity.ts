@@ -13,6 +13,7 @@ export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
 	public get id(): number { return this._id; }
 	public get battle(): VBattle { return this._battle; }
+	public get hudOffsetY(): number { return this._hudOffsetY; }
 	public get root(): fairygui.GComponent { return this._root; }
 	public get animationProxy(): AnimationProxy { return this._animationProxy; }
 	public get markToDestroy(): boolean { return this._markToDestroy; }
@@ -42,10 +43,11 @@ export abstract class VEntity {
 	private _rid: Long;
 	protected _id: number;
 	private _modelLevel: ModelLayer;
+	private _hudOffsetY: number;
 	private _pivot: Vec2;
 	private _shaker: Shaker;
-	protected readonly _root = new fairygui.GComponent();
-	protected _animationProxy: AnimationProxy = null;
+	private readonly _root = new fairygui.GComponent();
+	private _animationProxy: AnimationProxy = null;
 
 	private readonly _position: Vec2 = Vec2.zero;
 	private readonly _worldPosition: Vec2 = Vec2.zero;
@@ -74,6 +76,7 @@ export abstract class VEntity {
 
 		const cdefs = this.LoadCDef();
 		this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
+		this._hudOffsetY = Hashtable.GetNumber(cdefs, "hud_offset_y");
 		this._pivot = Hashtable.GetVec2(cdefs, "pivot") || new Vec2(0.5, 0.5);
 		//加载动画数据
 		const modelID = Hashtable.GetNumber(cdefs, "model", -1);

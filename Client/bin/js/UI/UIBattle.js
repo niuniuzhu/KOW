@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick"], function (require, exports, Global_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1) {
+define(["require", "exports", "../Consts", "../Global", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick"], function (require, exports, Consts_1, Global_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
@@ -48,7 +48,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
             for (const playerInfo of battleInfo.playerInfos) {
                 if (playerInfo.gcNID.equals(battleInfo.playerID)) {
                     this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
-                    this._root.getChild("nickname").asTextField.text = playerInfo.nickname;
+                    this._root.getChild("nickname").asTextField.text = playerInfo.nickname || Consts_1.Consts.DEFAULT_NICK_NAME;
                     break;
                 }
             }
@@ -100,6 +100,7 @@ define(["require", "exports", "../Global", "../Model/BattleEvent/UIEvent", "../M
                 com = this._endBattle.getChild("n1").asCom;
                 this._endBattle.getController("c1").selectedIndex = 1;
             }
+            com.getTransition("t0").play();
             const confirmBtn = com.getChild("confirm");
             confirmBtn.onClick(this, () => {
                 callback();

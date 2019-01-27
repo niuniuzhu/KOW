@@ -143,12 +143,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                 if (this._lBattle.finished) {
                     return;
                 }
-                if (e instanceof CloseEvent) {
-                    Logger_1.Logger.Log(`bs lost,code:${e.code},reason:${e.reason}`);
-                }
-                else {
-                    Logger_1.Logger.Log(`bs error`);
-                }
+                Logger_1.Logger.Log(`bs error`);
                 if (Global_1.Global.connector.gsConnector.connected) {
                     Global_1.Global.connector.gsConnector.Close();
                 }

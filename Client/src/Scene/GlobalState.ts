@@ -23,12 +23,7 @@ export class GlobalState extends SceneState {
 		if (Global.connector.bsConnector.connected) {
 			Global.connector.bsConnector.Close();
 		}
-		if (e instanceof CloseEvent) {
-			Logger.Log(`gs lost,code:${e.code},reason:${e.reason}`);
-		}
-		else {
-			Logger.Log(`gs error`);
-		}
+		Logger.Log(`gs error`);
 		UIAlert.Show("与服务器断开连接", this.BackToLogin.bind(this));
 	}
 

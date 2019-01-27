@@ -152,12 +152,7 @@ export class BattleManager {
             if (this._lBattle.finished) {
                 return;
             }
-            if (e instanceof CloseEvent) {
-                Logger.Log(`bs lost,code:${e.code},reason:${e.reason}`);
-            }
-            else {
-                Logger.Log(`bs error`);
-            }
+            Logger.Log(`bs error`);
             if (Global.connector.gsConnector.connected) {
                 Global.connector.gsConnector.Close();
             }

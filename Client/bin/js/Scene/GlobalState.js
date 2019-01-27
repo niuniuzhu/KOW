@@ -16,12 +16,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             if (Global_1.Global.connector.bsConnector.connected) {
                 Global_1.Global.connector.bsConnector.Close();
             }
-            if (e instanceof CloseEvent) {
-                Logger_1.Logger.Log(`gs lost,code:${e.code},reason:${e.reason}`);
-            }
-            else {
-                Logger_1.Logger.Log(`gs error`);
-            }
+            Logger_1.Logger.Log(`gs error`);
             UIAlert_1.UIAlert.Show("与服务器断开连接", this.BackToLogin.bind(this));
         }
         HandleKick(message) {

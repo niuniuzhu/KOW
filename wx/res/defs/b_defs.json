@@ -99,6 +99,13 @@
 					"length": 6,
 					"play_mode": 1,
 					"interval": 100
+				},
+				{
+					"id": 11,
+					"name": "dazhaodutiao",
+					"length": 1,
+					"play_mode": 1,
+					"interval": 100
 				}
 			]
 		},
@@ -118,6 +125,7 @@
 		"e0": {
 			"model": 0,
 			"model_layer": 1,
+			"hud_offset_y": -100,
 			"states": {
 				"0": {
 					"actions": [
@@ -150,11 +158,12 @@
 								0,
 								0
 							],
-							"trigger_time": 400,
+							"trigger_time": 350,
 							"attach_type": 1,
 							"follow_pos": true,
 							"follow_rot": true,
-							"always_follow": false
+							"always_follow": false,
+							"destroy_type": 0
 						}
 					]
 				},
@@ -165,7 +174,23 @@
 							"animation": 3
 						},
 						{
-							"id": 4
+							"id": 4,
+							"effect": 3,
+							"offset": [
+								0,
+								0
+							],
+							"trigger_time": 0,
+							"attach_type": 1,
+							"follow_pos": true,
+							"follow_rot": true,
+							"always_follow": false,
+							"destroy_type": 1,
+							"formula": "3000*(50+{0}*0.03)",
+							"shake": true,
+							"shake_amplitude": 3,
+							"shake_frequency": 40,
+							"shake_duration": -1
 						}
 					]
 				},
@@ -254,6 +279,16 @@
 			"model": 0,
 			"model_layer": 3,
 			"animation": 10
+		},
+		"fx3": {
+			"model": 0,
+			"model_layer": 2,
+			"pivot": [
+				0.5,
+				1
+			],
+			"animation": 11,
+			"lifetime": -1
 		}
 	},
 	"scene_item": {

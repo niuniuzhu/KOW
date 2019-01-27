@@ -9,7 +9,7 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
                 const cfgJson = JsonHelper_1.JsonHelper.Parse(config);
                 Global_1.Global.local = Hashtable_1.Hashtable.GetBool(cfgJson, "local");
             }
-            Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);
+            Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT, Laya.WebGL);
             Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
             Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
             Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;

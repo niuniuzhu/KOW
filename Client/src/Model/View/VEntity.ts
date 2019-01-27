@@ -1,12 +1,13 @@
 import { Consts } from "../../Consts";
 import { Global } from "../../Global";
+import { ModelLayer } from "../../Graphic";
 import * as $protobuf from "../../Libs/protobufjs";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
-import { AnimationProxy } from "./AnimationProxy";
-import { VBattle } from "./VBattle";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { ModelLayer } from "../../Graphic";
+import { AnimationProxy } from "./AnimationProxy";
+import { Shaker } from "./Shaker";
+import { VBattle } from "./VBattle";
 
 export abstract class VEntity {
 	public get rid(): Long { return this._rid; }
@@ -42,6 +43,7 @@ export abstract class VEntity {
 	protected _id: number;
 	private _modelLevel: ModelLayer;
 	private _pivot: Vec2;
+	private _shaker: Shaker;
 	protected readonly _root = new fairygui.GComponent();
 	protected _animationProxy: AnimationProxy = null;
 
@@ -141,6 +143,9 @@ export abstract class VEntity {
 	public Update(dt: number): void {
 		this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
 		this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
+		if (this._shaker != null) {
+			this._shaker.Update(dt);
+		}
 	}
 
 	private OnPositionChanged(delta: Vec2): void {
@@ -152,5 +157,16 @@ export abstract class VEntity {
 
 	private OnRatationChanged(delta: number): void {
 		this._root.rotation = this._rotation;
+	}
+
+	public Shake(amplitude: number, frequency: number, damping: number, duration: number): Shaker {
+		this._shaker = new Shaker(this._animationProxy.x, this._animationProxy.y, amplitude, frequency,
+			damping, duration, true);
+		this._shaker.onUpdate = (x, y) => {
+			this._animationProxy.x = x;
+			this._animationProxy.y = y;
+		}
+		this._shaker.onComplete = () => this._shaker = null;
+		return this._shaker;
 	}
 }

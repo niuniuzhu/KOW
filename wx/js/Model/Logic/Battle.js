@@ -30,8 +30,8 @@ export class Battle {
         this.chase = false;
         this._bornPoses = [];
         this._bornDirs = [];
+        this._finished = false;
         this._destroied = true;
-        this._markToEnd = false;
         this._frameActionGroups = [];
         this._champions = [];
         this._idToChampion = new Map();
@@ -56,6 +56,7 @@ export class Battle {
     get gladiatorRadius() { return this._gladiatorRadius; }
     get random() { return this._random; }
     get calcManager() { return this._calcManager; }
+    get finished() { return this._finished; }
     Destroy() {
         if (this._destroied)
             return;
@@ -93,7 +94,7 @@ export class Battle {
         this._nextKeyFrame = 0;
         this._logicElapsed = 0;
         this._realElapsed = 0;
-        this._markToEnd = false;
+        this._finished = false;
         const defs = Defs.GetMap(this._mapID);
         let arr = Hashtable.GetArray(defs, "born_pos");
         let count = arr.length;
@@ -235,7 +236,7 @@ export class Battle {
     }
     EncodeSnapshot(writer) {
         writer.int32(this._frame);
-        writer.bool(this._markToEnd);
+        writer.bool(this._finished);
         writer.double(this._random.seed);
         let count = this._champions.length;
         writer.int32(count);
@@ -265,7 +266,7 @@ export class Battle {
     }
     DecodeSnapshot(reader) {
         this._frame = reader.int32();
-        this._markToEnd = reader.bool();
+        this._finished = reader.bool();
         this._random.seed = reader.double();
         let count = reader.int32();
         for (let i = 0; i < count; i++) {
@@ -486,7 +487,7 @@ export class Battle {
         }
     }
     CheckBattleEnd() {
-        if (this._markToEnd)
+        if (this._finished)
             return;
         let team0Win = false;
         let team1Win = false;
@@ -528,7 +529,7 @@ export class Battle {
             msg.winTeam = winTeam;
             msg.snapshot = data;
             Global.connector.bsConnector.Send(Protos.GC2BS_EndBattle, msg);
-            this._markToEnd = true;
+            this._finished = true;
         }
     }
     HandleSnapShot(ret) {

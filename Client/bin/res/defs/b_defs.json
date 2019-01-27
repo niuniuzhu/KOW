@@ -185,7 +185,11 @@
 							"follow_rot": true,
 							"always_follow": false,
 							"destroy_type": 1,
-							"formula": "3000*(50+{0}*0.03)"
+							"formula": "3000*(50+{0}*0.03)",
+							"shake": true,
+							"shake_amplitude": 3,
+							"shake_frequency": 40,
+							"shake_duration": -1
 						}
 					]
 				},

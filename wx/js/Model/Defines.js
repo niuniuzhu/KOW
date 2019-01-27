@@ -9,9 +9,9 @@ import { ActMove } from "./Logic/Actions/ActMove";
 import { ActShake } from "./Logic/Actions/ActShake";
 import { ActSprint } from "./Logic/Actions/ActSprint";
 import { ActVelocity } from "./Logic/Actions/ActVelocity";
-import { VActAnimation } from "./View/FSM/VActAnimation";
-import { VActEffect } from "./View/FSM/VActEffect";
-import { VActShakeEffect } from "./View/FSM/VActShakeEffect";
+import { VActAnimation } from "./View/Actions/VActAnimation";
+import { VActEffect } from "./View/Actions/VActEffect";
+import { VActShakeEffect } from "./View/Actions/VActShakeEffect";
 export var StateType;
 (function (StateType) {
     StateType[StateType["Idle"] = 0] = "Idle";

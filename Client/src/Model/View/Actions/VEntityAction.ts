@@ -2,7 +2,7 @@ import { FSMState } from "../../../RC/Framework/FSM/FSMState";
 import { AbstractAction } from "../../../RC/Framework/Actions/AbstractAction";
 import { Hashtable } from "../../../RC/Utils/Hashtable";
 import { VActionType } from "../../Defines";
-import { VEntityState } from "./VEntityState";
+import { VEntityState } from "../FSM/VEntityState";
 import { VChampion } from "../VChampion";
 
 export class VEntityAction extends AbstractAction {

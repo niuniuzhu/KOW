@@ -1,10 +1,11 @@
 import { Consts } from "../../Consts";
 import { Global } from "../../Global";
+import { ModelLayer } from "../../Graphic";
 import { MathUtils } from "../../RC/Math/MathUtils";
 import { Vec2 } from "../../RC/Math/Vec2";
-import { AnimationProxy } from "./AnimationProxy";
 import { Hashtable } from "../../RC/Utils/Hashtable";
-import { ModelLayer } from "../../Graphic";
+import { AnimationProxy } from "./AnimationProxy";
+import { Shaker } from "./Shaker";
 export class VEntity {
     constructor(battle) {
         this._root = new fairygui.GComponent();
@@ -110,6 +111,9 @@ export class VEntity {
     Update(dt) {
         this.position = Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
         this.rotation = MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
+        if (this._shaker != null) {
+            this._shaker.Update(dt);
+        }
     }
     OnPositionChanged(delta) {
         this._root.setXY(this._position.x, this._position.y);
@@ -119,5 +123,14 @@ export class VEntity {
     }
     OnRatationChanged(delta) {
         this._root.rotation = this._rotation;
+    }
+    Shake(amplitude, frequency, damping, duration) {
+        this._shaker = new Shaker(this._animationProxy.x, this._animationProxy.y, amplitude, frequency, damping, duration, true);
+        this._shaker.onUpdate = (x, y) => {
+            this._animationProxy.x = x;
+            this._animationProxy.y = y;
+        };
+        this._shaker.onComplete = () => this._shaker = null;
+        return this._shaker;
     }
 }

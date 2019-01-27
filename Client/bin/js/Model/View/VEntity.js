@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "./AnimationProxy", "../../RC/Utils/Hashtable", "../../Graphic"], function (require, exports, Consts_1, Global_1, MathUtils_1, Vec2_1, AnimationProxy_1, Hashtable_1, Graphic_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Graphic", "../../RC/Math/MathUtils", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "./AnimationProxy", "./Shaker"], function (require, exports, Consts_1, Global_1, Graphic_1, MathUtils_1, Vec2_1, Hashtable_1, AnimationProxy_1, Shaker_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VEntity {
@@ -106,6 +106,9 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/Mat
         Update(dt) {
             this.position = Vec2_1.Vec2.Lerp(this._position, this._logicPos, 0.012 * dt);
             this.rotation = MathUtils_1.MathUtils.LerpAngle(this._rotation, this._logicRot, dt * 0.015);
+            if (this._shaker != null) {
+                this._shaker.Update(dt);
+            }
         }
         OnPositionChanged(delta) {
             this._root.setXY(this._position.x, this._position.y);
@@ -115,6 +118,15 @@ define(["require", "exports", "../../Consts", "../../Global", "../../RC/Math/Mat
         }
         OnRatationChanged(delta) {
             this._root.rotation = this._rotation;
+        }
+        Shake(amplitude, frequency, damping, duration) {
+            this._shaker = new Shaker_1.Shaker(this._animationProxy.x, this._animationProxy.y, amplitude, frequency, damping, duration, true);
+            this._shaker.onUpdate = (x, y) => {
+                this._animationProxy.x = x;
+                this._animationProxy.y = y;
+            };
+            this._shaker.onComplete = () => this._shaker = null;
+            return this._shaker;
         }
     }
     exports.VEntity = VEntity;

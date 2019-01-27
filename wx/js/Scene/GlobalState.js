@@ -10,8 +10,6 @@ export class GlobalState extends SceneState {
         super(type);
         Global.connector.gsConnector.onclose = this.OnGSLost.bind(this);
         Global.connector.gsConnector.onerror = this.OnGSLost.bind(this);
-        Global.connector.bsConnector.onclose = this.OnBSLost.bind(this);
-        Global.connector.bsConnector.onerror = this.OnBSLost.bind(this);
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_Kick, this.HandleKick.bind(this));
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eGS2GC_CSLost, this.HandleCSLost.bind(this));
     }
@@ -29,20 +27,6 @@ export class GlobalState extends SceneState {
             Logger.Log(`gs error`);
         }
         UIAlert.Show("与服务器断开连接", this.BackToLogin.bind(this));
-    }
-    OnBSLost(e) {
-        if (Global.battleManager.destroied) {
-            return;
-        }
-        if (e instanceof CloseEvent) {
-            Logger.Log(`bs lost,code:${e.code},reason:${e.reason}`);
-        }
-        else {
-            Logger.Log(`bs error`);
-        }
-        if (Global.connector.gsConnector.connected) {
-            Global.connector.gsConnector.Close();
-        }
     }
     HandleKick(message) {
         Logger.Warn("kick by gs");

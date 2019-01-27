@@ -42,9 +42,6 @@ export class AnimationProxy extends fairygui.GGraph {
 			const aniName = Hashtable.GetString(aniDef, "name");
 			const length = Hashtable.GetNumber(aniDef, "length");
 
-			//todo 应该记录到缓存池,能按key读取
-			//setting也保存到缓存池
-			//计算所有graphic的大小,选取最大一个为该动画的大小
 			let setting = owner.battle.assetsManager.GetAniSetting(alias);
 			if (setting == null) {
 				const startFrame = Hashtable.GetNumber(aniDef, "start_frame");
@@ -75,7 +72,6 @@ export class AnimationProxy extends fairygui.GGraph {
 			}
 			this._aniSettings.set(id, owner.battle.assetsManager.GetAniSetting(alias));
 		}
-
 		this._animation = new Laya.Animation();
 		this.setNativeObject(this._animation);
 	}

@@ -13,10 +13,10 @@ import { BulletAction } from "./Logic/Actions/BulletAction";
 import { EntityAction } from "./Logic/Actions/EntityAction";
 import { Bullet } from "./Logic/Bullet";
 import { Champion } from "./Logic/Champion";
-import { VActAnimation } from "./View/FSM/VActAnimation";
-import { VActEffect } from "./View/FSM/VActEffect";
-import { VActShakeEffect } from "./View/FSM/VActShakeEffect";
-import { VEntityAction } from "./View/FSM/VEntityAction";
+import { VActAnimation } from "./View/Actions/VActAnimation";
+import { VActEffect } from "./View/Actions/VActEffect";
+import { VActShakeEffect } from "./View/Actions/VActShakeEffect";
+import { VEntityAction } from "./View/Actions/VEntityAction";
 import { VChampion } from "./View/VChampion";
 
 export enum StateType {

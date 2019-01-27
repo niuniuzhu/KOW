@@ -248,7 +248,9 @@ export class LoginState extends SceneState {
                         Defs.Init(json);
                         if (resp.gcState == Protos.GS2GC_LoginRet.EGCCState.Battle) {
                             Global.sceneManager.ChangeState(SceneManager.State.Loading);
-                            Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort);
+                            if (!Global.sceneManager.loading.ConnectToBS(resp.gcNID, resp.bsIP, resp.bsPort)) {
+                                this._ui.OnFail("连接服务器失败", () => Global.sceneManager.ChangeState(SceneManager.State.Login, null, true));
+                            }
                         }
                         else {
                             Global.sceneManager.ChangeState(SceneManager.State.Main, resp.userInfo);

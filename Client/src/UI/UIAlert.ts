@@ -3,32 +3,31 @@ import { Global } from "../Global";
 export class UIAlert {
 	private static _com: fairygui.GComponent;
 	private static _hideHandler: () => void;
-	private static _isShowing;
 
-	public static get isShowing(): boolean { return UIAlert._isShowing; }
+	public static get isShowing(): boolean { return this._com.parent != null; }
 
 	public static Show(content: string, removeHandler: () => void = null): void {
-		if (null == UIAlert._com) {
-			UIAlert._com = fairygui.UIPackage.createObject("global", "alert").asCom;
-			UIAlert._com.getChild("confirm").onClick(null, this.OnConfirmBtnClick);
+		if (null == this._com) {
+			this._com = fairygui.UIPackage.createObject("global", "alert").asCom;
+			this._com.getChild("confirm").onClick(null, this.OnConfirmBtnClick);
 		}
-		UIAlert._hideHandler = removeHandler;
-		if (UIAlert._hideHandler != null)
-			UIAlert._com.on(laya.events.Event.REMOVED, null, UIAlert.OnHide);
-		fairygui.GRoot.inst.showPopup(UIAlert._com, Global.graphic.uiRoot);
-		UIAlert._com.center();
-		UIAlert._com.getChild("text").asTextField.text = content;
-		UIAlert._isShowing = true;
+		this._hideHandler = removeHandler;
+		if (this._hideHandler != null)
+			this._com.on(laya.events.Event.REMOVED, null, this.OnHide.bind(this));
+		if (!this.isShowing) {
+			fairygui.GRoot.inst.showPopup(this._com, Global.graphic.uiRoot);
+			this._com.center();
+		}
+		this._com.getChild("text").asTextField.text = content;
 	}
 
 	private static OnConfirmBtnClick(): void {
-		fairygui.GRoot.inst.hidePopup(UIAlert._com);
+		fairygui.GRoot.inst.hidePopup(this._com);
 	}
 
 	public static OnHide(): void {
-		UIAlert._com.off(laya.events.Event.REMOVED, null, UIAlert.OnHide);
-		UIAlert._isShowing = false;
-		if (UIAlert._hideHandler != null)
-			UIAlert._hideHandler();
+		this._com.off(laya.events.Event.REMOVED, null, this.OnHide.bind(this));
+		if (this._hideHandler != null)
+			this._hideHandler();
 	}
 }

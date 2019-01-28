@@ -52,6 +52,7 @@ export class GestureState2 {
 	}
 
 	public OnExit(): void {
+		this._joystick.Reset();
 		this._touchID = -1;
 		this._joystick.off(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
 		this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);

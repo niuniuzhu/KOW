@@ -2,28 +2,28 @@ define(["require", "exports", "../Global"], function (require, exports, Global_1
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIAlert {
-        static get isShowing() { return UIAlert._isShowing; }
+        static get isShowing() { return this._com.parent != null; }
         static Show(content, removeHandler = null) {
-            if (null == UIAlert._com) {
-                UIAlert._com = fairygui.UIPackage.createObject("global", "alert").asCom;
-                UIAlert._com.getChild("confirm").onClick(null, this.OnConfirmBtnClick);
+            if (null == this._com) {
+                this._com = fairygui.UIPackage.createObject("global", "alert").asCom;
+                this._com.getChild("confirm").onClick(null, this.OnConfirmBtnClick);
             }
-            UIAlert._hideHandler = removeHandler;
-            if (UIAlert._hideHandler != null)
-                UIAlert._com.on(laya.events.Event.REMOVED, null, UIAlert.OnHide);
-            fairygui.GRoot.inst.showPopup(UIAlert._com, Global_1.Global.graphic.uiRoot);
-            UIAlert._com.center();
-            UIAlert._com.getChild("text").asTextField.text = content;
-            UIAlert._isShowing = true;
+            this._hideHandler = removeHandler;
+            if (this._hideHandler != null)
+                this._com.on(laya.events.Event.REMOVED, null, this.OnHide.bind(this));
+            if (!this.isShowing) {
+                fairygui.GRoot.inst.showPopup(this._com, Global_1.Global.graphic.uiRoot);
+                this._com.center();
+            }
+            this._com.getChild("text").asTextField.text = content;
         }
         static OnConfirmBtnClick() {
-            fairygui.GRoot.inst.hidePopup(UIAlert._com);
+            fairygui.GRoot.inst.hidePopup(this._com);
         }
         static OnHide() {
-            UIAlert._com.off(laya.events.Event.REMOVED, null, UIAlert.OnHide);
-            UIAlert._isShowing = false;
-            if (UIAlert._hideHandler != null)
-                UIAlert._hideHandler();
+            this._com.off(laya.events.Event.REMOVED, null, this.OnHide.bind(this));
+            if (this._hideHandler != null)
+                this._hideHandler();
         }
     }
     exports.UIAlert = UIAlert;

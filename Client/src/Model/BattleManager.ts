@@ -24,7 +24,6 @@ export class BattleManager {
 	private _playerID: Long;
 	private readonly _lBattle: Battle;
 	private readonly _vBattle: VBattle;
-	private _finished: boolean;
 	private _ready: boolean;
 	private _destroied: boolean;
 	/**
@@ -47,10 +46,6 @@ export class BattleManager {
 	 */
 	public get vBattle(): VBattle { return this._vBattle; }
 	/**
-	 * 标记是否已结束战场
-	 */
-	public get finished(): boolean { return this._finished; }
-	/**
 	 * 标记资源,快照,追帧已经完成
 	 */
 	public get ready(): boolean { return this._ready; }
@@ -68,15 +63,13 @@ export class BattleManager {
 		if (this._destroied)
 			return;
 
-		this._finished = true;
 		this._ready = false;
 		this._destroied = true;
 
-		Global.connector.bsConnector.onclose = null;
-		Global.connector.bsConnector.onerror = null;
 		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
 		Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+		Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLost.bind(this));
 
 		this._lBattle.Destroy();
 		this._vBattle.Destroy();
@@ -87,14 +80,12 @@ export class BattleManager {
 	 * 在连接BS前就监听消息,由于一连接到BS就可能马上收到消息
 	 */
 	public Init(): void {
-		this._finished = false;
 		this._ready = false;
 		this._destroied = false;
-		Global.connector.bsConnector.onclose = this.HandleBSLost.bind(this);
-		Global.connector.bsConnector.onerror = this.HandleBSLost.bind(this);
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
 		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+		Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLost.bind(this));
 	}
 
 	/**
@@ -237,7 +228,6 @@ export class BattleManager {
 	private HandleBattleEnd(message: any): void {
 		this.QueueMessage(message, msg => {
 			const battleEnd = <Protos.CS2GC_BattleEnd>msg;
-			this._finished = true;
 			UIEvent.EndBattle(battleEnd.win, battleEnd.honour, () => {
 				this.Destroy();
 				Global.sceneManager.ChangeState(SceneManager.State.Main);
@@ -250,15 +240,7 @@ export class BattleManager {
 	 */
 	private HandleBSLost(e: Event): void {
 		this.QueueMessage(null, msg => {
-			//如果战场结束,说明BS是正常断开的,不用处理
-			if (this._lBattle.finished) {
-				return;
-			}
 			Logger.Log(`bs error`);
-			//断开GS
-			if (Global.connector.gsConnector.connected) {
-				Global.connector.gsConnector.Close();
-			}
 		});
 	}
 }

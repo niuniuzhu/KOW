@@ -1,3 +1,4 @@
+import { Global } from "../../Global";
 import * as $protobuf from "../../Libs/protobufjs";
 import { FSM } from "../../RC/Framework/FSM/FSM";
 import { Vec2 } from "../../RC/Math/Vec2";
@@ -13,6 +14,7 @@ import { VBattle } from "./VBattle";
 import { VEntity } from "./VEntity";
 
 export class VChampion extends VEntity {
+	public self: boolean = false;
 	public get hud(): HUD { return this._hud; }
 	public get fsm(): FSM { return this._fsm; }
 	public get radius(): number { return this._radius; }
@@ -148,9 +150,9 @@ export class VChampion extends VEntity {
 		if (isNew) {
 			UIEvent.ChampionInit(this);
 		}
+		this.self = this.rid.equals(Global.battleManager.playerID);
 		this.team = reader.int32();
 		this.name = reader.string();
-		this._hud.name = this.name;
 		this.hp = reader.int32();
 		this.mhp = reader.int32();
 		this.mp = reader.double();
@@ -171,13 +173,13 @@ export class VChampion extends VEntity {
 		this.t_atk_add = reader.int32();
 		this.t_def_add = reader.int32();
 		this.t_speed_add = reader.int32();
-
 		//read fsmstates
 		if (reader.bool()) {
 			const stateType = reader.int32();
 			this._fsm.ChangeState(stateType, null);
 			(<VEntityState>this._fsm.currentState).time = reader.double();
 		}
+		this._hud.OnDecodeSync();
 	}
 
 	/**

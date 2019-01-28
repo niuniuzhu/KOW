@@ -40,10 +40,10 @@ namespace Protos {
             "cm90b3MuTXNnT3B0cxILCgNiaWQYAiABKA0SMQoFaW5mb3MYAyADKAsyIi5Q",
             "cm90b3MuQlMyQ1NfQmF0dGxlRW5kLkluZm9zRW50cnkaSQoKSW5mb3NFbnRy",
             "eRILCgNrZXkYASABKAQSKgoFdmFsdWUYAiABKAsyGy5Qcm90b3MuQlMyQ1Nf",
-            "QmF0dGxlRW5kSW5mbzoCOAEihgEKDkJTMkNTX0tpY2tVc2VyEh0KBG9wdHMY",
+            "QmF0dGxlRW5kSW5mbzoCOAEikgEKDkJTMkNTX0tpY2tVc2VyEh0KBG9wdHMY",
             "ASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVnY05JRBgCIAEoBBItCgZyZWFz",
-            "b24YAyABKA4yHS5Qcm90b3MuQlMyQ1NfS2lja1VzZXIuUmVhc29uIhcKBlJl",
-            "YXNvbhINCglPdXRPZlN5bmMQAGIGcHJvdG8z"));
+            "b24YAyABKA4yHS5Qcm90b3MuQlMyQ1NfS2lja1VzZXIuUmVhc29uIiMKBlJl",
+            "YXNvbhINCglPdXRPZlN5bmMQABIKCgZHQ0xvc3QQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -1201,7 +1201,7 @@ namespace Protos {
   }
 
   /// <summary>
-  ///通知CS玩家离开战场
+  ///通知CS玩家踢掉玩家
   /// </summary>
   public sealed partial class BS2CS_KickUser : pb::IMessage<BS2CS_KickUser> {
     private static readonly pb::MessageParser<BS2CS_KickUser> _parser = new pb::MessageParser<BS2CS_KickUser>(() => new BS2CS_KickUser());
@@ -1398,6 +1398,7 @@ namespace Protos {
     public static partial class Types {
       public enum Reason {
         [pbr::OriginalName("OutOfSync")] OutOfSync = 0,
+        [pbr::OriginalName("GCLost")] Gclost = 1,
       }
 
     }

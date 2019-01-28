@@ -10,33 +10,28 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         get playerID() { return this._playerID; }
         get lBattle() { return this._lBattle; }
         get vBattle() { return this._vBattle; }
-        get finished() { return this._finished; }
         get ready() { return this._ready; }
         get destroied() { return this._destroied; }
         Destroy() {
             if (this._destroied)
                 return;
-            this._finished = true;
             this._ready = false;
             this._destroied = true;
-            Global_1.Global.connector.bsConnector.onclose = null;
-            Global_1.Global.connector.bsConnector.onerror = null;
             Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
             Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
             Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+            Global_1.Global.connector.RemoveListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BSLose, this.HandleBSLost.bind(this));
             this._lBattle.Destroy();
             this._vBattle.Destroy();
             this._messageQueue.splice(0);
         }
         Init() {
-            this._finished = false;
             this._ready = false;
             this._destroied = false;
-            Global_1.Global.connector.bsConnector.onclose = this.HandleBSLost.bind(this);
-            Global_1.Global.connector.bsConnector.onerror = this.HandleBSLost.bind(this);
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.BS, protos_1.Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
             Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+            Global_1.Global.connector.AddListener(Connector_1.Connector.ConnectorType.GS, protos_1.Protos.MsgID.eCS2GC_BSLose, this.HandleBSLost.bind(this));
         }
         Preload(battleInfo, caller, onComplete, onProgress) {
             this._vBattle.Preload(battleInfo, caller, onComplete, onProgress);
@@ -131,7 +126,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         HandleBattleEnd(message) {
             this.QueueMessage(message, msg => {
                 const battleEnd = msg;
-                this._finished = true;
                 UIEvent_1.UIEvent.EndBattle(battleEnd.win, battleEnd.honour, () => {
                     this.Destroy();
                     Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
@@ -140,13 +134,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         }
         HandleBSLost(e) {
             this.QueueMessage(null, msg => {
-                if (this._lBattle.finished) {
-                    return;
-                }
                 Logger_1.Logger.Log(`bs error`);
-                if (Global_1.Global.connector.gsConnector.connected) {
-                    Global_1.Global.connector.gsConnector.Close();
-                }
             });
         }
     }

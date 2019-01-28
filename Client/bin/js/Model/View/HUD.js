@@ -8,8 +8,9 @@ define(["require", "exports", "../../Global", "../../RC/Collections/Queue"], fun
             this._root = fairygui.UIPackage.createObject("battle", "HUD").asCom;
             Global_1.Global.graphic.hudRoot.addChild(this._root);
         }
-        set name(value) {
-            this._root.getChild("n0").asTextField.text = value;
+        OnDecodeSync() {
+            this._root.getController("c1").selectedIndex = this._owner.self ? 0 : 1;
+            this._root.getChild("n0").asTextField.text = this._owner.name;
         }
         Destroy() {
             this._root.dispose();

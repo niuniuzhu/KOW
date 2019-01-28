@@ -43,7 +43,7 @@ define(["require", "exports", "../Libs/long", "../Libs/protos", "../RC/Utils/Log
             this._socket.onopen = this.OnOpen.bind(this);
         }
         Send(msgType, message, rpcHandler = null, transTarget = protos_1.Protos.MsgOpts.TransTarget.Undefine, nsid = Long.ZERO) {
-            if (this._socket == null)
+            if (!this.connected)
                 return;
             let opts = ProtoHelper_1.ProtoCreator.GetMsgOpts(message);
             if (opts == null) {

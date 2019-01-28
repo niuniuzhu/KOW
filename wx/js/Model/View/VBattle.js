@@ -28,6 +28,7 @@ export class VBattle {
         this._effectPool = new EffectPool(this);
     }
     get mapID() { return this._mapID; }
+    get player() { return this._player; }
     get camera() { return this._camera; }
     get assetsManager() { return this._assetsManager; }
     Destroy() {
@@ -178,8 +179,7 @@ export class VBattle {
         champion.DecodeSync(rid, reader, true);
         this._champions.push(champion);
         this._idToChampion.set(champion.rid.toString(), champion);
-        const isSelf = champion.rid.equals(Global.battleManager.playerID);
-        if (isSelf) {
+        if (champion.self) {
             this._camera.lookAt = champion;
         }
         return champion;

@@ -19,6 +19,11 @@ namespace BattleServer.Biz
 			{
 				if ( reason != "battle_end" )
 				{
+					//通知cs玩家断线
+					Protos.BS2CS_KickUser msg = ProtoCreator.Q_BS2CS_KickUser();
+					msg.Reason = Protos.BS2CS_KickUser.Types.Reason.Gclost;
+					msg.GcNID = user.gcNID;
+					BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, msg );
 					BS.instance.userMgr.OnDisconnect( user );
 				}
 			}

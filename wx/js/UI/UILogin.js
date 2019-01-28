@@ -64,6 +64,7 @@ export class UILogin {
         }
     }
     OnFail(message, callback = null) {
+        this.ModalWait(false);
         UIAlert.Show(message, callback);
     }
     ModalWait(value) {

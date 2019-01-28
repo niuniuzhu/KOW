@@ -401,6 +401,7 @@ namespace BattleServer.Battle
 			Google.Protobuf.CodedInputStream reader = new Google.Protobuf.CodedInputStream( data.ToByteArray() );
 			reader.ReadInt32();//frame
 			reader.ReadBool();//marktoend
+			reader.ReadDouble();//seed
 
 			int count = reader.ReadInt32();//champions
 			for ( int i = 0; i < count; i++ )

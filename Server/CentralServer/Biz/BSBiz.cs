@@ -3,6 +3,7 @@ using Core.Misc;
 using Google.Protobuf;
 using Shared;
 using Shared.Net;
+using System.Collections.Generic;
 using BSInfo = Shared.BSInfo;
 
 namespace CentralServer.Biz
@@ -15,18 +16,18 @@ namespace CentralServer.Biz
 			CS.instance.lIDToBSInfos.Remove( session.logicID );
 			CS.instance.UpdateAppropriateBSInfo();
 
-			//通知客户端丢失bs
-			//Protos.CS2GC_BSLose gcBattleEnd = ProtoCreator.Q_CS2GC_BSLose();
-			//List<CSUser> users = CS.instance.battleStaging.GetUsers( session.logicID );
-			//if ( users != null )
-			//{
-			//	int count = users.Count;
-			//	for ( int i = 0; i < count; i++ )
-			//	{
-			//		CSUser user = users[i];
-			//		CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
-			//	}
-			//}
+			//通知gs踢掉gc
+			Protos.CS2GS_KickGC bsLose = ProtoCreator.Q_CS2GS_KickGC();
+			List<CSUser> users = CS.instance.battleStaging.GetUsers( session.logicID );
+			if ( users != null )
+			{
+				int count = users.Count;
+				for ( int i = 0; i < count; i++ )
+				{
+					CSUser user = users[i];
+					CS.instance.userMgr.KickUser( user, Protos.CS2GS_KickGC.Types.EReason.Bslost );
+				}
+			}
 			//踢出所有连接到该BS的玩家
 			CS.instance.battleStaging.Remove( session.logicID );
 
@@ -103,17 +104,23 @@ namespace CentralServer.Biz
 		public ErrorCode OnBs2CsKickUser( NetSessionBase session, IMessage message )
 		{
 			Protos.BS2CS_KickUser kickUser = ( Protos.BS2CS_KickUser )message;
-			//把玩家下线
-			uint ukey = ( uint )( kickUser.GcNID & uint.MaxValue );
-			CSUser user = CS.instance.userMgr.GetUser( ukey );
-			Protos.CS2GS_KickGC.Types.EReason reason = Protos.CS2GS_KickGC.Types.EReason.OutOfSync;
-			switch ( kickUser.Reason )
+			CSUser user = CS.instance.battleStaging.GetUser( kickUser.GcNID );
+			if ( user != null )
 			{
-				case Protos.BS2CS_KickUser.Types.Reason.OutOfSync:
-					reason = Protos.CS2GS_KickGC.Types.EReason.OutOfSync;
-					break;
+				Protos.CS2GS_KickGC.Types.EReason reason = Protos.CS2GS_KickGC.Types.EReason.OutOfSync;
+				switch ( kickUser.Reason )
+				{
+					case Protos.BS2CS_KickUser.Types.Reason.OutOfSync:
+						reason = Protos.CS2GS_KickGC.Types.EReason.OutOfSync;
+						break;
+
+					case Protos.BS2CS_KickUser.Types.Reason.Gclost:
+						reason = Protos.CS2GS_KickGC.Types.EReason.Bslost;
+						break;
+				}
+				//踢下线
+				CS.instance.userMgr.KickUser( user, reason );
 			}
-			CS.instance.userMgr.KickUser( user, reason );
 			return ErrorCode.Success;
 		}
 	}

@@ -17,6 +17,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._effectPool = new EffectPool_1.EffectPool(this);
         }
         get mapID() { return this._mapID; }
+        get player() { return this._player; }
         get camera() { return this._camera; }
         get assetsManager() { return this._assetsManager; }
         Destroy() {
@@ -167,8 +168,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             champion.DecodeSync(rid, reader, true);
             this._champions.push(champion);
             this._idToChampion.set(champion.rid.toString(), champion);
-            const isSelf = champion.rid.equals(Global_1.Global.battleManager.playerID);
-            if (isSelf) {
+            if (champion.self) {
                 this._camera.lookAt = champion;
             }
             return champion;

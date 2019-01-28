@@ -158,7 +158,8 @@ export namespace Protos {
     namespace BS2CS_KickUser {
 
         enum Reason {
-            OutOfSync = 0
+            OutOfSync = 0,
+            GCLost = 1
         }
     }
 
@@ -870,7 +871,8 @@ export namespace Protos {
         enum EReason {
             DuplicateLogin = 0,
             OutOfSync = 1,
-            Other = 2
+            BSLost = 2,
+            Other = 3
         }
     }
 

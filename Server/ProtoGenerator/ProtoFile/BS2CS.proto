@@ -48,10 +48,11 @@ message BS2CS_BattleEnd {
 	map<uint64, BS2CS_BattleEndInfo> infos = 3;
 }
 
-//通知CS玩家离开战场
+//通知CS玩家踢掉玩家
 message BS2CS_KickUser {
 	enum Reason {
 		OutOfSync = 0;
+		GCLost = 1;
 	}
 	MsgOpts opts = 1;
 	uint64 gcNID = 2;

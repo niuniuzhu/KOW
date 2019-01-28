@@ -19,33 +19,28 @@ export class BattleManager {
     get playerID() { return this._playerID; }
     get lBattle() { return this._lBattle; }
     get vBattle() { return this._vBattle; }
-    get finished() { return this._finished; }
     get ready() { return this._ready; }
     get destroied() { return this._destroied; }
     Destroy() {
         if (this._destroied)
             return;
-        this._finished = true;
         this._ready = false;
         this._destroied = true;
-        Global.connector.bsConnector.onclose = null;
-        Global.connector.bsConnector.onerror = null;
         Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
         Global.connector.RemoveListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
         Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+        Global.connector.RemoveListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLost.bind(this));
         this._lBattle.Destroy();
         this._vBattle.Destroy();
         this._messageQueue.splice(0);
     }
     Init() {
-        this._finished = false;
         this._ready = false;
         this._destroied = false;
-        Global.connector.bsConnector.onclose = this.HandleBSLost.bind(this);
-        Global.connector.bsConnector.onerror = this.HandleBSLost.bind(this);
         Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_FrameAction, this.HandleFrameAction.bind(this));
         Global.connector.AddListener(Connector.ConnectorType.BS, Protos.MsgID.eBS2GC_OutOfSync, this.HandleOutOfSync.bind(this));
         Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BattleEnd, this.HandleBattleEnd.bind(this));
+        Global.connector.AddListener(Connector.ConnectorType.GS, Protos.MsgID.eCS2GC_BSLose, this.HandleBSLost.bind(this));
     }
     Preload(battleInfo, caller, onComplete, onProgress) {
         this._vBattle.Preload(battleInfo, caller, onComplete, onProgress);
@@ -140,7 +135,6 @@ export class BattleManager {
     HandleBattleEnd(message) {
         this.QueueMessage(message, msg => {
             const battleEnd = msg;
-            this._finished = true;
             UIEvent.EndBattle(battleEnd.win, battleEnd.honour, () => {
                 this.Destroy();
                 Global.sceneManager.ChangeState(SceneManager.State.Main);
@@ -149,13 +143,7 @@ export class BattleManager {
     }
     HandleBSLost(e) {
         this.QueueMessage(null, msg => {
-            if (this._lBattle.finished) {
-                return;
-            }
             Logger.Log(`bs error`);
-            if (Global.connector.gsConnector.connected) {
-                Global.connector.gsConnector.Close();
-            }
         });
     }
 }

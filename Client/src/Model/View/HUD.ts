@@ -3,10 +3,6 @@ import Queue from "../../RC/Collections/Queue";
 import { VChampion } from "./VChampion";
 
 export class HUD {
-	public set name(value: string) {
-		this._root.getChild("n0").asTextField.text = value;
-	}
-
 	private readonly _owner: VChampion;
 	private readonly _root: fairygui.GComponent;
 	private readonly _texts: PopText[] = [];
@@ -15,6 +11,11 @@ export class HUD {
 		this._owner = owner;
 		this._root = fairygui.UIPackage.createObject("battle", "HUD").asCom;
 		Global.graphic.hudRoot.addChild(this._root);
+	}
+
+	public OnDecodeSync(): void {
+		this._root.getController("c1").selectedIndex = this._owner.self ? 0 : 1;
+		this._root.getChild("n0").asTextField.text = this._owner.name;
 	}
 
 	public Destroy(): void {

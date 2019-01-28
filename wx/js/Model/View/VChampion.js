@@ -1,3 +1,4 @@
+import { Global } from "../../Global";
 import { FSM } from "../../RC/Framework/FSM/FSM";
 import { Vec2 } from "../../RC/Math/Vec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
@@ -12,6 +13,7 @@ import { VEntity } from "./VEntity";
 export class VChampion extends VEntity {
     constructor(battle) {
         super(battle);
+        this.self = false;
         this._skills = [];
         this._fsm = new FSM();
         this._moveDirection = Vec2.zero;
@@ -130,9 +132,9 @@ export class VChampion extends VEntity {
         if (isNew) {
             UIEvent.ChampionInit(this);
         }
+        this.self = this.rid.equals(Global.battleManager.playerID);
         this.team = reader.int32();
         this.name = reader.string();
-        this._hud.name = this.name;
         this.hp = reader.int32();
         this.mhp = reader.int32();
         this.mp = reader.double();
@@ -158,6 +160,7 @@ export class VChampion extends VEntity {
             this._fsm.ChangeState(stateType, null);
             this._fsm.currentState.time = reader.double();
         }
+        this._hud.OnDecodeSync();
     }
     HasSkill(id) {
         for (const skill of this._skills) {

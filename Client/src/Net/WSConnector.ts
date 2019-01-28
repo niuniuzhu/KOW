@@ -65,7 +65,7 @@ export class WSConnector {
 	public Send(msgType: any, message: any, rpcHandler: (any) => any = null,
 		transTarget: Protos.MsgOpts.TransTarget = Protos.MsgOpts.TransTarget.Undefine,
 		nsid: Long = Long.ZERO): void {
-		if (this._socket == null)
+		if (!this.connected)
 			return;
 		let opts = ProtoCreator.GetMsgOpts(message);
 		if (opts == null) {

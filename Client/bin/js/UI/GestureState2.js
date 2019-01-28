@@ -41,6 +41,7 @@ define(["require", "exports", "../RC/Math/Vec2"], function (require, exports, Ve
             this._joystick.on(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
         }
         OnExit() {
+            this._joystick.Reset();
             this._touchID = -1;
             this._joystick.off(Laya.Event.MOUSE_DOWN, this, this.OnDragStart);
             this._root.off(Laya.Event.MOUSE_MOVE, this, this.OnDrag);

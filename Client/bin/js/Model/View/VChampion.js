@@ -1,9 +1,10 @@
-define(["require", "exports", "../../RC/Framework/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../BattleEvent/UIEvent", "../CDefs", "../Defs", "../Logic/Attribute", "../Skill", "./FSM/VEntityState", "./HUD", "./VEntity"], function (require, exports, FSM_1, Vec2_1, Hashtable_1, UIEvent_1, CDefs_1, Defs_1, Attribute_1, Skill_1, VEntityState_1, HUD_1, VEntity_1) {
+define(["require", "exports", "../../Global", "../../RC/Framework/FSM/FSM", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", "../BattleEvent/UIEvent", "../CDefs", "../Defs", "../Logic/Attribute", "../Skill", "./FSM/VEntityState", "./HUD", "./VEntity"], function (require, exports, Global_1, FSM_1, Vec2_1, Hashtable_1, UIEvent_1, CDefs_1, Defs_1, Attribute_1, Skill_1, VEntityState_1, HUD_1, VEntity_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VChampion extends VEntity_1.VEntity {
         constructor(battle) {
             super(battle);
+            this.self = false;
             this._skills = [];
             this._fsm = new FSM_1.FSM();
             this._moveDirection = Vec2_1.Vec2.zero;
@@ -122,9 +123,9 @@ define(["require", "exports", "../../RC/Framework/FSM/FSM", "../../RC/Math/Vec2"
             if (isNew) {
                 UIEvent_1.UIEvent.ChampionInit(this);
             }
+            this.self = this.rid.equals(Global_1.Global.battleManager.playerID);
             this.team = reader.int32();
             this.name = reader.string();
-            this._hud.name = this.name;
             this.hp = reader.int32();
             this.mhp = reader.int32();
             this.mp = reader.double();
@@ -150,6 +151,7 @@ define(["require", "exports", "../../RC/Framework/FSM/FSM", "../../RC/Math/Vec2"
                 this._fsm.ChangeState(stateType, null);
                 this._fsm.currentState.time = reader.double();
             }
+            this._hud.OnDecodeSync();
         }
         HasSkill(id) {
             for (const skill of this._skills) {

@@ -28,7 +28,8 @@ message CS2GS_KickGC {
 	enum EReason {
 		DuplicateLogin = 0;
 		OutOfSync = 1;
-		Other = 2;
+		BSLost = 2;
+		Other = 3;
 		// ...more reason
 	}
 	MsgOpts opts = 1;

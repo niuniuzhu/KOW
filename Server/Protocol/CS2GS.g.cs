@@ -31,11 +31,11 @@ namespace Protos {
             "LkVHQ0NTdGF0ZRIkCgh1c2VySW5mbxgEIAEoCzISLlByb3Rvcy5HX1VzZXJJ",
             "bmZvEg0KBWdjTklEGAUgASgEEgwKBGJzSVAYBiABKAkSDgoGYnNQb3J0GAcg",
             "ASgFIigKB0VSZXN1bHQSCwoHU3VjY2VzcxAAEhAKDElsbGVnYWxMb2dpbhAB",
-            "IiEKCUVHQ0NTdGF0ZRIICgRJZGxlEAASCgoGQmF0dGxlEAEiowEKDENTMkdT",
+            "IiEKCUVHQ0NTdGF0ZRIICgRJZGxlEAASCgoGQmF0dGxlEAEirwEKDENTMkdT",
             "X0tpY2tHQxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NO",
             "SUQYAiABKAQSLAoGcmVhc29uGAMgASgOMhwuUHJvdG9zLkNTMkdTX0tpY2tH",
-            "Qy5FUmVhc29uIjcKB0VSZWFzb24SEgoORHVwbGljYXRlTG9naW4QABINCglP",
-            "dXRPZlN5bmMQARIJCgVPdGhlchACYgZwcm90bzM="));
+            "Qy5FUmVhc29uIkMKB0VSZWFzb24SEgoORHVwbGljYXRlTG9naW4QABINCglP",
+            "dXRPZlN5bmMQARIKCgZCU0xvc3QQAhIJCgVPdGhlchADYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -587,10 +587,11 @@ namespace Protos {
       public enum EReason {
         [pbr::OriginalName("DuplicateLogin")] DuplicateLogin = 0,
         [pbr::OriginalName("OutOfSync")] OutOfSync = 1,
+        [pbr::OriginalName("BSLost")] Bslost = 2,
         /// <summary>
         /// ...more reason
         /// </summary>
-        [pbr::OriginalName("Other")] Other = 2,
+        [pbr::OriginalName("Other")] Other = 3,
       }
 
     }

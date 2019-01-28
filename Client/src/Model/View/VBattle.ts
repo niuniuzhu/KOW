@@ -16,17 +16,9 @@ import { VEffect } from "./VEffect";
 import { VSceneItem } from "./VSceneItem";
 
 export class VBattle {
-	/**
-	 * 地图ID
-	 */
 	private _mapID: number = 0;
-	/**
-	 * 虚拟摄像机
-	 */
+	private _player: VChampion;
 	private readonly _camera: Camera = new Camera();
-	/**
-	 * 战场资源管理器
-	 */
 	private readonly _assetsManager: BattleAssetsMgr = new BattleAssetsMgr();
 	/**
 	 * 特效资源池
@@ -45,8 +37,21 @@ export class VBattle {
 	private _logicFrame: number;
 	private _destroied: boolean = true;
 
+	/**
+	 * 地图ID
+	 */
 	public get mapID(): number { return this._mapID; }
+	/**
+	 * 主控
+	 */
+	public get player(): VChampion { return this._player; }
+	/**
+	 * 虚拟摄像机
+	 */
 	public get camera(): Camera { return this._camera; }
+	/**
+	 * 战场资源管理器
+	 */
 	public get assetsManager(): BattleAssetsMgr { return this._assetsManager; }
 
 	constructor() {
@@ -257,8 +262,7 @@ export class VBattle {
 		champion.DecodeSync(rid, reader, true);
 		this._champions.push(champion);
 		this._idToChampion.set(champion.rid.toString(), champion);
-		const isSelf = champion.rid.equals(Global.battleManager.playerID);
-		if (isSelf) {
+		if (champion.self) {
 			this._camera.lookAt = champion;
 		}
 		return champion;

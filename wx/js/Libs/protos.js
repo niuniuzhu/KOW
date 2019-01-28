@@ -850,6 +850,7 @@ export const Protos = $root.Protos = (() => {
                 default:
                     return "reason: enum value expected";
                 case 0:
+                case 1:
                     break;
                 }
             return null;
@@ -877,6 +878,10 @@ export const Protos = $root.Protos = (() => {
             case "OutOfSync":
             case 0:
                 message.reason = 0;
+                break;
+            case "GCLost":
+            case 1:
+                message.reason = 1;
                 break;
             }
             return message;
@@ -914,6 +919,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_KickUser.Reason = (function() {
             const valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "OutOfSync"] = 0;
+            values[valuesById[1] = "GCLost"] = 1;
             return values;
         })();
 
@@ -4565,6 +4571,7 @@ export const Protos = $root.Protos = (() => {
                 case 0:
                 case 1:
                 case 2:
+                case 3:
                     break;
                 }
             return null;
@@ -4597,9 +4604,13 @@ export const Protos = $root.Protos = (() => {
             case 1:
                 message.reason = 1;
                 break;
-            case "Other":
+            case "BSLost":
             case 2:
                 message.reason = 2;
+                break;
+            case "Other":
+            case 3:
+                message.reason = 3;
                 break;
             }
             return message;
@@ -4638,7 +4649,8 @@ export const Protos = $root.Protos = (() => {
             const valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "DuplicateLogin"] = 0;
             values[valuesById[1] = "OutOfSync"] = 1;
-            values[valuesById[2] = "Other"] = 2;
+            values[valuesById[2] = "BSLost"] = 2;
+            values[valuesById[3] = "Other"] = 3;
             return values;
         })();
 
@@ -8821,6 +8833,7 @@ export const Protos = $root.Protos = (() => {
                 case 0:
                 case 1:
                 case 2:
+                case 3:
                     break;
                 }
             return null;
@@ -8844,9 +8857,13 @@ export const Protos = $root.Protos = (() => {
             case 1:
                 message.reason = 1;
                 break;
-            case "Other":
+            case "BSLost":
             case 2:
                 message.reason = 2;
+                break;
+            case "Other":
+            case 3:
+                message.reason = 3;
                 break;
             }
             return message;

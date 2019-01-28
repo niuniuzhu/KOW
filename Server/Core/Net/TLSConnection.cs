@@ -49,6 +49,7 @@ namespace Core.Net
         {
             if ( this.socket == null )
                 return;
+			this.ProcessSendQueue();
             if ( this.connected )
             {
                 try
@@ -64,7 +65,6 @@ namespace Core.Net
             this.socket = null;
             this.remoteEndPoint = null;
             this.activeTime = 0;
-            this._sendQueue.Clear();
         }
 
         private void OnRecvBufSizeChanged()

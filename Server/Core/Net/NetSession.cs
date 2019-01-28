@@ -1,5 +1,4 @@
-﻿using Core.Misc;
-using System;
+﻿using System;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Core.Net
@@ -18,10 +17,6 @@ namespace Core.Net
 		public bool isPassive { get; set; }
 
 		protected State _state;
-
-		private bool _delayClose;
-		private long _timeToClose;
-		private string _delayCloseReason;
 
 		protected NetSession( uint id, ProtoType type, X509Certificate2 certificate )
 		{
@@ -63,13 +58,6 @@ namespace Core.Net
 
 		public void Send( byte[] data, int offset, int size ) => this.connection.Send( data, offset, size );
 
-		public void DelayClose( long delay, string reason )
-		{
-			this._delayClose = true;
-			this._timeToClose = TimeUtils.utcTime + delay;
-			this._delayCloseReason = reason;
-		}
-
 		/// <summary>
 		/// 关闭连接
 		/// </summary>
@@ -84,8 +72,6 @@ namespace Core.Net
 				NetworkMgr.instance.RemoveSession( this );
 			this.OnClose( reason );
 			this.isPassive = false;
-			this._timeToClose = 0;
-			this._delayClose = false;
 			this._state = State.Close;
 		}
 
@@ -117,12 +103,6 @@ namespace Core.Net
 		{
 			if ( this._state == State.Connected )
 				this.connection.Update( updateContext );
-
-			if ( this._delayClose && TimeUtils.utcTime >= this._timeToClose )
-			{
-				this.Close( true, this._delayCloseReason );
-				this._delayCloseReason = string.Empty;
-			}
 		}
 
 		public void HeartBeat( long dt )

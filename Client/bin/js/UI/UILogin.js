@@ -64,6 +64,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
             }
         }
         OnFail(message, callback = null) {
+            this.ModalWait(false);
             UIAlert_1.UIAlert.Show(message, callback);
         }
         ModalWait(value) {

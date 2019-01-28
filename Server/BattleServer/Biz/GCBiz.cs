@@ -65,7 +65,8 @@ namespace BattleServer.Biz
 			else
 			{
 				loginRet.Result = Protos.Global.Types.ECommon.Failed;
-				session.DelayClose( 500, "client login failed" );
+				session.Send( loginRet );
+				session.Close( true, "client login failed" );
 			}
 			return ErrorCode.Success;
 		}

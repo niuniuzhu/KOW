@@ -1,6 +1,5 @@
 ﻿using Core.Misc;
 using Google.Protobuf;
-using Protos;
 using Shared;
 using Shared.Net;
 
@@ -12,11 +11,11 @@ namespace GateServer.Biz
 		{
 			uint[] gcSIDs = GS.instance.userMgr.GetClients();
 			//广播到客户端CS丢失
-			GS2GC_CSLost csLost = ProtoCreator.Q_GS2GC_CSLost();
+			Protos.GS2GC_CSLost csLost = ProtoCreator.Q_GS2GC_CSLost();
 			GS.instance.netSessionMgr.Broadcast( gcSIDs, csLost );
 			//断开所有客户端
 			foreach ( uint gcSID in gcSIDs )
-				GS.instance.netSessionMgr.DelayCloseSession( gcSID, 100, "CS Closed" );
+				GS.instance.netSessionMgr.CloseSession( gcSID, "CS Closed" );
 			//清空客户端信息
 			GS.instance.userMgr.ClearClients();
 		}
@@ -34,7 +33,7 @@ namespace GateServer.Biz
 				GS.instance.netSessionMgr.Send( sid_, kick );
 
 				//强制断开客户端
-				GS.instance.netSessionMgr.DelayCloseSession( sid_, 100, "CS Kick" );
+				GS.instance.netSessionMgr.CloseSession( sid_, "CS Kick" );
 
 			}
 			return ErrorCode.Success;

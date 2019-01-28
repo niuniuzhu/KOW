@@ -320,7 +320,7 @@ namespace BattleServer.Battle
 			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, kickUser );
 
 			//断开玩家连接
-			BS.instance.netSessionMgr.DelayCloseSession( user.gcSID, 100, "different snapshot crc32 value" );
+			BS.instance.netSessionMgr.CloseSession( user.gcSID, "different snapshot crc32 value" );
 		}
 
 		/// <summary>

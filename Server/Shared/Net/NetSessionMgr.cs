@@ -156,15 +156,6 @@ namespace Shared.Net
 			return true;
 		}
 
-		public bool DelayCloseSession( uint sessionID, long delay, string reason )
-		{
-			INetSession session = this.GetSession( sessionID );
-			if ( session == null )
-				return false;
-			session.DelayClose( delay, reason );
-			return true;
-		}
-
 		/// <summary>
 		/// 发送消息到指定的session
 		/// </summary>

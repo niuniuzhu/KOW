@@ -80,6 +80,7 @@ export class UILogin implements IUIModule {
 	}
 
 	public OnFail(message: string, callback: () => void = null): void {
+		this.ModalWait(false);
 		UIAlert.Show(message, callback);
 	}
 

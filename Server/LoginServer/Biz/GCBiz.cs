@@ -54,7 +54,7 @@ namespace LoginServer.Biz
 							break;
 					}
 					session.Send( gcLoginRet );
-					session.DelayClose( 500, $"login fail:{errorCode}" );
+					session.Close( true, $"login fail:{errorCode}" );
 				}
 				else
 				{
@@ -117,7 +117,7 @@ namespace LoginServer.Biz
 			{
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.InvalidUname;
 				session.Send( gcLoginRet );
-				session.DelayClose( 500, "login complete" );
+				session.Close( true, "login failed" );
 				return ErrorCode.Success;
 			}
 
@@ -178,7 +178,7 @@ namespace LoginServer.Biz
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.Failed;
 				//通知客户端登陆失败
 				LS.instance.netSessionMgr.Send( sid, gcLoginRet );
-				LS.instance.netSessionMgr.DelayCloseSession( sid, 100, "login failed" );
+				LS.instance.netSessionMgr.CloseSession( sid, "login failed" );
 			}
 		}
 
@@ -224,7 +224,7 @@ namespace LoginServer.Biz
 
 				//通知客户端登陆结果
 				LS.instance.netSessionMgr.Send( sid, gcLoginRet );
-				LS.instance.netSessionMgr.DelayCloseSession( sid, 100, "login complete" );
+				LS.instance.netSessionMgr.CloseSession( sid, "login complete" );
 			}
 			else
 			{
@@ -233,7 +233,7 @@ namespace LoginServer.Biz
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.Failed;
 				//通知客户端登陆结果
 				LS.instance.netSessionMgr.Send( sid, gcLoginRet );
-				LS.instance.netSessionMgr.DelayCloseSession( sid, 100, "login failed" );
+				LS.instance.netSessionMgr.CloseSession( sid, "login failed" );
 			}
 		}
 

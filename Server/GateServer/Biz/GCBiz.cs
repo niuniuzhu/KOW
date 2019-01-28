@@ -84,7 +84,7 @@ namespace GateServer.Biz
 				case Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin:
 					gsLoginRet.Result = Protos.GS2GC_LoginRet.Types.EResult.SessionExpire;
 					GS.instance.netSessionMgr.Send( sid, gsLoginRet );
-					GS.instance.netSessionMgr.DelayCloseSession( sid, 100, "client login failed" );
+					GS.instance.netSessionMgr.CloseSession( sid, "client login failed" );
 					break;
 			}
 		}

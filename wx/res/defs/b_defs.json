@@ -158,7 +158,7 @@
 								0,
 								0
 							],
-							"trigger_time": 350,
+							"trigger_time": 300,
 							"attach_type": 1,
 							"follow_pos": true,
 							"follow_rot": true,

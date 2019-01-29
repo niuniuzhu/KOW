@@ -11,5 +11,8 @@
     "redisPort": 7000,
     "redisPwd": "159753",
     "secret": "Config/secret.json",
-    "pingInterval": 10000
+    "pingInterval": 10000,
+    "init_money": 500,
+    "init_diamoned": 200,
+    "init_honor": 0
 }

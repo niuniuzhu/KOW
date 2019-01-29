@@ -271,8 +271,9 @@ namespace CentralServer.Match
 					Nickname = player.user.nickname,
 					Avatar = player.user.avatar,
 					Gender = player.user.gender,
-					//todo
-					Honor = 0,
+					Money = player.user.money,
+					Diamoned = player.user.diamoned,
+					Honor = player.user.honor,
 					ActorID = player.actorID,
 					Team = player.team
 				};

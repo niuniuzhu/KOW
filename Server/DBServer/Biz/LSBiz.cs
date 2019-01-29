@@ -40,6 +40,9 @@ namespace DBServer.Biz
 					queryLoginRet.Nickname = dataReader.GetString( "nickname" );
 					queryLoginRet.Avatar = dataReader.GetString( "avatar" );
 					queryLoginRet.Gender = dataReader.GetByte( "gender" );
+					queryLoginRet.Money = dataReader.GetInt32( "money" );
+					queryLoginRet.Diamoned = dataReader.GetInt32( "diamoned" );
+					queryLoginRet.Honor = dataReader.GetInt32( "honor" );
 
 					ErrorCode QueryError = ErrorCode.Success;
 					if ( queryLogin.VertPwd )
@@ -56,16 +59,18 @@ namespace DBServer.Biz
 				errorCode = DB.instance.accountDB.SqlExecNonQuery(
 					$"update account_user SET channel={( byte )queryLogin.Channel},browser={( byte )queryLogin.Browser},platform={( byte )queryLogin.Platform}," +
 					$"unionID=\'{queryLogin.UnionID}\',nickname=\'{queryLogin.Nickname}\',avatar=\'{queryLogin.Avatar}\',gender={( byte )queryLogin.Gender}," +
-					$"last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\' where uname=\'{queryLogin.Name}\'",
+					$"last_login_time={queryLogin.Time},last_login_ip=\'{queryLogin.Ip}\'" +
+					$" where uname=\'{queryLogin.Name}\'",
 					out _, out uint _ );
 			}
 			else
 			{
 				//自动注册
 				errorCode = DB.instance.accountDB.SqlExecNonQuery(
-					$"insert account_user( uname,channel,browser,platform,unionID,nickname,avatar,gender,last_login_time,last_login_ip ) values" +
+					$"insert account_user( uname,channel,browser,platform,unionID,nickname,avatar,gender,money,diamoned,honor,last_login_time,last_login_ip ) values" +
 					$"(\'{queryLogin.Name}\',{( byte )queryLogin.Channel},{( byte )queryLogin.Browser},{( byte )queryLogin.Platform}," +
 					$"\'{queryLogin.UnionID}\',\'{queryLogin.Nickname}\',\'{queryLogin.Avatar}\',\'{( byte )queryLogin.Gender}\'," +
+					$"{queryLogin.Money},{queryLogin.Diamoned},{queryLogin.Honor}," +
 					$"{queryLogin.Time},\'{queryLogin.Ip}\');",
 					out _, out uint id );
 
@@ -77,6 +82,9 @@ namespace DBServer.Biz
 				queryLoginRet.Nickname = queryLogin.Nickname;
 				queryLoginRet.Avatar = queryLogin.Avatar;
 				queryLoginRet.Gender = queryLogin.Gender;
+				queryLoginRet.Money = queryLogin.Money;
+				queryLoginRet.Diamoned = queryLogin.Diamoned;
+				queryLoginRet.Honor = queryLogin.Honor;
 
 			}
 			switch ( errorCode )

@@ -81,6 +81,18 @@ namespace CentralServer.User
 		/// 性别
 		/// </summary>
 		public byte gender { get; private set; }
+		/// <summary>
+		/// 金币
+		/// </summary>
+		public int money { get; private set; }
+		/// <summary>
+		/// 钻石
+		/// </summary>
+		public int diamoned { get; private set; }
+		/// <summary>
+		/// 荣誉
+		/// </summary>
+		public int honor { get; private set; }
 
 		/// <summary>
 		/// 发送消息
@@ -103,6 +115,9 @@ namespace CentralServer.User
 			this.nickname = gcLogin.Nickname;
 			this.avatar = gcLogin.Avatar;
 			this.gender = ( byte )gcLogin.Gender;
+			this.money = gcLogin.Money;
+			this.diamoned = gcLogin.Diamoned;
+			this.honor = gcLogin.Honor;
 		}
 
 		/// <summary>

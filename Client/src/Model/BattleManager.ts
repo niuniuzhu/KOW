@@ -228,7 +228,7 @@ export class BattleManager {
 	private HandleBattleEnd(message: any): void {
 		this.QueueMessage(message, msg => {
 			const battleEnd = <Protos.CS2GC_BattleEnd>msg;
-			UIEvent.EndBattle(battleEnd.win, battleEnd.honour, () => {
+			UIEvent.EndBattle(battleEnd.result, battleEnd.honour, () => {
 				this.Destroy();
 				Global.sceneManager.ChangeState(SceneManager.State.Main);
 			});

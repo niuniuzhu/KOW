@@ -46,9 +46,11 @@ namespace Protos {
             "MiAuUHJvdG9zLkNTMkdDX0VudGVyQmF0dGxlLlJlc3VsdCJJCgZSZXN1bHQS",
             "CwoHU3VjY2VzcxAAEg4KCkJTTm90Rm91bmQQARIKCgZCU0xvc3QQAhIWChJC",
             "YXR0bGVDcmVhdGVGYWlsZWQQAyItCgxDUzJHQ19CU0xvc2USHQoEb3B0cxgB",
-            "IAEoCzIPLlByb3Rvcy5Nc2dPcHRzIk0KD0NTMkdDX0JhdHRsZUVuZBIdCgRv",
-            "cHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSCwoDd2luGAIgASgIEg4KBmhv",
-            "bm91chgDIAEoBWIGcHJvdG8z"));
+            "IAEoCzIPLlByb3Rvcy5Nc2dPcHRzIrgBCg9DUzJHQ19CYXR0bGVFbmQSHQoE",
+            "b3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEi4KBnJlc3VsdBgCIAEoDjIe",
+            "LlByb3Rvcy5DUzJHQ19CYXR0bGVFbmQuUmVzdWx0Eg4KBmhvbm91chgDIAEo",
+            "BRINCgVtb25leRgEIAEoBRIQCghkaWFtb25lZBgFIAEoBSIlCgZSZXN1bHQS",
+            "BwoDV2luEAASCAoERHJhdxABEggKBExvc2UQAmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -59,7 +61,7 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RoomInfo), global::Protos.CS2GC_RoomInfo.Parser, new[]{ "Opts", "PlayerInfos", "Progresses" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_EnterBattle), global::Protos.CS2GC_EnterBattle.Parser, new[]{ "Opts", "GcNID", "Ip", "Port", "Result" }, null, new[]{ typeof(global::Protos.CS2GC_EnterBattle.Types.Result) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BSLose), global::Protos.CS2GC_BSLose.Parser, new[]{ "Opts" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BattleEnd), global::Protos.CS2GC_BattleEnd.Parser, new[]{ "Opts", "Win", "Honour" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BattleEnd), global::Protos.CS2GC_BattleEnd.Parser, new[]{ "Opts", "Result", "Honour", "Money", "Diamoned" }, null, new[]{ typeof(global::Protos.CS2GC_BattleEnd.Types.Result) }, null)
           }));
     }
     #endregion
@@ -1642,8 +1644,10 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CS2GC_BattleEnd(CS2GC_BattleEnd other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      win_ = other.win_;
+      result_ = other.result_;
       honour_ = other.honour_;
+      money_ = other.money_;
+      diamoned_ = other.diamoned_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1663,14 +1667,14 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "win" field.</summary>
-    public const int WinFieldNumber = 2;
-    private bool win_;
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 2;
+    private global::Protos.CS2GC_BattleEnd.Types.Result result_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Win {
-      get { return win_; }
+    public global::Protos.CS2GC_BattleEnd.Types.Result Result {
+      get { return result_; }
       set {
-        win_ = value;
+        result_ = value;
       }
     }
 
@@ -1682,6 +1686,28 @@ namespace Protos {
       get { return honour_; }
       set {
         honour_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "money" field.</summary>
+    public const int MoneyFieldNumber = 4;
+    private int money_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Money {
+      get { return money_; }
+      set {
+        money_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "diamoned" field.</summary>
+    public const int DiamonedFieldNumber = 5;
+    private int diamoned_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Diamoned {
+      get { return diamoned_; }
+      set {
+        diamoned_ = value;
       }
     }
 
@@ -1699,8 +1725,10 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
-      if (Win != other.Win) return false;
+      if (Result != other.Result) return false;
       if (Honour != other.Honour) return false;
+      if (Money != other.Money) return false;
+      if (Diamoned != other.Diamoned) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1708,8 +1736,10 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
-      if (Win != false) hash ^= Win.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
       if (Honour != 0) hash ^= Honour.GetHashCode();
+      if (Money != 0) hash ^= Money.GetHashCode();
+      if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1727,13 +1757,21 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      if (Win != false) {
+      if (Result != 0) {
         output.WriteRawTag(16);
-        output.WriteBool(Win);
+        output.WriteEnum((int) Result);
       }
       if (Honour != 0) {
         output.WriteRawTag(24);
         output.WriteInt32(Honour);
+      }
+      if (Money != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Money);
+      }
+      if (Diamoned != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Diamoned);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1746,11 +1784,17 @@ namespace Protos {
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
-      if (Win != false) {
-        size += 1 + 1;
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
       if (Honour != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Honour);
+      }
+      if (Money != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Money);
+      }
+      if (Diamoned != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Diamoned);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1769,11 +1813,17 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
-      if (other.Win != false) {
-        Win = other.Win;
+      if (other.Result != 0) {
+        Result = other.Result;
       }
       if (other.Honour != 0) {
         Honour = other.Honour;
+      }
+      if (other.Money != 0) {
+        Money = other.Money;
+      }
+      if (other.Diamoned != 0) {
+        Diamoned = other.Diamoned;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1794,16 +1844,37 @@ namespace Protos {
             break;
           }
           case 16: {
-            Win = input.ReadBool();
+            result_ = (global::Protos.CS2GC_BattleEnd.Types.Result) input.ReadEnum();
             break;
           }
           case 24: {
             Honour = input.ReadInt32();
             break;
           }
+          case 32: {
+            Money = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Diamoned = input.ReadInt32();
+            break;
+          }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the CS2GC_BattleEnd message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum Result {
+        [pbr::OriginalName("Win")] Win = 0,
+        [pbr::OriginalName("Draw")] Draw = 1,
+        [pbr::OriginalName("Lose")] Lose = 2,
+      }
+
+    }
+    #endregion
 
   }
 

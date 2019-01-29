@@ -9,6 +9,14 @@ namespace BattleServer.User
 		/// 对每个账号每个BS服唯一
 		/// </summary>
 		public readonly ulong gcNID;
+		public readonly int team;
+		public readonly string nickname;
+		public readonly int actorID;
+		public readonly string avatar;
+		public readonly byte gender;
+		public readonly int money;
+		public readonly int diamoned;
+		public readonly int honor;
 
 		/// <summary>
 		/// GC连接的sessionID
@@ -25,9 +33,17 @@ namespace BattleServer.User
 		/// </summary>
 		public readonly Battle.Battle battle;
 
-		public BSUser( ulong gcNID, Battle.Battle battle )
+		public BSUser( Protos.CS2BS_PlayerInfo playerInfo, Battle.Battle battle )
 		{
-			this.gcNID = gcNID;
+			this.gcNID = playerInfo.GcNID;
+			this.team = playerInfo.Team;
+			this.nickname = playerInfo.Nickname;
+			this.avatar = playerInfo.Avatar;
+			this.actorID = playerInfo.ActorID;
+			this.gender = ( byte )playerInfo.Gender;
+			this.money = playerInfo.Money;
+			this.diamoned = playerInfo.Diamoned;
+			this.honor = playerInfo.Honor;
 			this.battle = battle;
 		}
 

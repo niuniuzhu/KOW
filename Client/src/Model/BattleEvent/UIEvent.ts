@@ -1,7 +1,8 @@
+import { Protos } from "../../Libs/protos";
 import Stack from "../../RC/Collections/Stack";
+import { EAttr } from "../Logic/Attribute";
 import { VChampion } from "../View/VChampion";
 import { BaseBattleEvent } from "./BaseBattleEvent";
-import { EAttr } from "../Logic/Attribute";
 
 export class UIEvent extends BaseBattleEvent {
 	public static readonly E_ENTITY_INIT: number = 101;
@@ -56,10 +57,10 @@ export class UIEvent extends BaseBattleEvent {
 		this.Invoke(e);
 	}
 
-	public static EndBattle(win: boolean, honer: number, callback: () => void): void {
+	public static EndBattle(result: Protos.CS2GC_BattleEnd.Result, honer: number, callback: () => void): void {
 		let e = this.Get();
 		e._type = UIEvent.E_END_BATTLE;
-		e.b0 = win;
+		e.any0 = result;
 		e.v1 = honer;
 		e.callback = callback;
 		this.Invoke(e);
@@ -78,7 +79,8 @@ export class UIEvent extends BaseBattleEvent {
 	public v0: number;
 	public v1: number;
 	public b0: boolean;
+	public any0: any;
 	public attr: EAttr;
-	public value: any; s
+	public value: any;
 	public callback: () => void;
 }

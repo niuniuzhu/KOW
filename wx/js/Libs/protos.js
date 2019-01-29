@@ -426,7 +426,8 @@ export const Protos = $root.Protos = (() => {
                         this[keys[i]] = properties[keys[i]];
         }
 
-        BS2CS_BattleEndInfo.prototype.win = false;
+        BS2CS_BattleEndInfo.prototype.result = 0;
+        BS2CS_BattleEndInfo.prototype.team = 0;
         BS2CS_BattleEndInfo.prototype.damage = 0;
         BS2CS_BattleEndInfo.prototype.hurt = 0;
         BS2CS_BattleEndInfo.prototype.heal = 0;
@@ -435,6 +436,9 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEndInfo.prototype.skill1Used = 0;
         BS2CS_BattleEndInfo.prototype.skill0Damage = 0;
         BS2CS_BattleEndInfo.prototype.skill1Damage = 0;
+        BS2CS_BattleEndInfo.prototype.honor = 0;
+        BS2CS_BattleEndInfo.prototype.money = 0;
+        BS2CS_BattleEndInfo.prototype.diamoned = 0;
 
         BS2CS_BattleEndInfo.create = function create(properties) {
             return new BS2CS_BattleEndInfo(properties);
@@ -443,8 +447,10 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEndInfo.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.win != null && message.hasOwnProperty("win"))
-                writer.uint32(16).bool(message.win);
+            if (message.result != null && message.hasOwnProperty("result"))
+                writer.uint32(8).int32(message.result);
+            if (message.team != null && message.hasOwnProperty("team"))
+                writer.uint32(16).int32(message.team);
             if (message.damage != null && message.hasOwnProperty("damage"))
                 writer.uint32(24).uint32(message.damage);
             if (message.hurt != null && message.hasOwnProperty("hurt"))
@@ -461,6 +467,12 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(72).uint32(message.skill0Damage);
             if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
                 writer.uint32(80).uint32(message.skill1Damage);
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                writer.uint32(88).int32(message.honor);
+            if (message.money != null && message.hasOwnProperty("money"))
+                writer.uint32(96).int32(message.money);
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                writer.uint32(104).int32(message.diamoned);
             return writer;
         };
 
@@ -475,8 +487,11 @@ export const Protos = $root.Protos = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
+                case 1:
+                    message.result = reader.int32();
+                    break;
                 case 2:
-                    message.win = reader.bool();
+                    message.team = reader.int32();
                     break;
                 case 3:
                     message.damage = reader.uint32();
@@ -502,6 +517,15 @@ export const Protos = $root.Protos = (() => {
                 case 10:
                     message.skill1Damage = reader.uint32();
                     break;
+                case 11:
+                    message.honor = reader.int32();
+                    break;
+                case 12:
+                    message.money = reader.int32();
+                    break;
+                case 13:
+                    message.diamoned = reader.int32();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -519,9 +543,18 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEndInfo.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.win != null && message.hasOwnProperty("win"))
-                if (typeof message.win !== "boolean")
-                    return "win: boolean expected";
+            if (message.result != null && message.hasOwnProperty("result"))
+                switch (message.result) {
+                default:
+                    return "result: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
+            if (message.team != null && message.hasOwnProperty("team"))
+                if (!$util.isInteger(message.team))
+                    return "team: integer expected";
             if (message.damage != null && message.hasOwnProperty("damage"))
                 if (!$util.isInteger(message.damage))
                     return "damage: integer expected";
@@ -546,6 +579,15 @@ export const Protos = $root.Protos = (() => {
             if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
                 if (!$util.isInteger(message.skill1Damage))
                     return "skill1Damage: integer expected";
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                if (!$util.isInteger(message.honor))
+                    return "honor: integer expected";
+            if (message.money != null && message.hasOwnProperty("money"))
+                if (!$util.isInteger(message.money))
+                    return "money: integer expected";
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                if (!$util.isInteger(message.diamoned))
+                    return "diamoned: integer expected";
             return null;
         };
 
@@ -553,8 +595,22 @@ export const Protos = $root.Protos = (() => {
             if (object instanceof $root.Protos.BS2CS_BattleEndInfo)
                 return object;
             let message = new $root.Protos.BS2CS_BattleEndInfo();
-            if (object.win != null)
-                message.win = Boolean(object.win);
+            switch (object.result) {
+            case "Win":
+            case 0:
+                message.result = 0;
+                break;
+            case "Draw":
+            case 1:
+                message.result = 1;
+                break;
+            case "Lose":
+            case 2:
+                message.result = 2;
+                break;
+            }
+            if (object.team != null)
+                message.team = object.team | 0;
             if (object.damage != null)
                 message.damage = object.damage >>> 0;
             if (object.hurt != null)
@@ -571,6 +627,12 @@ export const Protos = $root.Protos = (() => {
                 message.skill0Damage = object.skill0Damage >>> 0;
             if (object.skill1Damage != null)
                 message.skill1Damage = object.skill1Damage >>> 0;
+            if (object.honor != null)
+                message.honor = object.honor | 0;
+            if (object.money != null)
+                message.money = object.money | 0;
+            if (object.diamoned != null)
+                message.diamoned = object.diamoned | 0;
             return message;
         };
 
@@ -579,7 +641,8 @@ export const Protos = $root.Protos = (() => {
                 options = {};
             let object = {};
             if (options.defaults) {
-                object.win = false;
+                object.result = options.enums === String ? "Win" : 0;
+                object.team = 0;
                 object.damage = 0;
                 object.hurt = 0;
                 object.heal = 0;
@@ -588,9 +651,14 @@ export const Protos = $root.Protos = (() => {
                 object.skill1Used = 0;
                 object.skill0Damage = 0;
                 object.skill1Damage = 0;
+                object.honor = 0;
+                object.money = 0;
+                object.diamoned = 0;
             }
-            if (message.win != null && message.hasOwnProperty("win"))
-                object.win = message.win;
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = options.enums === String ? $root.Protos.BS2CS_BattleEndInfo.Result[message.result] : message.result;
+            if (message.team != null && message.hasOwnProperty("team"))
+                object.team = message.team;
             if (message.damage != null && message.hasOwnProperty("damage"))
                 object.damage = message.damage;
             if (message.hurt != null && message.hasOwnProperty("hurt"))
@@ -607,12 +675,26 @@ export const Protos = $root.Protos = (() => {
                 object.skill0Damage = message.skill0Damage;
             if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
                 object.skill1Damage = message.skill1Damage;
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                object.honor = message.honor;
+            if (message.money != null && message.hasOwnProperty("money"))
+                object.money = message.money;
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                object.diamoned = message.diamoned;
             return object;
         };
 
         BS2CS_BattleEndInfo.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
+
+        BS2CS_BattleEndInfo.Result = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "Win"] = 0;
+            values[valuesById[1] = "Draw"] = 1;
+            values[valuesById[2] = "Lose"] = 2;
+            return values;
+        })();
 
         return BS2CS_BattleEndInfo;
     })();
@@ -2609,6 +2691,8 @@ export const Protos = $root.Protos = (() => {
         CS2BS_PlayerInfo.prototype.nickname = "";
         CS2BS_PlayerInfo.prototype.avatar = "";
         CS2BS_PlayerInfo.prototype.gender = 0;
+        CS2BS_PlayerInfo.prototype.money = 0;
+        CS2BS_PlayerInfo.prototype.diamoned = 0;
         CS2BS_PlayerInfo.prototype.honor = 0;
         CS2BS_PlayerInfo.prototype.actorID = 0;
         CS2BS_PlayerInfo.prototype.team = 0;
@@ -2628,12 +2712,16 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(26).string(message.avatar);
             if (message.gender != null && message.hasOwnProperty("gender"))
                 writer.uint32(32).int32(message.gender);
+            if (message.money != null && message.hasOwnProperty("money"))
+                writer.uint32(40).int32(message.money);
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                writer.uint32(48).int32(message.diamoned);
             if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(40).int32(message.honor);
+                writer.uint32(56).int32(message.honor);
             if (message.actorID != null && message.hasOwnProperty("actorID"))
-                writer.uint32(48).int32(message.actorID);
+                writer.uint32(64).int32(message.actorID);
             if (message.team != null && message.hasOwnProperty("team"))
-                writer.uint32(56).int32(message.team);
+                writer.uint32(72).int32(message.team);
             return writer;
         };
 
@@ -2661,12 +2749,18 @@ export const Protos = $root.Protos = (() => {
                     message.gender = reader.int32();
                     break;
                 case 5:
-                    message.honor = reader.int32();
+                    message.money = reader.int32();
                     break;
                 case 6:
-                    message.actorID = reader.int32();
+                    message.diamoned = reader.int32();
                     break;
                 case 7:
+                    message.honor = reader.int32();
+                    break;
+                case 8:
+                    message.actorID = reader.int32();
+                    break;
+                case 9:
                     message.team = reader.int32();
                     break;
                 default:
@@ -2698,6 +2792,12 @@ export const Protos = $root.Protos = (() => {
             if (message.gender != null && message.hasOwnProperty("gender"))
                 if (!$util.isInteger(message.gender))
                     return "gender: integer expected";
+            if (message.money != null && message.hasOwnProperty("money"))
+                if (!$util.isInteger(message.money))
+                    return "money: integer expected";
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                if (!$util.isInteger(message.diamoned))
+                    return "diamoned: integer expected";
             if (message.honor != null && message.hasOwnProperty("honor"))
                 if (!$util.isInteger(message.honor))
                     return "honor: integer expected";
@@ -2729,6 +2829,10 @@ export const Protos = $root.Protos = (() => {
                 message.avatar = String(object.avatar);
             if (object.gender != null)
                 message.gender = object.gender | 0;
+            if (object.money != null)
+                message.money = object.money | 0;
+            if (object.diamoned != null)
+                message.diamoned = object.diamoned | 0;
             if (object.honor != null)
                 message.honor = object.honor | 0;
             if (object.actorID != null)
@@ -2751,6 +2855,8 @@ export const Protos = $root.Protos = (() => {
                 object.nickname = "";
                 object.avatar = "";
                 object.gender = 0;
+                object.money = 0;
+                object.diamoned = 0;
                 object.honor = 0;
                 object.actorID = 0;
                 object.team = 0;
@@ -2766,6 +2872,10 @@ export const Protos = $root.Protos = (() => {
                 object.avatar = message.avatar;
             if (message.gender != null && message.hasOwnProperty("gender"))
                 object.gender = message.gender;
+            if (message.money != null && message.hasOwnProperty("money"))
+                object.money = message.money;
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                object.diamoned = message.diamoned;
             if (message.honor != null && message.hasOwnProperty("honor"))
                 object.honor = message.honor;
             if (message.actorID != null && message.hasOwnProperty("actorID"))
@@ -4143,8 +4253,10 @@ export const Protos = $root.Protos = (() => {
         }
 
         CS2GC_BattleEnd.prototype.opts = null;
-        CS2GC_BattleEnd.prototype.win = false;
+        CS2GC_BattleEnd.prototype.result = 0;
         CS2GC_BattleEnd.prototype.honour = 0;
+        CS2GC_BattleEnd.prototype.money = 0;
+        CS2GC_BattleEnd.prototype.diamoned = 0;
 
         CS2GC_BattleEnd.create = function create(properties) {
             return new CS2GC_BattleEnd(properties);
@@ -4155,10 +4267,14 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.win != null && message.hasOwnProperty("win"))
-                writer.uint32(16).bool(message.win);
+            if (message.result != null && message.hasOwnProperty("result"))
+                writer.uint32(16).int32(message.result);
             if (message.honour != null && message.hasOwnProperty("honour"))
                 writer.uint32(24).int32(message.honour);
+            if (message.money != null && message.hasOwnProperty("money"))
+                writer.uint32(32).int32(message.money);
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                writer.uint32(40).int32(message.diamoned);
             return writer;
         };
 
@@ -4177,10 +4293,16 @@ export const Protos = $root.Protos = (() => {
                     message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.win = reader.bool();
+                    message.result = reader.int32();
                     break;
                 case 3:
                     message.honour = reader.int32();
+                    break;
+                case 4:
+                    message.money = reader.int32();
+                    break;
+                case 5:
+                    message.diamoned = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -4204,12 +4326,24 @@ export const Protos = $root.Protos = (() => {
                 if (error)
                     return "opts." + error;
             }
-            if (message.win != null && message.hasOwnProperty("win"))
-                if (typeof message.win !== "boolean")
-                    return "win: boolean expected";
+            if (message.result != null && message.hasOwnProperty("result"))
+                switch (message.result) {
+                default:
+                    return "result: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
             if (message.honour != null && message.hasOwnProperty("honour"))
                 if (!$util.isInteger(message.honour))
                     return "honour: integer expected";
+            if (message.money != null && message.hasOwnProperty("money"))
+                if (!$util.isInteger(message.money))
+                    return "money: integer expected";
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                if (!$util.isInteger(message.diamoned))
+                    return "diamoned: integer expected";
             return null;
         };
 
@@ -4222,10 +4356,26 @@ export const Protos = $root.Protos = (() => {
                     throw TypeError(".Protos.CS2GC_BattleEnd.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
-            if (object.win != null)
-                message.win = Boolean(object.win);
+            switch (object.result) {
+            case "Win":
+            case 0:
+                message.result = 0;
+                break;
+            case "Draw":
+            case 1:
+                message.result = 1;
+                break;
+            case "Lose":
+            case 2:
+                message.result = 2;
+                break;
+            }
             if (object.honour != null)
                 message.honour = object.honour | 0;
+            if (object.money != null)
+                message.money = object.money | 0;
+            if (object.diamoned != null)
+                message.diamoned = object.diamoned | 0;
             return message;
         };
 
@@ -4235,21 +4385,35 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
-                object.win = false;
+                object.result = options.enums === String ? "Win" : 0;
                 object.honour = 0;
+                object.money = 0;
+                object.diamoned = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.win != null && message.hasOwnProperty("win"))
-                object.win = message.win;
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = options.enums === String ? $root.Protos.CS2GC_BattleEnd.Result[message.result] : message.result;
             if (message.honour != null && message.hasOwnProperty("honour"))
                 object.honour = message.honour;
+            if (message.money != null && message.hasOwnProperty("money"))
+                object.money = message.money;
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                object.diamoned = message.diamoned;
             return object;
         };
 
         CS2GC_BattleEnd.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
+
+        CS2GC_BattleEnd.Result = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "Win"] = 0;
+            values[valuesById[1] = "Draw"] = 1;
+            values[valuesById[2] = "Lose"] = 2;
+            return values;
+        })();
 
         return CS2GC_BattleEnd;
     })();
@@ -5814,6 +5978,9 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryLoginRet.prototype.nickname = "";
         DB2LS_QueryLoginRet.prototype.avatar = "";
         DB2LS_QueryLoginRet.prototype.gender = 0;
+        DB2LS_QueryLoginRet.prototype.money = 0;
+        DB2LS_QueryLoginRet.prototype.diamoned = 0;
+        DB2LS_QueryLoginRet.prototype.honor = 0;
 
         DB2LS_QueryLoginRet.create = function create(properties) {
             return new DB2LS_QueryLoginRet(properties);
@@ -5842,6 +6009,12 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(74).string(message.avatar);
             if (message.gender != null && message.hasOwnProperty("gender"))
                 writer.uint32(80).int32(message.gender);
+            if (message.money != null && message.hasOwnProperty("money"))
+                writer.uint32(88).int32(message.money);
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                writer.uint32(96).int32(message.diamoned);
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                writer.uint32(104).int32(message.honor);
             return writer;
         };
 
@@ -5885,6 +6058,15 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 10:
                     message.gender = reader.int32();
+                    break;
+                case 11:
+                    message.money = reader.int32();
+                    break;
+                case 12:
+                    message.diamoned = reader.int32();
+                    break;
+                case 13:
+                    message.honor = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -5960,6 +6142,15 @@ export const Protos = $root.Protos = (() => {
             if (message.gender != null && message.hasOwnProperty("gender"))
                 if (!$util.isInteger(message.gender))
                     return "gender: integer expected";
+            if (message.money != null && message.hasOwnProperty("money"))
+                if (!$util.isInteger(message.money))
+                    return "money: integer expected";
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                if (!$util.isInteger(message.diamoned))
+                    return "diamoned: integer expected";
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                if (!$util.isInteger(message.honor))
+                    return "honor: integer expected";
             return null;
         };
 
@@ -6042,6 +6233,12 @@ export const Protos = $root.Protos = (() => {
                 message.avatar = String(object.avatar);
             if (object.gender != null)
                 message.gender = object.gender | 0;
+            if (object.money != null)
+                message.money = object.money | 0;
+            if (object.diamoned != null)
+                message.diamoned = object.diamoned | 0;
+            if (object.honor != null)
+                message.honor = object.honor | 0;
             return message;
         };
 
@@ -6060,6 +6257,9 @@ export const Protos = $root.Protos = (() => {
                 object.nickname = "";
                 object.avatar = "";
                 object.gender = 0;
+                object.money = 0;
+                object.diamoned = 0;
+                object.honor = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -6081,6 +6281,12 @@ export const Protos = $root.Protos = (() => {
                 object.avatar = message.avatar;
             if (message.gender != null && message.hasOwnProperty("gender"))
                 object.gender = message.gender;
+            if (message.money != null && message.hasOwnProperty("money"))
+                object.money = message.money;
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                object.diamoned = message.diamoned;
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                object.honor = message.honor;
             return object;
         };
 
@@ -9004,6 +9210,9 @@ export const Protos = $root.Protos = (() => {
         LS2CS_GCLogin.prototype.nickname = "";
         LS2CS_GCLogin.prototype.avatar = "";
         LS2CS_GCLogin.prototype.gender = 0;
+        LS2CS_GCLogin.prototype.money = 0;
+        LS2CS_GCLogin.prototype.diamoned = 0;
+        LS2CS_GCLogin.prototype.honor = 0;
 
         LS2CS_GCLogin.create = function create(properties) {
             return new LS2CS_GCLogin(properties);
@@ -9036,6 +9245,12 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(90).string(message.avatar);
             if (message.gender != null && message.hasOwnProperty("gender"))
                 writer.uint32(96).int32(message.gender);
+            if (message.money != null && message.hasOwnProperty("money"))
+                writer.uint32(104).int32(message.money);
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                writer.uint32(112).int32(message.diamoned);
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                writer.uint32(120).int32(message.honor);
             return writer;
         };
 
@@ -9085,6 +9300,15 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 12:
                     message.gender = reader.int32();
+                    break;
+                case 13:
+                    message.money = reader.int32();
+                    break;
+                case 14:
+                    message.diamoned = reader.int32();
+                    break;
+                case 15:
+                    message.honor = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -9161,6 +9385,15 @@ export const Protos = $root.Protos = (() => {
             if (message.gender != null && message.hasOwnProperty("gender"))
                 if (!$util.isInteger(message.gender))
                     return "gender: integer expected";
+            if (message.money != null && message.hasOwnProperty("money"))
+                if (!$util.isInteger(message.money))
+                    return "money: integer expected";
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                if (!$util.isInteger(message.diamoned))
+                    return "diamoned: integer expected";
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                if (!$util.isInteger(message.honor))
+                    return "honor: integer expected";
             return null;
         };
 
@@ -9246,6 +9479,12 @@ export const Protos = $root.Protos = (() => {
                 message.avatar = String(object.avatar);
             if (object.gender != null)
                 message.gender = object.gender | 0;
+            if (object.money != null)
+                message.money = object.money | 0;
+            if (object.diamoned != null)
+                message.diamoned = object.diamoned | 0;
+            if (object.honor != null)
+                message.honor = object.honor | 0;
             return message;
         };
 
@@ -9270,6 +9509,9 @@ export const Protos = $root.Protos = (() => {
                 object.nickname = "";
                 object.avatar = "";
                 object.gender = 0;
+                object.money = 0;
+                object.diamoned = 0;
+                object.honor = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -9298,6 +9540,12 @@ export const Protos = $root.Protos = (() => {
                 object.avatar = message.avatar;
             if (message.gender != null && message.hasOwnProperty("gender"))
                 object.gender = message.gender;
+            if (message.money != null && message.hasOwnProperty("money"))
+                object.money = message.money;
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                object.diamoned = message.diamoned;
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                object.honor = message.honor;
             return object;
         };
 
@@ -9437,6 +9685,9 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryLogin.prototype.nickname = "";
         LS2DB_QueryLogin.prototype.avatar = "";
         LS2DB_QueryLogin.prototype.gender = 0;
+        LS2DB_QueryLogin.prototype.money = 0;
+        LS2DB_QueryLogin.prototype.diamoned = 0;
+        LS2DB_QueryLogin.prototype.honor = 0;
 
         LS2DB_QueryLogin.create = function create(properties) {
             return new LS2DB_QueryLogin(properties);
@@ -9471,6 +9722,12 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(98).string(message.avatar);
             if (message.gender != null && message.hasOwnProperty("gender"))
                 writer.uint32(104).int32(message.gender);
+            if (message.money != null && message.hasOwnProperty("money"))
+                writer.uint32(112).int32(message.money);
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                writer.uint32(120).int32(message.diamoned);
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                writer.uint32(128).int32(message.honor);
             return writer;
         };
 
@@ -9523,6 +9780,15 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 13:
                     message.gender = reader.int32();
+                    break;
+                case 14:
+                    message.money = reader.int32();
+                    break;
+                case 15:
+                    message.diamoned = reader.int32();
+                    break;
+                case 16:
+                    message.honor = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -9602,6 +9868,15 @@ export const Protos = $root.Protos = (() => {
             if (message.gender != null && message.hasOwnProperty("gender"))
                 if (!$util.isInteger(message.gender))
                     return "gender: integer expected";
+            if (message.money != null && message.hasOwnProperty("money"))
+                if (!$util.isInteger(message.money))
+                    return "money: integer expected";
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                if (!$util.isInteger(message.diamoned))
+                    return "diamoned: integer expected";
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                if (!$util.isInteger(message.honor))
+                    return "honor: integer expected";
             return null;
         };
 
@@ -9689,6 +9964,12 @@ export const Protos = $root.Protos = (() => {
                 message.avatar = String(object.avatar);
             if (object.gender != null)
                 message.gender = object.gender | 0;
+            if (object.money != null)
+                message.money = object.money | 0;
+            if (object.diamoned != null)
+                message.diamoned = object.diamoned | 0;
+            if (object.honor != null)
+                message.honor = object.honor | 0;
             return message;
         };
 
@@ -9714,6 +9995,9 @@ export const Protos = $root.Protos = (() => {
                 object.nickname = "";
                 object.avatar = "";
                 object.gender = 0;
+                object.money = 0;
+                object.diamoned = 0;
+                object.honor = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -9744,6 +10028,12 @@ export const Protos = $root.Protos = (() => {
                 object.avatar = message.avatar;
             if (message.gender != null && message.hasOwnProperty("gender"))
                 object.gender = message.gender;
+            if (message.money != null && message.hasOwnProperty("money"))
+                object.money = message.money;
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                object.diamoned = message.diamoned;
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                object.honor = message.honor;
             return object;
         };
 

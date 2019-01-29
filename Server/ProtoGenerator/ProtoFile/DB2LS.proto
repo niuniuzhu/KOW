@@ -19,6 +19,9 @@ message DB2LS_QueryLoginRet{
 	string nickname = 8;
 	string avatar = 9;
 	int32 gender = 10;
+	int32 money = 11;
+	int32 diamoned = 12;
+	int32 honor = 13;
 }
 
 message DB2LS_ExecRet{

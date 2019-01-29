@@ -1,7 +1,7 @@
 ﻿using BattleServer.Battle.Model;
 using BattleServer.Battle.Snapshot;
+using BattleServer.User;
 using Core.Misc;
-using Google.Protobuf;
 using Shared.Net;
 using System;
 using System.Collections.Generic;
@@ -33,12 +33,15 @@ namespace BattleServer.Battle
 		/// </summary>
 		internal void CreateBattle( Protos.CS2BS_BattleInfo battleInfo, Action<uint, bool> callback )
 		{
+			//创建战场
+			Battle battle = POOL.Pop();
+
 			//创建战场描述
 			BattleEntry battleEntry;
 			battleEntry.rndSeed = this._random.Next();
 			battleEntry.mapID = battleInfo.MapID;
 			int count = battleInfo.PlayerInfos.Count;
-			battleEntry.players = new BattleEntry.Player[count];
+			battleEntry.users = new BSUser[count];
 			for ( int i = 0; i < count; i++ )
 			{
 				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfos[i];
@@ -49,26 +52,8 @@ namespace BattleServer.Battle
 					return;
 				}
 				//创建玩家
-				BattleEntry.Player player = new BattleEntry.Player
-				{
-					gcNID = playerInfo.GcNID,
-					actorID = playerInfo.ActorID,
-					nickname = playerInfo.Nickname,
-					avatar = playerInfo.Avatar,
-					gender = ( byte )playerInfo.Gender,
-					//todo
-					honor = 0,
-					team = playerInfo.Team
-				};
-				battleEntry.players[i] = player;
+				battleEntry.users[i] = BS.instance.userMgr.CreateUser( playerInfo, battle );
 			}
-
-			//创建战场
-			Battle battle = POOL.Pop();
-
-			//创建用户
-			foreach ( var player in battleEntry.players )
-				BS.instance.userMgr.CreateUser( player.gcNID, battle );
 
 			//初始化战场
 			battle.Init( battleEntry );
@@ -119,7 +104,11 @@ namespace BattleServer.Battle
 				Champion champion = battle.GetChampionAt( i );
 				var info = new Protos.BS2CS_BattleEndInfo
 				{
-					Win = champion.win,
+					Result = ( Protos.BS2CS_BattleEndInfo.Types.Result )champion.result,
+					Team = champion.team,
+					Money = champion.user.money,
+					Diamoned = champion.user.diamoned,
+					Honor = champion.user.honor,
 					Damage = champion.damage,
 					Hurt = champion.hurt,
 					Heal = champion.heal,
@@ -127,14 +116,14 @@ namespace BattleServer.Battle
 					Skill0Used = champion.skill0Used,
 					Skill0Damage = champion.skill0Damage,
 					Skill1Used = champion.skill1Used,
-					Skill1Damage = champion.skill1Damage
+					Skill1Damage = champion.skill1Damage,
 				};
 				battleEnd.Infos.Add( champion.user.gcNID, info );
 			}
 			BS.instance.netSessionMgr.Send( SessionType.ServerB2CS, battleEnd, RPCEntry.Pop( this.OnCSBattleEndRet, battle ) );
 		}
 
-		private void OnCSBattleEndRet( NetSessionBase session, IMessage message, object[] args )
+		private void OnCSBattleEndRet( NetSessionBase session, Google.Protobuf.IMessage message, object[] args )
 		{
 			Battle battle = ( Battle )args[0];
 			int count = battle.numChampions;

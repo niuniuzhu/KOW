@@ -85,22 +85,28 @@ namespace LoginServer
 			HelpText = "interval to ping to cs." )]
 		public long pingInterval { get; set; }
 
-		[Option( "pwd_verification",
-			Default = 0,
-			SetName = "bysetting",
-			HelpText = "password verification." )]
-		public int pwdVerification { get; set; }
-
-		[Option( "auto_register",
-			Default = 1,
-			SetName = "bysetting",
-			HelpText = "auto register." )]
-		public int autoRegister { get; set; }
-
 		[Option( "code2session_url",
 			Default = "",
 			SetName = "bysetting",
 			HelpText = "Expire time for login session." )]
 		public string code2sessionUrl { get; set; }
+
+		[Option( "init_money",
+			Default = 500,
+			SetName = "bysetting",
+			HelpText = "init money" )]
+		public int initMoney { get; set; }
+
+		[Option( "init_diamoned",
+			Default = 200,
+			SetName = "bysetting",
+			HelpText = "init diamoned" )]
+		public int initDiamoned { get; set; }
+
+		[Option( "init_honor",
+			Default = 0,
+			SetName = "bysetting",
+			HelpText = "init honor" )]
+		public int initHonor { get; set; }
 	}
 }

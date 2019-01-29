@@ -78,7 +78,8 @@ export namespace Protos {
     }
 
     interface IBS2CS_BattleEndInfo {
-        win?: (boolean|null);
+        result?: (Protos.BS2CS_BattleEndInfo.Result|null);
+        team?: (number|null);
         damage?: (number|null);
         hurt?: (number|null);
         heal?: (number|null);
@@ -87,11 +88,15 @@ export namespace Protos {
         skill1Used?: (number|null);
         skill0Damage?: (number|null);
         skill1Damage?: (number|null);
+        honor?: (number|null);
+        money?: (number|null);
+        diamoned?: (number|null);
     }
 
     class BS2CS_BattleEndInfo implements IBS2CS_BattleEndInfo {
         constructor(properties?: Protos.IBS2CS_BattleEndInfo);
-        public win: boolean;
+        public result: Protos.BS2CS_BattleEndInfo.Result;
+        public team: number;
         public damage: number;
         public hurt: number;
         public heal: number;
@@ -100,6 +105,9 @@ export namespace Protos {
         public skill1Used: number;
         public skill0Damage: number;
         public skill1Damage: number;
+        public honor: number;
+        public money: number;
+        public diamoned: number;
         public static create(properties?: Protos.IBS2CS_BattleEndInfo): Protos.BS2CS_BattleEndInfo;
         public static encode(message: Protos.IBS2CS_BattleEndInfo, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IBS2CS_BattleEndInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -109,6 +117,15 @@ export namespace Protos {
         public static fromObject(object: { [k: string]: any }): Protos.BS2CS_BattleEndInfo;
         public static toObject(message: Protos.BS2CS_BattleEndInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace BS2CS_BattleEndInfo {
+
+        enum Result {
+            Win = 0,
+            Draw = 1,
+            Lose = 2
+        }
     }
 
     interface IBS2CS_BattleEnd {
@@ -526,6 +543,8 @@ export namespace Protos {
         nickname?: (string|null);
         avatar?: (string|null);
         gender?: (number|null);
+        money?: (number|null);
+        diamoned?: (number|null);
         honor?: (number|null);
         actorID?: (number|null);
         team?: (number|null);
@@ -537,6 +556,8 @@ export namespace Protos {
         public nickname: string;
         public avatar: string;
         public gender: number;
+        public money: number;
+        public diamoned: number;
         public honor: number;
         public actorID: number;
         public team: number;
@@ -781,15 +802,19 @@ export namespace Protos {
 
     interface ICS2GC_BattleEnd {
         opts?: (Protos.IMsgOpts|null);
-        win?: (boolean|null);
+        result?: (Protos.CS2GC_BattleEnd.Result|null);
         honour?: (number|null);
+        money?: (number|null);
+        diamoned?: (number|null);
     }
 
     class CS2GC_BattleEnd implements ICS2GC_BattleEnd {
         constructor(properties?: Protos.ICS2GC_BattleEnd);
         public opts?: (Protos.IMsgOpts|null);
-        public win: boolean;
+        public result: Protos.CS2GC_BattleEnd.Result;
         public honour: number;
+        public money: number;
+        public diamoned: number;
         public static create(properties?: Protos.ICS2GC_BattleEnd): Protos.CS2GC_BattleEnd;
         public static encode(message: Protos.ICS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_BattleEnd, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -799,6 +824,15 @@ export namespace Protos {
         public static fromObject(object: { [k: string]: any }): Protos.CS2GC_BattleEnd;
         public static toObject(message: Protos.CS2GC_BattleEnd, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace CS2GC_BattleEnd {
+
+        enum Result {
+            Win = 0,
+            Draw = 1,
+            Lose = 2
+        }
     }
 
     interface ICS2GS_GCLoginRet {
@@ -1093,6 +1127,9 @@ export namespace Protos {
         nickname?: (string|null);
         avatar?: (string|null);
         gender?: (number|null);
+        money?: (number|null);
+        diamoned?: (number|null);
+        honor?: (number|null);
     }
 
     class DB2LS_QueryLoginRet implements IDB2LS_QueryLoginRet {
@@ -1107,6 +1144,9 @@ export namespace Protos {
         public nickname: string;
         public avatar: string;
         public gender: number;
+        public money: number;
+        public diamoned: number;
+        public honor: number;
         public static create(properties?: Protos.IDB2LS_QueryLoginRet): Protos.DB2LS_QueryLoginRet;
         public static encode(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1608,6 +1648,9 @@ export namespace Protos {
         nickname?: (string|null);
         avatar?: (string|null);
         gender?: (number|null);
+        money?: (number|null);
+        diamoned?: (number|null);
+        honor?: (number|null);
     }
 
     class LS2CS_GCLogin implements ILS2CS_GCLogin {
@@ -1624,6 +1667,9 @@ export namespace Protos {
         public nickname: string;
         public avatar: string;
         public gender: number;
+        public money: number;
+        public diamoned: number;
+        public honor: number;
         public static create(properties?: Protos.ILS2CS_GCLogin): Protos.LS2CS_GCLogin;
         public static encode(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1669,6 +1715,9 @@ export namespace Protos {
         nickname?: (string|null);
         avatar?: (string|null);
         gender?: (number|null);
+        money?: (number|null);
+        diamoned?: (number|null);
+        honor?: (number|null);
     }
 
     class LS2DB_QueryLogin implements ILS2DB_QueryLogin {
@@ -1686,6 +1735,9 @@ export namespace Protos {
         public nickname: string;
         public avatar: string;
         public gender: number;
+        public money: number;
+        public diamoned: number;
+        public honor: number;
         public static create(properties?: Protos.ILS2DB_QueryLogin): Protos.LS2DB_QueryLogin;
         public static encode(message: Protos.ILS2DB_QueryLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2DB_QueryLogin, writer?: $protobuf.Writer): $protobuf.Writer;

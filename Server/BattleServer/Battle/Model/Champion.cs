@@ -11,6 +11,13 @@ namespace BattleServer.Battle.Model
 {
 	public class Champion : Entity
 	{
+		public enum Result
+		{
+			Win,
+			Draw,
+			Lose
+		}
+
 		///<summary>
 		/// 队伍
 		/// </summary>
@@ -107,7 +114,7 @@ namespace BattleServer.Battle.Model
 
 		public BSUser user { get; internal set; }
 
-		public bool win;
+		public Result result;
 		public uint damage;
 		public uint hurt;
 		public uint heal;

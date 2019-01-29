@@ -20,8 +20,9 @@ namespace LoginServer
 		public string certPath;
 		public string certPass;
 		public long pingInterval;
-		public bool pwdVerification;
-		public bool autoRegister;
+		public int initMoney;
+		public int initDiamoned;
+		public int initHonor;
 
 		public void CopyFromCLIOptions( Options opts )
 		{
@@ -37,11 +38,12 @@ namespace LoginServer
 			this.redisPort = opts.redisPort;
 			this.redisPwd = opts.redisPwd;
 			this.pingInterval = opts.pingInterval;
-			this.pwdVerification = System.Convert.ToBoolean( opts.pwdVerification );
-			this.autoRegister = System.Convert.ToBoolean( opts.autoRegister );
 			Hashtable secretDef = ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.secret ) );
 			this.certPath = secretDef.GetString( "certPath" );
 			this.certPass = secretDef.GetString( "certPass" );
+			this.initMoney = opts.initMoney;
+			this.initDiamoned = opts.initDiamoned;
+			this.initHonor = opts.initHonor;
 		}
 
 		public void CopyFromJson( Hashtable json )
@@ -58,11 +60,12 @@ namespace LoginServer
 			this.redisPort = json.GetInt( "redisPort" );
 			this.redisPwd = json.GetString( "redisPwd" );
 			this.pingInterval = json.GetLong( "pingInterval" );
-			this.pwdVerification = json.GetBoolean( "pwdVerification" );
-			this.autoRegister = json.GetBoolean( "autoRegister" );
 			Hashtable secretDef = ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( json.GetString( "secret" ) ) );
 			this.certPath = secretDef.GetString( "certPath" );
 			this.certPass = secretDef.GetString( "certPass" );
+			this.initMoney = json.GetInt( "init_money" );
+			this.initDiamoned = json.GetInt( "init_diamoned" );
+			this.initHonor = json.GetInt( "init_honor" );
 		}
 	}
 }

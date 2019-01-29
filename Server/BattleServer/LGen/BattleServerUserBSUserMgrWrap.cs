@@ -21,13 +21,14 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.User.BSUserMgr);
-			Utils.BeginObjectRegister(type, L, translator, 0, 9, 1, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 10, 1, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "HasUser", _m_HasUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetUser", _m_GetUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SendToUser", _m_SendToUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "CreateUser", _m_CreateUser);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "DestroyUser", _m_DestroyUser);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OfflineAndDestroyAllUsers", _m_OfflineAndDestroyAllUsers);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Online", _m_Online);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Offline", _m_Offline);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "KickUser", _m_KickUser);
@@ -212,10 +213,10 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    ulong gcNID = LuaAPI.lua_touint64(L, 2);
+                    Protos.CS2BS_PlayerInfo playerInfo = (Protos.CS2BS_PlayerInfo)translator.GetObject(L, 2, typeof(Protos.CS2BS_PlayerInfo));
                     BattleServer.Battle.Battle battle = (BattleServer.Battle.Battle)translator.GetObject(L, 3, typeof(BattleServer.Battle.Battle));
                     
-                        BattleServer.User.BSUser __cl_gen_ret = __cl_gen_to_be_invoked.CreateUser( gcNID, battle );
+                        BattleServer.User.BSUser __cl_gen_ret = __cl_gen_to_be_invoked.CreateUser( playerInfo, battle );
                         translator.Push(L, __cl_gen_ret);
                     
                     
@@ -245,6 +246,33 @@ namespace XLua.CSObjectWrap
                     BattleServer.User.BSUser user = (BattleServer.User.BSUser)translator.GetObject(L, 2, typeof(BattleServer.User.BSUser));
                     
                     __cl_gen_to_be_invoked.DestroyUser( user );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_OfflineAndDestroyAllUsers(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                BattleServer.User.BSUserMgr __cl_gen_to_be_invoked = (BattleServer.User.BSUserMgr)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    __cl_gen_to_be_invoked.OfflineAndDestroyAllUsers(  );
                     
                     
                     

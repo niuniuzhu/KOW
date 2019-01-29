@@ -32,25 +32,28 @@ namespace Protos {
             "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvImkKE0JTMkNTX0JhdHRs",
             "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiYKBnJl",
             "c3VsdBgCIAEoDjIWLlByb3Rvcy5HbG9iYWwuRUNvbW1vbhILCgNiaWQYAyAB",
-            "KA0itgEKE0JTMkNTX0JhdHRsZUVuZEluZm8SCwoDd2luGAIgASgIEg4KBmRh",
-            "bWFnZRgDIAEoDRIMCgRodXJ0GAQgASgNEgwKBGhlYWwYBSABKA0SEgoKb2Nj",
-            "dXB5VGltZRgGIAEoDRISCgpza2lsbDBVc2VkGAcgASgNEhIKCnNraWxsMVVz",
-            "ZWQYCCABKA0SFAoMc2tpbGwwRGFtYWdlGAkgASgNEhQKDHNraWxsMURhbWFn",
-            "ZRgKIAEoDSK7AQoPQlMyQ1NfQmF0dGxlRW5kEh0KBG9wdHMYASABKAsyDy5Q",
-            "cm90b3MuTXNnT3B0cxILCgNiaWQYAiABKA0SMQoFaW5mb3MYAyADKAsyIi5Q",
-            "cm90b3MuQlMyQ1NfQmF0dGxlRW5kLkluZm9zRW50cnkaSQoKSW5mb3NFbnRy",
-            "eRILCgNrZXkYASABKAQSKgoFdmFsdWUYAiABKAsyGy5Qcm90b3MuQlMyQ1Nf",
-            "QmF0dGxlRW5kSW5mbzoCOAEikgEKDkJTMkNTX0tpY2tVc2VyEh0KBG9wdHMY",
-            "ASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVnY05JRBgCIAEoBBItCgZyZWFz",
-            "b24YAyABKA4yHS5Qcm90b3MuQlMyQ1NfS2lja1VzZXIuUmVhc29uIiMKBlJl",
-            "YXNvbhINCglPdXRPZlN5bmMQABIKCgZHQ0xvc3QQAWIGcHJvdG8z"));
+            "KA0iwgIKE0JTMkNTX0JhdHRsZUVuZEluZm8SMgoGcmVzdWx0GAEgASgOMiIu",
+            "UHJvdG9zLkJTMkNTX0JhdHRsZUVuZEluZm8uUmVzdWx0EgwKBHRlYW0YAiAB",
+            "KAUSDgoGZGFtYWdlGAMgASgNEgwKBGh1cnQYBCABKA0SDAoEaGVhbBgFIAEo",
+            "DRISCgpvY2N1cHlUaW1lGAYgASgNEhIKCnNraWxsMFVzZWQYByABKA0SEgoK",
+            "c2tpbGwxVXNlZBgIIAEoDRIUCgxza2lsbDBEYW1hZ2UYCSABKA0SFAoMc2tp",
+            "bGwxRGFtYWdlGAogASgNEg0KBWhvbm9yGAsgASgFEg0KBW1vbmV5GAwgASgF",
+            "EhAKCGRpYW1vbmVkGA0gASgFIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3",
+            "EAESCAoETG9zZRACIrsBCg9CUzJDU19CYXR0bGVFbmQSHQoEb3B0cxgBIAEo",
+            "CzIPLlByb3Rvcy5Nc2dPcHRzEgsKA2JpZBgCIAEoDRIxCgVpbmZvcxgDIAMo",
+            "CzIiLlByb3Rvcy5CUzJDU19CYXR0bGVFbmQuSW5mb3NFbnRyeRpJCgpJbmZv",
+            "c0VudHJ5EgsKA2tleRgBIAEoBBIqCgV2YWx1ZRgCIAEoCzIbLlByb3Rvcy5C",
+            "UzJDU19CYXR0bGVFbmRJbmZvOgI4ASKSAQoOQlMyQ1NfS2lja1VzZXISHQoE",
+            "b3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdjTklEGAIgASgEEi0K",
+            "BnJlYXNvbhgDIAEoDjIdLlByb3Rvcy5CUzJDU19LaWNrVXNlci5SZWFzb24i",
+            "IwoGUmVhc29uEg0KCU91dE9mU3luYxAAEgoKBkdDTG9zdBABYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BSInfo), global::Protos.BSInfo.Parser, new[]{ "Id", "Ip", "Port", "State" }, null, new[]{ typeof(global::Protos.BSInfo.Types.State) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_ReportState), global::Protos.BS2CS_ReportState.Parser, new[]{ "Opts", "BsInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts", "Result", "Bid" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEndInfo), global::Protos.BS2CS_BattleEndInfo.Parser, new[]{ "Win", "Damage", "Hurt", "Heal", "OccupyTime", "Skill0Used", "Skill1Used", "Skill0Damage", "Skill1Damage" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEndInfo), global::Protos.BS2CS_BattleEndInfo.Parser, new[]{ "Result", "Team", "Damage", "Hurt", "Heal", "OccupyTime", "Skill0Used", "Skill1Used", "Skill0Damage", "Skill1Damage", "Honor", "Money", "Diamoned" }, null, new[]{ typeof(global::Protos.BS2CS_BattleEndInfo.Types.Result) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEnd), global::Protos.BS2CS_BattleEnd.Parser, new[]{ "Opts", "Bid", "Infos" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_KickUser), global::Protos.BS2CS_KickUser.Parser, new[]{ "Opts", "GcNID", "Reason" }, null, new[]{ typeof(global::Protos.BS2CS_KickUser.Types.Reason) }, null)
           }));
@@ -683,7 +686,8 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public BS2CS_BattleEndInfo(BS2CS_BattleEndInfo other) : this() {
-      win_ = other.win_;
+      result_ = other.result_;
+      team_ = other.team_;
       damage_ = other.damage_;
       hurt_ = other.hurt_;
       heal_ = other.heal_;
@@ -692,6 +696,9 @@ namespace Protos {
       skill1Used_ = other.skill1Used_;
       skill0Damage_ = other.skill0Damage_;
       skill1Damage_ = other.skill1Damage_;
+      honor_ = other.honor_;
+      money_ = other.money_;
+      diamoned_ = other.diamoned_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -700,14 +707,25 @@ namespace Protos {
       return new BS2CS_BattleEndInfo(this);
     }
 
-    /// <summary>Field number for the "win" field.</summary>
-    public const int WinFieldNumber = 2;
-    private bool win_;
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 1;
+    private global::Protos.BS2CS_BattleEndInfo.Types.Result result_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Win {
-      get { return win_; }
+    public global::Protos.BS2CS_BattleEndInfo.Types.Result Result {
+      get { return result_; }
       set {
-        win_ = value;
+        result_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "team" field.</summary>
+    public const int TeamFieldNumber = 2;
+    private int team_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Team {
+      get { return team_; }
+      set {
+        team_ = value;
       }
     }
 
@@ -799,6 +817,39 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "honor" field.</summary>
+    public const int HonorFieldNumber = 11;
+    private int honor_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Honor {
+      get { return honor_; }
+      set {
+        honor_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "money" field.</summary>
+    public const int MoneyFieldNumber = 12;
+    private int money_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Money {
+      get { return money_; }
+      set {
+        money_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "diamoned" field.</summary>
+    public const int DiamonedFieldNumber = 13;
+    private int diamoned_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Diamoned {
+      get { return diamoned_; }
+      set {
+        diamoned_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as BS2CS_BattleEndInfo);
@@ -812,7 +863,8 @@ namespace Protos {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Win != other.Win) return false;
+      if (Result != other.Result) return false;
+      if (Team != other.Team) return false;
       if (Damage != other.Damage) return false;
       if (Hurt != other.Hurt) return false;
       if (Heal != other.Heal) return false;
@@ -821,13 +873,17 @@ namespace Protos {
       if (Skill1Used != other.Skill1Used) return false;
       if (Skill0Damage != other.Skill0Damage) return false;
       if (Skill1Damage != other.Skill1Damage) return false;
+      if (Honor != other.Honor) return false;
+      if (Money != other.Money) return false;
+      if (Diamoned != other.Diamoned) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Win != false) hash ^= Win.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
+      if (Team != 0) hash ^= Team.GetHashCode();
       if (Damage != 0) hash ^= Damage.GetHashCode();
       if (Hurt != 0) hash ^= Hurt.GetHashCode();
       if (Heal != 0) hash ^= Heal.GetHashCode();
@@ -836,6 +892,9 @@ namespace Protos {
       if (Skill1Used != 0) hash ^= Skill1Used.GetHashCode();
       if (Skill0Damage != 0) hash ^= Skill0Damage.GetHashCode();
       if (Skill1Damage != 0) hash ^= Skill1Damage.GetHashCode();
+      if (Honor != 0) hash ^= Honor.GetHashCode();
+      if (Money != 0) hash ^= Money.GetHashCode();
+      if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -849,9 +908,13 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Win != false) {
+      if (Result != 0) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Result);
+      }
+      if (Team != 0) {
         output.WriteRawTag(16);
-        output.WriteBool(Win);
+        output.WriteInt32(Team);
       }
       if (Damage != 0) {
         output.WriteRawTag(24);
@@ -885,6 +948,18 @@ namespace Protos {
         output.WriteRawTag(80);
         output.WriteUInt32(Skill1Damage);
       }
+      if (Honor != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(Honor);
+      }
+      if (Money != 0) {
+        output.WriteRawTag(96);
+        output.WriteInt32(Money);
+      }
+      if (Diamoned != 0) {
+        output.WriteRawTag(104);
+        output.WriteInt32(Diamoned);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -893,8 +968,11 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Win != false) {
-        size += 1 + 1;
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
+      }
+      if (Team != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Team);
       }
       if (Damage != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Damage);
@@ -920,6 +998,15 @@ namespace Protos {
       if (Skill1Damage != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill1Damage);
       }
+      if (Honor != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Honor);
+      }
+      if (Money != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Money);
+      }
+      if (Diamoned != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Diamoned);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -931,8 +1018,11 @@ namespace Protos {
       if (other == null) {
         return;
       }
-      if (other.Win != false) {
-        Win = other.Win;
+      if (other.Result != 0) {
+        Result = other.Result;
+      }
+      if (other.Team != 0) {
+        Team = other.Team;
       }
       if (other.Damage != 0) {
         Damage = other.Damage;
@@ -958,6 +1048,15 @@ namespace Protos {
       if (other.Skill1Damage != 0) {
         Skill1Damage = other.Skill1Damage;
       }
+      if (other.Honor != 0) {
+        Honor = other.Honor;
+      }
+      if (other.Money != 0) {
+        Money = other.Money;
+      }
+      if (other.Diamoned != 0) {
+        Diamoned = other.Diamoned;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -969,8 +1068,12 @@ namespace Protos {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
+          case 8: {
+            result_ = (global::Protos.BS2CS_BattleEndInfo.Types.Result) input.ReadEnum();
+            break;
+          }
           case 16: {
-            Win = input.ReadBool();
+            Team = input.ReadInt32();
             break;
           }
           case 24: {
@@ -1005,9 +1108,34 @@ namespace Protos {
             Skill1Damage = input.ReadUInt32();
             break;
           }
+          case 88: {
+            Honor = input.ReadInt32();
+            break;
+          }
+          case 96: {
+            Money = input.ReadInt32();
+            break;
+          }
+          case 104: {
+            Diamoned = input.ReadInt32();
+            break;
+          }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the BS2CS_BattleEndInfo message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum Result {
+        [pbr::OriginalName("Win")] Win = 0,
+        [pbr::OriginalName("Draw")] Draw = 1,
+        [pbr::OriginalName("Lose")] Lose = 2,
+      }
+
+    }
+    #endregion
 
   }
 

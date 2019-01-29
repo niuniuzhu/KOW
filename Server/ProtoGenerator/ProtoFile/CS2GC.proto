@@ -70,7 +70,14 @@ message CS2GC_BSLose {
 
 //战场结束
 message CS2GC_BattleEnd {
+	enum Result {
+		Win = 0;
+		Draw = 1;
+		Lose = 2;
+	}
 	MsgOpts opts = 1;
-	bool win = 2;
+	Result result = 2;
 	int32 honour = 3;
+	int32 money = 4;
+	int32 diamoned = 5;
 }

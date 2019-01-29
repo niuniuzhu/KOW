@@ -22,6 +22,9 @@ message LS2DB_QueryLogin{
 	string nickname = 11;
 	string avatar = 12;
 	int32 gender = 13;
+	int32 money = 14;
+	int32 diamoned = 15;
+	int32 honor = 16;
 }
 
 message LS2DB_Exec {

@@ -21,9 +21,8 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.Battle.BattleManager);
-			Utils.BeginObjectRegister(type, L, translator, 0, 4, 1, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 3, 1, 0);
 			
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetValidedBattle", _m_GetValidedBattle);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "HandleBattleEnd", _m_HandleBattleEnd);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetBattleAt", _m_GetBattleAt);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ListBids", _m_ListBids);
@@ -75,33 +74,6 @@ namespace XLua.CSObjectWrap
         
         
         
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_GetValidedBattle(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                BattleServer.Battle.BattleManager __cl_gen_to_be_invoked = (BattleServer.Battle.BattleManager)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    ulong gcNID = LuaAPI.lua_touint64(L, 2);
-                    
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_HandleBattleEnd(RealStatePtr L)

@@ -33,7 +33,7 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "config", _g_get_config);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "netSessionMgr", _g_get_netSessionMgr);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "bizProcessor", _g_get_bizProcessor);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "battleMgr", _g_get_battleManager);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "battleMgr", _g_get_battleMgr);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "userMgr", _g_get_userMgr);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "state", _g_get_state);
             
@@ -282,7 +282,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_battleManager(RealStatePtr L)
+        static int _g_get_battleMgr(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);

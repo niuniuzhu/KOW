@@ -8,9 +8,11 @@ message CS2BS_PlayerInfo {
 	string nickname = 2;//玩家名字
 	string avatar = 3;
 	int32 gender = 4;
-	int32 honor = 5;
-	int32 actorID = 6;//角色id
-	int32 team = 7;//所在队伍
+	int32 money = 5;
+	int32 diamoned = 6;
+	int32 honor = 7;
+	int32 actorID = 8;//角色id
+	int32 team = 9;//所在队伍
 }
 
 //战场信息

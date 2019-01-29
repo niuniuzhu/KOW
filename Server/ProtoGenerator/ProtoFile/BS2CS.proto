@@ -30,7 +30,13 @@ message BS2CS_BattleInfoRet {
 }
 
 message BS2CS_BattleEndInfo {
-	bool win = 2;
+	enum Result {
+		Win = 0;
+		Draw = 1;
+		Lose = 2;
+	}
+	Result result = 1;
+	int32 team = 2;
 	uint32 damage = 3;
 	uint32 hurt = 4;
 	uint32 heal = 5;
@@ -39,6 +45,9 @@ message BS2CS_BattleEndInfo {
 	uint32 skill1Used = 8;
 	uint32 skill0Damage = 9;
 	uint32 skill1Damage = 10;
+	int32 honor = 11;
+	int32 money = 12;
+	int32 diamoned = 13;
 }
 
 //战场结束

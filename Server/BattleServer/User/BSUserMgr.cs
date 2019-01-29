@@ -58,11 +58,11 @@ namespace BattleServer.User
 		/// 创建玩家
 		/// 在创建战场时调用
 		/// </summary>
-		public BSUser CreateUser( ulong gcNID, Battle.Battle battle )
+		public BSUser CreateUser( Protos.CS2BS_PlayerInfo playerInfo, Battle.Battle battle )
 		{
-			BSUser user = new BSUser( gcNID, battle );
-			this._gcNIDToUser.Add( gcNID, user );
-			Logger.Log( $"create user:{gcNID}" );
+			BSUser user = new BSUser( playerInfo, battle );
+			this._gcNIDToUser.Add( user.gcNID, user );
+			Logger.Log( $"create user:{user.gcNID}" );
 			return user;
 		}
 

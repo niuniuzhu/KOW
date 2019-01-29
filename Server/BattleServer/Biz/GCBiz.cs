@@ -50,7 +50,7 @@ namespace BattleServer.Biz
 				loginRet.BattleTime = user.battle.battleTime;
 				loginRet.MapID = user.battle.mapID;
 				loginRet.CurFrame = user.battle.frame;
-				foreach ( var player in user.battle.battleEntry.players )
+				foreach ( var player in user.battle.battleEntry.users )
 				{
 					Protos.CS2BS_PlayerInfo playerInfo = new Protos.CS2BS_PlayerInfo
 					{

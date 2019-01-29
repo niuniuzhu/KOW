@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick"], function (require, exports, Consts_1, Global_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick"], function (require, exports, Consts_1, Global_1, protos_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
@@ -88,17 +88,20 @@ define(["require", "exports", "../Consts", "../Global", "../Model/BattleEvent/UI
             this._markToEnd = true;
             this.GestureOff();
             Global_1.Global.graphic.uiRoot.addChild(this._endBattle);
-            const isWin = e.b0;
+            const result = e.any0;
             const honer = e.v1;
             const callback = e.callback;
             let com;
-            if (isWin) {
-                com = this._endBattle.getChild("n0").asCom;
-                this._endBattle.getController("c1").selectedIndex = 0;
-            }
-            else {
-                com = this._endBattle.getChild("n1").asCom;
-                this._endBattle.getController("c1").selectedIndex = 1;
+            switch (result) {
+                case protos_1.Protos.CS2GC_BattleEnd.Result.Win:
+                    com = this._endBattle.getChild("n0").asCom;
+                    this._endBattle.getController("c1").selectedIndex = 0;
+                    break;
+                case protos_1.Protos.CS2GC_BattleEnd.Result.Draw:
+                case protos_1.Protos.CS2GC_BattleEnd.Result.Lose:
+                    com = this._endBattle.getChild("n1").asCom;
+                    this._endBattle.getController("c1").selectedIndex = 1;
+                    break;
             }
             com.getTransition("t0").play();
             const confirmBtn = com.getChild("confirm");

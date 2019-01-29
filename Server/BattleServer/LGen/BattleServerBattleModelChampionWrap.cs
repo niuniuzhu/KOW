@@ -55,7 +55,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "t_def_add", _g_get_t_def_add);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "t_speed_add", _g_get_t_speed_add);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "fsm", _g_get_fsm);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "win", _g_get_win);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "result", _g_get_result);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "damage", _g_get_damage);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "hurt", _g_get_hurt);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "heal", _g_get_heal);
@@ -91,7 +91,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "t_atk_add", _s_set_t_atk_add);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "t_def_add", _s_set_t_def_add);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "t_speed_add", _s_set_t_speed_add);
-            Utils.RegisterFunc(L, Utils.SETTER_IDX, "win", _s_set_win);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "result", _s_set_result);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "damage", _s_set_damage);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "hurt", _s_set_hurt);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "heal", _s_set_heal);
@@ -600,13 +600,13 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_win(RealStatePtr L)
+        static int _g_get_result(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
-                LuaAPI.lua_pushboolean(L, __cl_gen_to_be_invoked.win);
+                translator.Push(L, __cl_gen_to_be_invoked.result);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }
@@ -1123,13 +1123,14 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _s_set_win(RealStatePtr L)
+        static int _s_set_result(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
-                __cl_gen_to_be_invoked.win = LuaAPI.lua_toboolean(L, 2);
+                BattleServer.Battle.Model.Champion.Result __cl_gen_value;translator.Get(L, 2, out __cl_gen_value);
+				__cl_gen_to_be_invoked.result = __cl_gen_value;
             
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);

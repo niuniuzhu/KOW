@@ -126,7 +126,6 @@ namespace BattleServer.Battle
 		/// </summary>
 		private readonly List<uint> _tempSIDs = new List<uint>();
 
-		private long _lastUpdateTime;
 		private Task _task;
 
 		public Battle()
@@ -154,8 +153,6 @@ namespace BattleServer.Battle
 		internal void Init( BattleEntry battleEntry )
 		{
 			this.frame = 0;
-			this._lastUpdateTime = 0;
-
 			this.battleEntry = battleEntry;
 			this.rndSeed = battleEntry.rndSeed;
 			this.mapID = battleEntry.mapID;
@@ -164,11 +161,11 @@ namespace BattleServer.Battle
 			this.LoadDefs();
 
 			//create champions
-			foreach ( var player in battleEntry.players )
+			foreach ( BSUser user in battleEntry.users )
 			{
 				Champion champion = new Champion( this );
-				champion.rid = player.gcNID;
-				champion.user = BS.instance.userMgr.GetUser( player.gcNID );
+				champion.rid = user.gcNID;
+				champion.user = BS.instance.userMgr.GetUser( user.gcNID );
 				this._champions.Add( champion );
 				this._idToChampion[champion.rid] = champion;
 			}
@@ -233,9 +230,7 @@ namespace BattleServer.Battle
 			while ( this.running )
 			{
 				long elasped = this._sw.ElapsedMilliseconds;
-				long dt = elasped - this._lastUpdateTime;
 				this._stepLocker.Update( elasped );
-				this._lastUpdateTime = elasped;
 				Thread.Sleep( 1 );
 			}
 		}
@@ -259,9 +254,11 @@ namespace BattleServer.Battle
 					//解码快照,把结束状态保存到内存
 					this.DecodeSnapshot( data );
 					//处理战场结果
-					this.ProcessResult();
-					//标记为结束
-					this.finished = true;
+					if ( this.ProcessResult() )
+					{
+						//标记为结束
+						this.finished = true;
+					}
 				}
 			}
 			this._frameActionMgr.Save( frame );
@@ -273,6 +270,12 @@ namespace BattleServer.Battle
 
 			if ( elasped >= this.battleTime && !this.finished )
 			{
+				int count = this.numChampions;
+				for ( int i = 0; i < count; i++ )
+				{
+					//标记为和局
+					this.GetChampionAt( i ).result = Champion.Result.Draw;
+				}
 				//标记为结束
 				this.finished = true;
 			}
@@ -326,7 +329,7 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 处理战场结果
 		/// </summary>
-		private void ProcessResult()
+		private bool ProcessResult()
 		{
 			//胜利检查
 			bool team0Win = false;
@@ -347,7 +350,7 @@ namespace BattleServer.Battle
 			//如果以上检测没有胜利队伍
 			if ( !team0Win &&
 				 !team1Win &&
-				 this._champions.Count > 1 )
+				 count > 1 )
 			{
 				//检查全员死亡
 				team0Win = true;
@@ -364,17 +367,25 @@ namespace BattleServer.Battle
 						team0Win = false;
 				}
 			}
-			//标记胜利玩家
-			for ( int i = 0; i < count; i++ )
+			if ( team0Win || team1Win )
 			{
-				Champion champion = this.GetChampionAt( i );
-				if ( ( team0Win && champion.team == 0 ) ||
-					 ( team1Win && champion.team == 1 ) )
+				for ( int i = 0; i < count; i++ )
+					this.GetChampionAt( i ).result = Champion.Result.Lose;
+
+				//标记胜利玩家
+				for ( int i = 0; i < count; i++ )
 				{
-					champion.win = true;
-					//todo 其他记录
+					Champion champion = this.GetChampionAt( i );
+					if ( ( team0Win && champion.team == 0 ) ||
+						 ( team1Win && champion.team == 1 ) )
+					{
+						champion.result = Champion.Result.Win;
+						//todo 其他记录
+					}
 				}
+				return true;
 			}
+			return false;
 		}
 
 		/// <summary>

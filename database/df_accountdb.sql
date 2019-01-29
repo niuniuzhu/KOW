@@ -5,19 +5,21 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `account_user`;
 CREATE TABLE `account_user` (
-  `id` int (11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `uname` varchar(36) NOT NULL,
-  `pwd` varchar(32) DEFAULT '' NOT NULL,
-  `channel` tinyint(4) unsigned DEFAULT 0 NOT NULL,
-  `browser` tinyint(4) unsigned DEFAULT 0 NOT NULL,
-  `platform` tinyint(4) unsigned DEFAULT 0 NOT NULL,
+  `channel` tinyint unsigned DEFAULT 0 NOT NULL,
+  `browser` tinyint unsigned DEFAULT 0 NOT NULL,
+  `platform` tinyint unsigned DEFAULT 0 NOT NULL,
   `unionID` varchar(32) DEFAULT '' NOT NULL,
   `nickname` varchar(36) DEFAULT '' NOT NULL,
   `avatar` varchar(128) DEFAULT '' NOT NULL,
-  `gender` tinyint(4) DEFAULT 0 NOT NULL,
+  `gender` tinyint unsigned DEFAULT 0 NOT NULL,
   `last_login_time` bigint(20) DEFAULT 0 NOT NULL,
   `last_login_ip` varchar(46) DEFAULT '' NOT NULL,
-  `block` int(11) DEFAULT 0 NOT NULL,
+  `block` tinyint unsigned DEFAULT 0 NOT NULL,
+  `money` int DEFAULT 0 NOT NULL,
+  `diamoned` int DEFAULT 0 NOT NULL,
+  `honor` int DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nickname_check` (`nickname`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;

@@ -149,18 +149,19 @@ namespace CentralServer.Biz
 			{
 				double we = 0;
 				//基数
-				const double K = 32;
+				const double K = 64;
 				//计算与其他队伍的逻辑斯谛分布和
 				foreach ( var kv2 in teamToAvgHonor )
 				{
 					if ( kv.Key == kv2.Key )
 						continue;
-					we += 1 / ( Math.Pow( 10, ( kv2.Value - kv.Value ) ) + 1 );//ELO算法公式,see https://blog.csdn.net/kaifeng2988/article/details/50171201
+					var delta = kv2.Value - kv.Value;
+					we += 1 / ( Math.Pow( 10, delta / 400.0 ) + 1 );//ELO算法公式,see https://blog.csdn.net/kaifeng2988/article/details/50171201
 				}
 				//获取胜负值
 				double w = teamToWin[kv.Key];
 				//最终得分
-				double rn = kv.Value + K * ( w - we );
+				double rn = K * ( w - we );
 				teamToHonor[kv.Key] = ( int )rn;
 			}
 			return teamToHonor;

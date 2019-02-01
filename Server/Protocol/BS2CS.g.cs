@@ -33,11 +33,11 @@ namespace Protos {
             "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiYKBnJl",
             "c3VsdBgCIAEoDjIWLlByb3Rvcy5HbG9iYWwuRUNvbW1vbhILCgNiaWQYAyAB",
             "KA0iwgIKE0JTMkNTX0JhdHRsZUVuZEluZm8SMgoGcmVzdWx0GAEgASgOMiIu",
-            "UHJvdG9zLkJTMkNTX0JhdHRsZUVuZEluZm8uUmVzdWx0EgwKBHRlYW0YAiAB",
-            "KAUSDgoGZGFtYWdlGAMgASgNEgwKBGh1cnQYBCABKA0SDAoEaGVhbBgFIAEo",
-            "DRISCgpvY2N1cHlUaW1lGAYgASgNEhIKCnNraWxsMFVzZWQYByABKA0SEgoK",
-            "c2tpbGwxVXNlZBgIIAEoDRIUCgxza2lsbDBEYW1hZ2UYCSABKA0SFAoMc2tp",
-            "bGwxRGFtYWdlGAogASgNEg0KBWhvbm9yGAsgASgFEg0KBW1vbmV5GAwgASgF",
+            "UHJvdG9zLkJTMkNTX0JhdHRsZUVuZEluZm8uUmVzdWx0Eg4KBmRhbWFnZRgC",
+            "IAEoDRIMCgRodXJ0GAMgASgNEgwKBGhlYWwYBCABKA0SEgoKb2NjdXB5VGlt",
+            "ZRgFIAEoDRISCgpza2lsbDBVc2VkGAYgASgNEhIKCnNraWxsMVVzZWQYByAB",
+            "KA0SFAoMc2tpbGwwRGFtYWdlGAggASgNEhQKDHNraWxsMURhbWFnZRgJIAEo",
+            "DRIMCgR0ZWFtGAogASgFEg0KBWhvbm9yGAsgASgFEg0KBW1vbmV5GAwgASgF",
             "EhAKCGRpYW1vbmVkGA0gASgFIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3",
             "EAESCAoETG9zZRACIrsBCg9CUzJDU19CYXR0bGVFbmQSHQoEb3B0cxgBIAEo",
             "CzIPLlByb3Rvcy5Nc2dPcHRzEgsKA2JpZBgCIAEoDRIxCgVpbmZvcxgDIAMo",
@@ -53,7 +53,7 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BSInfo), global::Protos.BSInfo.Parser, new[]{ "Id", "Ip", "Port", "State" }, null, new[]{ typeof(global::Protos.BSInfo.Types.State) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_ReportState), global::Protos.BS2CS_ReportState.Parser, new[]{ "Opts", "BsInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts", "Result", "Bid" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEndInfo), global::Protos.BS2CS_BattleEndInfo.Parser, new[]{ "Result", "Team", "Damage", "Hurt", "Heal", "OccupyTime", "Skill0Used", "Skill1Used", "Skill0Damage", "Skill1Damage", "Honor", "Money", "Diamoned" }, null, new[]{ typeof(global::Protos.BS2CS_BattleEndInfo.Types.Result) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEndInfo), global::Protos.BS2CS_BattleEndInfo.Parser, new[]{ "Result", "Damage", "Hurt", "Heal", "OccupyTime", "Skill0Used", "Skill1Used", "Skill0Damage", "Skill1Damage", "Team", "Honor", "Money", "Diamoned" }, null, new[]{ typeof(global::Protos.BS2CS_BattleEndInfo.Types.Result) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEnd), global::Protos.BS2CS_BattleEnd.Parser, new[]{ "Opts", "Bid", "Infos" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_KickUser), global::Protos.BS2CS_KickUser.Parser, new[]{ "Opts", "GcNID", "Reason" }, null, new[]{ typeof(global::Protos.BS2CS_KickUser.Types.Reason) }, null)
           }));
@@ -687,7 +687,6 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public BS2CS_BattleEndInfo(BS2CS_BattleEndInfo other) : this() {
       result_ = other.result_;
-      team_ = other.team_;
       damage_ = other.damage_;
       hurt_ = other.hurt_;
       heal_ = other.heal_;
@@ -696,6 +695,7 @@ namespace Protos {
       skill1Used_ = other.skill1Used_;
       skill0Damage_ = other.skill0Damage_;
       skill1Damage_ = other.skill1Damage_;
+      team_ = other.team_;
       honor_ = other.honor_;
       money_ = other.money_;
       diamoned_ = other.diamoned_;
@@ -718,19 +718,8 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "team" field.</summary>
-    public const int TeamFieldNumber = 2;
-    private int team_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Team {
-      get { return team_; }
-      set {
-        team_ = value;
-      }
-    }
-
     /// <summary>Field number for the "damage" field.</summary>
-    public const int DamageFieldNumber = 3;
+    public const int DamageFieldNumber = 2;
     private uint damage_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Damage {
@@ -741,7 +730,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "hurt" field.</summary>
-    public const int HurtFieldNumber = 4;
+    public const int HurtFieldNumber = 3;
     private uint hurt_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Hurt {
@@ -752,7 +741,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "heal" field.</summary>
-    public const int HealFieldNumber = 5;
+    public const int HealFieldNumber = 4;
     private uint heal_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Heal {
@@ -763,7 +752,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "occupyTime" field.</summary>
-    public const int OccupyTimeFieldNumber = 6;
+    public const int OccupyTimeFieldNumber = 5;
     private uint occupyTime_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint OccupyTime {
@@ -774,7 +763,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "skill0Used" field.</summary>
-    public const int Skill0UsedFieldNumber = 7;
+    public const int Skill0UsedFieldNumber = 6;
     private uint skill0Used_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Skill0Used {
@@ -785,7 +774,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "skill1Used" field.</summary>
-    public const int Skill1UsedFieldNumber = 8;
+    public const int Skill1UsedFieldNumber = 7;
     private uint skill1Used_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Skill1Used {
@@ -796,7 +785,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "skill0Damage" field.</summary>
-    public const int Skill0DamageFieldNumber = 9;
+    public const int Skill0DamageFieldNumber = 8;
     private uint skill0Damage_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Skill0Damage {
@@ -807,13 +796,24 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "skill1Damage" field.</summary>
-    public const int Skill1DamageFieldNumber = 10;
+    public const int Skill1DamageFieldNumber = 9;
     private uint skill1Damage_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Skill1Damage {
       get { return skill1Damage_; }
       set {
         skill1Damage_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "team" field.</summary>
+    public const int TeamFieldNumber = 10;
+    private int team_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Team {
+      get { return team_; }
+      set {
+        team_ = value;
       }
     }
 
@@ -864,7 +864,6 @@ namespace Protos {
         return true;
       }
       if (Result != other.Result) return false;
-      if (Team != other.Team) return false;
       if (Damage != other.Damage) return false;
       if (Hurt != other.Hurt) return false;
       if (Heal != other.Heal) return false;
@@ -873,6 +872,7 @@ namespace Protos {
       if (Skill1Used != other.Skill1Used) return false;
       if (Skill0Damage != other.Skill0Damage) return false;
       if (Skill1Damage != other.Skill1Damage) return false;
+      if (Team != other.Team) return false;
       if (Honor != other.Honor) return false;
       if (Money != other.Money) return false;
       if (Diamoned != other.Diamoned) return false;
@@ -883,7 +883,6 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (Result != 0) hash ^= Result.GetHashCode();
-      if (Team != 0) hash ^= Team.GetHashCode();
       if (Damage != 0) hash ^= Damage.GetHashCode();
       if (Hurt != 0) hash ^= Hurt.GetHashCode();
       if (Heal != 0) hash ^= Heal.GetHashCode();
@@ -892,6 +891,7 @@ namespace Protos {
       if (Skill1Used != 0) hash ^= Skill1Used.GetHashCode();
       if (Skill0Damage != 0) hash ^= Skill0Damage.GetHashCode();
       if (Skill1Damage != 0) hash ^= Skill1Damage.GetHashCode();
+      if (Team != 0) hash ^= Team.GetHashCode();
       if (Honor != 0) hash ^= Honor.GetHashCode();
       if (Money != 0) hash ^= Money.GetHashCode();
       if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
@@ -912,41 +912,41 @@ namespace Protos {
         output.WriteRawTag(8);
         output.WriteEnum((int) Result);
       }
-      if (Team != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Team);
-      }
       if (Damage != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteUInt32(Damage);
       }
       if (Hurt != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteUInt32(Hurt);
       }
       if (Heal != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteUInt32(Heal);
       }
       if (OccupyTime != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(40);
         output.WriteUInt32(OccupyTime);
       }
       if (Skill0Used != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(48);
         output.WriteUInt32(Skill0Used);
       }
       if (Skill1Used != 0) {
-        output.WriteRawTag(64);
+        output.WriteRawTag(56);
         output.WriteUInt32(Skill1Used);
       }
       if (Skill0Damage != 0) {
-        output.WriteRawTag(72);
+        output.WriteRawTag(64);
         output.WriteUInt32(Skill0Damage);
       }
       if (Skill1Damage != 0) {
-        output.WriteRawTag(80);
+        output.WriteRawTag(72);
         output.WriteUInt32(Skill1Damage);
+      }
+      if (Team != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(Team);
       }
       if (Honor != 0) {
         output.WriteRawTag(88);
@@ -970,9 +970,6 @@ namespace Protos {
       int size = 0;
       if (Result != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
-      }
-      if (Team != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Team);
       }
       if (Damage != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Damage);
@@ -998,6 +995,9 @@ namespace Protos {
       if (Skill1Damage != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Skill1Damage);
       }
+      if (Team != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Team);
+      }
       if (Honor != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Honor);
       }
@@ -1020,9 +1020,6 @@ namespace Protos {
       }
       if (other.Result != 0) {
         Result = other.Result;
-      }
-      if (other.Team != 0) {
-        Team = other.Team;
       }
       if (other.Damage != 0) {
         Damage = other.Damage;
@@ -1047,6 +1044,9 @@ namespace Protos {
       }
       if (other.Skill1Damage != 0) {
         Skill1Damage = other.Skill1Damage;
+      }
+      if (other.Team != 0) {
+        Team = other.Team;
       }
       if (other.Honor != 0) {
         Honor = other.Honor;
@@ -1073,39 +1073,39 @@ namespace Protos {
             break;
           }
           case 16: {
-            Team = input.ReadInt32();
-            break;
-          }
-          case 24: {
             Damage = input.ReadUInt32();
             break;
           }
-          case 32: {
+          case 24: {
             Hurt = input.ReadUInt32();
             break;
           }
-          case 40: {
+          case 32: {
             Heal = input.ReadUInt32();
             break;
           }
-          case 48: {
+          case 40: {
             OccupyTime = input.ReadUInt32();
             break;
           }
-          case 56: {
+          case 48: {
             Skill0Used = input.ReadUInt32();
             break;
           }
-          case 64: {
+          case 56: {
             Skill1Used = input.ReadUInt32();
             break;
           }
-          case 72: {
+          case 64: {
             Skill0Damage = input.ReadUInt32();
             break;
           }
-          case 80: {
+          case 72: {
             Skill1Damage = input.ReadUInt32();
+            break;
+          }
+          case 80: {
+            Team = input.ReadInt32();
             break;
           }
           case 88: {

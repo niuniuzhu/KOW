@@ -79,7 +79,6 @@ export namespace Protos {
 
     interface IBS2CS_BattleEndInfo {
         result?: (Protos.BS2CS_BattleEndInfo.Result|null);
-        team?: (number|null);
         damage?: (number|null);
         hurt?: (number|null);
         heal?: (number|null);
@@ -88,6 +87,7 @@ export namespace Protos {
         skill1Used?: (number|null);
         skill0Damage?: (number|null);
         skill1Damage?: (number|null);
+        team?: (number|null);
         honor?: (number|null);
         money?: (number|null);
         diamoned?: (number|null);
@@ -96,7 +96,6 @@ export namespace Protos {
     class BS2CS_BattleEndInfo implements IBS2CS_BattleEndInfo {
         constructor(properties?: Protos.IBS2CS_BattleEndInfo);
         public result: Protos.BS2CS_BattleEndInfo.Result;
-        public team: number;
         public damage: number;
         public hurt: number;
         public heal: number;
@@ -105,6 +104,7 @@ export namespace Protos {
         public skill1Used: number;
         public skill0Damage: number;
         public skill1Damage: number;
+        public team: number;
         public honor: number;
         public money: number;
         public diamoned: number;

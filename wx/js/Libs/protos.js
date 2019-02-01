@@ -427,7 +427,6 @@ export const Protos = $root.Protos = (() => {
         }
 
         BS2CS_BattleEndInfo.prototype.result = 0;
-        BS2CS_BattleEndInfo.prototype.team = 0;
         BS2CS_BattleEndInfo.prototype.damage = 0;
         BS2CS_BattleEndInfo.prototype.hurt = 0;
         BS2CS_BattleEndInfo.prototype.heal = 0;
@@ -436,6 +435,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEndInfo.prototype.skill1Used = 0;
         BS2CS_BattleEndInfo.prototype.skill0Damage = 0;
         BS2CS_BattleEndInfo.prototype.skill1Damage = 0;
+        BS2CS_BattleEndInfo.prototype.team = 0;
         BS2CS_BattleEndInfo.prototype.honor = 0;
         BS2CS_BattleEndInfo.prototype.money = 0;
         BS2CS_BattleEndInfo.prototype.diamoned = 0;
@@ -449,24 +449,24 @@ export const Protos = $root.Protos = (() => {
                 writer = $Writer.create();
             if (message.result != null && message.hasOwnProperty("result"))
                 writer.uint32(8).int32(message.result);
-            if (message.team != null && message.hasOwnProperty("team"))
-                writer.uint32(16).int32(message.team);
             if (message.damage != null && message.hasOwnProperty("damage"))
-                writer.uint32(24).uint32(message.damage);
+                writer.uint32(16).uint32(message.damage);
             if (message.hurt != null && message.hasOwnProperty("hurt"))
-                writer.uint32(32).uint32(message.hurt);
+                writer.uint32(24).uint32(message.hurt);
             if (message.heal != null && message.hasOwnProperty("heal"))
-                writer.uint32(40).uint32(message.heal);
+                writer.uint32(32).uint32(message.heal);
             if (message.occupyTime != null && message.hasOwnProperty("occupyTime"))
-                writer.uint32(48).uint32(message.occupyTime);
+                writer.uint32(40).uint32(message.occupyTime);
             if (message.skill0Used != null && message.hasOwnProperty("skill0Used"))
-                writer.uint32(56).uint32(message.skill0Used);
+                writer.uint32(48).uint32(message.skill0Used);
             if (message.skill1Used != null && message.hasOwnProperty("skill1Used"))
-                writer.uint32(64).uint32(message.skill1Used);
+                writer.uint32(56).uint32(message.skill1Used);
             if (message.skill0Damage != null && message.hasOwnProperty("skill0Damage"))
-                writer.uint32(72).uint32(message.skill0Damage);
+                writer.uint32(64).uint32(message.skill0Damage);
             if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
-                writer.uint32(80).uint32(message.skill1Damage);
+                writer.uint32(72).uint32(message.skill1Damage);
+            if (message.team != null && message.hasOwnProperty("team"))
+                writer.uint32(80).int32(message.team);
             if (message.honor != null && message.hasOwnProperty("honor"))
                 writer.uint32(88).int32(message.honor);
             if (message.money != null && message.hasOwnProperty("money"))
@@ -491,31 +491,31 @@ export const Protos = $root.Protos = (() => {
                     message.result = reader.int32();
                     break;
                 case 2:
-                    message.team = reader.int32();
-                    break;
-                case 3:
                     message.damage = reader.uint32();
                     break;
-                case 4:
+                case 3:
                     message.hurt = reader.uint32();
                     break;
-                case 5:
+                case 4:
                     message.heal = reader.uint32();
                     break;
-                case 6:
+                case 5:
                     message.occupyTime = reader.uint32();
                     break;
-                case 7:
+                case 6:
                     message.skill0Used = reader.uint32();
                     break;
-                case 8:
+                case 7:
                     message.skill1Used = reader.uint32();
                     break;
-                case 9:
+                case 8:
                     message.skill0Damage = reader.uint32();
                     break;
-                case 10:
+                case 9:
                     message.skill1Damage = reader.uint32();
+                    break;
+                case 10:
+                    message.team = reader.int32();
                     break;
                 case 11:
                     message.honor = reader.int32();
@@ -552,9 +552,6 @@ export const Protos = $root.Protos = (() => {
                 case 2:
                     break;
                 }
-            if (message.team != null && message.hasOwnProperty("team"))
-                if (!$util.isInteger(message.team))
-                    return "team: integer expected";
             if (message.damage != null && message.hasOwnProperty("damage"))
                 if (!$util.isInteger(message.damage))
                     return "damage: integer expected";
@@ -579,6 +576,9 @@ export const Protos = $root.Protos = (() => {
             if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
                 if (!$util.isInteger(message.skill1Damage))
                     return "skill1Damage: integer expected";
+            if (message.team != null && message.hasOwnProperty("team"))
+                if (!$util.isInteger(message.team))
+                    return "team: integer expected";
             if (message.honor != null && message.hasOwnProperty("honor"))
                 if (!$util.isInteger(message.honor))
                     return "honor: integer expected";
@@ -609,8 +609,6 @@ export const Protos = $root.Protos = (() => {
                 message.result = 2;
                 break;
             }
-            if (object.team != null)
-                message.team = object.team | 0;
             if (object.damage != null)
                 message.damage = object.damage >>> 0;
             if (object.hurt != null)
@@ -627,6 +625,8 @@ export const Protos = $root.Protos = (() => {
                 message.skill0Damage = object.skill0Damage >>> 0;
             if (object.skill1Damage != null)
                 message.skill1Damage = object.skill1Damage >>> 0;
+            if (object.team != null)
+                message.team = object.team | 0;
             if (object.honor != null)
                 message.honor = object.honor | 0;
             if (object.money != null)
@@ -642,7 +642,6 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.result = options.enums === String ? "Win" : 0;
-                object.team = 0;
                 object.damage = 0;
                 object.hurt = 0;
                 object.heal = 0;
@@ -651,14 +650,13 @@ export const Protos = $root.Protos = (() => {
                 object.skill1Used = 0;
                 object.skill0Damage = 0;
                 object.skill1Damage = 0;
+                object.team = 0;
                 object.honor = 0;
                 object.money = 0;
                 object.diamoned = 0;
             }
             if (message.result != null && message.hasOwnProperty("result"))
                 object.result = options.enums === String ? $root.Protos.BS2CS_BattleEndInfo.Result[message.result] : message.result;
-            if (message.team != null && message.hasOwnProperty("team"))
-                object.team = message.team;
             if (message.damage != null && message.hasOwnProperty("damage"))
                 object.damage = message.damage;
             if (message.hurt != null && message.hasOwnProperty("hurt"))
@@ -675,6 +673,8 @@ export const Protos = $root.Protos = (() => {
                 object.skill0Damage = message.skill0Damage;
             if (message.skill1Damage != null && message.hasOwnProperty("skill1Damage"))
                 object.skill1Damage = message.skill1Damage;
+            if (message.team != null && message.hasOwnProperty("team"))
+                object.team = message.team;
             if (message.honor != null && message.hasOwnProperty("honor"))
                 object.honor = message.honor;
             if (message.money != null && message.hasOwnProperty("money"))

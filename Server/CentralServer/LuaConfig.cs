@@ -17,7 +17,7 @@ namespace CentralServer
 			typeof( CSUserMgr ),
 			typeof( RoomPlayer ),
 			typeof( Room ),
-			typeof( Matcher ),
+			typeof( Matcher2 ),
 			typeof( BattleStaging ),
 		};
 	}

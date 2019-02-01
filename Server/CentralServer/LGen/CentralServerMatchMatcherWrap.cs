@@ -20,7 +20,7 @@ namespace XLua.CSObjectWrap
         public static void __Register(RealStatePtr L)
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			System.Type type = typeof(CentralServer.Match.Matcher);
+			System.Type type = typeof(CentralServer.Match.Matcher2);
 			Utils.BeginObjectRegister(type, L, translator, 0, 3, 1, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ContainsUser", _m_ContainsUser);
@@ -54,7 +54,7 @@ namespace XLua.CSObjectWrap
 				if(LuaAPI.lua_gettop(L) == 1)
 				{
 					
-					CentralServer.Match.Matcher __cl_gen_ret = new CentralServer.Match.Matcher();
+					CentralServer.Match.Matcher2 __cl_gen_ret = new CentralServer.Match.Matcher2();
 					translator.Push(L, __cl_gen_ret);
                     
 					return 1;
@@ -64,7 +64,7 @@ namespace XLua.CSObjectWrap
 			catch(System.Exception __gen_e) {
 				return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
 			}
-            return LuaAPI.luaL_error(L, "invalid arguments to CentralServer.Match.Matcher constructor!");
+            return LuaAPI.luaL_error(L, "invalid arguments to CentralServer.Match.Matcher2 constructor!");
             
         }
         
@@ -83,7 +83,7 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
             
             
-                CentralServer.Match.Matcher __cl_gen_to_be_invoked = (CentralServer.Match.Matcher)translator.FastGetCSObj(L, 1);
+                CentralServer.Match.Matcher2 __cl_gen_to_be_invoked = (CentralServer.Match.Matcher2)translator.FastGetCSObj(L, 1);
             
             
                 
@@ -112,7 +112,7 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
             
             
-                CentralServer.Match.Matcher __cl_gen_to_be_invoked = (CentralServer.Match.Matcher)translator.FastGetCSObj(L, 1);
+                CentralServer.Match.Matcher2 __cl_gen_to_be_invoked = (CentralServer.Match.Matcher2)translator.FastGetCSObj(L, 1);
             
             
                 
@@ -140,7 +140,7 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
             
             
-                CentralServer.Match.Matcher __cl_gen_to_be_invoked = (CentralServer.Match.Matcher)translator.FastGetCSObj(L, 1);
+                CentralServer.Match.Matcher2 __cl_gen_to_be_invoked = (CentralServer.Match.Matcher2)translator.FastGetCSObj(L, 1);
             
             
                 
@@ -170,7 +170,7 @@ namespace XLua.CSObjectWrap
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
-                CentralServer.Match.Matcher __cl_gen_to_be_invoked = (CentralServer.Match.Matcher)translator.FastGetCSObj(L, 1);
+                CentralServer.Match.Matcher2 __cl_gen_to_be_invoked = (CentralServer.Match.Matcher2)translator.FastGetCSObj(L, 1);
                 LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.numOpenRooms);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);

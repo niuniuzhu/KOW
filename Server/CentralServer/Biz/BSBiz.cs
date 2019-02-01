@@ -131,15 +131,23 @@ namespace CentralServer.Biz
 				}
 			}
 
+			//把玩家分配到个队伍
+			var teamToUser = new Dictionary<int, List<CSUser>>();
+			foreach ( var kv in battleEndInfos )
+			{
+				CSUser user = CS.instance.battleStaging.GetUser( kv.Key );
+				teamToUser.AddToList( kv.Value.Team, user );
+			}
+
 			//计算每个队伍的平均分值
 			var teamToAvgHonor = new Dictionary<int, int>();
 			foreach ( var kv in teamToInfos )
 			{
 				int honor = 0;
-				List<Protos.BS2CS_BattleEndInfo> infos = kv.Value;
-				int count = infos.Count;
+				List<CSUser> users = teamToUser[kv.Key];
+				int count = users.Count;
 				for ( int i = 0; i < count; i++ )
-					honor += infos[i].Honor;
+					honor += users[i].honor;
 				honor /= count;
 				teamToAvgHonor[kv.Key] = honor;
 			}

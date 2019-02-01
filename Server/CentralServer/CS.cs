@@ -41,7 +41,7 @@ namespace CentralServer
 		/// <summary>
 		/// 匹配器
 		/// </summary>
-		public readonly Matcher matcher = new Matcher();
+		public readonly Matcher2 matcher = new Matcher2();
 		/// <summary>
 		/// 战场暂存区
 		/// </summary>

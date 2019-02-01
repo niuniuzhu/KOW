@@ -81,8 +81,8 @@ namespace CentralServer
 			{
 				case "exit":
 					Dispose();
-
 					break;
+
 				case "cls":
 					Console.Clear();
 					break;

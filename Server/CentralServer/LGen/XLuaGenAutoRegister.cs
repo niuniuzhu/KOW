@@ -44,7 +44,7 @@ namespace XLua
 				
 				translator.DelayWrapLoader(typeof(CentralServer.Match.Room), CentralServerMatchRoomWrap.__Register);
 				
-				translator.DelayWrapLoader(typeof(CentralServer.Match.Matcher), CentralServerMatchMatcherWrap.__Register);
+				translator.DelayWrapLoader(typeof(CentralServer.Match.Matcher2), CentralServerMatchMatcherWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(CentralServer.Match.BattleStaging), CentralServerMatchBattleStagingWrap.__Register);
 				

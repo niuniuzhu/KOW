@@ -23,13 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBServer", "DBServer\DBServ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleServer", "BattleServer\BattleServer.csproj", "{210323AC-2B49-4847-BC15-AEBFAF79037A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLua.Mini", "XLua.Mini\XLua.Mini.csproj", "{342687C6-6150-43E4-896D-FAE95ECD305D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XLua.Mini", "XLua.Mini\XLua.Mini.csproj", "{342687C6-6150-43E4-896D-FAE95ECD305D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuaBinder", "LuaBinder\LuaBinder.csproj", "{54AD1F7A-A822-4B74-B9FE-A7AD1542BDD3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lua", "Lua", "{14BB6A1B-8E2E-4BC6-9EA1-F5429DCBA24F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell", "Shell\Shell.csproj", "{0995A451-B577-480E-97C3-E38167CE26C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shell", "Shell\Shell.csproj", "{0995A451-B577-480E-97C3-E38167CE26C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

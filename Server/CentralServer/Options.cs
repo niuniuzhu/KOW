@@ -15,10 +15,10 @@ namespace CentralServer
 			HelpText = "Specify configuration file." )]
 		public string cfg { get; set; }
 
-		[Option( 'd', "dbcfg",
-			Default = "",
-			HelpText = "Specify configuration file for database." )]
-		public string dbCfg { get; set; }
+		[Option( "match_defs",
+			Default = "Config/matching.json",
+			HelpText = "Specify configuration file for matching system." )]
+		public string matchDefs { get; set; }
 
 		[Option( 'f', "defs",
 			Default = "",

@@ -5,12 +5,11 @@ import "Global.proto";
 
 //开始匹配
 message GC2CS_BeginMatch {
-	//todo 匹配模式
 	enum EMode {
-		Single1V1 = 0;//单人随机匹配
-		Single2V2 = 1;//多人随机匹配
-		Team2V2 = 2;//多人组队匹配
-		All = 3;
+		T2P1 = 0;
+		T2P2 = 1;
+		T3P1 = 2;
+		T3P2 = 3;
 	}
 	MsgOpts opts = 1;
 	EMode mode = 2;//匹配模式

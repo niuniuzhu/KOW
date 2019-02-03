@@ -8,5 +8,6 @@
     "redisIP": "127.0.0.1",
     "redisPort": 7000,
     "redisPwd": "159753",
-    "sessionExpTime": 40000
+    "sessionExpTime": 40000,
+    "matchDefs": "Config/matching.json"
 }

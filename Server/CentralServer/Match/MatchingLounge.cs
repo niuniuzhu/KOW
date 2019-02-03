@@ -64,8 +64,6 @@ namespace CentralServer.Match
 			return true;
 		}
 
-		internal MatchUser GetUser( int index ) => this._users[index];
-
 		internal MatchState GetState()
 		{
 			MatchState state = new MatchState();

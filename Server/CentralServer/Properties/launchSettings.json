@@ -2,7 +2,7 @@
   "profiles": {
     "CentralServer": {
       "commandName": "Project",
-      "commandLineArgs": "-c Config/CSCfg.json -d Config/CSDBCfg.json  -f Config/battle_defs.json"
+      "commandLineArgs": "-c Config/CSCfg.json -f Config/battle_defs.json"
     }
   }
 }

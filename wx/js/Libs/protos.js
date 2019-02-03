@@ -1059,8 +1059,6 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[5200] = "eCS2BS_BattleInfo"] = 5200;
         values[valuesById[5201] = "eCS2BS_BattleEndRet"] = 5201;
         values[valuesById[5300] = "eCS2GC_BeginMatchRet"] = 5300;
-        values[valuesById[5301] = "eCS2GC_PlayerJoin"] = 5301;
-        values[valuesById[5302] = "eCS2GC_PlayerLeave"] = 5302;
         values[valuesById[5303] = "eCS2GC_RoomInfo"] = 5303;
         values[valuesById[5304] = "eCS2GC_EnterBattle"] = 5304;
         values[valuesById[5305] = "eCS2GC_BattleEnd"] = 5305;
@@ -3554,239 +3552,6 @@ export const Protos = $root.Protos = (() => {
         })();
 
         return CS2GC_BeginMatchRet;
-    })();
-
-    Protos.CS2GC_PlayerJoin = (function() {
-
-        function CS2GC_PlayerJoin(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        CS2GC_PlayerJoin.prototype.opts = null;
-        CS2GC_PlayerJoin.prototype.playerInfo = null;
-
-        CS2GC_PlayerJoin.create = function create(properties) {
-            return new CS2GC_PlayerJoin(properties);
-        };
-
-        CS2GC_PlayerJoin.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.playerInfo != null && message.hasOwnProperty("playerInfo"))
-                $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfo, writer.uint32(18).fork()).ldelim();
-            return writer;
-        };
-
-        CS2GC_PlayerJoin.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        CS2GC_PlayerJoin.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerJoin();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                    break;
-                case 2:
-                    message.playerInfo = $root.Protos.CS2GC_PlayerInfo.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        CS2GC_PlayerJoin.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        CS2GC_PlayerJoin.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
-                if (error)
-                    return "opts." + error;
-            }
-            if (message.playerInfo != null && message.hasOwnProperty("playerInfo")) {
-                let error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfo);
-                if (error)
-                    return "playerInfo." + error;
-            }
-            return null;
-        };
-
-        CS2GC_PlayerJoin.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.CS2GC_PlayerJoin)
-                return object;
-            let message = new $root.Protos.CS2GC_PlayerJoin();
-            if (object.opts != null) {
-                if (typeof object.opts !== "object")
-                    throw TypeError(".Protos.CS2GC_PlayerJoin.opts: object expected");
-                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-            }
-            if (object.playerInfo != null) {
-                if (typeof object.playerInfo !== "object")
-                    throw TypeError(".Protos.CS2GC_PlayerJoin.playerInfo: object expected");
-                message.playerInfo = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfo);
-            }
-            return message;
-        };
-
-        CS2GC_PlayerJoin.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.opts = null;
-                object.playerInfo = null;
-            }
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.playerInfo != null && message.hasOwnProperty("playerInfo"))
-                object.playerInfo = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfo, options);
-            return object;
-        };
-
-        CS2GC_PlayerJoin.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return CS2GC_PlayerJoin;
-    })();
-
-    Protos.CS2GC_PlayerLeave = (function() {
-
-        function CS2GC_PlayerLeave(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        CS2GC_PlayerLeave.prototype.opts = null;
-        CS2GC_PlayerLeave.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-
-        CS2GC_PlayerLeave.create = function create(properties) {
-            return new CS2GC_PlayerLeave(properties);
-        };
-
-        CS2GC_PlayerLeave.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                writer.uint32(16).uint64(message.gcNID);
-            return writer;
-        };
-
-        CS2GC_PlayerLeave.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        CS2GC_PlayerLeave.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerLeave();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
-                    break;
-                case 2:
-                    message.gcNID = reader.uint64();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        CS2GC_PlayerLeave.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        CS2GC_PlayerLeave.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.opts != null && message.hasOwnProperty("opts")) {
-                let error = $root.Protos.MsgOpts.verify(message.opts);
-                if (error)
-                    return "opts." + error;
-            }
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
-                    return "gcNID: integer|Long expected";
-            return null;
-        };
-
-        CS2GC_PlayerLeave.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.CS2GC_PlayerLeave)
-                return object;
-            let message = new $root.Protos.CS2GC_PlayerLeave();
-            if (object.opts != null) {
-                if (typeof object.opts !== "object")
-                    throw TypeError(".Protos.CS2GC_PlayerLeave.opts: object expected");
-                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
-            }
-            if (object.gcNID != null)
-                if ($util.Long)
-                    (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
-                else if (typeof object.gcNID === "string")
-                    message.gcNID = parseInt(object.gcNID, 10);
-                else if (typeof object.gcNID === "number")
-                    message.gcNID = object.gcNID;
-                else if (typeof object.gcNID === "object")
-                    message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
-            return message;
-        };
-
-        CS2GC_PlayerLeave.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.opts = null;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
-                    object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.gcNID = options.longs === String ? "0" : 0;
-            }
-            if (message.opts != null && message.hasOwnProperty("opts"))
-                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                if (typeof message.gcNID === "number")
-                    object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
-                else
-                    object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
-            return object;
-        };
-
-        CS2GC_PlayerLeave.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return CS2GC_PlayerLeave;
     })();
 
     Protos.CS2GC_RoomInfo = (function() {
@@ -7501,19 +7266,19 @@ export const Protos = $root.Protos = (() => {
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
             switch (object.mode) {
-            case "Single1V1":
+            case "T2P1":
             case 0:
                 message.mode = 0;
                 break;
-            case "Single2V2":
+            case "T2P2":
             case 1:
                 message.mode = 1;
                 break;
-            case "Team2V2":
+            case "T3P1":
             case 2:
                 message.mode = 2;
                 break;
-            case "All":
+            case "T3P2":
             case 3:
                 message.mode = 3;
                 break;
@@ -7529,7 +7294,7 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
-                object.mode = options.enums === String ? "Single1V1" : 0;
+                object.mode = options.enums === String ? "T2P1" : 0;
                 object.actorID = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
@@ -7547,10 +7312,10 @@ export const Protos = $root.Protos = (() => {
 
         GC2CS_BeginMatch.EMode = (function() {
             const valuesById = {}, values = Object.create(valuesById);
-            values[valuesById[0] = "Single1V1"] = 0;
-            values[valuesById[1] = "Single2V2"] = 1;
-            values[valuesById[2] = "Team2V2"] = 2;
-            values[valuesById[3] = "All"] = 3;
+            values[valuesById[0] = "T2P1"] = 0;
+            values[valuesById[1] = "T2P2"] = 1;
+            values[valuesById[2] = "T3P1"] = 2;
+            values[valuesById[3] = "T3P2"] = 3;
             return values;
         })();
 

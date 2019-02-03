@@ -20,7 +20,6 @@ namespace CentralServer
 		public static CS instance => _instance ?? ( _instance = new CS() );
 
 		public CSConfig config { get; private set; }
-		public DBConfig dbConfig { get; private set; }
 
 		/// <summary>
 		/// Session管理器
@@ -41,7 +40,7 @@ namespace CentralServer
 		/// <summary>
 		/// 匹配器
 		/// </summary>
-		public readonly Matcher2 matcher = new Matcher2();
+		public readonly MatchManager matchMgr = new MatchManager();
 		/// <summary>
 		/// 战场暂存区
 		/// </summary>
@@ -87,10 +86,9 @@ namespace CentralServer
 				this.config.CopyFromCLIOptions( opts );
 			else
 				this.config.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
-			if ( string.IsNullOrEmpty( opts.dbCfg ) )
-				return ErrorCode.DBCfgLoadFailed;
-			this.dbConfig = new DBConfig();
-			this.dbConfig.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.dbCfg ) ) );
+
+			this.matchMgr.InitFromDefs( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( this.config.matchDefs ) ) );
+
 			this.ReloadDefs();
 			return ErrorCode.Success;
 		}
@@ -146,6 +144,7 @@ namespace CentralServer
 		{
 			this.UpdateAppropriateBSInfo();
 			this.userMgr.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+			this.matchMgr.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			this.redisWrapper.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 		}

@@ -31,16 +31,6 @@ message CS2GC_BeginMatchRet {
 	repeated CS2GC_PlayerInfo playerInfos = 6;//玩家信息
 }
 
-message CS2GC_PlayerJoin {
-	MsgOpts opts = 1;
-	CS2GC_PlayerInfo playerInfo = 2;//玩家信息
-}
-
-message CS2GC_PlayerLeave {
-	MsgOpts opts = 1;
-	uint64 gcNID = 2;
-}
-
 //更新房间信息
 message CS2GC_RoomInfo {
 	MsgOpts opts = 1;

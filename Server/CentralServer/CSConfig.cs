@@ -16,6 +16,7 @@ namespace CentralServer
 		public string redisPwd;
 		public long sessionExpTime;
 		public string defPath;
+		public string matchDefs;
 
 		public void CopyFromJson( Hashtable json )
 		{
@@ -29,6 +30,7 @@ namespace CentralServer
 			this.redisPort = json.GetInt( "redisPort" );
 			this.redisPwd = json.GetString( "redisPwd" );
 			this.sessionExpTime = json.GetLong( "sessionExpTime" );
+			this.matchDefs = json.GetString( "matchDefs" );
 		}
 
 		public void CopyFromCLIOptions( Options opts )
@@ -43,6 +45,7 @@ namespace CentralServer
 			this.redisPort = opts.redisPort;
 			this.redisPwd = opts.redisPwd;
 			this.sessionExpTime = opts.sessionExpTime;
+			this.matchDefs = opts.matchDefs;
 		}
 	}
 }

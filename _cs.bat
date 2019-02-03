@@ -1,3 +1,3 @@
 @echo off
 PUSHD %~dp0Server\Bin\
-dotnet CentralServer.dll -c Config/CSCfg.json -d Config/CSDBCfg.json -f Config/battle_defs.json
+dotnet CentralServer.dll -c Config/CSCfg.json -f Config/battle_defs.json

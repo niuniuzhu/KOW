@@ -64,9 +64,7 @@ namespace CentralServer.Match
 			{
 				//搜索第i层
 				grading = this._searchSpace[i];
-				//获取所需玩家数量
-				int numRequired = grading.system.numUsers;
-
+				int numUsers = grading.system.numUsers;
 				int c2 = grading.users.Count;
 				for ( int j = 0; j < c2; j++ )
 				{
@@ -77,7 +75,7 @@ namespace CentralServer.Match
 						//添加事件
 						this._owner.system.CreateEvent( MatchUserEvent.Type.AddToCandidate, user, user.lounge.GetState() );
 
-						if ( this._matchingLounge.numUsers == numRequired )
+						if ( this._matchingLounge.numUsers == numUsers )
 						{
 							//匹配成功
 							MatchState state =  this._matchingLounge.GetState();

@@ -230,8 +230,6 @@ export namespace Protos {
         eCS2BS_BattleInfo = 5200,
         eCS2BS_BattleEndRet = 5201,
         eCS2GC_BeginMatchRet = 5300,
-        eCS2GC_PlayerJoin = 5301,
-        eCS2GC_PlayerLeave = 5302,
         eCS2GC_RoomInfo = 5303,
         eCS2GC_EnterBattle = 5304,
         eCS2GC_BattleEnd = 5305,
@@ -682,46 +680,6 @@ export namespace Protos {
             UserInBattle = 4,
             UserInRoom = 5
         }
-    }
-
-    interface ICS2GC_PlayerJoin {
-        opts?: (Protos.IMsgOpts|null);
-        playerInfo?: (Protos.ICS2GC_PlayerInfo|null);
-    }
-
-    class CS2GC_PlayerJoin implements ICS2GC_PlayerJoin {
-        constructor(properties?: Protos.ICS2GC_PlayerJoin);
-        public opts?: (Protos.IMsgOpts|null);
-        public playerInfo?: (Protos.ICS2GC_PlayerInfo|null);
-        public static create(properties?: Protos.ICS2GC_PlayerJoin): Protos.CS2GC_PlayerJoin;
-        public static encode(message: Protos.ICS2GC_PlayerJoin, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.ICS2GC_PlayerJoin, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_PlayerJoin;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_PlayerJoin;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_PlayerJoin;
-        public static toObject(message: Protos.CS2GC_PlayerJoin, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
-    }
-
-    interface ICS2GC_PlayerLeave {
-        opts?: (Protos.IMsgOpts|null);
-        gcNID?: (Long|null);
-    }
-
-    class CS2GC_PlayerLeave implements ICS2GC_PlayerLeave {
-        constructor(properties?: Protos.ICS2GC_PlayerLeave);
-        public opts?: (Protos.IMsgOpts|null);
-        public gcNID: Long;
-        public static create(properties?: Protos.ICS2GC_PlayerLeave): Protos.CS2GC_PlayerLeave;
-        public static encode(message: Protos.ICS2GC_PlayerLeave, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static encodeDelimited(message: Protos.ICS2GC_PlayerLeave, writer?: $protobuf.Writer): $protobuf.Writer;
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_PlayerLeave;
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_PlayerLeave;
-        public static verify(message: { [k: string]: any }): (string|null);
-        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_PlayerLeave;
-        public static toObject(message: Protos.CS2GC_PlayerLeave, options?: $protobuf.IConversionOptions): { [k: string]: any };
-        public toJSON(): { [k: string]: any };
     }
 
     interface ICS2GC_RoomInfo {
@@ -1375,10 +1333,10 @@ export namespace Protos {
     namespace GC2CS_BeginMatch {
 
         enum EMode {
-            Single1V1 = 0,
-            Single2V2 = 1,
-            Team2V2 = 2,
-            All = 3
+            T2P1 = 0,
+            T2P2 = 1,
+            T3P1 = 2,
+            T3P2 = 3
         }
     }
 

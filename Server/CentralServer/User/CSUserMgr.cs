@@ -147,10 +147,10 @@ namespace CentralServer.User
 		internal void Offline( CSUser user )
 		{
 			Logger.Info( $"user:{user.gcNID}({user.gsLID}) offline" );
+			//从匹配系统中移除
+			CS.instance.matchMgr.RemoveUser( user );
 			//玩家下线
 			user.Offline();
-			//把玩家从房间中踢掉
-			CS.instance.matcher.OnUserKicked( user );
 		}
 
 		/// <summary>

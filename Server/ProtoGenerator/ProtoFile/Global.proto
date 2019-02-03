@@ -72,8 +72,6 @@ enum MsgID {
 	eCS2BS_BattleEndRet = 5201;
 
 	eCS2GC_BeginMatchRet = 5300;
-	eCS2GC_PlayerJoin = 5301;
-	eCS2GC_PlayerLeave = 5302;
 	eCS2GC_RoomInfo = 5303;
 	eCS2GC_EnterBattle = 5304;
 	eCS2GC_BattleEnd = 5305;

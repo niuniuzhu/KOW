@@ -1,9 +1,9 @@
-﻿using CentralServer.Net;
+﻿using CentralServer.Match;
+using CentralServer.Net;
 using CentralServer.User;
 using Core.Misc;
 using Core.Net;
 using Google.Protobuf;
-using Protos;
 using Shared;
 using Shared.Net;
 using BSInfo = Shared.BSInfo;
@@ -97,7 +97,7 @@ namespace CentralServer.Biz
 			}
 			else
 			{
-				gcAskLoginRet.UserInfo = new G_UserInfo
+				gcAskLoginRet.UserInfo = new Protos.G_UserInfo
 				{
 					GcNID = user.gcNID,
 					Nickname = user.nickname,
@@ -146,7 +146,18 @@ namespace CentralServer.Biz
 		public ErrorCode OnGc2CsBeginMatch( NetSessionBase session, IMessage message )
 		{
 			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch )message;
-			CS.instance.matcher.BeginMatch( session, beginMatch );
+
+			ulong gcNID = beginMatch.Opts.Transid;
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+
+			MatchParams @params = new MatchParams
+			{
+				actorID = beginMatch.ActorID
+			};
+
+			if ( !CS.instance.matchMgr.CreateUser( beginMatch.Mode, user, @params ) )
+				return ErrorCode.Failed;
+
 			return ErrorCode.Success;
 		}
 	}

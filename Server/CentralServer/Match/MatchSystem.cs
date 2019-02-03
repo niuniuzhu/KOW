@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CentralServer.Match
 {
-	public class MatchingSystem
+	public class MatchSystem
 	{
 		/// <summary>
 		/// 模式(高4位代表队伍数量,低4位代表每个队伍的玩家数量)
@@ -29,20 +29,20 @@ namespace CentralServer.Match
 		/// </summary>
 		public int numUsers => this.numTeam * this.numUserPerTeam;
 
-		public Action<MatchState> onMatchResult;
+		public Action<MatchTeam> onMatchResult;
 		public Action<MatchUserEvent> OnUserStateChanged;
 
 		private readonly List<Grading> _gradings = new List<Grading>();
 		private readonly Dictionary<byte, Grading> _modeToGrading = new Dictionary<byte, Grading>();
 		private readonly Task _task;
 		private readonly Stopwatch _sw = new Stopwatch();
-		private readonly SwitchQueue<MatchState> _results = new SwitchQueue<MatchState>();
+		private readonly SwitchQueue<MatchTeam> _results = new SwitchQueue<MatchTeam>();
 		private readonly SwitchQueue<MatchUserEvent> _events = new SwitchQueue<MatchUserEvent>();
 		private long _updateInterval;
 		private long _lastUpdateTime;
 		private bool _disposed;
 
-		public MatchingSystem()
+		public MatchSystem()
 		{
 			this._task = Task.Factory.StartNew( this.AsyncLoop, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default );
 			this._sw.Start();
@@ -125,7 +125,7 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 外部驱动的更新
 		/// </summary>
-		public void Update()
+		public void Update( long dt )
 		{
 			//处理事件
 			this._events.Switch();
@@ -137,7 +137,7 @@ namespace CentralServer.Match
 			this._results.Switch();
 			while ( !this._results.isEmpty )
 			{
-				MatchState state = this._results.Pop();
+				MatchTeam state = this._results.Pop();
 				this.onMatchResult?.Invoke( state );
 			}
 		}

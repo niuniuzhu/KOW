@@ -9,7 +9,7 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 所属的匹配系统
 		/// </summary>
-		public MatchingSystem system { get; }
+		public MatchSystem system { get; }
 		/// <summary>
 		/// 起始分数
 		/// </summary>
@@ -43,7 +43,7 @@ namespace CentralServer.Match
 		private readonly SwitchQueue<MatchUser> _pendingToRemove = new SwitchQueue<MatchUser>();
 		private readonly Matcher _matcher;
 
-		public Grading( MatchingSystem system, int from, int to, long expireTime, int maxExtends )
+		public Grading( MatchSystem system, int from, int to, long expireTime, int maxExtends )
 		{
 			this.system = system;
 			this.from = from;
@@ -57,7 +57,7 @@ namespace CentralServer.Match
 		/// 系统每次更新调用匹配
 		/// 非主线程调用
 		/// </summary>
-		internal void ProcessMatch( SwitchQueue<MatchState> results, long dt )
+		internal void ProcessMatch( SwitchQueue<MatchTeam> results, long dt )
 		{
 			if ( this.users.Count == 0 )
 				return;
@@ -67,7 +67,7 @@ namespace CentralServer.Match
 				state = this._matcher.ProcessMatch( dt );
 				if ( state != null )//匹配成功
 				{
-					results.Push( state );
+					results.Push( state.CreateTeam( this.system.numTeam ) );
 				}
 			} while ( state != null && this.users.Count > 0 );//如果第一个玩家都匹配不了则不用往下处理了
 		}

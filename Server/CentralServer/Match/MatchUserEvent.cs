@@ -6,8 +6,8 @@
 		{
 			AddToGrading,
 			RemoveFromGrading,
-			AddToCandidate,
-			RemoveFromCandidate
+			AddToLounge,
+			RemoveFromLounge
 		}
 
 		public readonly Type type;

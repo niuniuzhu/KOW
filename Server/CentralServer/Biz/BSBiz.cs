@@ -64,7 +64,7 @@ namespace CentralServer.Biz
 			gsInfo.ip = BSInfoRecv.Ip;
 			gsInfo.port = BSInfoRecv.Port;
 			gsInfo.state = ( BSInfo.State )BSInfoRecv.State;
-			Logger.Log( $"report from BS:{gsInfo}" );
+			//Logger.Log( $"report from BS:{gsInfo}" );
 			return ErrorCode.Success;
 		}
 

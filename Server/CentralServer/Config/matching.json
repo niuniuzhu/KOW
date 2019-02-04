@@ -29,6 +29,36 @@
                     "max_extends": 1
                 }
             ]
+        },
+        {
+            "mode": 34,
+            "update_interval": 1000,
+            "gradings": [
+                {
+                    "from": 0,
+                    "to": 49,
+                    "expire": 3000,
+                    "max_extends": 2
+                },
+                {
+                    "from": 50,
+                    "to": 99,
+                    "expire": 3000,
+                    "max_extends": 1
+                },
+                {
+                    "from": 100,
+                    "to": 149,
+                    "expire": 3000,
+                    "max_extends": 1
+                },
+                {
+                    "from": 150,
+                    "to": 199,
+                    "expire": 3000,
+                    "max_extends": 1
+                }
+            ]
         }
     ]
 }

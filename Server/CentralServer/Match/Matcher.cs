@@ -38,7 +38,7 @@ namespace CentralServer.Match
 		public Matcher( Grading owner )
 		{
 			this._owner = owner;
-			this._matchingLounge = new MatchingLounge( this._owner.system.numUsers );
+			this._matchingLounge = new MatchingLounge( this._owner.system.numTeam, this._owner.system.numUserPerTeam );
 			this.ExtendSearchGrading( owner );
 		}
 
@@ -73,7 +73,7 @@ namespace CentralServer.Match
 					if ( this._matchingLounge.AddUser( user ) )
 					{
 						//添加事件
-						this._owner.system.CreateEvent( MatchUserEvent.Type.AddToCandidate, user, user.lounge.GetState() );
+						this._owner.system.CreateEvent( MatchUserEvent.Type.AddToLounge, user, user.lounge.GetState() );
 
 						if ( this._matchingLounge.numUsers == numUsers )
 						{

@@ -1,7 +1,7 @@
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
-import { SceneManager } from "../Scene/SceneManager";
 import { IUIModule } from "./IUIModule";
+import { UIAlert } from "./UIAlert";
 
 export class UIMain implements IUIModule {
 	private readonly _root: fairygui.GComponent;
@@ -13,7 +13,7 @@ export class UIMain implements IUIModule {
 		this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
 		this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
-		this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
+		this._root.getChild("n3").onClick(this, this.OnMatchBtnClick);
 	}
 
 	public Dispose(): void {
@@ -21,6 +21,7 @@ export class UIMain implements IUIModule {
 	}
 
 	public Enter(param: any): void {
+		this._root.getChild("n3").enabled = true;
 		Global.graphic.uiRoot.addChild(this._root);
 		this._root.getTransition("t0").play();
 
@@ -41,7 +42,16 @@ export class UIMain implements IUIModule {
 	public OnResize(e: laya.events.Event): void {
 	}
 
-	private OnAutoMatchBtnClick(): void {
-		Global.sceneManager.ChangeState(SceneManager.State.Matching);
+	public SetMatchBtnEnable(value: boolean): void {
+		this._root.getChild("n3").enabled = value;
+	}
+
+	private OnMatchBtnClick(): void {
+		this.SetMatchBtnEnable(false);
+		Global.sceneManager.main.BeginMatch();
+	}
+
+	public OnFail(message: string, callback: () => void = null): void {
+		UIAlert.Show(message, callback);
 	}
 }

@@ -14,8 +14,6 @@ namespace CentralServer.Match
 	{
 		private readonly Dictionary<byte, MatchSystem> _matchingSystems = new Dictionary<byte, MatchSystem>();
 		private readonly Dictionary<CSUser, MatchUser> _userToMatchUser = new Dictionary<CSUser, MatchUser>();
-		private readonly Dictionary<MatchUser, CSUser> _matchUserToUser = new Dictionary<MatchUser, CSUser>();
-		private readonly HashSet<MatchUser> _userToRemove = new HashSet<MatchUser>();
 
 		internal void InitFromDefs( Hashtable json )
 		{
@@ -36,20 +34,69 @@ namespace CentralServer.Match
 				kv.Value.Update( dt );
 		}
 
-		private void OnMatchResult( MatchTeam team )
+		private void OnMatchResult( MatchState state )
 		{
-			this.BeginBattle( team );
+			this.BeginBattle( state );
 		}
 
 		private void OnUserStateChanged( MatchUserEvent e )
 		{
-			MatchUser matchUser = e.user;
-			if ( this._userToRemove.Contains( matchUser ) )
+			switch ( e.type )
 			{
-				CSUser user = this._matchUserToUser[matchUser];
-				this._matchUserToUser.Remove( matchUser );
-				this._userToMatchUser.Remove( user );
-				this._userToRemove.Remove( matchUser );
+				case MatchUserEvent.Type.AddToGrading:
+					//{
+					//	Protos.CS2GC_AddToMatch response = ProtoCreator.Q_CS2GC_AddToMatch();
+					//	CS.instance.userMgr.GetUser( e.user.id ).Send( response );
+					//}
+					break;
+
+				case MatchUserEvent.Type.RemoveFromGrading:
+					{
+						Protos.CS2GC_RemoveFromMatch response = ProtoCreator.Q_CS2GC_RemoveFromMatch();
+						CS.instance.userMgr.GetUser( e.user.id )?.Send( response );
+					}
+					break;
+
+				case MatchUserEvent.Type.AddToLounge:
+				case MatchUserEvent.Type.RemoveFromLounge:
+					{
+						Protos.CS2GC_MatchState pMatchState = ProtoCreator.Q_CS2GC_MatchState();
+						for ( int i = 0; i < e.state.numTeam; i++ )
+						{
+							MatchUser[] matchUsers = e.state.tUsers[i];
+							for ( int j = 0; j < e.state.numUserPerTeam; j++ )
+							{
+								MatchUser matchUser = matchUsers[j];
+								if ( matchUser == null )
+								{
+									Protos.CS2GC_PlayerInfo playerInfo = new Protos.CS2GC_PlayerInfo
+									{
+										Vaild = false,
+									};
+									pMatchState.PlayerInfos.Add( playerInfo );
+								}
+								else
+								{
+									CSUser user = CS.instance.userMgr.GetUser( matchUser.id );
+									MatchParams matchParams = ( MatchParams )matchUser.userdata;
+									Protos.CS2GC_PlayerInfo playerInfo = new Protos.CS2GC_PlayerInfo
+									{
+										Vaild = true,
+										GcNID = user.gcNID,
+										Nickname = user.nickname,
+										Avatar = user.avatar,
+										Gender = user.gender,
+										Honor = user.honor,
+										Team = i,
+										ActorID = matchParams.actorID
+									};
+									pMatchState.PlayerInfos.Add( playerInfo );
+								}
+							}
+						}
+						this.Broadcast( e.state.users, pMatchState );
+					}
+					break;
 			}
 		}
 
@@ -64,12 +111,14 @@ namespace CentralServer.Match
 		{
 			if ( this._userToMatchUser.ContainsKey( user ) )
 				return false;
+
 			byte mode2;
 			switch ( mode )
 			{
 				case Protos.GC2CS_BeginMatch.Types.EMode.T2P2:
 					mode2 = 34;
 					break;
+
 				default:
 					mode2 = 33;
 					break;
@@ -78,9 +127,10 @@ namespace CentralServer.Match
 			MatchUser matchUser = matchingSystem?.CreateUser( user.gcNID, user.honor );
 			if ( matchUser == null )
 				return false;
+
 			matchUser.userdata = matchParams;
 			this._userToMatchUser[user] = matchUser;
-			this._matchUserToUser[matchUser] = user;
+
 			return true;
 		}
 
@@ -91,18 +141,18 @@ namespace CentralServer.Match
 		{
 			if ( !this._userToMatchUser.TryGetValue( user, out MatchUser matchUser ) )
 				return false;
-			this._userToRemove.Add( matchUser );
+			this._userToMatchUser.Remove( user );
 			matchUser.grading.system.RemoveUser( matchUser );
 			return true;
 		}
 
-		private void BeginBattle( MatchTeam team )
+		private void BeginBattle( MatchState state )
 		{
 			BSInfo appropriateBSInfo = CS.instance.appropriateBSInfo;
 			//没有找到合适的bs,通知客户端匹配失败
 			if ( appropriateBSInfo == null )
 			{
-				this.NotifyGCEnterBattleFailed( team, Protos.CS2GC_EnterBattle.Types.Result.BsnotFound );
+				this.NotifyGCEnterBattleFailed( state.users, Protos.CS2GC_EnterBattle.Types.Result.BsnotFound );
 				return;
 			}
 
@@ -114,16 +164,14 @@ namespace CentralServer.Match
 			Protos.CS2BS_BattleInfo battleInfo = ProtoCreator.Q_CS2BS_BattleInfo();
 			battleInfo.MapID = mapID;
 			battleInfo.ConnTimeout = ( int )Consts.WAITING_ROOM_TIME_OUT;
-			int c0 = team.users.Length;
-			for ( int i = 0; i < c0; i++ )
+			for ( int i = 0; i < state.numTeam; i++ )
 			{
-				MatchUser[] users0 = team.users[i];
-				int c1 = users0.Length;
-				for ( int j = 0; j < c1; j++ )
+				MatchUser[] matchUsers = state.tUsers[i];
+				for ( int j = 0; j < state.numUserPerTeam; j++ )
 				{
-					MatchUser matchUser = users0[j];
-					MatchParams matchParams = ( MatchParams )matchUser.userdata;
+					MatchUser matchUser = matchUsers[j];
 					CSUser user = CS.instance.userMgr.GetUser( matchUser.id );
+					MatchParams matchParams = ( MatchParams )matchUser.userdata;
 					Protos.CS2BS_PlayerInfo pi = new Protos.CS2BS_PlayerInfo
 					{
 						GcNID = user.ukey | ( ulong )appropriateBSInfo.lid << 32,
@@ -139,8 +187,7 @@ namespace CentralServer.Match
 					battleInfo.PlayerInfos.Add( pi );
 				}
 			}
-
-			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, RPCEntry.Pop( this.OnBattleInfoRet, team,
+			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, RPCEntry.Pop( this.OnBattleInfoRet, state,
 																								   appropriateBSInfo.ip, appropriateBSInfo.port,
 																								   appropriateBSInfo.sessionID, appropriateBSInfo.lid ) );
 		}
@@ -150,7 +197,7 @@ namespace CentralServer.Match
 		/// </summary>
 		private void OnBattleInfoRet( NetSessionBase session_, Google.Protobuf.IMessage ret, object[] args )
 		{
-			MatchTeam team = ( MatchTeam )args[0];
+			MatchState state = ( MatchState )args[0];
 			string bsIP = ( string )args[1];
 			int bsPort = ( int )args[2];
 			uint bsSID = ( uint )args[3];
@@ -160,7 +207,7 @@ namespace CentralServer.Match
 			//检查是否成功创建战场
 			if ( battleInfoRet.Result != Protos.Global.Types.ECommon.Success )
 			{
-				this.NotifyGCEnterBattleFailed( team, Protos.CS2GC_EnterBattle.Types.Result.BattleCreateFailed );
+				this.NotifyGCEnterBattleFailed( state.users, Protos.CS2GC_EnterBattle.Types.Result.BattleCreateFailed );
 				return;
 			}
 
@@ -169,46 +216,42 @@ namespace CentralServer.Match
 			CS.instance.battleStaging.OnBattleCreated( bsLID, battleInfoRet.Bid );
 
 			//把所有玩家移动到战场暂存器里
-			foreach ( MatchUser[] users0 in team.users )
+			foreach ( MatchUser matchUser in state.users )
 			{
-				foreach ( MatchUser matchUser in users0 )
-				{
-					CSUser user = this._matchUserToUser[matchUser];
-					CS.instance.battleStaging.Add( user, bsLID, bsSID, battleInfoRet.Bid );
-				}
+				CSUser user = CS.instance.userMgr.GetUser( matchUser.id );
+				CS.instance.battleStaging.Add( user, bsLID, bsSID, battleInfoRet.Bid );
 			}
 
 			//广播给玩家
 			Protos.CS2GC_EnterBattle enterBattle = ProtoCreator.Q_CS2GC_EnterBattle();
 			enterBattle.Ip = bsIP;
 			enterBattle.Port = bsPort;
-			foreach ( MatchUser[] users0 in team.users )
+			foreach ( MatchUser matchUser in state.users )
 			{
-				foreach ( MatchUser matchUser in users0 )
-				{
-					CSUser user = this._matchUserToUser[matchUser];
-					enterBattle.GcNID = user.ukey | ( ulong )bsLID << 32;
-					user.Send( enterBattle );
-				}
+				CSUser user = CS.instance.userMgr.GetUser( matchUser.id );
+				enterBattle.GcNID = user.ukey | ( ulong )bsLID << 32;
+				user.Send( enterBattle );
 			}
 		}
 
-		private void NotifyGCEnterBattleFailed( MatchTeam team, Protos.CS2GC_EnterBattle.Types.Result result )
+		private void NotifyGCEnterBattleFailed( MatchUser[] users, Protos.CS2GC_EnterBattle.Types.Result result )
 		{
 			Protos.CS2GC_EnterBattle bsInfo = ProtoCreator.Q_CS2GC_EnterBattle();
 			bsInfo.Result = result;
-			this.Broadcast( team, bsInfo );
+			this.Broadcast( users, bsInfo );
 		}
 
 		/// <summary>
 		/// 广播消息
 		/// </summary>
-		private void Broadcast( MatchTeam team, Google.Protobuf.IMessage msg )
+		private void Broadcast( MatchUser[] users, Google.Protobuf.IMessage msg )
 		{
 			//预编码的消息广播不支持转发
-			foreach ( MatchUser[] users0 in team.users )
-				foreach ( MatchUser user in users0 )
-					this._matchUserToUser[user].Send( msg );
+			foreach ( MatchUser matchUser in users )
+			{
+				if ( matchUser != null )
+					CS.instance.userMgr.GetUser( matchUser.id )?.Send( msg );
+			}
 		}
 	}
 }

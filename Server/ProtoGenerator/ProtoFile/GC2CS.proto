@@ -15,3 +15,8 @@ message GC2CS_BeginMatch {
 	EMode mode = 2;//匹配模式
 	int32 actorID = 3;//匹配前选择的角色id 
 }
+
+//取消匹配
+message GC2CS_CancelMatch {
+	MsgOpts opts = 1;
+}

@@ -29,14 +29,14 @@ namespace CentralServer.Match
 		/// </summary>
 		public int numUsers => this.numTeam * this.numUserPerTeam;
 
-		public Action<MatchTeam> onMatchResult;
+		public Action<MatchState> onMatchResult;
 		public Action<MatchUserEvent> OnUserStateChanged;
 
 		private readonly List<Grading> _gradings = new List<Grading>();
 		private readonly Dictionary<byte, Grading> _modeToGrading = new Dictionary<byte, Grading>();
 		private readonly Task _task;
 		private readonly Stopwatch _sw = new Stopwatch();
-		private readonly SwitchQueue<MatchTeam> _results = new SwitchQueue<MatchTeam>();
+		private readonly SwitchQueue<MatchState> _results = new SwitchQueue<MatchState>();
 		private readonly SwitchQueue<MatchUserEvent> _events = new SwitchQueue<MatchUserEvent>();
 		private long _updateInterval;
 		private long _lastUpdateTime;
@@ -137,8 +137,9 @@ namespace CentralServer.Match
 			this._results.Switch();
 			while ( !this._results.isEmpty )
 			{
-				MatchTeam state = this._results.Pop();
+				MatchState state = this._results.Pop();
 				this.onMatchResult?.Invoke( state );
+				MatchState.POOL.Push( state );
 			}
 		}
 
@@ -174,9 +175,9 @@ namespace CentralServer.Match
 			return user;
 		}
 
-		public void RemoveUser( MatchUser user )
+		public void RemoveUser( MatchUser matchUser )
 		{
-			user.grading.PendingRemoveUser( user );
+			matchUser.grading.PendingRemoveUser( matchUser );
 		}
 
 		public string Dump()

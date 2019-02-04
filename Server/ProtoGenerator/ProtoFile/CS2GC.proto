@@ -3,39 +3,40 @@ package Protos;
 
 import "Global.proto";
 
-message CS2GC_PlayerInfo {
-	uint64 gcNID = 1;//玩家网络id
-	string nickname = 2;//玩家名字
-	string avatar = 3;
-	int32 gender = 4;
-	int32 honor = 5;
-	int32 actorID = 6;//角色id
-	int32 team = 7;//所在队伍
-}
-
 //匹配回应
 message CS2GC_BeginMatchRet {
 	enum EResult {
 		Success = 0;
 		Failed = 1;
-		IllegalID = 2;
-		NoRoom = 3;
-		UserInBattle = 4;
-		UserInRoom = 5;
+		UserInBattle = 2;
 	}
 	MsgOpts opts = 1;
 	EResult result = 2;
-	uint32 id = 3;//房间运行时id
-	int32 mapID = 4;//地图id
-	int32 maxPlayer = 5;//房间最大玩家数
-	repeated CS2GC_PlayerInfo playerInfos = 6;//玩家信息
+}
+
+message CS2GC_PlayerInfo {
+	bool vaild = 1;
+	uint64 gcNID = 2;//玩家网络id
+	string nickname = 3;//玩家名字
+	string avatar = 4;
+	int32 gender = 5;
+	int32 honor = 6;
+	int32 actorID = 7;//角色id
+	int32 team = 8;//所在队伍
 }
 
 //更新房间信息
-message CS2GC_RoomInfo {
+message CS2GC_MatchState {
 	MsgOpts opts = 1;
 	repeated CS2GC_PlayerInfo playerInfos = 2;//玩家信息
-	repeated int32 progresses = 3;//各玩家加载进度
+}
+
+message CS2GC_AddToMatch {
+	MsgOpts opts = 1;
+}
+
+message CS2GC_RemoveFromMatch {
+	MsgOpts opts = 1;
 }
 
 //所有玩家准备完成,下发BS连接信息

@@ -1028,6 +1028,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[1205] = "eGC2BS_CommitSnapshot"] = 1205;
         values[valuesById[1206] = "eGC2BS_EndBattle"] = 1206;
         values[valuesById[1300] = "eGC2CS_BeginMatch"] = 1300;
+        values[valuesById[1301] = "eGC2CS_CancelMatch"] = 1301;
         values[valuesById[2000] = "eLS2GC_GSInfo"] = 2000;
         values[valuesById[2001] = "eLS2GC_AskRegRet"] = 2001;
         values[valuesById[2002] = "eLS2GC_AskLoginRet"] = 2002;
@@ -1059,10 +1060,12 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[5200] = "eCS2BS_BattleInfo"] = 5200;
         values[valuesById[5201] = "eCS2BS_BattleEndRet"] = 5201;
         values[valuesById[5300] = "eCS2GC_BeginMatchRet"] = 5300;
-        values[valuesById[5303] = "eCS2GC_RoomInfo"] = 5303;
-        values[valuesById[5304] = "eCS2GC_EnterBattle"] = 5304;
-        values[valuesById[5305] = "eCS2GC_BattleEnd"] = 5305;
-        values[valuesById[5306] = "eCS2GC_BSLose"] = 5306;
+        values[valuesById[5303] = "eCS2GC_MatchState"] = 5303;
+        values[valuesById[5304] = "eCS2GC_AddToMatch"] = 5304;
+        values[valuesById[5305] = "eCS2GC_RemoveFromMatch"] = 5305;
+        values[valuesById[5306] = "eCS2GC_EnterBattle"] = 5306;
+        values[valuesById[5307] = "eCS2GC_BattleEnd"] = 5307;
+        values[valuesById[5308] = "eCS2GC_BSLose"] = 5308;
         values[valuesById[8000] = "eDB2LS_QueryAccountRet"] = 8000;
         values[valuesById[8001] = "eDB2LS_QueryLoginRet"] = 8001;
         values[valuesById[8002] = "eDB2LS_ExecRet"] = 8002;
@@ -3139,196 +3142,9 @@ export const Protos = $root.Protos = (() => {
         return CS2BS_BattleEndRet;
     })();
 
-    Protos.CS2GC_PlayerInfo = (function() {
-
-        function CS2GC_PlayerInfo(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        CS2GC_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-        CS2GC_PlayerInfo.prototype.nickname = "";
-        CS2GC_PlayerInfo.prototype.avatar = "";
-        CS2GC_PlayerInfo.prototype.gender = 0;
-        CS2GC_PlayerInfo.prototype.honor = 0;
-        CS2GC_PlayerInfo.prototype.actorID = 0;
-        CS2GC_PlayerInfo.prototype.team = 0;
-
-        CS2GC_PlayerInfo.create = function create(properties) {
-            return new CS2GC_PlayerInfo(properties);
-        };
-
-        CS2GC_PlayerInfo.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                writer.uint32(8).uint64(message.gcNID);
-            if (message.nickname != null && message.hasOwnProperty("nickname"))
-                writer.uint32(18).string(message.nickname);
-            if (message.avatar != null && message.hasOwnProperty("avatar"))
-                writer.uint32(26).string(message.avatar);
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                writer.uint32(32).int32(message.gender);
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(40).int32(message.honor);
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                writer.uint32(48).int32(message.actorID);
-            if (message.team != null && message.hasOwnProperty("team"))
-                writer.uint32(56).int32(message.team);
-            return writer;
-        };
-
-        CS2GC_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        CS2GC_PlayerInfo.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerInfo();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.gcNID = reader.uint64();
-                    break;
-                case 2:
-                    message.nickname = reader.string();
-                    break;
-                case 3:
-                    message.avatar = reader.string();
-                    break;
-                case 4:
-                    message.gender = reader.int32();
-                    break;
-                case 5:
-                    message.honor = reader.int32();
-                    break;
-                case 6:
-                    message.actorID = reader.int32();
-                    break;
-                case 7:
-                    message.team = reader.int32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        CS2GC_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        CS2GC_PlayerInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
-                    return "gcNID: integer|Long expected";
-            if (message.nickname != null && message.hasOwnProperty("nickname"))
-                if (!$util.isString(message.nickname))
-                    return "nickname: string expected";
-            if (message.avatar != null && message.hasOwnProperty("avatar"))
-                if (!$util.isString(message.avatar))
-                    return "avatar: string expected";
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                if (!$util.isInteger(message.gender))
-                    return "gender: integer expected";
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                if (!$util.isInteger(message.honor))
-                    return "honor: integer expected";
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                if (!$util.isInteger(message.actorID))
-                    return "actorID: integer expected";
-            if (message.team != null && message.hasOwnProperty("team"))
-                if (!$util.isInteger(message.team))
-                    return "team: integer expected";
-            return null;
-        };
-
-        CS2GC_PlayerInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.CS2GC_PlayerInfo)
-                return object;
-            let message = new $root.Protos.CS2GC_PlayerInfo();
-            if (object.gcNID != null)
-                if ($util.Long)
-                    (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
-                else if (typeof object.gcNID === "string")
-                    message.gcNID = parseInt(object.gcNID, 10);
-                else if (typeof object.gcNID === "number")
-                    message.gcNID = object.gcNID;
-                else if (typeof object.gcNID === "object")
-                    message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
-            if (object.nickname != null)
-                message.nickname = String(object.nickname);
-            if (object.avatar != null)
-                message.avatar = String(object.avatar);
-            if (object.gender != null)
-                message.gender = object.gender | 0;
-            if (object.honor != null)
-                message.honor = object.honor | 0;
-            if (object.actorID != null)
-                message.actorID = object.actorID | 0;
-            if (object.team != null)
-                message.team = object.team | 0;
-            return message;
-        };
-
-        CS2GC_PlayerInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, true);
-                    object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.gcNID = options.longs === String ? "0" : 0;
-                object.nickname = "";
-                object.avatar = "";
-                object.gender = 0;
-                object.honor = 0;
-                object.actorID = 0;
-                object.team = 0;
-            }
-            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
-                if (typeof message.gcNID === "number")
-                    object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
-                else
-                    object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
-            if (message.nickname != null && message.hasOwnProperty("nickname"))
-                object.nickname = message.nickname;
-            if (message.avatar != null && message.hasOwnProperty("avatar"))
-                object.avatar = message.avatar;
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                object.gender = message.gender;
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                object.honor = message.honor;
-            if (message.actorID != null && message.hasOwnProperty("actorID"))
-                object.actorID = message.actorID;
-            if (message.team != null && message.hasOwnProperty("team"))
-                object.team = message.team;
-            return object;
-        };
-
-        CS2GC_PlayerInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return CS2GC_PlayerInfo;
-    })();
-
     Protos.CS2GC_BeginMatchRet = (function() {
 
         function CS2GC_BeginMatchRet(properties) {
-            this.playerInfos = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -3337,10 +3153,6 @@ export const Protos = $root.Protos = (() => {
 
         CS2GC_BeginMatchRet.prototype.opts = null;
         CS2GC_BeginMatchRet.prototype.result = 0;
-        CS2GC_BeginMatchRet.prototype.id = 0;
-        CS2GC_BeginMatchRet.prototype.mapID = 0;
-        CS2GC_BeginMatchRet.prototype.maxPlayer = 0;
-        CS2GC_BeginMatchRet.prototype.playerInfos = $util.emptyArray;
 
         CS2GC_BeginMatchRet.create = function create(properties) {
             return new CS2GC_BeginMatchRet(properties);
@@ -3353,15 +3165,6 @@ export const Protos = $root.Protos = (() => {
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.result != null && message.hasOwnProperty("result"))
                 writer.uint32(16).int32(message.result);
-            if (message.id != null && message.hasOwnProperty("id"))
-                writer.uint32(24).uint32(message.id);
-            if (message.mapID != null && message.hasOwnProperty("mapID"))
-                writer.uint32(32).int32(message.mapID);
-            if (message.maxPlayer != null && message.hasOwnProperty("maxPlayer"))
-                writer.uint32(40).int32(message.maxPlayer);
-            if (message.playerInfos != null && message.playerInfos.length)
-                for (let i = 0; i < message.playerInfos.length; ++i)
-                    $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfos[i], writer.uint32(50).fork()).ldelim();
             return writer;
         };
 
@@ -3381,20 +3184,6 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 2:
                     message.result = reader.int32();
-                    break;
-                case 3:
-                    message.id = reader.uint32();
-                    break;
-                case 4:
-                    message.mapID = reader.int32();
-                    break;
-                case 5:
-                    message.maxPlayer = reader.int32();
-                    break;
-                case 6:
-                    if (!(message.playerInfos && message.playerInfos.length))
-                        message.playerInfos = [];
-                    message.playerInfos.push($root.Protos.CS2GC_PlayerInfo.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -3425,29 +3214,8 @@ export const Protos = $root.Protos = (() => {
                 case 0:
                 case 1:
                 case 2:
-                case 3:
-                case 4:
-                case 5:
                     break;
                 }
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isInteger(message.id))
-                    return "id: integer expected";
-            if (message.mapID != null && message.hasOwnProperty("mapID"))
-                if (!$util.isInteger(message.mapID))
-                    return "mapID: integer expected";
-            if (message.maxPlayer != null && message.hasOwnProperty("maxPlayer"))
-                if (!$util.isInteger(message.maxPlayer))
-                    return "maxPlayer: integer expected";
-            if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
-                if (!Array.isArray(message.playerInfos))
-                    return "playerInfos: array expected";
-                for (let i = 0; i < message.playerInfos.length; ++i) {
-                    let error = $root.Protos.CS2GC_PlayerInfo.verify(message.playerInfos[i]);
-                    if (error)
-                        return "playerInfos." + error;
-                }
-            }
             return null;
         };
 
@@ -3469,38 +3237,10 @@ export const Protos = $root.Protos = (() => {
             case 1:
                 message.result = 1;
                 break;
-            case "IllegalID":
+            case "UserInBattle":
             case 2:
                 message.result = 2;
                 break;
-            case "NoRoom":
-            case 3:
-                message.result = 3;
-                break;
-            case "UserInBattle":
-            case 4:
-                message.result = 4;
-                break;
-            case "UserInRoom":
-            case 5:
-                message.result = 5;
-                break;
-            }
-            if (object.id != null)
-                message.id = object.id >>> 0;
-            if (object.mapID != null)
-                message.mapID = object.mapID | 0;
-            if (object.maxPlayer != null)
-                message.maxPlayer = object.maxPlayer | 0;
-            if (object.playerInfos) {
-                if (!Array.isArray(object.playerInfos))
-                    throw TypeError(".Protos.CS2GC_BeginMatchRet.playerInfos: array expected");
-                message.playerInfos = [];
-                for (let i = 0; i < object.playerInfos.length; ++i) {
-                    if (typeof object.playerInfos[i] !== "object")
-                        throw TypeError(".Protos.CS2GC_BeginMatchRet.playerInfos: object expected");
-                    message.playerInfos[i] = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfos[i]);
-                }
             }
             return message;
         };
@@ -3509,30 +3249,14 @@ export const Protos = $root.Protos = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.arrays || options.defaults)
-                object.playerInfos = [];
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
-                object.id = 0;
-                object.mapID = 0;
-                object.maxPlayer = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.result != null && message.hasOwnProperty("result"))
                 object.result = options.enums === String ? $root.Protos.CS2GC_BeginMatchRet.EResult[message.result] : message.result;
-            if (message.id != null && message.hasOwnProperty("id"))
-                object.id = message.id;
-            if (message.mapID != null && message.hasOwnProperty("mapID"))
-                object.mapID = message.mapID;
-            if (message.maxPlayer != null && message.hasOwnProperty("maxPlayer"))
-                object.maxPlayer = message.maxPlayer;
-            if (message.playerInfos && message.playerInfos.length) {
-                object.playerInfos = [];
-                for (let j = 0; j < message.playerInfos.length; ++j)
-                    object.playerInfos[j] = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfos[j], options);
-            }
             return object;
         };
 
@@ -3544,36 +3268,231 @@ export const Protos = $root.Protos = (() => {
             const valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "Success"] = 0;
             values[valuesById[1] = "Failed"] = 1;
-            values[valuesById[2] = "IllegalID"] = 2;
-            values[valuesById[3] = "NoRoom"] = 3;
-            values[valuesById[4] = "UserInBattle"] = 4;
-            values[valuesById[5] = "UserInRoom"] = 5;
+            values[valuesById[2] = "UserInBattle"] = 2;
             return values;
         })();
 
         return CS2GC_BeginMatchRet;
     })();
 
-    Protos.CS2GC_RoomInfo = (function() {
+    Protos.CS2GC_PlayerInfo = (function() {
 
-        function CS2GC_RoomInfo(properties) {
-            this.playerInfos = [];
-            this.progresses = [];
+        function CS2GC_PlayerInfo(properties) {
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
 
-        CS2GC_RoomInfo.prototype.opts = null;
-        CS2GC_RoomInfo.prototype.playerInfos = $util.emptyArray;
-        CS2GC_RoomInfo.prototype.progresses = $util.emptyArray;
+        CS2GC_PlayerInfo.prototype.vaild = false;
+        CS2GC_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+        CS2GC_PlayerInfo.prototype.nickname = "";
+        CS2GC_PlayerInfo.prototype.avatar = "";
+        CS2GC_PlayerInfo.prototype.gender = 0;
+        CS2GC_PlayerInfo.prototype.honor = 0;
+        CS2GC_PlayerInfo.prototype.actorID = 0;
+        CS2GC_PlayerInfo.prototype.team = 0;
 
-        CS2GC_RoomInfo.create = function create(properties) {
-            return new CS2GC_RoomInfo(properties);
+        CS2GC_PlayerInfo.create = function create(properties) {
+            return new CS2GC_PlayerInfo(properties);
         };
 
-        CS2GC_RoomInfo.encode = function encode(message, writer) {
+        CS2GC_PlayerInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.vaild != null && message.hasOwnProperty("vaild"))
+                writer.uint32(8).bool(message.vaild);
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                writer.uint32(16).uint64(message.gcNID);
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                writer.uint32(26).string(message.nickname);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(34).string(message.avatar);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(40).int32(message.gender);
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                writer.uint32(48).int32(message.honor);
+            if (message.actorID != null && message.hasOwnProperty("actorID"))
+                writer.uint32(56).int32(message.actorID);
+            if (message.team != null && message.hasOwnProperty("team"))
+                writer.uint32(64).int32(message.team);
+            return writer;
+        };
+
+        CS2GC_PlayerInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_PlayerInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_PlayerInfo();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.vaild = reader.bool();
+                    break;
+                case 2:
+                    message.gcNID = reader.uint64();
+                    break;
+                case 3:
+                    message.nickname = reader.string();
+                    break;
+                case 4:
+                    message.avatar = reader.string();
+                    break;
+                case 5:
+                    message.gender = reader.int32();
+                    break;
+                case 6:
+                    message.honor = reader.int32();
+                    break;
+                case 7:
+                    message.actorID = reader.int32();
+                    break;
+                case 8:
+                    message.team = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_PlayerInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_PlayerInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.vaild != null && message.hasOwnProperty("vaild"))
+                if (typeof message.vaild !== "boolean")
+                    return "vaild: boolean expected";
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                if (!$util.isInteger(message.gcNID) && !(message.gcNID && $util.isInteger(message.gcNID.low) && $util.isInteger(message.gcNID.high)))
+                    return "gcNID: integer|Long expected";
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                if (!$util.isString(message.nickname))
+                    return "nickname: string expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                if (!$util.isInteger(message.honor))
+                    return "honor: integer expected";
+            if (message.actorID != null && message.hasOwnProperty("actorID"))
+                if (!$util.isInteger(message.actorID))
+                    return "actorID: integer expected";
+            if (message.team != null && message.hasOwnProperty("team"))
+                if (!$util.isInteger(message.team))
+                    return "team: integer expected";
+            return null;
+        };
+
+        CS2GC_PlayerInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_PlayerInfo)
+                return object;
+            let message = new $root.Protos.CS2GC_PlayerInfo();
+            if (object.vaild != null)
+                message.vaild = Boolean(object.vaild);
+            if (object.gcNID != null)
+                if ($util.Long)
+                    (message.gcNID = $util.Long.fromValue(object.gcNID)).unsigned = true;
+                else if (typeof object.gcNID === "string")
+                    message.gcNID = parseInt(object.gcNID, 10);
+                else if (typeof object.gcNID === "number")
+                    message.gcNID = object.gcNID;
+                else if (typeof object.gcNID === "object")
+                    message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
+            if (object.nickname != null)
+                message.nickname = String(object.nickname);
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
+            if (object.honor != null)
+                message.honor = object.honor | 0;
+            if (object.actorID != null)
+                message.actorID = object.actorID | 0;
+            if (object.team != null)
+                message.team = object.team | 0;
+            return message;
+        };
+
+        CS2GC_PlayerInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.vaild = false;
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, true);
+                    object.gcNID = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.gcNID = options.longs === String ? "0" : 0;
+                object.nickname = "";
+                object.avatar = "";
+                object.gender = 0;
+                object.honor = 0;
+                object.actorID = 0;
+                object.team = 0;
+            }
+            if (message.vaild != null && message.hasOwnProperty("vaild"))
+                object.vaild = message.vaild;
+            if (message.gcNID != null && message.hasOwnProperty("gcNID"))
+                if (typeof message.gcNID === "number")
+                    object.gcNID = options.longs === String ? String(message.gcNID) : message.gcNID;
+                else
+                    object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                object.nickname = message.nickname;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
+            if (message.honor != null && message.hasOwnProperty("honor"))
+                object.honor = message.honor;
+            if (message.actorID != null && message.hasOwnProperty("actorID"))
+                object.actorID = message.actorID;
+            if (message.team != null && message.hasOwnProperty("team"))
+                object.team = message.team;
+            return object;
+        };
+
+        CS2GC_PlayerInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2GC_PlayerInfo;
+    })();
+
+    Protos.CS2GC_MatchState = (function() {
+
+        function CS2GC_MatchState(properties) {
+            this.playerInfos = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_MatchState.prototype.opts = null;
+        CS2GC_MatchState.prototype.playerInfos = $util.emptyArray;
+
+        CS2GC_MatchState.create = function create(properties) {
+            return new CS2GC_MatchState(properties);
+        };
+
+        CS2GC_MatchState.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
             if (message.opts != null && message.hasOwnProperty("opts"))
@@ -3581,23 +3500,17 @@ export const Protos = $root.Protos = (() => {
             if (message.playerInfos != null && message.playerInfos.length)
                 for (let i = 0; i < message.playerInfos.length; ++i)
                     $root.Protos.CS2GC_PlayerInfo.encode(message.playerInfos[i], writer.uint32(18).fork()).ldelim();
-            if (message.progresses != null && message.progresses.length) {
-                writer.uint32(26).fork();
-                for (let i = 0; i < message.progresses.length; ++i)
-                    writer.int32(message.progresses[i]);
-                writer.ldelim();
-            }
             return writer;
         };
 
-        CS2GC_RoomInfo.encodeDelimited = function encodeDelimited(message, writer) {
+        CS2GC_MatchState.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
-        CS2GC_RoomInfo.decode = function decode(reader, length) {
+        CS2GC_MatchState.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_RoomInfo();
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_MatchState();
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
@@ -3609,16 +3522,6 @@ export const Protos = $root.Protos = (() => {
                         message.playerInfos = [];
                     message.playerInfos.push($root.Protos.CS2GC_PlayerInfo.decode(reader, reader.uint32()));
                     break;
-                case 3:
-                    if (!(message.progresses && message.progresses.length))
-                        message.progresses = [];
-                    if ((tag & 7) === 2) {
-                        let end2 = reader.uint32() + reader.pos;
-                        while (reader.pos < end2)
-                            message.progresses.push(reader.int32());
-                    } else
-                        message.progresses.push(reader.int32());
-                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -3627,13 +3530,13 @@ export const Protos = $root.Protos = (() => {
             return message;
         };
 
-        CS2GC_RoomInfo.decodeDelimited = function decodeDelimited(reader) {
+        CS2GC_MatchState.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
-        CS2GC_RoomInfo.verify = function verify(message) {
+        CS2GC_MatchState.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.opts != null && message.hasOwnProperty("opts")) {
@@ -3650,53 +3553,37 @@ export const Protos = $root.Protos = (() => {
                         return "playerInfos." + error;
                 }
             }
-            if (message.progresses != null && message.hasOwnProperty("progresses")) {
-                if (!Array.isArray(message.progresses))
-                    return "progresses: array expected";
-                for (let i = 0; i < message.progresses.length; ++i)
-                    if (!$util.isInteger(message.progresses[i]))
-                        return "progresses: integer[] expected";
-            }
             return null;
         };
 
-        CS2GC_RoomInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.Protos.CS2GC_RoomInfo)
+        CS2GC_MatchState.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_MatchState)
                 return object;
-            let message = new $root.Protos.CS2GC_RoomInfo();
+            let message = new $root.Protos.CS2GC_MatchState();
             if (object.opts != null) {
                 if (typeof object.opts !== "object")
-                    throw TypeError(".Protos.CS2GC_RoomInfo.opts: object expected");
+                    throw TypeError(".Protos.CS2GC_MatchState.opts: object expected");
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
             if (object.playerInfos) {
                 if (!Array.isArray(object.playerInfos))
-                    throw TypeError(".Protos.CS2GC_RoomInfo.playerInfos: array expected");
+                    throw TypeError(".Protos.CS2GC_MatchState.playerInfos: array expected");
                 message.playerInfos = [];
                 for (let i = 0; i < object.playerInfos.length; ++i) {
                     if (typeof object.playerInfos[i] !== "object")
-                        throw TypeError(".Protos.CS2GC_RoomInfo.playerInfos: object expected");
+                        throw TypeError(".Protos.CS2GC_MatchState.playerInfos: object expected");
                     message.playerInfos[i] = $root.Protos.CS2GC_PlayerInfo.fromObject(object.playerInfos[i]);
                 }
-            }
-            if (object.progresses) {
-                if (!Array.isArray(object.progresses))
-                    throw TypeError(".Protos.CS2GC_RoomInfo.progresses: array expected");
-                message.progresses = [];
-                for (let i = 0; i < object.progresses.length; ++i)
-                    message.progresses[i] = object.progresses[i] | 0;
             }
             return message;
         };
 
-        CS2GC_RoomInfo.toObject = function toObject(message, options) {
+        CS2GC_MatchState.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
             let object = {};
-            if (options.arrays || options.defaults) {
+            if (options.arrays || options.defaults)
                 object.playerInfos = [];
-                object.progresses = [];
-            }
             if (options.defaults)
                 object.opts = null;
             if (message.opts != null && message.hasOwnProperty("opts"))
@@ -3706,19 +3593,198 @@ export const Protos = $root.Protos = (() => {
                 for (let j = 0; j < message.playerInfos.length; ++j)
                     object.playerInfos[j] = $root.Protos.CS2GC_PlayerInfo.toObject(message.playerInfos[j], options);
             }
-            if (message.progresses && message.progresses.length) {
-                object.progresses = [];
-                for (let j = 0; j < message.progresses.length; ++j)
-                    object.progresses[j] = message.progresses[j];
-            }
             return object;
         };
 
-        CS2GC_RoomInfo.prototype.toJSON = function toJSON() {
+        CS2GC_MatchState.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        return CS2GC_RoomInfo;
+        return CS2GC_MatchState;
+    })();
+
+    Protos.CS2GC_AddToMatch = (function() {
+
+        function CS2GC_AddToMatch(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_AddToMatch.prototype.opts = null;
+
+        CS2GC_AddToMatch.create = function create(properties) {
+            return new CS2GC_AddToMatch(properties);
+        };
+
+        CS2GC_AddToMatch.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            return writer;
+        };
+
+        CS2GC_AddToMatch.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_AddToMatch.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_AddToMatch();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_AddToMatch.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_AddToMatch.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            return null;
+        };
+
+        CS2GC_AddToMatch.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_AddToMatch)
+                return object;
+            let message = new $root.Protos.CS2GC_AddToMatch();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2GC_AddToMatch.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            return message;
+        };
+
+        CS2GC_AddToMatch.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            return object;
+        };
+
+        CS2GC_AddToMatch.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2GC_AddToMatch;
+    })();
+
+    Protos.CS2GC_RemoveFromMatch = (function() {
+
+        function CS2GC_RemoveFromMatch(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_RemoveFromMatch.prototype.opts = null;
+
+        CS2GC_RemoveFromMatch.create = function create(properties) {
+            return new CS2GC_RemoveFromMatch(properties);
+        };
+
+        CS2GC_RemoveFromMatch.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            return writer;
+        };
+
+        CS2GC_RemoveFromMatch.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_RemoveFromMatch.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_RemoveFromMatch();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_RemoveFromMatch.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_RemoveFromMatch.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            return null;
+        };
+
+        CS2GC_RemoveFromMatch.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_RemoveFromMatch)
+                return object;
+            let message = new $root.Protos.CS2GC_RemoveFromMatch();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2GC_RemoveFromMatch.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            return message;
+        };
+
+        CS2GC_RemoveFromMatch.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            return object;
+        };
+
+        CS2GC_RemoveFromMatch.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2GC_RemoveFromMatch;
     })();
 
     Protos.CS2GC_EnterBattle = (function() {
@@ -7320,6 +7386,98 @@ export const Protos = $root.Protos = (() => {
         })();
 
         return GC2CS_BeginMatch;
+    })();
+
+    Protos.GC2CS_CancelMatch = (function() {
+
+        function GC2CS_CancelMatch(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2CS_CancelMatch.prototype.opts = null;
+
+        GC2CS_CancelMatch.create = function create(properties) {
+            return new GC2CS_CancelMatch(properties);
+        };
+
+        GC2CS_CancelMatch.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            return writer;
+        };
+
+        GC2CS_CancelMatch.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2CS_CancelMatch.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2CS_CancelMatch();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2CS_CancelMatch.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2CS_CancelMatch.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            return null;
+        };
+
+        GC2CS_CancelMatch.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2CS_CancelMatch)
+                return object;
+            let message = new $root.Protos.GC2CS_CancelMatch();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.GC2CS_CancelMatch.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            return message;
+        };
+
+        GC2CS_CancelMatch.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            return object;
+        };
+
+        GC2CS_CancelMatch.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GC2CS_CancelMatch;
     })();
 
     Protos.GC2GS_AskLogin = (function() {

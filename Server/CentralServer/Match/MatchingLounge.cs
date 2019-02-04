@@ -9,9 +9,14 @@ namespace CentralServer.Match
 
 		internal int numUsers { get; private set; }
 
-		public MatchingLounge( int maxUserCount )
+		private int _numTeam;
+		private int _numUserPerTeam;
+
+		public MatchingLounge( int numTeam, int numUserPerTeam )
 		{
-			this._users = new MatchUser[maxUserCount];
+			this._numTeam = numTeam;
+			this._numUserPerTeam = numUserPerTeam;
+			this._users = new MatchUser[this._numTeam * this._numUserPerTeam];
 		}
 
 		/// <summary>
@@ -66,9 +71,10 @@ namespace CentralServer.Match
 
 		internal MatchState GetState()
 		{
-			MatchState state = new MatchState();
-			state.users = new MatchUser[this._users.Length];
-			Array.Copy( this._users, state.users, this._users.Length );
+			MatchState state = MatchState.POOL.Pop();
+			state.numTeam = this._numTeam;
+			state.numUserPerTeam = this._numUserPerTeam;
+			state.SetUsers( this._users );
 			return state;
 		}
 

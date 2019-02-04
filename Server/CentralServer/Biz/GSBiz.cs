@@ -23,27 +23,27 @@ namespace CentralServer.Biz
 			CS.instance.userMgr.OnGSDisconnect( session.logicID );
 
 			//通知LS有GS断开连接了
-			Protos.CS2LS_GSLost gsLost = ProtoCreator.Q_CS2LS_GSLost();
-			gsLost.Gsid = session.logicID;
-			CS.instance.netSessionMgr.Send( SessionType.ServerLS, gsLost );
+			Protos.CS2LS_GSLost message = ProtoCreator.Q_CS2LS_GSLost();
+			message.Gsid = session.logicID;
+			CS.instance.netSessionMgr.Send( SessionType.ServerLS, message );
 
 			session.logicID = 0;
 		}
 
 		public ErrorCode OnGSAskPing( NetSessionBase session, IMessage message )
 		{
-			Protos.G_AskPing askPing = ( Protos.G_AskPing )message;
-			Protos.G_AskPingRet askPingRet = ProtoCreator.R_G_AskPing( askPing.Opts.Pid );
-			askPingRet.Stime = askPing.Time;
-			askPingRet.Time = TimeUtils.utcTime;
-			session.Send( askPingRet );
+			Protos.G_AskPing request = ( Protos.G_AskPing )message;
+			Protos.G_AskPingRet response = ProtoCreator.R_G_AskPing( request.Opts.Pid );
+			response.Stime = request.Time;
+			response.Time = TimeUtils.utcTime;
+			session.Send( response );
 			return ErrorCode.Success;
 		}
 
 		public ErrorCode OnGs2CsReportState( NetSessionBase session, IMessage message )
 		{
-			Protos.GS2CS_ReportState reportState = ( Protos.GS2CS_ReportState )message;
-			return this.GStateReportHandler( session, reportState.GsInfo );
+			Protos.GS2CS_ReportState request = ( Protos.GS2CS_ReportState )message;
+			return this.GStateReportHandler( session, request.GsInfo );
 		}
 
 		private ErrorCode GStateReportHandler( NetSessionBase session, Protos.GSInfo GSInfoRecv )
@@ -85,19 +85,19 @@ namespace CentralServer.Biz
 		/// </summary>
 		public ErrorCode OnGs2CsGcaskLogin( NetSessionBase session, IMessage message )
 		{
-			Protos.GS2CS_GCAskLogin gcAskLogin = ( Protos.GS2CS_GCAskLogin )message;
-			Protos.CS2GS_GCLoginRet gcAskLoginRet = ProtoCreator.R_GS2CS_GCAskLogin( gcAskLogin.Opts.Pid );
+			Protos.GS2CS_GCAskLogin request = ( Protos.GS2CS_GCAskLogin )message;
+			Protos.CS2GS_GCLoginRet response = ProtoCreator.R_GS2CS_GCAskLogin( request.Opts.Pid );
 
 			//创建玩家并上线
-			CSUser user = CS.instance.userMgr.Online( gcAskLogin.SessionID, session.id, session.logicID );
+			CSUser user = CS.instance.userMgr.Online( request.SessionID, session.id, session.logicID );
 			if ( user == null )
 			{
 				//非法登陆
-				gcAskLoginRet.Result = Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin;
+				response.Result = Protos.CS2GS_GCLoginRet.Types.EResult.IllegalLogin;
 			}
 			else
 			{
-				gcAskLoginRet.UserInfo = new Protos.G_UserInfo
+				response.UserInfo = new Protos.G_UserInfo
 				{
 					GcNID = user.gcNID,
 					Nickname = user.nickname,
@@ -116,14 +116,14 @@ namespace CentralServer.Biz
 
 					CS.instance.lIDToBSInfos.TryGetValue( ( ( BattleSession )bsSession ).logicID, out BSInfo bsInfo );
 					System.Diagnostics.Debug.Assert( bsInfo != null, $"can not find BS:{( ( BattleSession )bsSession ).logicID}" );
-					gcAskLoginRet.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;
-					gcAskLoginRet.GcNID = user.ukey | ( ulong )bsInfo.lid << 32;
-					gcAskLoginRet.BsIP = bsInfo.ip;
-					gcAskLoginRet.BsPort = bsInfo.port;
+					response.GcState = Protos.CS2GS_GCLoginRet.Types.EGCCState.Battle;
+					response.GcNID = user.ukey | ( ulong )bsInfo.lid << 32;
+					response.BsIP = bsInfo.ip;
+					response.BsPort = bsInfo.port;
 				}
-				gcAskLoginRet.Result = Protos.CS2GS_GCLoginRet.Types.EResult.Success;
+				response.Result = Protos.CS2GS_GCLoginRet.Types.EResult.Success;
 			}
-			session.Send( gcAskLoginRet );
+			session.Send( response );
 			return ErrorCode.Success;
 		}
 
@@ -132,8 +132,8 @@ namespace CentralServer.Biz
 		/// </summary>
 		public ErrorCode OnGs2CsGclost( NetSessionBase session, IMessage message )
 		{
-			Protos.GS2CS_GCLost gcLost = ( Protos.GS2CS_GCLost )message;
-			ulong gcNID = gcLost.SessionID;
+			Protos.GS2CS_GCLost request = ( Protos.GS2CS_GCLost )message;
+			ulong gcNID = request.SessionID;
 			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 			if ( user != null )
 			{
@@ -145,17 +145,36 @@ namespace CentralServer.Biz
 
 		public ErrorCode OnGc2CsBeginMatch( NetSessionBase session, IMessage message )
 		{
-			Protos.GC2CS_BeginMatch beginMatch = ( Protos.GC2CS_BeginMatch )message;
+			Protos.GC2CS_BeginMatch request = ( Protos.GC2CS_BeginMatch )message;
+			Protos.CS2GC_BeginMatchRet response = ProtoCreator.R_GC2CS_BeginMatch( request.Opts.Pid );
 
-			ulong gcNID = beginMatch.Opts.Transid;
+			ulong gcNID = request.Opts.Transid;
 			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 
-			MatchParams @params = new MatchParams
+			if ( user.isInBattle )
+				response.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.UserInBattle;
+			else
 			{
-				actorID = beginMatch.ActorID
-			};
+				MatchParams @params = new MatchParams
+				{
+					actorID = request.ActorID
+				};
+				response.Result = CS.instance.matchMgr.CreateUser( request.Mode, user, @params ) ?
+									  Protos.CS2GC_BeginMatchRet.Types.EResult.Success :
+									  Protos.CS2GC_BeginMatchRet.Types.EResult.Failed;
+			}
+			user.Send( response );
+			return ErrorCode.Success;
+		}
 
-			if ( !CS.instance.matchMgr.CreateUser( beginMatch.Mode, user, @params ) )
+		public ErrorCode OnGc2CsCancelMatch( NetSessionBase session, IMessage message )
+		{
+			Protos.GC2CS_CancelMatch request = ( Protos.GC2CS_CancelMatch )message;
+
+			ulong gcNID = request.Opts.Transid;
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+
+			if ( !CS.instance.matchMgr.RemoveUser( user ) )
 				return ErrorCode.Failed;
 
 			return ErrorCode.Success;

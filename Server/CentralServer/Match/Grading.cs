@@ -57,7 +57,7 @@ namespace CentralServer.Match
 		/// 系统每次更新调用匹配
 		/// 非主线程调用
 		/// </summary>
-		internal void ProcessMatch( SwitchQueue<MatchTeam> results, long dt )
+		internal void ProcessMatch( SwitchQueue<MatchState> results, long dt )
 		{
 			if ( this.users.Count == 0 )
 				return;
@@ -67,7 +67,7 @@ namespace CentralServer.Match
 				state = this._matcher.ProcessMatch( dt );
 				if ( state != null )//匹配成功
 				{
-					results.Push( state.CreateTeam( this.system.numTeam ) );
+					results.Push( state );
 				}
 			} while ( state != null && this.users.Count > 0 );//如果第一个玩家都匹配不了则不用往下处理了
 		}
@@ -107,7 +107,7 @@ namespace CentralServer.Match
 				MatchingLounge lounge = user.lounge;
 				user.lounge.RemoveUser( user );
 				//添加事件
-				this.system.CreateEvent( MatchUserEvent.Type.RemoveFromCandidate, user, lounge.GetState() );
+				this.system.CreateEvent( MatchUserEvent.Type.RemoveFromLounge, user, lounge.GetState() );
 			}
 			this.users.Remove( user );
 			user.grading = null;

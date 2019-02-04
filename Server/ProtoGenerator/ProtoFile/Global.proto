@@ -26,6 +26,7 @@ enum MsgID {
 	eGC2BS_EndBattle = 1206;
 
 	eGC2CS_BeginMatch = 1300;
+	eGC2CS_CancelMatch = 1301;
 	
 	//ls
 	eLS2GC_GSInfo = 2000;
@@ -72,10 +73,12 @@ enum MsgID {
 	eCS2BS_BattleEndRet = 5201;
 
 	eCS2GC_BeginMatchRet = 5300;
-	eCS2GC_RoomInfo = 5303;
-	eCS2GC_EnterBattle = 5304;
-	eCS2GC_BattleEnd = 5305;
-	eCS2GC_BSLose = 5306;
+	eCS2GC_MatchState = 5303;
+	eCS2GC_AddToMatch = 5304;
+	eCS2GC_RemoveFromMatch = 5305;
+	eCS2GC_EnterBattle = 5306;
+	eCS2GC_BattleEnd = 5307;
+	eCS2GC_BSLose = 5308;
 
 	//db
 	eDB2LS_QueryAccountRet = 8000;

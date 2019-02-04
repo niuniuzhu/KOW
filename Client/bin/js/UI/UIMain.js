@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Scene/SceneManager"], function (require, exports, Global_1, SceneManager_1) {
+define(["require", "exports", "../Global", "./UIAlert"], function (require, exports, Global_1, UIAlert_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
@@ -8,12 +8,13 @@ define(["require", "exports", "../Global", "../Scene/SceneManager"], function (r
             this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
             this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
             this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
-            this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
+            this._root.getChild("n3").onClick(this, this.OnMatchBtnClick);
         }
         Dispose() {
             this._root.dispose();
         }
         Enter(param) {
+            this._root.getChild("n3").enabled = true;
             Global_1.Global.graphic.uiRoot.addChild(this._root);
             this._root.getTransition("t0").play();
             const userInfo = param;
@@ -29,8 +30,15 @@ define(["require", "exports", "../Global", "../Scene/SceneManager"], function (r
         }
         OnResize(e) {
         }
-        OnAutoMatchBtnClick() {
-            Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Matching);
+        SetMatchBtnEnable(value) {
+            this._root.getChild("n3").enabled = value;
+        }
+        OnMatchBtnClick() {
+            this.SetMatchBtnEnable(false);
+            Global_1.Global.sceneManager.main.BeginMatch();
+        }
+        OnFail(message, callback = null) {
+            UIAlert_1.UIAlert.Show(message, callback);
         }
     }
     exports.UIMain = UIMain;

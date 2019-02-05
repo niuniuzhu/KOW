@@ -1,8 +1,8 @@
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
+import { ProtoCreator } from "../Net/ProtoHelper";
 import { IUIModule } from "./IUIModule";
 import { UIAlert } from "./UIAlert";
-import { ProtoCreator } from "../Net/ProtoHelper";
 
 export class UIMatching implements IUIModule {
 	private readonly _root: fairygui.GComponent;
@@ -28,6 +28,7 @@ export class UIMatching implements IUIModule {
 	}
 
 	public Enter(param: any): void {
+		this.SetCancelBtnEnable(true);
 		Global.graphic.uiRoot.addChild(this._root);
 	}
 

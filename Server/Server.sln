@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lua", "Lua", "{14BB6A1B-8E2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shell", "Shell\Shell.csproj", "{0995A451-B577-480E-97C3-E38167CE26C4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingTest", "MatchingTest\MatchingTest.csproj", "{4C546EEF-CD11-436F-98FC-93E2C8528E13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{0995A451-B577-480E-97C3-E38167CE26C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0995A451-B577-480E-97C3-E38167CE26C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0995A451-B577-480E-97C3-E38167CE26C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C546EEF-CD11-436F-98FC-93E2C8528E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C546EEF-CD11-436F-98FC-93E2C8528E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C546EEF-CD11-436F-98FC-93E2C8528E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C546EEF-CD11-436F-98FC-93E2C8528E13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

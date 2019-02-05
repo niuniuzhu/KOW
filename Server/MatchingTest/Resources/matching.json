@@ -1,8 +1,8 @@
 {
+    "max_elapse_per_update": 50,
     "instances": [
         {
-            "mode": 34,
-            "update_interval": 1000,
+            "mode": 33,
             "gradings": [
                 {
                     "from": 0,

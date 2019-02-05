@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert", "../Net/ProtoHelper"], function (require, exports, Global_1, protos_1, UIAlert_1, ProtoHelper_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Net/ProtoHelper", "./UIAlert"], function (require, exports, Global_1, protos_1, ProtoHelper_1, UIAlert_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMatching {
@@ -17,6 +17,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert", "../Ne
         Dispose() {
         }
         Enter(param) {
+            this.SetCancelBtnEnable(true);
             Global_1.Global.graphic.uiRoot.addChild(this._root);
         }
         Exit() {

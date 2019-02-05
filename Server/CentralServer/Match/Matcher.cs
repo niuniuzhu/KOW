@@ -53,14 +53,14 @@ namespace CentralServer.Match
 			this._time = 0;
 		}
 
-		internal MatchState ProcessMatch( long dt )
+		internal bool ProcessMatch( long dt )
 		{
-			int count = this._searchSpace.Count;
-			if ( count == 0 )
-				return null;
+			int c1 = this._searchSpace.Count;
+			if ( c1 == 0 )
+				return false;
 
 			Grading grading = null;
-			for ( int i = 0; i < count; i++ )
+			for ( int i = 0; i < c1; i++ )
 			{
 				//搜索第i层
 				grading = this._searchSpace[i];
@@ -73,14 +73,15 @@ namespace CentralServer.Match
 					if ( this._matchingLounge.AddUser( user ) )
 					{
 						//添加事件
-						this._owner.system.CreateEvent( MatchUserEvent.Type.AddToLounge, user, user.lounge.GetState() );
+						this._owner.system.RaiseEvent( MatchUserEvent.Type.AddToLounge, user, user.lounge.GetState() );
 
 						if ( this._matchingLounge.numUsers == numUsers )
 						{
 							//匹配成功
-							MatchState state =  this._matchingLounge.GetState();
+							MatchState state = this._matchingLounge.GetState();
+							this._owner.system.RaiseEvent( MatchUserEvent.Type.MatchSuccess, null, state );
 							this.Clear();
-							return state;
+							return true;
 						}
 					}
 				}
@@ -123,7 +124,7 @@ namespace CentralServer.Match
 					this.ExtendSearchGrading( prev ?? next );
 			}
 			this._time += dt;
-			return null;
+			return false;
 		}
 
 		/// <summary>

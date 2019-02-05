@@ -1,21 +1,23 @@
 ﻿using CentralServer.Match;
-using ConsoleApp1.Properties;
 using Core.Misc;
+using MatchingTest.Properties;
 using Shared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace MatchingTest
 {
 	static class Program
 	{
 		private static readonly List<MatchSystem> _matchingSystems = new List<MatchSystem>();
 		private static InputHandler _inputHandler;
 		private static readonly Random _rnd = new Random();
+		private static IEnumerator _enumerator;
 
 		static void Main( string[] args )
 		{
@@ -28,13 +30,22 @@ namespace ConsoleApp1
 				_matchingSystems.Add( matchSystem );
 			}
 
-			_matchingSystems[0].OnUserStateChanged = e =>
+			_matchingSystems[0].eventHandler = ( t, u, s ) =>
 			{
-				Console.WriteLine( $"changed:{e.Dump()}" );
-			};
-			_matchingSystems[0].onMatchResult = team =>
-			{
-				Console.WriteLine( $"sucess:{team.Dump()}" );
+				switch ( t )
+				{
+					case MatchUserEvent.Type.AddToGrading:
+						break;
+					case MatchUserEvent.Type.RemoveFromGrading:
+						break;
+					case MatchUserEvent.Type.AddToLounge:
+						break;
+					case MatchUserEvent.Type.RemoveFromLounge:
+						break;
+					case MatchUserEvent.Type.MatchSuccess:
+						Console.WriteLine( s.Dump() );
+						break;
+				}
 			};
 
 			Task.Factory.StartNew( Update, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default );
@@ -47,11 +58,36 @@ namespace ConsoleApp1
 
 		private static void MainLoop()
 		{
+			_enumerator = TestC();
 			while ( true )
 			{
+				//bool r;
+				//if ( ( r = _enumerator.MoveNext() ) == false )
+				//{
+				//	_enumerator = TestC();
+				//}
+				//Console.WriteLine( "ok" );
 				_inputHandler.ProcessInput();
 				Thread.Sleep( 10 );
 			}
+		}
+
+		private static IEnumerator TestC()
+		{
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+			double a = 100;
+			for ( int i = 0; i < 10000000; i++ )
+			{
+				a = Math.Sin( a );
+				if ( sw.ElapsedMilliseconds > 100 )
+				{
+					sw.Restart();
+					Console.WriteLine( $"yield:{i}" );
+					yield return i;
+				}
+			}
+			Console.WriteLine( "done" );
 		}
 
 		private static void Update()

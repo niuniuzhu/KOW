@@ -1,5 +1,6 @@
 import { Global } from "../Global";
-import { SceneManager } from "../Scene/SceneManager";
+import { Protos } from "../Libs/protos";
+import { UIAlert } from "./UIAlert";
 export class UIMain {
     get root() { return this._root; }
     constructor() {
@@ -7,12 +8,18 @@ export class UIMain {
         this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
-        this._root.getChild("n3").onClick(this, this.OnAutoMatchBtnClick);
+        this._matchBtn = this._root.getChild("n3").asCom;
+        this._matchBtn2 = this._root.getChild("n13").asCom;
+        this._matchBtn4 = this._root.getChild("n15").asCom;
+        this._matchBtn.onClick(this, this.OnMatchBtnClick);
+        this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
+        this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
     }
     Dispose() {
         this._root.dispose();
     }
     Enter(param) {
+        this.SetMatchBtnEnable(true);
         Global.graphic.uiRoot.addChild(this._root);
         this._root.getTransition("t0").play();
         const userInfo = param;
@@ -28,7 +35,24 @@ export class UIMain {
     }
     OnResize(e) {
     }
-    OnAutoMatchBtnClick() {
-        Global.sceneManager.ChangeState(SceneManager.State.Matching);
+    SetMatchBtnEnable(value) {
+        this._matchBtn.enabled = value;
+        this._matchBtn2.enabled = value;
+        this._matchBtn4.enabled = value;
+    }
+    OnMatchBtnClick() {
+        this.SetMatchBtnEnable(false);
+        Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P1);
+    }
+    OnMatchBtn2Click() {
+        this.SetMatchBtnEnable(false);
+        Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T1P1);
+    }
+    OnMatchBtn4Click() {
+        this.SetMatchBtnEnable(false);
+        Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
+    }
+    OnFail(message, callback = null) {
+        UIAlert.Show(message, callback);
     }
 }

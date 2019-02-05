@@ -6,9 +6,9 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/ProtoHelper
             super(type);
             this.__ui = this._ui = Global_1.Global.uiManager.main;
         }
-        BeginMatch() {
+        BeginMatch(mode) {
             const beginMatch = ProtoHelper_1.ProtoCreator.Q_GC2CS_BeginMatch();
-            beginMatch.mode = protos_1.Protos.GC2CS_BeginMatch.EMode.T2P2;
+            beginMatch.mode = mode;
             beginMatch.actorID = 0;
             Global_1.Global.connector.SendToCS(protos_1.Protos.GC2CS_BeginMatch, beginMatch, message => {
                 const resp = message;

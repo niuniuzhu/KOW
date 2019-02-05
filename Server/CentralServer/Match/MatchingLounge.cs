@@ -9,8 +9,8 @@ namespace CentralServer.Match
 
 		internal int numUsers { get; private set; }
 
-		private int _numTeam;
-		private int _numUserPerTeam;
+		private readonly int _numTeam;
+		private readonly int _numUserPerTeam;
 
 		public MatchingLounge( int numTeam, int numUserPerTeam )
 		{
@@ -30,7 +30,7 @@ namespace CentralServer.Match
 				MatchUser user = this._users[i];
 				if ( user == null )
 					continue;
-				user.grading.InternalRemoveUser( user );
+				user.grading.RemoveUser( user );
 				user.lounge = null;
 			}
 			Array.Clear( this._users, 0, this._users.Length );
@@ -71,7 +71,7 @@ namespace CentralServer.Match
 
 		internal MatchState GetState()
 		{
-			MatchState state = MatchState.POOL.Pop();
+			MatchState state = new MatchState();
 			state.numTeam = this._numTeam;
 			state.numUserPerTeam = this._numUserPerTeam;
 			state.SetUsers( this._users );

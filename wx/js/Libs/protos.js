@@ -7314,6 +7314,11 @@ export const Protos = $root.Protos = (() => {
                 case 1:
                 case 2:
                 case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
                     break;
                 }
             if (message.actorID != null && message.hasOwnProperty("actorID"))
@@ -7332,21 +7337,41 @@ export const Protos = $root.Protos = (() => {
                 message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
             }
             switch (object.mode) {
-            case "T2P1":
+            case "T1P1":
             case 0:
                 message.mode = 0;
                 break;
-            case "T2P2":
+            case "T2P1":
             case 1:
                 message.mode = 1;
                 break;
-            case "T3P1":
+            case "T2P2":
             case 2:
                 message.mode = 2;
                 break;
-            case "T3P2":
+            case "T3P1":
             case 3:
                 message.mode = 3;
+                break;
+            case "T3P2":
+            case 4:
+                message.mode = 4;
+                break;
+            case "T4P1":
+            case 5:
+                message.mode = 5;
+                break;
+            case "T4P2":
+            case 6:
+                message.mode = 6;
+                break;
+            case "T4P3":
+            case 7:
+                message.mode = 7;
+                break;
+            case "T4P4":
+            case 8:
+                message.mode = 8;
                 break;
             }
             if (object.actorID != null)
@@ -7360,7 +7385,7 @@ export const Protos = $root.Protos = (() => {
             let object = {};
             if (options.defaults) {
                 object.opts = null;
-                object.mode = options.enums === String ? "T2P1" : 0;
+                object.mode = options.enums === String ? "T1P1" : 0;
                 object.actorID = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
@@ -7378,10 +7403,15 @@ export const Protos = $root.Protos = (() => {
 
         GC2CS_BeginMatch.EMode = (function() {
             const valuesById = {}, values = Object.create(valuesById);
-            values[valuesById[0] = "T2P1"] = 0;
-            values[valuesById[1] = "T2P2"] = 1;
-            values[valuesById[2] = "T3P1"] = 2;
-            values[valuesById[3] = "T3P2"] = 3;
+            values[valuesById[0] = "T1P1"] = 0;
+            values[valuesById[1] = "T2P1"] = 1;
+            values[valuesById[2] = "T2P2"] = 2;
+            values[valuesById[3] = "T3P1"] = 3;
+            values[valuesById[4] = "T3P2"] = 4;
+            values[valuesById[5] = "T4P1"] = 5;
+            values[valuesById[6] = "T4P2"] = 6;
+            values[valuesById[7] = "T4P3"] = 7;
+            values[valuesById[8] = "T4P4"] = 8;
             return values;
         })();
 

@@ -35,10 +35,10 @@ export class UIEvent extends BaseBattleEvent {
         e.champion = champion;
         this.Invoke(e);
     }
-    static EndBattle(win, honer, callback) {
+    static EndBattle(result, honer, callback) {
         let e = this.Get();
         e._type = UIEvent.E_END_BATTLE;
-        e.b0 = win;
+        e.any0 = result;
         e.v1 = honer;
         e.callback = callback;
         this.Invoke(e);

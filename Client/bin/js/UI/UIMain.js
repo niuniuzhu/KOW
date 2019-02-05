@@ -1,4 +1,4 @@
-define(["require", "exports", "../Global", "./UIAlert"], function (require, exports, Global_1, UIAlert_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], function (require, exports, Global_1, protos_1, UIAlert_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
@@ -8,13 +8,18 @@ define(["require", "exports", "../Global", "./UIAlert"], function (require, expo
             this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
             this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
             this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
-            this._root.getChild("n3").onClick(this, this.OnMatchBtnClick);
+            this._matchBtn = this._root.getChild("n3").asCom;
+            this._matchBtn2 = this._root.getChild("n13").asCom;
+            this._matchBtn4 = this._root.getChild("n15").asCom;
+            this._matchBtn.onClick(this, this.OnMatchBtnClick);
+            this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
+            this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
         }
         Dispose() {
             this._root.dispose();
         }
         Enter(param) {
-            this._root.getChild("n3").enabled = true;
+            this.SetMatchBtnEnable(true);
             Global_1.Global.graphic.uiRoot.addChild(this._root);
             this._root.getTransition("t0").play();
             const userInfo = param;
@@ -31,11 +36,21 @@ define(["require", "exports", "../Global", "./UIAlert"], function (require, expo
         OnResize(e) {
         }
         SetMatchBtnEnable(value) {
-            this._root.getChild("n3").enabled = value;
+            this._matchBtn.enabled = value;
+            this._matchBtn2.enabled = value;
+            this._matchBtn4.enabled = value;
         }
         OnMatchBtnClick() {
             this.SetMatchBtnEnable(false);
-            Global_1.Global.sceneManager.main.BeginMatch();
+            Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T2P1);
+        }
+        OnMatchBtn2Click() {
+            this.SetMatchBtnEnable(false);
+            Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T1P1);
+        }
+        OnMatchBtn4Click() {
+            this.SetMatchBtnEnable(false);
+            Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T2P2);
         }
         OnFail(message, callback = null) {
             UIAlert_1.UIAlert.Show(message, callback);

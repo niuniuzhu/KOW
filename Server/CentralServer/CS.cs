@@ -88,6 +88,7 @@ namespace CentralServer
 				this.config.CopyFromJson( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( opts.cfg ) ) );
 
 			this.matchMgr.InitFromDefs( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( this.config.matchDefs ) ) );
+			this.matchMgr.ResetEnumerator( Consts.HEART_BEAT_INTERVAL );
 
 			this.ReloadDefs();
 			return ErrorCode.Success;
@@ -144,7 +145,9 @@ namespace CentralServer
 		{
 			this.UpdateAppropriateBSInfo();
 			this.userMgr.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
-			this.matchMgr.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
+			//模拟协程方式驱动匹配管理器
+			if ( !this.matchMgr.enumerator.MoveNext() )
+				this.matchMgr.ResetEnumerator( Consts.HEART_BEAT_INTERVAL );
 			NetworkMgr.instance.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 			this.redisWrapper.OnHeartBeat( Consts.HEART_BEAT_INTERVAL );
 		}

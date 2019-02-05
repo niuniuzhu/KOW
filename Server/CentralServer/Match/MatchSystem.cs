@@ -1,12 +1,8 @@
 ﻿using Core.Misc;
-using Core.Structure;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CentralServer.Match
 {
@@ -29,36 +25,14 @@ namespace CentralServer.Match
 		/// </summary>
 		public int numUsers => this.numTeam * this.numUserPerTeam;
 
-		public Action<MatchState> onMatchResult;
-		public Action<MatchUserEvent> OnUserStateChanged;
+		public Action<MatchUserEvent.Type, MatchUser, MatchState> eventHandler;
 
 		private readonly List<Grading> _gradings = new List<Grading>();
 		private readonly Dictionary<byte, Grading> _modeToGrading = new Dictionary<byte, Grading>();
-		private readonly Task _task;
-		private readonly Stopwatch _sw = new Stopwatch();
-		private readonly SwitchQueue<MatchState> _results = new SwitchQueue<MatchState>();
-		private readonly SwitchQueue<MatchUserEvent> _events = new SwitchQueue<MatchUserEvent>();
-		private long _updateInterval;
-		private long _lastUpdateTime;
-		private bool _disposed;
-
-		public MatchSystem()
-		{
-			this._task = Task.Factory.StartNew( this.AsyncLoop, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default );
-			this._sw.Start();
-		}
-
-		public void Dispose()
-		{
-			this._disposed = true;
-			this._sw.Stop();
-			this._task.Wait();
-		}
 
 		public void InitFromDefs( Hashtable json )
 		{
 			this.mode = json.GetByte( "mode" );
-			this._updateInterval = json.GetInt( "update_interval" );
 			Hashtable[] gradingDefs = json.GetMapArray( "gradings" );
 			int count = gradingDefs.Length;
 			for ( int i = 0; i < count; i++ )
@@ -78,48 +52,9 @@ namespace CentralServer.Match
 			}
 		}
 
-		internal void CreateEvent( MatchUserEvent.Type type, MatchUser user ) => this._events.Push( new MatchUserEvent( type, user ) );
-
-		internal void CreateEvent( MatchUserEvent.Type type, MatchUser user, MatchState state ) => this._events.Push( new MatchUserEvent( type, user, state ) );
-
-		private void AsyncLoop()
+		internal void RaiseEvent( MatchUserEvent.Type type, MatchUser user, MatchState state )
 		{
-			while ( !this._disposed )
-			{
-				long dt = this._sw.ElapsedMilliseconds - this._lastUpdateTime;
-				while ( dt >= this._updateInterval )
-				{
-					dt -= this._updateInterval;
-					this._lastUpdateTime += this._updateInterval;
-					this.AsyncMatching( this._updateInterval );
-				}
-				this.ProcessEvents();
-				Thread.Sleep( 10 );
-			}
-		}
-
-		/// <summary>
-		/// 处理时间
-		/// 非主线程调用
-		/// </summary>
-		private void ProcessEvents()
-		{
-			int count = this._gradings.Count;
-			//处理计划事件
-			for ( int i = 0; i < count; i++ )
-				this._gradings[i].ProcessPendings();
-		}
-
-		/// <summary>
-		/// 异步匹配
-		/// 非主线程
-		/// </summary>
-		private void AsyncMatching( long dt )
-		{
-			int count = this._gradings.Count;
-			//处理匹配
-			for ( int i = 0; i < count; i++ )
-				this._gradings[i].ProcessMatch( this._results, dt );
+			this.eventHandler?.Invoke( type, user, state );
 		}
 
 		/// <summary>
@@ -127,20 +62,10 @@ namespace CentralServer.Match
 		/// </summary>
 		public void Update( long dt )
 		{
-			//处理事件
-			this._events.Switch();
-			while ( !this._events.isEmpty )
-			{
-				this.OnUserStateChanged?.Invoke( this._events.Pop() );
-			}
-			//主线程处理匹配结果
-			this._results.Switch();
-			while ( !this._results.isEmpty )
-			{
-				MatchState state = this._results.Pop();
-				this.onMatchResult?.Invoke( state );
-				MatchState.POOL.Push( state );
-			}
+			int count = this._gradings.Count;
+			//处理匹配
+			for ( int i = 0; i < count; i++ )
+				this._gradings[i].ProcessMatch( dt );
 		}
 
 		/// <summary>
@@ -171,13 +96,8 @@ namespace CentralServer.Match
 			if ( grading == null )
 				return null;
 			MatchUser user = new MatchUser( id, rank );
-			grading.PendingAddUser( user );
+			grading.AddUser( user );
 			return user;
-		}
-
-		public void RemoveUser( MatchUser matchUser )
-		{
-			matchUser.grading.PendingRemoveUser( matchUser );
 		}
 
 		public string Dump()

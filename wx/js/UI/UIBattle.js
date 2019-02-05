@@ -1,5 +1,6 @@
 import { Consts } from "../Consts";
 import { Global } from "../Global";
+import { Protos } from "../Libs/protos";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
 import { EAttr } from "../Model/Logic/Attribute";
 import { FrameAciontManager } from "../Model/View/FrameActionManager";
@@ -94,17 +95,20 @@ export class UIBattle {
         this._markToEnd = true;
         this.GestureOff();
         Global.graphic.uiRoot.addChild(this._endBattle);
-        const isWin = e.b0;
+        const result = e.any0;
         const honer = e.v1;
         const callback = e.callback;
         let com;
-        if (isWin) {
-            com = this._endBattle.getChild("n0").asCom;
-            this._endBattle.getController("c1").selectedIndex = 0;
-        }
-        else {
-            com = this._endBattle.getChild("n1").asCom;
-            this._endBattle.getController("c1").selectedIndex = 1;
+        switch (result) {
+            case Protos.CS2GC_BattleEnd.Result.Win:
+                com = this._endBattle.getChild("n0").asCom;
+                this._endBattle.getController("c1").selectedIndex = 0;
+                break;
+            case Protos.CS2GC_BattleEnd.Result.Draw:
+            case Protos.CS2GC_BattleEnd.Result.Lose:
+                com = this._endBattle.getChild("n1").asCom;
+                this._endBattle.getController("c1").selectedIndex = 1;
+                break;
         }
         com.getTransition("t0").play();
         const confirmBtn = com.getChild("confirm");

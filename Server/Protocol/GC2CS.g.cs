@@ -24,12 +24,13 @@ namespace Protos {
     static GC2CSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtHQzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8ioQEKEEdDMkNT",
+            "CgtHQzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8i0wEKEEdDMkNT",
             "X0JlZ2luTWF0Y2gSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiwK",
             "BG1vZGUYAiABKA4yHi5Qcm90b3MuR0MyQ1NfQmVnaW5NYXRjaC5FTW9kZRIP",
-            "CgdhY3RvcklEGAMgASgFIi8KBUVNb2RlEggKBFQyUDEQABIICgRUMlAyEAES",
-            "CAoEVDNQMRACEggKBFQzUDIQAyIyChFHQzJDU19DYW5jZWxNYXRjaBIdCgRv",
-            "cHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHNiBnByb3RvMw=="));
+            "CgdhY3RvcklEGAMgASgFImEKBUVNb2RlEggKBFQxUDEQABIICgRUMlAxEAES",
+            "CAoEVDJQMhACEggKBFQzUDEQAxIICgRUM1AyEAQSCAoEVDRQMRAFEggKBFQ0",
+            "UDIQBhIICgRUNFAzEAcSCAoEVDRQNBAIIjIKEUdDMkNTX0NhbmNlbE1hdGNo",
+            "Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0c2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -244,10 +245,15 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
       public enum EMode {
-        [pbr::OriginalName("T2P1")] T2P1 = 0,
-        [pbr::OriginalName("T2P2")] T2P2 = 1,
-        [pbr::OriginalName("T3P1")] T3P1 = 2,
-        [pbr::OriginalName("T3P2")] T3P2 = 3,
+        [pbr::OriginalName("T1P1")] T1P1 = 0,
+        [pbr::OriginalName("T2P1")] T2P1 = 1,
+        [pbr::OriginalName("T2P2")] T2P2 = 2,
+        [pbr::OriginalName("T3P1")] T3P1 = 3,
+        [pbr::OriginalName("T3P2")] T3P2 = 4,
+        [pbr::OriginalName("T4P1")] T4P1 = 5,
+        [pbr::OriginalName("T4P2")] T4P2 = 6,
+        [pbr::OriginalName("T4P3")] T4P3 = 7,
+        [pbr::OriginalName("T4P4")] T4P4 = 8,
       }
 
     }

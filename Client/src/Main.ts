@@ -22,7 +22,7 @@ export class Main {
 			const cfgJson = JsonHelper.Parse(config);
 			Global.local = Hashtable.GetBool(cfgJson, "local");
 		}
-		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
+		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT, Laya.WebGL);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
 		Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
 		Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;

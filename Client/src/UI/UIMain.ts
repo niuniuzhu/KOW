@@ -8,12 +8,22 @@ export class UIMain implements IUIModule {
 
 	public get root(): fairygui.GComponent { return this._root; }
 
+	private readonly _matchBtn: fairygui.GComponent;
+	private readonly _matchBtn2: fairygui.GComponent;
+	private readonly _matchBtn4: fairygui.GComponent;
+
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/main");
 		this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
 		this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
-		this._root.getChild("n3").onClick(this, this.OnMatchBtnClick);
+
+		this._matchBtn = this._root.getChild("n3").asCom;
+		this._matchBtn2 = this._root.getChild("n13").asCom;
+		this._matchBtn4 = this._root.getChild("n15").asCom;
+		this._matchBtn.onClick(this, this.OnMatchBtnClick);
+		this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
+		this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
 	}
 
 	public Dispose(): void {
@@ -21,7 +31,7 @@ export class UIMain implements IUIModule {
 	}
 
 	public Enter(param: any): void {
-		this._root.getChild("n3").enabled = true;
+		this.SetMatchBtnEnable(true);
 		Global.graphic.uiRoot.addChild(this._root);
 		this._root.getTransition("t0").play();
 
@@ -43,12 +53,24 @@ export class UIMain implements IUIModule {
 	}
 
 	public SetMatchBtnEnable(value: boolean): void {
-		this._root.getChild("n3").enabled = value;
+		this._matchBtn.enabled = value;
+		this._matchBtn2.enabled = value;
+		this._matchBtn4.enabled = value;
 	}
 
 	private OnMatchBtnClick(): void {
 		this.SetMatchBtnEnable(false);
-		Global.sceneManager.main.BeginMatch();
+		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P1);
+	}
+
+	private OnMatchBtn2Click(): void {
+		this.SetMatchBtnEnable(false);
+		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T1P1);
+	}
+
+	private OnMatchBtn4Click(): void {
+		this.SetMatchBtnEnable(false);
+		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
 	}
 
 	public OnFail(message: string, callback: () => void = null): void {

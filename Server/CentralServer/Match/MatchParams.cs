@@ -1,6 +1,4 @@
-﻿using CentralServer.User;
-
-namespace CentralServer.Match
+﻿namespace CentralServer.Match
 {
 	public class MatchParams
 	{

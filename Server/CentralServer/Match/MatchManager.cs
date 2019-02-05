@@ -6,6 +6,7 @@ using Shared.Net;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using BSInfo = Shared.BSInfo;
 
 namespace CentralServer.Match
@@ -14,34 +15,43 @@ namespace CentralServer.Match
 	{
 		private readonly Dictionary<byte, MatchSystem> _matchingSystems = new Dictionary<byte, MatchSystem>();
 		private readonly Dictionary<CSUser, MatchUser> _userToMatchUser = new Dictionary<CSUser, MatchUser>();
+		private readonly Stopwatch _sw = new Stopwatch();
+		private long _maxElapsePerUpdate;
+
+		public IEnumerator enumerator { get; private set; }
+
+		public void ResetEnumerator( long dt ) => this.enumerator = this.OnHeartBeat( dt );
 
 		internal void InitFromDefs( Hashtable json )
 		{
 			Hashtable[] defs = json.GetMapArray( "instances" );
+			this._maxElapsePerUpdate = json.GetInt( "max_elapse_per_update" );
 			foreach ( Hashtable def in defs )
 			{
 				MatchSystem matchSystem = new MatchSystem();
 				matchSystem.InitFromDefs( def );
-				matchSystem.onMatchResult += this.OnMatchResult;
-				matchSystem.OnUserStateChanged += this.OnUserStateChanged;
+				matchSystem.eventHandler += this.OnEvent;
 				this._matchingSystems[matchSystem.mode] = matchSystem;
 			}
 		}
 
-		internal void OnHeartBeat( long dt )
+		private IEnumerator OnHeartBeat( long dt )
 		{
+			this._sw.Start();
 			foreach ( var kv in this._matchingSystems )
+			{
 				kv.Value.Update( dt );
+				if ( this._sw.ElapsedMilliseconds >= this._maxElapsePerUpdate )
+				{
+					this._sw.Restart();
+					yield return 0;
+				}
+			}
 		}
 
-		private void OnMatchResult( MatchState state )
+		private void OnEvent( MatchUserEvent.Type type, MatchUser sender, MatchState state )
 		{
-			this.BeginBattle( state );
-		}
-
-		private void OnUserStateChanged( MatchUserEvent e )
-		{
-			switch ( e.type )
+			switch ( type )
 			{
 				case MatchUserEvent.Type.AddToGrading:
 					//{
@@ -52,8 +62,10 @@ namespace CentralServer.Match
 
 				case MatchUserEvent.Type.RemoveFromGrading:
 					{
+						CSUser user = CS.instance.userMgr.GetUser( sender.id );
+						this._userToMatchUser.Remove( user );
 						Protos.CS2GC_RemoveFromMatch response = ProtoCreator.Q_CS2GC_RemoveFromMatch();
-						CS.instance.userMgr.GetUser( e.user.id )?.Send( response );
+						user.Send( response );
 					}
 					break;
 
@@ -61,10 +73,10 @@ namespace CentralServer.Match
 				case MatchUserEvent.Type.RemoveFromLounge:
 					{
 						Protos.CS2GC_MatchState pMatchState = ProtoCreator.Q_CS2GC_MatchState();
-						for ( int i = 0; i < e.state.numTeam; i++ )
+						for ( int i = 0; i < state.numTeam; i++ )
 						{
-							MatchUser[] matchUsers = e.state.tUsers[i];
-							for ( int j = 0; j < e.state.numUserPerTeam; j++ )
+							MatchUser[] matchUsers = state.tUsers[i];
+							for ( int j = 0; j < state.numUserPerTeam; j++ )
 							{
 								MatchUser matchUser = matchUsers[j];
 								if ( matchUser == null )
@@ -94,8 +106,11 @@ namespace CentralServer.Match
 								}
 							}
 						}
-						this.Broadcast( e.state.users, pMatchState );
+						this.Broadcast( state.users, pMatchState );
 					}
+					break;
+				case MatchUserEvent.Type.MatchSuccess:
+					this.BeginBattle( state );
 					break;
 			}
 		}
@@ -115,13 +130,21 @@ namespace CentralServer.Match
 			byte mode2;
 			switch ( mode )
 			{
+				case Protos.GC2CS_BeginMatch.Types.EMode.T1P1:
+					mode2 = ( 1 << 4 ) | 1;
+					break;
+
+				case Protos.GC2CS_BeginMatch.Types.EMode.T2P1:
+					mode2 = ( 2 << 4 ) | 1;
+					break;
+
 				case Protos.GC2CS_BeginMatch.Types.EMode.T2P2:
-					mode2 = 34;
+					mode2 = ( 2 << 4 ) | 2;
 					break;
 
 				default:
-					mode2 = 33;
-					break;
+					Logger.Warn( $"not support mode:{mode}" );
+					return false;
 			}
 			this._matchingSystems.TryGetValue( mode2, out MatchSystem matchingSystem );
 			MatchUser matchUser = matchingSystem?.CreateUser( user.gcNID, user.honor );
@@ -130,7 +153,6 @@ namespace CentralServer.Match
 
 			matchUser.userdata = matchParams;
 			this._userToMatchUser[user] = matchUser;
-
 			return true;
 		}
 
@@ -141,8 +163,7 @@ namespace CentralServer.Match
 		{
 			if ( !this._userToMatchUser.TryGetValue( user, out MatchUser matchUser ) )
 				return false;
-			this._userToMatchUser.Remove( user );
-			matchUser.grading.system.RemoveUser( matchUser );
+			matchUser.grading.RemoveUser( matchUser );
 			return true;
 		}
 
@@ -216,8 +237,10 @@ namespace CentralServer.Match
 			CS.instance.battleStaging.OnBattleCreated( bsLID, battleInfoRet.Bid );
 
 			//把所有玩家移动到战场暂存器里
-			foreach ( MatchUser matchUser in state.users )
+			int count = state.numTeam * state.numUserPerTeam;
+			for ( int i = 0; i < count; i++ )
 			{
+				MatchUser matchUser = state.users[i];
 				CSUser user = CS.instance.userMgr.GetUser( matchUser.id );
 				CS.instance.battleStaging.Add( user, bsLID, bsSID, battleInfoRet.Bid );
 			}
@@ -226,8 +249,9 @@ namespace CentralServer.Match
 			Protos.CS2GC_EnterBattle enterBattle = ProtoCreator.Q_CS2GC_EnterBattle();
 			enterBattle.Ip = bsIP;
 			enterBattle.Port = bsPort;
-			foreach ( MatchUser matchUser in state.users )
+			for ( int i = 0; i < count; i++ )
 			{
+				MatchUser matchUser = state.users[i];
 				CSUser user = CS.instance.userMgr.GetUser( matchUser.id );
 				enterBattle.GcNID = user.ukey | ( ulong )bsLID << 32;
 				user.Send( enterBattle );

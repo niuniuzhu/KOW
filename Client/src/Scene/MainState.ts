@@ -17,9 +17,9 @@ export class MainState extends SceneState {
 	/**
 	 * 请求匹配
 	 */
-	public BeginMatch(): void {
+	public BeginMatch(mode: Protos.GC2CS_BeginMatch.EMode): void {
 		const beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
-		beginMatch.mode = Protos.GC2CS_BeginMatch.EMode.T2P2;
+		beginMatch.mode = mode;
 		beginMatch.actorID = 0;//todo 使用的角色
 		//请求CS开始匹配
 		Global.connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {

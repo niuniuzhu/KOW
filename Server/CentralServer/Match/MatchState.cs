@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Text;
-using Core.Misc;
 
 namespace CentralServer.Match
 {
-	public class MatchState : IPoolObject
+	public class MatchState
 	{
-		internal static readonly ObjectPool<MatchState> POOL = new ObjectPool<MatchState>();
-
 		internal int numTeam;
 		internal int numUserPerTeam;
 		internal readonly MatchUser[] users = new MatchUser[64];

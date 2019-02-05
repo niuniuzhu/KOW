@@ -1,8 +1,6 @@
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { Connector } from "../Net/Connector";
-import { ProtoCreator } from "../Net/ProtoHelper";
-import { Logger } from "../RC/Utils/Logger";
 import { UIMatching } from "../UI/UIMatching";
 import { SceneManager } from "./SceneManager";
 import { SceneState } from "./SceneState";

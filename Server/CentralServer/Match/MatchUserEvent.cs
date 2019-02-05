@@ -7,7 +7,8 @@
 			AddToGrading,
 			RemoveFromGrading,
 			AddToLounge,
-			RemoveFromLounge
+			RemoveFromLounge,
+			MatchSuccess
 		}
 
 		public readonly Type type;

@@ -135,7 +135,7 @@ export class BattleManager {
     HandleBattleEnd(message) {
         this.QueueMessage(message, msg => {
             const battleEnd = msg;
-            UIEvent.EndBattle(battleEnd.win, battleEnd.honour, () => {
+            UIEvent.EndBattle(battleEnd.result, battleEnd.honour, () => {
                 this.Destroy();
                 Global.sceneManager.ChangeState(SceneManager.State.Main);
             });

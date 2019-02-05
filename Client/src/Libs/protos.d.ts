@@ -1361,10 +1361,15 @@ export namespace Protos {
     namespace GC2CS_BeginMatch {
 
         enum EMode {
-            T2P1 = 0,
-            T2P2 = 1,
-            T3P1 = 2,
-            T3P2 = 3
+            T1P1 = 0,
+            T2P1 = 1,
+            T2P2 = 2,
+            T3P1 = 3,
+            T3P2 = 4,
+            T4P1 = 5,
+            T4P2 = 6,
+            T4P3 = 7,
+            T4P4 = 8
         }
     }
 

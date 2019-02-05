@@ -1,5 +1,4 @@
-﻿using Core.Structure;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace CentralServer.Match
@@ -39,8 +38,6 @@ namespace CentralServer.Match
 		/// </summary>
 		internal readonly List<MatchUser> users = new List<MatchUser>();
 
-		private readonly SwitchQueue<MatchUser> _pendingToAdd = new SwitchQueue<MatchUser>();
-		private readonly SwitchQueue<MatchUser> _pendingToRemove = new SwitchQueue<MatchUser>();
 		private readonly Matcher _matcher;
 
 		public Grading( MatchSystem system, int from, int to, long expireTime, int maxExtends )
@@ -57,49 +54,27 @@ namespace CentralServer.Match
 		/// 系统每次更新调用匹配
 		/// 非主线程调用
 		/// </summary>
-		internal void ProcessMatch( SwitchQueue<MatchState> results, long dt )
+		internal void ProcessMatch( long dt )
 		{
 			if ( this.users.Count == 0 )
 				return;
-			MatchState state;
+			bool success;
 			do
 			{
-				state = this._matcher.ProcessMatch( dt );
-				if ( state != null )//匹配成功
-				{
-					results.Push( state );
-				}
-			} while ( state != null && this.users.Count > 0 );//如果第一个玩家都匹配不了则不用往下处理了
+				success = this._matcher.ProcessMatch( dt );
+			} while ( success && this.users.Count > 0 );//如果第一个玩家都匹配不了则不用往下处理了
 		}
 
-		internal void PendingAddUser( MatchUser user ) => this._pendingToAdd.Push( user );
-
-		internal void PendingRemoveUser( MatchUser user ) => this._pendingToRemove.Push( user );
-
-		internal void ProcessPendings()
-		{
-			this._pendingToAdd.Switch();
-			while ( !this._pendingToAdd.isEmpty )
-			{
-				this.InternalAddUser( this._pendingToAdd.Pop() );
-			}
-			this._pendingToRemove.Switch();
-			while ( !this._pendingToRemove.isEmpty )
-			{
-				this.InternalRemoveUser( this._pendingToRemove.Pop() );
-			}
-		}
-
-		internal void InternalAddUser( MatchUser user )
+		internal void AddUser( MatchUser user )
 		{
 			if ( this.users.Contains( user ) )
 				return;
 			this.users.Add( user );
 			user.grading = this;
-			this.system.CreateEvent( MatchUserEvent.Type.AddToGrading, user );
+			this.system.RaiseEvent( MatchUserEvent.Type.AddToGrading, user, null );
 		}
 
-		internal void InternalRemoveUser( MatchUser user )
+		internal void RemoveUser( MatchUser user )
 		{
 			//从等候室中移除玩家
 			if ( user.lounge != null )
@@ -107,11 +82,11 @@ namespace CentralServer.Match
 				MatchingLounge lounge = user.lounge;
 				user.lounge.RemoveUser( user );
 				//添加事件
-				this.system.CreateEvent( MatchUserEvent.Type.RemoveFromLounge, user, lounge.GetState() );
+				this.system.RaiseEvent( MatchUserEvent.Type.RemoveFromLounge, user, lounge.GetState() );
 			}
 			this.users.Remove( user );
 			user.grading = null;
-			this.system.CreateEvent( MatchUserEvent.Type.RemoveFromGrading, user );
+			this.system.RaiseEvent( MatchUserEvent.Type.RemoveFromGrading, user, null );
 		}
 
 		public string Dump()

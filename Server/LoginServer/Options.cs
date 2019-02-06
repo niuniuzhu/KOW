@@ -103,10 +103,10 @@ namespace LoginServer
 			HelpText = "init diamoned" )]
 		public int initDiamoned { get; set; }
 
-		[Option( "init_honor",
+		[Option( "init_rank",
 			Default = 0,
 			SetName = "bysetting",
-			HelpText = "init honor" )]
-		public int initHonor { get; set; }
+			HelpText = "init rank" )]
+		public int initRank { get; set; }
 	}
 }

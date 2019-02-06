@@ -83,7 +83,7 @@ namespace CentralServer.Biz
 				CSUser user = CS.instance.battleStaging.GetUser( kv.Key );
 				Protos.BS2CS_BattleEndInfo info = kv.Value;
 				gcBattleEnd.Result = ( Protos.CS2GC_BattleEnd.Types.Result )info.Result;
-				gcBattleEnd.Honour = ratings[info.Team];
+				gcBattleEnd.Rank = ratings[info.Team];
 				CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
 				//todo 记录到数据库
 			}
@@ -147,7 +147,7 @@ namespace CentralServer.Biz
 				List<CSUser> users = teamToUser[kv.Key];
 				int count = users.Count;
 				for ( int i = 0; i < count; i++ )
-					honor += users[i].honor;
+					honor += users[i].rank;
 				honor /= count;
 				teamToAvgHonor[kv.Key] = honor;
 			}

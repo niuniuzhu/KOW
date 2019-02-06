@@ -98,7 +98,7 @@ namespace CentralServer.Match
 										Nickname = user.nickname,
 										Avatar = user.avatar,
 										Gender = user.gender,
-										Honor = user.honor,
+										Rank = user.rank,
 										Team = i,
 										ActorID = matchParams.actorID
 									};
@@ -147,7 +147,7 @@ namespace CentralServer.Match
 					return false;
 			}
 			this._matchingSystems.TryGetValue( mode2, out MatchSystem matchingSystem );
-			MatchUser matchUser = matchingSystem?.CreateUser( user.gcNID, user.honor );
+			MatchUser matchUser = matchingSystem?.CreateUser( user.gcNID, user.rank );
 			if ( matchUser == null )
 				return false;
 
@@ -201,7 +201,7 @@ namespace CentralServer.Match
 						Gender = user.gender,
 						Money = user.money,
 						Diamoned = user.diamoned,
-						Honor = user.honor,
+						Rank = user.rank,
 						ActorID = matchParams.actorID,
 						Team = i
 					};

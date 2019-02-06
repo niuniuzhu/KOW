@@ -25,7 +25,7 @@ namespace LoginServer.Biz
 			public byte gender;
 			public int money;
 			public int diamoned;
-			public int honor;
+			public int rank;
 		}
 
 		public ErrorCode OnGc2LsAskWxlogin( NetSessionBase session, Google.Protobuf.IMessage message )
@@ -94,7 +94,7 @@ namespace LoginServer.Biz
 					queryLogin.Gender = login.Gender;
 					queryLogin.Money = LS.instance.config.initMoney;
 					queryLogin.Diamoned = LS.instance.config.initDiamoned;
-					queryLogin.Honor = LS.instance.config.initHonor;
+					queryLogin.Rank = LS.instance.config.initRank;
 					LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, queryLogin,
 													RPCEntry.Pop( OnSmartQueryLoginRet, gcLoginRet, sid, context ) );
 				}
@@ -139,7 +139,7 @@ namespace LoginServer.Biz
 			queryLogin.Platform = login.Platform;
 			queryLogin.Money = LS.instance.config.initMoney;
 			queryLogin.Diamoned = LS.instance.config.initDiamoned;
-			queryLogin.Honor = LS.instance.config.initHonor;
+			queryLogin.Rank = LS.instance.config.initRank;
 			LS.instance.netSessionMgr.Send( SessionType.ServerL2DB, queryLogin,
 											RPCEntry.Pop( OnSmartQueryLoginRet, gcLoginRet, sid, context ) );
 			return ErrorCode.Success;
@@ -174,7 +174,7 @@ namespace LoginServer.Biz
 				context.gender = ( byte )queryLoginRet.Gender;
 				context.money = queryLoginRet.Money;
 				context.diamoned = queryLoginRet.Diamoned;
-				context.honor = queryLoginRet.Honor;
+				context.rank = queryLoginRet.Rank;
 				HandleLoginSuccess( gcLoginRet, sid, context );
 			}
 			else
@@ -206,7 +206,7 @@ namespace LoginServer.Biz
 			csLogin.Gender = context.gender;
 			csLogin.Money = context.money;
 			csLogin.Diamoned = context.diamoned;
-			csLogin.Honor = context.honor;
+			csLogin.Rank = context.rank;
 			LS.instance.netSessionMgr.Send( SessionType.ServerL2CS, csLogin,
 											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, sid, gcNID ) );
 		}

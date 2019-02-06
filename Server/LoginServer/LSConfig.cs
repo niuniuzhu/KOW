@@ -22,7 +22,7 @@ namespace LoginServer
 		public long pingInterval;
 		public int initMoney;
 		public int initDiamoned;
-		public int initHonor;
+		public int initRank;
 
 		public void CopyFromCLIOptions( Options opts )
 		{
@@ -43,7 +43,7 @@ namespace LoginServer
 			this.certPass = secretDef.GetString( "certPass" );
 			this.initMoney = opts.initMoney;
 			this.initDiamoned = opts.initDiamoned;
-			this.initHonor = opts.initHonor;
+			this.initRank = opts.initRank;
 		}
 
 		public void CopyFromJson( Hashtable json )
@@ -65,7 +65,7 @@ namespace LoginServer
 			this.certPass = secretDef.GetString( "certPass" );
 			this.initMoney = json.GetInt( "init_money" );
 			this.initDiamoned = json.GetInt( "init_diamoned" );
-			this.initHonor = json.GetInt( "init_honor" );
+			this.initRank = json.GetInt( "init_rank" );
 		}
 	}
 }

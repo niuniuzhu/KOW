@@ -108,7 +108,7 @@ namespace BattleServer.Battle
 					Team = champion.team,
 					Money = champion.user.money,
 					Diamoned = champion.user.diamoned,
-					Honor = champion.user.honor,
+					Rank = champion.user.rank,
 					Damage = champion.damage,
 					Hurt = champion.hurt,
 					Heal = champion.heal,

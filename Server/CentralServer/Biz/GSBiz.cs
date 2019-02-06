@@ -104,7 +104,7 @@ namespace CentralServer.Biz
 					Avatar = user.avatar,
 					Gender = user.gender,
 					//todo
-					Honor = 0
+					Rank = 0
 				};
 				//检查玩家是否在战场
 				if ( user.isInBattle )

@@ -42,7 +42,7 @@ namespace DBServer.Biz
 					queryLoginRet.Gender = dataReader.GetByte( "gender" );
 					queryLoginRet.Money = dataReader.GetInt32( "money" );
 					queryLoginRet.Diamoned = dataReader.GetInt32( "diamoned" );
-					queryLoginRet.Honor = dataReader.GetInt32( "honor" );
+					queryLoginRet.Rank = dataReader.GetInt32( "rank" );
 
 					ErrorCode QueryError = ErrorCode.Success;
 					if ( queryLogin.VertPwd )
@@ -70,7 +70,7 @@ namespace DBServer.Biz
 					$"insert account_user( uname,channel,browser,platform,unionID,nickname,avatar,gender,money,diamoned,honor,last_login_time,last_login_ip ) values" +
 					$"(\'{queryLogin.Name}\',{( byte )queryLogin.Channel},{( byte )queryLogin.Browser},{( byte )queryLogin.Platform}," +
 					$"\'{queryLogin.UnionID}\',\'{queryLogin.Nickname}\',\'{queryLogin.Avatar}\',\'{( byte )queryLogin.Gender}\'," +
-					$"{queryLogin.Money},{queryLogin.Diamoned},{queryLogin.Honor}," +
+					$"{queryLogin.Money},{queryLogin.Diamoned},{queryLogin.Rank}," +
 					$"{queryLogin.Time},\'{queryLogin.Ip}\');",
 					out _, out uint id );
 
@@ -84,7 +84,7 @@ namespace DBServer.Biz
 				queryLoginRet.Gender = queryLogin.Gender;
 				queryLoginRet.Money = queryLogin.Money;
 				queryLoginRet.Diamoned = queryLogin.Diamoned;
-				queryLoginRet.Honor = queryLogin.Honor;
+				queryLoginRet.Rank = queryLogin.Rank;
 
 			}
 			switch ( errorCode )

@@ -36,40 +36,40 @@ namespace Protos {
             "bm5lbBIHCgNXZWIQABIKCgZXWE1pbmkQASIwCghQbGF0Zm9ybRIGCgJQQxAA",
             "EgsKB0FuZHJvaWQQARIHCgNJT1MQAhIGCgJXUBADIkAKB0Jyb3dzZXISCgoG",
             "Q2hyb21lEAASCwoHRmlyZWZveBABEgoKBlNhZmFpchACEggKBEVkZ2UQAxIG",
-            "CgJJRRAEIlwKCkdfVXNlckluZm8SDQoFZ2NOSUQYASABKAQSEAoIbmlja25h",
-            "bWUYAiABKAkSDgoGYXZhdGFyGAMgASgJEg4KBmdlbmRlchgEIAEoBRINCgVo",
-            "b25vchgFIAEoBSr/CgoFTXNnSUQSDAoIVW5kZWZpbmUQABIOCgplR19Bc2tQ",
-            "aW5nEAoSEQoNZUdfQXNrUGluZ1JldBALEhcKEmVHQzJMU19Bc2tSZWdpc3Rl",
-            "chDoBxIUCg9lR0MyTFNfQXNrTG9naW4Q6QcSGQoUZUdDMkxTX0Fza1NtYXJ0",
-            "TG9naW4Q6gcSFgoRZUdDMkxTX0Fza1dYTG9naW4Q6wcSGQoUZUdDMkxDX1Vw",
-            "ZGF0ZVByb2ZpbGUQ7AcSFAoPZUdDMkdTX0Fza0xvZ2luEMwIEhUKEGVHQzJH",
-            "U19LZWVwQWxpdmUQzQgSFAoPZUdDMkJTX0Fza0xvZ2luELAJEhUKEGVHQzJC",
-            "U19LZWVwQWxpdmUQsQkSGwoWZUdDMkJTX1JlcXVlc3RTbmFwc2hvdBCyCRIX",
-            "ChJlR0MyQlNfRnJhbWVBY3Rpb24QswkSHwoaZUdDMkJTX1JlcXVlc3RGcmFt",
-            "ZUFjdGlvbnMQtAkSGgoVZUdDMkJTX0NvbW1pdFNuYXBzaG90ELUJEhUKEGVH",
-            "QzJCU19FbmRCYXR0bGUQtgkSFgoRZUdDMkNTX0JlZ2luTWF0Y2gQlAoSFwoS",
-            "ZUdDMkNTX0NhbmNlbE1hdGNoEJUKEhIKDWVMUzJHQ19HU0luZm8Q0A8SFQoQ",
-            "ZUxTMkdDX0Fza1JlZ1JldBDRDxIXChJlTFMyR0NfQXNrTG9naW5SZXQQ0g8S",
-            "EwoOZUxTMkNTX0dDTG9naW4QtBASGAoTZUxTMkRCX1F1ZXJ5QWNjb3VudBCY",
-            "ERIWChFlTFMyREJfUXVlcnlMb2dpbhCZERIQCgtlTFMyREJfRXhlYxCaERIX",
-            "ChJlR1MyQ1NfUmVwb3J0U3RhdGUQuBcSFgoRZUdTMkNTX0dDQXNrTG9naW4Q",
-            "uRcSEgoNZUdTMkNTX0dDTG9zdBC6FxIUCg9lR1MyR0NfTG9naW5SZXQQnBgS",
-            "EAoLZUdTMkdDX0tpY2sQnRgSEgoNZUdTMkdDX0NTTG9zdBCeGBIXChJlQlMy",
-            "Q1NfUmVwb3J0U3RhdGUQoB8SGQoUZUJTMkNTX0JhdHRsZUluZm9SZXQQoR8S",
-            "FQoQZUJTMkNTX0JhdHRsZUVuZBCiHxIUCg9lQlMyQ1NfS2lja1VzZXIQox8S",
-            "FAoPZUJTMkdDX0xvZ2luUmV0EIQgEh4KGWVCUzJHQ19SZXF1ZXN0U25hcHNo",
-            "b3RSZXQQhSASFwoSZUJTMkdDX0ZyYW1lQWN0aW9uEIYgEiIKHWVCUzJHQ19S",
-            "ZXF1ZXN0RnJhbWVBY3Rpb25zUmV0EIcgEhUKEGVCUzJHQ19PdXRPZlN5bmMQ",
-            "iCASEwoOZUNTMkxTX0dTSW5mb3MQiCcSEgoNZUNTMkxTX0dTSW5mbxCJJxIS",
-            "Cg1lQ1MyTFNfR1NMb3N0EIonEhYKEWVDUzJMU19HQ0xvZ2luUmV0EIsnEhYK",
-            "EWVDUzJHU19HQ0xvZ2luUmV0EOwnEhIKDWVDUzJHU19LaWNrR0MQ7ScSFgoR",
-            "ZUNTMkJTX0JhdHRsZUluZm8Q0CgSGAoTZUNTMkJTX0JhdHRsZUVuZFJldBDR",
-            "KBIZChRlQ1MyR0NfQmVnaW5NYXRjaFJldBC0KRIWChFlQ1MyR0NfTWF0Y2hT",
-            "dGF0ZRC3KRIWChFlQ1MyR0NfQWRkVG9NYXRjaBC4KRIbChZlQ1MyR0NfUmVt",
-            "b3ZlRnJvbU1hdGNoELkpEhcKEmVDUzJHQ19FbnRlckJhdHRsZRC6KRIVChBl",
-            "Q1MyR0NfQmF0dGxlRW5kELspEhIKDWVDUzJHQ19CU0xvc2UQvCkSGwoWZURC",
-            "MkxTX1F1ZXJ5QWNjb3VudFJldBDAPhIZChRlREIyTFNfUXVlcnlMb2dpblJl",
-            "dBDBPhITCg5lREIyTFNfRXhlY1JldBDCPmIGcHJvdG8z"));
+            "CgJJRRAEIlsKCkdfVXNlckluZm8SDQoFZ2NOSUQYASABKAQSEAoIbmlja25h",
+            "bWUYAiABKAkSDgoGYXZhdGFyGAMgASgJEg4KBmdlbmRlchgEIAEoBRIMCgRy",
+            "YW5rGAUgASgFKv8KCgVNc2dJRBIMCghVbmRlZmluZRAAEg4KCmVHX0Fza1Bp",
+            "bmcQChIRCg1lR19Bc2tQaW5nUmV0EAsSFwoSZUdDMkxTX0Fza1JlZ2lzdGVy",
+            "EOgHEhQKD2VHQzJMU19Bc2tMb2dpbhDpBxIZChRlR0MyTFNfQXNrU21hcnRM",
+            "b2dpbhDqBxIWChFlR0MyTFNfQXNrV1hMb2dpbhDrBxIZChRlR0MyTENfVXBk",
+            "YXRlUHJvZmlsZRDsBxIUCg9lR0MyR1NfQXNrTG9naW4QzAgSFQoQZUdDMkdT",
+            "X0tlZXBBbGl2ZRDNCBIUCg9lR0MyQlNfQXNrTG9naW4QsAkSFQoQZUdDMkJT",
+            "X0tlZXBBbGl2ZRCxCRIbChZlR0MyQlNfUmVxdWVzdFNuYXBzaG90ELIJEhcK",
+            "EmVHQzJCU19GcmFtZUFjdGlvbhCzCRIfChplR0MyQlNfUmVxdWVzdEZyYW1l",
+            "QWN0aW9ucxC0CRIaChVlR0MyQlNfQ29tbWl0U25hcHNob3QQtQkSFQoQZUdD",
+            "MkJTX0VuZEJhdHRsZRC2CRIWChFlR0MyQ1NfQmVnaW5NYXRjaBCUChIXChJl",
+            "R0MyQ1NfQ2FuY2VsTWF0Y2gQlQoSEgoNZUxTMkdDX0dTSW5mbxDQDxIVChBl",
+            "TFMyR0NfQXNrUmVnUmV0ENEPEhcKEmVMUzJHQ19Bc2tMb2dpblJldBDSDxIT",
+            "Cg5lTFMyQ1NfR0NMb2dpbhC0EBIYChNlTFMyREJfUXVlcnlBY2NvdW50EJgR",
+            "EhYKEWVMUzJEQl9RdWVyeUxvZ2luEJkREhAKC2VMUzJEQl9FeGVjEJoREhcK",
+            "EmVHUzJDU19SZXBvcnRTdGF0ZRC4FxIWChFlR1MyQ1NfR0NBc2tMb2dpbhC5",
+            "FxISCg1lR1MyQ1NfR0NMb3N0ELoXEhQKD2VHUzJHQ19Mb2dpblJldBCcGBIQ",
+            "CgtlR1MyR0NfS2ljaxCdGBISCg1lR1MyR0NfQ1NMb3N0EJ4YEhcKEmVCUzJD",
+            "U19SZXBvcnRTdGF0ZRCgHxIZChRlQlMyQ1NfQmF0dGxlSW5mb1JldBChHxIV",
+            "ChBlQlMyQ1NfQmF0dGxlRW5kEKIfEhQKD2VCUzJDU19LaWNrVXNlchCjHxIU",
+            "Cg9lQlMyR0NfTG9naW5SZXQQhCASHgoZZUJTMkdDX1JlcXVlc3RTbmFwc2hv",
+            "dFJldBCFIBIXChJlQlMyR0NfRnJhbWVBY3Rpb24QhiASIgodZUJTMkdDX1Jl",
+            "cXVlc3RGcmFtZUFjdGlvbnNSZXQQhyASFQoQZUJTMkdDX091dE9mU3luYxCI",
+            "IBITCg5lQ1MyTFNfR1NJbmZvcxCIJxISCg1lQ1MyTFNfR1NJbmZvEIknEhIK",
+            "DWVDUzJMU19HU0xvc3QQiicSFgoRZUNTMkxTX0dDTG9naW5SZXQQiycSFgoR",
+            "ZUNTMkdTX0dDTG9naW5SZXQQ7CcSEgoNZUNTMkdTX0tpY2tHQxDtJxIWChFl",
+            "Q1MyQlNfQmF0dGxlSW5mbxDQKBIYChNlQ1MyQlNfQmF0dGxlRW5kUmV0ENEo",
+            "EhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhYKEWVDUzJHQ19NYXRjaFN0",
+            "YXRlELcpEhYKEWVDUzJHQ19BZGRUb01hdGNoELgpEhsKFmVDUzJHQ19SZW1v",
+            "dmVGcm9tTWF0Y2gQuSkSFwoSZUNTMkdDX0VudGVyQmF0dGxlELopEhUKEGVD",
+            "UzJHQ19CYXR0bGVFbmQQuykSEgoNZUNTMkdDX0JTTG9zZRC8KRIbChZlREIy",
+            "TFNfUXVlcnlBY2NvdW50UmV0EMA+EhkKFGVEQjJMU19RdWVyeUxvZ2luUmV0",
+            "EME+EhMKDmVEQjJMU19FeGVjUmV0EMI+YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
@@ -77,7 +77,7 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPing), global::Protos.G_AskPing.Parser, new[]{ "Opts", "Time" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPingRet), global::Protos.G_AskPingRet.Parser, new[]{ "Opts", "Stime", "Time" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Global), global::Protos.Global.Parser, null, null, new[]{ typeof(global::Protos.Global.Types.ECommon), typeof(global::Protos.Global.Types.Channel), typeof(global::Protos.Global.Types.Platform), typeof(global::Protos.Global.Types.Browser) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_UserInfo), global::Protos.G_UserInfo.Parser, new[]{ "GcNID", "Nickname", "Avatar", "Gender", "Honor" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_UserInfo), global::Protos.G_UserInfo.Parser, new[]{ "GcNID", "Nickname", "Avatar", "Gender", "Rank" }, null, null, null)
           }));
     }
     #endregion
@@ -932,7 +932,7 @@ namespace Protos {
       nickname_ = other.nickname_;
       avatar_ = other.avatar_;
       gender_ = other.gender_;
-      honor_ = other.honor_;
+      rank_ = other.rank_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -985,14 +985,14 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "honor" field.</summary>
-    public const int HonorFieldNumber = 5;
-    private int honor_;
+    /// <summary>Field number for the "rank" field.</summary>
+    public const int RankFieldNumber = 5;
+    private int rank_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Honor {
-      get { return honor_; }
+    public int Rank {
+      get { return rank_; }
       set {
-        honor_ = value;
+        rank_ = value;
       }
     }
 
@@ -1013,7 +1013,7 @@ namespace Protos {
       if (Nickname != other.Nickname) return false;
       if (Avatar != other.Avatar) return false;
       if (Gender != other.Gender) return false;
-      if (Honor != other.Honor) return false;
+      if (Rank != other.Rank) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1024,7 +1024,7 @@ namespace Protos {
       if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
       if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
       if (Gender != 0) hash ^= Gender.GetHashCode();
-      if (Honor != 0) hash ^= Honor.GetHashCode();
+      if (Rank != 0) hash ^= Rank.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1054,9 +1054,9 @@ namespace Protos {
         output.WriteRawTag(32);
         output.WriteInt32(Gender);
       }
-      if (Honor != 0) {
+      if (Rank != 0) {
         output.WriteRawTag(40);
-        output.WriteInt32(Honor);
+        output.WriteInt32(Rank);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1078,8 +1078,8 @@ namespace Protos {
       if (Gender != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gender);
       }
-      if (Honor != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Honor);
+      if (Rank != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Rank);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1104,8 +1104,8 @@ namespace Protos {
       if (other.Gender != 0) {
         Gender = other.Gender;
       }
-      if (other.Honor != 0) {
-        Honor = other.Honor;
+      if (other.Rank != 0) {
+        Rank = other.Rank;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1135,7 +1135,7 @@ namespace Protos {
             break;
           }
           case 40: {
-            Honor = input.ReadInt32();
+            Rank = input.ReadInt32();
             break;
           }
         }

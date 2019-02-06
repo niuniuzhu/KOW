@@ -20,7 +20,7 @@ message CS2GC_PlayerInfo {
 	string nickname = 3;//玩家名字
 	string avatar = 4;
 	int32 gender = 5;
-	int32 honor = 6;
+	int32 rank = 6;
 	int32 actorID = 7;//角色id
 	int32 team = 8;//所在队伍
 }
@@ -68,7 +68,7 @@ message CS2GC_BattleEnd {
 	}
 	MsgOpts opts = 1;
 	Result result = 2;
-	int32 honour = 3;
+	int32 rank = 3;
 	int32 money = 4;
 	int32 diamoned = 5;
 }

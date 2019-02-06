@@ -92,7 +92,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 荣誉
 		/// </summary>
-		public int honor { get; private set; }
+		public int rank { get; private set; }
 
 		/// <summary>
 		/// 发送消息
@@ -117,7 +117,7 @@ namespace CentralServer.User
 			this.gender = ( byte )gcLogin.Gender;
 			this.money = gcLogin.Money;
 			this.diamoned = gcLogin.Diamoned;
-			this.honor = gcLogin.Honor;
+			this.rank = gcLogin.Rank;
 		}
 
 		/// <summary>

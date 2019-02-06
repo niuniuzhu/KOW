@@ -126,7 +126,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
         HandleBattleEnd(message) {
             this.QueueMessage(message, msg => {
                 const battleEnd = msg;
-                UIEvent_1.UIEvent.EndBattle(battleEnd.result, battleEnd.honour, () => {
+                UIEvent_1.UIEvent.EndBattle(battleEnd.result, battleEnd.rank, () => {
                     this.Destroy();
                     Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main);
                 });

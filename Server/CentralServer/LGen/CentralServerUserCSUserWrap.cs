@@ -48,7 +48,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "gender", _g_get_gender);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "money", _g_get_money);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "diamoned", _g_get_diamoned);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "honor", _g_get_honor);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "rank", _g_get_honor);
             
 			
 			
@@ -455,7 +455,7 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 CentralServer.User.CSUser __cl_gen_to_be_invoked = (CentralServer.User.CSUser)translator.FastGetCSObj(L, 1);
-                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.honor);
+                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.rank);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }

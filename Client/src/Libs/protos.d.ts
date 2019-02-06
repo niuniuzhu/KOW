@@ -88,7 +88,7 @@ export namespace Protos {
         skill0Damage?: (number|null);
         skill1Damage?: (number|null);
         team?: (number|null);
-        honor?: (number|null);
+        rank?: (number|null);
         money?: (number|null);
         diamoned?: (number|null);
     }
@@ -105,7 +105,7 @@ export namespace Protos {
         public skill0Damage: number;
         public skill1Damage: number;
         public team: number;
-        public honor: number;
+        public rank: number;
         public money: number;
         public diamoned: number;
         public static create(properties?: Protos.IBS2CS_BattleEndInfo): Protos.BS2CS_BattleEndInfo;
@@ -377,7 +377,7 @@ export namespace Protos {
         nickname?: (string|null);
         avatar?: (string|null);
         gender?: (number|null);
-        honor?: (number|null);
+        rank?: (number|null);
     }
 
     class G_UserInfo implements IG_UserInfo {
@@ -386,7 +386,7 @@ export namespace Protos {
         public nickname: string;
         public avatar: string;
         public gender: number;
-        public honor: number;
+        public rank: number;
         public static create(properties?: Protos.IG_UserInfo): Protos.G_UserInfo;
         public static encode(message: Protos.IG_UserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IG_UserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -546,7 +546,7 @@ export namespace Protos {
         gender?: (number|null);
         money?: (number|null);
         diamoned?: (number|null);
-        honor?: (number|null);
+        rank?: (number|null);
         actorID?: (number|null);
         team?: (number|null);
     }
@@ -559,7 +559,7 @@ export namespace Protos {
         public gender: number;
         public money: number;
         public diamoned: number;
-        public honor: number;
+        public rank: number;
         public actorID: number;
         public team: number;
         public static create(properties?: Protos.ICS2BS_PlayerInfo): Protos.CS2BS_PlayerInfo;
@@ -650,7 +650,7 @@ export namespace Protos {
         nickname?: (string|null);
         avatar?: (string|null);
         gender?: (number|null);
-        honor?: (number|null);
+        rank?: (number|null);
         actorID?: (number|null);
         team?: (number|null);
     }
@@ -662,7 +662,7 @@ export namespace Protos {
         public nickname: string;
         public avatar: string;
         public gender: number;
-        public honor: number;
+        public rank: number;
         public actorID: number;
         public team: number;
         public static create(properties?: Protos.ICS2GC_PlayerInfo): Protos.CS2GC_PlayerInfo;
@@ -789,7 +789,7 @@ export namespace Protos {
     interface ICS2GC_BattleEnd {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.CS2GC_BattleEnd.Result|null);
-        honour?: (number|null);
+        rank?: (number|null);
         money?: (number|null);
         diamoned?: (number|null);
     }
@@ -798,7 +798,7 @@ export namespace Protos {
         constructor(properties?: Protos.ICS2GC_BattleEnd);
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.CS2GC_BattleEnd.Result;
-        public honour: number;
+        public rank: number;
         public money: number;
         public diamoned: number;
         public static create(properties?: Protos.ICS2GC_BattleEnd): Protos.CS2GC_BattleEnd;
@@ -1115,7 +1115,7 @@ export namespace Protos {
         gender?: (number|null);
         money?: (number|null);
         diamoned?: (number|null);
-        honor?: (number|null);
+        rank?: (number|null);
     }
 
     class DB2LS_QueryLoginRet implements IDB2LS_QueryLoginRet {
@@ -1132,7 +1132,7 @@ export namespace Protos {
         public gender: number;
         public money: number;
         public diamoned: number;
-        public honor: number;
+        public rank: number;
         public static create(properties?: Protos.IDB2LS_QueryLoginRet): Protos.DB2LS_QueryLoginRet;
         public static encode(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1659,7 +1659,7 @@ export namespace Protos {
         gender?: (number|null);
         money?: (number|null);
         diamoned?: (number|null);
-        honor?: (number|null);
+        rank?: (number|null);
     }
 
     class LS2CS_GCLogin implements ILS2CS_GCLogin {
@@ -1678,7 +1678,7 @@ export namespace Protos {
         public gender: number;
         public money: number;
         public diamoned: number;
-        public honor: number;
+        public rank: number;
         public static create(properties?: Protos.ILS2CS_GCLogin): Protos.LS2CS_GCLogin;
         public static encode(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1726,7 +1726,7 @@ export namespace Protos {
         gender?: (number|null);
         money?: (number|null);
         diamoned?: (number|null);
-        honor?: (number|null);
+        rank?: (number|null);
     }
 
     class LS2DB_QueryLogin implements ILS2DB_QueryLogin {
@@ -1746,7 +1746,7 @@ export namespace Protos {
         public gender: number;
         public money: number;
         public diamoned: number;
-        public honor: number;
+        public rank: number;
         public static create(properties?: Protos.ILS2DB_QueryLogin): Protos.LS2DB_QueryLogin;
         public static encode(message: Protos.ILS2DB_QueryLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2DB_QueryLogin, writer?: $protobuf.Writer): $protobuf.Writer;

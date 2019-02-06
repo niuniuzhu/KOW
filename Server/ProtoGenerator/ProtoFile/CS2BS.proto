@@ -10,7 +10,7 @@ message CS2BS_PlayerInfo {
 	int32 gender = 4;
 	int32 money = 5;
 	int32 diamoned = 6;
-	int32 honor = 7;
+	int32 rank = 7;
 	int32 actorID = 8;//角色id
 	int32 team = 9;//所在队伍
 }

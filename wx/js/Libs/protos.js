@@ -436,7 +436,7 @@ export const Protos = $root.Protos = (() => {
         BS2CS_BattleEndInfo.prototype.skill0Damage = 0;
         BS2CS_BattleEndInfo.prototype.skill1Damage = 0;
         BS2CS_BattleEndInfo.prototype.team = 0;
-        BS2CS_BattleEndInfo.prototype.honor = 0;
+        BS2CS_BattleEndInfo.prototype.rank = 0;
         BS2CS_BattleEndInfo.prototype.money = 0;
         BS2CS_BattleEndInfo.prototype.diamoned = 0;
 
@@ -467,8 +467,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(72).uint32(message.skill1Damage);
             if (message.team != null && message.hasOwnProperty("team"))
                 writer.uint32(80).int32(message.team);
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(88).int32(message.honor);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(88).int32(message.rank);
             if (message.money != null && message.hasOwnProperty("money"))
                 writer.uint32(96).int32(message.money);
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
@@ -518,7 +518,7 @@ export const Protos = $root.Protos = (() => {
                     message.team = reader.int32();
                     break;
                 case 11:
-                    message.honor = reader.int32();
+                    message.rank = reader.int32();
                     break;
                 case 12:
                     message.money = reader.int32();
@@ -579,9 +579,9 @@ export const Protos = $root.Protos = (() => {
             if (message.team != null && message.hasOwnProperty("team"))
                 if (!$util.isInteger(message.team))
                     return "team: integer expected";
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                if (!$util.isInteger(message.honor))
-                    return "honor: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             if (message.money != null && message.hasOwnProperty("money"))
                 if (!$util.isInteger(message.money))
                     return "money: integer expected";
@@ -627,8 +627,8 @@ export const Protos = $root.Protos = (() => {
                 message.skill1Damage = object.skill1Damage >>> 0;
             if (object.team != null)
                 message.team = object.team | 0;
-            if (object.honor != null)
-                message.honor = object.honor | 0;
+            if (object.rank != null)
+                message.rank = object.rank | 0;
             if (object.money != null)
                 message.money = object.money | 0;
             if (object.diamoned != null)
@@ -651,7 +651,7 @@ export const Protos = $root.Protos = (() => {
                 object.skill0Damage = 0;
                 object.skill1Damage = 0;
                 object.team = 0;
-                object.honor = 0;
+                object.rank = 0;
                 object.money = 0;
                 object.diamoned = 0;
             }
@@ -675,8 +675,8 @@ export const Protos = $root.Protos = (() => {
                 object.skill1Damage = message.skill1Damage;
             if (message.team != null && message.hasOwnProperty("team"))
                 object.team = message.team;
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                object.honor = message.honor;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
             if (message.money != null && message.hasOwnProperty("money"))
                 object.money = message.money;
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
@@ -1620,7 +1620,7 @@ export const Protos = $root.Protos = (() => {
         G_UserInfo.prototype.nickname = "";
         G_UserInfo.prototype.avatar = "";
         G_UserInfo.prototype.gender = 0;
-        G_UserInfo.prototype.honor = 0;
+        G_UserInfo.prototype.rank = 0;
 
         G_UserInfo.create = function create(properties) {
             return new G_UserInfo(properties);
@@ -1637,8 +1637,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(26).string(message.avatar);
             if (message.gender != null && message.hasOwnProperty("gender"))
                 writer.uint32(32).int32(message.gender);
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(40).int32(message.honor);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(40).int32(message.rank);
             return writer;
         };
 
@@ -1666,7 +1666,7 @@ export const Protos = $root.Protos = (() => {
                     message.gender = reader.int32();
                     break;
                 case 5:
-                    message.honor = reader.int32();
+                    message.rank = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1697,9 +1697,9 @@ export const Protos = $root.Protos = (() => {
             if (message.gender != null && message.hasOwnProperty("gender"))
                 if (!$util.isInteger(message.gender))
                     return "gender: integer expected";
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                if (!$util.isInteger(message.honor))
-                    return "honor: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             return null;
         };
 
@@ -1722,8 +1722,8 @@ export const Protos = $root.Protos = (() => {
                 message.avatar = String(object.avatar);
             if (object.gender != null)
                 message.gender = object.gender | 0;
-            if (object.honor != null)
-                message.honor = object.honor | 0;
+            if (object.rank != null)
+                message.rank = object.rank | 0;
             return message;
         };
 
@@ -1740,7 +1740,7 @@ export const Protos = $root.Protos = (() => {
                 object.nickname = "";
                 object.avatar = "";
                 object.gender = 0;
-                object.honor = 0;
+                object.rank = 0;
             }
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 if (typeof message.gcNID === "number")
@@ -1753,8 +1753,8 @@ export const Protos = $root.Protos = (() => {
                 object.avatar = message.avatar;
             if (message.gender != null && message.hasOwnProperty("gender"))
                 object.gender = message.gender;
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                object.honor = message.honor;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
             return object;
         };
 
@@ -2694,7 +2694,7 @@ export const Protos = $root.Protos = (() => {
         CS2BS_PlayerInfo.prototype.gender = 0;
         CS2BS_PlayerInfo.prototype.money = 0;
         CS2BS_PlayerInfo.prototype.diamoned = 0;
-        CS2BS_PlayerInfo.prototype.honor = 0;
+        CS2BS_PlayerInfo.prototype.rank = 0;
         CS2BS_PlayerInfo.prototype.actorID = 0;
         CS2BS_PlayerInfo.prototype.team = 0;
 
@@ -2717,8 +2717,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(40).int32(message.money);
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 writer.uint32(48).int32(message.diamoned);
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(56).int32(message.honor);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(56).int32(message.rank);
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 writer.uint32(64).int32(message.actorID);
             if (message.team != null && message.hasOwnProperty("team"))
@@ -2756,7 +2756,7 @@ export const Protos = $root.Protos = (() => {
                     message.diamoned = reader.int32();
                     break;
                 case 7:
-                    message.honor = reader.int32();
+                    message.rank = reader.int32();
                     break;
                 case 8:
                     message.actorID = reader.int32();
@@ -2799,9 +2799,9 @@ export const Protos = $root.Protos = (() => {
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 if (!$util.isInteger(message.diamoned))
                     return "diamoned: integer expected";
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                if (!$util.isInteger(message.honor))
-                    return "honor: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 if (!$util.isInteger(message.actorID))
                     return "actorID: integer expected";
@@ -2834,8 +2834,8 @@ export const Protos = $root.Protos = (() => {
                 message.money = object.money | 0;
             if (object.diamoned != null)
                 message.diamoned = object.diamoned | 0;
-            if (object.honor != null)
-                message.honor = object.honor | 0;
+            if (object.rank != null)
+                message.rank = object.rank | 0;
             if (object.actorID != null)
                 message.actorID = object.actorID | 0;
             if (object.team != null)
@@ -2858,7 +2858,7 @@ export const Protos = $root.Protos = (() => {
                 object.gender = 0;
                 object.money = 0;
                 object.diamoned = 0;
-                object.honor = 0;
+                object.rank = 0;
                 object.actorID = 0;
                 object.team = 0;
             }
@@ -2877,8 +2877,8 @@ export const Protos = $root.Protos = (() => {
                 object.money = message.money;
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 object.diamoned = message.diamoned;
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                object.honor = message.honor;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 object.actorID = message.actorID;
             if (message.team != null && message.hasOwnProperty("team"))
@@ -3289,7 +3289,7 @@ export const Protos = $root.Protos = (() => {
         CS2GC_PlayerInfo.prototype.nickname = "";
         CS2GC_PlayerInfo.prototype.avatar = "";
         CS2GC_PlayerInfo.prototype.gender = 0;
-        CS2GC_PlayerInfo.prototype.honor = 0;
+        CS2GC_PlayerInfo.prototype.rank = 0;
         CS2GC_PlayerInfo.prototype.actorID = 0;
         CS2GC_PlayerInfo.prototype.team = 0;
 
@@ -3310,8 +3310,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(34).string(message.avatar);
             if (message.gender != null && message.hasOwnProperty("gender"))
                 writer.uint32(40).int32(message.gender);
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(48).int32(message.honor);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(48).int32(message.rank);
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 writer.uint32(56).int32(message.actorID);
             if (message.team != null && message.hasOwnProperty("team"))
@@ -3346,7 +3346,7 @@ export const Protos = $root.Protos = (() => {
                     message.gender = reader.int32();
                     break;
                 case 6:
-                    message.honor = reader.int32();
+                    message.rank = reader.int32();
                     break;
                 case 7:
                     message.actorID = reader.int32();
@@ -3386,9 +3386,9 @@ export const Protos = $root.Protos = (() => {
             if (message.gender != null && message.hasOwnProperty("gender"))
                 if (!$util.isInteger(message.gender))
                     return "gender: integer expected";
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                if (!$util.isInteger(message.honor))
-                    return "honor: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 if (!$util.isInteger(message.actorID))
                     return "actorID: integer expected";
@@ -3419,8 +3419,8 @@ export const Protos = $root.Protos = (() => {
                 message.avatar = String(object.avatar);
             if (object.gender != null)
                 message.gender = object.gender | 0;
-            if (object.honor != null)
-                message.honor = object.honor | 0;
+            if (object.rank != null)
+                message.rank = object.rank | 0;
             if (object.actorID != null)
                 message.actorID = object.actorID | 0;
             if (object.team != null)
@@ -3442,7 +3442,7 @@ export const Protos = $root.Protos = (() => {
                 object.nickname = "";
                 object.avatar = "";
                 object.gender = 0;
-                object.honor = 0;
+                object.rank = 0;
                 object.actorID = 0;
                 object.team = 0;
             }
@@ -3459,8 +3459,8 @@ export const Protos = $root.Protos = (() => {
                 object.avatar = message.avatar;
             if (message.gender != null && message.hasOwnProperty("gender"))
                 object.gender = message.gender;
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                object.honor = message.honor;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 object.actorID = message.actorID;
             if (message.team != null && message.hasOwnProperty("team"))
@@ -4085,7 +4085,7 @@ export const Protos = $root.Protos = (() => {
 
         CS2GC_BattleEnd.prototype.opts = null;
         CS2GC_BattleEnd.prototype.result = 0;
-        CS2GC_BattleEnd.prototype.honour = 0;
+        CS2GC_BattleEnd.prototype.rank = 0;
         CS2GC_BattleEnd.prototype.money = 0;
         CS2GC_BattleEnd.prototype.diamoned = 0;
 
@@ -4100,8 +4100,8 @@ export const Protos = $root.Protos = (() => {
                 $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
             if (message.result != null && message.hasOwnProperty("result"))
                 writer.uint32(16).int32(message.result);
-            if (message.honour != null && message.hasOwnProperty("honour"))
-                writer.uint32(24).int32(message.honour);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(24).int32(message.rank);
             if (message.money != null && message.hasOwnProperty("money"))
                 writer.uint32(32).int32(message.money);
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
@@ -4127,7 +4127,7 @@ export const Protos = $root.Protos = (() => {
                     message.result = reader.int32();
                     break;
                 case 3:
-                    message.honour = reader.int32();
+                    message.rank = reader.int32();
                     break;
                 case 4:
                     message.money = reader.int32();
@@ -4166,9 +4166,9 @@ export const Protos = $root.Protos = (() => {
                 case 2:
                     break;
                 }
-            if (message.honour != null && message.hasOwnProperty("honour"))
-                if (!$util.isInteger(message.honour))
-                    return "honour: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             if (message.money != null && message.hasOwnProperty("money"))
                 if (!$util.isInteger(message.money))
                     return "money: integer expected";
@@ -4201,8 +4201,8 @@ export const Protos = $root.Protos = (() => {
                 message.result = 2;
                 break;
             }
-            if (object.honour != null)
-                message.honour = object.honour | 0;
+            if (object.rank != null)
+                message.rank = object.rank | 0;
             if (object.money != null)
                 message.money = object.money | 0;
             if (object.diamoned != null)
@@ -4217,7 +4217,7 @@ export const Protos = $root.Protos = (() => {
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Win" : 0;
-                object.honour = 0;
+                object.rank = 0;
                 object.money = 0;
                 object.diamoned = 0;
             }
@@ -4225,8 +4225,8 @@ export const Protos = $root.Protos = (() => {
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
             if (message.result != null && message.hasOwnProperty("result"))
                 object.result = options.enums === String ? $root.Protos.CS2GC_BattleEnd.Result[message.result] : message.result;
-            if (message.honour != null && message.hasOwnProperty("honour"))
-                object.honour = message.honour;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
             if (message.money != null && message.hasOwnProperty("money"))
                 object.money = message.money;
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
@@ -5811,7 +5811,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryLoginRet.prototype.gender = 0;
         DB2LS_QueryLoginRet.prototype.money = 0;
         DB2LS_QueryLoginRet.prototype.diamoned = 0;
-        DB2LS_QueryLoginRet.prototype.honor = 0;
+        DB2LS_QueryLoginRet.prototype.rank = 0;
 
         DB2LS_QueryLoginRet.create = function create(properties) {
             return new DB2LS_QueryLoginRet(properties);
@@ -5844,8 +5844,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(88).int32(message.money);
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 writer.uint32(96).int32(message.diamoned);
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(104).int32(message.honor);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(104).int32(message.rank);
             return writer;
         };
 
@@ -5897,7 +5897,7 @@ export const Protos = $root.Protos = (() => {
                     message.diamoned = reader.int32();
                     break;
                 case 13:
-                    message.honor = reader.int32();
+                    message.rank = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -5979,9 +5979,9 @@ export const Protos = $root.Protos = (() => {
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 if (!$util.isInteger(message.diamoned))
                     return "diamoned: integer expected";
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                if (!$util.isInteger(message.honor))
-                    return "honor: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             return null;
         };
 
@@ -6068,8 +6068,8 @@ export const Protos = $root.Protos = (() => {
                 message.money = object.money | 0;
             if (object.diamoned != null)
                 message.diamoned = object.diamoned | 0;
-            if (object.honor != null)
-                message.honor = object.honor | 0;
+            if (object.rank != null)
+                message.rank = object.rank | 0;
             return message;
         };
 
@@ -6090,7 +6090,7 @@ export const Protos = $root.Protos = (() => {
                 object.gender = 0;
                 object.money = 0;
                 object.diamoned = 0;
-                object.honor = 0;
+                object.rank = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -6116,8 +6116,8 @@ export const Protos = $root.Protos = (() => {
                 object.money = message.money;
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 object.diamoned = message.diamoned;
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                object.honor = message.honor;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
             return object;
         };
 
@@ -9165,7 +9165,7 @@ export const Protos = $root.Protos = (() => {
         LS2CS_GCLogin.prototype.gender = 0;
         LS2CS_GCLogin.prototype.money = 0;
         LS2CS_GCLogin.prototype.diamoned = 0;
-        LS2CS_GCLogin.prototype.honor = 0;
+        LS2CS_GCLogin.prototype.rank = 0;
 
         LS2CS_GCLogin.create = function create(properties) {
             return new LS2CS_GCLogin(properties);
@@ -9202,8 +9202,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(104).int32(message.money);
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 writer.uint32(112).int32(message.diamoned);
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(120).int32(message.honor);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(120).int32(message.rank);
             return writer;
         };
 
@@ -9261,7 +9261,7 @@ export const Protos = $root.Protos = (() => {
                     message.diamoned = reader.int32();
                     break;
                 case 15:
-                    message.honor = reader.int32();
+                    message.rank = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -9344,9 +9344,9 @@ export const Protos = $root.Protos = (() => {
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 if (!$util.isInteger(message.diamoned))
                     return "diamoned: integer expected";
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                if (!$util.isInteger(message.honor))
-                    return "honor: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             return null;
         };
 
@@ -9436,8 +9436,8 @@ export const Protos = $root.Protos = (() => {
                 message.money = object.money | 0;
             if (object.diamoned != null)
                 message.diamoned = object.diamoned | 0;
-            if (object.honor != null)
-                message.honor = object.honor | 0;
+            if (object.rank != null)
+                message.rank = object.rank | 0;
             return message;
         };
 
@@ -9464,7 +9464,7 @@ export const Protos = $root.Protos = (() => {
                 object.gender = 0;
                 object.money = 0;
                 object.diamoned = 0;
-                object.honor = 0;
+                object.rank = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -9497,8 +9497,8 @@ export const Protos = $root.Protos = (() => {
                 object.money = message.money;
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 object.diamoned = message.diamoned;
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                object.honor = message.honor;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
             return object;
         };
 
@@ -9640,7 +9640,7 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryLogin.prototype.gender = 0;
         LS2DB_QueryLogin.prototype.money = 0;
         LS2DB_QueryLogin.prototype.diamoned = 0;
-        LS2DB_QueryLogin.prototype.honor = 0;
+        LS2DB_QueryLogin.prototype.rank = 0;
 
         LS2DB_QueryLogin.create = function create(properties) {
             return new LS2DB_QueryLogin(properties);
@@ -9679,8 +9679,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(112).int32(message.money);
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 writer.uint32(120).int32(message.diamoned);
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                writer.uint32(128).int32(message.honor);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(128).int32(message.rank);
             return writer;
         };
 
@@ -9741,7 +9741,7 @@ export const Protos = $root.Protos = (() => {
                     message.diamoned = reader.int32();
                     break;
                 case 16:
-                    message.honor = reader.int32();
+                    message.rank = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -9827,9 +9827,9 @@ export const Protos = $root.Protos = (() => {
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 if (!$util.isInteger(message.diamoned))
                     return "diamoned: integer expected";
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                if (!$util.isInteger(message.honor))
-                    return "honor: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             return null;
         };
 
@@ -9921,8 +9921,8 @@ export const Protos = $root.Protos = (() => {
                 message.money = object.money | 0;
             if (object.diamoned != null)
                 message.diamoned = object.diamoned | 0;
-            if (object.honor != null)
-                message.honor = object.honor | 0;
+            if (object.rank != null)
+                message.rank = object.rank | 0;
             return message;
         };
 
@@ -9950,7 +9950,7 @@ export const Protos = $root.Protos = (() => {
                 object.gender = 0;
                 object.money = 0;
                 object.diamoned = 0;
-                object.honor = 0;
+                object.rank = 0;
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -9985,8 +9985,8 @@ export const Protos = $root.Protos = (() => {
                 object.money = message.money;
             if (message.diamoned != null && message.hasOwnProperty("diamoned"))
                 object.diamoned = message.diamoned;
-            if (message.honor != null && message.hasOwnProperty("honor"))
-                object.honor = message.honor;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
             return object;
         };
 

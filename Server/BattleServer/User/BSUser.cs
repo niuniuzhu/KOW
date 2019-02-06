@@ -16,7 +16,7 @@ namespace BattleServer.User
 		public readonly byte gender;
 		public readonly int money;
 		public readonly int diamoned;
-		public readonly int honor;
+		public readonly int rank;
 
 		/// <summary>
 		/// GC连接的sessionID
@@ -43,7 +43,7 @@ namespace BattleServer.User
 			this.gender = ( byte )playerInfo.Gender;
 			this.money = playerInfo.Money;
 			this.diamoned = playerInfo.Diamoned;
-			this.honor = playerInfo.Honor;
+			this.rank = playerInfo.Rank;
 			this.battle = battle;
 		}
 

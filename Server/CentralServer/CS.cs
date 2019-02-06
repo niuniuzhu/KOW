@@ -121,7 +121,7 @@ namespace CentralServer
 					return s;
 				};
 			};
-
+			this.netSessionMgr.CreateConnector<L2DBSession>( SessionType.ServerC2DB, this.config.dbIP, this.config.dbPort, ProtoType.TCP, 20480, 0 );
 			this.redisWrapper.Connect( this.config.redisIP, this.config.redisPort, this.config.redisPwd );
 
 			return ErrorCode.Success;

@@ -80,6 +80,8 @@ enum MsgID {
 	eCS2GC_BattleEnd = 5307;
 	eCS2GC_BSLose = 5308;
 
+	eCS2DB_UpdateRank = 5400;
+
 	//db
 	eDB2LS_QueryAccountRet = 8000;
 	eDB2LS_QueryLoginRet = 8001;

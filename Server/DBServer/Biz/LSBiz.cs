@@ -3,7 +3,7 @@ using Shared.Net;
 
 namespace DBServer.Biz
 {
-	public class BizProcessor
+	public partial class BizProcessor
 	{
 		public ErrorCode OnLs2DbQueryAccount( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
@@ -67,7 +67,7 @@ namespace DBServer.Biz
 			{
 				//自动注册
 				errorCode = DB.instance.accountDB.SqlExecNonQuery(
-					$"insert account_user( uname,channel,browser,platform,unionID,nickname,avatar,gender,money,diamoned,honor,last_login_time,last_login_ip ) values" +
+					$"insert account_user( uname,channel,browser,platform,unionID,nickname,avatar,gender,money,diamoned,ranking,last_login_time,last_login_ip ) values" +
 					$"(\'{queryLogin.Name}\',{( byte )queryLogin.Channel},{( byte )queryLogin.Browser},{( byte )queryLogin.Platform}," +
 					$"\'{queryLogin.UnionID}\',\'{queryLogin.Nickname}\',\'{queryLogin.Avatar}\',\'{( byte )queryLogin.Gender}\'," +
 					$"{queryLogin.Money},{queryLogin.Diamoned},{queryLogin.Rank}," +

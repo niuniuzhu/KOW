@@ -38,7 +38,7 @@ namespace Protos {
             "Q2hyb21lEAASCwoHRmlyZWZveBABEgoKBlNhZmFpchACEggKBEVkZ2UQAxIG",
             "CgJJRRAEIlsKCkdfVXNlckluZm8SDQoFZ2NOSUQYASABKAQSEAoIbmlja25h",
             "bWUYAiABKAkSDgoGYXZhdGFyGAMgASgJEg4KBmdlbmRlchgEIAEoBRIMCgRy",
-            "YW5rGAUgASgFKv8KCgVNc2dJRBIMCghVbmRlZmluZRAAEg4KCmVHX0Fza1Bp",
+            "YW5rGAUgASgFKpcLCgVNc2dJRBIMCghVbmRlZmluZRAAEg4KCmVHX0Fza1Bp",
             "bmcQChIRCg1lR19Bc2tQaW5nUmV0EAsSFwoSZUdDMkxTX0Fza1JlZ2lzdGVy",
             "EOgHEhQKD2VHQzJMU19Bc2tMb2dpbhDpBxIZChRlR0MyTFNfQXNrU21hcnRM",
             "b2dpbhDqBxIWChFlR0MyTFNfQXNrV1hMb2dpbhDrBxIZChRlR0MyTENfVXBk",
@@ -67,9 +67,10 @@ namespace Protos {
             "EhkKFGVDUzJHQ19CZWdpbk1hdGNoUmV0ELQpEhYKEWVDUzJHQ19NYXRjaFN0",
             "YXRlELcpEhYKEWVDUzJHQ19BZGRUb01hdGNoELgpEhsKFmVDUzJHQ19SZW1v",
             "dmVGcm9tTWF0Y2gQuSkSFwoSZUNTMkdDX0VudGVyQmF0dGxlELopEhUKEGVD",
-            "UzJHQ19CYXR0bGVFbmQQuykSEgoNZUNTMkdDX0JTTG9zZRC8KRIbChZlREIy",
-            "TFNfUXVlcnlBY2NvdW50UmV0EMA+EhkKFGVEQjJMU19RdWVyeUxvZ2luUmV0",
-            "EME+EhMKDmVEQjJMU19FeGVjUmV0EMI+YgZwcm90bzM="));
+            "UzJHQ19CYXR0bGVFbmQQuykSEgoNZUNTMkdDX0JTTG9zZRC8KRIWChFlQ1My",
+            "REJfVXBkYXRlUmFuaxCYKhIbChZlREIyTFNfUXVlcnlBY2NvdW50UmV0EMA+",
+            "EhkKFGVEQjJMU19RdWVyeUxvZ2luUmV0EME+EhMKDmVEQjJMU19FeGVjUmV0",
+            "EMI+YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
@@ -156,6 +157,7 @@ namespace Protos {
     [pbr::OriginalName("eCS2GC_EnterBattle")] ECs2GcEnterBattle = 5306,
     [pbr::OriginalName("eCS2GC_BattleEnd")] ECs2GcBattleEnd = 5307,
     [pbr::OriginalName("eCS2GC_BSLose")] ECs2GcBslose = 5308,
+    [pbr::OriginalName("eCS2DB_UpdateRank")] ECs2DbUpdateRank = 5400,
     /// <summary>
     ///db
     /// </summary>

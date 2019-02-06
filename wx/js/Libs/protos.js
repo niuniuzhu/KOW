@@ -1066,6 +1066,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[5306] = "eCS2GC_EnterBattle"] = 5306;
         values[valuesById[5307] = "eCS2GC_BattleEnd"] = 5307;
         values[valuesById[5308] = "eCS2GC_BSLose"] = 5308;
+        values[valuesById[5400] = "eCS2DB_UpdateRank"] = 5400;
         values[valuesById[8000] = "eDB2LS_QueryAccountRet"] = 8000;
         values[valuesById[8001] = "eDB2LS_QueryLoginRet"] = 8001;
         values[valuesById[8002] = "eDB2LS_ExecRet"] = 8002;
@@ -3140,6 +3141,176 @@ export const Protos = $root.Protos = (() => {
         };
 
         return CS2BS_BattleEndRet;
+    })();
+
+    Protos.CS2DB_UpdateRank = (function() {
+
+        function CS2DB_UpdateRank(properties) {
+            this.ukeys = [];
+            this.ranks = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2DB_UpdateRank.prototype.opts = null;
+        CS2DB_UpdateRank.prototype.ukeys = $util.emptyArray;
+        CS2DB_UpdateRank.prototype.ranks = $util.emptyArray;
+
+        CS2DB_UpdateRank.create = function create(properties) {
+            return new CS2DB_UpdateRank(properties);
+        };
+
+        CS2DB_UpdateRank.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.ukeys != null && message.ukeys.length) {
+                writer.uint32(18).fork();
+                for (let i = 0; i < message.ukeys.length; ++i)
+                    writer.uint32(message.ukeys[i]);
+                writer.ldelim();
+            }
+            if (message.ranks != null && message.ranks.length) {
+                writer.uint32(26).fork();
+                for (let i = 0; i < message.ranks.length; ++i)
+                    writer.int32(message.ranks[i]);
+                writer.ldelim();
+            }
+            return writer;
+        };
+
+        CS2DB_UpdateRank.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2DB_UpdateRank.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2DB_UpdateRank();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    if (!(message.ukeys && message.ukeys.length))
+                        message.ukeys = [];
+                    if ((tag & 7) === 2) {
+                        let end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.ukeys.push(reader.uint32());
+                    } else
+                        message.ukeys.push(reader.uint32());
+                    break;
+                case 3:
+                    if (!(message.ranks && message.ranks.length))
+                        message.ranks = [];
+                    if ((tag & 7) === 2) {
+                        let end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.ranks.push(reader.int32());
+                    } else
+                        message.ranks.push(reader.int32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2DB_UpdateRank.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2DB_UpdateRank.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.ukeys != null && message.hasOwnProperty("ukeys")) {
+                if (!Array.isArray(message.ukeys))
+                    return "ukeys: array expected";
+                for (let i = 0; i < message.ukeys.length; ++i)
+                    if (!$util.isInteger(message.ukeys[i]))
+                        return "ukeys: integer[] expected";
+            }
+            if (message.ranks != null && message.hasOwnProperty("ranks")) {
+                if (!Array.isArray(message.ranks))
+                    return "ranks: array expected";
+                for (let i = 0; i < message.ranks.length; ++i)
+                    if (!$util.isInteger(message.ranks[i]))
+                        return "ranks: integer[] expected";
+            }
+            return null;
+        };
+
+        CS2DB_UpdateRank.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2DB_UpdateRank)
+                return object;
+            let message = new $root.Protos.CS2DB_UpdateRank();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2DB_UpdateRank.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.ukeys) {
+                if (!Array.isArray(object.ukeys))
+                    throw TypeError(".Protos.CS2DB_UpdateRank.ukeys: array expected");
+                message.ukeys = [];
+                for (let i = 0; i < object.ukeys.length; ++i)
+                    message.ukeys[i] = object.ukeys[i] >>> 0;
+            }
+            if (object.ranks) {
+                if (!Array.isArray(object.ranks))
+                    throw TypeError(".Protos.CS2DB_UpdateRank.ranks: array expected");
+                message.ranks = [];
+                for (let i = 0; i < object.ranks.length; ++i)
+                    message.ranks[i] = object.ranks[i] | 0;
+            }
+            return message;
+        };
+
+        CS2DB_UpdateRank.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.arrays || options.defaults) {
+                object.ukeys = [];
+                object.ranks = [];
+            }
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.ukeys && message.ukeys.length) {
+                object.ukeys = [];
+                for (let j = 0; j < message.ukeys.length; ++j)
+                    object.ukeys[j] = message.ukeys[j];
+            }
+            if (message.ranks && message.ranks.length) {
+                object.ranks = [];
+                for (let j = 0; j < message.ranks.length; ++j)
+                    object.ranks[j] = message.ranks[j];
+            }
+            return object;
+        };
+
+        CS2DB_UpdateRank.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2DB_UpdateRank;
     })();
 
     Protos.CS2GC_BeginMatchRet = (function() {

@@ -237,6 +237,7 @@ export namespace Protos {
         eCS2GC_EnterBattle = 5306,
         eCS2GC_BattleEnd = 5307,
         eCS2GC_BSLose = 5308,
+        eCS2DB_UpdateRank = 5400,
         eDB2LS_QueryAccountRet = 8000,
         eDB2LS_QueryLoginRet = 8001,
         eDB2LS_ExecRet = 8002
@@ -612,6 +613,28 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.CS2BS_BattleEndRet;
         public static toObject(message: Protos.CS2BS_BattleEndRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface ICS2DB_UpdateRank {
+        opts?: (Protos.IMsgOpts|null);
+        ukeys?: (number[]|null);
+        ranks?: (number[]|null);
+    }
+
+    class CS2DB_UpdateRank implements ICS2DB_UpdateRank {
+        constructor(properties?: Protos.ICS2DB_UpdateRank);
+        public opts?: (Protos.IMsgOpts|null);
+        public ukeys: number[];
+        public ranks: number[];
+        public static create(properties?: Protos.ICS2DB_UpdateRank): Protos.CS2DB_UpdateRank;
+        public static encode(message: Protos.ICS2DB_UpdateRank, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2DB_UpdateRank, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2DB_UpdateRank;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2DB_UpdateRank;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2DB_UpdateRank;
+        public static toObject(message: Protos.CS2DB_UpdateRank, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

@@ -5,6 +5,7 @@
 		Undefine,
 		ServerL2CS,
 		ServerL2DB,
+		ServerC2DB,
 		ServerG2CS,
 		ServerB2CS,
 		ServerGC,

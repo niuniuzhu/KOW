@@ -9,6 +9,8 @@ namespace CentralServer
 		public int lsPort;
 		public int gsPort;
 		public int bsPort;
+		public string dbIP;
+		public int dbPort;
 		public int shellPort;
 		public int maxGSNum;
 		public string redisIP;
@@ -24,6 +26,8 @@ namespace CentralServer
 			this.lsPort = json.GetInt( "lsPort" );
 			this.gsPort = json.GetInt( "gsPort" );
 			this.bsPort = json.GetInt( "bsPort" );
+			this.dbIP = json.GetString( "dbIP" );
+			this.dbPort = json.GetInt( "dbPort" );
 			this.shellPort = json.GetInt( "shellPort" );
 			this.maxGSNum = json.GetInt( "maxGSNum" );
 			this.redisIP = json.GetString( "redisIP" );
@@ -39,6 +43,8 @@ namespace CentralServer
 			this.lsPort = opts.lsPort;
 			this.gsPort = opts.gsPort;
 			this.bsPort = opts.bsPort;
+			this.dbIP = opts.dbIP;
+			this.dbPort = opts.dbPort;
 			this.shellPort = opts.shellPort;
 			this.maxGSNum = opts.maxGSNum;
 			this.redisIP = opts.redisIP;

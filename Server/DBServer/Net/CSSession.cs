@@ -9,6 +9,7 @@ namespace DBServer.Net
 	{
 		protected CSSession( uint id, ProtoType type, X509Certificate2 certificate ) : base( id, type, certificate )
 		{
+			this.RegMsgHandler( Protos.MsgID.ECs2DbUpdateRank, DB.instance.bizProcessor.OnCs2DbUpdateRank );
 		}
 
 		protected override void OnEstablish()

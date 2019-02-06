@@ -74,18 +74,30 @@ namespace CentralServer.Biz
 		public ErrorCode OnBs2CsBattleEnd( NetSessionBase session, Google.Protobuf.IMessage message )
 		{
 			Protos.BS2CS_BattleEnd battleEnd = ( Protos.BS2CS_BattleEnd )message;
-			//通知客户端战场结束
-			Protos.CS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_CS2GC_BattleEnd();
 			//评分
 			Dictionary<int, int> ratings = this.ComputeElorating( battleEnd.Infos );
+
+			//数据库
+			Protos.CS2DB_UpdateRank request = ProtoCreator.Q_CS2DB_UpdateRank();
 			foreach ( var kv in battleEnd.Infos )
 			{
+				Protos.BS2CS_BattleEndInfo info = kv.Value;
 				CSUser user = CS.instance.battleStaging.GetUser( kv.Key );
+				request.Ukeys.Add( user.ukey );
+				request.Ranks.Add( ratings[info.Team] + user.rank );
+			}
+			CS.instance.netSessionMgr.Send( SessionType.ServerC2DB, request );
+
+			//通知客户端战场结束
+			Protos.CS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_CS2GC_BattleEnd();
+			foreach ( var kv in battleEnd.Infos )
+			{
 				Protos.BS2CS_BattleEndInfo info = kv.Value;
 				gcBattleEnd.Result = ( Protos.CS2GC_BattleEnd.Types.Result )info.Result;
 				gcBattleEnd.Rank = ratings[info.Team];
+
+				CSUser user = CS.instance.battleStaging.GetUser( kv.Key );
 				CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
-				//todo 记录到数据库
 			}
 
 			//移除指定BS里指定战场里的所有玩家
@@ -143,13 +155,13 @@ namespace CentralServer.Biz
 			var teamToAvgHonor = new Dictionary<int, int>();
 			foreach ( var kv in teamToInfos )
 			{
-				int honor = 0;
+				int rank = 0;
 				List<CSUser> users = teamToUser[kv.Key];
 				int count = users.Count;
 				for ( int i = 0; i < count; i++ )
-					honor += users[i].rank;
-				honor /= count;
-				teamToAvgHonor[kv.Key] = honor;
+					rank += users[i].rank;
+				rank /= count;
+				teamToAvgHonor[kv.Key] = rank;
 			}
 			//计算每个队伍的得分
 			var teamToHonor = new Dictionary<int, int>();

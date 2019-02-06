@@ -56,6 +56,18 @@ namespace CentralServer
 			HelpText = "Battle server port." )]
 		public int bsPort { get; set; }
 
+		[Option( "db_ip",
+			Default = "127.0.0.1",
+			SetName = "bysetting",
+			HelpText = "IPAddress of db server to connect." )]
+		public string dbIP { get; set; }
+
+		[Option( "db_port",
+			Default = 20001,
+			SetName = "bysetting",
+			HelpText = "Port of db server." )]
+		public int dbPort { get; set; }
+
 		[Option( "shell_port",
 			Default = 50001,
 			SetName = "bysetting",

@@ -1,0 +1,10 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+
+message CS2DB_UpdateRank {
+	MsgOpts opts = 1;
+	repeated uint32 ukeys = 2;
+	repeated int32 ranks = 3;
+}

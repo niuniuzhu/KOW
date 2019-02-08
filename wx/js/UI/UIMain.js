@@ -2,7 +2,6 @@ import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 export class UIMain {
-    get root() { return this._root; }
     constructor() {
         fairygui.UIPackage.addPackage("res/ui/main");
         this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
@@ -15,6 +14,7 @@ export class UIMain {
         this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
         this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
     }
+    get root() { return this._root; }
     Dispose() {
         this._root.dispose();
     }
@@ -26,6 +26,9 @@ export class UIMain {
         if (userInfo != null) {
             this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
             this._root.getChild("nickname").asTextField.text = userInfo.nickname;
+            const r = userInfo.rank - userInfo.rank % UIMain.RANK_STEP;
+            this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
+            this._root.getChild("rank").asTextField.text = "" + userInfo.rank;
         }
     }
     Exit() {
@@ -56,3 +59,4 @@ export class UIMain {
         UIAlert.Show(message, callback);
     }
 }
+UIMain.RANK_STEP = 400;

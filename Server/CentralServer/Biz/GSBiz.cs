@@ -63,7 +63,7 @@ namespace CentralServer.Biz
 			gsInfo.port = GSInfoRecv.Port;
 			gsInfo.password = GSInfoRecv.Password;
 			gsInfo.state = ( GSInfo.State )GSInfoRecv.State;
-			Logger.Log( $"report from GS:{gsInfo}" );
+			//Logger.Log( $"report from GS:{gsInfo}" );
 
 			//转发到LS
 			Protos.CS2LS_GSInfo nGSInfo = ProtoCreator.Q_CS2LS_GSInfo();
@@ -103,8 +103,7 @@ namespace CentralServer.Biz
 					Nickname = user.nickname,
 					Avatar = user.avatar,
 					Gender = user.gender,
-					//todo
-					Rank = 0
+					Rank = user.rank
 				};
 				//检查玩家是否在战场
 				if ( user.isInBattle )

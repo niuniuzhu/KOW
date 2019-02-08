@@ -195,7 +195,7 @@ namespace CentralServer.Biz
 				return 16;
 			if ( rank >= 2400 )
 				return 32;
-			if ( rank >= 2100 )
+			if ( rank >= 2000 )
 				return 48;
 			return 64;
 		}

@@ -42,7 +42,7 @@ namespace DBServer.Biz
 					queryLoginRet.Gender = dataReader.GetByte( "gender" );
 					queryLoginRet.Money = dataReader.GetInt32( "money" );
 					queryLoginRet.Diamoned = dataReader.GetInt32( "diamoned" );
-					queryLoginRet.Rank = dataReader.GetInt32( "rank" );
+					queryLoginRet.Rank = dataReader.GetInt32( "ranking" );
 
 					ErrorCode QueryError = ErrorCode.Success;
 					if ( queryLogin.VertPwd )

@@ -34,21 +34,45 @@ namespace CentralServer.Match
 		{
 			this.mode = json.GetByte( "mode" );
 			Hashtable[] gradingDefs = json.GetMapArray( "gradings" );
-			int count = gradingDefs.Length;
-			for ( int i = 0; i < count; i++ )
+			//是否每个分段定义
+			if ( gradingDefs != null )
 			{
-				Hashtable gradingDef = gradingDefs[i];
-				int from = gradingDef.GetInt( "from" );
-				int to = gradingDef.GetInt( "to" );
-				int expire = gradingDef.GetInt( "expire" );
-				int maxExtends = gradingDef.GetInt( "max_extends" );
-				Grading grading = new Grading( this, @from, to, expire, maxExtends );
-				if ( i > 0 )
+				int count = gradingDefs.Length;
+				for ( int i = 0; i < count; i++ )
 				{
-					grading.prev = this._gradings[i - 1];
-					grading.prev.next = grading;
+					Hashtable gradingDef = gradingDefs[i];
+					int @from = gradingDef.GetInt( "from" );
+					int to = gradingDef.GetInt( "to" );
+					int expire = gradingDef.GetInt( "expire" );
+					int searchRange = gradingDef.GetInt( "search_range" );
+					Grading grading = new Grading( this, @from, to, expire, searchRange );
+					if ( i > 0 )
+					{
+						grading.prev = this._gradings[i - 1];
+						grading.prev.next = grading;
+					}
+					this._gradings.Add( grading );
 				}
-				this._gradings.Add( grading );
+			}
+			else
+			{
+				int gradingStep = json.GetInt( "grading_step" );
+				int gradingCount = json.GetInt( "grading_count" );
+				int searchRange = json.GetInt( "search_range" );
+				int expire = json.GetInt( "expire" );
+				for ( int i = 0, k = 0; i < gradingCount; i++ )
+				{
+					int @from = k;
+					k += gradingStep;
+					int to = k - 1;
+					Grading grading = new Grading( this, @from, to, expire, searchRange );
+					if ( i > 0 )
+					{
+						grading.prev = this._gradings[i - 1];
+						grading.prev.next = grading;
+					}
+					this._gradings.Add( grading );
+				}
 			}
 		}
 

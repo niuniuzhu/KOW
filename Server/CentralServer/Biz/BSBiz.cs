@@ -169,7 +169,7 @@ namespace CentralServer.Biz
 			{
 				double we = 0;
 				//基数
-				const double K = 64;
+				double K = AdaptationK( kv.Value );
 				//计算与其他队伍的逻辑斯谛分布和
 				foreach ( var kv2 in teamToAvgHonor )
 				{
@@ -185,6 +185,19 @@ namespace CentralServer.Biz
 				teamToHonor[kv.Key] = ( int )rn;
 			}
 			return teamToHonor;
+		}
+
+		private static double AdaptationK( int rank )
+		{
+			if ( rank >= 3200 )
+				return 8;
+			if ( rank >= 2800 )
+				return 16;
+			if ( rank >= 2400 )
+				return 32;
+			if ( rank >= 2100 )
+				return 48;
+			return 64;
 		}
 
 		/// <summary>

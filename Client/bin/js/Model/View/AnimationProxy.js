@@ -15,6 +15,8 @@ define(["require", "exports", "../../Consts", "../../RC/Math/Vec2", "../../RC/Ut
             super();
             this._aniSettings = new Map();
             this._playingID = -1;
+            this.touchable = false;
+            this.setSize(0, 0);
             const def = CDefs_1.CDefs.GetModel(id);
             const model = Consts_1.Consts.ASSETS_MODEL_PREFIX + id;
             const aniDefs = Hashtable_1.Hashtable.GetMapArray(def, "animations");

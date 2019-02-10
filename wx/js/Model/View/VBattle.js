@@ -85,6 +85,8 @@ export class VBattle {
         fairygui.UIPackage.addPackage("res/ui/assets");
         this._root = fairygui.UIPackage.createObject("assets", Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
         this._root.touchable = false;
+        this._root.displayObject.cacheAs = "bitmap";
+        this._root.displayObject.staticCache = true;
         Global.graphic.mapRoot.addChild(this._root);
     }
     Update(dt) {

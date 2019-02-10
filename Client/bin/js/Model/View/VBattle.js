@@ -74,6 +74,8 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             fairygui.UIPackage.addPackage("res/ui/assets");
             this._root = fairygui.UIPackage.createObject("assets", Consts_1.Consts.ASSETS_MAP_PREFIX + battleInfo.mapID).asCom;
             this._root.touchable = false;
+            this._root.displayObject.cacheAs = "bitmap";
+            this._root.displayObject.staticCache = true;
             Global_1.Global.graphic.mapRoot.addChild(this._root);
         }
         Update(dt) {

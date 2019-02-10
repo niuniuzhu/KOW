@@ -15,6 +15,8 @@ export class AnimationProxy extends fairygui.GGraph {
         super();
         this._aniSettings = new Map();
         this._playingID = -1;
+        this.touchable = false;
+        this.setSize(0, 0);
         const def = CDefs.GetModel(id);
         const model = Consts.ASSETS_MODEL_PREFIX + id;
         const aniDefs = Hashtable.GetMapArray(def, "animations");

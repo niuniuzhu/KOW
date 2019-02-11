@@ -20,9 +20,9 @@ export class UIBattle {
         this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
         this._root.name = "battle_main";
         this._skillBtn0 = this._root.getChild("n0").asButton;
-        this._skill0Progress = this._skillBtn0.getChild("n3").asCom.getChild("n3").asImage;
+        this._skill0Progress = this._skillBtn0.getChild("n3").asProgress;
         this._skillBtn1 = this._root.getChild("n1").asButton;
-        this._skill1Progress = this._skillBtn1.getChild("n3").asCom.getChild("n3").asImage;
+        this._skill1Progress = this._skillBtn1.getChild("n3").asProgress;
         this._skillBtn0.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn0Press);
         this._skillBtn0.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn0Release);
         this._skillBtn1.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn1Press);
@@ -135,17 +135,13 @@ export class UIBattle {
                     const skill0 = this._skillBtn0.data;
                     this._skillBtn0.getChild("icon").grayed = target.mp < skill0.mpCost;
                     this._skillBtn0.touchable = target.mp >= skill0.mpCost;
-                    if (skill0.mpCost != 0)
-                        this._skill0Progress.fillAmount = target.mp / skill0.mpCost;
-                    else
-                        this._skill0Progress.fillAmount = 1;
+                    this._skill0Progress.max = skill0.mpCost;
+                    this._skill0Progress.value = target.mp;
                     const skill1 = this._skillBtn1.data;
                     this._skillBtn1.getChild("icon").grayed = target.mp < skill1.mpCost;
                     this._skillBtn1.touchable = target.mp >= skill1.mpCost;
-                    if (skill1.mpCost != 0)
-                        this._skill1Progress.fillAmount = target.mp / skill1.mpCost;
-                    else
-                        this._skill1Progress.fillAmount = 1;
+                    this._skill1Progress.max = skill1.mpCost;
+                    this._skill1Progress.value = target.mp;
                 }
                 break;
             case EAttr.GLADIATOR_TIME:

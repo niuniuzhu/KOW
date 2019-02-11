@@ -266,6 +266,7 @@ export class VBattle {
 		this._idToChampion.set(champion.rid.toString(), champion);
 		if (champion.self) {
 			this._camera.lookAt = champion;
+			this._camera.UpdatePos();
 		}
 		return champion;
 	}

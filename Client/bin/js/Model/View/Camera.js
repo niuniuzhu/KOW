@@ -2,8 +2,21 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Camera {
+        constructor() {
+            this.smooth = 0.005;
+        }
         get width() { return fairygui.GRoot.inst.width; }
         get height() { return fairygui.GRoot.inst.height; }
+        UpdatePos() {
+            let x = -this.lookAt.position.x;
+            let y = -this.lookAt.position.y;
+            x = MathUtils_1.MathUtils.Max(x, this._bounds.xMin + this.width * 0.5);
+            y = MathUtils_1.MathUtils.Max(y, this._bounds.yMin + this.height * 0.5);
+            x = MathUtils_1.MathUtils.Min(x, this._bounds.xMax - this.width * 0.5);
+            y = MathUtils_1.MathUtils.Min(y, this._bounds.yMax - this.height * 0.5);
+            Global_1.Global.graphic.battleRoot.x = x;
+            Global_1.Global.graphic.battleRoot.y = y;
+        }
         Update(dt) {
             if (this.lookAt == null)
                 return;
@@ -13,8 +26,6 @@ define(["require", "exports", "../../Global", "../../RC/Math/MathUtils", "../../
             y = MathUtils_1.MathUtils.Max(y, this._bounds.yMin + this.height * 0.5);
             x = MathUtils_1.MathUtils.Min(x, this._bounds.xMax - this.width * 0.5);
             y = MathUtils_1.MathUtils.Min(y, this._bounds.yMax - this.height * 0.5);
-            Global_1.Global.graphic.battleRoot.x = x;
-            Global_1.Global.graphic.battleRoot.y = y;
         }
         SetBounds(width, height) {
             this._bounds = new Rect_1.Rect(-MathUtils_1.MathUtils.Floor(width * 0.5), -MathUtils_1.MathUtils.Floor(height * 0.5), width, height);

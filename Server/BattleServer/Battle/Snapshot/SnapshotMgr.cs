@@ -42,14 +42,24 @@ namespace BattleServer.Battle.Snapshot
 		/// <param name="frame">指定帧数下的快照,-1表示最近的快照</param>
 		public FrameSnapshot Get( int frame = -1 )
 		{
+			if ( this._frameToSnapshot.Count == 0 )
+				return null;
+			var values = this._frameToSnapshot.Values;
 			if ( frame < 0 )
 			{
-				IList<FrameSnapshot> values = this._frameToSnapshot.Values;
 				int count = values.Count;
 				return count == 0 ? null : values[count - 1];
 			}
-			this._frameToSnapshot.TryGetValue( frame, out FrameSnapshot snapshot );
-			return snapshot;
+			//找到最接近指定帧数的快照
+			var keys = this._frameToSnapshot.Keys;
+			int c2 = keys.Count, i = 0;
+			for ( ; i < c2; i++ )
+			{
+				int key = keys[i];
+				if ( key > frame )
+					break;
+			}
+			return values[i - 1];
 		}
 
 		/// <summary>

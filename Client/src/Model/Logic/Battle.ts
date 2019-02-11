@@ -707,6 +707,7 @@ export class Battle implements ISnapshotable {
 		for (let i = 0; i < frameActionGroup.numActions; i++) {
 			const frameAction = frameActionGroup.Get(i);
 			const champion = this.GetChampion(frameAction.gcNID);
+			//todo champion may be null?????
 			champion.FrameAction(frameAction);
 		}
 	}

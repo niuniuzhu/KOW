@@ -94,14 +94,14 @@ namespace BattleServer.Battle
 		/// <summary>
 		/// 获取指定范围内的帧行为集合
 		/// </summary>
-		/// <param name="from">开始帧数</param>
+		/// <param name="from">开始帧数(包括该帧)</param>
 		/// <param name="to">结束帧数, -1表示最新帧数</param>
 		/// <param name="ret">需要填充的消息</param>
 		internal void FillHistoryToMessage( int from, int to, Protos.BS2GC_RequestFrameActionsRet ret )
 		{
 			from = from < 0 ? 0 : from;
 			to = to < 0 ? this._battle.frame : ( to > this._battle.frame ? this._battle.frame : to );
-			int fromIndex = from / this._battle.keyframeStep + 1;
+			int fromIndex = from / this._battle.keyframeStep;
 			int toIndex = to / this._battle.keyframeStep;
 			IList<int> keys = this._histroy.Keys;
 			IList<Google.Protobuf.ByteString> values = this._histroy.Values;

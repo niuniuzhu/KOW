@@ -27,7 +27,10 @@
 		{
 			this._battle = null;
 		}
-
+		
+		/// <summary>
+		/// 异步调用
+		/// </summary>
 		public void Update( long elasped )
 		{
 			long delta = elasped - this._timestamp;

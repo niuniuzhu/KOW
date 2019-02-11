@@ -51,6 +51,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
                 const request = ProtoHelper_1.ProtoCreator.Q_GC2BS_RequestFrameActions();
                 request.from = this._lBattle.frame;
                 request.to = serverFrame;
+                Logger_1.Logger.Log(`request frame from ${request.from} to ${request.to}`);
                 Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestFrameActions, request, msg => {
                     if (this._destroied)
                         return;
@@ -74,9 +75,11 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/Connector",
             Global_1.Global.connector.SendToBS(protos_1.Protos.GC2BS_RequestSnapshot, requestState, msg => {
                 const ret = msg;
                 if (ret.snapshot.length == 0) {
+                    Logger_1.Logger.Log("no snapshot");
                     callback(false);
                 }
                 else {
+                    Logger_1.Logger.Log(`snapshot reqframe:${ret.reqFrame}, curframe:${ret.curFrame}`);
                     this._lBattle.HandleSnapShot(ret);
                     callback(true);
                 }

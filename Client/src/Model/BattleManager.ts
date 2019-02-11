@@ -116,8 +116,10 @@ export class BattleManager {
 			}
 			//请求帧行为历史记录
 			const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
+			//注意快照的提交在执行指令之前,因此在恢复快照后,当前帧的帧行为依然需要请求
 			request.from = this._lBattle.frame;
 			request.to = serverFrame;
+			Logger.Log(`request frame from ${request.from} to ${request.to}`);
 			Global.connector.SendToBS(Protos.GC2BS_RequestFrameActions, request, msg => {
 				if (this._destroied)
 					return;
@@ -152,9 +154,11 @@ export class BattleManager {
 		Global.connector.SendToBS(Protos.GC2BS_RequestSnapshot, requestState, msg => {
 			const ret = <Protos.BS2GC_RequestSnapshotRet>msg;
 			if (ret.snapshot.length == 0) {//没有数据,说明没有快照
+				Logger.Log("no snapshot");
 				callback(false);
 			}
 			else {
+				Logger.Log(`snapshot reqframe:${ret.reqFrame}, curframe:${ret.curFrame}`);
 				this._lBattle.HandleSnapShot(ret);
 				callback(true);
 			}

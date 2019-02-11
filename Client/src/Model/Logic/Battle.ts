@@ -161,7 +161,6 @@ export class Battle implements ISnapshotable {
 	public Update(dt: number): void {
 		//追帧
 		this.Chase(this._frameActionGroups);
-
 		this._realElapsed = FMathUtils.Add(this._realElapsed, dt);
 		if (this.frame < this._nextKeyFrame) {
 			this._logicElapsed = FMathUtils.Add(this._logicElapsed, dt);
@@ -472,6 +471,7 @@ export class Battle implements ISnapshotable {
 	public Chase(frameActionGroups: FrameActionGroup[]): void {
 		for (const frameActionGroup of frameActionGroups) {
 			let length = frameActionGroup.frame - this.frame;
+			//注意,先执行逻辑再执行指令
 			while (length > 0) {
 				this.UpdateLogic(this._msPerFrame);
 				--length;

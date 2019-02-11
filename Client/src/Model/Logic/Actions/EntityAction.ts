@@ -99,7 +99,7 @@ export class EntityAction extends AbstractAction implements ISnapshotable {
 	}
 
 	public Dump(): string {
-		let str = "\t========";
+		let str = "\t========\n";
 		str += `\ttype:${this.type}\n`;
 		str += `\tistriggered:${this._isTriggered}\n`;
 		return str;

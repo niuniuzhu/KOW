@@ -26,6 +26,8 @@ export class Camera {
         y = MathUtils.Max(y, this._bounds.yMin + this.height * 0.5);
         x = MathUtils.Min(x, this._bounds.xMax - this.width * 0.5);
         y = MathUtils.Min(y, this._bounds.yMax - this.height * 0.5);
+        Global.graphic.battleRoot.x = MathUtils.Lerp(Global.graphic.battleRoot.x, x, dt * this.smooth);
+        Global.graphic.battleRoot.y = MathUtils.Lerp(Global.graphic.battleRoot.y, y, dt * this.smooth);
     }
     SetBounds(width, height) {
         this._bounds = new Rect(-MathUtils.Floor(width * 0.5), -MathUtils.Floor(height * 0.5), width, height);

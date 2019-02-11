@@ -61,7 +61,7 @@ define(["require", "exports", "../../../RC/Framework/Actions/AbstractAction", ".
             this._isTriggered = reader.bool();
         }
         Dump() {
-            let str = "\t========";
+            let str = "\t========\n";
             str += `\ttype:${this.type}\n`;
             str += `\tistriggered:${this._isTriggered}\n`;
             return str;

@@ -40,8 +40,8 @@ export class Camera {
 		y = MathUtils.Min(y, this._bounds.yMax - this.height * 0.5);
 
 		//缓冲移动
-		// Global.graphic.battleRoot.x = MathUtils.Lerp(Global.graphic.battleRoot.x, x, dt * this.smooth);
-		// Global.graphic.battleRoot.y = MathUtils.Lerp(Global.graphic.battleRoot.y, y, dt * this.smooth);
+		Global.graphic.battleRoot.x = MathUtils.Lerp(Global.graphic.battleRoot.x, x, dt * this.smooth);
+		Global.graphic.battleRoot.y = MathUtils.Lerp(Global.graphic.battleRoot.y, y, dt * this.smooth);
 	}
 
 	/**

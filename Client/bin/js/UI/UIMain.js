@@ -26,8 +26,8 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
             if (userInfo != null) {
                 this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
                 this._root.getChild("nickname").asTextField.text = userInfo.nickname;
-                let r = userInfo.rank < UIMain.RANK_START ? UIMain.RANK_START : userInfo.rank;
-                r = userInfo.rank - userInfo.rank % UIMain.RANK_STEP;
+                let r = userInfo.rank - userInfo.rank % UIMain.RANK_STEP;
+                r = r < UIMain.RANK_START ? UIMain.RANK_START : r;
                 this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
                 this._root.getChild("rank").asTextField.text = "" + (userInfo.rank < 0 ? 0 : userInfo.rank);
             }

@@ -60,7 +60,7 @@ export class EntityAction extends AbstractAction {
         this._isTriggered = reader.bool();
     }
     Dump() {
-        let str = "\t========";
+        let str = "\t========\n";
         str += `\ttype:${this.type}\n`;
         str += `\tistriggered:${this._isTriggered}\n`;
         return str;

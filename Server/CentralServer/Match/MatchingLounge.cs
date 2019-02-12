@@ -71,9 +71,7 @@ namespace CentralServer.Match
 
 		internal MatchState GetState()
 		{
-			MatchState state = new MatchState();
-			state.numTeam = this._numTeam;
-			state.numUserPerTeam = this._numUserPerTeam;
+			MatchState state = new MatchState( this._numTeam, this._numUserPerTeam );
 			state.SetUsers( this._users );
 			return state;
 		}

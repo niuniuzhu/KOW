@@ -3,31 +3,35 @@
     "instances": [
         {
             "mode": 17,
-            "grading_step": 50,
             "grading_count": 100,
-            "expire": 3000,
-            "search_range": 2
+            "extend_range": 50,
+            "extend_interval": 3000,
+            "max_extend_count": 2,
+            "check_room_interval": 1000
         },
         {
             "mode": 33,
-            "grading_step": 50,
             "grading_count": 100,
-            "expire": 3000,
-            "search_range": 2
+            "extend_range": 50,
+            "extend_interval": 3000,
+            "max_extend_count": 2,
+            "check_room_interval": 1000
         },
         {
             "mode": 34,
-            "grading_step": 50,
             "grading_count": 100,
-            "expire": 3000,
-            "search_range": 2
+            "extend_range": 50,
+            "extend_interval": 3000,
+            "max_extend_count": 2,
+            "check_room_interval": 1000
         },
         {
             "mode": 65,
-            "grading_step": 50,
             "grading_count": 100,
-            "expire": 3000,
-            "search_range": 2
+            "extend_range": 50,
+            "extend_interval": 3000,
+            "max_extend_count": 2,
+            "check_room_interval": 1000
         }
     ]
 }

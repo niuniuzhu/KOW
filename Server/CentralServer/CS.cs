@@ -1,5 +1,6 @@
 ﻿using CentralServer.Biz;
 using CentralServer.Match;
+using CentralServer.Match2;
 using CentralServer.Net;
 using CentralServer.User;
 using Core.Misc;
@@ -40,7 +41,7 @@ namespace CentralServer
 		/// <summary>
 		/// 匹配器
 		/// </summary>
-		public readonly MatchManager matchMgr = new MatchManager();
+		public readonly MatchManager2 matchMgr = new MatchManager2();
 		/// <summary>
 		/// 战场暂存区
 		/// </summary>

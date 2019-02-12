@@ -1,23 +1,20 @@
-﻿using CentralServer.Match;
+﻿using CentralServer.Match2;
 using Core.Misc;
 using MatchingTest.Properties;
 using Shared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace MatchingTest
 {
 	static class Program
 	{
-		private static readonly List<MatchSystem> _matchingSystems = new List<MatchSystem>();
+		private static readonly List<MatchSystem2> _matchingSystems = new List<MatchSystem2>();
 		private static InputHandler _inputHandler;
 		private static readonly Random _rnd = new Random();
-		private static IEnumerator _enumerator;
 
 		static void Main( string[] args )
 		{
@@ -25,7 +22,7 @@ namespace MatchingTest
 			Hashtable[] instanceDefs = json.GetMapArray( "instances" );
 			foreach ( Hashtable instanceDef in instanceDefs )
 			{
-				MatchSystem matchSystem = new MatchSystem();
+				MatchSystem2 matchSystem = new MatchSystem2();
 				matchSystem.InitFromDefs( instanceDef );
 				_matchingSystems.Add( matchSystem );
 			}
@@ -34,21 +31,11 @@ namespace MatchingTest
 			{
 				switch ( t )
 				{
-					case MatchUserEvent.Type.AddToGrading:
-						break;
-					case MatchUserEvent.Type.RemoveFromGrading:
-						break;
-					case MatchUserEvent.Type.AddToLounge:
-						break;
-					case MatchUserEvent.Type.RemoveFromLounge:
-						break;
-					case MatchUserEvent.Type.MatchSuccess:
-						Console.WriteLine( s.Dump() );
+					case MatchEvent.Type.MatchSuccess:
+						//Console.WriteLine( s.Dump() );
 						break;
 				}
 			};
-
-			Task.Factory.StartNew( Update, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default );
 
 			_inputHandler = new InputHandler { cmdHandler = HandleInput };
 			_inputHandler.Start();
@@ -58,7 +45,6 @@ namespace MatchingTest
 
 		private static void MainLoop()
 		{
-			_enumerator = TestC();
 			while ( true )
 			{
 				//bool r;
@@ -67,38 +53,12 @@ namespace MatchingTest
 				//	_enumerator = TestC();
 				//}
 				//Console.WriteLine( "ok" );
-				_inputHandler.ProcessInput();
-				Thread.Sleep( 10 );
-			}
-		}
-
-		private static IEnumerator TestC()
-		{
-			Stopwatch sw = new Stopwatch();
-			sw.Start();
-			double a = 100;
-			for ( int i = 0; i < 10000000; i++ )
-			{
-				a = Math.Sin( a );
-				if ( sw.ElapsedMilliseconds > 100 )
-				{
-					sw.Restart();
-					Console.WriteLine( $"yield:{i}" );
-					yield return i;
-				}
-			}
-			Console.WriteLine( "done" );
-		}
-
-		private static void Update()
-		{
-			while ( true )
-			{
-				foreach ( MatchSystem matchingSystem in _matchingSystems )
+				foreach ( MatchSystem2 matchingSystem in _matchingSystems )
 				{
 					matchingSystem.Update( 20 );
-					Thread.Sleep( 20 );
 				}
+				_inputHandler.ProcessInput();
+				Thread.Sleep( 20 );
 			}
 		}
 
@@ -108,25 +68,31 @@ namespace MatchingTest
 			switch ( pairs[0] )
 			{
 				case "a":
-					_matchingSystems[0].CreateUser( GuidHash.GetUInt64(), int.Parse( pairs[1] ) );
+					{
+						RoomUser user = new RoomUser( GuidHash.GetUInt64(), int.Parse( pairs[1] ) );
+						_matchingSystems[0].Join( user );
+					}
 					break;
 
 				case "d":
 					break;
 
 				case "b":
-					int count = int.Parse( pairs[1] );
-					for ( int i = 0; i < count; i++ )
 					{
-						ulong id = GuidHash.GetUInt64();
-						int rank = _rnd.Next( 0, 150 );
-						Console.WriteLine( $"add id:{id}, rank:{rank}" );
-						_matchingSystems[0].CreateUser( id, rank );
+						int count = int.Parse( pairs[1] );
+						for ( int i = 0; i < count; i++ )
+						{
+							ulong id = GuidHash.GetUInt64();
+							int rank = _rnd.Next( 0, 1000 );
+							//Console.WriteLine( $"add id:{id}, rank:{rank}" );
+							RoomUser user = new RoomUser( id, rank );
+							_matchingSystems[0].Join( user );
+						}
 					}
 					break;
 
 				case "x":
-					foreach ( MatchSystem matchingSystem in _matchingSystems )
+					foreach ( MatchSystem2 matchingSystem in _matchingSystems )
 					{
 						Console.WriteLine( matchingSystem.Dump() );
 					}

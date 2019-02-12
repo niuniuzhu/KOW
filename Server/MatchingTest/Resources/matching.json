@@ -1,34 +1,11 @@
 {
-    "max_elapse_per_update": 50,
     "instances": [
         {
             "mode": 33,
-            "gradings": [
-                {
-                    "from": 0,
-                    "to": 49,
-                    "expire": 3000,
-                    "max_extends": 2
-                },
-                {
-                    "from": 50,
-                    "to": 99,
-                    "expire": 3000,
-                    "max_extends": 1
-                },
-                {
-                    "from": 100,
-                    "to": 149,
-                    "expire": 3000,
-                    "max_extends": 1
-                },
-                {
-                    "from": 150,
-                    "to": 199,
-                    "expire": 3000,
-                    "max_extends": 1
-                }
-            ]
+            "extend_range": 50,
+            "extend_interval": 3000,
+            "max_extend_count": 2,
+            "check_room_interval": 1000
         }
     ]
 }

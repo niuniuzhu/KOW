@@ -43,8 +43,8 @@ namespace CentralServer.Match
 					Hashtable gradingDef = gradingDefs[i];
 					int @from = gradingDef.GetInt( "from" );
 					int to = gradingDef.GetInt( "to" );
-					int expire = gradingDef.GetInt( "expire" );
-					int searchRange = gradingDef.GetInt( "search_range" );
+					int expire = gradingDef.GetInt( "extend_interval" );
+					int searchRange = gradingDef.GetInt( "max_extend_count" );
 					Grading grading = new Grading( this, @from, to, expire, searchRange );
 					if ( i > 0 )
 					{
@@ -56,10 +56,10 @@ namespace CentralServer.Match
 			}
 			else
 			{
-				int gradingStep = json.GetInt( "grading_step" );
+				int gradingStep = json.GetInt( "extend_range" );
 				int gradingCount = json.GetInt( "grading_count" );
-				int searchRange = json.GetInt( "search_range" );
-				int expire = json.GetInt( "expire" );
+				int searchRange = json.GetInt( "max_extend_count" );
+				int expire = json.GetInt( "extend_interval" );
 				for ( int i = 0, k = 0; i < gradingCount; i++ )
 				{
 					int @from = k;

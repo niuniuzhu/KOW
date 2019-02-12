@@ -158,7 +158,7 @@ namespace CentralServer.Biz
 				{
 					actorID = request.ActorID
 				};
-				response.Result = CS.instance.matchMgr.CreateUser( request.Mode, user, @params ) ?
+				response.Result = CS.instance.matchMgr.Join( request.Mode, user, @params ) ?
 									  Protos.CS2GC_BeginMatchRet.Types.EResult.Success :
 									  Protos.CS2GC_BeginMatchRet.Types.EResult.Failed;
 			}
@@ -173,7 +173,7 @@ namespace CentralServer.Biz
 			ulong gcNID = request.Opts.Transid;
 			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 
-			if ( !CS.instance.matchMgr.RemoveUser( user ) )
+			if ( !CS.instance.matchMgr.Leave( user ) )
 				return ErrorCode.Failed;
 
 			return ErrorCode.Success;

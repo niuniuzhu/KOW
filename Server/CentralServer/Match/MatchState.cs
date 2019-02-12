@@ -5,25 +5,19 @@ namespace CentralServer.Match
 {
 	public class MatchState
 	{
-		internal int numTeam;
-		internal int numUserPerTeam;
 		internal readonly MatchUser[] users = new MatchUser[64];
 		internal readonly MatchUser[][] tUsers = new MatchUser[8][];
 
-		public MatchState()
+		public readonly int numTeam;
+		public readonly int numUserPerTeam;
+
+		public MatchState( int numTeam, int numUserPerTeam )
 		{
+			this.numTeam = numTeam;
+			this.numUserPerTeam = numUserPerTeam;
 			int count = this.tUsers.Length;
 			for ( int i = 0; i < count; i++ )
 				this.tUsers[i] = new MatchUser[8];
-		}
-
-		public void Clear()
-		{
-			Array.Clear( this.users, 0, this.numTeam * this.numUserPerTeam );
-			for ( int i = 0; i < this.numTeam; i++ )
-				Array.Clear( this.tUsers[i], 0, this.numUserPerTeam );
-			this.numTeam = 0;
-			this.numUserPerTeam = 0;
 		}
 
 		internal void SetUsers( MatchUser[] users )

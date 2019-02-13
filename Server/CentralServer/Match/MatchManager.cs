@@ -156,10 +156,14 @@ namespace CentralServer.Match
 			}
 			if ( !this._matchingSystems.TryGetValue( mode2, out MatchSystem matchingSystem ) )
 				return false;
+
 			RoomUser roomUser = new RoomUser( user.gcNID, user.rank ) { userdata = matchParams };
-			if ( !matchingSystem.Join( roomUser ) )
-				return false;
 			this._userIDToRoomUser[user.gcNID] = roomUser;
+			if ( !matchingSystem.Join( roomUser ) )
+			{
+				this._userIDToRoomUser.Remove( user.gcNID );
+				return false;
+			}
 			return true;
 		}
 

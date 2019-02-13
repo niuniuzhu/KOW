@@ -86,10 +86,13 @@ namespace CentralServer.Match
 			}
 			if ( !room.AddUser( user ) )
 				return false;
+
 			this.eventHandler( MatchEvent.Type.AddToRoom, user, null );
 			this.eventHandler( MatchEvent.Type.RoomInfo, null, room.GetRoomInfo() );
+
 			if ( room.isFull )
 				this.FullRoom( room );
+
 			return true;
 		}
 

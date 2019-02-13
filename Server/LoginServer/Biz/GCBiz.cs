@@ -132,6 +132,7 @@ namespace LoginServer.Biz
 			//若查询失败则自动注册
 			Protos.LS2DB_QueryLogin queryLogin = ProtoCreator.Q_LS2DB_QueryLogin();
 			queryLogin.Name = login.Id;
+			queryLogin.Nickname = login.Id;
 			queryLogin.VertPwd = false;
 			queryLogin.Time = TimeUtils.utcTime;
 			queryLogin.Ip = remote;

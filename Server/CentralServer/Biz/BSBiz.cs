@@ -89,7 +89,7 @@ namespace CentralServer.Biz
 				gcBattleEnd.GMoney = info.Result == Protos.BS2CS_BattleEndInfo.Types.Result.Win ? ( int )( 0.01f * user.rank ) : 0;
 				gcBattleEnd.GDiamoned = 0;
 				gcBattleEnd.GRank = ratings[info.Team];
-				gcBattleEnd.GExp = 10;
+				gcBattleEnd.GExp = info.Result == Protos.BS2CS_BattleEndInfo.Types.Result.Win ? 10u : 0u;
 
 				user.money += gcBattleEnd.GMoney;
 				user.diamoned += gcBattleEnd.GDiamoned;

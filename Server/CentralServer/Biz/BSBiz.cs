@@ -194,10 +194,10 @@ namespace CentralServer.Biz
 			if ( rank >= 2800 )
 				return 16;
 			if ( rank >= 2400 )
-				return 32;
+				return 24;
 			if ( rank >= 2000 )
-				return 48;
-			return 64;
+				return 32;
+			return 40;
 		}
 
 		/// <summary>

@@ -6,7 +6,7 @@
             "grading_count": 100,
             "extend_range": 50,
             "extend_interval": 3000,
-            "max_extend_count": 2,
+            "max_extend_count": 3,
             "check_room_interval": 1000
         },
         {
@@ -14,7 +14,7 @@
             "grading_count": 100,
             "extend_range": 50,
             "extend_interval": 3000,
-            "max_extend_count": 2,
+            "max_extend_count": 3,
             "check_room_interval": 1000
         },
         {
@@ -22,7 +22,7 @@
             "grading_count": 100,
             "extend_range": 50,
             "extend_interval": 3000,
-            "max_extend_count": 2,
+            "max_extend_count": 3,
             "check_room_interval": 1000
         },
         {
@@ -30,7 +30,7 @@
             "grading_count": 100,
             "extend_range": 50,
             "extend_interval": 3000,
-            "max_extend_count": 2,
+            "max_extend_count": 3,
             "check_room_interval": 1000
         }
     ]

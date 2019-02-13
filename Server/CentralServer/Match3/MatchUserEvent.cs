@@ -1,25 +1,27 @@
-﻿namespace CentralServer.Match2
+﻿namespace CentralServer.Match3
 {
-	public class MatchEvent
+	public class MatchUserEvent
 	{
 		public enum Type
 		{
-			AddToRoom,
-			RemoveFromRoom,
+			AddToGrading,
+			RemoveFromGrading,
+			AddToLounge,
+			RemoveFromLounge,
 			MatchSuccess
 		}
 
 		public readonly Type type;
-		public readonly RoomUser user;
-		public readonly RoomInfo state;
+		public readonly MatchUser user;
+		public readonly MatchState state;
 
-		public MatchEvent( Type type, RoomUser user )
+		public MatchUserEvent( Type type, MatchUser user )
 		{
 			this.type = type;
 			this.user = user;
 		}
 
-		public MatchEvent( Type type, RoomUser user, RoomInfo state )
+		public MatchUserEvent( Type type, MatchUser user, MatchState state )
 		{
 			this.type = type;
 			this.user = user;

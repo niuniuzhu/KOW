@@ -97,7 +97,7 @@ export class UIBattle {
         this.GestureOff();
         Global.graphic.uiRoot.addChild(this._endBattle);
         const result = e.any0;
-        const honer = e.v1;
+        const rank = e.v1;
         const callback = e.callback;
         let com;
         switch (result) {
@@ -117,7 +117,8 @@ export class UIBattle {
             callback();
             confirmBtn.offClick(this, callback);
         });
-        com.getChild("n7").asTextField.text = "" + honer;
+        com.getChild("n7").asTextField.text = "" + rank;
+        Global.sceneManager.main.UpdateRank(rank);
     }
     OnAttrChange(e) {
         const target = e.champion;

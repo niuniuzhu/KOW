@@ -14,6 +14,10 @@ export class MainState extends SceneState {
 		this.__ui = this._ui = Global.uiManager.main;
 	}
 
+	public UpdateRank(delta: number): void {
+		this._ui.UpdateRank(delta);
+	}
+
 	/**
 	 * 请求匹配
 	 */

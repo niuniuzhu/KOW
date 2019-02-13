@@ -12,6 +12,7 @@ import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState2 } from "./GestureState2";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
+import { SceneManager } from "../Scene/SceneManager";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
@@ -137,7 +138,7 @@ export class UIBattle implements IUIModule {
 		Global.graphic.uiRoot.addChild(this._endBattle);
 
 		const result = <Protos.CS2GC_BattleEnd.Result>e.any0;
-		const honer = e.v1;
+		const rank = e.v1;
 		const callback = e.callback;
 		let com: fairygui.GComponent;
 		switch (result) {
@@ -157,7 +158,9 @@ export class UIBattle implements IUIModule {
 			callback();
 			confirmBtn.offClick(this, callback);
 		});
-		com.getChild("n7").asTextField.text = "" + honer;
+		com.getChild("n7").asTextField.text = "" + rank;
+		//更新主界面的分值
+		Global.sceneManager.main.UpdateRank(rank);
 	}
 
 	private OnAttrChange(e: UIEvent): void {

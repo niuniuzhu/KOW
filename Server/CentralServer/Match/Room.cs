@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CentralServer.Match2
+namespace CentralServer.Match
 {
 	public static class RoomPool
 	{
 		private static readonly Dictionary<byte, Queue<Room>> POOL = new Dictionary<byte, Queue<Room>>();
 		private const int INC = 10;
 
-		internal static Room Pop( MatchSystem2 system )
+		internal static Room Pop( MatchSystem system )
 		{
 			Queue<Room> rooms;
 			if ( !POOL.TryGetValue( system.mode, out rooms ) )
@@ -41,7 +41,7 @@ namespace CentralServer.Match2
 		/// <summary>
 		/// 所属系统
 		/// </summary>
-		public MatchSystem2 system { get; }
+		public MatchSystem system { get; }
 		/// <summary>
 		/// 搜索分数下限,开区间
 		/// </summary>
@@ -88,7 +88,7 @@ namespace CentralServer.Match2
 		private int _extendCount;
 		private long _time;
 
-		internal Room( MatchSystem2 system )
+		internal Room( MatchSystem system )
 		{
 			this.system = system;
 			this._users = new RoomUser[this.numTeam * this.numUserPerTeam];
@@ -136,6 +136,8 @@ namespace CentralServer.Match2
 			return true;
 		}
 
+		internal bool RemoveUserAt( int index ) => this.RemoveUser( this._users[index] );
+
 		internal RoomUser GetUserAt( int index ) => this._users[index];
 
 		internal RoomInfo GetRoomInfo()
@@ -151,12 +153,11 @@ namespace CentralServer.Match2
 			if ( this._time >= this.system.extendInterval )
 			{
 				++this._extendCount;
-				this._time = 0;
+				this._time -= this.system.extendInterval;
 				this.@from -= this.system.extendRange;
 				this.to += this.system.extendRange;
 			}
-			else
-				this._time += dt;
+			this._time += dt;
 		}
 
 		public string Dump()

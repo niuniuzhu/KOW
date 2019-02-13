@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace CentralServer.Match
+namespace CentralServer.Match3
 {
 	public class MatchState
 	{

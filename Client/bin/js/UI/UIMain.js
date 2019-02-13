@@ -39,6 +39,10 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
         }
         OnResize(e) {
         }
+        UpdateRank(delta) {
+            const rank = Number.parseInt(this._root.getChild("rank").asTextField.text) + delta;
+            this._root.getChild("rank").asTextField.text = "" + (rank < 0 ? 0 : rank);
+        }
         SetMatchBtnEnable(value) {
             this._matchBtn.enabled = value;
             this._matchBtn2.enabled = value;

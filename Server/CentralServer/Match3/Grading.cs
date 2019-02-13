@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace CentralServer.Match
+namespace CentralServer.Match3
 {
 	public class Grading
 	{
 		/// <summary>
 		/// 所属的匹配系统
 		/// </summary>
-		public MatchSystem system { get; }
+		public MatchSystem3 system { get; }
 		/// <summary>
 		/// 起始分数
 		/// </summary>
@@ -40,7 +40,7 @@ namespace CentralServer.Match
 
 		private readonly Matcher _matcher;
 
-		public Grading( MatchSystem system, int from, int to, long expireTime, int maxExtends )
+		public Grading( MatchSystem3 system, int from, int to, long expireTime, int maxExtends )
 		{
 			this.system = system;
 			this.from = from;

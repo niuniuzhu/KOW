@@ -1,6 +1,6 @@
 ﻿namespace CentralServer.Match
 {
-	public class MatchUser
+	public class RoomUser
 	{
 		/// <summary>
 		/// 玩家ID
@@ -15,15 +15,11 @@
 		/// </summary>
 		public object userdata;
 		/// <summary>
-		/// 所属分段
+		/// 玩家所在房间
 		/// </summary>
-		internal Grading grading;
-		/// <summary>
-		/// 已加入的等候室
-		/// </summary>
-		internal MatchingLounge lounge;
+		internal Room room;
 
-		public MatchUser( ulong id, int rank )
+		public RoomUser( ulong id, int rank )
 		{
 			this.id = id;
 			this.rank = rank;

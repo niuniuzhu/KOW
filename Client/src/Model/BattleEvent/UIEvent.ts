@@ -57,11 +57,11 @@ export class UIEvent extends BaseBattleEvent {
 		this.Invoke(e);
 	}
 
-	public static EndBattle(result: Protos.CS2GC_BattleEnd.Result, honer: number, callback: () => void): void {
+	public static EndBattle(result: Protos.CS2GC_BattleEnd.Result, rank: number, callback: () => void): void {
 		let e = this.Get();
 		e._type = UIEvent.E_END_BATTLE;
 		e.any0 = result;
-		e.v1 = honer;
+		e.v1 = rank;
 		e.callback = callback;
 		this.Invoke(e);
 	}

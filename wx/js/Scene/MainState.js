@@ -9,6 +9,9 @@ export class MainState extends SceneState {
         super(type);
         this.__ui = this._ui = Global.uiManager.main;
     }
+    UpdateRank(delta) {
+        this._ui.UpdateRank(delta);
+    }
     BeginMatch(mode) {
         const beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
         beginMatch.mode = mode;

@@ -1,4 +1,4 @@
-﻿using CentralServer.Match2;
+﻿using CentralServer.Match;
 using Core.Misc;
 using MatchingTest.Properties;
 using Shared;
@@ -12,7 +12,7 @@ namespace MatchingTest
 {
 	static class Program
 	{
-		private static readonly List<MatchSystem2> _matchingSystems = new List<MatchSystem2>();
+		private static readonly List<MatchSystem> _matchingSystems = new List<MatchSystem>();
 		private static InputHandler _inputHandler;
 		private static readonly Random _rnd = new Random();
 
@@ -22,7 +22,7 @@ namespace MatchingTest
 			Hashtable[] instanceDefs = json.GetMapArray( "instances" );
 			foreach ( Hashtable instanceDef in instanceDefs )
 			{
-				MatchSystem2 matchSystem = new MatchSystem2();
+				MatchSystem matchSystem = new MatchSystem();
 				matchSystem.InitFromDefs( instanceDef );
 				_matchingSystems.Add( matchSystem );
 			}
@@ -32,7 +32,7 @@ namespace MatchingTest
 				switch ( t )
 				{
 					case MatchEvent.Type.MatchSuccess:
-						//Console.WriteLine( s.Dump() );
+						Console.WriteLine( "success:" + s.Dump() );
 						break;
 				}
 			};
@@ -53,9 +53,10 @@ namespace MatchingTest
 				//	_enumerator = TestC();
 				//}
 				//Console.WriteLine( "ok" );
-				foreach ( MatchSystem2 matchingSystem in _matchingSystems )
+				foreach ( MatchSystem matchingSystem in _matchingSystems )
 				{
 					matchingSystem.Update( 20 );
+					matchingSystem.CheckRoom();
 				}
 				_inputHandler.ProcessInput();
 				Thread.Sleep( 20 );
@@ -92,7 +93,7 @@ namespace MatchingTest
 					break;
 
 				case "x":
-					foreach ( MatchSystem2 matchingSystem in _matchingSystems )
+					foreach ( MatchSystem matchingSystem in _matchingSystems )
 					{
 						Console.WriteLine( matchingSystem.Dump() );
 					}

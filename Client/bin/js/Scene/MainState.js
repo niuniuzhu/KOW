@@ -6,6 +6,9 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/ProtoHelper
             super(type);
             this.__ui = this._ui = Global_1.Global.uiManager.main;
         }
+        UpdateRank(delta) {
+            this._ui.UpdateRank(delta);
+        }
         BeginMatch(mode) {
             const beginMatch = ProtoHelper_1.ProtoCreator.Q_GC2CS_BeginMatch();
             beginMatch.mode = mode;

@@ -26,12 +26,12 @@ namespace Core.Misc
 
 		public void Update( long dt )
 		{
-			this._currTime += dt;
 			if ( this._currTime >= this._interval )
 			{
 				this._handler?.Invoke( this._count++ );
-				this._currTime = 0;
+				this._currTime -= this._interval;
 			}
+			this._currTime += dt;
 		}
 	}
 }

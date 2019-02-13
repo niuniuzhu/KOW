@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CentralServer.Match
+namespace CentralServer.Match3
 {
 	/// <summary>
 	/// 匹配器

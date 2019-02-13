@@ -5,14 +5,15 @@ import "Global.proto";
 
 message CS2BS_PlayerInfo {
 	uint64 gcNID = 1;//玩家登陆id
-	string nickname = 2;//玩家名字
-	string avatar = 3;
-	int32 gender = 4;
-	int32 money = 5;
-	int32 diamoned = 6;
-	int32 rank = 7;
-	int32 actorID = 8;//角色id
-	int32 team = 9;//所在队伍
+	int32 actorID = 2;//角色id
+	int32 team = 3;//所在队伍
+	string nickname = 4;//玩家名字
+	string avatar = 5;
+	int32 gender = 6;
+	int32 money = 7;
+	int32 diamoned = 8;
+	int32 rank = 9;
+	uint32 exp = 10;
 }
 
 //战场信息

@@ -76,30 +76,44 @@ namespace CentralServer.Biz
 			Protos.BS2CS_BattleEnd battleEnd = ( Protos.BS2CS_BattleEnd )message;
 			//评分
 			Dictionary<int, int> ratings = this.ComputeElorating( battleEnd.Infos );
-
 			//数据库
-			Protos.CS2DB_UpdateRank request = ProtoCreator.Q_CS2DB_UpdateRank();
-			foreach ( var kv in battleEnd.Infos )
-			{
-				Protos.BS2CS_BattleEndInfo info = kv.Value;
-				CSUser user = CS.instance.battleStaging.GetUser( kv.Key );
-				request.Ukeys.Add( user.ukey );
-				request.Ranks.Add( ratings[info.Team] + user.rank );
-			}
-			CS.instance.netSessionMgr.Send( SessionType.ServerC2DB, request );
-
+			Protos.CS2DB_UpdateRank dbRequest = ProtoCreator.Q_CS2DB_UpdateRank();
 			//通知客户端战场结束
 			Protos.CS2GC_BattleEnd gcBattleEnd = ProtoCreator.Q_CS2GC_BattleEnd();
 			foreach ( var kv in battleEnd.Infos )
 			{
+				CSUser user = CS.instance.battleStaging.GetUser( kv.Key );
+
 				Protos.BS2CS_BattleEndInfo info = kv.Value;
 				gcBattleEnd.Result = ( Protos.CS2GC_BattleEnd.Types.Result )info.Result;
-				gcBattleEnd.Rank = ratings[info.Team];
+				gcBattleEnd.GMoney = info.Result == Protos.BS2CS_BattleEndInfo.Types.Result.Win ? ( int )( 0.01f * user.rank ) : 0;
+				gcBattleEnd.GDiamoned = 0;
+				gcBattleEnd.GRank = ratings[info.Team];
+				gcBattleEnd.GExp = 10;
 
-				CSUser user = CS.instance.battleStaging.GetUser( kv.Key );
+				user.money += gcBattleEnd.GMoney;
+				user.diamoned += gcBattleEnd.GDiamoned;
+				user.rank += gcBattleEnd.GRank;
+				user.exp += gcBattleEnd.GExp;
+
+				gcBattleEnd.Money = user.rank;
+				gcBattleEnd.Diamoned = user.diamoned;
+				gcBattleEnd.Rank = user.rank;
+				gcBattleEnd.Exp = user.exp;
+
 				CS.instance.netSessionMgr.Send( user.gsSID, gcBattleEnd, null, Protos.MsgOpts.Types.TransTarget.Gc, user.gcNID );
-			}
 
+				//数据库
+				Protos.CS2DB_Gain gain = new Protos.CS2DB_Gain();
+				gain.Ukey = user.ukey;
+				gain.Money = user.money;
+				gain.Diamoned = user.diamoned;
+				gain.Rank = user.rank;
+				gain.Exp = user.exp;
+				dbRequest.Gains.Add( gain );
+			}
+			//数据库
+			CS.instance.netSessionMgr.Send( SessionType.ServerC2DB, dbRequest );
 			//移除指定BS里指定战场里的所有玩家
 			CS.instance.battleStaging.Remove( session.logicID, battleEnd.Bid );
 
@@ -142,7 +156,6 @@ namespace CentralServer.Biz
 						break;
 				}
 			}
-
 			//把玩家分配到个队伍
 			var teamToUser = new Dictionary<int, List<CSUser>>();
 			foreach ( var kv in battleEndInfos )

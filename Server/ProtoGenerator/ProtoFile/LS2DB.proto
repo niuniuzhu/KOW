@@ -25,6 +25,7 @@ message LS2DB_QueryLogin{
 	int32 money = 14;
 	int32 diamoned = 15;
 	int32 rank = 16;
+	uint32 exp = 17;
 }
 
 message LS2DB_Exec {

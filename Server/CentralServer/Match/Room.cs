@@ -150,10 +150,11 @@ namespace CentralServer.Match
 		{
 			if ( this._extendCount == this.system.maxExtendCount )
 				return;
-			if ( this._time >= this.system.extendInterval )
+			long interval = ( long )( this.system.extendInterval * Math.Pow( this.system.intervalAttenuation, this._extendCount ) );
+			if ( this._time >= interval )
 			{
 				++this._extendCount;
-				this._time -= this.system.extendInterval;
+				this._time -= interval;
 				this.@from -= this.system.extendRange;
 				this.to += this.system.extendRange;
 			}

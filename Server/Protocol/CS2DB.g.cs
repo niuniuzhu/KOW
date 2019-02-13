@@ -24,19 +24,263 @@ namespace Protos {
     static CS2DBReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtDUzJEQi5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iTwoQQ1MyREJf",
-            "VXBkYXRlUmFuaxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoF",
-            "dWtleXMYAiADKA0SDQoFcmFua3MYAyADKAViBnByb3RvMw=="));
+            "CgtDUzJEQi5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iVgoKQ1MyREJf",
+            "R2FpbhIMCgR1a2V5GAEgASgNEg0KBW1vbmV5GAIgASgFEhAKCGRpYW1vbmVk",
+            "GAMgASgFEgwKBHJhbmsYBCABKAUSCwoDZXhwGAUgASgNIlQKEENTMkRCX1Vw",
+            "ZGF0ZVJhbmsSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiEKBWdh",
+            "aW5zGAIgAygLMhIuUHJvdG9zLkNTMkRCX0dhaW5iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_UpdateRank), global::Protos.CS2DB_UpdateRank.Parser, new[]{ "Opts", "Ukeys", "Ranks" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_Gain), global::Protos.CS2DB_Gain.Parser, new[]{ "Ukey", "Money", "Diamoned", "Rank", "Exp" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_UpdateRank), global::Protos.CS2DB_UpdateRank.Parser, new[]{ "Opts", "Gains" }, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
+  public sealed partial class CS2DB_Gain : pb::IMessage<CS2DB_Gain> {
+    private static readonly pb::MessageParser<CS2DB_Gain> _parser = new pb::MessageParser<CS2DB_Gain>(() => new CS2DB_Gain());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2DB_Gain> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2DBReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_Gain() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_Gain(CS2DB_Gain other) : this() {
+      ukey_ = other.ukey_;
+      money_ = other.money_;
+      diamoned_ = other.diamoned_;
+      rank_ = other.rank_;
+      exp_ = other.exp_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_Gain Clone() {
+      return new CS2DB_Gain(this);
+    }
+
+    /// <summary>Field number for the "ukey" field.</summary>
+    public const int UkeyFieldNumber = 1;
+    private uint ukey_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Ukey {
+      get { return ukey_; }
+      set {
+        ukey_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "money" field.</summary>
+    public const int MoneyFieldNumber = 2;
+    private int money_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Money {
+      get { return money_; }
+      set {
+        money_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "diamoned" field.</summary>
+    public const int DiamonedFieldNumber = 3;
+    private int diamoned_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Diamoned {
+      get { return diamoned_; }
+      set {
+        diamoned_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "rank" field.</summary>
+    public const int RankFieldNumber = 4;
+    private int rank_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Rank {
+      get { return rank_; }
+      set {
+        rank_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "exp" field.</summary>
+    public const int ExpFieldNumber = 5;
+    private uint exp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Exp {
+      get { return exp_; }
+      set {
+        exp_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2DB_Gain);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2DB_Gain other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Ukey != other.Ukey) return false;
+      if (Money != other.Money) return false;
+      if (Diamoned != other.Diamoned) return false;
+      if (Rank != other.Rank) return false;
+      if (Exp != other.Exp) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Ukey != 0) hash ^= Ukey.GetHashCode();
+      if (Money != 0) hash ^= Money.GetHashCode();
+      if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
+      if (Rank != 0) hash ^= Rank.GetHashCode();
+      if (Exp != 0) hash ^= Exp.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Ukey != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(Ukey);
+      }
+      if (Money != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Money);
+      }
+      if (Diamoned != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Diamoned);
+      }
+      if (Rank != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Rank);
+      }
+      if (Exp != 0) {
+        output.WriteRawTag(40);
+        output.WriteUInt32(Exp);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Ukey != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Ukey);
+      }
+      if (Money != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Money);
+      }
+      if (Diamoned != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Diamoned);
+      }
+      if (Rank != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Rank);
+      }
+      if (Exp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Exp);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2DB_Gain other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Ukey != 0) {
+        Ukey = other.Ukey;
+      }
+      if (other.Money != 0) {
+        Money = other.Money;
+      }
+      if (other.Diamoned != 0) {
+        Diamoned = other.Diamoned;
+      }
+      if (other.Rank != 0) {
+        Rank = other.Rank;
+      }
+      if (other.Exp != 0) {
+        Exp = other.Exp;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Ukey = input.ReadUInt32();
+            break;
+          }
+          case 16: {
+            Money = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            Diamoned = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Rank = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Exp = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   public sealed partial class CS2DB_UpdateRank : pb::IMessage<CS2DB_UpdateRank> {
     private static readonly pb::MessageParser<CS2DB_UpdateRank> _parser = new pb::MessageParser<CS2DB_UpdateRank>(() => new CS2DB_UpdateRank());
     private pb::UnknownFieldSet _unknownFields;
@@ -45,7 +289,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2DBReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Protos.CS2DBReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -63,8 +307,7 @@ namespace Protos {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CS2DB_UpdateRank(CS2DB_UpdateRank other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
-      ukeys_ = other.ukeys_.Clone();
-      ranks_ = other.ranks_.Clone();
+      gains_ = other.gains_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -84,24 +327,14 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "ukeys" field.</summary>
-    public const int UkeysFieldNumber = 2;
-    private static readonly pb::FieldCodec<uint> _repeated_ukeys_codec
-        = pb::FieldCodec.ForUInt32(18);
-    private readonly pbc::RepeatedField<uint> ukeys_ = new pbc::RepeatedField<uint>();
+    /// <summary>Field number for the "gains" field.</summary>
+    public const int GainsFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::Protos.CS2DB_Gain> _repeated_gains_codec
+        = pb::FieldCodec.ForMessage(18, global::Protos.CS2DB_Gain.Parser);
+    private readonly pbc::RepeatedField<global::Protos.CS2DB_Gain> gains_ = new pbc::RepeatedField<global::Protos.CS2DB_Gain>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<uint> Ukeys {
-      get { return ukeys_; }
-    }
-
-    /// <summary>Field number for the "ranks" field.</summary>
-    public const int RanksFieldNumber = 3;
-    private static readonly pb::FieldCodec<int> _repeated_ranks_codec
-        = pb::FieldCodec.ForInt32(26);
-    private readonly pbc::RepeatedField<int> ranks_ = new pbc::RepeatedField<int>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<int> Ranks {
-      get { return ranks_; }
+    public pbc::RepeatedField<global::Protos.CS2DB_Gain> Gains {
+      get { return gains_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -118,8 +351,7 @@ namespace Protos {
         return true;
       }
       if (!object.Equals(Opts, other.Opts)) return false;
-      if(!ukeys_.Equals(other.ukeys_)) return false;
-      if(!ranks_.Equals(other.ranks_)) return false;
+      if(!gains_.Equals(other.gains_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -127,8 +359,7 @@ namespace Protos {
     public override int GetHashCode() {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
-      hash ^= ukeys_.GetHashCode();
-      hash ^= ranks_.GetHashCode();
+      hash ^= gains_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -146,8 +377,7 @@ namespace Protos {
         output.WriteRawTag(10);
         output.WriteMessage(Opts);
       }
-      ukeys_.WriteTo(output, _repeated_ukeys_codec);
-      ranks_.WriteTo(output, _repeated_ranks_codec);
+      gains_.WriteTo(output, _repeated_gains_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -159,8 +389,7 @@ namespace Protos {
       if (opts_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
-      size += ukeys_.CalculateSize(_repeated_ukeys_codec);
-      size += ranks_.CalculateSize(_repeated_ranks_codec);
+      size += gains_.CalculateSize(_repeated_gains_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -178,8 +407,7 @@ namespace Protos {
         }
         Opts.MergeFrom(other.Opts);
       }
-      ukeys_.Add(other.ukeys_);
-      ranks_.Add(other.ranks_);
+      gains_.Add(other.gains_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -198,14 +426,8 @@ namespace Protos {
             input.ReadMessage(opts_);
             break;
           }
-          case 18:
-          case 16: {
-            ukeys_.AddEntriesFrom(input, _repeated_ukeys_codec);
-            break;
-          }
-          case 26:
-          case 24: {
-            ranks_.AddEntriesFrom(input, _repeated_ranks_codec);
+          case 18: {
+            gains_.AddEntriesFrom(input, _repeated_gains_codec);
             break;
           }
         }

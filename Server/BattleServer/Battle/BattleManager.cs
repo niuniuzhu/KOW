@@ -106,9 +106,6 @@ namespace BattleServer.Battle
 				{
 					Result = ( Protos.BS2CS_BattleEndInfo.Types.Result )champion.result,
 					Team = champion.team,
-					Money = champion.user.money,
-					Diamoned = champion.user.diamoned,
-					Rank = champion.user.rank,
 					Damage = champion.damage,
 					Hurt = champion.hurt,
 					Heal = champion.heal,

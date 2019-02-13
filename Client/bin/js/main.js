@@ -14,7 +14,6 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
             Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
             Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
             Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
-            laya.utils.Stat.show(0, 0);
             this.ShowLogo();
         }
         ShowLogo() {

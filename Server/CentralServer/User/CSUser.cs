@@ -84,15 +84,19 @@ namespace CentralServer.User
 		/// <summary>
 		/// 金币
 		/// </summary>
-		public int money { get; private set; }
+		public int money { get; set; }
 		/// <summary>
 		/// 钻石
 		/// </summary>
-		public int diamoned { get; private set; }
+		public int diamoned { get; set; }
 		/// <summary>
-		/// 荣誉
+		/// 积分
 		/// </summary>
-		public int rank { get; private set; }
+		public int rank { get; set; }
+		/// <summary>
+		/// 经验值
+		/// </summary>
+		public uint exp { get; set; }
 
 		/// <summary>
 		/// 发送消息
@@ -118,6 +122,7 @@ namespace CentralServer.User
 			this.money = gcLogin.Money;
 			this.diamoned = gcLogin.Diamoned;
 			this.rank = gcLogin.Rank;
+			this.exp = gcLogin.Exp;
 		}
 
 		/// <summary>

@@ -28,36 +28,39 @@ namespace Protos {
             "X0JlZ2luTWF0Y2hSZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRz",
             "EjMKBnJlc3VsdBgCIAEoDjIjLlByb3Rvcy5DUzJHQ19CZWdpbk1hdGNoUmV0",
             "LkVSZXN1bHQiNAoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVkEAES",
-            "EAoMVXNlckluQmF0dGxlEAIijwEKEENTMkdDX1BsYXllckluZm8SDQoFdmFp",
-            "bGQYASABKAgSDQoFZ2NOSUQYAiABKAQSEAoIbmlja25hbWUYAyABKAkSDgoG",
-            "YXZhdGFyGAQgASgJEg4KBmdlbmRlchgFIAEoBRIMCgRyYW5rGAYgASgFEg8K",
-            "B2FjdG9ySUQYByABKAUSDAoEdGVhbRgIIAEoBSJgChBDUzJHQ19NYXRjaFN0",
-            "YXRlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxItCgtwbGF5ZXJJ",
-            "bmZvcxgCIAMoCzIYLlByb3Rvcy5DUzJHQ19QbGF5ZXJJbmZvIjEKEENTMkdD",
-            "X0FkZFRvTWF0Y2gSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzIjYK",
-            "FUNTMkdDX1JlbW92ZUZyb21NYXRjaBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
-            "Lk1zZ09wdHMi2AEKEUNTMkdDX0VudGVyQmF0dGxlEh0KBG9wdHMYASABKAsy",
-            "Dy5Qcm90b3MuTXNnT3B0cxINCgVnY05JRBgCIAEoBBIKCgJpcBgDIAEoCRIM",
-            "CgRwb3J0GAQgASgFEjAKBnJlc3VsdBgFIAEoDjIgLlByb3Rvcy5DUzJHQ19F",
-            "bnRlckJhdHRsZS5SZXN1bHQiSQoGUmVzdWx0EgsKB1N1Y2Nlc3MQABIOCgpC",
-            "U05vdEZvdW5kEAESCgoGQlNMb3N0EAISFgoSQmF0dGxlQ3JlYXRlRmFpbGVk",
-            "EAMiLQoMQ1MyR0NfQlNMb3NlEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNn",
-            "T3B0cyK2AQoPQ1MyR0NfQmF0dGxlRW5kEh0KBG9wdHMYASABKAsyDy5Qcm90",
-            "b3MuTXNnT3B0cxIuCgZyZXN1bHQYAiABKA4yHi5Qcm90b3MuQ1MyR0NfQmF0",
-            "dGxlRW5kLlJlc3VsdBIMCgRyYW5rGAMgASgFEg0KBW1vbmV5GAQgASgFEhAK",
-            "CGRpYW1vbmVkGAUgASgFIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3EAES",
-            "CAoETG9zZRACYgZwcm90bzM="));
+            "EAoMVXNlckluQmF0dGxlEAIivQEKEENTMkdDX1BsYXllckluZm8SDQoFdmFp",
+            "bGQYASABKAgSDQoFZ2NOSUQYAiABKAQSDwoHYWN0b3JJRBgDIAEoBRIMCgR0",
+            "ZWFtGAQgASgFEhAKCG5pY2tuYW1lGAUgASgJEg4KBmF2YXRhchgGIAEoCRIO",
+            "CgZnZW5kZXIYByABKAUSDQoFbW9uZXkYCCABKAUSEAoIZGlhbW9uZWQYCSAB",
+            "KAUSDAoEcmFuaxgKIAEoBRILCgNleHAYCyABKA0iYAoQQ1MyR0NfTWF0Y2hT",
+            "dGF0ZRIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSLQoLcGxheWVy",
+            "SW5mb3MYAiADKAsyGC5Qcm90b3MuQ1MyR0NfUGxheWVySW5mbyIxChBDUzJH",
+            "Q19BZGRUb01hdGNoEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cyI2",
+            "ChVDUzJHQ19SZW1vdmVGcm9tTWF0Y2gSHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
+            "cy5Nc2dPcHRzItgBChFDUzJHQ19FbnRlckJhdHRsZRIdCgRvcHRzGAEgASgL",
+            "Mg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NOSUQYAiABKAQSCgoCaXAYAyABKAkS",
+            "DAoEcG9ydBgEIAEoBRIwCgZyZXN1bHQYBSABKA4yIC5Qcm90b3MuQ1MyR0Nf",
+            "RW50ZXJCYXR0bGUuUmVzdWx0IkkKBlJlc3VsdBILCgdTdWNjZXNzEAASDgoK",
+            "QlNOb3RGb3VuZBABEgoKBkJTTG9zdBACEhYKEkJhdHRsZUNyZWF0ZUZhaWxl",
+            "ZBADIi0KDENTMkdDX0JTTG9zZRIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1z",
+            "Z09wdHMigwIKD0NTMkdDX0JhdHRsZUVuZBIdCgRvcHRzGAEgASgLMg8uUHJv",
+            "dG9zLk1zZ09wdHMSLgoGcmVzdWx0GAIgASgOMh4uUHJvdG9zLkNTMkdDX0Jh",
+            "dHRsZUVuZC5SZXN1bHQSDQoFZ1JhbmsYAyABKAUSDgoGZ01vbmV5GAQgASgF",
+            "EhEKCWdEaWFtb25lZBgFIAEoBRIMCgRnRXhwGAYgASgNEgwKBHJhbmsYByAB",
+            "KAUSDQoFbW9uZXkYCCABKAUSEAoIZGlhbW9uZWQYCSABKAUSCwoDZXhwGAog",
+            "ASgNIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3EAESCAoETG9zZRACYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result" }, null, new[]{ typeof(global::Protos.CS2GC_BeginMatchRet.Types.EResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerInfo), global::Protos.CS2GC_PlayerInfo.Parser, new[]{ "Vaild", "GcNID", "Nickname", "Avatar", "Gender", "Rank", "ActorID", "Team" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerInfo), global::Protos.CS2GC_PlayerInfo.Parser, new[]{ "Vaild", "GcNID", "ActorID", "Team", "Nickname", "Avatar", "Gender", "Money", "Diamoned", "Rank", "Exp" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_MatchState), global::Protos.CS2GC_MatchState.Parser, new[]{ "Opts", "PlayerInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_AddToMatch), global::Protos.CS2GC_AddToMatch.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RemoveFromMatch), global::Protos.CS2GC_RemoveFromMatch.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_EnterBattle), global::Protos.CS2GC_EnterBattle.Parser, new[]{ "Opts", "GcNID", "Ip", "Port", "Result" }, null, new[]{ typeof(global::Protos.CS2GC_EnterBattle.Types.Result) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BSLose), global::Protos.CS2GC_BSLose.Parser, new[]{ "Opts" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BattleEnd), global::Protos.CS2GC_BattleEnd.Parser, new[]{ "Opts", "Result", "Rank", "Money", "Diamoned" }, null, new[]{ typeof(global::Protos.CS2GC_BattleEnd.Types.Result) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BattleEnd), global::Protos.CS2GC_BattleEnd.Parser, new[]{ "Opts", "Result", "GRank", "GMoney", "GDiamoned", "GExp", "Rank", "Money", "Diamoned", "Exp" }, null, new[]{ typeof(global::Protos.CS2GC_BattleEnd.Types.Result) }, null)
           }));
     }
     #endregion
@@ -270,12 +273,15 @@ namespace Protos {
     public CS2GC_PlayerInfo(CS2GC_PlayerInfo other) : this() {
       vaild_ = other.vaild_;
       gcNID_ = other.gcNID_;
+      actorID_ = other.actorID_;
+      team_ = other.team_;
       nickname_ = other.nickname_;
       avatar_ = other.avatar_;
       gender_ = other.gender_;
+      money_ = other.money_;
+      diamoned_ = other.diamoned_;
       rank_ = other.rank_;
-      actorID_ = other.actorID_;
-      team_ = other.team_;
+      exp_ = other.exp_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -309,55 +315,8 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "nickname" field.</summary>
-    public const int NicknameFieldNumber = 3;
-    private string nickname_ = "";
-    /// <summary>
-    ///玩家名字
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Nickname {
-      get { return nickname_; }
-      set {
-        nickname_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "avatar" field.</summary>
-    public const int AvatarFieldNumber = 4;
-    private string avatar_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Avatar {
-      get { return avatar_; }
-      set {
-        avatar_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "gender" field.</summary>
-    public const int GenderFieldNumber = 5;
-    private int gender_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Gender {
-      get { return gender_; }
-      set {
-        gender_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "rank" field.</summary>
-    public const int RankFieldNumber = 6;
-    private int rank_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Rank {
-      get { return rank_; }
-      set {
-        rank_ = value;
-      }
-    }
-
     /// <summary>Field number for the "actorID" field.</summary>
-    public const int ActorIDFieldNumber = 7;
+    public const int ActorIDFieldNumber = 3;
     private int actorID_;
     /// <summary>
     ///角色id
@@ -371,7 +330,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "team" field.</summary>
-    public const int TeamFieldNumber = 8;
+    public const int TeamFieldNumber = 4;
     private int team_;
     /// <summary>
     ///所在队伍
@@ -381,6 +340,83 @@ namespace Protos {
       get { return team_; }
       set {
         team_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "nickname" field.</summary>
+    public const int NicknameFieldNumber = 5;
+    private string nickname_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Nickname {
+      get { return nickname_; }
+      set {
+        nickname_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "avatar" field.</summary>
+    public const int AvatarFieldNumber = 6;
+    private string avatar_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Avatar {
+      get { return avatar_; }
+      set {
+        avatar_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "gender" field.</summary>
+    public const int GenderFieldNumber = 7;
+    private int gender_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Gender {
+      get { return gender_; }
+      set {
+        gender_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "money" field.</summary>
+    public const int MoneyFieldNumber = 8;
+    private int money_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Money {
+      get { return money_; }
+      set {
+        money_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "diamoned" field.</summary>
+    public const int DiamonedFieldNumber = 9;
+    private int diamoned_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Diamoned {
+      get { return diamoned_; }
+      set {
+        diamoned_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "rank" field.</summary>
+    public const int RankFieldNumber = 10;
+    private int rank_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Rank {
+      get { return rank_; }
+      set {
+        rank_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "exp" field.</summary>
+    public const int ExpFieldNumber = 11;
+    private uint exp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Exp {
+      get { return exp_; }
+      set {
+        exp_ = value;
       }
     }
 
@@ -399,12 +435,15 @@ namespace Protos {
       }
       if (Vaild != other.Vaild) return false;
       if (GcNID != other.GcNID) return false;
+      if (ActorID != other.ActorID) return false;
+      if (Team != other.Team) return false;
       if (Nickname != other.Nickname) return false;
       if (Avatar != other.Avatar) return false;
       if (Gender != other.Gender) return false;
+      if (Money != other.Money) return false;
+      if (Diamoned != other.Diamoned) return false;
       if (Rank != other.Rank) return false;
-      if (ActorID != other.ActorID) return false;
-      if (Team != other.Team) return false;
+      if (Exp != other.Exp) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -413,12 +452,15 @@ namespace Protos {
       int hash = 1;
       if (Vaild != false) hash ^= Vaild.GetHashCode();
       if (GcNID != 0UL) hash ^= GcNID.GetHashCode();
+      if (ActorID != 0) hash ^= ActorID.GetHashCode();
+      if (Team != 0) hash ^= Team.GetHashCode();
       if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
       if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
       if (Gender != 0) hash ^= Gender.GetHashCode();
+      if (Money != 0) hash ^= Money.GetHashCode();
+      if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
       if (Rank != 0) hash ^= Rank.GetHashCode();
-      if (ActorID != 0) hash ^= ActorID.GetHashCode();
-      if (Team != 0) hash ^= Team.GetHashCode();
+      if (Exp != 0) hash ^= Exp.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -440,29 +482,41 @@ namespace Protos {
         output.WriteRawTag(16);
         output.WriteUInt64(GcNID);
       }
-      if (Nickname.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Nickname);
-      }
-      if (Avatar.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(Avatar);
-      }
-      if (Gender != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(Gender);
-      }
-      if (Rank != 0) {
-        output.WriteRawTag(48);
-        output.WriteInt32(Rank);
-      }
       if (ActorID != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(24);
         output.WriteInt32(ActorID);
       }
       if (Team != 0) {
-        output.WriteRawTag(64);
+        output.WriteRawTag(32);
         output.WriteInt32(Team);
+      }
+      if (Nickname.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Nickname);
+      }
+      if (Avatar.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Avatar);
+      }
+      if (Gender != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(Gender);
+      }
+      if (Money != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(Money);
+      }
+      if (Diamoned != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(Diamoned);
+      }
+      if (Rank != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(Rank);
+      }
+      if (Exp != 0) {
+        output.WriteRawTag(88);
+        output.WriteUInt32(Exp);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -478,6 +532,12 @@ namespace Protos {
       if (GcNID != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GcNID);
       }
+      if (ActorID != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
+      }
+      if (Team != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Team);
+      }
       if (Nickname.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Nickname);
       }
@@ -487,14 +547,17 @@ namespace Protos {
       if (Gender != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gender);
       }
+      if (Money != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Money);
+      }
+      if (Diamoned != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Diamoned);
+      }
       if (Rank != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Rank);
       }
-      if (ActorID != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
-      }
-      if (Team != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Team);
+      if (Exp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Exp);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -513,6 +576,12 @@ namespace Protos {
       if (other.GcNID != 0UL) {
         GcNID = other.GcNID;
       }
+      if (other.ActorID != 0) {
+        ActorID = other.ActorID;
+      }
+      if (other.Team != 0) {
+        Team = other.Team;
+      }
       if (other.Nickname.Length != 0) {
         Nickname = other.Nickname;
       }
@@ -522,14 +591,17 @@ namespace Protos {
       if (other.Gender != 0) {
         Gender = other.Gender;
       }
+      if (other.Money != 0) {
+        Money = other.Money;
+      }
+      if (other.Diamoned != 0) {
+        Diamoned = other.Diamoned;
+      }
       if (other.Rank != 0) {
         Rank = other.Rank;
       }
-      if (other.ActorID != 0) {
-        ActorID = other.ActorID;
-      }
-      if (other.Team != 0) {
-        Team = other.Team;
+      if (other.Exp != 0) {
+        Exp = other.Exp;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -550,28 +622,40 @@ namespace Protos {
             GcNID = input.ReadUInt64();
             break;
           }
-          case 26: {
-            Nickname = input.ReadString();
-            break;
-          }
-          case 34: {
-            Avatar = input.ReadString();
-            break;
-          }
-          case 40: {
-            Gender = input.ReadInt32();
-            break;
-          }
-          case 48: {
-            Rank = input.ReadInt32();
-            break;
-          }
-          case 56: {
+          case 24: {
             ActorID = input.ReadInt32();
             break;
           }
-          case 64: {
+          case 32: {
             Team = input.ReadInt32();
+            break;
+          }
+          case 42: {
+            Nickname = input.ReadString();
+            break;
+          }
+          case 50: {
+            Avatar = input.ReadString();
+            break;
+          }
+          case 56: {
+            Gender = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            Money = input.ReadInt32();
+            break;
+          }
+          case 72: {
+            Diamoned = input.ReadInt32();
+            break;
+          }
+          case 80: {
+            Rank = input.ReadInt32();
+            break;
+          }
+          case 88: {
+            Exp = input.ReadUInt32();
             break;
           }
         }
@@ -1461,9 +1545,14 @@ namespace Protos {
     public CS2GC_BattleEnd(CS2GC_BattleEnd other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       result_ = other.result_;
+      gRank_ = other.gRank_;
+      gMoney_ = other.gMoney_;
+      gDiamoned_ = other.gDiamoned_;
+      gExp_ = other.gExp_;
       rank_ = other.rank_;
       money_ = other.money_;
       diamoned_ = other.diamoned_;
+      exp_ = other.exp_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1494,8 +1583,52 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "gRank" field.</summary>
+    public const int GRankFieldNumber = 3;
+    private int gRank_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int GRank {
+      get { return gRank_; }
+      set {
+        gRank_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gMoney" field.</summary>
+    public const int GMoneyFieldNumber = 4;
+    private int gMoney_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int GMoney {
+      get { return gMoney_; }
+      set {
+        gMoney_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gDiamoned" field.</summary>
+    public const int GDiamonedFieldNumber = 5;
+    private int gDiamoned_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int GDiamoned {
+      get { return gDiamoned_; }
+      set {
+        gDiamoned_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gExp" field.</summary>
+    public const int GExpFieldNumber = 6;
+    private uint gExp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint GExp {
+      get { return gExp_; }
+      set {
+        gExp_ = value;
+      }
+    }
+
     /// <summary>Field number for the "rank" field.</summary>
-    public const int RankFieldNumber = 3;
+    public const int RankFieldNumber = 7;
     private int rank_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Rank {
@@ -1506,7 +1639,7 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "money" field.</summary>
-    public const int MoneyFieldNumber = 4;
+    public const int MoneyFieldNumber = 8;
     private int money_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Money {
@@ -1517,13 +1650,24 @@ namespace Protos {
     }
 
     /// <summary>Field number for the "diamoned" field.</summary>
-    public const int DiamonedFieldNumber = 5;
+    public const int DiamonedFieldNumber = 9;
     private int diamoned_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Diamoned {
       get { return diamoned_; }
       set {
         diamoned_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "exp" field.</summary>
+    public const int ExpFieldNumber = 10;
+    private uint exp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Exp {
+      get { return exp_; }
+      set {
+        exp_ = value;
       }
     }
 
@@ -1542,9 +1686,14 @@ namespace Protos {
       }
       if (!object.Equals(Opts, other.Opts)) return false;
       if (Result != other.Result) return false;
+      if (GRank != other.GRank) return false;
+      if (GMoney != other.GMoney) return false;
+      if (GDiamoned != other.GDiamoned) return false;
+      if (GExp != other.GExp) return false;
       if (Rank != other.Rank) return false;
       if (Money != other.Money) return false;
       if (Diamoned != other.Diamoned) return false;
+      if (Exp != other.Exp) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1553,9 +1702,14 @@ namespace Protos {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
+      if (GRank != 0) hash ^= GRank.GetHashCode();
+      if (GMoney != 0) hash ^= GMoney.GetHashCode();
+      if (GDiamoned != 0) hash ^= GDiamoned.GetHashCode();
+      if (GExp != 0) hash ^= GExp.GetHashCode();
       if (Rank != 0) hash ^= Rank.GetHashCode();
       if (Money != 0) hash ^= Money.GetHashCode();
       if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
+      if (Exp != 0) hash ^= Exp.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1577,17 +1731,37 @@ namespace Protos {
         output.WriteRawTag(16);
         output.WriteEnum((int) Result);
       }
-      if (Rank != 0) {
+      if (GRank != 0) {
         output.WriteRawTag(24);
+        output.WriteInt32(GRank);
+      }
+      if (GMoney != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(GMoney);
+      }
+      if (GDiamoned != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(GDiamoned);
+      }
+      if (GExp != 0) {
+        output.WriteRawTag(48);
+        output.WriteUInt32(GExp);
+      }
+      if (Rank != 0) {
+        output.WriteRawTag(56);
         output.WriteInt32(Rank);
       }
       if (Money != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(64);
         output.WriteInt32(Money);
       }
       if (Diamoned != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(72);
         output.WriteInt32(Diamoned);
+      }
+      if (Exp != 0) {
+        output.WriteRawTag(80);
+        output.WriteUInt32(Exp);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1603,6 +1777,18 @@ namespace Protos {
       if (Result != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
+      if (GRank != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GRank);
+      }
+      if (GMoney != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GMoney);
+      }
+      if (GDiamoned != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GDiamoned);
+      }
+      if (GExp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(GExp);
+      }
       if (Rank != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Rank);
       }
@@ -1611,6 +1797,9 @@ namespace Protos {
       }
       if (Diamoned != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Diamoned);
+      }
+      if (Exp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Exp);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1632,6 +1821,18 @@ namespace Protos {
       if (other.Result != 0) {
         Result = other.Result;
       }
+      if (other.GRank != 0) {
+        GRank = other.GRank;
+      }
+      if (other.GMoney != 0) {
+        GMoney = other.GMoney;
+      }
+      if (other.GDiamoned != 0) {
+        GDiamoned = other.GDiamoned;
+      }
+      if (other.GExp != 0) {
+        GExp = other.GExp;
+      }
       if (other.Rank != 0) {
         Rank = other.Rank;
       }
@@ -1640,6 +1841,9 @@ namespace Protos {
       }
       if (other.Diamoned != 0) {
         Diamoned = other.Diamoned;
+      }
+      if (other.Exp != 0) {
+        Exp = other.Exp;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1664,15 +1868,35 @@ namespace Protos {
             break;
           }
           case 24: {
-            Rank = input.ReadInt32();
+            GRank = input.ReadInt32();
             break;
           }
           case 32: {
-            Money = input.ReadInt32();
+            GMoney = input.ReadInt32();
             break;
           }
           case 40: {
+            GDiamoned = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            GExp = input.ReadUInt32();
+            break;
+          }
+          case 56: {
+            Rank = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            Money = input.ReadInt32();
+            break;
+          }
+          case 72: {
             Diamoned = input.ReadInt32();
+            break;
+          }
+          case 80: {
+            Exp = input.ReadUInt32();
             break;
           }
         }

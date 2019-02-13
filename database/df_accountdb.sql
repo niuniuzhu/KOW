@@ -20,6 +20,7 @@ CREATE TABLE `account_user` (
   `money` int DEFAULT 0 NOT NULL,
   `diamoned` int DEFAULT 0 NOT NULL,
   `ranking` int DEFAULT 0 NOT NULL,
+  `exp` int unsigned DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nickname_check` (`nickname`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;

@@ -10,13 +10,14 @@ namespace BattleServer.User
 		/// </summary>
 		public readonly ulong gcNID;
 		public readonly int team;
-		public readonly string nickname;
 		public readonly int actorID;
+		public readonly string nickname;
 		public readonly string avatar;
 		public readonly byte gender;
 		public readonly int money;
 		public readonly int diamoned;
 		public readonly int rank;
+		public readonly uint exp;
 
 		/// <summary>
 		/// GC连接的sessionID
@@ -37,13 +38,14 @@ namespace BattleServer.User
 		{
 			this.gcNID = playerInfo.GcNID;
 			this.team = playerInfo.Team;
+			this.actorID = playerInfo.ActorID;
 			this.nickname = playerInfo.Nickname;
 			this.avatar = playerInfo.Avatar;
-			this.actorID = playerInfo.ActorID;
 			this.gender = ( byte )playerInfo.Gender;
 			this.money = playerInfo.Money;
 			this.diamoned = playerInfo.Diamoned;
 			this.rank = playerInfo.Rank;
+			this.exp = playerInfo.Exp;
 			this.battle = battle;
 		}
 

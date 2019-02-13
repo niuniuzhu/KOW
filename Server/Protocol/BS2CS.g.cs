@@ -32,28 +32,27 @@ namespace Protos {
             "CgZic0luZm8YAiABKAsyDi5Qcm90b3MuQlNJbmZvImkKE0JTMkNTX0JhdHRs",
             "ZUluZm9SZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiYKBnJl",
             "c3VsdBgCIAEoDjIWLlByb3Rvcy5HbG9iYWwuRUNvbW1vbhILCgNiaWQYAyAB",
-            "KA0iwQIKE0JTMkNTX0JhdHRsZUVuZEluZm8SMgoGcmVzdWx0GAEgASgOMiIu",
+            "KA0ikgIKE0JTMkNTX0JhdHRsZUVuZEluZm8SMgoGcmVzdWx0GAEgASgOMiIu",
             "UHJvdG9zLkJTMkNTX0JhdHRsZUVuZEluZm8uUmVzdWx0Eg4KBmRhbWFnZRgC",
             "IAEoDRIMCgRodXJ0GAMgASgNEgwKBGhlYWwYBCABKA0SEgoKb2NjdXB5VGlt",
             "ZRgFIAEoDRISCgpza2lsbDBVc2VkGAYgASgNEhIKCnNraWxsMVVzZWQYByAB",
             "KA0SFAoMc2tpbGwwRGFtYWdlGAggASgNEhQKDHNraWxsMURhbWFnZRgJIAEo",
-            "DRIMCgR0ZWFtGAogASgFEgwKBHJhbmsYCyABKAUSDQoFbW9uZXkYDCABKAUS",
-            "EAoIZGlhbW9uZWQYDSABKAUiJQoGUmVzdWx0EgcKA1dpbhAAEggKBERyYXcQ",
-            "ARIICgRMb3NlEAIiuwEKD0JTMkNTX0JhdHRsZUVuZBIdCgRvcHRzGAEgASgL",
-            "Mg8uUHJvdG9zLk1zZ09wdHMSCwoDYmlkGAIgASgNEjEKBWluZm9zGAMgAygL",
-            "MiIuUHJvdG9zLkJTMkNTX0JhdHRsZUVuZC5JbmZvc0VudHJ5GkkKCkluZm9z",
-            "RW50cnkSCwoDa2V5GAEgASgEEioKBXZhbHVlGAIgASgLMhsuUHJvdG9zLkJT",
-            "MkNTX0JhdHRsZUVuZEluZm86AjgBIpIBCg5CUzJDU19LaWNrVXNlchIdCgRv",
-            "cHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NOSUQYAiABKAQSLQoG",
-            "cmVhc29uGAMgASgOMh0uUHJvdG9zLkJTMkNTX0tpY2tVc2VyLlJlYXNvbiIj",
-            "CgZSZWFzb24SDQoJT3V0T2ZTeW5jEAASCgoGR0NMb3N0EAFiBnByb3RvMw=="));
+            "DRIMCgR0ZWFtGAogASgFIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3EAES",
+            "CAoETG9zZRACIrsBCg9CUzJDU19CYXR0bGVFbmQSHQoEb3B0cxgBIAEoCzIP",
+            "LlByb3Rvcy5Nc2dPcHRzEgsKA2JpZBgCIAEoDRIxCgVpbmZvcxgDIAMoCzIi",
+            "LlByb3Rvcy5CUzJDU19CYXR0bGVFbmQuSW5mb3NFbnRyeRpJCgpJbmZvc0Vu",
+            "dHJ5EgsKA2tleRgBIAEoBBIqCgV2YWx1ZRgCIAEoCzIbLlByb3Rvcy5CUzJD",
+            "U19CYXR0bGVFbmRJbmZvOgI4ASKSAQoOQlMyQ1NfS2lja1VzZXISHQoEb3B0",
+            "cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdjTklEGAIgASgEEi0KBnJl",
+            "YXNvbhgDIAEoDjIdLlByb3Rvcy5CUzJDU19LaWNrVXNlci5SZWFzb24iIwoG",
+            "UmVhc29uEg0KCU91dE9mU3luYxAAEgoKBkdDTG9zdBABYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BSInfo), global::Protos.BSInfo.Parser, new[]{ "Id", "Ip", "Port", "State" }, null, new[]{ typeof(global::Protos.BSInfo.Types.State) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_ReportState), global::Protos.BS2CS_ReportState.Parser, new[]{ "Opts", "BsInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleInfoRet), global::Protos.BS2CS_BattleInfoRet.Parser, new[]{ "Opts", "Result", "Bid" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEndInfo), global::Protos.BS2CS_BattleEndInfo.Parser, new[]{ "Result", "Damage", "Hurt", "Heal", "OccupyTime", "Skill0Used", "Skill1Used", "Skill0Damage", "Skill1Damage", "Team", "Rank", "Money", "Diamoned" }, null, new[]{ typeof(global::Protos.BS2CS_BattleEndInfo.Types.Result) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEndInfo), global::Protos.BS2CS_BattleEndInfo.Parser, new[]{ "Result", "Damage", "Hurt", "Heal", "OccupyTime", "Skill0Used", "Skill1Used", "Skill0Damage", "Skill1Damage", "Team" }, null, new[]{ typeof(global::Protos.BS2CS_BattleEndInfo.Types.Result) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_BattleEnd), global::Protos.BS2CS_BattleEnd.Parser, new[]{ "Opts", "Bid", "Infos" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2CS_KickUser), global::Protos.BS2CS_KickUser.Parser, new[]{ "Opts", "GcNID", "Reason" }, null, new[]{ typeof(global::Protos.BS2CS_KickUser.Types.Reason) }, null)
           }));
@@ -696,9 +695,6 @@ namespace Protos {
       skill0Damage_ = other.skill0Damage_;
       skill1Damage_ = other.skill1Damage_;
       team_ = other.team_;
-      rank_ = other.rank_;
-      money_ = other.money_;
-      diamoned_ = other.diamoned_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -817,39 +813,6 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "rank" field.</summary>
-    public const int RankFieldNumber = 11;
-    private int rank_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Rank {
-      get { return rank_; }
-      set {
-        rank_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "money" field.</summary>
-    public const int MoneyFieldNumber = 12;
-    private int money_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Money {
-      get { return money_; }
-      set {
-        money_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "diamoned" field.</summary>
-    public const int DiamonedFieldNumber = 13;
-    private int diamoned_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Diamoned {
-      get { return diamoned_; }
-      set {
-        diamoned_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as BS2CS_BattleEndInfo);
@@ -873,9 +836,6 @@ namespace Protos {
       if (Skill0Damage != other.Skill0Damage) return false;
       if (Skill1Damage != other.Skill1Damage) return false;
       if (Team != other.Team) return false;
-      if (Rank != other.Rank) return false;
-      if (Money != other.Money) return false;
-      if (Diamoned != other.Diamoned) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -892,9 +852,6 @@ namespace Protos {
       if (Skill0Damage != 0) hash ^= Skill0Damage.GetHashCode();
       if (Skill1Damage != 0) hash ^= Skill1Damage.GetHashCode();
       if (Team != 0) hash ^= Team.GetHashCode();
-      if (Rank != 0) hash ^= Rank.GetHashCode();
-      if (Money != 0) hash ^= Money.GetHashCode();
-      if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -948,18 +905,6 @@ namespace Protos {
         output.WriteRawTag(80);
         output.WriteInt32(Team);
       }
-      if (Rank != 0) {
-        output.WriteRawTag(88);
-        output.WriteInt32(Rank);
-      }
-      if (Money != 0) {
-        output.WriteRawTag(96);
-        output.WriteInt32(Money);
-      }
-      if (Diamoned != 0) {
-        output.WriteRawTag(104);
-        output.WriteInt32(Diamoned);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -997,15 +942,6 @@ namespace Protos {
       }
       if (Team != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Team);
-      }
-      if (Rank != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Rank);
-      }
-      if (Money != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Money);
-      }
-      if (Diamoned != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Diamoned);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1047,15 +983,6 @@ namespace Protos {
       }
       if (other.Team != 0) {
         Team = other.Team;
-      }
-      if (other.Rank != 0) {
-        Rank = other.Rank;
-      }
-      if (other.Money != 0) {
-        Money = other.Money;
-      }
-      if (other.Diamoned != 0) {
-        Diamoned = other.Diamoned;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1106,18 +1033,6 @@ namespace Protos {
           }
           case 80: {
             Team = input.ReadInt32();
-            break;
-          }
-          case 88: {
-            Rank = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            Money = input.ReadInt32();
-            break;
-          }
-          case 104: {
-            Diamoned = input.ReadInt32();
             break;
           }
         }

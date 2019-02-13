@@ -45,9 +45,6 @@ message BS2CS_BattleEndInfo {
 	uint32 skill0Damage = 8;
 	uint32 skill1Damage = 9;
 	int32 team = 10;
-	int32 rank = 11;
-	int32 money = 12;
-	int32 diamoned = 13;
 }
 
 //战场结束

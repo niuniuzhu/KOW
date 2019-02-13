@@ -17,12 +17,15 @@ message CS2GC_BeginMatchRet {
 message CS2GC_PlayerInfo {
 	bool vaild = 1;
 	uint64 gcNID = 2;//玩家网络id
-	string nickname = 3;//玩家名字
-	string avatar = 4;
-	int32 gender = 5;
-	int32 rank = 6;
-	int32 actorID = 7;//角色id
-	int32 team = 8;//所在队伍
+	int32 actorID = 3;//角色id
+	int32 team = 4;//所在队伍
+	string nickname = 5;
+	string avatar = 6;
+	int32 gender = 7;
+	int32 money = 8;
+	int32 diamoned = 9;
+	int32 rank = 10;
+	uint32 exp = 11;
 }
 
 //更新房间信息
@@ -68,7 +71,12 @@ message CS2GC_BattleEnd {
 	}
 	MsgOpts opts = 1;
 	Result result = 2;
-	int32 rank = 3;
-	int32 money = 4;
-	int32 diamoned = 5;
+	int32 gRank = 3;
+	int32 gMoney = 4;
+	int32 gDiamoned = 5;
+	uint32 gExp = 6;
+	int32 rank = 7;
+	int32 money = 8;
+	int32 diamoned = 9;
+	uint32 exp = 10;
 }

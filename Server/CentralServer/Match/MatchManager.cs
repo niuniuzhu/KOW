@@ -105,12 +105,14 @@ namespace CentralServer.Match
 									{
 										Vaild = true,
 										GcNID = user.gcNID,
+										Team = i,
+										ActorID = matchParams.actorID,
 										Nickname = user.nickname,
 										Avatar = user.avatar,
 										Gender = user.gender,
-										Rank = user.rank,
-										Team = i,
-										ActorID = matchParams.actorID
+										Money = user.money,
+										Diamoned = user.diamoned,
+										Rank = user.rank
 									};
 									pMatchState.PlayerInfos.Add( playerInfo );
 								}
@@ -203,12 +205,6 @@ namespace CentralServer.Match
 					Protos.CS2BS_PlayerInfo pi = new Protos.CS2BS_PlayerInfo
 					{
 						GcNID = user.ukey | ( ulong )appropriateBSInfo.lid << 32,
-						Nickname = user.nickname,
-						Avatar = user.avatar,
-						Gender = user.gender,
-						Money = user.money,
-						Diamoned = user.diamoned,
-						Rank = user.rank,
 						ActorID = matchParams.actorID,
 						Team = i
 					};

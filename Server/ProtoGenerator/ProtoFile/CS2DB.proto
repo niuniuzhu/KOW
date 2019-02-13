@@ -3,8 +3,15 @@ package Protos;
 
 import "Global.proto";
 
+message CS2DB_Gain {
+	uint32 ukey = 1;
+	int32 money = 2;
+	int32 diamoned = 3;
+	int32 rank = 4;
+	uint32 exp = 5;
+}
+
 message CS2DB_UpdateRank {
 	MsgOpts opts = 1;
-	repeated uint32 ukeys = 2;
-	repeated int32 ranks = 3;
+	repeated CS2DB_Gain gains = 2;
 }

@@ -60,7 +60,8 @@ namespace BattleServer.Biz
 						Avatar = player.avatar,
 						Gender = player.gender,
 						Rank = player.rank,
-						Team = player.team
+						Team = player.team,
+						Exp = player.exp
 					};
 					loginRet.PlayerInfos.Add( playerInfo );
 				}

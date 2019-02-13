@@ -34,13 +34,16 @@ namespace CentralServer.Match
 		/// </summary>
 		public long extendInterval { get; private set; }
 		/// <summary>
+		/// 搜索间隔的衰减值
+		/// </summary>
+		public float intervalAttenuation { get; private set; }
+		/// <summary>
 		/// 最大扩展次数
 		/// </summary>
 		public int maxExtendCount { get; private set; }
 
 		private readonly List<Room> _rooms = new List<Room>();
-		private long _checkRoomInterval;
-		private long _checkRoomTime;
+		//private long _checkRoomInterval;
 
 		public void InitFromDefs( Hashtable json )
 		{
@@ -49,9 +52,10 @@ namespace CentralServer.Match
 			this.numUserPerTeam = this.mode & 0xf;
 			this.numUsers = this.numTeam * this.numUserPerTeam;
 			this.extendInterval = json.GetLong( "extend_interval" );
+			this.intervalAttenuation = json.GetFloat( "interval_attenuation" );
 			this.extendRange = json.GetInt( "extend_range" );
 			this.maxExtendCount = json.GetInt( "max_extend_count" );
-			this._checkRoomInterval = json.GetLong( "check_room_interval" );
+			//this._checkRoomInterval = json.GetLong( "check_room_interval" );
 		}
 
 		/// <summary>

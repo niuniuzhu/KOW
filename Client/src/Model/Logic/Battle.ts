@@ -32,20 +32,61 @@ export class Battle implements ISnapshotable {
 	private _frame: number = 0;
 	private _random: FRandom;
 
+	/**
+	 * 帧率
+	 */
 	public get frameRate(): number { return this._frameRate; }
+	/**
+	 * 关键帧步长
+	 */
 	public get keyframeStep(): number { return this._keyframeStep; }
+	/**
+	 * 快照步长
+	 */
 	public get snapshotStep(): number { return this._snapshotStep; }
+	/**
+	 * 战场超时时间
+	 */
 	public get timeout(): number { return this._timeout; }
+	/**
+	 * 地图id
+	 */
 	public get mapID(): number { return this._mapID; }
+	/**
+	 * 当前帧数
+	 */
 	public get frame(): number { return this._frame; }
+	/**
+	 * 地图范围
+	 */
 	public get bounds(): FRect { return this._bounds; }
+	/**
+	 * 禁区超时时间
+	 */
 	public get gladiatorTimeout(): number { return this._gladiatorTimeout; }
+	/**
+	 * 禁区中心位置
+	 */
 	public get gladiatorPos(): FVec2 { return this._gladiatorPos; }
+	/**
+	 * 禁区半径
+	 */
 	public get gladiatorRadius(): number { return this._gladiatorRadius; }
+	/**
+	 * 随机器
+	 */
 	public get random(): FRandom { return this._random; }
+	/**
+	 * 数值计算管理器
+	 */
 	public get calcManager(): CalcationManager { return this._calcManager; }
+	/**
+	 * 战场是否结束
+	 */
 	public get finished(): boolean { return this._finished; }
-
+	/**
+	 * 是否在追帧状态
+	 */
 	public chase: boolean = false;
 
 	private _msPerFrame: number;
@@ -502,7 +543,7 @@ export class Battle implements ISnapshotable {
 			params.rid = playerInfo.gcNID;
 			params.id = playerInfo.actorID;
 			params.team = playerInfo.team;
-			params.name = playerInfo.nickname || Consts.DEFAULT_NICK_NAME;
+			params.name = playerInfo.nickname;
 			params.position = this._bornPoses[params.team];
 			params.direction = this._bornDirs[params.team];
 			const player = this.CreateChampion(params);

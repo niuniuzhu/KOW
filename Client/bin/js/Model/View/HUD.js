@@ -21,19 +21,17 @@ define(["require", "exports", "../../Global", "../../RC/Collections/Queue"], fun
         Update(dt) {
             this._root.setXY(this._owner.position.x, this._owner.position.y + this._owner.hudOffsetY);
         }
-        PopText(type, value) {
+        PopText(value) {
+            value = Math.floor(value);
+            if (value == 0)
+                return;
             const popText = PopText.Pop();
             this._texts.push(popText);
             popText.onComplete = () => this._texts.splice(this._texts.indexOf(popText), 1);
-            popText.Show(type, value, this._owner.position.x, this._owner.position.y);
+            popText.Show(value, this._owner.position.x, this._owner.position.y);
         }
     }
     exports.HUD = HUD;
-    var PopTextType;
-    (function (PopTextType) {
-        PopTextType[PopTextType["Hurt"] = 0] = "Hurt";
-        PopTextType[PopTextType["Heal"] = 1] = "Heal";
-    })(PopTextType = exports.PopTextType || (exports.PopTextType = {}));
     class PopText {
         constructor() {
             this._hurt = fairygui.UIPackage.createObject("battle", "hurt_text").asCom;
@@ -47,21 +45,11 @@ define(["require", "exports", "../../Global", "../../RC/Collections/Queue"], fun
         static Push(element) {
             this.POOL.enqueue(element);
         }
-        Show(type, value, x, y) {
-            let str;
-            switch (type) {
-                case PopTextType.Hurt:
-                    this._root = this._hurt;
-                    str = "-" + value;
-                    break;
-                case PopTextType.Heal:
-                    this._root = this._heal;
-                    str = "+" + value;
-                    break;
-            }
+        Show(value, x, y) {
+            this._root = value > 0 ? this._heal : this._hurt;
             Global_1.Global.graphic.hudRoot.addChild(this._root);
             this._root.setXY(x, y);
-            this._root.getChild("n0").asTextField.text = str;
+            this._root.getChild("n0").asTextField.text = value > 0 ? "+" + value : "" + value;
             this._root.getTransition("t0").play(laya.utils.Handler.create(this, this.OnTransitionComplete), 1, 0, 0, -1);
         }
         Complete() {

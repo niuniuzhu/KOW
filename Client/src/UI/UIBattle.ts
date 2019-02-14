@@ -86,7 +86,7 @@ export class UIBattle implements IUIModule {
 		for (const playerInfo of battleInfo.playerInfos) {
 			if (playerInfo.gcNID.equals(battleInfo.playerID)) {
 				this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
-				this._root.getChild("nickname").asTextField.text = playerInfo.nickname || Consts.DEFAULT_NICK_NAME;
+				this._root.getChild("nickname").asTextField.text = playerInfo.nickname;
 				break;
 			}
 		}

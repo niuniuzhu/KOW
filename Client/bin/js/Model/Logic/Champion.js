@@ -293,63 +293,63 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/FMath/FVec2
                 case Attribute_1.EAttr.HP:
                     value = FMathUtils_1.FMathUtils.Clamp(value, 0, this.mhp);
                     this.hp = value;
-                    break;
+                    return this.hp;
                 case Attribute_1.EAttr.MHP:
                     value = value < 0 ? 0 : value;
                     this.mhp = value;
-                    break;
+                    return this.mhp;
                 case Attribute_1.EAttr.MP:
                     value = FMathUtils_1.FMathUtils.Clamp(value, 0, this.mmp);
                     this.mp = value;
-                    break;
+                    return this.mp;
                 case Attribute_1.EAttr.MMP:
                     value = value < 0 ? 0 : value;
                     this.mmp = value;
-                    break;
+                    return this.mmp;
                 case Attribute_1.EAttr.ATK:
                     value = value < 0 ? 0 : value;
                     this.atk = value;
-                    break;
+                    return this.atk;
                 case Attribute_1.EAttr.DEF:
                     value = value < 0 ? 0 : value;
                     this.def = value;
-                    break;
+                    return this.def;
                 case Attribute_1.EAttr.S_DISABLE_MOVE:
                     this.disableMove = value;
-                    break;
+                    return this.disableMove;
                 case Attribute_1.EAttr.S_DISABLE_TURN:
                     this.disableTurn = value;
-                    break;
+                    return this.disableTurn;
                 case Attribute_1.EAttr.S_DISABLE_SKILL:
                     this.disableSkill = value;
-                    break;
+                    return this.disableSkill;
                 case Attribute_1.EAttr.S_DISABLE_COLLISION:
                     this.disableCollision = value;
-                    break;
+                    return this.disableCollision;
                 case Attribute_1.EAttr.S_SUPPER_ARMOR:
                     this.supperArmor = value;
-                    break;
+                    return this.supperArmor;
                 case Attribute_1.EAttr.S_INVULNER_ABILITY:
                     this.invulnerAbility = value;
-                    break;
+                    return this.invulnerAbility;
                 case Attribute_1.EAttr.GLADIATOR_TIME:
                     this.gladiatorTime = value;
-                    break;
+                    return this.gladiatorTime;
                 case Attribute_1.EAttr.S_HP_ADD:
                     this.t_hp_add = value;
-                    break;
+                    return this.t_hp_add;
                 case Attribute_1.EAttr.S_MP_ADD:
                     this.t_mp_add = value;
-                    break;
+                    return this.t_mp_add;
                 case Attribute_1.EAttr.S_ATK_ADD:
                     this.t_atk_add = value;
-                    break;
+                    return this.t_atk_add;
                 case Attribute_1.EAttr.S_DEF_ADD:
                     this.t_def_add = value;
-                    break;
+                    return this.t_def_add;
                 case Attribute_1.EAttr.S_SPEED_ADD:
                     this.t_speed_add = value;
-                    break;
+                    return this.t_speed_add;
             }
         }
         GetAttr(attr) {

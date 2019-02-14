@@ -3,7 +3,6 @@
     "instances": [
         {
             "mode": 17,
-            "grading_count": 100,
             "extend_range": 50,
             "extend_interval": 3000,
             "interval_attenuation": 0.8,
@@ -12,7 +11,6 @@
         },
         {
             "mode": 33,
-            "grading_count": 100,
             "extend_range": 50,
             "extend_interval": 3000,
             "interval_attenuation": 0.8,
@@ -21,7 +19,6 @@
         },
         {
             "mode": 34,
-            "grading_count": 100,
             "extend_range": 50,
             "extend_interval": 3000,
             "interval_attenuation": 0.8,
@@ -30,7 +27,6 @@
         },
         {
             "mode": 65,
-            "grading_count": 100,
             "extend_range": 50,
             "extend_interval": 3000,
             "interval_attenuation": 0.8,

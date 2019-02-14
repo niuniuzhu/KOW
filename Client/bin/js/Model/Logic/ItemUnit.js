@@ -15,27 +15,31 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../BattleEvent/SyncE
             const count = item.attrs.length;
             for (let i = 0; i < count; ++i) {
                 const attr = item.attrs[i];
-                let value = item.values[i];
+                const value = item.values[i];
                 const op = item.ops[i];
                 const old = target.GetAttr(attr);
+                let _new;
                 switch (op) {
                     case SceneItem_1.SceneItemAttrOp.Add:
-                        value = FMathUtils_1.FMathUtils.Add(value, old);
+                        _new = FMathUtils_1.FMathUtils.Add(value, old);
                         break;
                     case SceneItem_1.SceneItemAttrOp.Mul:
-                        value = FMathUtils_1.FMathUtils.Mul(value, old);
+                        _new = FMathUtils_1.FMathUtils.Mul(value, old);
                         break;
                     case SceneItem_1.SceneItemAttrOp.Pow:
-                        value = FMathUtils_1.FMathUtils.Pow(value, old);
+                        _new = FMathUtils_1.FMathUtils.Pow(value, old);
                         break;
                     case SceneItem_1.SceneItemAttrOp.Sin:
-                        value = FMathUtils_1.FMathUtils.Sin(old);
+                        _new = FMathUtils_1.FMathUtils.Sin(old);
                         break;
                     case SceneItem_1.SceneItemAttrOp.Cos:
-                        value = FMathUtils_1.FMathUtils.Cos(old);
+                        _new = FMathUtils_1.FMathUtils.Cos(old);
                         break;
                 }
-                target.SetAttr(attr, value);
+                _new = target.SetAttr(attr, _new);
+                if (!item.battle.chase) {
+                    SyncEvent_1.SyncEvent.Hit(this._targetID, this._targetID, _new - old);
+                }
             }
             if (!item.battle.chase) {
                 SyncEvent_1.SyncEvent.ItemTrigger(this._itemID, this._targetID);

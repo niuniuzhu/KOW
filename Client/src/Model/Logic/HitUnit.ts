@@ -55,7 +55,7 @@ export class HitUnit implements ISnapshotable, ICalcUnit {
 		target.SetAttr(EAttr.MP, FMathUtils.Add(target.mp, skill.mpAdd));
 
 		if (!caster.battle.chase) {
-			SyncEvent.Hit(caster.rid, target.rid, totalDmg);
+			SyncEvent.Hit(caster.rid, target.rid, -totalDmg);
 		}
 	}
 

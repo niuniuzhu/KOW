@@ -9,7 +9,7 @@
 		"uglifyFileName": false
 	},
 	"compileType": "game",
-	"libVersion": "2.5.2",
+	"libVersion": "2.6.0",
 	"appid": "wx813f14b0ccd8c57a",
 	"projectname": "kow",
 	"scripts": {

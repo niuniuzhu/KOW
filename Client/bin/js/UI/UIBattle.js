@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick"], function (require, exports, Consts_1, Global_1, protos_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick"], function (require, exports, Global_1, protos_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
@@ -49,7 +49,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../Mo
             for (const playerInfo of battleInfo.playerInfos) {
                 if (playerInfo.gcNID.equals(battleInfo.playerID)) {
                     this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
-                    this._root.getChild("nickname").asTextField.text = playerInfo.nickname || Consts_1.Consts.DEFAULT_NICK_NAME;
+                    this._root.getChild("nickname").asTextField.text = playerInfo.nickname;
                     break;
                 }
             }

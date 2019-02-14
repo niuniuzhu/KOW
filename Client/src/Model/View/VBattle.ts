@@ -9,7 +9,6 @@ import { EntityType } from "../EntityType";
 import { BattleAssetsMgr } from "./BattleAssetsMgr";
 import { Camera } from "./Camera";
 import { EffectPool } from "./EffectPool";
-import { PopTextType } from "./HUD";
 import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
 import { VEffect } from "./VEffect";
@@ -410,7 +409,7 @@ export class VBattle {
 
 	private OnHit(e: SyncEvent): void {
 		const target = this.GetChampion(e.rid1);
-		target.hud.PopText(PopTextType.Hurt, e.v0);
+		target.hud.PopText(e.v0);
 	}
 
 	private OnItemCollision(e: SyncEvent): void {

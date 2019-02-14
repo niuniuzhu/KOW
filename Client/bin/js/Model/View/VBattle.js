@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./BattleAssetsMgr", "./Camera", "./EffectPool", "./HUD", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, BattleAssetsMgr_1, Camera_1, EffectPool_1, HUD_1, VBullet_1, VChampion_1, VSceneItem_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./BattleAssetsMgr", "./Camera", "./EffectPool", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, BattleAssetsMgr_1, Camera_1, EffectPool_1, VBullet_1, VChampion_1, VSceneItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -271,7 +271,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         OnHit(e) {
             const target = this.GetChampion(e.rid1);
-            target.hud.PopText(HUD_1.PopTextType.Hurt, e.v0);
+            target.hud.PopText(e.v0);
         }
         OnItemCollision(e) {
         }

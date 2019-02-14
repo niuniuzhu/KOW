@@ -46,7 +46,7 @@ export class VActShakeEffect extends VActEffect {
 			//获取上一状态的持续时间
 			const result = StringUtils.Format(this._formula, "" + this.time);
 			const distance = this._ee.evaluate(result) * 0.001;//s=vt
-			this._fx.root.scaleY = distance;
+			this._fx.root.scaleY = distance * 0.1;//原图片高度是10,这里写死算了
 		}
 	}
 }

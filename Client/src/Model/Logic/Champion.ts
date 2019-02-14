@@ -484,68 +484,68 @@ export class Champion extends Entity implements ISnapshotable {
 		this._fsm.HandleInput(type, press);
 	}
 
-	public SetAttr(attr: EAttr, value: any) {
+	public SetAttr(attr: EAttr, value: any): any {
 		switch (attr) {
 			case EAttr.HP:
 				value = FMathUtils.Clamp(value, 0, this.mhp);
 				this.hp = value;
-				break;
+				return this.hp;
 			case EAttr.MHP:
 				value = value < 0 ? 0 : value;
 				this.mhp = value;
-				break;
+				return this.mhp;
 			case EAttr.MP:
 				value = FMathUtils.Clamp(value, 0, this.mmp);
 				this.mp = value;
-				break;
+				return this.mp;
 			case EAttr.MMP:
 				value = value < 0 ? 0 : value;
 				this.mmp = value;
-				break;
+				return this.mmp;
 			case EAttr.ATK:
 				value = value < 0 ? 0 : value;
 				this.atk = value;
-				break;
+				return this.atk;
 			case EAttr.DEF:
 				value = value < 0 ? 0 : value;
 				this.def = value;
-				break;
+				return this.def;
 			case EAttr.S_DISABLE_MOVE:
 				this.disableMove = value;
-				break;
+				return this.disableMove;
 			case EAttr.S_DISABLE_TURN:
 				this.disableTurn = value;
-				break;
+				return this.disableTurn;
 			case EAttr.S_DISABLE_SKILL:
 				this.disableSkill = value;
-				break;
+				return this.disableSkill;
 			case EAttr.S_DISABLE_COLLISION:
 				this.disableCollision = value;
-				break;
+				return this.disableCollision;
 			case EAttr.S_SUPPER_ARMOR:
 				this.supperArmor = value;
-				break;
+				return this.supperArmor;
 			case EAttr.S_INVULNER_ABILITY:
 				this.invulnerAbility = value;
-				break;
+				return this.invulnerAbility;
 			case EAttr.GLADIATOR_TIME:
 				this.gladiatorTime = value;
-				break;
+				return this.gladiatorTime;
 			case EAttr.S_HP_ADD:
 				this.t_hp_add = value;
-				break;
+				return this.t_hp_add;
 			case EAttr.S_MP_ADD:
 				this.t_mp_add = value;
-				break;
+				return this.t_mp_add;
 			case EAttr.S_ATK_ADD:
 				this.t_atk_add = value;
-				break;
+				return this.t_atk_add;
 			case EAttr.S_DEF_ADD:
 				this.t_def_add = value;
-				break;
+				return this.t_def_add;
 			case EAttr.S_SPEED_ADD:
 				this.t_speed_add = value;
-				break;
+				return this.t_speed_add;
 		}
 	}
 

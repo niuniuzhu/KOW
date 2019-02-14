@@ -29,17 +29,15 @@ export class HUD {
 		this._root.setXY(this._owner.position.x, this._owner.position.y + this._owner.hudOffsetY);
 	}
 
-	public PopText(type: PopTextType, value: number): void {
+	public PopText(value: number): void {
+		value = Math.floor(value);
+		if (value == 0)
+			return;
 		const popText = PopText.Pop();
 		this._texts.push(popText);
 		popText.onComplete = () => this._texts.splice(this._texts.indexOf(popText), 1);
-		popText.Show(type, value, this._owner.position.x, this._owner.position.y);
+		popText.Show(value, this._owner.position.x, this._owner.position.y);
 	}
-}
-
-export enum PopTextType {
-	Hurt,
-	Heal
 }
 
 class PopText {
@@ -66,22 +64,11 @@ class PopText {
 		this._heal = fairygui.UIPackage.createObject("battle", "heal_text").asCom;
 	}
 
-	public Show(type: PopTextType, value: number, x: number, y: number): void {
-		let str;
-		switch (type) {
-			case PopTextType.Hurt:
-				this._root = this._hurt;
-				str = "-" + value;
-				break;
-
-			case PopTextType.Heal:
-				this._root = this._heal;
-				str = "+" + value;
-				break;
-		}
+	public Show(value: number, x: number, y: number): void {
+		this._root = value > 0 ? this._heal : this._hurt;
 		Global.graphic.hudRoot.addChild(this._root);
 		this._root.setXY(x, y);
-		this._root.getChild("n0").asTextField.text = str;
+		this._root.getChild("n0").asTextField.text = value > 0 ? "+" + value : "" + value;
 		this._root.getTransition("t0").play(laya.utils.Handler.create(this, this.OnTransitionComplete), 1, 0, 0, -1);
 	}
 

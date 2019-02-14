@@ -33,7 +33,7 @@ define(["require", "exports", "../../../RC/Utils/ExpressionEvaluator", "../../..
             if (this._formula != null) {
                 const result = TextUtils_1.StringUtils.Format(this._formula, "" + this.time);
                 const distance = this._ee.evaluate(result) * 0.001;
-                this._fx.root.scaleY = distance;
+                this._fx.root.scaleY = distance * 0.1;
             }
         }
     }

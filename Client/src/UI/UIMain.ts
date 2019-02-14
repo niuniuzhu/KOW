@@ -12,6 +12,7 @@ export class UIMain implements IUIModule {
 
 	private readonly _matchBtn: fairygui.GComponent;
 	private readonly _matchBtn2: fairygui.GComponent;
+	private readonly _matchBtn3: fairygui.GComponent;
 	private readonly _matchBtn4: fairygui.GComponent;
 
 	constructor() {
@@ -22,9 +23,11 @@ export class UIMain implements IUIModule {
 
 		this._matchBtn = this._root.getChild("n3").asCom;
 		this._matchBtn2 = this._root.getChild("n13").asCom;
+		this._matchBtn3 = this._root.getChild("n19").asCom;
 		this._matchBtn4 = this._root.getChild("n15").asCom;
 		this._matchBtn.onClick(this, this.OnMatchBtnClick);
 		this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
+		this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
 		this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
 	}
 
@@ -77,6 +80,11 @@ export class UIMain implements IUIModule {
 	private OnMatchBtn2Click(): void {
 		this.SetMatchBtnEnable(false);
 		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T1P1);
+	}
+
+	private OnMatchBtn3Click(): void {
+		this.SetMatchBtnEnable(false);
+		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T4P1);
 	}
 
 	private OnMatchBtn4Click(): void {

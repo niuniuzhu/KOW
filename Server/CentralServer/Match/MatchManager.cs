@@ -150,6 +150,10 @@ namespace CentralServer.Match
 					mode2 = ( 2 << 4 ) | 2;
 					break;
 
+				case Protos.GC2CS_BeginMatch.Types.EMode.T4P1:
+					mode2 = ( 4 << 4 ) | 1;
+					break;
+
 				default:
 					Logger.Warn( $"not support mode:{mode}" );
 					return false;
@@ -210,7 +214,14 @@ namespace CentralServer.Match
 					{
 						GcNID = user.ukey | ( ulong )appropriateBSInfo.lid << 32,
 						ActorID = matchParams.actorID,
-						Team = i
+						Team = i,
+						Avatar = user.avatar,
+						Nickname = user.nickname,
+						Gender = user.gender,
+						Money = user.money,
+						Diamoned = user.diamoned,
+						Rank = user.rank,
+						Exp = user.exp
 					};
 					battleInfo.PlayerInfos.Add( pi );
 				}

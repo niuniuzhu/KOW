@@ -7,9 +7,9 @@ import { MathUtils } from "../RC/Math/MathUtils";
 import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState2 } from "./GestureState2";
 import { Joystick } from "./Joystick";
+import { Consts } from "../Consts";
 export class UIBattle {
     constructor() {
-        this._times = [];
         this._frameActionManager = new FrameAciontManager();
         this._markToEnd = false;
         this._keyInput = Vec2.zero;
@@ -32,10 +32,7 @@ export class UIBattle {
         this._hpProgress = this._root.getChild("n00").asProgress;
         this._hpbar = this._hpProgress.getChild("bar").asImage;
         this._hpbarBg = this._hpProgress.getChild("di").asImage;
-        this._times.push(this._root.getChild("s00").asTextField);
-        this._times.push(this._root.getChild("s01").asTextField);
-        this._times.push(this._root.getChild("s02").asTextField);
-        this._times.push(this._root.getChild("s03").asTextField);
+        this._timeList = this._root.getChild("t_list").asList;
         this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
         this._endBattle.setSize(this._root.width, this._root.height);
         this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
@@ -56,10 +53,17 @@ export class UIBattle {
         Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
         const battleInfo = param;
         for (const teamInfo of battleInfo.teamInfos) {
+            const item = this._timeList.addItemFromPool().asCom;
+            item.getController("c1").selectedIndex = 0;
             for (const player of teamInfo.playerInfos) {
                 if (player.gcNID.equals(battleInfo.playerID)) {
+                    item.getController("c1").selectedIndex = 1;
                     this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = player.avatar;
                     this._root.getChild("nickname").asTextField.text = player.nickname;
+                    let r = player.rank - player.rank % Consts.RANK_STEP;
+                    r = r < Consts.RANK_START ? Consts.RANK_START : r;
+                    this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
+                    this._root.getChild("rank").asTextField.text = "" + (player.rank < 0 ? 0 : player.rank);
                     break;
                 }
             }
@@ -76,6 +80,7 @@ export class UIBattle {
         UIEvent.RemoveListener(UIEvent.E_GLADIATOR_TIME_CHANGE);
         this._gestureState.OnExit();
         this.GestureOff();
+        this._timeList.removeChildrenToPool();
         if (this._endBattle.parent != null) {
             this._endBattle.removeFromParent();
         }
@@ -154,7 +159,7 @@ export class UIBattle {
         }
     }
     OnGladiatorTimeChange(e) {
-        const tf = this._times[e.team];
+        const tf = this._timeList.getChildAt(e.team).asCom.getChild("time").asTextField;
         const t = e.v0 < 0 ? 0 : e.v0;
         tf.text = "" + Math.floor(t * 0.001);
     }

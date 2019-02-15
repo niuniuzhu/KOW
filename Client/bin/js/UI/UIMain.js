@@ -1,7 +1,8 @@
-define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], function (require, exports, Global_1, protos_1, UIAlert_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIAlert"], function (require, exports, Consts_1, Global_1, protos_1, UIAlert_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
+        get root() { return this._root; }
         constructor() {
             fairygui.UIPackage.addPackage("res/ui/main");
             this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
@@ -16,7 +17,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
             this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
             this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
         }
-        get root() { return this._root; }
         Dispose() {
             this._root.dispose();
         }
@@ -28,8 +28,8 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
             if (userInfo != null) {
                 this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
                 this._root.getChild("nickname").asTextField.text = userInfo.nickname;
-                let r = userInfo.rank - userInfo.rank % UIMain.RANK_STEP;
-                r = r < UIMain.RANK_START ? UIMain.RANK_START : r;
+                let r = userInfo.rank - userInfo.rank % Consts_1.Consts.RANK_STEP;
+                r = r < Consts_1.Consts.RANK_START ? Consts_1.Consts.RANK_START : r;
                 this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
                 this._root.getChild("rank").asTextField.text = "" + (userInfo.rank < 0 ? 0 : userInfo.rank);
             }
@@ -70,8 +70,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
             UIAlert_1.UIAlert.Show(message, callback);
         }
     }
-    UIMain.RANK_STEP = 400;
-    UIMain.RANK_START = 1200;
     exports.UIMain = UIMain;
 });
 //# sourceMappingURL=UIMain.js.map

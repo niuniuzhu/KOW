@@ -11,4 +11,6 @@ export class Consts {
 	public static readonly ASSETS_SCENE_ITEM_PREFIX: string = "s";
 	public static readonly ASSETS_EFFECT_PREFIX: string = "fx";
 	public static readonly LOGIC_TO_PIXEL_RATIO: number = 100;
+	public static readonly RANK_STEP = 400;
+	public static readonly RANK_START = 1200;
 }

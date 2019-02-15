@@ -1,7 +1,9 @@
+import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 export class UIMain {
+    get root() { return this._root; }
     constructor() {
         fairygui.UIPackage.addPackage("res/ui/main");
         this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
@@ -16,7 +18,6 @@ export class UIMain {
         this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
         this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
     }
-    get root() { return this._root; }
     Dispose() {
         this._root.dispose();
     }
@@ -28,8 +29,8 @@ export class UIMain {
         if (userInfo != null) {
             this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
             this._root.getChild("nickname").asTextField.text = userInfo.nickname;
-            let r = userInfo.rank - userInfo.rank % UIMain.RANK_STEP;
-            r = r < UIMain.RANK_START ? UIMain.RANK_START : r;
+            let r = userInfo.rank - userInfo.rank % Consts.RANK_STEP;
+            r = r < Consts.RANK_START ? Consts.RANK_START : r;
             this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
             this._root.getChild("rank").asTextField.text = "" + (userInfo.rank < 0 ? 0 : userInfo.rank);
         }
@@ -70,5 +71,3 @@ export class UIMain {
         UIAlert.Show(message, callback);
     }
 }
-UIMain.RANK_STEP = 400;
-UIMain.RANK_START = 1200;

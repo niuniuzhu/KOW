@@ -1,9 +1,8 @@
-define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick"], function (require, exports, Global_1, protos_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1) {
+define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEvent/UIEvent", "../Model/Logic/Attribute", "../Model/View/FrameActionManager", "../RC/Math/MathUtils", "../RC/Math/Vec2", "./GestureState2", "./Joystick", "../Consts"], function (require, exports, Global_1, protos_1, UIEvent_1, Attribute_1, FrameActionManager_1, MathUtils_1, Vec2_1, GestureState2_1, Joystick_1, Consts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
         constructor() {
-            this._times = [];
             this._frameActionManager = new FrameActionManager_1.FrameAciontManager();
             this._markToEnd = false;
             this._keyInput = Vec2_1.Vec2.zero;
@@ -26,10 +25,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEve
             this._hpProgress = this._root.getChild("n00").asProgress;
             this._hpbar = this._hpProgress.getChild("bar").asImage;
             this._hpbarBg = this._hpProgress.getChild("di").asImage;
-            this._times.push(this._root.getChild("s00").asTextField);
-            this._times.push(this._root.getChild("s01").asTextField);
-            this._times.push(this._root.getChild("s02").asTextField);
-            this._times.push(this._root.getChild("s03").asTextField);
+            this._timeList = this._root.getChild("t_list").asList;
             this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
             this._endBattle.setSize(this._root.width, this._root.height);
             this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
@@ -50,10 +46,17 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEve
             Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
             const battleInfo = param;
             for (const teamInfo of battleInfo.teamInfos) {
+                const item = this._timeList.addItemFromPool().asCom;
+                item.getController("c1").selectedIndex = 0;
                 for (const player of teamInfo.playerInfos) {
                     if (player.gcNID.equals(battleInfo.playerID)) {
+                        item.getController("c1").selectedIndex = 1;
                         this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = player.avatar;
                         this._root.getChild("nickname").asTextField.text = player.nickname;
+                        let r = player.rank - player.rank % Consts_1.Consts.RANK_STEP;
+                        r = r < Consts_1.Consts.RANK_START ? Consts_1.Consts.RANK_START : r;
+                        this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
+                        this._root.getChild("rank").asTextField.text = "" + (player.rank < 0 ? 0 : player.rank);
                         break;
                     }
                 }
@@ -70,6 +73,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEve
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_GLADIATOR_TIME_CHANGE);
             this._gestureState.OnExit();
             this.GestureOff();
+            this._timeList.removeChildrenToPool();
             if (this._endBattle.parent != null) {
                 this._endBattle.removeFromParent();
             }
@@ -148,7 +152,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEve
             }
         }
         OnGladiatorTimeChange(e) {
-            const tf = this._times[e.team];
+            const tf = this._timeList.getChildAt(e.team).asCom.getChild("time").asTextField;
             const t = e.v0 < 0 ? 0 : e.v0;
             tf.text = "" + Math.floor(t * 0.001);
         }

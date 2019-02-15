@@ -15,6 +15,8 @@ define(["require", "exports"], function (require, exports) {
     Consts.ASSETS_SCENE_ITEM_PREFIX = "s";
     Consts.ASSETS_EFFECT_PREFIX = "fx";
     Consts.LOGIC_TO_PIXEL_RATIO = 100;
+    Consts.RANK_STEP = 400;
+    Consts.RANK_START = 1200;
     exports.Consts = Consts;
 });
 //# sourceMappingURL=Consts.js.map

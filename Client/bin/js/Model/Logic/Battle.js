@@ -370,8 +370,8 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
                     playerInfo.id = _playerInfo.actorID;
                     playerInfo.name = _playerInfo.nickname;
                     playerInfo.team = i;
-                    playerInfo.position = this._bornPoses[i];
-                    playerInfo.direction = this._bornDirs[i];
+                    playerInfo.position = this._bornPoses[i * c2 + j];
+                    playerInfo.direction = this._bornDirs[i * c2 + j];
                     const champion = this.CreateChampion(playerInfo);
                     team.AddChampion(champion);
                 }

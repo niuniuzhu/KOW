@@ -1,6 +1,5 @@
 export class Consts {
 }
-Consts.DEFAULT_NICK_NAME = "guest";
 Consts.SCREEN_WIDTH = 1280;
 Consts.SCREEN_HEIGHT = 720;
 Consts.FRAME_ACTION_SEND_INTERVAL = 60;

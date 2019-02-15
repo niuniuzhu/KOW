@@ -190,6 +190,8 @@ namespace CentralServer.Match3
 			battleInfo.ConnTimeout = ( int )Consts.WAITING_ROOM_TIME_OUT;
 			for ( int i = 0; i < state.numTeam; i++ )
 			{
+				Protos.CS2BS_TeamInfo ti = new Protos.CS2BS_TeamInfo();
+				battleInfo.TeamInfos.Add( ti );
 				MatchUser[] matchUsers = state.tUsers[i];
 				for ( int j = 0; j < state.numUserPerTeam; j++ )
 				{
@@ -200,9 +202,15 @@ namespace CentralServer.Match3
 					{
 						GcNID = user.ukey | ( ulong )appropriateBSInfo.lid << 32,
 						ActorID = matchParams.actorID,
-						Team = i
+						Avatar = user.avatar,
+						Nickname = user.nickname,
+						Gender = user.gender,
+						Money = user.money,
+						Diamoned = user.diamoned,
+						Rank = user.rank,
+						Exp = user.exp
 					};
-					battleInfo.PlayerInfos.Add( pi );
+					ti.PlayerInfos.Add( pi );
 				}
 			}
 			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, RPCEntry.Pop( this.OnBattleInfoRet, state,

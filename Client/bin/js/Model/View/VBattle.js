@@ -1,4 +1,4 @@
-define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./BattleAssetsMgr", "./Camera", "./EffectPool", "./VBullet", "./VChampion", "./VSceneItem"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, BattleAssetsMgr_1, Camera_1, EffectPool_1, VBullet_1, VChampion_1, VSceneItem_1) {
+define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protobufjs", "../../RC/Utils/Hashtable", "../BattleEvent/SyncEvent", "../Defs", "../EntityType", "./BattleAssetsMgr", "./Camera", "./EffectPool", "./VBullet", "./VChampion", "./VSceneItem", "./VTeam"], function (require, exports, Consts_1, Global_1, $protobuf, Hashtable_1, SyncEvent_1, Defs_1, EntityType_1, BattleAssetsMgr_1, Camera_1, EffectPool_1, VBullet_1, VChampion_1, VSceneItem_1, VTeam_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class VBattle {
@@ -6,6 +6,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._mapID = 0;
             this._camera = new Camera_1.Camera();
             this._assetsManager = new BattleAssetsMgr_1.BattleAssetsMgr();
+            this._teams = [];
             this._champions = [];
             this._idToChampion = new Map();
             this._bullets = [];
@@ -36,6 +37,7 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             }
             this._champions.splice(0);
             this._idToChampion.clear();
+            this._teams.splice(0);
             for (let i = 0, count = this._bullets.length; i < count; ++i) {
                 this._bullets[i].Destroy();
             }
@@ -133,6 +135,15 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
             this._logicFrame = reader.int32();
             let count = reader.int32();
             for (let i = 0; i < count; i++) {
+                const id = reader.int32();
+                let team = this.GetTeam(id);
+                if (team == null) {
+                    team = new VTeam_1.VTeam();
+                }
+                team.DecodeSync(id, reader);
+            }
+            count = reader.int32();
+            for (let i = 0; i < count; i++) {
                 const rid = reader.uint64();
                 let champion = this.GetChampion(rid);
                 if (champion == null) {
@@ -189,6 +200,9 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
         }
         GetChampion(rid) {
             return this._idToChampion.get(rid.toString());
+        }
+        GetTeam(id) {
+            return this._teams[id];
         }
         CreateBullet(rid, reader) {
             const bullet = new VBullet_1.VBullet(this);

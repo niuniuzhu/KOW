@@ -6,7 +6,6 @@ import "Global.proto";
 message CS2BS_PlayerInfo {
 	uint64 gcNID = 1;//玩家登陆id
 	int32 actorID = 2;//角色id
-	int32 team = 3;//所在队伍
 	string nickname = 4;//玩家名字
 	string avatar = 5;
 	int32 gender = 6;
@@ -16,12 +15,16 @@ message CS2BS_PlayerInfo {
 	uint32 exp = 10;
 }
 
+message CS2BS_TeamInfo {
+	repeated CS2BS_PlayerInfo playerInfos = 4;//玩家信息
+}
+
 //战场信息
 message CS2BS_BattleInfo {
 	MsgOpts opts = 1;
 	int32 mapID = 2;//地图id
 	int32 connTimeout = 3;//连接超时时间
-	repeated CS2BS_PlayerInfo playerInfos = 4;//玩家信息
+	repeated CS2BS_TeamInfo teamInfos = 4;//队伍信息
 }
 
 message CS2BS_BattleEndRet {

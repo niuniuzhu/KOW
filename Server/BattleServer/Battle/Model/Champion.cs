@@ -98,10 +98,6 @@ namespace BattleServer.Battle.Model
 		/// 是否已死亡
 		/// </summary>
 		public bool isDead;
-		/// <summary>
-		/// 停留在禁区的时间
-		/// </summary>
-		public int gladiatorTime;
 
 		//临时属性
 		public int t_hp_add;
@@ -168,7 +164,6 @@ namespace BattleServer.Battle.Model
 			this.phyxSpeed = new FVec2( ( Fix64 )reader.ReadDouble(), ( Fix64 )reader.ReadDouble() );
 			this.velocity = ( Fix64 )reader.ReadDouble();
 			this.isDead = reader.ReadBool();
-			this.gladiatorTime = reader.ReadInt32();
 			this.t_hp_add = reader.ReadInt32();
 			this.t_mp_add = reader.ReadInt32();
 			this.t_atk_add = reader.ReadInt32();

@@ -25,28 +25,28 @@ namespace Protos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgtCUzJHQy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8aC0NTMkJTLnBy",
-            "b3RvIp0CCg5CUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
+            "b3RvIpkCCg5CUzJHQ19Mb2dpblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
             "Lk1zZ09wdHMSJgoGcmVzdWx0GAIgASgOMhYuUHJvdG9zLkdsb2JhbC5FQ29t",
             "bW9uEhAKCHBsYXllcklEGAMgASgEEg8KB3JuZFNlZWQYBCABKAUSEQoJZnJh",
             "bWVSYXRlGAUgASgFEhQKDGtleWZyYW1lU3RlcBgGIAEoBRIUCgxzbmFwc2hv",
             "dFN0ZXAYByABKAUSEgoKYmF0dGxlVGltZRgIIAEoBRINCgVtYXBJRBgJIAEo",
-            "BRIQCghjdXJGcmFtZRgKIAEoBRItCgtwbGF5ZXJJbmZvcxgLIAMoCzIYLlBy",
-            "b3Rvcy5DUzJCU19QbGF5ZXJJbmZvIuUBChhCUzJHQ19SZXF1ZXN0U25hcHNo",
-            "b3RSZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEjgKBnJlc3Vs",
-            "dBgCIAEoDjIoLlByb3Rvcy5CUzJHQ19SZXF1ZXN0U25hcHNob3RSZXQuRVJl",
-            "c3VsdBIQCghyZXFGcmFtZRgDIAEoBRIQCghjdXJGcmFtZRgEIAEoBRIQCghz",
-            "bmFwc2hvdBgFIAEoDCI6CgdFUmVzdWx0EgsKB1N1Y2Nlc3MQABIPCgtJbnZh",
-            "bGlkVXNlchABEhEKDUludmFsaWRCYXR0bGUQAiJRChFCUzJHQ19GcmFtZUFj",
-            "dGlvbhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUY",
-            "AiABKAUSDgoGYWN0aW9uGAMgASgMIl4KHEJTMkdDX1JlcXVlc3RGcmFtZUFj",
-            "dGlvbnNSZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg4KBmZy",
-            "YW1lcxgCIAMoBRIPCgdhY3Rpb25zGAMgAygMIl0KD0JTMkdDX091dE9mU3lu",
-            "YxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZnJhbWUYAiAB",
-            "KAUSDQoFZGF0YTEYAyABKAwSDQoFZGF0YTIYBCABKAxiBnByb3RvMw=="));
+            "BRIQCghjdXJGcmFtZRgKIAEoBRIpCgl0ZWFtSW5mb3MYCyADKAsyFi5Qcm90",
+            "b3MuQ1MyQlNfVGVhbUluZm8i5QEKGEJTMkdDX1JlcXVlc3RTbmFwc2hvdFJl",
+            "dBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSOAoGcmVzdWx0GAIg",
+            "ASgOMiguUHJvdG9zLkJTMkdDX1JlcXVlc3RTbmFwc2hvdFJldC5FUmVzdWx0",
+            "EhAKCHJlcUZyYW1lGAMgASgFEhAKCGN1ckZyYW1lGAQgASgFEhAKCHNuYXBz",
+            "aG90GAUgASgMIjoKB0VSZXN1bHQSCwoHU3VjY2VzcxAAEg8KC0ludmFsaWRV",
+            "c2VyEAESEQoNSW52YWxpZEJhdHRsZRACIlEKEUJTMkdDX0ZyYW1lQWN0aW9u",
+            "Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVmcmFtZRgCIAEo",
+            "BRIOCgZhY3Rpb24YAyABKAwiXgocQlMyR0NfUmVxdWVzdEZyYW1lQWN0aW9u",
+            "c1JldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDgoGZnJhbWVz",
+            "GAIgAygFEg8KB2FjdGlvbnMYAyADKAwiXQoPQlMyR0NfT3V0T2ZTeW5jEh0K",
+            "BG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxINCgVmcmFtZRgCIAEoBRIN",
+            "CgVkYXRhMRgDIAEoDBINCgVkYXRhMhgEIAEoDGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, global::Protos.CS2BSReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_LoginRet), global::Protos.BS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "PlayerID", "RndSeed", "FrameRate", "KeyframeStep", "SnapshotStep", "BattleTime", "MapID", "CurFrame", "PlayerInfos" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_LoginRet), global::Protos.BS2GC_LoginRet.Parser, new[]{ "Opts", "Result", "PlayerID", "RndSeed", "FrameRate", "KeyframeStep", "SnapshotStep", "BattleTime", "MapID", "CurFrame", "TeamInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestSnapshotRet), global::Protos.BS2GC_RequestSnapshotRet.Parser, new[]{ "Opts", "Result", "ReqFrame", "CurFrame", "Snapshot" }, null, new[]{ typeof(global::Protos.BS2GC_RequestSnapshotRet.Types.EResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_FrameAction), global::Protos.BS2GC_FrameAction.Parser, new[]{ "Opts", "Frame", "Action" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.BS2GC_RequestFrameActionsRet), global::Protos.BS2GC_RequestFrameActionsRet.Parser, new[]{ "Opts", "Frames", "Actions" }, null, null, null),
@@ -95,7 +95,7 @@ namespace Protos {
       battleTime_ = other.battleTime_;
       mapID_ = other.mapID_;
       curFrame_ = other.curFrame_;
-      playerInfos_ = other.playerInfos_.Clone();
+      teamInfos_ = other.teamInfos_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -238,17 +238,17 @@ namespace Protos {
       }
     }
 
-    /// <summary>Field number for the "playerInfos" field.</summary>
-    public const int PlayerInfosFieldNumber = 11;
-    private static readonly pb::FieldCodec<global::Protos.CS2BS_PlayerInfo> _repeated_playerInfos_codec
-        = pb::FieldCodec.ForMessage(90, global::Protos.CS2BS_PlayerInfo.Parser);
-    private readonly pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo> playerInfos_ = new pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo>();
+    /// <summary>Field number for the "teamInfos" field.</summary>
+    public const int TeamInfosFieldNumber = 11;
+    private static readonly pb::FieldCodec<global::Protos.CS2BS_TeamInfo> _repeated_teamInfos_codec
+        = pb::FieldCodec.ForMessage(90, global::Protos.CS2BS_TeamInfo.Parser);
+    private readonly pbc::RepeatedField<global::Protos.CS2BS_TeamInfo> teamInfos_ = new pbc::RepeatedField<global::Protos.CS2BS_TeamInfo>();
     /// <summary>
     ///玩家信息
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Protos.CS2BS_PlayerInfo> PlayerInfos {
-      get { return playerInfos_; }
+    public pbc::RepeatedField<global::Protos.CS2BS_TeamInfo> TeamInfos {
+      get { return teamInfos_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -274,7 +274,7 @@ namespace Protos {
       if (BattleTime != other.BattleTime) return false;
       if (MapID != other.MapID) return false;
       if (CurFrame != other.CurFrame) return false;
-      if(!playerInfos_.Equals(other.playerInfos_)) return false;
+      if(!teamInfos_.Equals(other.teamInfos_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -291,7 +291,7 @@ namespace Protos {
       if (BattleTime != 0) hash ^= BattleTime.GetHashCode();
       if (MapID != 0) hash ^= MapID.GetHashCode();
       if (CurFrame != 0) hash ^= CurFrame.GetHashCode();
-      hash ^= playerInfos_.GetHashCode();
+      hash ^= teamInfos_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -345,7 +345,7 @@ namespace Protos {
         output.WriteRawTag(80);
         output.WriteInt32(CurFrame);
       }
-      playerInfos_.WriteTo(output, _repeated_playerInfos_codec);
+      teamInfos_.WriteTo(output, _repeated_teamInfos_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -384,7 +384,7 @@ namespace Protos {
       if (CurFrame != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurFrame);
       }
-      size += playerInfos_.CalculateSize(_repeated_playerInfos_codec);
+      size += teamInfos_.CalculateSize(_repeated_teamInfos_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -429,7 +429,7 @@ namespace Protos {
       if (other.CurFrame != 0) {
         CurFrame = other.CurFrame;
       }
-      playerInfos_.Add(other.playerInfos_);
+      teamInfos_.Add(other.teamInfos_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -485,7 +485,7 @@ namespace Protos {
             break;
           }
           case 90: {
-            playerInfos_.AddEntriesFrom(input, _repeated_playerInfos_codec);
+            teamInfos_.AddEntriesFrom(input, _repeated_teamInfos_codec);
             break;
           }
         }

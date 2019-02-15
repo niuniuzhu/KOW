@@ -1,4 +1,3 @@
-import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
@@ -10,6 +9,7 @@ import { GestureState2 } from "./GestureState2";
 import { Joystick } from "./Joystick";
 export class UIBattle {
     constructor() {
+        this._times = [];
         this._frameActionManager = new FrameAciontManager();
         this._markToEnd = false;
         this._keyInput = Vec2.zero;
@@ -32,8 +32,10 @@ export class UIBattle {
         this._hpProgress = this._root.getChild("n00").asProgress;
         this._hpbar = this._hpProgress.getChild("bar").asImage;
         this._hpbarBg = this._hpProgress.getChild("di").asImage;
-        this._time0 = this._root.getChild("s00").asTextField;
-        this._time1 = this._root.getChild("s10").asTextField;
+        this._times.push(this._root.getChild("s00").asTextField);
+        this._times.push(this._root.getChild("s01").asTextField);
+        this._times.push(this._root.getChild("s02").asTextField);
+        this._times.push(this._root.getChild("s03").asTextField);
         this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
         this._endBattle.setSize(this._root.width, this._root.height);
         this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
@@ -53,21 +55,25 @@ export class UIBattle {
         Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
         Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
         const battleInfo = param;
-        for (const playerInfo of battleInfo.playerInfos) {
-            if (playerInfo.gcNID.equals(battleInfo.playerID)) {
-                this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
-                this._root.getChild("nickname").asTextField.text = playerInfo.nickname || Consts.DEFAULT_NICK_NAME;
-                break;
+        for (const teamInfo of battleInfo.teamInfos) {
+            for (const player of teamInfo.playerInfos) {
+                if (player.gcNID.equals(battleInfo.playerID)) {
+                    this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = player.avatar;
+                    this._root.getChild("nickname").asTextField.text = player.nickname;
+                    break;
+                }
             }
         }
         UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
         UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
         UIEvent.AddListener(UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));
+        UIEvent.AddListener(UIEvent.E_GLADIATOR_TIME_CHANGE, this.OnGladiatorTimeChange.bind(this));
     }
     Exit() {
         UIEvent.RemoveListener(UIEvent.E_ENTITY_INIT);
         UIEvent.RemoveListener(UIEvent.E_END_BATTLE);
         UIEvent.RemoveListener(UIEvent.E_ATTR_CHANGE);
+        UIEvent.RemoveListener(UIEvent.E_GLADIATOR_TIME_CHANGE);
         this._gestureState.OnExit();
         this.GestureOff();
         if (this._endBattle.parent != null) {
@@ -145,12 +151,12 @@ export class UIBattle {
                     this._skill1Progress.value = target.mp;
                 }
                 break;
-            case EAttr.GLADIATOR_TIME:
-                const tf = target.team == 0 ? this._time0 : this._time1;
-                const t = target.gladiatorTime < 0 ? 0 : target.gladiatorTime;
-                tf.text = "" + Math.floor(t * 0.001);
-                break;
         }
+    }
+    OnGladiatorTimeChange(e) {
+        const tf = this._times[e.team];
+        const t = e.v0 < 0 ? 0 : e.v0;
+        tf.text = "" + Math.floor(t * 0.001);
     }
     IsSelf(champion) {
         return champion.rid.equals(Global.battleManager.playerID);

@@ -20,10 +20,14 @@ define(["require", "exports", "../../AssetsManager", "../../Consts", "../../RC/U
                 const ss = u.split(",");
                 this.assetsPath.push({ url: "res/" + ss[0], type: Number.parseInt(ss[1]) });
             }
-            const count = battleInfo.playerInfos.length;
-            for (let i = 0; i < count; ++i) {
-                const playerInfo = battleInfo.playerInfos[i];
-                this.assetsPath.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetsManager_1.AssetType.Atlas });
+            const c1 = battleInfo.teamInfos.length;
+            for (let i = 0; i < c1; ++i) {
+                const playerInfos = battleInfo.teamInfos[i].playerInfos;
+                const c2 = playerInfos.length;
+                for (let j = 0; j < c2; ++j) {
+                    const playerInfo = playerInfos[j];
+                    this.assetsPath.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetsManager_1.AssetType.Atlas });
+                }
             }
             this.assetsPath.push({ url: "res/ui/assets.bin", type: AssetsManager_1.AssetType.Binary });
             this.assetsPath.push({ url: "res/ui/assets_atlas0.png", type: AssetsManager_1.AssetType.Image });

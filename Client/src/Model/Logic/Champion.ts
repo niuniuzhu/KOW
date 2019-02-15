@@ -2,19 +2,19 @@ import * as $protobuf from "../../Libs/protobufjs";
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { StateType } from "../Defines";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
-import { FrameAction } from "./FrameAction";
-import { IntersectInfo } from "./IntersectInfo";
-import { ISnapshotable } from "./ISnapshotable";
 import { Skill } from "../Skill";
-import { StateType } from "../Defines";
 import { EAttr } from "./Attribute";
 import { Battle } from "./Battle";
 import { Entity, EntityInitParams } from "./Entity";
+import { FrameAction } from "./FrameAction";
 import { EntityFSM } from "./FSM/EntityFSM";
 import { EntityState } from "./FSM/EntityState";
 import { InputAgent, InputType } from "./InputAagent";
+import { IntersectInfo } from "./IntersectInfo";
+import { ISnapshotable } from "./ISnapshotable";
 
 export class Champion extends Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Champion; }
@@ -34,13 +34,13 @@ export class Champion extends Entity implements ISnapshotable {
 
 	//run time properties
 	/**
-	 * 队伍
-	 */
-	public team: number;
-	/**
 	 * 名字
 	 */
 	public name: string;
+	/**
+	 * 队伍
+	 */
+	public team: number;
 	/**
 	 * 当前血量
 	 */
@@ -113,10 +113,6 @@ export class Champion extends Entity implements ISnapshotable {
 	 * 是否已死亡
 	 */
 	public isDead: boolean;
-	/**
-	 * 停留在禁区的时间
-	 */
-	public gladiatorTime: number = -1;
 
 	//临时属性
 	public t_hp_add: number = 0;
@@ -203,7 +199,6 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.double(this.phyxSpeed.x).double(this.phyxSpeed.y);
 		writer.double(this.velocity);
 		writer.bool(this.isDead);
-		writer.int32(this.gladiatorTime);
 		writer.int32(this.t_hp_add);
 		writer.int32(this.t_mp_add);
 		writer.int32(this.t_atk_add);
@@ -246,7 +241,6 @@ export class Champion extends Entity implements ISnapshotable {
 		this.phyxSpeed.Set(reader.double(), reader.double());
 		this.velocity = reader.double();
 		this.isDead = reader.bool();
-		this.gladiatorTime = reader.int32();
 		this.t_hp_add = reader.int32();
 		this.t_mp_add = reader.int32();
 		this.t_atk_add = reader.int32();
@@ -284,7 +278,6 @@ export class Champion extends Entity implements ISnapshotable {
 		writer.int32(this.supperArmor);
 		writer.int32(this.invulnerAbility);
 		writer.double(this.moveDirection.x).double(this.moveDirection.y);
-		writer.int32(this.gladiatorTime);
 		writer.int32(this.t_hp_add);
 		writer.int32(this.t_mp_add);
 		writer.int32(this.t_atk_add);
@@ -447,12 +440,6 @@ export class Champion extends Entity implements ISnapshotable {
 		this.position.CopyFrom(pos);
 	}
 
-	public UpdateGladiator(dt: number): void {
-		this.gladiatorTime += dt;
-		if (this.gladiatorTime > this._battle.gladiatorTimeout)
-			this.gladiatorTime = this._battle.gladiatorTimeout;
-	}
-
 	public UpdateAfterHit(): void {
 		if (this.hp <= 0) {
 			this.Die();
@@ -528,9 +515,6 @@ export class Champion extends Entity implements ISnapshotable {
 			case EAttr.S_INVULNER_ABILITY:
 				this.invulnerAbility = value;
 				return this.invulnerAbility;
-			case EAttr.GLADIATOR_TIME:
-				this.gladiatorTime = value;
-				return this.gladiatorTime;
 			case EAttr.S_HP_ADD:
 				this.t_hp_add = value;
 				return this.t_hp_add;
@@ -575,8 +559,6 @@ export class Champion extends Entity implements ISnapshotable {
 				return this.supperArmor;
 			case EAttr.S_INVULNER_ABILITY:
 				return this.invulnerAbility;
-			case EAttr.GLADIATOR_TIME:
-				return this.gladiatorTime;
 			case EAttr.S_HP_ADD:
 				return this.t_hp_add;
 			case EAttr.S_MP_ADD:
@@ -598,7 +580,6 @@ export class Champion extends Entity implements ISnapshotable {
 		str += `phyxSpeed:${this.phyxSpeed.ToString()}\n`;
 		str += `velocity:${this.velocity}\n`;
 		str += `skill count:${this._skills.length}\n`;
-		str += `gladiatorTime:${this.gladiatorTime}\n`;
 		str += this._fsm.Dump();
 		return str;
 	}

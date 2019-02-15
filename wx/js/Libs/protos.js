@@ -1727,7 +1727,7 @@ export const Protos = $root.Protos = (() => {
     Protos.BS2GC_LoginRet = (function() {
 
         function BS2GC_LoginRet(properties) {
-            this.playerInfos = [];
+            this.teamInfos = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -1744,7 +1744,7 @@ export const Protos = $root.Protos = (() => {
         BS2GC_LoginRet.prototype.battleTime = 0;
         BS2GC_LoginRet.prototype.mapID = 0;
         BS2GC_LoginRet.prototype.curFrame = 0;
-        BS2GC_LoginRet.prototype.playerInfos = $util.emptyArray;
+        BS2GC_LoginRet.prototype.teamInfos = $util.emptyArray;
 
         BS2GC_LoginRet.create = function create(properties) {
             return new BS2GC_LoginRet(properties);
@@ -1773,9 +1773,9 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(72).int32(message.mapID);
             if (message.curFrame != null && message.hasOwnProperty("curFrame"))
                 writer.uint32(80).int32(message.curFrame);
-            if (message.playerInfos != null && message.playerInfos.length)
-                for (let i = 0; i < message.playerInfos.length; ++i)
-                    $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(90).fork()).ldelim();
+            if (message.teamInfos != null && message.teamInfos.length)
+                for (let i = 0; i < message.teamInfos.length; ++i)
+                    $root.Protos.CS2BS_TeamInfo.encode(message.teamInfos[i], writer.uint32(90).fork()).ldelim();
             return writer;
         };
 
@@ -1821,9 +1821,9 @@ export const Protos = $root.Protos = (() => {
                     message.curFrame = reader.int32();
                     break;
                 case 11:
-                    if (!(message.playerInfos && message.playerInfos.length))
-                        message.playerInfos = [];
-                    message.playerInfos.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
+                    if (!(message.teamInfos && message.teamInfos.length))
+                        message.teamInfos = [];
+                    message.teamInfos.push($root.Protos.CS2BS_TeamInfo.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1879,13 +1879,13 @@ export const Protos = $root.Protos = (() => {
             if (message.curFrame != null && message.hasOwnProperty("curFrame"))
                 if (!$util.isInteger(message.curFrame))
                     return "curFrame: integer expected";
-            if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
-                if (!Array.isArray(message.playerInfos))
-                    return "playerInfos: array expected";
-                for (let i = 0; i < message.playerInfos.length; ++i) {
-                    let error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
+            if (message.teamInfos != null && message.hasOwnProperty("teamInfos")) {
+                if (!Array.isArray(message.teamInfos))
+                    return "teamInfos: array expected";
+                for (let i = 0; i < message.teamInfos.length; ++i) {
+                    let error = $root.Protos.CS2BS_TeamInfo.verify(message.teamInfos[i]);
                     if (error)
-                        return "playerInfos." + error;
+                        return "teamInfos." + error;
                 }
             }
             return null;
@@ -1933,14 +1933,14 @@ export const Protos = $root.Protos = (() => {
                 message.mapID = object.mapID | 0;
             if (object.curFrame != null)
                 message.curFrame = object.curFrame | 0;
-            if (object.playerInfos) {
-                if (!Array.isArray(object.playerInfos))
-                    throw TypeError(".Protos.BS2GC_LoginRet.playerInfos: array expected");
-                message.playerInfos = [];
-                for (let i = 0; i < object.playerInfos.length; ++i) {
-                    if (typeof object.playerInfos[i] !== "object")
-                        throw TypeError(".Protos.BS2GC_LoginRet.playerInfos: object expected");
-                    message.playerInfos[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfos[i]);
+            if (object.teamInfos) {
+                if (!Array.isArray(object.teamInfos))
+                    throw TypeError(".Protos.BS2GC_LoginRet.teamInfos: array expected");
+                message.teamInfos = [];
+                for (let i = 0; i < object.teamInfos.length; ++i) {
+                    if (typeof object.teamInfos[i] !== "object")
+                        throw TypeError(".Protos.BS2GC_LoginRet.teamInfos: object expected");
+                    message.teamInfos[i] = $root.Protos.CS2BS_TeamInfo.fromObject(object.teamInfos[i]);
                 }
             }
             return message;
@@ -1951,7 +1951,7 @@ export const Protos = $root.Protos = (() => {
                 options = {};
             let object = {};
             if (options.arrays || options.defaults)
-                object.playerInfos = [];
+                object.teamInfos = [];
             if (options.defaults) {
                 object.opts = null;
                 object.result = options.enums === String ? "Success" : 0;
@@ -1991,10 +1991,10 @@ export const Protos = $root.Protos = (() => {
                 object.mapID = message.mapID;
             if (message.curFrame != null && message.hasOwnProperty("curFrame"))
                 object.curFrame = message.curFrame;
-            if (message.playerInfos && message.playerInfos.length) {
-                object.playerInfos = [];
-                for (let j = 0; j < message.playerInfos.length; ++j)
-                    object.playerInfos[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfos[j], options);
+            if (message.teamInfos && message.teamInfos.length) {
+                object.teamInfos = [];
+                for (let j = 0; j < message.teamInfos.length; ++j)
+                    object.teamInfos[j] = $root.Protos.CS2BS_TeamInfo.toObject(message.teamInfos[j], options);
             }
             return object;
         };
@@ -2649,7 +2649,6 @@ export const Protos = $root.Protos = (() => {
 
         CS2BS_PlayerInfo.prototype.gcNID = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
         CS2BS_PlayerInfo.prototype.actorID = 0;
-        CS2BS_PlayerInfo.prototype.team = 0;
         CS2BS_PlayerInfo.prototype.nickname = "";
         CS2BS_PlayerInfo.prototype.avatar = "";
         CS2BS_PlayerInfo.prototype.gender = 0;
@@ -2669,8 +2668,6 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(8).uint64(message.gcNID);
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 writer.uint32(16).int32(message.actorID);
-            if (message.team != null && message.hasOwnProperty("team"))
-                writer.uint32(24).int32(message.team);
             if (message.nickname != null && message.hasOwnProperty("nickname"))
                 writer.uint32(34).string(message.nickname);
             if (message.avatar != null && message.hasOwnProperty("avatar"))
@@ -2704,9 +2701,6 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 2:
                     message.actorID = reader.int32();
-                    break;
-                case 3:
-                    message.team = reader.int32();
                     break;
                 case 4:
                     message.nickname = reader.string();
@@ -2752,9 +2746,6 @@ export const Protos = $root.Protos = (() => {
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 if (!$util.isInteger(message.actorID))
                     return "actorID: integer expected";
-            if (message.team != null && message.hasOwnProperty("team"))
-                if (!$util.isInteger(message.team))
-                    return "team: integer expected";
             if (message.nickname != null && message.hasOwnProperty("nickname"))
                 if (!$util.isString(message.nickname))
                     return "nickname: string expected";
@@ -2794,8 +2785,6 @@ export const Protos = $root.Protos = (() => {
                     message.gcNID = new $util.LongBits(object.gcNID.low >>> 0, object.gcNID.high >>> 0).toNumber(true);
             if (object.actorID != null)
                 message.actorID = object.actorID | 0;
-            if (object.team != null)
-                message.team = object.team | 0;
             if (object.nickname != null)
                 message.nickname = String(object.nickname);
             if (object.avatar != null)
@@ -2824,7 +2813,6 @@ export const Protos = $root.Protos = (() => {
                 } else
                     object.gcNID = options.longs === String ? "0" : 0;
                 object.actorID = 0;
-                object.team = 0;
                 object.nickname = "";
                 object.avatar = "";
                 object.gender = 0;
@@ -2840,8 +2828,6 @@ export const Protos = $root.Protos = (() => {
                     object.gcNID = options.longs === String ? $util.Long.prototype.toString.call(message.gcNID) : options.longs === Number ? new $util.LongBits(message.gcNID.low >>> 0, message.gcNID.high >>> 0).toNumber(true) : message.gcNID;
             if (message.actorID != null && message.hasOwnProperty("actorID"))
                 object.actorID = message.actorID;
-            if (message.team != null && message.hasOwnProperty("team"))
-                object.team = message.team;
             if (message.nickname != null && message.hasOwnProperty("nickname"))
                 object.nickname = message.nickname;
             if (message.avatar != null && message.hasOwnProperty("avatar"))
@@ -2866,10 +2852,118 @@ export const Protos = $root.Protos = (() => {
         return CS2BS_PlayerInfo;
     })();
 
+    Protos.CS2BS_TeamInfo = (function() {
+
+        function CS2BS_TeamInfo(properties) {
+            this.playerInfos = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2BS_TeamInfo.prototype.playerInfos = $util.emptyArray;
+
+        CS2BS_TeamInfo.create = function create(properties) {
+            return new CS2BS_TeamInfo(properties);
+        };
+
+        CS2BS_TeamInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.playerInfos != null && message.playerInfos.length)
+                for (let i = 0; i < message.playerInfos.length; ++i)
+                    $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(34).fork()).ldelim();
+            return writer;
+        };
+
+        CS2BS_TeamInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2BS_TeamInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2BS_TeamInfo();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 4:
+                    if (!(message.playerInfos && message.playerInfos.length))
+                        message.playerInfos = [];
+                    message.playerInfos.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2BS_TeamInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2BS_TeamInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
+                if (!Array.isArray(message.playerInfos))
+                    return "playerInfos: array expected";
+                for (let i = 0; i < message.playerInfos.length; ++i) {
+                    let error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
+                    if (error)
+                        return "playerInfos." + error;
+                }
+            }
+            return null;
+        };
+
+        CS2BS_TeamInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2BS_TeamInfo)
+                return object;
+            let message = new $root.Protos.CS2BS_TeamInfo();
+            if (object.playerInfos) {
+                if (!Array.isArray(object.playerInfos))
+                    throw TypeError(".Protos.CS2BS_TeamInfo.playerInfos: array expected");
+                message.playerInfos = [];
+                for (let i = 0; i < object.playerInfos.length; ++i) {
+                    if (typeof object.playerInfos[i] !== "object")
+                        throw TypeError(".Protos.CS2BS_TeamInfo.playerInfos: object expected");
+                    message.playerInfos[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfos[i]);
+                }
+            }
+            return message;
+        };
+
+        CS2BS_TeamInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.arrays || options.defaults)
+                object.playerInfos = [];
+            if (message.playerInfos && message.playerInfos.length) {
+                object.playerInfos = [];
+                for (let j = 0; j < message.playerInfos.length; ++j)
+                    object.playerInfos[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfos[j], options);
+            }
+            return object;
+        };
+
+        CS2BS_TeamInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2BS_TeamInfo;
+    })();
+
     Protos.CS2BS_BattleInfo = (function() {
 
         function CS2BS_BattleInfo(properties) {
-            this.playerInfos = [];
+            this.teamInfos = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -2879,7 +2973,7 @@ export const Protos = $root.Protos = (() => {
         CS2BS_BattleInfo.prototype.opts = null;
         CS2BS_BattleInfo.prototype.mapID = 0;
         CS2BS_BattleInfo.prototype.connTimeout = 0;
-        CS2BS_BattleInfo.prototype.playerInfos = $util.emptyArray;
+        CS2BS_BattleInfo.prototype.teamInfos = $util.emptyArray;
 
         CS2BS_BattleInfo.create = function create(properties) {
             return new CS2BS_BattleInfo(properties);
@@ -2894,9 +2988,9 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(16).int32(message.mapID);
             if (message.connTimeout != null && message.hasOwnProperty("connTimeout"))
                 writer.uint32(24).int32(message.connTimeout);
-            if (message.playerInfos != null && message.playerInfos.length)
-                for (let i = 0; i < message.playerInfos.length; ++i)
-                    $root.Protos.CS2BS_PlayerInfo.encode(message.playerInfos[i], writer.uint32(34).fork()).ldelim();
+            if (message.teamInfos != null && message.teamInfos.length)
+                for (let i = 0; i < message.teamInfos.length; ++i)
+                    $root.Protos.CS2BS_TeamInfo.encode(message.teamInfos[i], writer.uint32(34).fork()).ldelim();
             return writer;
         };
 
@@ -2921,9 +3015,9 @@ export const Protos = $root.Protos = (() => {
                     message.connTimeout = reader.int32();
                     break;
                 case 4:
-                    if (!(message.playerInfos && message.playerInfos.length))
-                        message.playerInfos = [];
-                    message.playerInfos.push($root.Protos.CS2BS_PlayerInfo.decode(reader, reader.uint32()));
+                    if (!(message.teamInfos && message.teamInfos.length))
+                        message.teamInfos = [];
+                    message.teamInfos.push($root.Protos.CS2BS_TeamInfo.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2953,13 +3047,13 @@ export const Protos = $root.Protos = (() => {
             if (message.connTimeout != null && message.hasOwnProperty("connTimeout"))
                 if (!$util.isInteger(message.connTimeout))
                     return "connTimeout: integer expected";
-            if (message.playerInfos != null && message.hasOwnProperty("playerInfos")) {
-                if (!Array.isArray(message.playerInfos))
-                    return "playerInfos: array expected";
-                for (let i = 0; i < message.playerInfos.length; ++i) {
-                    let error = $root.Protos.CS2BS_PlayerInfo.verify(message.playerInfos[i]);
+            if (message.teamInfos != null && message.hasOwnProperty("teamInfos")) {
+                if (!Array.isArray(message.teamInfos))
+                    return "teamInfos: array expected";
+                for (let i = 0; i < message.teamInfos.length; ++i) {
+                    let error = $root.Protos.CS2BS_TeamInfo.verify(message.teamInfos[i]);
                     if (error)
-                        return "playerInfos." + error;
+                        return "teamInfos." + error;
                 }
             }
             return null;
@@ -2978,14 +3072,14 @@ export const Protos = $root.Protos = (() => {
                 message.mapID = object.mapID | 0;
             if (object.connTimeout != null)
                 message.connTimeout = object.connTimeout | 0;
-            if (object.playerInfos) {
-                if (!Array.isArray(object.playerInfos))
-                    throw TypeError(".Protos.CS2BS_BattleInfo.playerInfos: array expected");
-                message.playerInfos = [];
-                for (let i = 0; i < object.playerInfos.length; ++i) {
-                    if (typeof object.playerInfos[i] !== "object")
-                        throw TypeError(".Protos.CS2BS_BattleInfo.playerInfos: object expected");
-                    message.playerInfos[i] = $root.Protos.CS2BS_PlayerInfo.fromObject(object.playerInfos[i]);
+            if (object.teamInfos) {
+                if (!Array.isArray(object.teamInfos))
+                    throw TypeError(".Protos.CS2BS_BattleInfo.teamInfos: array expected");
+                message.teamInfos = [];
+                for (let i = 0; i < object.teamInfos.length; ++i) {
+                    if (typeof object.teamInfos[i] !== "object")
+                        throw TypeError(".Protos.CS2BS_BattleInfo.teamInfos: object expected");
+                    message.teamInfos[i] = $root.Protos.CS2BS_TeamInfo.fromObject(object.teamInfos[i]);
                 }
             }
             return message;
@@ -2996,7 +3090,7 @@ export const Protos = $root.Protos = (() => {
                 options = {};
             let object = {};
             if (options.arrays || options.defaults)
-                object.playerInfos = [];
+                object.teamInfos = [];
             if (options.defaults) {
                 object.opts = null;
                 object.mapID = 0;
@@ -3008,10 +3102,10 @@ export const Protos = $root.Protos = (() => {
                 object.mapID = message.mapID;
             if (message.connTimeout != null && message.hasOwnProperty("connTimeout"))
                 object.connTimeout = message.connTimeout;
-            if (message.playerInfos && message.playerInfos.length) {
-                object.playerInfos = [];
-                for (let j = 0; j < message.playerInfos.length; ++j)
-                    object.playerInfos[j] = $root.Protos.CS2BS_PlayerInfo.toObject(message.playerInfos[j], options);
+            if (message.teamInfos && message.teamInfos.length) {
+                object.teamInfos = [];
+                for (let j = 0; j < message.teamInfos.length; ++j)
+                    object.teamInfos[j] = $root.Protos.CS2BS_TeamInfo.toObject(message.teamInfos[j], options);
             }
             return object;
         };

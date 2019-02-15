@@ -16,7 +16,7 @@ message BS2GC_LoginRet {
 	int32 battleTime = 8;//战场限时
 	int32 mapID = 9;//地图id
 	int32 curFrame = 10;//当前帧数
-	repeated CS2BS_PlayerInfo playerInfos = 11;//玩家信息
+	repeated CS2BS_TeamInfo teamInfos = 11;//玩家信息
 }
 
 //回应战场快照

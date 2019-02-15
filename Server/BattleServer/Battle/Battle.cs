@@ -87,7 +87,12 @@ namespace BattleServer.Battle
 		public BattleEntry battleEntry { get; private set; }
 
 		/// <summary>
-		/// 所有实体列表
+		/// 队伍列表
+		/// </summary>
+		private readonly List<Team> _teams = new List<Team>();
+
+		/// <summary>
+		/// 实体列表
 		/// </summary>
 		private readonly List<Champion> _champions = new List<Champion>();
 
@@ -140,6 +145,7 @@ namespace BattleServer.Battle
 			for ( int i = 0; i < count; i++ )
 				this._champions[i].Dispose();
 			this._champions.Clear();
+			this._teams.Clear();
 			this._idToChampion.Clear();
 			this._frameActionMgr.Clear();
 			this._snapshotMgr.Clear();
@@ -161,13 +167,26 @@ namespace BattleServer.Battle
 			this.LoadDefs();
 
 			//create champions
-			foreach ( BSUser user in battleEntry.users )
+			int c1 = battleEntry.users.Length;
+			for ( int i = 0; i < c1; i++ )
 			{
-				Champion champion = new Champion( this );
-				champion.rid = user.gcNID;
-				champion.user = BS.instance.userMgr.GetUser( user.gcNID );
-				this._champions.Add( champion );
-				this._idToChampion[champion.rid] = champion;
+				BSUser[] _team = battleEntry.users[i];
+				Team team = new Team( this );
+				team.id = i;
+				this._teams.Add( team );
+
+				int c2 = _team.Length;
+				for ( int j = 0; j < c2; j++ )
+				{
+					BSUser user = _team[j];
+					Champion champion = new Champion( this );
+					champion.rid = user.gcNID;
+					champion.user = BS.instance.userMgr.GetUser( user.gcNID );
+					this._champions.Add( champion );
+					this._idToChampion[champion.rid] = champion;
+
+					team.AddChampion( champion );
+				}
 			}
 
 			this._snapshotMgr.Init( this );
@@ -339,7 +358,7 @@ namespace BattleServer.Battle
 			for ( int i = 0; i < count; i++ )
 			{
 				Champion champion = this.GetChampionAt( i );
-				if ( champion.gladiatorTime >= this.gladiatorTimeout )
+				if ( this.GetTeam( champion.team ).gladiatorTime >= this.gladiatorTimeout )
 				{
 					if ( champion.team == 0 )
 						team0Win = true;
@@ -417,6 +436,14 @@ namespace BattleServer.Battle
 			int count = reader.ReadInt32();//champions
 			for ( int i = 0; i < count; i++ )
 			{
+				int id = reader.ReadInt32();
+				Team team = this.GetTeam( i );
+				team.DecodeSnapshot( id, reader );
+			}
+
+			count = reader.ReadInt32();//champions
+			for ( int i = 0; i < count; i++ )
+			{
 				ulong rid = reader.ReadUInt64();
 				Champion champion = this.GetChampion( rid );
 				champion.DecodeSnapshot( rid, false, reader );
@@ -443,25 +470,7 @@ namespace BattleServer.Battle
 			return this._champions[index];
 		}
 
-		/// <summary>
-		/// 以字符串形式列出所有实体信息
-		/// </summary>
-		public string ListChampions()
-		{
-			StringBuilder sb = new StringBuilder();
-			foreach ( Champion champion in this._champions )
-				sb.AppendLine( champion.ToString() );
-			return sb.ToString();
-		}
-
-		public string Dump()
-		{
-			string str = string.Empty;
-			str += $"frame:{this.frame}\n";
-			foreach ( Champion champion in this._champions )
-				str += champion.Dump();
-			return str;
-		}
+		public Team GetTeam( int index ) => this._teams[index];
 
 		/// <summary>
 		/// 处理玩家提交的帧行为
@@ -493,5 +502,25 @@ namespace BattleServer.Battle
 		/// 处理战场结束
 		/// </summary>
 		public void HandleBattleEnd( ulong gcNID, Protos.GC2BS_EndBattle endBattle ) => this._battleEndProcessor.Add( gcNID, endBattle );
+
+		/// <summary>
+		/// 以字符串形式列出所有实体信息
+		/// </summary>
+		public string ListChampions()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach ( Champion champion in this._champions )
+				sb.AppendLine( champion.ToString() );
+			return sb.ToString();
+		}
+
+		public string Dump()
+		{
+			string str = string.Empty;
+			str += $"frame:{this.frame}\n";
+			foreach ( Champion champion in this._champions )
+				str += champion.Dump();
+			return str;
+		}
 	}
 }

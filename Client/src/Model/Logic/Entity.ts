@@ -1,19 +1,20 @@
 import * as $protobuf from "../../Libs/protobufjs";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { EntityType } from "../EntityType";
-import { ISnapshotable } from "./ISnapshotable";
 import { Battle } from "./Battle";
+import { ISnapshotable } from "./ISnapshotable";
 
 export class EntityInitParams {
 	//entity
 	public rid: Long;
 	public id: number;
 	//champion
-	public team: number;
 	public name: string;
+	public team: number;
 	//bullet
 	public casterID: Long;
 	public skillID: number;
+	//global
 	public position: FVec2;
 	public direction: FVec2;
 }

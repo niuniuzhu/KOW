@@ -9,7 +9,6 @@ namespace BattleServer.User
 		/// 对每个账号每个BS服唯一
 		/// </summary>
 		public readonly ulong gcNID;
-		public readonly int team;
 		public readonly int actorID;
 		public readonly string nickname;
 		public readonly string avatar;
@@ -37,7 +36,6 @@ namespace BattleServer.User
 		public BSUser( Protos.CS2BS_PlayerInfo playerInfo, Battle.Battle battle )
 		{
 			this.gcNID = playerInfo.GcNID;
-			this.team = playerInfo.Team;
 			this.actorID = playerInfo.ActorID;
 			this.nickname = playerInfo.Nickname;
 			this.avatar = playerInfo.Avatar;

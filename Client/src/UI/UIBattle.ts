@@ -1,4 +1,3 @@
-import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { UIEvent } from "../Model/BattleEvent/UIEvent";
@@ -12,7 +11,6 @@ import { Vec2 } from "../RC/Math/Vec2";
 import { GestureState2 } from "./GestureState2";
 import { IUIModule } from "./IUIModule";
 import { Joystick } from "./Joystick";
-import { SceneManager } from "../Scene/SceneManager";
 
 export class UIBattle implements IUIModule {
 	public get root(): fairygui.GComponent { return this._root; }
@@ -25,8 +23,7 @@ export class UIBattle implements IUIModule {
 	private readonly _skill0Progress: fairygui.GProgressBar;
 	private readonly _skillBtn1: fairygui.GButton;
 	private readonly _skill1Progress: fairygui.GProgressBar;
-	private readonly _time0: fairygui.GTextField;
-	private readonly _time1: fairygui.GTextField;
+	private readonly _times: fairygui.GTextField[] = [];
 	private readonly _endBattle: fairygui.GComponent;
 	private readonly _gestureState: GestureState2;
 	private readonly _frameActionManager: FrameAciontManager = new FrameAciontManager();
@@ -56,8 +53,11 @@ export class UIBattle implements IUIModule {
 		this._hpProgress = this._root.getChild("n00").asProgress;
 		this._hpbar = this._hpProgress.getChild("bar").asImage;
 		this._hpbarBg = this._hpProgress.getChild("di").asImage;
-		this._time0 = this._root.getChild("s00").asTextField;
-		this._time1 = this._root.getChild("s10").asTextField;
+
+		this._times.push(this._root.getChild("s00").asTextField);
+		this._times.push(this._root.getChild("s01").asTextField);
+		this._times.push(this._root.getChild("s02").asTextField);
+		this._times.push(this._root.getChild("s03").asTextField);
 
 		this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
 		this._endBattle.setSize(this._root.width, this._root.height);
@@ -83,23 +83,27 @@ export class UIBattle implements IUIModule {
 		Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
 
 		const battleInfo = <BattleInfo>param;
-		for (const playerInfo of battleInfo.playerInfos) {
-			if (playerInfo.gcNID.equals(battleInfo.playerID)) {
-				this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
-				this._root.getChild("nickname").asTextField.text = playerInfo.nickname;
-				break;
+		for (const teamInfo of battleInfo.teamInfos) {
+			for (const player of teamInfo.playerInfos) {
+				if (player.gcNID.equals(battleInfo.playerID)) {
+					this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = player.avatar;
+					this._root.getChild("nickname").asTextField.text = player.nickname;
+					break;
+				}
 			}
 		}
 
 		UIEvent.AddListener(UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
 		UIEvent.AddListener(UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
 		UIEvent.AddListener(UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));
+		UIEvent.AddListener(UIEvent.E_GLADIATOR_TIME_CHANGE, this.OnGladiatorTimeChange.bind(this));
 	}
 
 	public Exit(): void {
 		UIEvent.RemoveListener(UIEvent.E_ENTITY_INIT);
 		UIEvent.RemoveListener(UIEvent.E_END_BATTLE);
 		UIEvent.RemoveListener(UIEvent.E_ATTR_CHANGE);
+		UIEvent.RemoveListener(UIEvent.E_GLADIATOR_TIME_CHANGE);
 
 		this._gestureState.OnExit();
 		this.GestureOff();
@@ -191,13 +195,13 @@ export class UIBattle implements IUIModule {
 					this._skill1Progress.value = target.mp;
 				}
 				break;
-
-			case EAttr.GLADIATOR_TIME:
-				const tf = target.team == 0 ? this._time0 : this._time1;
-				const t = target.gladiatorTime < 0 ? 0 : target.gladiatorTime;
-				tf.text = "" + Math.floor(t * 0.001);
-				break;
 		}
+	}
+
+	private OnGladiatorTimeChange(e: UIEvent): void {
+		const tf = this._times[e.team];
+		const t = e.v0 < 0 ? 0 : e.v0;
+		tf.text = "" + Math.floor(t * 0.001);
 	}
 
 	private IsSelf(champion: VChampion): boolean {

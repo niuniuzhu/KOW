@@ -11,6 +11,8 @@ export class UIMatching {
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._tLists.push(this._root.getChild("t0").asList);
         this._tLists.push(this._root.getChild("t1").asList);
+        this._tLists.push(this._root.getChild("t2").asList);
+        this._tLists.push(this._root.getChild("t3").asList);
         this._cancelBtn = this._root.getChild("cancel_btn").asButton;
         this._cancelBtn.onClick(this, this.OnCancelBtnClick);
     }

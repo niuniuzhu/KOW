@@ -50,21 +50,30 @@ namespace BattleServer.Biz
 				loginRet.BattleTime = user.battle.battleTime;
 				loginRet.MapID = user.battle.mapID;
 				loginRet.CurFrame = user.battle.frame;
-				foreach ( var player in user.battle.battleEntry.users )
+				int c1 = user.battle.battleEntry.users.Length;
+				for ( int i = 0; i < c1; i++ )
 				{
-					Protos.CS2BS_PlayerInfo playerInfo = new Protos.CS2BS_PlayerInfo
+					var team = user.battle.battleEntry.users[i];
+					int c2 = team.Length;
+					var teamInfo = new Protos.CS2BS_TeamInfo();
+					loginRet.TeamInfos.Add( teamInfo );
+					for ( int j = 0; j < c2; j++ )
 					{
-						GcNID = player.gcNID,
-						ActorID = player.actorID,
-						Nickname = player.nickname,
-						Avatar = player.avatar,
-						Gender = player.gender,
-						Rank = player.rank,
-						Team = player.team,
-						Exp = player.exp
-					};
-					loginRet.PlayerInfos.Add( playerInfo );
+						BSUser player = team[j];
+						Protos.CS2BS_PlayerInfo playerInfo = new Protos.CS2BS_PlayerInfo
+						{
+							GcNID = player.gcNID,
+							ActorID = player.actorID,
+							Nickname = player.nickname,
+							Avatar = player.avatar,
+							Gender = player.gender,
+							Rank = player.rank,
+							Exp = player.exp
+						};
+						teamInfo.PlayerInfos.Add( playerInfo );
+					}
 				}
+
 				loginRet.Result = Protos.Global.Types.ECommon.Success;
 				session.Send( loginRet );
 			}

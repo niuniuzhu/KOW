@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(CentralServer.User.CSUser);
-			Utils.BeginObjectRegister(type, L, translator, 0, 2, 22, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 2, 23, 4);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Send", _m_Send);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ToString", _m_ToString);
@@ -48,9 +48,14 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "gender", _g_get_gender);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "money", _g_get_money);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "diamoned", _g_get_diamoned);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "rank", _g_get_honor);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "rank", _g_get_rank);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "exp", _g_get_exp);
             
-			
+			Utils.RegisterFunc(L, Utils.SETTER_IDX, "money", _s_set_money);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "diamoned", _s_set_diamoned);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "rank", _s_set_rank);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "exp", _s_set_exp);
+            
 			
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
@@ -449,7 +454,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_honor(RealStatePtr L)
+        static int _g_get_rank(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
@@ -462,7 +467,81 @@ namespace XLua.CSObjectWrap
             return 1;
         }
         
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_exp(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                CentralServer.User.CSUser __cl_gen_to_be_invoked = (CentralServer.User.CSUser)translator.FastGetCSObj(L, 1);
+                LuaAPI.xlua_pushuint(L, __cl_gen_to_be_invoked.exp);
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 1;
+        }
         
+        
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_money(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                CentralServer.User.CSUser __cl_gen_to_be_invoked = (CentralServer.User.CSUser)translator.FastGetCSObj(L, 1);
+                __cl_gen_to_be_invoked.money = LuaAPI.xlua_tointeger(L, 2);
+            
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_diamoned(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                CentralServer.User.CSUser __cl_gen_to_be_invoked = (CentralServer.User.CSUser)translator.FastGetCSObj(L, 1);
+                __cl_gen_to_be_invoked.diamoned = LuaAPI.xlua_tointeger(L, 2);
+            
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_rank(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                CentralServer.User.CSUser __cl_gen_to_be_invoked = (CentralServer.User.CSUser)translator.FastGetCSObj(L, 1);
+                __cl_gen_to_be_invoked.rank = LuaAPI.xlua_tointeger(L, 2);
+            
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_exp(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                CentralServer.User.CSUser __cl_gen_to_be_invoked = (CentralServer.User.CSUser)translator.FastGetCSObj(L, 1);
+                __cl_gen_to_be_invoked.exp = LuaAPI.xlua_touint(L, 2);
+            
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 0;
+        }
         
 		
 		

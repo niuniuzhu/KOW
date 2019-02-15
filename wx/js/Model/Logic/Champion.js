@@ -1,16 +1,16 @@
 import { FMathUtils } from "../../RC/FMath/FMathUtils";
 import { FVec2 } from "../../RC/FMath/FVec2";
 import { Hashtable } from "../../RC/Utils/Hashtable";
+import { StateType } from "../Defines";
 import { Defs } from "../Defs";
 import { EntityType } from "../EntityType";
-import { IntersectInfo } from "./IntersectInfo";
 import { Skill } from "../Skill";
-import { StateType } from "../Defines";
 import { EAttr } from "./Attribute";
 import { Entity } from "./Entity";
 import { EntityFSM } from "./FSM/EntityFSM";
 import { EntityState } from "./FSM/EntityState";
 import { InputAgent } from "./InputAagent";
+import { IntersectInfo } from "./IntersectInfo";
 export class Champion extends Entity {
     constructor(battle) {
         super(battle);
@@ -26,7 +26,6 @@ export class Champion extends Entity {
         this.moveDirection = FVec2.zero;
         this.intersectVector = FVec2.zero;
         this.phyxSpeed = FVec2.zero;
-        this.gladiatorTime = -1;
         this.t_hp_add = 0;
         this.t_mp_add = 0;
         this.t_atk_add = 0;
@@ -97,7 +96,6 @@ export class Champion extends Entity {
         writer.double(this.phyxSpeed.x).double(this.phyxSpeed.y);
         writer.double(this.velocity);
         writer.bool(this.isDead);
-        writer.int32(this.gladiatorTime);
         writer.int32(this.t_hp_add);
         writer.int32(this.t_mp_add);
         writer.int32(this.t_atk_add);
@@ -130,7 +128,6 @@ export class Champion extends Entity {
         this.phyxSpeed.Set(reader.double(), reader.double());
         this.velocity = reader.double();
         this.isDead = reader.bool();
-        this.gladiatorTime = reader.int32();
         this.t_hp_add = reader.int32();
         this.t_mp_add = reader.int32();
         this.t_atk_add = reader.int32();
@@ -158,7 +155,6 @@ export class Champion extends Entity {
         writer.int32(this.supperArmor);
         writer.int32(this.invulnerAbility);
         writer.double(this.moveDirection.x).double(this.moveDirection.y);
-        writer.int32(this.gladiatorTime);
         writer.int32(this.t_hp_add);
         writer.int32(this.t_mp_add);
         writer.int32(this.t_atk_add);
@@ -267,11 +263,6 @@ export class Champion extends Entity {
         pos.y = FMathUtils.Min(this._battle.bounds.yMax, pos.y);
         this.position.CopyFrom(pos);
     }
-    UpdateGladiator(dt) {
-        this.gladiatorTime += dt;
-        if (this.gladiatorTime > this._battle.gladiatorTimeout)
-            this.gladiatorTime = this._battle.gladiatorTimeout;
-    }
     UpdateAfterHit() {
         if (this.hp <= 0) {
             this.Die();
@@ -303,63 +294,60 @@ export class Champion extends Entity {
             case EAttr.HP:
                 value = FMathUtils.Clamp(value, 0, this.mhp);
                 this.hp = value;
-                break;
+                return this.hp;
             case EAttr.MHP:
                 value = value < 0 ? 0 : value;
                 this.mhp = value;
-                break;
+                return this.mhp;
             case EAttr.MP:
                 value = FMathUtils.Clamp(value, 0, this.mmp);
                 this.mp = value;
-                break;
+                return this.mp;
             case EAttr.MMP:
                 value = value < 0 ? 0 : value;
                 this.mmp = value;
-                break;
+                return this.mmp;
             case EAttr.ATK:
                 value = value < 0 ? 0 : value;
                 this.atk = value;
-                break;
+                return this.atk;
             case EAttr.DEF:
                 value = value < 0 ? 0 : value;
                 this.def = value;
-                break;
+                return this.def;
             case EAttr.S_DISABLE_MOVE:
                 this.disableMove = value;
-                break;
+                return this.disableMove;
             case EAttr.S_DISABLE_TURN:
                 this.disableTurn = value;
-                break;
+                return this.disableTurn;
             case EAttr.S_DISABLE_SKILL:
                 this.disableSkill = value;
-                break;
+                return this.disableSkill;
             case EAttr.S_DISABLE_COLLISION:
                 this.disableCollision = value;
-                break;
+                return this.disableCollision;
             case EAttr.S_SUPPER_ARMOR:
                 this.supperArmor = value;
-                break;
+                return this.supperArmor;
             case EAttr.S_INVULNER_ABILITY:
                 this.invulnerAbility = value;
-                break;
-            case EAttr.GLADIATOR_TIME:
-                this.gladiatorTime = value;
-                break;
+                return this.invulnerAbility;
             case EAttr.S_HP_ADD:
                 this.t_hp_add = value;
-                break;
+                return this.t_hp_add;
             case EAttr.S_MP_ADD:
                 this.t_mp_add = value;
-                break;
+                return this.t_mp_add;
             case EAttr.S_ATK_ADD:
                 this.t_atk_add = value;
-                break;
+                return this.t_atk_add;
             case EAttr.S_DEF_ADD:
                 this.t_def_add = value;
-                break;
+                return this.t_def_add;
             case EAttr.S_SPEED_ADD:
                 this.t_speed_add = value;
-                break;
+                return this.t_speed_add;
         }
     }
     GetAttr(attr) {
@@ -388,8 +376,6 @@ export class Champion extends Entity {
                 return this.supperArmor;
             case EAttr.S_INVULNER_ABILITY:
                 return this.invulnerAbility;
-            case EAttr.GLADIATOR_TIME:
-                return this.gladiatorTime;
             case EAttr.S_HP_ADD:
                 return this.t_hp_add;
             case EAttr.S_MP_ADD:
@@ -410,7 +396,6 @@ export class Champion extends Entity {
         str += `phyxSpeed:${this.phyxSpeed.ToString()}\n`;
         str += `velocity:${this.velocity}\n`;
         str += `skill count:${this._skills.length}\n`;
-        str += `gladiatorTime:${this.gladiatorTime}\n`;
         str += this._fsm.Dump();
         return str;
     }

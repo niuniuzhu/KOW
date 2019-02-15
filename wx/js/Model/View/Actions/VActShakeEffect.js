@@ -34,7 +34,7 @@ export class VActShakeEffect extends VActEffect {
         if (this._formula != null) {
             const result = StringUtils.Format(this._formula, "" + this.time);
             const distance = this._ee.evaluate(result) * 0.001;
-            this._fx.root.scaleY = distance;
+            this._fx.root.scaleY = distance * 0.1;
         }
     }
 }

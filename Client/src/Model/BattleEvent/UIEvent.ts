@@ -8,6 +8,7 @@ export class UIEvent extends BaseBattleEvent {
 	public static readonly E_ENTITY_INIT: number = 101;
 	public static readonly E_END_BATTLE: number = 102;
 	public static readonly E_ATTR_CHANGE: number = 103;
+	public static readonly E_GLADIATOR_TIME_CHANGE: number = 104;
 
 	private static readonly POOL: Stack<UIEvent> = new Stack<UIEvent>();
 	private static readonly HANDLERS: Map<number, (e: UIEvent) => void> = new Map<number, (e: UIEvent) => void>();
@@ -75,7 +76,16 @@ export class UIEvent extends BaseBattleEvent {
 		this.Invoke(e);
 	}
 
+	public static GladiatorTimeChange(team: number, value: number): void {
+		let e = this.Get();
+		e._type = UIEvent.E_GLADIATOR_TIME_CHANGE;
+		e.team = team;
+		e.v0 = value;
+		this.Invoke(e);
+	}
+
 	public champion: VChampion;
+	public team: number;
 	public v0: number;
 	public v1: number;
 	public b0: boolean;

@@ -11,6 +11,7 @@ import { BattleInfo } from "./BattleInfo";
 import { Battle } from "./Logic/Battle";
 import { FrameActionGroup } from "./Logic/FrameActionGroup";
 import { VBattle } from "./View/VBattle";
+import { Team } from "./Logic/Team";
 
 interface IMessageInfo {
 	message: any;
@@ -105,14 +106,14 @@ export class BattleManager {
 		this._lBattle.SetBattleInfo(battleInfo);
 
 		const serverFrame = battleInfo.serverFrame;
-		const playerInfos = battleInfo.playerInfos;
+		const teamInfos = battleInfo.teamInfos;
 		//请求最新战场快照
 		this.RequestSnapshot(serverFrame, success => {
 			if (this._destroied)
 				return;
 			if (!success) {
 				//如果没有快照,则创建初始战场状态
-				this._lBattle.CreatePlayers(playerInfos);
+				this._lBattle.CreatePlayers(teamInfos);
 			}
 			//请求帧行为历史记录
 			const request = ProtoCreator.Q_GC2BS_RequestFrameActions();

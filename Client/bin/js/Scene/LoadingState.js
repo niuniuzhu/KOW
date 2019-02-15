@@ -29,7 +29,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleInf
                             this._battleInfo.snapshotStep = resp.snapshotStep;
                             this._battleInfo.battleTime = resp.battleTime;
                             this._battleInfo.mapID = resp.mapID;
-                            this._battleInfo.playerInfos = resp.playerInfos;
+                            this._battleInfo.teamInfos = resp.teamInfos;
                             this._battleInfo.serverFrame = resp.curFrame;
                             Global_1.Global.battleManager.Preload(this._battleInfo, this, () => {
                                 this._ui.OnLoadComplete();

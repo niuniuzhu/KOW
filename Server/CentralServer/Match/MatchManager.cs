@@ -203,6 +203,8 @@ namespace CentralServer.Match
 			int c1 = roomInfo.tUsers.Length;
 			for ( int i = 0; i < c1; i++ )
 			{
+				Protos.CS2BS_TeamInfo ti = new Protos.CS2BS_TeamInfo();
+				battleInfo.TeamInfos.Add( ti );
 				RoomUser[] roomUsers = roomInfo.tUsers[i];
 				int c2 = roomUsers.Length;
 				for ( int j = 0; j < c2; j++ )
@@ -214,7 +216,6 @@ namespace CentralServer.Match
 					{
 						GcNID = user.ukey | ( ulong )appropriateBSInfo.lid << 32,
 						ActorID = matchParams.actorID,
-						Team = i,
 						Avatar = user.avatar,
 						Nickname = user.nickname,
 						Gender = user.gender,
@@ -223,7 +224,7 @@ namespace CentralServer.Match
 						Rank = user.rank,
 						Exp = user.exp
 					};
-					battleInfo.PlayerInfos.Add( pi );
+					ti.PlayerInfos.Add( pi );
 				}
 			}
 			CS.instance.netSessionMgr.Send( appropriateBSInfo.sessionID, battleInfo, RPCEntry.Pop( this.OnBattleInfoRet, roomInfo,

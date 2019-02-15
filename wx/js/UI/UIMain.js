@@ -9,9 +9,11 @@ export class UIMain {
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._matchBtn = this._root.getChild("n3").asCom;
         this._matchBtn2 = this._root.getChild("n13").asCom;
+        this._matchBtn3 = this._root.getChild("n19").asCom;
         this._matchBtn4 = this._root.getChild("n15").asCom;
         this._matchBtn.onClick(this, this.OnMatchBtnClick);
         this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
+        this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
         this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
     }
     get root() { return this._root; }
@@ -55,6 +57,10 @@ export class UIMain {
     OnMatchBtn2Click() {
         this.SetMatchBtnEnable(false);
         Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T1P1);
+    }
+    OnMatchBtn3Click() {
+        this.SetMatchBtnEnable(false);
+        Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T4P1);
     }
     OnMatchBtn4Click() {
         this.SetMatchBtnEnable(false);

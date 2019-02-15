@@ -6,6 +6,6 @@ namespace BattleServer.Battle
 	{
 		public int rndSeed;
 		public int mapID;
-		public BSUser[] users;
+		public BSUser[][] users;
 	}
 }

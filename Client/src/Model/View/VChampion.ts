@@ -44,7 +44,6 @@ export class VChampion extends VEntity {
 	private _supperArmor: number;
 	private _invulnerAbility: number;
 	private readonly _moveDirection: Vec2 = Vec2.zero;
-	private _gladiatorTime: number;
 	//临时属性
 	private _t_hp_add: number = 0;
 	private _t_mp_add: number = 0;
@@ -66,7 +65,6 @@ export class VChampion extends VEntity {
 	public get supperArmor(): number { return this._supperArmor; }
 	public get invulnerAbility(): number { return this._invulnerAbility; }
 	public get moveDirection(): Vec2 { return this._moveDirection; }
-	public get gladiatorTime(): number { return this._gladiatorTime; }
 	public get t_hp_add(): number { return this._t_hp_add; }
 	public get t_mp_add(): number { return this._t_mp_add; }
 	public get t_atk_add(): number { return this._t_atk_add; }
@@ -87,7 +85,6 @@ export class VChampion extends VEntity {
 	public set supperArmor(value: number) { if (this._supperArmor == value) return; this._supperArmor = value; this.OnAttrChange(EAttr.S_SUPPER_ARMOR, value); }
 	public set invulnerAbility(value: number) { if (this._invulnerAbility == value) return; this._invulnerAbility = value; this.OnAttrChange(EAttr.S_INVULNER_ABILITY, value); }
 	public set moveDirection(value: Vec2) { if (this._moveDirection.EqualsTo(value)) return; this._moveDirection.CopyFrom(value); this.OnAttrChange(EAttr.MOVE_DIRECTION, value); }
-	public set gladiatorTime(value: number) { if (this._gladiatorTime == value) return; this._gladiatorTime = value; this.OnAttrChange(EAttr.GLADIATOR_TIME, value); }
 	public set t_hp_add(value: number) { if (this._t_hp_add == value) return; this._t_hp_add = value; this.OnAttrChange(EAttr.S_HP_ADD, value); }
 	public set t_mp_add(value: number) { if (this._t_mp_add == value) return; this._t_mp_add = value; this.OnAttrChange(EAttr.S_MP_ADD, value); }
 	public set t_atk_add(value: number) { if (this._t_atk_add == value) return; this._t_atk_add = value; this.OnAttrChange(EAttr.S_ATK_ADD, value); }
@@ -167,7 +164,6 @@ export class VChampion extends VEntity {
 		this.supperArmor = reader.int32();
 		this.invulnerAbility = reader.int32();
 		this.moveDirection = new Vec2(reader.double(), reader.double());
-		this.gladiatorTime = reader.int32();
 		this.t_hp_add = reader.int32();
 		this.t_mp_add = reader.int32();
 		this.t_atk_add = reader.int32();

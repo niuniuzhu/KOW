@@ -13,6 +13,7 @@ import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
 import { VEffect } from "./VEffect";
 import { VSceneItem } from "./VSceneItem";
+import { VTeam } from "./VTeam";
 
 export class VBattle {
 	private _mapID: number = 0;
@@ -23,7 +24,7 @@ export class VBattle {
 	 * 特效资源池
 	 */
 	private readonly _effectPool: EffectPool;
-
+	private readonly _teams: VTeam[] = [];
 	private readonly _champions: VChampion[] = [];
 	private readonly _idToChampion: Map<string, VChampion> = new Map<string, VChampion>();
 	private readonly _bullets: VBullet[] = [];
@@ -79,6 +80,7 @@ export class VBattle {
 		}
 		this._champions.splice(0);
 		this._idToChampion.clear();
+		this._teams.splice(0);
 
 		//destroy bullets
 		for (let i = 0, count = this._bullets.length; i < count; ++i) {
@@ -218,8 +220,20 @@ export class VBattle {
 	 */
 	public DecodeSync(reader: $protobuf.Reader | $protobuf.BufferReader): void {
 		this._logicFrame = reader.int32();
-		//champions
+
+		//teams
 		let count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const id = reader.int32();
+			let team = this.GetTeam(id);
+			if (team == null) {
+				team = new VTeam();
+			}
+			team.DecodeSync(id, reader);
+		}
+
+		//champions
+		count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const rid = <Long>reader.uint64();
 			let champion = this.GetChampion(rid);
@@ -258,6 +272,9 @@ export class VBattle {
 		}
 	}
 
+	/**
+	 * 创建战士
+	 */
 	public CreateChampion(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader): VChampion {
 		const champion = new VChampion(this);
 		champion.DecodeSync(rid, reader, true);
@@ -296,6 +313,17 @@ export class VBattle {
 		return this._idToChampion.get(rid.toString());
 	}
 
+	/**
+	 * 获取指定id队伍
+	 * @param id 队伍id
+	 */
+	public GetTeam(id: number): VTeam {
+		return this._teams[id];
+	}
+
+	/**
+	 * 创建子弹
+	 */
 	public CreateBullet(rid: Long, reader: $protobuf.Reader | $protobuf.BufferReader): VBullet {
 		const bullet = new VBullet(this);
 		bullet.DecodeSync(rid, reader, true);

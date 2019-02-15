@@ -15,27 +15,31 @@ export class ItemUnit {
         const count = item.attrs.length;
         for (let i = 0; i < count; ++i) {
             const attr = item.attrs[i];
-            let value = item.values[i];
+            const value = item.values[i];
             const op = item.ops[i];
             const old = target.GetAttr(attr);
+            let _new;
             switch (op) {
                 case SceneItemAttrOp.Add:
-                    value = FMathUtils.Add(value, old);
+                    _new = FMathUtils.Add(value, old);
                     break;
                 case SceneItemAttrOp.Mul:
-                    value = FMathUtils.Mul(value, old);
+                    _new = FMathUtils.Mul(value, old);
                     break;
                 case SceneItemAttrOp.Pow:
-                    value = FMathUtils.Pow(value, old);
+                    _new = FMathUtils.Pow(value, old);
                     break;
                 case SceneItemAttrOp.Sin:
-                    value = FMathUtils.Sin(old);
+                    _new = FMathUtils.Sin(old);
                     break;
                 case SceneItemAttrOp.Cos:
-                    value = FMathUtils.Cos(old);
+                    _new = FMathUtils.Cos(old);
                     break;
             }
-            target.SetAttr(attr, value);
+            _new = target.SetAttr(attr, _new);
+            if (!item.battle.chase) {
+                SyncEvent.Hit(this._targetID, this._targetID, _new - old);
+            }
         }
         if (!item.battle.chase) {
             SyncEvent.ItemTrigger(this._itemID, this._targetID);

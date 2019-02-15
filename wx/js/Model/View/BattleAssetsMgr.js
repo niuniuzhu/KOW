@@ -21,10 +21,14 @@ export class BattleAssetsMgr {
             const ss = u.split(",");
             this.assetsPath.push({ url: "res/" + ss[0], type: Number.parseInt(ss[1]) });
         }
-        const count = battleInfo.playerInfos.length;
-        for (let i = 0; i < count; ++i) {
-            const playerInfo = battleInfo.playerInfos[i];
-            this.assetsPath.push({ url: "res/roles/" + Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
+        const c1 = battleInfo.teamInfos.length;
+        for (let i = 0; i < c1; ++i) {
+            const playerInfos = battleInfo.teamInfos[i].playerInfos;
+            const c2 = playerInfos.length;
+            for (let j = 0; j < c2; ++j) {
+                const playerInfo = playerInfos[j];
+                this.assetsPath.push({ url: "res/roles/" + Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
+            }
         }
         this.assetsPath.push({ url: "res/ui/assets.bin", type: AssetType.Binary });
         this.assetsPath.push({ url: "res/ui/assets_atlas0.png", type: AssetType.Image });

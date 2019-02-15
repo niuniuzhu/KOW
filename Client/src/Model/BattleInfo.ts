@@ -42,7 +42,7 @@ export class BattleInfo {
 	 */
 	public snapshot: Uint8Array;
 	/**
-	 * 玩家信息
+	 * 队伍信息
 	 */
-	public playerInfos: Protos.ICS2BS_PlayerInfo[];
+	public teamInfos: Protos.ICS2BS_TeamInfo[];
 }

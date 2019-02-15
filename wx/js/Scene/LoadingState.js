@@ -33,7 +33,7 @@ export class LoadingState extends SceneState {
                         this._battleInfo.snapshotStep = resp.snapshotStep;
                         this._battleInfo.battleTime = resp.battleTime;
                         this._battleInfo.mapID = resp.mapID;
-                        this._battleInfo.playerInfos = resp.playerInfos;
+                        this._battleInfo.teamInfos = resp.teamInfos;
                         this._battleInfo.serverFrame = resp.curFrame;
                         Global.battleManager.Preload(this._battleInfo, this, () => {
                             this._ui.OnLoadComplete();

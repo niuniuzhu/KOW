@@ -1,4 +1,3 @@
-import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
@@ -20,6 +19,7 @@ import { EntityInitParams } from "./Entity";
 import { FrameActionGroup } from "./FrameActionGroup";
 import { HPPacket } from "./HPPacket";
 import { SceneItem } from "./SceneItem";
+import { Team } from "./Team";
 export class Battle {
     constructor() {
         this._frameRate = 0;
@@ -34,6 +34,7 @@ export class Battle {
         this._finished = false;
         this._destroied = true;
         this._frameActionGroups = [];
+        this._teams = [];
         this._champions = [];
         this._idToChampion = new Map();
         this._emitters = [];
@@ -69,6 +70,9 @@ export class Battle {
             this._champions[i].Destroy();
         this._champions.splice(0);
         this._idToChampion.clear();
+        for (let i = 0, count = this._teams.length; i < count; i++)
+            this._teams[i].Destroy();
+        this._teams.splice(0);
         for (let i = 0, count = this._emitters.length; i < count; i++)
             this._emitters[i].Destroy();
         this._emitters.splice(0);
@@ -176,18 +180,22 @@ export class Battle {
             champion.UpdateAfterHit();
         }
         let championInGladiator = null;
-        for (let i = 0, count = this._champions.length; i < count; i++) {
-            const champion = this._champions[i];
-            if (champion.isDead || !champion.isInGladiator)
-                continue;
-            if (championInGladiator != null) {
-                championInGladiator = null;
+        for (let i = 0, count = this._teams.length; i < count; i++) {
+            const team = this._teams[i];
+            for (let j = 0; j < team.numChanpions; j++) {
+                const champion = team.GetChampionAt(j);
+                if (champion.isDead || !champion.isInGladiator)
+                    continue;
+                if (championInGladiator != null) {
+                    championInGladiator = null;
+                    break;
+                }
+                championInGladiator = champion;
                 break;
             }
-            championInGladiator = champion;
         }
         if (championInGladiator != null) {
-            championInGladiator.UpdateGladiator(dt);
+            this.GetTeam(championInGladiator.team).UpdateGladiator(dt);
         }
         if (!this.chase) {
             this.SyncToView();
@@ -239,7 +247,13 @@ export class Battle {
         writer.int32(this._frame);
         writer.bool(this._finished);
         writer.double(this._random.seed);
-        let count = this._champions.length;
+        let count = this._teams.length;
+        writer.int32(count);
+        for (let i = 0; i < count; i++) {
+            const team = this._teams[i];
+            team.EncodeSnapshot(writer);
+        }
+        count = this._champions.length;
         writer.int32(count);
         for (let i = 0; i < count; i++) {
             const champion = this._champions[i];
@@ -271,6 +285,12 @@ export class Battle {
         this._random.seed = reader.double();
         let count = reader.int32();
         for (let i = 0; i < count; i++) {
+            const team = new Team(this);
+            team.DecodeSnapshot(reader);
+            this._teams.push(team);
+        }
+        count = reader.int32();
+        for (let i = 0; i < count; i++) {
             const champion = new Champion(this);
             champion.DecodeSnapshot(reader);
             this._champions.push(champion);
@@ -301,7 +321,13 @@ export class Battle {
     }
     EncodeSync(writer) {
         writer.int32(this._frame);
-        let count = this._champions.length;
+        let count = this._teams.length;
+        writer.int32(count);
+        for (let i = 0; i < count; i++) {
+            const team = this._teams[i];
+            team.EncodeSync(writer);
+        }
+        count = this._champions.length;
         writer.int32(count);
         for (let i = 0; i < count; i++) {
             const champion = this._champions[i];
@@ -348,21 +374,25 @@ export class Battle {
         const rnd = this._random.NextFloor(0, 0xfffff);
         return Long.fromBits(id, rnd);
     }
-    CreatePlayers(playerInfos) {
-        const params = new EntityInitParams();
-        const count = playerInfos.length;
-        for (let i = 0; i < count; ++i) {
-            const playerInfo = playerInfos[i];
-            params.rid = playerInfo.gcNID;
-            params.id = playerInfo.actorID;
-            params.team = playerInfo.team;
-            params.name = playerInfo.nickname || Consts.DEFAULT_NICK_NAME;
-            params.position = this._bornPoses[params.team];
-            params.direction = this._bornDirs[params.team];
-            const player = this.CreateChampion(params);
-            if (player.team >= this._bornPoses.length ||
-                player.team >= this._bornDirs.length) {
-                throw new Error("invalid team:" + player.team + ", player:" + player.rid);
+    CreatePlayers(_teamInfos) {
+        const c1 = _teamInfos.length;
+        for (let i = 0; i < c1; ++i) {
+            const team = new Team(this);
+            team.id = i;
+            this._teams.push(team);
+            const _teamInfo = _teamInfos[i];
+            const c2 = _teamInfo.playerInfos.length;
+            for (let j = 0; j < c2; ++j) {
+                const _playerInfo = _teamInfo.playerInfos[j];
+                const playerInfo = new EntityInitParams();
+                playerInfo.rid = _playerInfo.gcNID;
+                playerInfo.id = _playerInfo.actorID;
+                playerInfo.name = _playerInfo.nickname;
+                playerInfo.team = i;
+                playerInfo.position = this._bornPoses[i];
+                playerInfo.direction = this._bornDirs[i];
+                const champion = this.CreateChampion(playerInfo);
+                team.AddChampion(champion);
             }
         }
     }
@@ -393,6 +423,9 @@ export class Battle {
     }
     GetChampions() {
         return this._champions;
+    }
+    GetTeam(id) {
+        return this._teams[id];
     }
     CreateEmitter(id, casterID, skillID) {
         const emitter = new Emitter(this);
@@ -493,7 +526,7 @@ export class Battle {
         let team0Win = false;
         let team1Win = false;
         for (const champion of this._champions) {
-            if (champion.gladiatorTime >= this._gladiatorTimeout) {
+            if (this.GetTeam(champion.team).gladiatorTime >= this._gladiatorTimeout) {
                 if (champion.team == 0)
                     team0Win = true;
                 else

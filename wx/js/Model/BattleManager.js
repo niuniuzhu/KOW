@@ -50,12 +50,12 @@ export class BattleManager {
         this._vBattle.SetBattleInfo(battleInfo);
         this._lBattle.SetBattleInfo(battleInfo);
         const serverFrame = battleInfo.serverFrame;
-        const playerInfos = battleInfo.playerInfos;
+        const teamInfos = battleInfo.teamInfos;
         this.RequestSnapshot(serverFrame, success => {
             if (this._destroied)
                 return;
             if (!success) {
-                this._lBattle.CreatePlayers(playerInfos);
+                this._lBattle.CreatePlayers(teamInfos);
             }
             const request = ProtoCreator.Q_GC2BS_RequestFrameActions();
             request.from = this._lBattle.frame;

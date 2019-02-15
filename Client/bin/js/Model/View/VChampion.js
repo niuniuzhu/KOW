@@ -33,7 +33,6 @@ define(["require", "exports", "../../Global", "../../RC/Framework/FSM/FSM", "../
         get supperArmor() { return this._supperArmor; }
         get invulnerAbility() { return this._invulnerAbility; }
         get moveDirection() { return this._moveDirection; }
-        get gladiatorTime() { return this._gladiatorTime; }
         get t_hp_add() { return this._t_hp_add; }
         get t_mp_add() { return this._t_mp_add; }
         get t_atk_add() { return this._t_atk_add; }
@@ -67,8 +66,6 @@ define(["require", "exports", "../../Global", "../../RC/Framework/FSM/FSM", "../
             return; this._invulnerAbility = value; this.OnAttrChange(Attribute_1.EAttr.S_INVULNER_ABILITY, value); }
         set moveDirection(value) { if (this._moveDirection.EqualsTo(value))
             return; this._moveDirection.CopyFrom(value); this.OnAttrChange(Attribute_1.EAttr.MOVE_DIRECTION, value); }
-        set gladiatorTime(value) { if (this._gladiatorTime == value)
-            return; this._gladiatorTime = value; this.OnAttrChange(Attribute_1.EAttr.GLADIATOR_TIME, value); }
         set t_hp_add(value) { if (this._t_hp_add == value)
             return; this._t_hp_add = value; this.OnAttrChange(Attribute_1.EAttr.S_HP_ADD, value); }
         set t_mp_add(value) { if (this._t_mp_add == value)
@@ -140,7 +137,6 @@ define(["require", "exports", "../../Global", "../../RC/Framework/FSM/FSM", "../
             this.supperArmor = reader.int32();
             this.invulnerAbility = reader.int32();
             this.moveDirection = new Vec2_1.Vec2(reader.double(), reader.double());
-            this.gladiatorTime = reader.int32();
             this.t_hp_add = reader.int32();
             this.t_mp_add = reader.int32();
             this.t_atk_add = reader.int32();

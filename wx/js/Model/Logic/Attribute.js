@@ -9,7 +9,6 @@ export var EAttr;
     EAttr[EAttr["DEF"] = 6] = "DEF";
     EAttr[EAttr["MOVE_DIRECTION"] = 7] = "MOVE_DIRECTION";
     EAttr[EAttr["VELOCITY"] = 8] = "VELOCITY";
-    EAttr[EAttr["GLADIATOR_TIME"] = 9] = "GLADIATOR_TIME";
     EAttr[EAttr["S_DISABLE_MOVE"] = 500] = "S_DISABLE_MOVE";
     EAttr[EAttr["S_DISABLE_TURN"] = 501] = "S_DISABLE_TURN";
     EAttr[EAttr["S_DISABLE_SKILL"] = 502] = "S_DISABLE_SKILL";

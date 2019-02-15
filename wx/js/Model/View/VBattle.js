@@ -8,15 +8,16 @@ import { EntityType } from "../EntityType";
 import { BattleAssetsMgr } from "./BattleAssetsMgr";
 import { Camera } from "./Camera";
 import { EffectPool } from "./EffectPool";
-import { PopTextType } from "./HUD";
 import { VBullet } from "./VBullet";
 import { VChampion } from "./VChampion";
 import { VSceneItem } from "./VSceneItem";
+import { VTeam } from "./VTeam";
 export class VBattle {
     constructor() {
         this._mapID = 0;
         this._camera = new Camera();
         this._assetsManager = new BattleAssetsMgr();
+        this._teams = [];
         this._champions = [];
         this._idToChampion = new Map();
         this._bullets = [];
@@ -47,6 +48,7 @@ export class VBattle {
         }
         this._champions.splice(0);
         this._idToChampion.clear();
+        this._teams.splice(0);
         for (let i = 0, count = this._bullets.length; i < count; ++i) {
             this._bullets[i].Destroy();
         }
@@ -144,6 +146,15 @@ export class VBattle {
         this._logicFrame = reader.int32();
         let count = reader.int32();
         for (let i = 0; i < count; i++) {
+            const id = reader.int32();
+            let team = this.GetTeam(id);
+            if (team == null) {
+                team = new VTeam();
+            }
+            team.DecodeSync(id, reader);
+        }
+        count = reader.int32();
+        for (let i = 0; i < count; i++) {
             const rid = reader.uint64();
             let champion = this.GetChampion(rid);
             if (champion == null) {
@@ -200,6 +211,9 @@ export class VBattle {
     }
     GetChampion(rid) {
         return this._idToChampion.get(rid.toString());
+    }
+    GetTeam(id) {
+        return this._teams[id];
     }
     CreateBullet(rid, reader) {
         const bullet = new VBullet(this);
@@ -282,7 +296,7 @@ export class VBattle {
     }
     OnHit(e) {
         const target = this.GetChampion(e.rid1);
-        target.hud.PopText(PopTextType.Hurt, e.v0);
+        target.hud.PopText(e.v0);
     }
     OnItemCollision(e) {
     }

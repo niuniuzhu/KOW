@@ -1,4 +1,3 @@
-import { Consts } from "../../Consts";
 import { Global } from "../../Global";
 import * as Long from "../../Libs/long";
 import * as $protobuf from "../../Libs/protobufjs";
@@ -22,6 +21,7 @@ import { FrameActionGroup } from "./FrameActionGroup";
 import { HPPacket } from "./HPPacket";
 import { ISnapshotable } from "./ISnapshotable";
 import { SceneItem } from "./SceneItem";
+import { Team } from "./Team";
 
 export class Battle implements ISnapshotable {
 	private _frameRate: number = 0;
@@ -104,6 +104,7 @@ export class Battle implements ISnapshotable {
 	private _destroied: boolean = true;
 
 	private readonly _frameActionGroups: FrameActionGroup[] = [];
+	private readonly _teams: Team[] = [];
 	private readonly _champions: Champion[] = [];
 	private readonly _idToChampion: Map<string, Champion> = new Map<string, Champion>();
 	private readonly _emitters: Emitter[] = [];
@@ -135,6 +136,10 @@ export class Battle implements ISnapshotable {
 			this._champions[i].Destroy();
 		this._champions.splice(0);
 		this._idToChampion.clear();
+
+		for (let i = 0, count = this._teams.length; i < count; i++)
+			this._teams[i].Destroy();
+		this._teams.splice(0);
 
 		for (let i = 0, count = this._emitters.length; i < count; i++)
 			this._emitters[i].Destroy();
@@ -287,21 +292,26 @@ export class Battle implements ISnapshotable {
 
 		//check gladiator
 		let championInGladiator: Champion = null;
-		for (let i = 0, count = this._champions.length; i < count; i++) {
-			const champion = this._champions[i];
-			if (champion.isDead || !champion.isInGladiator)
-				continue;
-			//仅当一个玩家在禁区时计时生效
-			//当championInGladiator不为null,即存在多个玩家在禁区
-			if (championInGladiator != null) {
-				championInGladiator = null;
+		for (let i = 0, count = this._teams.length; i < count; i++) {
+			const team = this._teams[i];
+			for (let j = 0; j < team.numChanpions; j++) {
+				const champion = team.GetChampionAt(j);
+				if (champion.isDead || !champion.isInGladiator)
+					continue;
+				//仅当一个玩家在禁区时计时生效
+				//当championInGladiator不为null,即存在多个玩家在禁区
+				if (championInGladiator != null) {
+					championInGladiator = null;
+					break;
+				}
+				championInGladiator = champion;
+				//检查到一个就足够了
 				break;
 			}
-			championInGladiator = champion;
 		}
 		if (championInGladiator != null) {
 			//更新禁区时间
-			championInGladiator.UpdateGladiator(dt);
+			this.GetTeam(championInGladiator.team).UpdateGladiator(dt);
 		}
 
 		//sync to view
@@ -373,8 +383,16 @@ export class Battle implements ISnapshotable {
 		writer.bool(this._finished);
 		writer.double(this._random.seed);
 
+		//teams
+		let count = this._teams.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const team = this._teams[i];
+			team.EncodeSnapshot(writer);
+		}
+
 		//champions
-		let count = this._champions.length;
+		count = this._champions.length;
 		writer.int32(count);
 		for (let i = 0; i < count; i++) {
 			const champion = this._champions[i];
@@ -416,8 +434,16 @@ export class Battle implements ISnapshotable {
 		this._finished = reader.bool();
 		this._random.seed = reader.double();
 
-		//champions
+		//teams
 		let count = reader.int32();
+		for (let i = 0; i < count; i++) {
+			const team = new Team(this);
+			team.DecodeSnapshot(reader);
+			this._teams.push(team);
+		}
+
+		//champions
+		count = reader.int32();
 		for (let i = 0; i < count; i++) {
 			const champion = new Champion(this);
 			champion.DecodeSnapshot(reader);
@@ -460,8 +486,17 @@ export class Battle implements ISnapshotable {
 	 */
 	public EncodeSync(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.int32(this._frame);
+
+		//teams
+		let count = this._teams.length;
+		writer.int32(count);
+		for (let i = 0; i < count; i++) {
+			const team = this._teams[i];
+			team.EncodeSync(writer);
+		}
+
 		//champions
-		let count = this._champions.length;
+		count = this._champions.length;
 		writer.int32(count);
 		for (let i = 0; i < count; i++) {
 			const champion = this._champions[i];
@@ -533,23 +568,28 @@ export class Battle implements ISnapshotable {
 
 	/**
 	 * 创建玩家
-	 * @param playerInfos 玩家信息
+	 * @param _teamInfos 队伍信息
 	 */
-	public CreatePlayers(playerInfos: Protos.ICS2BS_PlayerInfo[]): void {
-		const params = new EntityInitParams();
-		const count = playerInfos.length;
-		for (let i = 0; i < count; ++i) {
-			const playerInfo = playerInfos[i];
-			params.rid = playerInfo.gcNID;
-			params.id = playerInfo.actorID;
-			params.team = playerInfo.team;
-			params.name = playerInfo.nickname;
-			params.position = this._bornPoses[params.team];
-			params.direction = this._bornDirs[params.team];
-			const player = this.CreateChampion(params);
-			if (player.team >= this._bornPoses.length ||
-				player.team >= this._bornDirs.length) {
-				throw new Error("invalid team:" + player.team + ", player:" + player.rid);
+	public CreatePlayers(_teamInfos: Protos.ICS2BS_TeamInfo[]): void {
+		const c1 = _teamInfos.length;
+		for (let i = 0; i < c1; ++i) {
+			const team: Team = new Team(this);
+			team.id = i;
+			this._teams.push(team);
+
+			const _teamInfo = _teamInfos[i];
+			const c2 = _teamInfo.playerInfos.length;
+			for (let j = 0; j < c2; ++j) {
+				const _playerInfo = _teamInfo.playerInfos[j];
+				const playerInfo = new EntityInitParams();
+				playerInfo.rid = _playerInfo.gcNID;
+				playerInfo.id = _playerInfo.actorID;
+				playerInfo.name = _playerInfo.nickname;
+				playerInfo.team = i;
+				playerInfo.position = this._bornPoses[i];
+				playerInfo.direction = this._bornDirs[i];
+				const champion = this.CreateChampion(playerInfo);
+				team.AddChampion(champion);
 			}
 		}
 	}
@@ -601,6 +641,14 @@ export class Battle implements ISnapshotable {
 	 */
 	public GetChampions(): Champion[] {
 		return this._champions;
+	}
+
+	/**
+	 * 获取指定id队伍
+	 * @param id 队伍id
+	 */
+	public GetTeam(id: number): Team {
+		return this._teams[id];
 	}
 
 	/**
@@ -763,7 +811,7 @@ export class Battle implements ISnapshotable {
 		let team1Win = false;
 		//检查禁区情况
 		for (const champion of this._champions) {
-			if (champion.gladiatorTime >= this._gladiatorTimeout) {
+			if (this.GetTeam(champion.team).gladiatorTime >= this._gladiatorTimeout) {
 				if (champion.team == 0)
 					team0Win = true;
 				else

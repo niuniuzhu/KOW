@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(BattleServer.Battle.Model.Champion);
-			Utils.BeginObjectRegister(type, L, translator, 0, 2, 37, 35);
+			Utils.BeginObjectRegister(type, L, translator, 0, 2, 36, 34);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "DecodeSnapshot", _m_DecodeSnapshot);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Dump", _m_Dump);
@@ -48,7 +48,6 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "phyxSpeed", _g_get_phyxSpeed);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "velocity", _g_get_velocity);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "isDead", _g_get_isDead);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "gladiatorTime", _g_get_gladiatorTime);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "t_hp_add", _g_get_t_hp_add);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "t_mp_add", _g_get_t_mp_add);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "t_atk_add", _g_get_t_atk_add);
@@ -85,7 +84,6 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "phyxSpeed", _s_set_phyxSpeed);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "velocity", _s_set_velocity);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "isDead", _s_set_isDead);
-            Utils.RegisterFunc(L, Utils.SETTER_IDX, "gladiatorTime", _s_set_gladiatorTime);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "t_hp_add", _s_set_t_hp_add);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "t_mp_add", _s_set_t_mp_add);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "t_atk_add", _s_set_t_atk_add);
@@ -495,20 +493,6 @@ namespace XLua.CSObjectWrap
 			
                 BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
                 LuaAPI.lua_pushboolean(L, __cl_gen_to_be_invoked.isDead);
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            return 1;
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_gladiatorTime(RealStatePtr L)
-        {
-		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			
-                BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
-                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.gladiatorTime);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }
@@ -1025,21 +1009,6 @@ namespace XLua.CSObjectWrap
 			
                 BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
                 __cl_gen_to_be_invoked.isDead = LuaAPI.lua_toboolean(L, 2);
-            
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            return 0;
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _s_set_gladiatorTime(RealStatePtr L)
-        {
-		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			
-                BattleServer.Battle.Model.Champion __cl_gen_to_be_invoked = (BattleServer.Battle.Model.Champion)translator.FastGetCSObj(L, 1);
-                __cl_gen_to_be_invoked.gladiatorTime = LuaAPI.xlua_tointeger(L, 2);
             
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);

@@ -3,6 +3,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEve
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIBattle {
         constructor() {
+            this._times = [];
             this._frameActionManager = new FrameActionManager_1.FrameAciontManager();
             this._markToEnd = false;
             this._keyInput = Vec2_1.Vec2.zero;
@@ -25,8 +26,10 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEve
             this._hpProgress = this._root.getChild("n00").asProgress;
             this._hpbar = this._hpProgress.getChild("bar").asImage;
             this._hpbarBg = this._hpProgress.getChild("di").asImage;
-            this._time0 = this._root.getChild("s00").asTextField;
-            this._time1 = this._root.getChild("s10").asTextField;
+            this._times.push(this._root.getChild("s00").asTextField);
+            this._times.push(this._root.getChild("s01").asTextField);
+            this._times.push(this._root.getChild("s02").asTextField);
+            this._times.push(this._root.getChild("s03").asTextField);
             this._endBattle = fairygui.UIPackage.createObject("endlevel", "Main").asCom;
             this._endBattle.setSize(this._root.width, this._root.height);
             this._endBattle.addRelation(this._root, fairygui.RelationType.Size);
@@ -46,21 +49,25 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEve
             Laya.stage.on(Laya.Event.KEY_DOWN, this, this.OnKeyDown);
             Laya.stage.on(Laya.Event.KEY_UP, this, this.OnKeyUp);
             const battleInfo = param;
-            for (const playerInfo of battleInfo.playerInfos) {
-                if (playerInfo.gcNID.equals(battleInfo.playerID)) {
-                    this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = playerInfo.avatar;
-                    this._root.getChild("nickname").asTextField.text = playerInfo.nickname;
-                    break;
+            for (const teamInfo of battleInfo.teamInfos) {
+                for (const player of teamInfo.playerInfos) {
+                    if (player.gcNID.equals(battleInfo.playerID)) {
+                        this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = player.avatar;
+                        this._root.getChild("nickname").asTextField.text = player.nickname;
+                        break;
+                    }
                 }
             }
             UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ENTITY_INIT, this.OnChampionInit.bind(this));
             UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_END_BATTLE, this.OnBattleEnd.bind(this));
             UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_ATTR_CHANGE, this.OnAttrChange.bind(this));
+            UIEvent_1.UIEvent.AddListener(UIEvent_1.UIEvent.E_GLADIATOR_TIME_CHANGE, this.OnGladiatorTimeChange.bind(this));
         }
         Exit() {
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ENTITY_INIT);
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_END_BATTLE);
             UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_ATTR_CHANGE);
+            UIEvent_1.UIEvent.RemoveListener(UIEvent_1.UIEvent.E_GLADIATOR_TIME_CHANGE);
             this._gestureState.OnExit();
             this.GestureOff();
             if (this._endBattle.parent != null) {
@@ -138,12 +145,12 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/BattleEve
                         this._skill1Progress.value = target.mp;
                     }
                     break;
-                case Attribute_1.EAttr.GLADIATOR_TIME:
-                    const tf = target.team == 0 ? this._time0 : this._time1;
-                    const t = target.gladiatorTime < 0 ? 0 : target.gladiatorTime;
-                    tf.text = "" + Math.floor(t * 0.001);
-                    break;
             }
+        }
+        OnGladiatorTimeChange(e) {
+            const tf = this._times[e.team];
+            const t = e.v0 < 0 ? 0 : e.v0;
+            tf.text = "" + Math.floor(t * 0.001);
         }
         IsSelf(champion) {
             return champion.rid.equals(Global_1.Global.battleManager.playerID);

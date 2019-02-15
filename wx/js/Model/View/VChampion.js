@@ -42,7 +42,6 @@ export class VChampion extends VEntity {
     get supperArmor() { return this._supperArmor; }
     get invulnerAbility() { return this._invulnerAbility; }
     get moveDirection() { return this._moveDirection; }
-    get gladiatorTime() { return this._gladiatorTime; }
     get t_hp_add() { return this._t_hp_add; }
     get t_mp_add() { return this._t_mp_add; }
     get t_atk_add() { return this._t_atk_add; }
@@ -76,8 +75,6 @@ export class VChampion extends VEntity {
         return; this._invulnerAbility = value; this.OnAttrChange(EAttr.S_INVULNER_ABILITY, value); }
     set moveDirection(value) { if (this._moveDirection.EqualsTo(value))
         return; this._moveDirection.CopyFrom(value); this.OnAttrChange(EAttr.MOVE_DIRECTION, value); }
-    set gladiatorTime(value) { if (this._gladiatorTime == value)
-        return; this._gladiatorTime = value; this.OnAttrChange(EAttr.GLADIATOR_TIME, value); }
     set t_hp_add(value) { if (this._t_hp_add == value)
         return; this._t_hp_add = value; this.OnAttrChange(EAttr.S_HP_ADD, value); }
     set t_mp_add(value) { if (this._t_mp_add == value)
@@ -149,7 +146,6 @@ export class VChampion extends VEntity {
         this.supperArmor = reader.int32();
         this.invulnerAbility = reader.int32();
         this.moveDirection = new Vec2(reader.double(), reader.double());
-        this.gladiatorTime = reader.int32();
         this.t_hp_add = reader.int32();
         this.t_mp_add = reader.int32();
         this.t_atk_add = reader.int32();

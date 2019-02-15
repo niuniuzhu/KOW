@@ -40,19 +40,25 @@ namespace BattleServer.Battle
 			BattleEntry battleEntry;
 			battleEntry.rndSeed = this._random.Next();
 			battleEntry.mapID = battleInfo.MapID;
-			int count = battleInfo.PlayerInfos.Count;
-			battleEntry.users = new BSUser[count];
-			for ( int i = 0; i < count; i++ )
+			int c1 = battleInfo.TeamInfos.Count;
+			battleEntry.users = new BSUser[c1][];
+			for ( int i = 0; i < c1; i++ )
 			{
-				Protos.CS2BS_PlayerInfo playerInfo = battleInfo.PlayerInfos[i];
-				//检查玩家是否在别的战场
-				if ( BS.instance.userMgr.HasUser( playerInfo.GcNID ) )
+				Protos.CS2BS_TeamInfo teamInfo = battleInfo.TeamInfos[i];
+				int c2 = teamInfo.PlayerInfos.Count;
+				battleEntry.users[i] = new BSUser[c2];
+				for ( int j = 0; j < c2; j++ )
 				{
-					callback( 0, false );
-					return;
+					Protos.CS2BS_PlayerInfo playerInfo = teamInfo.PlayerInfos[j];
+					//检查玩家是否在别的战场
+					if ( BS.instance.userMgr.HasUser( playerInfo.GcNID ) )
+					{
+						callback( 0, false );
+						return;
+					}
+					//创建玩家
+					battleEntry.users[i][j] = BS.instance.userMgr.CreateUser( playerInfo, battle );
 				}
-				//创建玩家
-				battleEntry.users[i] = BS.instance.userMgr.CreateUser( playerInfo, battle );
 			}
 
 			//初始化战场

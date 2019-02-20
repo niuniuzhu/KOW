@@ -23,7 +23,6 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
         Enter(param) {
             this.SetMatchBtnEnable(true);
             Global_1.Global.graphic.uiRoot.addChild(this._root);
-            this._root.getTransition("t0").play();
             const userInfo = param;
             if (userInfo != null) {
                 this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;

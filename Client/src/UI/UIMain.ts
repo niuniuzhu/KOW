@@ -37,7 +37,7 @@ export class UIMain implements IUIModule {
 	public Enter(param: any): void {
 		this.SetMatchBtnEnable(true);
 		Global.graphic.uiRoot.addChild(this._root);
-		this._root.getTransition("t0").play();
+		// this._root.getTransition("t0").play();
 
 		const userInfo = <Protos.IG_UserInfo>param;
 		if (userInfo != null) {

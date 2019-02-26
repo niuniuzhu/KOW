@@ -1,4 +1,4 @@
-define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActBulletChangeAttrs", "./Logic/Actions/ActBulletIntrptState", "./Logic/Actions/ActChangeAttrs", "./Logic/Actions/ActIntrptCollider", "./Logic/Actions/ActIntrptInput", "./Logic/Actions/ActIntrptTimeup", "./Logic/Actions/ActMove", "./Logic/Actions/ActShake", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./View/Actions/VActAnimation", "./View/Actions/VActEffect", "./View/Actions/VActShakeEffect"], function (require, exports, ActAttack_1, ActBulletChangeAttrs_1, ActBulletIntrptState_1, ActChangeAttrs_1, ActIntrptCollider_1, ActIntrptInput_1, ActIntrptTimeup_1, ActMove_1, ActShake_1, ActSprint_1, ActVelocity_1, VActAnimation_1, VActEffect_1, VActShakeEffect_1) {
+define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActBulletChangeAttrs", "./Logic/Actions/ActBulletIntrptState", "./Logic/Actions/ActChangeAttrs", "./Logic/Actions/ActIntrptCollider", "./Logic/Actions/ActIntrptInput", "./Logic/Actions/ActIntrptTimeup", "./Logic/Actions/ActMove", "./Logic/Actions/ActShake", "./Logic/Actions/ActSprint", "./Logic/Actions/ActVelocity", "./View/Actions/VActAnimation", "./View/Actions/VActEffect", "./View/Actions/VActShakeEffect", "./View/Actions/VActPlaySound"], function (require, exports, ActAttack_1, ActBulletChangeAttrs_1, ActBulletIntrptState_1, ActChangeAttrs_1, ActIntrptCollider_1, ActIntrptInput_1, ActIntrptTimeup_1, ActMove_1, ActShake_1, ActSprint_1, ActVelocity_1, VActAnimation_1, VActEffect_1, VActShakeEffect_1, VActPlaySound_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var StateType;
@@ -32,6 +32,7 @@ define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActB
         VActionType[VActionType["Animation"] = 0] = "Animation";
         VActionType[VActionType["ShakeEffect"] = 4] = "ShakeEffect";
         VActionType[VActionType["Effect"] = 5] = "Effect";
+        VActionType[VActionType["PlaySound"] = 6] = "PlaySound";
         VActionType[VActionType["Custom"] = 999] = "Custom";
     })(VActionType = exports.VActionType || (exports.VActionType = {}));
     var BulletActionType;
@@ -54,6 +55,7 @@ define(["require", "exports", "./Logic/Actions/ActAttack", "./Logic/Actions/ActB
     exports.V_STATE_ACTION_CTOR_MAP.set(VActionType.Animation, VActAnimation_1.VActAnimation);
     exports.V_STATE_ACTION_CTOR_MAP.set(VActionType.ShakeEffect, VActShakeEffect_1.VActShakeEffect);
     exports.V_STATE_ACTION_CTOR_MAP.set(VActionType.Effect, VActEffect_1.VActEffect);
+    exports.V_STATE_ACTION_CTOR_MAP.set(VActionType.PlaySound, VActPlaySound_1.VActPlaySound);
     exports.BULLET_ACTION_CTOR_MAP = new Map();
     exports.BULLET_ACTION_CTOR_MAP.set(BulletActionType.IntrptState, ActBulletIntrptState_1.ActBulletIntrptState);
     exports.BULLET_ACTION_CTOR_MAP.set(BulletActionType.ChangeAttrs, ActBulletChangeAttrs_1.ActBulletChangeAttrs);

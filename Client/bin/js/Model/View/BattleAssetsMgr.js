@@ -1,4 +1,4 @@
-define(["require", "exports", "../../AssetsManager", "../../Consts", "../../RC/Utils/Hashtable", "../CDefs"], function (require, exports, AssetsManager_1, Consts_1, Hashtable_1, CDefs_1) {
+define(["require", "exports", "../../AssetsManager", "../../RC/Utils/Hashtable", "../CDefs"], function (require, exports, AssetsManager_1, Hashtable_1, CDefs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class BattleAssetsMgr {
@@ -15,8 +15,8 @@ define(["require", "exports", "../../AssetsManager", "../../Consts", "../../RC/U
         }
         Preload(battleInfo, caller, onComplete, onProgress) {
             const mapDef = CDefs_1.CDefs.GetMap(battleInfo.mapID);
-            const preloads = Hashtable_1.Hashtable.GetStringArray(mapDef, "preloads");
-            for (const u of preloads) {
+            const mapPreloads = Hashtable_1.Hashtable.GetStringArray(mapDef, "preloads");
+            for (const u of mapPreloads) {
                 const ss = u.split(",");
                 this.assetsPath.push({ url: "res/" + ss[0], type: Number.parseInt(ss[1]) });
             }
@@ -26,7 +26,12 @@ define(["require", "exports", "../../AssetsManager", "../../Consts", "../../RC/U
                 const c2 = playerInfos.length;
                 for (let j = 0; j < c2; ++j) {
                     const playerInfo = playerInfos[j];
-                    this.assetsPath.push({ url: "res/roles/" + Consts_1.Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetsManager_1.AssetType.Atlas });
+                    const entityDef = CDefs_1.CDefs.GetEntity(playerInfo.actorID);
+                    const entityPreloads = Hashtable_1.Hashtable.GetStringArray(entityDef, "preloads");
+                    for (const u of entityPreloads) {
+                        const ss = u.split(",");
+                        this.assetsPath.push({ url: "res/" + ss[0], type: Number.parseInt(ss[1]) });
+                    }
                 }
             }
             this.assetsPath.push({ url: "res/ui/assets.bin", type: AssetsManager_1.AssetType.Binary });

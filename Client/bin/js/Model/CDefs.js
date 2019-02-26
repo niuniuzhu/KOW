@@ -10,6 +10,7 @@ define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (r
             this._bulletMap = Hashtable_1.Hashtable.GetMap(this._defs, "bullet");
             this._sceneItem = Hashtable_1.Hashtable.GetMap(this._defs, "scene_item");
             this._fxMap = Hashtable_1.Hashtable.GetMap(this._defs, "effect");
+            this._soundMap = Hashtable_1.Hashtable.GetMap(this._defs, "sound");
         }
         static GetConfig() {
             return Hashtable_1.Hashtable.GetMap(this._defs, "config");
@@ -34,6 +35,9 @@ define(["require", "exports", "../Consts", "../RC/Utils/Hashtable"], function (r
         }
         static GetEffect(id) {
             return Hashtable_1.Hashtable.GetMap(this._fxMap, Consts_1.Consts.ASSETS_EFFECT_PREFIX + id);
+        }
+        static GetSound(id) {
+            return Hashtable_1.Hashtable.GetMap(this._soundMap, Consts_1.Consts.ASSETS_SOUND_PREFIX + id);
         }
     }
     exports.CDefs = CDefs;

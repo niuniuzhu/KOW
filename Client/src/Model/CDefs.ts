@@ -9,6 +9,7 @@ export class CDefs {
 	private static _bulletMap: Hashtable;
 	private static _sceneItem: Hashtable;
 	private static _fxMap: Hashtable;
+	private static _soundMap: Hashtable;
 
 	public static Init(json: JSON) {
 		this._defs = json;
@@ -18,6 +19,7 @@ export class CDefs {
 		this._bulletMap = Hashtable.GetMap(this._defs, "bullet");
 		this._sceneItem = Hashtable.GetMap(this._defs, "scene_item");
 		this._fxMap = Hashtable.GetMap(this._defs, "effect");
+		this._soundMap = Hashtable.GetMap(this._defs, "sound");
 	}
 
 	public static GetConfig(): Hashtable {
@@ -50,5 +52,9 @@ export class CDefs {
 
 	public static GetEffect(id: number): Hashtable {
 		return Hashtable.GetMap(this._fxMap, Consts.ASSETS_EFFECT_PREFIX + id);
+	}
+
+	public static GetSound(id: number): Hashtable {
+		return Hashtable.GetMap(this._soundMap, Consts.ASSETS_SOUND_PREFIX + id);
 	}
 }

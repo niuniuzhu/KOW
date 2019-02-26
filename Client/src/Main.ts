@@ -4,6 +4,7 @@ import { Global } from "./Global";
 import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
 import { CDefs } from "./Model/CDefs";
+import { SoundManager } from "./Model/View/SoundManager";
 import { Hashtable } from "./RC/Utils/Hashtable";
 import { JsonHelper } from "./RC/Utils/JsonHelper";
 import { Logger } from "./RC/Utils/Logger";
@@ -110,6 +111,7 @@ export class Main {
 		Global.connector.Update(dt);
 		Global.sceneManager.Update(dt);
 		Global.battleManager.Update(dt);
+		SoundManager.Update();
 	}
 
 	private OnResize(e: laya.events.Event): void {

@@ -25,11 +25,12 @@ export class BattleAssetsMgr {
 	public Preload(battleInfo: BattleInfo, caller: any, onComplete: () => void, onProgress: (p: number) => void): void {
 		//获取场景预加载资源路径
 		const mapDef = CDefs.GetMap(battleInfo.mapID);
-		const preloads = Hashtable.GetStringArray(mapDef, "preloads");
-		for (const u of preloads) {
+		const mapPreloads = Hashtable.GetStringArray(mapDef, "preloads");
+		for (const u of mapPreloads) {
 			const ss = u.split(",");
 			this.assetsPath.push({ url: "res/" + ss[0], type: Number.parseInt(ss[1]) });
 		}
+		
 		//压入角色资源
 		const c1 = battleInfo.teamInfos.length;
 		for (let i = 0; i < c1; ++i) {
@@ -37,7 +38,12 @@ export class BattleAssetsMgr {
 			const c2 = playerInfos.length;
 			for (let j = 0; j < c2; ++j) {
 				const playerInfo = playerInfos[j];
-				this.assetsPath.push({ url: "res/roles/" + Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
+				const entityDef = CDefs.GetEntity(playerInfo.actorID);
+				const entityPreloads = Hashtable.GetStringArray(entityDef, "preloads");
+				for (const u of entityPreloads) {
+					const ss = u.split(",");
+					this.assetsPath.push({ url: "res/" + ss[0], type: Number.parseInt(ss[1]) });
+				}
 			}
 		}
 

@@ -123,6 +123,13 @@
 	},
 	"entity": {
 		"e0": {
+			"preloads": [
+				"roles/m0.atlas,7",
+				"sounds/m0_attack.mp3,5",
+				"sounds/m0_dazhao.mp3,5",
+				"sounds/m0_houjiao.mp3,5",
+				"sounds/m0_run.mp3,5"
+			],
 			"model": 0,
 			"model_layer": 1,
 			"hud_offset_y": -100,
@@ -142,6 +149,12 @@
 						{
 							"id": 0,
 							"animation": 1
+						},
+						{
+							"id": 6,
+							"sound": 3,
+							"interval": 700,
+							"trigger_time": 300
 						}
 					]
 				},
@@ -164,6 +177,11 @@
 							"follow_rot": true,
 							"always_follow": false,
 							"destroy_type": 0
+						},
+						{
+							"id": 6,
+							"sound": 0,
+							"trigger_time": 300
 						}
 					]
 				},
@@ -200,6 +218,11 @@
 						{
 							"id": 0,
 							"animation": 5
+						},
+						{
+							"id": 6,
+							"sound": 1,
+							"trigger_time": 400
 						}
 					]
 				},
@@ -296,6 +319,36 @@
 			"model": 100,
 			"model_layer": 0,
 			"animation": 0
+		}
+	},
+	"sound": {
+		"s0": {
+			"type": 1,
+			"url": "m0_attack.mp3",
+			"loop": false,
+			"volume": 1,
+			"max_overlay": 2
+		},
+		"s1": {
+			"type": 1,
+			"url": "m0_dazhao.mp3",
+			"loop": false,
+			"volume": 1,
+			"max_overlay": 2
+		},
+		"s2": {
+			"type": 1,
+			"url": "m0_houjiao.mp3",
+			"loop": false,
+			"volume": 1,
+			"max_overlay": 2
+		},
+		"s3": {
+			"type": 1,
+			"url": "m0_run.mp3",
+			"loop": false,
+			"volume": 1,
+			"max_overlay": 5
 		}
 	}
 }

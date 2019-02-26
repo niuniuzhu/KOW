@@ -24,7 +24,6 @@ export class UIMain {
     Enter(param) {
         this.SetMatchBtnEnable(true);
         Global.graphic.uiRoot.addChild(this._root);
-        this._root.getTransition("t0").play();
         const userInfo = param;
         if (userInfo != null) {
             this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;

@@ -1,5 +1,4 @@
 import { AssetsManager, AssetType } from "../../AssetsManager";
-import { Consts } from "../../Consts";
 import { Hashtable } from "../../RC/Utils/Hashtable";
 import { CDefs } from "../CDefs";
 export class BattleAssetsMgr {
@@ -16,8 +15,8 @@ export class BattleAssetsMgr {
     }
     Preload(battleInfo, caller, onComplete, onProgress) {
         const mapDef = CDefs.GetMap(battleInfo.mapID);
-        const preloads = Hashtable.GetStringArray(mapDef, "preloads");
-        for (const u of preloads) {
+        const mapPreloads = Hashtable.GetStringArray(mapDef, "preloads");
+        for (const u of mapPreloads) {
             const ss = u.split(",");
             this.assetsPath.push({ url: "res/" + ss[0], type: Number.parseInt(ss[1]) });
         }
@@ -27,7 +26,12 @@ export class BattleAssetsMgr {
             const c2 = playerInfos.length;
             for (let j = 0; j < c2; ++j) {
                 const playerInfo = playerInfos[j];
-                this.assetsPath.push({ url: "res/roles/" + Consts.ASSETS_MODEL_PREFIX + playerInfo.actorID + ".atlas", type: AssetType.Atlas });
+                const entityDef = CDefs.GetEntity(playerInfo.actorID);
+                const entityPreloads = Hashtable.GetStringArray(entityDef, "preloads");
+                for (const u of entityPreloads) {
+                    const ss = u.split(",");
+                    this.assetsPath.push({ url: "res/" + ss[0], type: Number.parseInt(ss[1]) });
+                }
             }
         }
         this.assetsPath.push({ url: "res/ui/assets.bin", type: AssetType.Binary });

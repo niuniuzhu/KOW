@@ -1,4 +1,4 @@
-define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Model/CDefs", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, CDefs_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1) {
+define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Model/CDefs", "./Model/View/SoundManager", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, CDefs_1, SoundManager_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
@@ -84,6 +84,7 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
             Global_1.Global.connector.Update(dt);
             Global_1.Global.sceneManager.Update(dt);
             Global_1.Global.battleManager.Update(dt);
+            SoundManager_1.SoundManager.Update();
         }
         OnResize(e) {
             Global_1.Global.uiManager.OnResize(e);

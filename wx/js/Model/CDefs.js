@@ -9,6 +9,7 @@ export class CDefs {
         this._bulletMap = Hashtable.GetMap(this._defs, "bullet");
         this._sceneItem = Hashtable.GetMap(this._defs, "scene_item");
         this._fxMap = Hashtable.GetMap(this._defs, "effect");
+        this._soundMap = Hashtable.GetMap(this._defs, "sound");
     }
     static GetConfig() {
         return Hashtable.GetMap(this._defs, "config");
@@ -33,5 +34,8 @@ export class CDefs {
     }
     static GetEffect(id) {
         return Hashtable.GetMap(this._fxMap, Consts.ASSETS_EFFECT_PREFIX + id);
+    }
+    static GetSound(id) {
+        return Hashtable.GetMap(this._soundMap, Consts.ASSETS_SOUND_PREFIX + id);
     }
 }

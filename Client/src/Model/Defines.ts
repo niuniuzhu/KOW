@@ -18,6 +18,7 @@ import { VActEffect } from "./View/Actions/VActEffect";
 import { VActShakeEffect } from "./View/Actions/VActShakeEffect";
 import { VEntityAction } from "./View/Actions/VEntityAction";
 import { VChampion } from "./View/VChampion";
+import { VActPlaySound } from "./View/Actions/VActPlaySound";
 
 export enum StateType {
 	Idle = 0,
@@ -50,6 +51,7 @@ export enum VActionType {
 	Animation = 0,
 	ShakeEffect = 4,
 	Effect = 5,
+	PlaySound = 6,
 	Custom = 999
 }
 
@@ -74,6 +76,7 @@ export const V_STATE_ACTION_CTOR_MAP = new Map<number, new (owner: VChampion, ty
 V_STATE_ACTION_CTOR_MAP.set(VActionType.Animation, VActAnimation);
 V_STATE_ACTION_CTOR_MAP.set(VActionType.ShakeEffect, VActShakeEffect);
 V_STATE_ACTION_CTOR_MAP.set(VActionType.Effect, VActEffect);
+V_STATE_ACTION_CTOR_MAP.set(VActionType.PlaySound, VActPlaySound);
 
 export const BULLET_ACTION_CTOR_MAP = new Map<number, new (owner: Bullet, type: BulletActionType) => BulletAction>();
 BULLET_ACTION_CTOR_MAP.set(BulletActionType.IntrptState, ActBulletIntrptState);

@@ -41,9 +41,9 @@ export class UIBattle implements IUIModule {
 		this._root = fairygui.UIPackage.createObject("battle", "Main").asCom;
 		this._root.name = "battle_main";
 		this._skillBtn0 = this._root.getChild("n0").asButton;
-		this._skill0Progress = this._skillBtn0.getChild("n3").asProgress;
+		this._skill0Progress = this._skillBtn0.getChild("n5").asProgress;
 		this._skillBtn1 = this._root.getChild("n1").asButton;
-		this._skill1Progress = this._skillBtn1.getChild("n3").asProgress;
+		this._skill1Progress = this._skillBtn1.getChild("n5").asProgress;
 		this._skillBtn0.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn0Press);
 		this._skillBtn0.on(Laya.Event.MOUSE_UP, this, this.OnSkillBtn0Release);
 		this._skillBtn1.on(Laya.Event.MOUSE_DOWN, this, this.OnSkillBtn1Press);
@@ -53,7 +53,7 @@ export class UIBattle implements IUIModule {
 
 		this._hpProgress = this._root.getChild("n00").asProgress;
 		this._hpbar = this._hpProgress.getChild("bar").asImage;
-		this._hpbarBg = this._hpProgress.getChild("di").asImage;
+		this._hpbarBg = this._hpProgress.getChild("n0").asImage;
 
 		this._timeList = this._root.getChild("t_list").asList;
 
@@ -168,7 +168,7 @@ export class UIBattle implements IUIModule {
 			callback();
 			confirmBtn.offClick(this, callback);
 		});
-		com.getChild("n7").asTextField.text = "" + rank;
+		this._endBattle.getChild("n4").asTextField.text = "" + rank;
 		//更新主界面的分值
 		Global.sceneManager.main.UpdateRank(rank);
 	}

@@ -185,6 +185,9 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Libs/protob
                 this._camera.lookAt = champion;
                 this._camera.UpdatePos();
             }
+            else {
+                champion.ShowDecal();
+            }
             return champion;
         }
         DestroyChampion(champion) {

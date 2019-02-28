@@ -75,6 +75,7 @@ export abstract class VEntity {
 		this.AfterLoadDef(defs);
 
 		const cdefs = this.LoadCDef();
+		
 		this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
 		this._hudOffsetY = Hashtable.GetNumber(cdefs, "hud_offset_y");
 		this._pivot = Hashtable.GetVec2(cdefs, "pivot") || new Vec2(0.5, 0.5);
@@ -85,6 +86,7 @@ export abstract class VEntity {
 			this._animationProxy.setPivot(this._pivot.x, this._pivot.y);
 			this._root.addChild(this._animationProxy);
 		}
+		
 		this.AfterLoadCDef(cdefs);
 	}
 

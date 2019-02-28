@@ -166,6 +166,10 @@ define(["require", "exports", "../../Global", "../../RC/Framework/FSM/FSM", "../
         GetSkillAt(index) {
             return this._skills[index];
         }
+        ShowDecal() {
+            const decal = fairygui.UIPackage.createObject("battle", "decal").asCom;
+            this.root.addChildAt(decal, 0);
+        }
     }
     exports.VChampion = VChampion;
 });

@@ -39,6 +39,12 @@ export abstract class VEntity {
 
 	public get worldPosition(): Vec2 { return this._worldPosition; }
 
+	public get logicPos(): Vec2 { return this._logicPos.Clone(); }
+	public get logicRot(): number { return this._logicRot; }
+
+	public get visible(): boolean { return this._root.visible; }
+	public set visible(value: boolean) { this._root.visible = value; }
+
 	private readonly _battle: VBattle;
 	private _rid: Long;
 	protected _id: number;
@@ -75,7 +81,7 @@ export abstract class VEntity {
 		this.AfterLoadDef(defs);
 
 		const cdefs = this.LoadCDef();
-		
+
 		this._modelLevel = Hashtable.GetNumber(cdefs, "model_layer");
 		this._hudOffsetY = Hashtable.GetNumber(cdefs, "hud_offset_y");
 		this._pivot = Hashtable.GetVec2(cdefs, "pivot") || new Vec2(0.5, 0.5);
@@ -86,7 +92,7 @@ export abstract class VEntity {
 			this._animationProxy.setPivot(this._pivot.x, this._pivot.y);
 			this._root.addChild(this._animationProxy);
 		}
-		
+
 		this.AfterLoadCDef(cdefs);
 	}
 

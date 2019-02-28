@@ -13,21 +13,21 @@ export class FRandom {
 		return result;
 	}
 
-	public NextD(min: number, max: number): number {
+	public NextDouble(min: number, max: number): number {
 		//max不能超过0xfffff
 		const r = this.Next();
 		return FMathUtils.Add(FMathUtils.Mul(r, FMathUtils.Sub(max, min)), min);
 	}
 
 	public NextFloor(min: number, max: number): number {
-		return FMathUtils.Floor(this.NextD(min, max));
+		return FMathUtils.Floor(this.NextDouble(min, max));
 	}
 
 	public NextRound(min: number, max: number): number {
-		return FMathUtils.Round(this.NextD(min, max));
+		return FMathUtils.Round(this.NextDouble(min, max));
 	}
 
 	public NextCeil(min: number, max: number): number {
-		return FMathUtils.Ceil(this.NextD(min, max));
+		return FMathUtils.Ceil(this.NextDouble(min, max));
 	}
 }

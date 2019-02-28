@@ -39,6 +39,10 @@ define(["require", "exports", "../../Consts", "../../Global", "../../Graphic", "
             this.OnRatationChanged(delta);
         }
         get worldPosition() { return this._worldPosition; }
+        get logicPos() { return this._logicPos.Clone(); }
+        get logicRot() { return this._logicRot; }
+        get visible() { return this._root.visible; }
+        set visible(value) { this._root.visible = value; }
         Destroy() {
             if (this._animationProxy != null) {
                 this._animationProxy.dispose();

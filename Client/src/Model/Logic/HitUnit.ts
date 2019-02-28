@@ -45,6 +45,10 @@ export class HitUnit implements ISnapshotable, ICalcUnit {
 			commonDmg = commonDmg < 0 ? 0 : commonDmg;
 			totalDmg = FMathUtils.Add(commonDmg, skill.damage);
 		}
+		//do some random
+		if (skill.float > 0) {
+			totalDmg += target.battle.random.NextCeil(1, skill.float);
+		}
 
 		//minus hp
 		let hp = target.GetAttr(EAttr.HP);

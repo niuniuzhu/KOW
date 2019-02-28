@@ -11,6 +11,7 @@ export class Skill {
     get emitterID() { return this._emitterID; }
     get bulletID() { return this._bulletID; }
     get damage() { return this._damage; }
+    get float() { return this._float; }
     get formula() { return this._formula; }
     Init(id) {
         this._id = id;
@@ -24,6 +25,7 @@ export class Skill {
         this._emitterID = Hashtable.GetNumber(def, "emitter");
         this._bulletID = Hashtable.GetNumber(def, "bullet");
         this._damage = Hashtable.GetNumber(def, "damage");
+        this._float = Hashtable.GetNumber(def, "float");
         this._formula = Hashtable.GetString(def, "formula", null);
     }
 }

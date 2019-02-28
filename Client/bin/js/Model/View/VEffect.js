@@ -39,7 +39,7 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", 
             this._followPos = followPos;
             this._followRot = followRot;
             this._alwaysFollow = alwaysFollow;
-            this.UpdateFollow();
+            this.UpdateFollowLogic();
         }
         Update(dt) {
             if (this._lifeTime >= 0 && this._time >= this._lifeTime) {
@@ -49,31 +49,47 @@ define(["require", "exports", "../../RC/Math/Vec2", "../../RC/Utils/Hashtable", 
                 this._time += dt;
             }
             if (this._alwaysFollow)
-                this.UpdateFollow();
+                this.UpdateFollowView();
         }
-        UpdateFollow() {
-            if (this._targetID != null) {
-                let target;
-                switch (this._followType) {
-                    case EntityType_1.EntityType.Bullet:
-                        target = this.battle.GetBullet(this._targetID);
-                        break;
-                    case EntityType_1.EntityType.Champion:
-                        target = this.battle.GetChampion(this._targetID);
-                        break;
-                    default:
-                        Logger_1.Logger.Error(`follow type:${this._followType} not supported`);
-                        break;
-                }
-                if (target != null) {
-                    if (this._followPos) {
-                        const offset = Vec2_1.Vec2.Rotate(this._followOffset, target.rotation);
-                        this.position = Vec2_1.Vec2.Add(target.position, offset);
-                    }
-                    if (this._followRot) {
-                        this.rotation = target.rotation;
-                    }
-                }
+        UpdateFollowLogic() {
+            const target = this.GetTargetInstance();
+            if (target == null) {
+                return;
+            }
+            this.UpdateFollow(target.logicPos, target.logicRot);
+        }
+        UpdateFollowView() {
+            const target = this.GetTargetInstance();
+            if (target == null) {
+                return;
+            }
+            this.UpdateFollow(target.position, target.rotation);
+        }
+        GetTargetInstance() {
+            if (this._targetID == null) {
+                return null;
+            }
+            let target;
+            switch (this._followType) {
+                case EntityType_1.EntityType.Bullet:
+                    target = this.battle.GetBullet(this._targetID);
+                    break;
+                case EntityType_1.EntityType.Champion:
+                    target = this.battle.GetChampion(this._targetID);
+                    break;
+                default:
+                    Logger_1.Logger.Error(`follow type:${this._followType} not supported`);
+                    break;
+            }
+            return target;
+        }
+        UpdateFollow(position, rotation) {
+            if (this._followPos) {
+                const offset = Vec2_1.Vec2.Rotate(this._followOffset, rotation);
+                this.position = Vec2_1.Vec2.Add(position, offset);
+            }
+            if (this._followRot) {
+                this.rotation = rotation;
             }
         }
         OnSpawn() {

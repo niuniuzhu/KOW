@@ -10,18 +10,18 @@ define(["require", "exports", "./FMathUtils"], function (require, exports, FMath
             const result = FMathUtils_1.FMathUtils.Div(this.seed, 233280.0);
             return result;
         }
-        NextD(min, max) {
+        NextDouble(min, max) {
             const r = this.Next();
             return FMathUtils_1.FMathUtils.Add(FMathUtils_1.FMathUtils.Mul(r, FMathUtils_1.FMathUtils.Sub(max, min)), min);
         }
         NextFloor(min, max) {
-            return FMathUtils_1.FMathUtils.Floor(this.NextD(min, max));
+            return FMathUtils_1.FMathUtils.Floor(this.NextDouble(min, max));
         }
         NextRound(min, max) {
-            return FMathUtils_1.FMathUtils.Round(this.NextD(min, max));
+            return FMathUtils_1.FMathUtils.Round(this.NextDouble(min, max));
         }
         NextCeil(min, max) {
-            return FMathUtils_1.FMathUtils.Ceil(this.NextD(min, max));
+            return FMathUtils_1.FMathUtils.Ceil(this.NextDouble(min, max));
         }
     }
     exports.FRandom = FRandom;

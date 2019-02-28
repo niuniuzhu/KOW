@@ -26,6 +26,9 @@ export class HitUnit {
             commonDmg = commonDmg < 0 ? 0 : commonDmg;
             totalDmg = FMathUtils.Add(commonDmg, skill.damage);
         }
+        if (skill.float > 0) {
+            totalDmg += target.battle.random.NextCeil(1, skill.float);
+        }
         let hp = target.GetAttr(EAttr.HP);
         hp -= FMathUtils.Floor(totalDmg);
         target.SetAttr(EAttr.HP, hp);

@@ -32,6 +32,11 @@ export class VActShakeEffect extends VActEffect {
 		}
 	}
 
+	protected OnEnter(param: any): void {
+		super.OnEnter(param);
+		this._fx.visible = this.owner.self ? true : false;
+	}
+
 	protected OnExit(): void {
 		this._fx.root.setScale(1, 1);
 		if (this._shaker != null) {

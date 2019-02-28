@@ -24,6 +24,9 @@ define(["require", "exports", "../../RC/FMath/FMathUtils", "../../RC/Utils/Expre
                 commonDmg = commonDmg < 0 ? 0 : commonDmg;
                 totalDmg = FMathUtils_1.FMathUtils.Add(commonDmg, skill.damage);
             }
+            if (skill.float > 0) {
+                totalDmg += target.battle.random.NextCeil(1, skill.float);
+            }
             let hp = target.GetAttr(Attribute_1.EAttr.HP);
             hp -= FMathUtils_1.FMathUtils.Floor(totalDmg);
             target.SetAttr(Attribute_1.EAttr.HP, hp);

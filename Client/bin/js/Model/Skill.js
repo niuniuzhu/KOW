@@ -12,6 +12,7 @@ define(["require", "exports", "./Defs", "../RC/Utils/Hashtable"], function (requ
         get emitterID() { return this._emitterID; }
         get bulletID() { return this._bulletID; }
         get damage() { return this._damage; }
+        get float() { return this._float; }
         get formula() { return this._formula; }
         Init(id) {
             this._id = id;
@@ -25,6 +26,7 @@ define(["require", "exports", "./Defs", "../RC/Utils/Hashtable"], function (requ
             this._emitterID = Hashtable_1.Hashtable.GetNumber(def, "emitter");
             this._bulletID = Hashtable_1.Hashtable.GetNumber(def, "bullet");
             this._damage = Hashtable_1.Hashtable.GetNumber(def, "damage");
+            this._float = Hashtable_1.Hashtable.GetNumber(def, "float");
             this._formula = Hashtable_1.Hashtable.GetString(def, "formula", null);
         }
     }

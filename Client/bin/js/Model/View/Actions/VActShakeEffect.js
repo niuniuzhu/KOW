@@ -21,6 +21,10 @@ define(["require", "exports", "../../../RC/Utils/ExpressionEvaluator", "../../..
                 this._shaker = this.owner.Shake(this._shakeAmplitude, this._shakeFrequency, this._damping, this._shakeDuration == -1 ? Number.MAX_VALUE : this._shakeDuration);
             }
         }
+        OnEnter(param) {
+            super.OnEnter(param);
+            this._fx.visible = this.owner.self ? true : false;
+        }
         OnExit() {
             this._fx.root.setScale(1, 1);
             if (this._shaker != null) {

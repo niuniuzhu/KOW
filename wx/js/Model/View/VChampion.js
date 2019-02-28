@@ -175,4 +175,8 @@ export class VChampion extends VEntity {
     GetSkillAt(index) {
         return this._skills[index];
     }
+    ShowDecal() {
+        const decal = fairygui.UIPackage.createObject("battle", "decal").asCom;
+        this.root.addChildAt(decal, 0);
+    }
 }

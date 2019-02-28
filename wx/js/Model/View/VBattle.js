@@ -196,6 +196,9 @@ export class VBattle {
             this._camera.lookAt = champion;
             this._camera.UpdatePos();
         }
+        else {
+            champion.ShowDecal();
+        }
         return champion;
     }
     DestroyChampion(champion) {

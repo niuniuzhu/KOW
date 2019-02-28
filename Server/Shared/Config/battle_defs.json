@@ -279,9 +279,9 @@
 							"id": 6,
 							"speed": [
 								0,
-								30
+								33
 							],
-							"formula": "50+{0}*0.03" /*冲刺时间公式*/
+							"formula": "50+{0}*0.027" /*冲刺时间公式*/
 						},
 						{
 							"id": 100, /*计时中断*/
@@ -384,7 +384,8 @@
 			"mp_add": 5,
 			"emitter": 0,
 			"bullet": 0,
-			"damage": 40
+			"damage": 40,
+			"float": 5
 		},
 		"s1": {
 			"name": "爪击2",
@@ -393,7 +394,8 @@
 			"mp_add": 5,
 			"emitter": 0,
 			"bullet": 1,
-			"damage": 40
+			"damage": 40,
+			"float": 5
 		},
 		"s2": {
 			"name": "大招",
@@ -403,6 +405,7 @@
 			"emitter": 1,
 			"bullet": 2,
 			"damage": 100,
+			"float": 10,
 			"formula": "100+{0}*0.1"
 		}
 	},

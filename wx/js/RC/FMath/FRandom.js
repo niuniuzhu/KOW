@@ -8,17 +8,17 @@ export class FRandom {
         const result = FMathUtils.Div(this.seed, 233280.0);
         return result;
     }
-    NextD(min, max) {
+    NextDouble(min, max) {
         const r = this.Next();
         return FMathUtils.Add(FMathUtils.Mul(r, FMathUtils.Sub(max, min)), min);
     }
     NextFloor(min, max) {
-        return FMathUtils.Floor(this.NextD(min, max));
+        return FMathUtils.Floor(this.NextDouble(min, max));
     }
     NextRound(min, max) {
-        return FMathUtils.Round(this.NextD(min, max));
+        return FMathUtils.Round(this.NextDouble(min, max));
     }
     NextCeil(min, max) {
-        return FMathUtils.Ceil(this.NextD(min, max));
+        return FMathUtils.Ceil(this.NextDouble(min, max));
     }
 }

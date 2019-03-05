@@ -17,7 +17,11 @@
 		"battle.bin,3",
 		"battle_atlas0.png,4",
 		"endlevel.bin,3",
-		"endlevel_atlas0.png,4"
+		"endlevel_atlas0.png,4",
+		"pet.bin,3",
+		"pet_atlas0.png,4",
+		"ranking.bin,3",
+		"ranking_atlas0.png,4"
 	],
 	"map": {
 		"m0": {

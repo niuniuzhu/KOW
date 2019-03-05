@@ -15,3 +15,13 @@ message CS2DB_UpdateRank {
 	MsgOpts opts = 1;
 	repeated CS2DB_Gain gains = 2;
 }
+
+message CS2DB_QueryRanking {
+	enum SortType{
+		Rank = 0;
+	}
+	MsgOpts opts = 1;
+	SortType sortType = 2;
+	int32 from  = 3;
+	int32 count = 4;
+}

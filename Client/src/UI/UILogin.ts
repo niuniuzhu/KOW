@@ -36,9 +36,6 @@ export class UILogin implements IUIModule {
 		this._root.getChild("login_btn").onClick(this, this.OnLoginBtnClick);
 	}
 
-	protected onInit(): void {
-	}
-
 	public Dispose(): void {
 		this._root.dispose();
 	}

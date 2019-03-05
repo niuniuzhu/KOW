@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIAlert"], function (require, exports, Consts_1, Global_1, protos_1, UIAlert_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIAlert", "./UIRanking"], function (require, exports, Consts_1, Global_1, protos_1, UIAlert_1, UIRanking_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
@@ -8,6 +8,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
             this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
             this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
             this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
+            this._ranking = new UIRanking_1.UIRanking();
             this._matchBtn = this._root.getChild("n3").asCom;
             this._matchBtn2 = this._root.getChild("n13").asCom;
             this._matchBtn3 = this._root.getChild("n19").asCom;
@@ -16,8 +17,10 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
             this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
             this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
             this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
+            this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
         }
         Dispose() {
+            this._ranking.dispose();
             this._root.dispose();
         }
         Enter(param) {
@@ -64,6 +67,9 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
         OnMatchBtn4Click() {
             this.SetMatchBtnEnable(false);
             Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T2P2);
+        }
+        OnRankingBtnClick() {
+            this._ranking.show();
         }
         OnFail(message, callback = null) {
             UIAlert_1.UIAlert.Show(message, callback);

@@ -1,9 +1,9 @@
+import { IUIModule } from "./IUIModule";
+import { UIBattle } from "./UIBattle";
+import { UILoading } from "./UILoading";
 import { UILogin } from "./UILogin";
 import { UIMain } from "./UIMain";
 import { UIMatching } from "./UIMatching";
-import { UILoading } from "./UILoading";
-import { UIBattle } from "./UIBattle";
-import { IUIModule } from "./IUIModule";
 
 export class UIManager {
 	private _login: UILogin;

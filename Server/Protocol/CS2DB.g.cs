@@ -28,12 +28,17 @@ namespace Protos {
             "R2FpbhIMCgR1a2V5GAEgASgNEg0KBW1vbmV5GAIgASgFEhAKCGRpYW1vbmVk",
             "GAMgASgFEgwKBHJhbmsYBCABKAUSCwoDZXhwGAUgASgNIlQKEENTMkRCX1Vw",
             "ZGF0ZVJhbmsSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEiEKBWdh",
-            "aW5zGAIgAygLMhIuUHJvdG9zLkNTMkRCX0dhaW5iBnByb3RvMw=="));
+            "aW5zGAIgAygLMhIuUHJvdG9zLkNTMkRCX0dhaW4inQEKEkNTMkRCX1F1ZXJ5",
+            "UmFua2luZxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSNQoIc29y",
+            "dFR5cGUYAiABKA4yIy5Qcm90b3MuQ1MyREJfUXVlcnlSYW5raW5nLlNvcnRU",
+            "eXBlEgwKBGZyb20YAyABKAUSDQoFY291bnQYBCABKAUiFAoIU29ydFR5cGUS",
+            "CAoEUmFuaxAAYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_Gain), global::Protos.CS2DB_Gain.Parser, new[]{ "Ukey", "Money", "Diamoned", "Rank", "Exp" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_UpdateRank), global::Protos.CS2DB_UpdateRank.Parser, new[]{ "Opts", "Gains" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_UpdateRank), global::Protos.CS2DB_UpdateRank.Parser, new[]{ "Opts", "Gains" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_QueryRanking), global::Protos.CS2DB_QueryRanking.Parser, new[]{ "Opts", "SortType", "From", "Count" }, null, new[]{ typeof(global::Protos.CS2DB_QueryRanking.Types.SortType) }, null)
           }));
     }
     #endregion
@@ -433,6 +438,236 @@ namespace Protos {
         }
       }
     }
+
+  }
+
+  public sealed partial class CS2DB_QueryRanking : pb::IMessage<CS2DB_QueryRanking> {
+    private static readonly pb::MessageParser<CS2DB_QueryRanking> _parser = new pb::MessageParser<CS2DB_QueryRanking>(() => new CS2DB_QueryRanking());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2DB_QueryRanking> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2DBReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_QueryRanking() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_QueryRanking(CS2DB_QueryRanking other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      sortType_ = other.sortType_;
+      from_ = other.from_;
+      count_ = other.count_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_QueryRanking Clone() {
+      return new CS2DB_QueryRanking(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "sortType" field.</summary>
+    public const int SortTypeFieldNumber = 2;
+    private global::Protos.CS2DB_QueryRanking.Types.SortType sortType_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.CS2DB_QueryRanking.Types.SortType SortType {
+      get { return sortType_; }
+      set {
+        sortType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "from" field.</summary>
+    public const int FromFieldNumber = 3;
+    private int from_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int From {
+      get { return from_; }
+      set {
+        from_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "count" field.</summary>
+    public const int CountFieldNumber = 4;
+    private int count_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Count {
+      get { return count_; }
+      set {
+        count_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2DB_QueryRanking);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2DB_QueryRanking other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (SortType != other.SortType) return false;
+      if (From != other.From) return false;
+      if (Count != other.Count) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (SortType != 0) hash ^= SortType.GetHashCode();
+      if (From != 0) hash ^= From.GetHashCode();
+      if (Count != 0) hash ^= Count.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (SortType != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) SortType);
+      }
+      if (From != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(From);
+      }
+      if (Count != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Count);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (SortType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) SortType);
+      }
+      if (From != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(From);
+      }
+      if (Count != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Count);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2DB_QueryRanking other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.SortType != 0) {
+        SortType = other.SortType;
+      }
+      if (other.From != 0) {
+        From = other.From;
+      }
+      if (other.Count != 0) {
+        Count = other.Count;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            sortType_ = (global::Protos.CS2DB_QueryRanking.Types.SortType) input.ReadEnum();
+            break;
+          }
+          case 24: {
+            From = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Count = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the CS2DB_QueryRanking message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum SortType {
+        [pbr::OriginalName("Rank")] Rank = 0,
+      }
+
+    }
+    #endregion
 
   }
 

@@ -1,8 +1,8 @@
+import { UIBattle } from "./UIBattle";
+import { UILoading } from "./UILoading";
 import { UILogin } from "./UILogin";
 import { UIMain } from "./UIMain";
 import { UIMatching } from "./UIMatching";
-import { UILoading } from "./UILoading";
-import { UIBattle } from "./UIBattle";
 export class UIManager {
     get login() { return this._login; }
     get main() { return this._main; }

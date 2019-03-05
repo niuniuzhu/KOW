@@ -28,8 +28,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "./UIAlert"], funct
                     break;
             }
         }
-        onInit() {
-        }
         Dispose() {
             this._root.dispose();
         }

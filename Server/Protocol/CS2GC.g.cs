@@ -48,8 +48,13 @@ namespace Protos {
             "dHRsZUVuZC5SZXN1bHQSDQoFZ1JhbmsYAyABKAUSDgoGZ01vbmV5GAQgASgF",
             "EhEKCWdEaWFtb25lZBgFIAEoBRIMCgRnRXhwGAYgASgNEgwKBHJhbmsYByAB",
             "KAUSDQoFbW9uZXkYCCABKAUSEAoIZGlhbW9uZWQYCSABKAUSCwoDZXhwGAog",
-            "ASgNIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3EAESCAoETG9zZRACYgZw",
-            "cm90bzM="));
+            "ASgNIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3EAESCAoETG9zZRACIoEB",
+            "ChFDUzJHQ19SYW5raW5nSW5mbxIMCgR1a2V5GAEgASgNEgwKBG5hbWUYAiAB",
+            "KAkSDgoGZ2VuZGVyGAMgASgFEg4KBmF2YXRhchgEIAEoCRIVCg1sYXN0TG9n",
+            "aW5UaW1lGAUgASgDEgwKBHJhbmsYBiABKAUSCwoDZXhwGAcgASgFImcKFUNT",
+            "MkdDX1F1ZXJ5UmFua2luZ1JldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1z",
+            "Z09wdHMSLwoMcmFua2luZ0luZm9zGAIgAygLMhkuUHJvdG9zLkNTMkdDX1Jh",
+            "bmtpbmdJbmZvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -60,7 +65,9 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RemoveFromMatch), global::Protos.CS2GC_RemoveFromMatch.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_EnterBattle), global::Protos.CS2GC_EnterBattle.Parser, new[]{ "Opts", "GcNID", "Ip", "Port", "Result" }, null, new[]{ typeof(global::Protos.CS2GC_EnterBattle.Types.Result) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BSLose), global::Protos.CS2GC_BSLose.Parser, new[]{ "Opts" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BattleEnd), global::Protos.CS2GC_BattleEnd.Parser, new[]{ "Opts", "Result", "GRank", "GMoney", "GDiamoned", "GExp", "Rank", "Money", "Diamoned", "Exp" }, null, new[]{ typeof(global::Protos.CS2GC_BattleEnd.Types.Result) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BattleEnd), global::Protos.CS2GC_BattleEnd.Parser, new[]{ "Opts", "Result", "GRank", "GMoney", "GDiamoned", "GExp", "Rank", "Money", "Diamoned", "Exp" }, null, new[]{ typeof(global::Protos.CS2GC_BattleEnd.Types.Result) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_RankingInfo), global::Protos.CS2GC_RankingInfo.Parser, new[]{ "Ukey", "Name", "Gender", "Avatar", "LastLoginTime", "Rank", "Exp" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_QueryRankingRet), global::Protos.CS2GC_QueryRankingRet.Parser, new[]{ "Opts", "RankingInfos" }, null, null, null)
           }));
     }
     #endregion
@@ -1915,6 +1922,458 @@ namespace Protos {
 
     }
     #endregion
+
+  }
+
+  public sealed partial class CS2GC_RankingInfo : pb::IMessage<CS2GC_RankingInfo> {
+    private static readonly pb::MessageParser<CS2GC_RankingInfo> _parser = new pb::MessageParser<CS2GC_RankingInfo>(() => new CS2GC_RankingInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2GC_RankingInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[8]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_RankingInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_RankingInfo(CS2GC_RankingInfo other) : this() {
+      ukey_ = other.ukey_;
+      name_ = other.name_;
+      gender_ = other.gender_;
+      avatar_ = other.avatar_;
+      lastLoginTime_ = other.lastLoginTime_;
+      rank_ = other.rank_;
+      exp_ = other.exp_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_RankingInfo Clone() {
+      return new CS2GC_RankingInfo(this);
+    }
+
+    /// <summary>Field number for the "ukey" field.</summary>
+    public const int UkeyFieldNumber = 1;
+    private uint ukey_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Ukey {
+      get { return ukey_; }
+      set {
+        ukey_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 2;
+    private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "gender" field.</summary>
+    public const int GenderFieldNumber = 3;
+    private int gender_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Gender {
+      get { return gender_; }
+      set {
+        gender_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "avatar" field.</summary>
+    public const int AvatarFieldNumber = 4;
+    private string avatar_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Avatar {
+      get { return avatar_; }
+      set {
+        avatar_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "lastLoginTime" field.</summary>
+    public const int LastLoginTimeFieldNumber = 5;
+    private long lastLoginTime_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public long LastLoginTime {
+      get { return lastLoginTime_; }
+      set {
+        lastLoginTime_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "rank" field.</summary>
+    public const int RankFieldNumber = 6;
+    private int rank_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Rank {
+      get { return rank_; }
+      set {
+        rank_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "exp" field.</summary>
+    public const int ExpFieldNumber = 7;
+    private int exp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Exp {
+      get { return exp_; }
+      set {
+        exp_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2GC_RankingInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2GC_RankingInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Ukey != other.Ukey) return false;
+      if (Name != other.Name) return false;
+      if (Gender != other.Gender) return false;
+      if (Avatar != other.Avatar) return false;
+      if (LastLoginTime != other.LastLoginTime) return false;
+      if (Rank != other.Rank) return false;
+      if (Exp != other.Exp) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Ukey != 0) hash ^= Ukey.GetHashCode();
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Gender != 0) hash ^= Gender.GetHashCode();
+      if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
+      if (LastLoginTime != 0L) hash ^= LastLoginTime.GetHashCode();
+      if (Rank != 0) hash ^= Rank.GetHashCode();
+      if (Exp != 0) hash ^= Exp.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Ukey != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(Ukey);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Name);
+      }
+      if (Gender != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Gender);
+      }
+      if (Avatar.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Avatar);
+      }
+      if (LastLoginTime != 0L) {
+        output.WriteRawTag(40);
+        output.WriteInt64(LastLoginTime);
+      }
+      if (Rank != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(Rank);
+      }
+      if (Exp != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(Exp);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Ukey != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Ukey);
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (Gender != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gender);
+      }
+      if (Avatar.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Avatar);
+      }
+      if (LastLoginTime != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(LastLoginTime);
+      }
+      if (Rank != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Rank);
+      }
+      if (Exp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Exp);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2GC_RankingInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Ukey != 0) {
+        Ukey = other.Ukey;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.Gender != 0) {
+        Gender = other.Gender;
+      }
+      if (other.Avatar.Length != 0) {
+        Avatar = other.Avatar;
+      }
+      if (other.LastLoginTime != 0L) {
+        LastLoginTime = other.LastLoginTime;
+      }
+      if (other.Rank != 0) {
+        Rank = other.Rank;
+      }
+      if (other.Exp != 0) {
+        Exp = other.Exp;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Ukey = input.ReadUInt32();
+            break;
+          }
+          case 18: {
+            Name = input.ReadString();
+            break;
+          }
+          case 24: {
+            Gender = input.ReadInt32();
+            break;
+          }
+          case 34: {
+            Avatar = input.ReadString();
+            break;
+          }
+          case 40: {
+            LastLoginTime = input.ReadInt64();
+            break;
+          }
+          case 48: {
+            Rank = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            Exp = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class CS2GC_QueryRankingRet : pb::IMessage<CS2GC_QueryRankingRet> {
+    private static readonly pb::MessageParser<CS2GC_QueryRankingRet> _parser = new pb::MessageParser<CS2GC_QueryRankingRet>(() => new CS2GC_QueryRankingRet());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2GC_QueryRankingRet> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[9]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_QueryRankingRet() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_QueryRankingRet(CS2GC_QueryRankingRet other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      rankingInfos_ = other.rankingInfos_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_QueryRankingRet Clone() {
+      return new CS2GC_QueryRankingRet(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "rankingInfos" field.</summary>
+    public const int RankingInfosFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::Protos.CS2GC_RankingInfo> _repeated_rankingInfos_codec
+        = pb::FieldCodec.ForMessage(18, global::Protos.CS2GC_RankingInfo.Parser);
+    private readonly pbc::RepeatedField<global::Protos.CS2GC_RankingInfo> rankingInfos_ = new pbc::RepeatedField<global::Protos.CS2GC_RankingInfo>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Protos.CS2GC_RankingInfo> RankingInfos {
+      get { return rankingInfos_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2GC_QueryRankingRet);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2GC_QueryRankingRet other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if(!rankingInfos_.Equals(other.rankingInfos_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      hash ^= rankingInfos_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      rankingInfos_.WriteTo(output, _repeated_rankingInfos_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      size += rankingInfos_.CalculateSize(_repeated_rankingInfos_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2GC_QueryRankingRet other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      rankingInfos_.Add(other.rankingInfos_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 18: {
+            rankingInfos_.AddEntriesFrom(input, _repeated_rankingInfos_codec);
+            break;
+          }
+        }
+      }
+    }
 
   }
 

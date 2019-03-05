@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+package Protos;
+
+import "Global.proto";
+
+message DB2CS_RankingInfo {
+	uint32 ukey = 1;
+	string name = 2;
+	int32 gender = 3;
+	string avatar = 4;
+	int64 lastLoginTime = 5;
+	int32 rank = 6;
+	int32 exp= 7;
+}
+
+message DB2CS_QueryRankingRet {
+	MsgOpts opts = 1;
+	repeated DB2CS_RankingInfo rankingInfos = 2;
+}

@@ -28,8 +28,6 @@ export class UILogin {
                 break;
         }
     }
-    onInit() {
-    }
     Dispose() {
         this._root.dispose();
     }

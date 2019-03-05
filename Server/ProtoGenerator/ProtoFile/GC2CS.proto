@@ -25,3 +25,13 @@ message GC2CS_BeginMatch {
 message GC2CS_CancelMatch {
 	MsgOpts opts = 1;
 }
+
+message GC2CS_QueryRanking {
+	enum SortType{
+		Rank = 0;
+	}
+	MsgOpts opts = 1;
+	SortType sortType = 2;
+	int32 from  = 3;
+	int32 count = 4;
+}

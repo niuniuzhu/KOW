@@ -2,6 +2,7 @@ import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
+import { UIRanking } from "./UIRanking";
 export class UIMain {
     get root() { return this._root; }
     constructor() {
@@ -9,6 +10,7 @@ export class UIMain {
         this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
+        this._ranking = new UIRanking();
         this._matchBtn = this._root.getChild("n3").asCom;
         this._matchBtn2 = this._root.getChild("n13").asCom;
         this._matchBtn3 = this._root.getChild("n19").asCom;
@@ -17,8 +19,10 @@ export class UIMain {
         this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
         this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
         this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
+        this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
     }
     Dispose() {
+        this._ranking.dispose();
         this._root.dispose();
     }
     Enter(param) {
@@ -65,6 +69,9 @@ export class UIMain {
     OnMatchBtn4Click() {
         this.SetMatchBtnEnable(false);
         Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
+    }
+    OnRankingBtnClick() {
+        this._ranking.show();
     }
     OnFail(message, callback = null) {
         UIAlert.Show(message, callback);

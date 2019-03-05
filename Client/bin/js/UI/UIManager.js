@@ -1,4 +1,4 @@
-define(["require", "exports", "./UILogin", "./UIMain", "./UIMatching", "./UILoading", "./UIBattle"], function (require, exports, UILogin_1, UIMain_1, UIMatching_1, UILoading_1, UIBattle_1) {
+define(["require", "exports", "./UIBattle", "./UILoading", "./UILogin", "./UIMain", "./UIMatching"], function (require, exports, UIBattle_1, UILoading_1, UILogin_1, UIMain_1, UIMatching_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIManager {

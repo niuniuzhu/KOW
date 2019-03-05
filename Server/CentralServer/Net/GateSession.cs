@@ -16,6 +16,7 @@ namespace CentralServer.Net
 
 			this.RegMsgHandler( Protos.MsgID.EGc2CsBeginMatch, CS.instance.bizProcessor.OnGc2CsBeginMatch );
 			this.RegMsgHandler( Protos.MsgID.EGc2CsCancelMatch, CS.instance.bizProcessor.OnGc2CsCancelMatch );
+			this.RegMsgHandler( Protos.MsgID.EGc2CsQueryRanking, CS.instance.bizProcessor.OnGc2CsQueryRanking );
 		}
 
 		protected override void OnEstablish()

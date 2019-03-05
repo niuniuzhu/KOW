@@ -80,3 +80,18 @@ message CS2GC_BattleEnd {
 	int32 diamoned = 9;
 	uint32 exp = 10;
 }
+
+message CS2GC_RankingInfo {
+	uint32 ukey = 1;
+	string name = 2;
+	int32 gender = 3;
+	string avatar = 4;
+	int64 lastLoginTime = 5;
+	int32 rank = 6;
+	int32 exp = 7;
+}
+
+message CS2GC_QueryRankingRet {
+	MsgOpts opts = 1;
+	repeated CS2GC_RankingInfo rankingInfos = 2;
+}

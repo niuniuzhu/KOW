@@ -24,6 +24,7 @@ public static class ProtoCreator {
 		{typeof(Protos.GC2BS_EndBattle), (Protos.MsgID)1206},
 		{typeof(Protos.GC2CS_BeginMatch), (Protos.MsgID)1300},
 		{typeof(Protos.GC2CS_CancelMatch), (Protos.MsgID)1301},
+		{typeof(Protos.GC2CS_QueryRanking), (Protos.MsgID)1302},
 		{typeof(Protos.LS2GC_GSInfo), (Protos.MsgID)2000},
 		{typeof(Protos.LS2GC_AskRegRet), (Protos.MsgID)2001},
 		{typeof(Protos.LS2GC_AskLoginRet), (Protos.MsgID)2002},
@@ -61,10 +62,13 @@ public static class ProtoCreator {
 		{typeof(Protos.CS2GC_EnterBattle), (Protos.MsgID)5306},
 		{typeof(Protos.CS2GC_BattleEnd), (Protos.MsgID)5307},
 		{typeof(Protos.CS2GC_BSLose), (Protos.MsgID)5308},
+		{typeof(Protos.CS2GC_QueryRankingRet), (Protos.MsgID)5309},
 		{typeof(Protos.CS2DB_UpdateRank), (Protos.MsgID)5400},
+		{typeof(Protos.CS2DB_QueryRanking), (Protos.MsgID)5401},
 		{typeof(Protos.DB2LS_QueryAccountRet), (Protos.MsgID)8000},
 		{typeof(Protos.DB2LS_QueryLoginRet), (Protos.MsgID)8001},
 		{typeof(Protos.DB2LS_ExecRet), (Protos.MsgID)8002},
+		{typeof(Protos.DB2CS_QueryRankingRet), (Protos.MsgID)9000},
 	};
 
 	internal static readonly System.Collections.Generic.Dictionary<Protos.MsgID, System.Type> _ID2TYPE = new System.Collections.Generic.Dictionary<Protos.MsgID, System.Type> {
@@ -86,6 +90,7 @@ public static class ProtoCreator {
 		{(Protos.MsgID)1206, typeof(Protos.GC2BS_EndBattle)},
 		{(Protos.MsgID)1300, typeof(Protos.GC2CS_BeginMatch)},
 		{(Protos.MsgID)1301, typeof(Protos.GC2CS_CancelMatch)},
+		{(Protos.MsgID)1302, typeof(Protos.GC2CS_QueryRanking)},
 		{(Protos.MsgID)2000, typeof(Protos.LS2GC_GSInfo)},
 		{(Protos.MsgID)2001, typeof(Protos.LS2GC_AskRegRet)},
 		{(Protos.MsgID)2002, typeof(Protos.LS2GC_AskLoginRet)},
@@ -123,10 +128,13 @@ public static class ProtoCreator {
 		{(Protos.MsgID)5306, typeof(Protos.CS2GC_EnterBattle)},
 		{(Protos.MsgID)5307, typeof(Protos.CS2GC_BattleEnd)},
 		{(Protos.MsgID)5308, typeof(Protos.CS2GC_BSLose)},
+		{(Protos.MsgID)5309, typeof(Protos.CS2GC_QueryRankingRet)},
 		{(Protos.MsgID)5400, typeof(Protos.CS2DB_UpdateRank)},
+		{(Protos.MsgID)5401, typeof(Protos.CS2DB_QueryRanking)},
 		{(Protos.MsgID)8000, typeof(Protos.DB2LS_QueryAccountRet)},
 		{(Protos.MsgID)8001, typeof(Protos.DB2LS_QueryLoginRet)},
 		{(Protos.MsgID)8002, typeof(Protos.DB2LS_ExecRet)},
+		{(Protos.MsgID)9000, typeof(Protos.DB2CS_QueryRankingRet)},
 	};
 	#endregion
 
@@ -246,6 +254,13 @@ public static class ProtoCreator {
 	public static Protos.GC2CS_CancelMatch Q_GC2CS_CancelMatch() {
 		var msg = new Protos.GC2CS_CancelMatch();
 		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Protos.GC2CS_QueryRanking Q_GC2CS_QueryRanking() {
+		var msg = new Protos.GC2CS_QueryRanking();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Rpc;
 		return msg;
 	}
 
@@ -478,9 +493,22 @@ public static class ProtoCreator {
 		return msg;
 	}
 
+	public static Protos.CS2GC_QueryRankingRet Q_CS2GC_QueryRankingRet() {
+		var msg = new Protos.CS2GC_QueryRankingRet();
+		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
 	public static Protos.CS2DB_UpdateRank Q_CS2DB_UpdateRank() {
 		var msg = new Protos.CS2DB_UpdateRank();
 		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
+	public static Protos.CS2DB_QueryRanking Q_CS2DB_QueryRanking() {
+		var msg = new Protos.CS2DB_QueryRanking();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Rpc;
 		return msg;
 	}
 
@@ -502,115 +530,17 @@ public static class ProtoCreator {
 		return msg;
 	}
 
+	public static Protos.DB2CS_QueryRankingRet Q_DB2CS_QueryRankingRet() {
+		var msg = new Protos.DB2CS_QueryRankingRet();
+		msg.Opts = new Protos.MsgOpts();
+		return msg;
+	}
+
 	#endregion
 
 	#region response message static functions
-	public static Protos.BS2GC_RequestSnapshotRet R_GC2BS_RequestSnapshot( uint pid ) {
-		var msg = new Protos.BS2GC_RequestSnapshotRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.CS2LS_GCLoginRet R_LS2CS_GCLogin( uint pid ) {
-		var msg = new Protos.CS2LS_GCLoginRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.GS2GC_LoginRet R_GC2GS_AskLogin( uint pid ) {
-		var msg = new Protos.GS2GC_LoginRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
 	public static Protos.CS2BS_BattleEndRet R_BS2CS_BattleEnd( uint pid ) {
 		var msg = new Protos.CS2BS_BattleEndRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.BS2GC_RequestFrameActionsRet R_GC2BS_RequestFrameActions( uint pid ) {
-		var msg = new Protos.BS2GC_RequestFrameActionsRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.LS2GC_AskLoginRet R_GC2LS_AskSmartLogin( uint pid ) {
-		var msg = new Protos.LS2GC_AskLoginRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.DB2LS_QueryLoginRet R_LS2DB_QueryLogin( uint pid ) {
-		var msg = new Protos.DB2LS_QueryLoginRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.LS2GC_AskLoginRet R_GC2LS_AskWXLogin( uint pid ) {
-		var msg = new Protos.LS2GC_AskLoginRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.LS2GC_AskRegRet R_GC2LS_AskRegister( uint pid ) {
-		var msg = new Protos.LS2GC_AskRegRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.BS2CS_BattleInfoRet R_CS2BS_BattleInfo( uint pid ) {
-		var msg = new Protos.BS2CS_BattleInfoRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.DB2LS_ExecRet R_LS2DB_Exec( uint pid ) {
-		var msg = new Protos.DB2LS_ExecRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.BS2GC_LoginRet R_GC2BS_AskLogin( uint pid ) {
-		var msg = new Protos.BS2GC_LoginRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.DB2LS_QueryAccountRet R_LS2DB_QueryAccount( uint pid ) {
-		var msg = new Protos.DB2LS_QueryAccountRet();
-		msg.Opts = new Protos.MsgOpts();
-		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
-		msg.Opts.Rpid = pid;
-		return msg;
-	}
-
-	public static Protos.CS2GC_BeginMatchRet R_GC2CS_BeginMatch( uint pid ) {
-		var msg = new Protos.CS2GC_BeginMatchRet();
 		msg.Opts = new Protos.MsgOpts();
 		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
 		msg.Opts.Rpid = pid;
@@ -625,8 +555,8 @@ public static class ProtoCreator {
 		return msg;
 	}
 
-	public static Protos.LS2GC_AskLoginRet R_GC2LS_AskLogin( uint pid ) {
-		var msg = new Protos.LS2GC_AskLoginRet();
+	public static Protos.DB2CS_QueryRankingRet R_CS2DB_QueryRanking( uint pid ) {
+		var msg = new Protos.DB2CS_QueryRankingRet();
 		msg.Opts = new Protos.MsgOpts();
 		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
 		msg.Opts.Rpid = pid;
@@ -635,6 +565,126 @@ public static class ProtoCreator {
 
 	public static Protos.G_AskPingRet R_G_AskPing( uint pid ) {
 		var msg = new Protos.G_AskPingRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.LS2GC_AskLoginRet R_GC2LS_AskWXLogin( uint pid ) {
+		var msg = new Protos.LS2GC_AskLoginRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.BS2GC_RequestSnapshotRet R_GC2BS_RequestSnapshot( uint pid ) {
+		var msg = new Protos.BS2GC_RequestSnapshotRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.CS2GC_QueryRankingRet R_GC2CS_QueryRanking( uint pid ) {
+		var msg = new Protos.CS2GC_QueryRankingRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.DB2LS_QueryAccountRet R_LS2DB_QueryAccount( uint pid ) {
+		var msg = new Protos.DB2LS_QueryAccountRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.BS2CS_BattleInfoRet R_CS2BS_BattleInfo( uint pid ) {
+		var msg = new Protos.BS2CS_BattleInfoRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.LS2GC_AskLoginRet R_GC2LS_AskLogin( uint pid ) {
+		var msg = new Protos.LS2GC_AskLoginRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.LS2GC_AskLoginRet R_GC2LS_AskSmartLogin( uint pid ) {
+		var msg = new Protos.LS2GC_AskLoginRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.CS2GC_BeginMatchRet R_GC2CS_BeginMatch( uint pid ) {
+		var msg = new Protos.CS2GC_BeginMatchRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.BS2GC_RequestFrameActionsRet R_GC2BS_RequestFrameActions( uint pid ) {
+		var msg = new Protos.BS2GC_RequestFrameActionsRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.LS2GC_AskRegRet R_GC2LS_AskRegister( uint pid ) {
+		var msg = new Protos.LS2GC_AskRegRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.DB2LS_ExecRet R_LS2DB_Exec( uint pid ) {
+		var msg = new Protos.DB2LS_ExecRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.DB2LS_QueryLoginRet R_LS2DB_QueryLogin( uint pid ) {
+		var msg = new Protos.DB2LS_QueryLoginRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.GS2GC_LoginRet R_GC2GS_AskLogin( uint pid ) {
+		var msg = new Protos.GS2GC_LoginRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.CS2LS_GCLoginRet R_LS2CS_GCLogin( uint pid ) {
+		var msg = new Protos.CS2LS_GCLoginRet();
+		msg.Opts = new Protos.MsgOpts();
+		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
+		msg.Opts.Rpid = pid;
+		return msg;
+	}
+
+	public static Protos.BS2GC_LoginRet R_GC2BS_AskLogin( uint pid ) {
+		var msg = new Protos.BS2GC_LoginRet();
 		msg.Opts = new Protos.MsgOpts();
 		msg.Opts.Flag |= 1 << (int)Protos.MsgOpts.Types.Flag.Resp;
 		msg.Opts.Rpid = pid;
@@ -733,6 +783,11 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)1301: {
 				var msg = new Protos.GC2CS_CancelMatch();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
+			case (Protos.MsgID)1302: {
+				var msg = new Protos.GC2CS_QueryRanking();
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
@@ -921,8 +976,18 @@ public static class ProtoCreator {
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
+			case (Protos.MsgID)5309: {
+				var msg = new Protos.CS2GC_QueryRankingRet();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
 			case (Protos.MsgID)5400: {
 				var msg = new Protos.CS2DB_UpdateRank();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
+			case (Protos.MsgID)5401: {
+				var msg = new Protos.CS2DB_QueryRanking();
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
@@ -938,6 +1003,11 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)8002: {
 				var msg = new Protos.DB2LS_ExecRet();
+				msg.MergeFrom( data, offset, size );
+				return msg;
+			}
+			case (Protos.MsgID)9000: {
+				var msg = new Protos.DB2CS_QueryRankingRet();
 				msg.MergeFrom( data, offset, size );
 				return msg;
 			}
@@ -1049,6 +1119,12 @@ public static class ProtoCreator {
 
 	public static Protos.GC2CS_CancelMatch D_GC2CS_CancelMatch( byte[] data, int offset, int size ) {
 		var msg = new Protos.GC2CS_CancelMatch();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
+	public static Protos.GC2CS_QueryRanking D_GC2CS_QueryRanking( byte[] data, int offset, int size ) {
+		var msg = new Protos.GC2CS_QueryRanking();
 		msg.MergeFrom( data, offset, size );
 		return msg;
 	}
@@ -1275,8 +1351,20 @@ public static class ProtoCreator {
 		return msg;
 	}
 
+	public static Protos.CS2GC_QueryRankingRet D_CS2GC_QueryRankingRet( byte[] data, int offset, int size ) {
+		var msg = new Protos.CS2GC_QueryRankingRet();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
 	public static Protos.CS2DB_UpdateRank D_CS2DB_UpdateRank( byte[] data, int offset, int size ) {
 		var msg = new Protos.CS2DB_UpdateRank();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
+	public static Protos.CS2DB_QueryRanking D_CS2DB_QueryRanking( byte[] data, int offset, int size ) {
+		var msg = new Protos.CS2DB_QueryRanking();
 		msg.MergeFrom( data, offset, size );
 		return msg;
 	}
@@ -1295,6 +1383,12 @@ public static class ProtoCreator {
 
 	public static Protos.DB2LS_ExecRet D_DB2LS_ExecRet( byte[] data, int offset, int size ) {
 		var msg = new Protos.DB2LS_ExecRet();
+		msg.MergeFrom( data, offset, size );
+		return msg;
+	}
+
+	public static Protos.DB2CS_QueryRankingRet D_DB2CS_QueryRankingRet( byte[] data, int offset, int size ) {
+		var msg = new Protos.DB2CS_QueryRankingRet();
 		msg.MergeFrom( data, offset, size );
 		return msg;
 	}
@@ -1357,6 +1451,9 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)1301: {
 				return new Protos.GC2CS_CancelMatch();
+			}
+			case (Protos.MsgID)1302: {
+				return new Protos.GC2CS_QueryRanking();
 			}
 			case (Protos.MsgID)2000: {
 				return new Protos.LS2GC_GSInfo();
@@ -1469,8 +1566,14 @@ public static class ProtoCreator {
 			case (Protos.MsgID)5308: {
 				return new Protos.CS2GC_BSLose();
 			}
+			case (Protos.MsgID)5309: {
+				return new Protos.CS2GC_QueryRankingRet();
+			}
 			case (Protos.MsgID)5400: {
 				return new Protos.CS2DB_UpdateRank();
+			}
+			case (Protos.MsgID)5401: {
+				return new Protos.CS2DB_QueryRanking();
 			}
 			case (Protos.MsgID)8000: {
 				return new Protos.DB2LS_QueryAccountRet();
@@ -1480,6 +1583,9 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)8002: {
 				return new Protos.DB2LS_ExecRet();
+			}
+			case (Protos.MsgID)9000: {
+				return new Protos.DB2CS_QueryRankingRet();
 			}
 		}
 		return null;
@@ -1545,6 +1651,9 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)1301: {
 				return ((Protos.GC2CS_CancelMatch)message).Opts;
+			}
+			case (Protos.MsgID)1302: {
+				return ((Protos.GC2CS_QueryRanking)message).Opts;
 			}
 			case (Protos.MsgID)2000: {
 				return ((Protos.LS2GC_GSInfo)message).Opts;
@@ -1657,8 +1766,14 @@ public static class ProtoCreator {
 			case (Protos.MsgID)5308: {
 				return ((Protos.CS2GC_BSLose)message).Opts;
 			}
+			case (Protos.MsgID)5309: {
+				return ((Protos.CS2GC_QueryRankingRet)message).Opts;
+			}
 			case (Protos.MsgID)5400: {
 				return ((Protos.CS2DB_UpdateRank)message).Opts;
+			}
+			case (Protos.MsgID)5401: {
+				return ((Protos.CS2DB_QueryRanking)message).Opts;
 			}
 			case (Protos.MsgID)8000: {
 				return ((Protos.DB2LS_QueryAccountRet)message).Opts;
@@ -1668,6 +1783,9 @@ public static class ProtoCreator {
 			}
 			case (Protos.MsgID)8002: {
 				return ((Protos.DB2LS_ExecRet)message).Opts;
+			}
+			case (Protos.MsgID)9000: {
+				return ((Protos.DB2CS_QueryRankingRet)message).Opts;
 			}
 		}
 		return null;

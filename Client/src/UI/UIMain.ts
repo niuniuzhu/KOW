@@ -3,6 +3,7 @@ import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { IUIModule } from "./IUIModule";
 import { UIAlert } from "./UIAlert";
+import { UIRanking } from "./UIRanking";
 
 export class UIMain implements IUIModule {
 	private readonly _root: fairygui.GComponent;
@@ -13,12 +14,15 @@ export class UIMain implements IUIModule {
 	private readonly _matchBtn2: fairygui.GComponent;
 	private readonly _matchBtn3: fairygui.GComponent;
 	private readonly _matchBtn4: fairygui.GComponent;
+	private readonly _ranking: UIRanking;
 
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/main");
 		this._root = fairygui.UIPackage.createObject("main", "Main").asCom;
 		this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
+
+		this._ranking = new UIRanking();
 
 		this._matchBtn = this._root.getChild("n3").asCom;
 		this._matchBtn2 = this._root.getChild("n13").asCom;
@@ -28,9 +32,12 @@ export class UIMain implements IUIModule {
 		this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
 		this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
 		this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
+
+		this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
 	}
 
 	public Dispose(): void {
+		this._ranking.dispose();
 		this._root.dispose();
 	}
 
@@ -89,6 +96,10 @@ export class UIMain implements IUIModule {
 	private OnMatchBtn4Click(): void {
 		this.SetMatchBtnEnable(false);
 		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
+	}
+
+	private OnRankingBtnClick(): void {
+		this._ranking.show();
 	}
 
 	public OnFail(message: string, callback: () => void = null): void {

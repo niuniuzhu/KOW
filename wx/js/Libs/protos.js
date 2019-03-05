@@ -987,6 +987,7 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[1206] = "eGC2BS_EndBattle"] = 1206;
         values[valuesById[1300] = "eGC2CS_BeginMatch"] = 1300;
         values[valuesById[1301] = "eGC2CS_CancelMatch"] = 1301;
+        values[valuesById[1302] = "eGC2CS_QueryRanking"] = 1302;
         values[valuesById[2000] = "eLS2GC_GSInfo"] = 2000;
         values[valuesById[2001] = "eLS2GC_AskRegRet"] = 2001;
         values[valuesById[2002] = "eLS2GC_AskLoginRet"] = 2002;
@@ -1024,10 +1025,13 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[5306] = "eCS2GC_EnterBattle"] = 5306;
         values[valuesById[5307] = "eCS2GC_BattleEnd"] = 5307;
         values[valuesById[5308] = "eCS2GC_BSLose"] = 5308;
+        values[valuesById[5309] = "eCS2GC_QueryRankingRet"] = 5309;
         values[valuesById[5400] = "eCS2DB_UpdateRank"] = 5400;
+        values[valuesById[5401] = "eCS2DB_QueryRanking"] = 5401;
         values[valuesById[8000] = "eDB2LS_QueryAccountRet"] = 8000;
         values[valuesById[8001] = "eDB2LS_QueryLoginRet"] = 8001;
         values[valuesById[8002] = "eDB2LS_ExecRet"] = 8002;
+        values[valuesById[9000] = "eDB2CS_QueryRankingRet"] = 9000;
         return values;
     })();
 
@@ -3481,6 +3485,155 @@ export const Protos = $root.Protos = (() => {
         return CS2DB_UpdateRank;
     })();
 
+    Protos.CS2DB_QueryRanking = (function() {
+
+        function CS2DB_QueryRanking(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2DB_QueryRanking.prototype.opts = null;
+        CS2DB_QueryRanking.prototype.sortType = 0;
+        CS2DB_QueryRanking.prototype.from = 0;
+        CS2DB_QueryRanking.prototype.count = 0;
+
+        CS2DB_QueryRanking.create = function create(properties) {
+            return new CS2DB_QueryRanking(properties);
+        };
+
+        CS2DB_QueryRanking.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.sortType != null && message.hasOwnProperty("sortType"))
+                writer.uint32(16).int32(message.sortType);
+            if (message.from != null && message.hasOwnProperty("from"))
+                writer.uint32(24).int32(message.from);
+            if (message.count != null && message.hasOwnProperty("count"))
+                writer.uint32(32).int32(message.count);
+            return writer;
+        };
+
+        CS2DB_QueryRanking.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2DB_QueryRanking.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2DB_QueryRanking();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.sortType = reader.int32();
+                    break;
+                case 3:
+                    message.from = reader.int32();
+                    break;
+                case 4:
+                    message.count = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2DB_QueryRanking.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2DB_QueryRanking.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.sortType != null && message.hasOwnProperty("sortType"))
+                switch (message.sortType) {
+                default:
+                    return "sortType: enum value expected";
+                case 0:
+                    break;
+                }
+            if (message.from != null && message.hasOwnProperty("from"))
+                if (!$util.isInteger(message.from))
+                    return "from: integer expected";
+            if (message.count != null && message.hasOwnProperty("count"))
+                if (!$util.isInteger(message.count))
+                    return "count: integer expected";
+            return null;
+        };
+
+        CS2DB_QueryRanking.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2DB_QueryRanking)
+                return object;
+            let message = new $root.Protos.CS2DB_QueryRanking();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2DB_QueryRanking.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            switch (object.sortType) {
+            case "Rank":
+            case 0:
+                message.sortType = 0;
+                break;
+            }
+            if (object.from != null)
+                message.from = object.from | 0;
+            if (object.count != null)
+                message.count = object.count | 0;
+            return message;
+        };
+
+        CS2DB_QueryRanking.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.sortType = options.enums === String ? "Rank" : 0;
+                object.from = 0;
+                object.count = 0;
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.sortType != null && message.hasOwnProperty("sortType"))
+                object.sortType = options.enums === String ? $root.Protos.CS2DB_QueryRanking.SortType[message.sortType] : message.sortType;
+            if (message.from != null && message.hasOwnProperty("from"))
+                object.from = message.from;
+            if (message.count != null && message.hasOwnProperty("count"))
+                object.count = message.count;
+            return object;
+        };
+
+        CS2DB_QueryRanking.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        CS2DB_QueryRanking.SortType = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "Rank"] = 0;
+            return values;
+        })();
+
+        return CS2DB_QueryRanking;
+    })();
+
     Protos.CS2GC_BeginMatchRet = (function() {
 
         function CS2GC_BeginMatchRet(properties) {
@@ -4698,6 +4851,320 @@ export const Protos = $root.Protos = (() => {
         })();
 
         return CS2GC_BattleEnd;
+    })();
+
+    Protos.CS2GC_RankingInfo = (function() {
+
+        function CS2GC_RankingInfo(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_RankingInfo.prototype.ukey = 0;
+        CS2GC_RankingInfo.prototype.name = "";
+        CS2GC_RankingInfo.prototype.gender = 0;
+        CS2GC_RankingInfo.prototype.avatar = "";
+        CS2GC_RankingInfo.prototype.lastLoginTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        CS2GC_RankingInfo.prototype.rank = 0;
+        CS2GC_RankingInfo.prototype.exp = 0;
+
+        CS2GC_RankingInfo.create = function create(properties) {
+            return new CS2GC_RankingInfo(properties);
+        };
+
+        CS2GC_RankingInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.ukey != null && message.hasOwnProperty("ukey"))
+                writer.uint32(8).uint32(message.ukey);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(18).string(message.name);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(24).int32(message.gender);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(34).string(message.avatar);
+            if (message.lastLoginTime != null && message.hasOwnProperty("lastLoginTime"))
+                writer.uint32(40).int64(message.lastLoginTime);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(48).int32(message.rank);
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                writer.uint32(56).int32(message.exp);
+            return writer;
+        };
+
+        CS2GC_RankingInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_RankingInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_RankingInfo();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.ukey = reader.uint32();
+                    break;
+                case 2:
+                    message.name = reader.string();
+                    break;
+                case 3:
+                    message.gender = reader.int32();
+                    break;
+                case 4:
+                    message.avatar = reader.string();
+                    break;
+                case 5:
+                    message.lastLoginTime = reader.int64();
+                    break;
+                case 6:
+                    message.rank = reader.int32();
+                    break;
+                case 7:
+                    message.exp = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_RankingInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_RankingInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.ukey != null && message.hasOwnProperty("ukey"))
+                if (!$util.isInteger(message.ukey))
+                    return "ukey: integer expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.lastLoginTime != null && message.hasOwnProperty("lastLoginTime"))
+                if (!$util.isInteger(message.lastLoginTime) && !(message.lastLoginTime && $util.isInteger(message.lastLoginTime.low) && $util.isInteger(message.lastLoginTime.high)))
+                    return "lastLoginTime: integer|Long expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                if (!$util.isInteger(message.exp))
+                    return "exp: integer expected";
+            return null;
+        };
+
+        CS2GC_RankingInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_RankingInfo)
+                return object;
+            let message = new $root.Protos.CS2GC_RankingInfo();
+            if (object.ukey != null)
+                message.ukey = object.ukey >>> 0;
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.lastLoginTime != null)
+                if ($util.Long)
+                    (message.lastLoginTime = $util.Long.fromValue(object.lastLoginTime)).unsigned = false;
+                else if (typeof object.lastLoginTime === "string")
+                    message.lastLoginTime = parseInt(object.lastLoginTime, 10);
+                else if (typeof object.lastLoginTime === "number")
+                    message.lastLoginTime = object.lastLoginTime;
+                else if (typeof object.lastLoginTime === "object")
+                    message.lastLoginTime = new $util.LongBits(object.lastLoginTime.low >>> 0, object.lastLoginTime.high >>> 0).toNumber();
+            if (object.rank != null)
+                message.rank = object.rank | 0;
+            if (object.exp != null)
+                message.exp = object.exp | 0;
+            return message;
+        };
+
+        CS2GC_RankingInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.ukey = 0;
+                object.name = "";
+                object.gender = 0;
+                object.avatar = "";
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, false);
+                    object.lastLoginTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.lastLoginTime = options.longs === String ? "0" : 0;
+                object.rank = 0;
+                object.exp = 0;
+            }
+            if (message.ukey != null && message.hasOwnProperty("ukey"))
+                object.ukey = message.ukey;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.lastLoginTime != null && message.hasOwnProperty("lastLoginTime"))
+                if (typeof message.lastLoginTime === "number")
+                    object.lastLoginTime = options.longs === String ? String(message.lastLoginTime) : message.lastLoginTime;
+                else
+                    object.lastLoginTime = options.longs === String ? $util.Long.prototype.toString.call(message.lastLoginTime) : options.longs === Number ? new $util.LongBits(message.lastLoginTime.low >>> 0, message.lastLoginTime.high >>> 0).toNumber() : message.lastLoginTime;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                object.exp = message.exp;
+            return object;
+        };
+
+        CS2GC_RankingInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2GC_RankingInfo;
+    })();
+
+    Protos.CS2GC_QueryRankingRet = (function() {
+
+        function CS2GC_QueryRankingRet(properties) {
+            this.rankingInfos = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_QueryRankingRet.prototype.opts = null;
+        CS2GC_QueryRankingRet.prototype.rankingInfos = $util.emptyArray;
+
+        CS2GC_QueryRankingRet.create = function create(properties) {
+            return new CS2GC_QueryRankingRet(properties);
+        };
+
+        CS2GC_QueryRankingRet.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.rankingInfos != null && message.rankingInfos.length)
+                for (let i = 0; i < message.rankingInfos.length; ++i)
+                    $root.Protos.CS2GC_RankingInfo.encode(message.rankingInfos[i], writer.uint32(18).fork()).ldelim();
+            return writer;
+        };
+
+        CS2GC_QueryRankingRet.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_QueryRankingRet.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_QueryRankingRet();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    if (!(message.rankingInfos && message.rankingInfos.length))
+                        message.rankingInfos = [];
+                    message.rankingInfos.push($root.Protos.CS2GC_RankingInfo.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_QueryRankingRet.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_QueryRankingRet.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.rankingInfos != null && message.hasOwnProperty("rankingInfos")) {
+                if (!Array.isArray(message.rankingInfos))
+                    return "rankingInfos: array expected";
+                for (let i = 0; i < message.rankingInfos.length; ++i) {
+                    let error = $root.Protos.CS2GC_RankingInfo.verify(message.rankingInfos[i]);
+                    if (error)
+                        return "rankingInfos." + error;
+                }
+            }
+            return null;
+        };
+
+        CS2GC_QueryRankingRet.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_QueryRankingRet)
+                return object;
+            let message = new $root.Protos.CS2GC_QueryRankingRet();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2GC_QueryRankingRet.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.rankingInfos) {
+                if (!Array.isArray(object.rankingInfos))
+                    throw TypeError(".Protos.CS2GC_QueryRankingRet.rankingInfos: array expected");
+                message.rankingInfos = [];
+                for (let i = 0; i < object.rankingInfos.length; ++i) {
+                    if (typeof object.rankingInfos[i] !== "object")
+                        throw TypeError(".Protos.CS2GC_QueryRankingRet.rankingInfos: object expected");
+                    message.rankingInfos[i] = $root.Protos.CS2GC_RankingInfo.fromObject(object.rankingInfos[i]);
+                }
+            }
+            return message;
+        };
+
+        CS2GC_QueryRankingRet.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.arrays || options.defaults)
+                object.rankingInfos = [];
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.rankingInfos && message.rankingInfos.length) {
+                object.rankingInfos = [];
+                for (let j = 0; j < message.rankingInfos.length; ++j)
+                    object.rankingInfos[j] = $root.Protos.CS2GC_RankingInfo.toObject(message.rankingInfos[j], options);
+            }
+            return object;
+        };
+
+        CS2GC_QueryRankingRet.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2GC_QueryRankingRet;
     })();
 
     Protos.CS2GS_GCLoginRet = (function() {
@@ -6119,6 +6586,320 @@ export const Protos = $root.Protos = (() => {
         };
 
         return GS2CS_GCLost;
+    })();
+
+    Protos.DB2CS_RankingInfo = (function() {
+
+        function DB2CS_RankingInfo(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        DB2CS_RankingInfo.prototype.ukey = 0;
+        DB2CS_RankingInfo.prototype.name = "";
+        DB2CS_RankingInfo.prototype.gender = 0;
+        DB2CS_RankingInfo.prototype.avatar = "";
+        DB2CS_RankingInfo.prototype.lastLoginTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        DB2CS_RankingInfo.prototype.rank = 0;
+        DB2CS_RankingInfo.prototype.exp = 0;
+
+        DB2CS_RankingInfo.create = function create(properties) {
+            return new DB2CS_RankingInfo(properties);
+        };
+
+        DB2CS_RankingInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.ukey != null && message.hasOwnProperty("ukey"))
+                writer.uint32(8).uint32(message.ukey);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(18).string(message.name);
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                writer.uint32(24).int32(message.gender);
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                writer.uint32(34).string(message.avatar);
+            if (message.lastLoginTime != null && message.hasOwnProperty("lastLoginTime"))
+                writer.uint32(40).int64(message.lastLoginTime);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(48).int32(message.rank);
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                writer.uint32(56).int32(message.exp);
+            return writer;
+        };
+
+        DB2CS_RankingInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        DB2CS_RankingInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.DB2CS_RankingInfo();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.ukey = reader.uint32();
+                    break;
+                case 2:
+                    message.name = reader.string();
+                    break;
+                case 3:
+                    message.gender = reader.int32();
+                    break;
+                case 4:
+                    message.avatar = reader.string();
+                    break;
+                case 5:
+                    message.lastLoginTime = reader.int64();
+                    break;
+                case 6:
+                    message.rank = reader.int32();
+                    break;
+                case 7:
+                    message.exp = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        DB2CS_RankingInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        DB2CS_RankingInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.ukey != null && message.hasOwnProperty("ukey"))
+                if (!$util.isInteger(message.ukey))
+                    return "ukey: integer expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                if (!$util.isString(message.avatar))
+                    return "avatar: string expected";
+            if (message.lastLoginTime != null && message.hasOwnProperty("lastLoginTime"))
+                if (!$util.isInteger(message.lastLoginTime) && !(message.lastLoginTime && $util.isInteger(message.lastLoginTime.low) && $util.isInteger(message.lastLoginTime.high)))
+                    return "lastLoginTime: integer|Long expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                if (!$util.isInteger(message.exp))
+                    return "exp: integer expected";
+            return null;
+        };
+
+        DB2CS_RankingInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.DB2CS_RankingInfo)
+                return object;
+            let message = new $root.Protos.DB2CS_RankingInfo();
+            if (object.ukey != null)
+                message.ukey = object.ukey >>> 0;
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.gender != null)
+                message.gender = object.gender | 0;
+            if (object.avatar != null)
+                message.avatar = String(object.avatar);
+            if (object.lastLoginTime != null)
+                if ($util.Long)
+                    (message.lastLoginTime = $util.Long.fromValue(object.lastLoginTime)).unsigned = false;
+                else if (typeof object.lastLoginTime === "string")
+                    message.lastLoginTime = parseInt(object.lastLoginTime, 10);
+                else if (typeof object.lastLoginTime === "number")
+                    message.lastLoginTime = object.lastLoginTime;
+                else if (typeof object.lastLoginTime === "object")
+                    message.lastLoginTime = new $util.LongBits(object.lastLoginTime.low >>> 0, object.lastLoginTime.high >>> 0).toNumber();
+            if (object.rank != null)
+                message.rank = object.rank | 0;
+            if (object.exp != null)
+                message.exp = object.exp | 0;
+            return message;
+        };
+
+        DB2CS_RankingInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.ukey = 0;
+                object.name = "";
+                object.gender = 0;
+                object.avatar = "";
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, false);
+                    object.lastLoginTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.lastLoginTime = options.longs === String ? "0" : 0;
+                object.rank = 0;
+                object.exp = 0;
+            }
+            if (message.ukey != null && message.hasOwnProperty("ukey"))
+                object.ukey = message.ukey;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
+            if (message.avatar != null && message.hasOwnProperty("avatar"))
+                object.avatar = message.avatar;
+            if (message.lastLoginTime != null && message.hasOwnProperty("lastLoginTime"))
+                if (typeof message.lastLoginTime === "number")
+                    object.lastLoginTime = options.longs === String ? String(message.lastLoginTime) : message.lastLoginTime;
+                else
+                    object.lastLoginTime = options.longs === String ? $util.Long.prototype.toString.call(message.lastLoginTime) : options.longs === Number ? new $util.LongBits(message.lastLoginTime.low >>> 0, message.lastLoginTime.high >>> 0).toNumber() : message.lastLoginTime;
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                object.rank = message.rank;
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                object.exp = message.exp;
+            return object;
+        };
+
+        DB2CS_RankingInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return DB2CS_RankingInfo;
+    })();
+
+    Protos.DB2CS_QueryRankingRet = (function() {
+
+        function DB2CS_QueryRankingRet(properties) {
+            this.rankingInfos = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        DB2CS_QueryRankingRet.prototype.opts = null;
+        DB2CS_QueryRankingRet.prototype.rankingInfos = $util.emptyArray;
+
+        DB2CS_QueryRankingRet.create = function create(properties) {
+            return new DB2CS_QueryRankingRet(properties);
+        };
+
+        DB2CS_QueryRankingRet.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.rankingInfos != null && message.rankingInfos.length)
+                for (let i = 0; i < message.rankingInfos.length; ++i)
+                    $root.Protos.DB2CS_RankingInfo.encode(message.rankingInfos[i], writer.uint32(18).fork()).ldelim();
+            return writer;
+        };
+
+        DB2CS_QueryRankingRet.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        DB2CS_QueryRankingRet.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.DB2CS_QueryRankingRet();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    if (!(message.rankingInfos && message.rankingInfos.length))
+                        message.rankingInfos = [];
+                    message.rankingInfos.push($root.Protos.DB2CS_RankingInfo.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        DB2CS_QueryRankingRet.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        DB2CS_QueryRankingRet.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.rankingInfos != null && message.hasOwnProperty("rankingInfos")) {
+                if (!Array.isArray(message.rankingInfos))
+                    return "rankingInfos: array expected";
+                for (let i = 0; i < message.rankingInfos.length; ++i) {
+                    let error = $root.Protos.DB2CS_RankingInfo.verify(message.rankingInfos[i]);
+                    if (error)
+                        return "rankingInfos." + error;
+                }
+            }
+            return null;
+        };
+
+        DB2CS_QueryRankingRet.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.DB2CS_QueryRankingRet)
+                return object;
+            let message = new $root.Protos.DB2CS_QueryRankingRet();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.DB2CS_QueryRankingRet.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.rankingInfos) {
+                if (!Array.isArray(object.rankingInfos))
+                    throw TypeError(".Protos.DB2CS_QueryRankingRet.rankingInfos: array expected");
+                message.rankingInfos = [];
+                for (let i = 0; i < object.rankingInfos.length; ++i) {
+                    if (typeof object.rankingInfos[i] !== "object")
+                        throw TypeError(".Protos.DB2CS_QueryRankingRet.rankingInfos: object expected");
+                    message.rankingInfos[i] = $root.Protos.DB2CS_RankingInfo.fromObject(object.rankingInfos[i]);
+                }
+            }
+            return message;
+        };
+
+        DB2CS_QueryRankingRet.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.arrays || options.defaults)
+                object.rankingInfos = [];
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.rankingInfos && message.rankingInfos.length) {
+                object.rankingInfos = [];
+                for (let j = 0; j < message.rankingInfos.length; ++j)
+                    object.rankingInfos[j] = $root.Protos.DB2CS_RankingInfo.toObject(message.rankingInfos[j], options);
+            }
+            return object;
+        };
+
+        DB2CS_QueryRankingRet.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return DB2CS_QueryRankingRet;
     })();
 
     Protos.DB2LS_QueryAccountRet = (function() {
@@ -7973,6 +8754,155 @@ export const Protos = $root.Protos = (() => {
         };
 
         return GC2CS_CancelMatch;
+    })();
+
+    Protos.GC2CS_QueryRanking = (function() {
+
+        function GC2CS_QueryRanking(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2CS_QueryRanking.prototype.opts = null;
+        GC2CS_QueryRanking.prototype.sortType = 0;
+        GC2CS_QueryRanking.prototype.from = 0;
+        GC2CS_QueryRanking.prototype.count = 0;
+
+        GC2CS_QueryRanking.create = function create(properties) {
+            return new GC2CS_QueryRanking(properties);
+        };
+
+        GC2CS_QueryRanking.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.sortType != null && message.hasOwnProperty("sortType"))
+                writer.uint32(16).int32(message.sortType);
+            if (message.from != null && message.hasOwnProperty("from"))
+                writer.uint32(24).int32(message.from);
+            if (message.count != null && message.hasOwnProperty("count"))
+                writer.uint32(32).int32(message.count);
+            return writer;
+        };
+
+        GC2CS_QueryRanking.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2CS_QueryRanking.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2CS_QueryRanking();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.sortType = reader.int32();
+                    break;
+                case 3:
+                    message.from = reader.int32();
+                    break;
+                case 4:
+                    message.count = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2CS_QueryRanking.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2CS_QueryRanking.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.sortType != null && message.hasOwnProperty("sortType"))
+                switch (message.sortType) {
+                default:
+                    return "sortType: enum value expected";
+                case 0:
+                    break;
+                }
+            if (message.from != null && message.hasOwnProperty("from"))
+                if (!$util.isInteger(message.from))
+                    return "from: integer expected";
+            if (message.count != null && message.hasOwnProperty("count"))
+                if (!$util.isInteger(message.count))
+                    return "count: integer expected";
+            return null;
+        };
+
+        GC2CS_QueryRanking.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2CS_QueryRanking)
+                return object;
+            let message = new $root.Protos.GC2CS_QueryRanking();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.GC2CS_QueryRanking.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            switch (object.sortType) {
+            case "Rank":
+            case 0:
+                message.sortType = 0;
+                break;
+            }
+            if (object.from != null)
+                message.from = object.from | 0;
+            if (object.count != null)
+                message.count = object.count | 0;
+            return message;
+        };
+
+        GC2CS_QueryRanking.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.sortType = options.enums === String ? "Rank" : 0;
+                object.from = 0;
+                object.count = 0;
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.sortType != null && message.hasOwnProperty("sortType"))
+                object.sortType = options.enums === String ? $root.Protos.GC2CS_QueryRanking.SortType[message.sortType] : message.sortType;
+            if (message.from != null && message.hasOwnProperty("from"))
+                object.from = message.from;
+            if (message.count != null && message.hasOwnProperty("count"))
+                object.count = message.count;
+            return object;
+        };
+
+        GC2CS_QueryRanking.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        GC2CS_QueryRanking.SortType = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "Rank"] = 0;
+            return values;
+        })();
+
+        return GC2CS_QueryRanking;
     })();
 
     Protos.GC2GS_AskLogin = (function() {

@@ -194,6 +194,7 @@ export namespace Protos {
         eGC2BS_EndBattle = 1206,
         eGC2CS_BeginMatch = 1300,
         eGC2CS_CancelMatch = 1301,
+        eGC2CS_QueryRanking = 1302,
         eLS2GC_GSInfo = 2000,
         eLS2GC_AskRegRet = 2001,
         eLS2GC_AskLoginRet = 2002,
@@ -231,10 +232,13 @@ export namespace Protos {
         eCS2GC_EnterBattle = 5306,
         eCS2GC_BattleEnd = 5307,
         eCS2GC_BSLose = 5308,
+        eCS2GC_QueryRankingRet = 5309,
         eCS2DB_UpdateRank = 5400,
+        eCS2DB_QueryRanking = 5401,
         eDB2LS_QueryAccountRet = 8000,
         eDB2LS_QueryLoginRet = 8001,
-        eDB2LS_ExecRet = 8002
+        eDB2LS_ExecRet = 8002,
+        eDB2CS_QueryRankingRet = 9000
     }
 
     interface IMsgOpts {
@@ -674,6 +678,37 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
+    interface ICS2DB_QueryRanking {
+        opts?: (Protos.IMsgOpts|null);
+        sortType?: (Protos.CS2DB_QueryRanking.SortType|null);
+        from?: (number|null);
+        count?: (number|null);
+    }
+
+    class CS2DB_QueryRanking implements ICS2DB_QueryRanking {
+        constructor(properties?: Protos.ICS2DB_QueryRanking);
+        public opts?: (Protos.IMsgOpts|null);
+        public sortType: Protos.CS2DB_QueryRanking.SortType;
+        public from: number;
+        public count: number;
+        public static create(properties?: Protos.ICS2DB_QueryRanking): Protos.CS2DB_QueryRanking;
+        public static encode(message: Protos.ICS2DB_QueryRanking, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2DB_QueryRanking, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2DB_QueryRanking;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2DB_QueryRanking;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2DB_QueryRanking;
+        public static toObject(message: Protos.CS2DB_QueryRanking, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace CS2DB_QueryRanking {
+
+        enum SortType {
+            Rank = 0
+        }
+    }
+
     interface ICS2GC_BeginMatchRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.CS2GC_BeginMatchRet.EResult|null);
@@ -894,6 +929,56 @@ export namespace Protos {
             Draw = 1,
             Lose = 2
         }
+    }
+
+    interface ICS2GC_RankingInfo {
+        ukey?: (number|null);
+        name?: (string|null);
+        gender?: (number|null);
+        avatar?: (string|null);
+        lastLoginTime?: (Long|null);
+        rank?: (number|null);
+        exp?: (number|null);
+    }
+
+    class CS2GC_RankingInfo implements ICS2GC_RankingInfo {
+        constructor(properties?: Protos.ICS2GC_RankingInfo);
+        public ukey: number;
+        public name: string;
+        public gender: number;
+        public avatar: string;
+        public lastLoginTime: Long;
+        public rank: number;
+        public exp: number;
+        public static create(properties?: Protos.ICS2GC_RankingInfo): Protos.CS2GC_RankingInfo;
+        public static encode(message: Protos.ICS2GC_RankingInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_RankingInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_RankingInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_RankingInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_RankingInfo;
+        public static toObject(message: Protos.CS2GC_RankingInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface ICS2GC_QueryRankingRet {
+        opts?: (Protos.IMsgOpts|null);
+        rankingInfos?: (Protos.ICS2GC_RankingInfo[]|null);
+    }
+
+    class CS2GC_QueryRankingRet implements ICS2GC_QueryRankingRet {
+        constructor(properties?: Protos.ICS2GC_QueryRankingRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public rankingInfos: Protos.ICS2GC_RankingInfo[];
+        public static create(properties?: Protos.ICS2GC_QueryRankingRet): Protos.CS2GC_QueryRankingRet;
+        public static encode(message: Protos.ICS2GC_QueryRankingRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_QueryRankingRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_QueryRankingRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_QueryRankingRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_QueryRankingRet;
+        public static toObject(message: Protos.CS2GC_QueryRankingRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
     }
 
     interface ICS2GS_GCLoginRet {
@@ -1154,6 +1239,56 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GS2CS_GCLost;
         public static toObject(message: Protos.GS2CS_GCLost, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IDB2CS_RankingInfo {
+        ukey?: (number|null);
+        name?: (string|null);
+        gender?: (number|null);
+        avatar?: (string|null);
+        lastLoginTime?: (Long|null);
+        rank?: (number|null);
+        exp?: (number|null);
+    }
+
+    class DB2CS_RankingInfo implements IDB2CS_RankingInfo {
+        constructor(properties?: Protos.IDB2CS_RankingInfo);
+        public ukey: number;
+        public name: string;
+        public gender: number;
+        public avatar: string;
+        public lastLoginTime: Long;
+        public rank: number;
+        public exp: number;
+        public static create(properties?: Protos.IDB2CS_RankingInfo): Protos.DB2CS_RankingInfo;
+        public static encode(message: Protos.IDB2CS_RankingInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IDB2CS_RankingInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.DB2CS_RankingInfo;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.DB2CS_RankingInfo;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.DB2CS_RankingInfo;
+        public static toObject(message: Protos.DB2CS_RankingInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IDB2CS_QueryRankingRet {
+        opts?: (Protos.IMsgOpts|null);
+        rankingInfos?: (Protos.IDB2CS_RankingInfo[]|null);
+    }
+
+    class DB2CS_QueryRankingRet implements IDB2CS_QueryRankingRet {
+        constructor(properties?: Protos.IDB2CS_QueryRankingRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public rankingInfos: Protos.IDB2CS_RankingInfo[];
+        public static create(properties?: Protos.IDB2CS_QueryRankingRet): Protos.DB2CS_QueryRankingRet;
+        public static encode(message: Protos.IDB2CS_QueryRankingRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IDB2CS_QueryRankingRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.DB2CS_QueryRankingRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.DB2CS_QueryRankingRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.DB2CS_QueryRankingRet;
+        public static toObject(message: Protos.DB2CS_QueryRankingRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 
@@ -1466,6 +1601,37 @@ export namespace Protos {
         public static fromObject(object: { [k: string]: any }): Protos.GC2CS_CancelMatch;
         public static toObject(message: Protos.GC2CS_CancelMatch, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2CS_QueryRanking {
+        opts?: (Protos.IMsgOpts|null);
+        sortType?: (Protos.GC2CS_QueryRanking.SortType|null);
+        from?: (number|null);
+        count?: (number|null);
+    }
+
+    class GC2CS_QueryRanking implements IGC2CS_QueryRanking {
+        constructor(properties?: Protos.IGC2CS_QueryRanking);
+        public opts?: (Protos.IMsgOpts|null);
+        public sortType: Protos.GC2CS_QueryRanking.SortType;
+        public from: number;
+        public count: number;
+        public static create(properties?: Protos.IGC2CS_QueryRanking): Protos.GC2CS_QueryRanking;
+        public static encode(message: Protos.IGC2CS_QueryRanking, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2CS_QueryRanking, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2CS_QueryRanking;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2CS_QueryRanking;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2CS_QueryRanking;
+        public static toObject(message: Protos.GC2CS_QueryRanking, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace GC2CS_QueryRanking {
+
+        enum SortType {
+            Rank = 0
+        }
     }
 
     interface IGC2GS_AskLogin {

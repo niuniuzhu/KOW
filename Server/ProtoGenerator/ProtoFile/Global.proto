@@ -27,6 +27,7 @@ enum MsgID {
 
 	eGC2CS_BeginMatch = 1300;
 	eGC2CS_CancelMatch = 1301;
+	eGC2CS_QueryRanking = 1302;
 	
 	//ls
 	eLS2GC_GSInfo = 2000;
@@ -79,13 +80,17 @@ enum MsgID {
 	eCS2GC_EnterBattle = 5306;
 	eCS2GC_BattleEnd = 5307;
 	eCS2GC_BSLose = 5308;
+	eCS2GC_QueryRankingRet = 5309;
 
 	eCS2DB_UpdateRank = 5400;
+	eCS2DB_QueryRanking = 5401;
 
 	//db
 	eDB2LS_QueryAccountRet = 8000;
 	eDB2LS_QueryLoginRet = 8001;
 	eDB2LS_ExecRet = 8002;
+
+	eDB2CS_QueryRankingRet = 9000;
 }
 
 message MsgOpts {
@@ -174,7 +179,9 @@ message G_UserInfo {
 		"CS2BS_BattleInfo":"BS2CS_BattleInfoRet",
 		"BS2CS_BattleEnd":"CS2BS_BattleEndRet",
 		"GC2BS_RequestSnapshot":"BS2GC_RequestSnapshotRet",
-		"GC2BS_RequestFrameActions":"BS2GC_RequestFrameActionsRet"
+		"GC2BS_RequestFrameActions":"BS2GC_RequestFrameActionsRet",
+		"CS2DB_QueryRanking":"DB2CS_QueryRankingRet",
+		"GC2CS_QueryRanking":"CS2GC_QueryRankingRet"
 	}
 }
 </ext>

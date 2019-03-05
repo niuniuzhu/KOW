@@ -178,5 +178,42 @@ namespace CentralServer.Biz
 
 			return ErrorCode.Success;
 		}
+
+		public ErrorCode OnGc2CsQueryRanking( NetSessionBase session, IMessage message )
+		{
+			Protos.GC2CS_QueryRanking request = ( Protos.GC2CS_QueryRanking )message;
+			ulong gcNID = request.Opts.Transid;
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+
+			Protos.CS2GC_QueryRankingRet resp = ProtoCreator.R_GC2CS_QueryRanking( request.Opts.Pid );
+			Protos.CS2DB_QueryRanking queryRanking = ProtoCreator.Q_CS2DB_QueryRanking();
+			queryRanking.SortType = ( Protos.CS2DB_QueryRanking.Types.SortType )request.SortType;
+			queryRanking.From = request.From;
+			queryRanking.Count = request.Count;
+
+			CS.instance.netSessionMgr.Send( SessionType.ServerC2DB, queryRanking, RPCEntry.Pop( OnQueryRankingRet, user, resp ) );
+
+			return ErrorCode.Success;
+		}
+
+		private static void OnQueryRankingRet( NetSessionBase session, IMessage message, object[] args )
+		{
+			CSUser user = ( CSUser )args[0];
+			Protos.CS2GC_QueryRankingRet resp = ( Protos.CS2GC_QueryRankingRet )args[1];
+			Protos.DB2CS_QueryRankingRet result = ( Protos.DB2CS_QueryRankingRet )message;
+			foreach ( Protos.DB2CS_RankingInfo rankingInfoResult in result.RankingInfos )
+			{
+				Protos.CS2GC_RankingInfo rankingInfo = new Protos.CS2GC_RankingInfo();
+				rankingInfo.Ukey = rankingInfoResult.Ukey;
+				rankingInfo.Name = rankingInfoResult.Name;
+				rankingInfo.Avatar = rankingInfoResult.Avatar;
+				rankingInfo.Gender = rankingInfoResult.Gender;
+				rankingInfo.LastLoginTime = rankingInfoResult.LastLoginTime;
+				rankingInfo.Rank = rankingInfoResult.Rank;
+				rankingInfo.Exp = rankingInfoResult.Exp;
+				resp.RankingInfos.Add( rankingInfo );
+			}
+			user.Send( resp );
+		}
 	}
 }

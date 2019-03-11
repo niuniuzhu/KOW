@@ -32,13 +32,17 @@ namespace Protos {
             "UmFua2luZxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSNQoIc29y",
             "dFR5cGUYAiABKA4yIy5Qcm90b3MuQ1MyREJfUXVlcnlSYW5raW5nLlNvcnRU",
             "eXBlEgwKBGZyb20YAyABKAUSDQoFY291bnQYBCABKAUiFAoIU29ydFR5cGUS",
-            "CAoEUmFuaxAAYgZwcm90bzM="));
+            "CAoEUmFuaxAAIpcBChFDUzJEQl9CdXlDaGFtcGlvbhIdCgRvcHRzGAEgASgL",
+            "Mg8uUHJvdG9zLk1zZ09wdHMSJgoGcmVzdWx0GAIgASgOMhYuUHJvdG9zLkds",
+            "b2JhbC5FQ29tbW9uEgwKBHVrZXkYAyABKA0SDQoFbW9uZXkYBCABKAUSEAoI",
+            "ZGlhbW9uZWQYBSABKAUSDAoEY2lkcxgGIAMoBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_Gain), global::Protos.CS2DB_Gain.Parser, new[]{ "Ukey", "Money", "Diamoned", "Rank", "Exp" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_UpdateRank), global::Protos.CS2DB_UpdateRank.Parser, new[]{ "Opts", "Gains" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_QueryRanking), global::Protos.CS2DB_QueryRanking.Parser, new[]{ "Opts", "SortType", "From", "Count" }, null, new[]{ typeof(global::Protos.CS2DB_QueryRanking.Types.SortType) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_QueryRanking), global::Protos.CS2DB_QueryRanking.Parser, new[]{ "Opts", "SortType", "From", "Count" }, null, new[]{ typeof(global::Protos.CS2DB_QueryRanking.Types.SortType) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2DB_BuyChampion), global::Protos.CS2DB_BuyChampion.Parser, new[]{ "Opts", "Result", "Ukey", "Money", "Diamoned", "Cids" }, null, null, null)
           }));
     }
     #endregion
@@ -668,6 +672,274 @@ namespace Protos {
 
     }
     #endregion
+
+  }
+
+  public sealed partial class CS2DB_BuyChampion : pb::IMessage<CS2DB_BuyChampion> {
+    private static readonly pb::MessageParser<CS2DB_BuyChampion> _parser = new pb::MessageParser<CS2DB_BuyChampion>(() => new CS2DB_BuyChampion());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2DB_BuyChampion> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2DBReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_BuyChampion() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_BuyChampion(CS2DB_BuyChampion other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      result_ = other.result_;
+      ukey_ = other.ukey_;
+      money_ = other.money_;
+      diamoned_ = other.diamoned_;
+      cids_ = other.cids_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2DB_BuyChampion Clone() {
+      return new CS2DB_BuyChampion(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 2;
+    private global::Protos.Global.Types.ECommon result_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.ECommon Result {
+      get { return result_; }
+      set {
+        result_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "ukey" field.</summary>
+    public const int UkeyFieldNumber = 3;
+    private uint ukey_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Ukey {
+      get { return ukey_; }
+      set {
+        ukey_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "money" field.</summary>
+    public const int MoneyFieldNumber = 4;
+    private int money_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Money {
+      get { return money_; }
+      set {
+        money_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "diamoned" field.</summary>
+    public const int DiamonedFieldNumber = 5;
+    private int diamoned_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Diamoned {
+      get { return diamoned_; }
+      set {
+        diamoned_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "cids" field.</summary>
+    public const int CidsFieldNumber = 6;
+    private static readonly pb::FieldCodec<int> _repeated_cids_codec
+        = pb::FieldCodec.ForInt32(50);
+    private readonly pbc::RepeatedField<int> cids_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Cids {
+      get { return cids_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2DB_BuyChampion);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2DB_BuyChampion other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Result != other.Result) return false;
+      if (Ukey != other.Ukey) return false;
+      if (Money != other.Money) return false;
+      if (Diamoned != other.Diamoned) return false;
+      if(!cids_.Equals(other.cids_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
+      if (Ukey != 0) hash ^= Ukey.GetHashCode();
+      if (Money != 0) hash ^= Money.GetHashCode();
+      if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
+      hash ^= cids_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Result != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) Result);
+      }
+      if (Ukey != 0) {
+        output.WriteRawTag(24);
+        output.WriteUInt32(Ukey);
+      }
+      if (Money != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Money);
+      }
+      if (Diamoned != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Diamoned);
+      }
+      cids_.WriteTo(output, _repeated_cids_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
+      }
+      if (Ukey != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Ukey);
+      }
+      if (Money != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Money);
+      }
+      if (Diamoned != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Diamoned);
+      }
+      size += cids_.CalculateSize(_repeated_cids_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2DB_BuyChampion other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Result != 0) {
+        Result = other.Result;
+      }
+      if (other.Ukey != 0) {
+        Ukey = other.Ukey;
+      }
+      if (other.Money != 0) {
+        Money = other.Money;
+      }
+      if (other.Diamoned != 0) {
+        Diamoned = other.Diamoned;
+      }
+      cids_.Add(other.cids_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
+            break;
+          }
+          case 24: {
+            Ukey = input.ReadUInt32();
+            break;
+          }
+          case 32: {
+            Money = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Diamoned = input.ReadInt32();
+            break;
+          }
+          case 50:
+          case 48: {
+            cids_.AddEntriesFrom(input, _repeated_cids_codec);
+            break;
+          }
+        }
+      }
+    }
 
   }
 

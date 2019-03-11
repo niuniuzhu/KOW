@@ -11,6 +11,7 @@ namespace DBServer.Net
 		{
 			this.RegMsgHandler( Protos.MsgID.ECs2DbUpdateRank, DB.instance.bizProcessor.OnCs2DbUpdateRank );
 			this.RegMsgHandler( Protos.MsgID.ECs2DbQueryRanking, DB.instance.bizProcessor.OnCs2DbQueryRanking );
+			this.RegMsgHandler( Protos.MsgID.ECs2DbBuyChampion, DB.instance.bizProcessor.OnCs2DbBuyChampion );
 		}
 
 		protected override void OnEstablish()

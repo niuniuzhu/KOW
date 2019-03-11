@@ -18,6 +18,7 @@ namespace CentralServer
 		public string redisPwd;
 		public long sessionExpTime;
 		public string defPath;
+		public string goodsPath;
 		public string matchDefs;
 
 		public void CopyFromJson( Hashtable json )

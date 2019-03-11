@@ -26,6 +26,7 @@ message GC2CS_CancelMatch {
 	MsgOpts opts = 1;
 }
 
+//查询排名
 message GC2CS_QueryRanking {
 	enum SortType{
 		Rank = 0;
@@ -34,4 +35,15 @@ message GC2CS_QueryRanking {
 	SortType sortType = 2;
 	int32 from  = 3;
 	int32 count = 4;
+}
+
+//查询英雄
+message GC2CS_QueryChampions {
+	MsgOpts opts = 1;
+}
+
+//购买英雄
+message GC2CS_BuyChampion {
+	MsgOpts opts = 1;
+	int32 cid = 2;
 }

@@ -195,6 +195,8 @@ export namespace Protos {
         eGC2CS_BeginMatch = 1300,
         eGC2CS_CancelMatch = 1301,
         eGC2CS_QueryRanking = 1302,
+        eGC2CS_QueryChampions = 1303,
+        eGC2CS_BuyChampion = 1304,
         eLS2GC_GSInfo = 2000,
         eLS2GC_AskRegRet = 2001,
         eLS2GC_AskLoginRet = 2002,
@@ -233,6 +235,8 @@ export namespace Protos {
         eCS2GC_BattleEnd = 5307,
         eCS2GC_BSLose = 5308,
         eCS2GC_QueryRankingRet = 5309,
+        eCS2GC_QueryChampionsRet = 5310,
+        eCS2GC_BuyChampionRet = 5111,
         eCS2DB_UpdateRank = 5400,
         eCS2DB_QueryRanking = 5401,
         eDB2LS_QueryAccountRet = 8000,
@@ -377,6 +381,10 @@ export namespace Protos {
         avatar?: (string|null);
         gender?: (number|null);
         rank?: (number|null);
+        money?: (number|null);
+        diamoned?: (number|null);
+        exp?: (number|null);
+        champions?: (string[]|null);
     }
 
     class G_UserInfo implements IG_UserInfo {
@@ -386,6 +394,10 @@ export namespace Protos {
         public avatar: string;
         public gender: number;
         public rank: number;
+        public money: number;
+        public diamoned: number;
+        public exp: number;
+        public champions: string[];
         public static create(properties?: Protos.IG_UserInfo): Protos.G_UserInfo;
         public static encode(message: Protos.IG_UserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IG_UserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -981,6 +993,56 @@ export namespace Protos {
         public toJSON(): { [k: string]: any };
     }
 
+    interface ICS2GC_QueryChampionsRet {
+        opts?: (Protos.IMsgOpts|null);
+        cids?: (string[]|null);
+    }
+
+    class CS2GC_QueryChampionsRet implements ICS2GC_QueryChampionsRet {
+        constructor(properties?: Protos.ICS2GC_QueryChampionsRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public cids: string[];
+        public static create(properties?: Protos.ICS2GC_QueryChampionsRet): Protos.CS2GC_QueryChampionsRet;
+        public static encode(message: Protos.ICS2GC_QueryChampionsRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_QueryChampionsRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_QueryChampionsRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_QueryChampionsRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_QueryChampionsRet;
+        public static toObject(message: Protos.CS2GC_QueryChampionsRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface ICS2GC_BuyChampionRet {
+        opts?: (Protos.IMsgOpts|null);
+        result?: (Protos.CS2GC_BuyChampionRet.Result|null);
+    }
+
+    class CS2GC_BuyChampionRet implements ICS2GC_BuyChampionRet {
+        constructor(properties?: Protos.ICS2GC_BuyChampionRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public result: Protos.CS2GC_BuyChampionRet.Result;
+        public static create(properties?: Protos.ICS2GC_BuyChampionRet): Protos.CS2GC_BuyChampionRet;
+        public static encode(message: Protos.ICS2GC_BuyChampionRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_BuyChampionRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_BuyChampionRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_BuyChampionRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_BuyChampionRet;
+        public static toObject(message: Protos.CS2GC_BuyChampionRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace CS2GC_BuyChampionRet {
+
+        enum Result {
+            Success = 0,
+            NotEnoughMoney = 1,
+            NotEnoughDiamoned = 2,
+            NotEnoughExp = 3
+        }
+    }
+
     interface ICS2GS_GCLoginRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.CS2GS_GCLoginRet.EResult|null);
@@ -1327,6 +1389,7 @@ export namespace Protos {
         diamoned?: (number|null);
         rank?: (number|null);
         exp?: (number|null);
+        champions?: (string|null);
     }
 
     class DB2LS_QueryLoginRet implements IDB2LS_QueryLoginRet {
@@ -1345,6 +1408,7 @@ export namespace Protos {
         public diamoned: number;
         public rank: number;
         public exp: number;
+        public champions: string;
         public static create(properties?: Protos.IDB2LS_QueryLoginRet): Protos.DB2LS_QueryLoginRet;
         public static encode(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1634,6 +1698,44 @@ export namespace Protos {
         }
     }
 
+    interface IGC2CS_QueryChampions {
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    class GC2CS_QueryChampions implements IGC2CS_QueryChampions {
+        constructor(properties?: Protos.IGC2CS_QueryChampions);
+        public opts?: (Protos.IMsgOpts|null);
+        public static create(properties?: Protos.IGC2CS_QueryChampions): Protos.GC2CS_QueryChampions;
+        public static encode(message: Protos.IGC2CS_QueryChampions, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2CS_QueryChampions, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2CS_QueryChampions;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2CS_QueryChampions;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2CS_QueryChampions;
+        public static toObject(message: Protos.GC2CS_QueryChampions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2CS_BuyChampion {
+        opts?: (Protos.IMsgOpts|null);
+        cid?: (number|null);
+    }
+
+    class GC2CS_BuyChampion implements IGC2CS_BuyChampion {
+        constructor(properties?: Protos.IGC2CS_BuyChampion);
+        public opts?: (Protos.IMsgOpts|null);
+        public cid: number;
+        public static create(properties?: Protos.IGC2CS_BuyChampion): Protos.GC2CS_BuyChampion;
+        public static encode(message: Protos.IGC2CS_BuyChampion, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2CS_BuyChampion, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2CS_BuyChampion;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2CS_BuyChampion;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2CS_BuyChampion;
+        public static toObject(message: Protos.GC2CS_BuyChampion, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
     interface IGC2GS_AskLogin {
         opts?: (Protos.IMsgOpts|null);
         pwd?: (string|null);
@@ -1904,6 +2006,7 @@ export namespace Protos {
         diamoned?: (number|null);
         rank?: (number|null);
         exp?: (number|null);
+        champions?: (string|null);
     }
 
     class LS2CS_GCLogin implements ILS2CS_GCLogin {
@@ -1924,6 +2027,7 @@ export namespace Protos {
         public diamoned: number;
         public rank: number;
         public exp: number;
+        public champions: string;
         public static create(properties?: Protos.ILS2CS_GCLogin): Protos.LS2CS_GCLogin;
         public static encode(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1973,6 +2077,7 @@ export namespace Protos {
         diamoned?: (number|null);
         rank?: (number|null);
         exp?: (number|null);
+        champions?: (string|null);
     }
 
     class LS2DB_QueryLogin implements ILS2DB_QueryLogin {
@@ -1994,6 +2099,7 @@ export namespace Protos {
         public diamoned: number;
         public rank: number;
         public exp: number;
+        public champions: string;
         public static create(properties?: Protos.ILS2DB_QueryLogin): Protos.LS2DB_QueryLogin;
         public static encode(message: Protos.ILS2DB_QueryLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2DB_QueryLogin, writer?: $protobuf.Writer): $protobuf.Writer;

@@ -26,6 +26,7 @@ message LS2DB_QueryLogin{
 	int32 diamoned = 15;
 	int32 rank = 16;
 	uint32 exp = 17;
+	string champions = 18;
 }
 
 message LS2DB_Exec {

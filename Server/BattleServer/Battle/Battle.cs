@@ -4,7 +4,6 @@ using BattleServer.Battle.Snapshot;
 using BattleServer.User;
 using Core.FMath;
 using Core.Misc;
-using Shared.Battle;
 using Shared.Net;
 using System;
 using System.Collections;
@@ -13,6 +12,8 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Shared;
+
 #endregion
 
 namespace BattleServer.Battle

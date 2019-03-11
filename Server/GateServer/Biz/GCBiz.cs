@@ -1,7 +1,6 @@
 ﻿using Core.Misc;
 using GateServer.Net;
 using Shared;
-using Shared.Battle;
 using Shared.Net;
 
 namespace GateServer.Biz

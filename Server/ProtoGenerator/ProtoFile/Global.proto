@@ -28,6 +28,8 @@ enum MsgID {
 	eGC2CS_BeginMatch = 1300;
 	eGC2CS_CancelMatch = 1301;
 	eGC2CS_QueryRanking = 1302;
+	eGC2CS_QueryChampions = 1303;
+	eGC2CS_BuyChampion = 1304;
 	
 	//ls
 	eLS2GC_GSInfo = 2000;
@@ -81,9 +83,12 @@ enum MsgID {
 	eCS2GC_BattleEnd = 5307;
 	eCS2GC_BSLose = 5308;
 	eCS2GC_QueryRankingRet = 5309;
+	eCS2GC_QueryChampionsRet = 5310;
+	eCS2GC_BuyChampionRet = 5111;
 
 	eCS2DB_UpdateRank = 5400;
 	eCS2DB_QueryRanking = 5401;
+	eCS2DB_BuyChampion = 5402;
 
 	//db
 	eDB2LS_QueryAccountRet = 8000;
@@ -91,6 +96,7 @@ enum MsgID {
 	eDB2LS_ExecRet = 8002;
 
 	eDB2CS_QueryRankingRet = 9000;
+	eDB2CS_BuyChampionRet = 9001;
 }
 
 message MsgOpts {
@@ -109,7 +115,7 @@ message MsgOpts {
 		DB = 5;
 		GS = 6;
 	}
-	//protobuf是变长编码的,数值在0-127就只会用花费一个byte
+	//protobuf是变长编码的,数值在0-127就只会用占用一个byte
 	uint32 flag = 1;		//消息标记,每个位用途,0:正常消息,1:是否rpc消息,2:是否回应rpc的消息,3:是否转发消息,4-5:转发目标
 	uint32 pid = 2;			//运行时消息pid
 	uint32 rpid = 3;		//回应对应请求的消息的pid
@@ -157,6 +163,10 @@ message G_UserInfo {
 	string avatar = 3;
 	int32 gender = 4;
 	int32 rank = 5;
+	int32 money = 6;
+	int32 diamoned = 7;
+	uint32 exp = 8;
+	repeated int32 champions = 9;
 }
 
 /*
@@ -181,7 +191,10 @@ message G_UserInfo {
 		"GC2BS_RequestSnapshot":"BS2GC_RequestSnapshotRet",
 		"GC2BS_RequestFrameActions":"BS2GC_RequestFrameActionsRet",
 		"CS2DB_QueryRanking":"DB2CS_QueryRankingRet",
-		"GC2CS_QueryRanking":"CS2GC_QueryRankingRet"
+		"GC2CS_QueryRanking":"CS2GC_QueryRankingRet",
+		"GC2CS_QueryChampions":"CS2GC_QueryChampionsRet",
+		"GC2CS_BuyChampion":"CS2GC_BuyChampionRet",
+		"CS2DB_BuyChampion":"DB2CS_BuyChampionRet"
 	}
 }
 </ext>

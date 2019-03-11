@@ -17,3 +17,8 @@ message DB2CS_QueryRankingRet {
 	MsgOpts opts = 1;
 	repeated DB2CS_RankingInfo rankingInfos = 2;
 }
+
+message DB2CS_BuyChampionRet {
+	MsgOpts opts = 1;
+	Global.ECommon result = 2;
+}

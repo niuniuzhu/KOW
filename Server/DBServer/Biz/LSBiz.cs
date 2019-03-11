@@ -44,6 +44,7 @@ namespace DBServer.Biz
 					queryLoginRet.Diamoned = dataReader.GetInt32( "diamoned" );
 					queryLoginRet.Rank = dataReader.GetInt32( "ranking" );
 					queryLoginRet.Exp = dataReader.GetUInt32( "exp" );
+					queryLoginRet.Champions = dataReader.GetString( "champions" );
 
 					ErrorCode QueryError = ErrorCode.Success;
 					if ( queryLogin.VertPwd )
@@ -87,6 +88,7 @@ namespace DBServer.Biz
 				queryLoginRet.Diamoned = queryLogin.Diamoned;
 				queryLoginRet.Rank = queryLogin.Rank;
 				queryLoginRet.Exp = queryLogin.Exp;
+				queryLoginRet.Champions = queryLogin.Champions;
 
 			}
 			switch ( errorCode )

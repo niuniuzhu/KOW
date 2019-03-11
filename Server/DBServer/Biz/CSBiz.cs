@@ -69,5 +69,25 @@ namespace DBServer.Biz
 			session.Send( resp );
 			return ErrorCode.Success;
 		}
+
+		public ErrorCode OnCs2DbBuyChampion( NetSessionBase session, Google.Protobuf.IMessage message )
+		{
+			Protos.CS2DB_BuyChampion request = ( Protos.CS2DB_BuyChampion )message;
+			Protos.DB2CS_BuyChampionRet resp = ProtoCreator.R_CS2DB_BuyChampion( request.Opts.Pid );
+			string cids = string.Join( '|', request.Cids );
+			string str = $"UPDATE account_user SET money={request.Money},diamoned={request.Diamoned},champions={cids} where id={request.Ukey}";
+			ErrorCode errorCode = DB.instance.accountDB.SqlExecNonQuery( str, out _, out uint _ );
+			switch ( errorCode )
+			{
+				case ErrorCode.Success:
+					request.Result = Protos.Global.Types.ECommon.Success;
+					break;
+				default:
+					request.Result = Protos.Global.Types.ECommon.Failed;
+					break;
+			}
+			session.Send( resp );
+			return ErrorCode.Success;
+		}
 	}
 }

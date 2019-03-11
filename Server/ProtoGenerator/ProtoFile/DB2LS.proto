@@ -23,6 +23,7 @@ message DB2LS_QueryLoginRet{
 	int32 diamoned = 12;
 	int32 rank = 13;
 	uint32 exp = 14;
+	string champions = 15;
 }
 
 message DB2LS_ExecRet{

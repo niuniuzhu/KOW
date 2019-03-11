@@ -30,12 +30,15 @@ namespace Protos {
             "BSABKAMSDAoEcmFuaxgGIAEoBRILCgNleHAYByABKAUiZwoVREIyQ1NfUXVl",
             "cnlSYW5raW5nUmV0Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIv",
             "CgxyYW5raW5nSW5mb3MYAiADKAsyGS5Qcm90b3MuREIyQ1NfUmFua2luZ0lu",
-            "Zm9iBnByb3RvMw=="));
+            "Zm8iXQoUREIyQ1NfQnV5Q2hhbXBpb25SZXQSHQoEb3B0cxgBIAEoCzIPLlBy",
+            "b3Rvcy5Nc2dPcHRzEiYKBnJlc3VsdBgCIAEoDjIWLlByb3Rvcy5HbG9iYWwu",
+            "RUNvbW1vbmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2CS_RankingInfo), global::Protos.DB2CS_RankingInfo.Parser, new[]{ "Ukey", "Name", "Gender", "Avatar", "LastLoginTime", "Rank", "Exp" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2CS_QueryRankingRet), global::Protos.DB2CS_QueryRankingRet.Parser, new[]{ "Opts", "RankingInfos" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2CS_QueryRankingRet), global::Protos.DB2CS_QueryRankingRet.Parser, new[]{ "Opts", "RankingInfos" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.DB2CS_BuyChampionRet), global::Protos.DB2CS_BuyChampionRet.Parser, new[]{ "Opts", "Result" }, null, null, null)
           }));
     }
     #endregion
@@ -486,6 +489,169 @@ namespace Protos {
           }
           case 18: {
             rankingInfos_.AddEntriesFrom(input, _repeated_rankingInfos_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class DB2CS_BuyChampionRet : pb::IMessage<DB2CS_BuyChampionRet> {
+    private static readonly pb::MessageParser<DB2CS_BuyChampionRet> _parser = new pb::MessageParser<DB2CS_BuyChampionRet>(() => new DB2CS_BuyChampionRet());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<DB2CS_BuyChampionRet> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.DB2CSReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DB2CS_BuyChampionRet() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DB2CS_BuyChampionRet(DB2CS_BuyChampionRet other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      result_ = other.result_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DB2CS_BuyChampionRet Clone() {
+      return new DB2CS_BuyChampionRet(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 2;
+    private global::Protos.Global.Types.ECommon result_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.ECommon Result {
+      get { return result_; }
+      set {
+        result_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as DB2CS_BuyChampionRet);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(DB2CS_BuyChampionRet other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Result != other.Result) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Result != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) Result);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(DB2CS_BuyChampionRet other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Result != 0) {
+        Result = other.Result;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
             break;
           }
         }

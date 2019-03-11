@@ -1,4 +1,6 @@
 ﻿using Google.Protobuf;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CentralServer.User
 {
@@ -97,6 +99,10 @@ namespace CentralServer.User
 		/// 经验值
 		/// </summary>
 		public uint exp { get; set; }
+		/// <summary>
+		/// 当前拥有的英雄
+		/// </summary>
+		public List<int> champions { get; set; }
 
 		/// <summary>
 		/// 发送消息
@@ -123,6 +129,7 @@ namespace CentralServer.User
 			this.diamoned = gcLogin.Diamoned;
 			this.rank = gcLogin.Rank;
 			this.exp = gcLogin.Exp;
+			this.champions = gcLogin.Champions.Split( '|' ).Cast<int>().ToList();
 		}
 
 		/// <summary>

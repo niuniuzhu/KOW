@@ -988,6 +988,8 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[1300] = "eGC2CS_BeginMatch"] = 1300;
         values[valuesById[1301] = "eGC2CS_CancelMatch"] = 1301;
         values[valuesById[1302] = "eGC2CS_QueryRanking"] = 1302;
+        values[valuesById[1303] = "eGC2CS_QueryChampions"] = 1303;
+        values[valuesById[1304] = "eGC2CS_BuyChampion"] = 1304;
         values[valuesById[2000] = "eLS2GC_GSInfo"] = 2000;
         values[valuesById[2001] = "eLS2GC_AskRegRet"] = 2001;
         values[valuesById[2002] = "eLS2GC_AskLoginRet"] = 2002;
@@ -1026,6 +1028,8 @@ export const Protos = $root.Protos = (() => {
         values[valuesById[5307] = "eCS2GC_BattleEnd"] = 5307;
         values[valuesById[5308] = "eCS2GC_BSLose"] = 5308;
         values[valuesById[5309] = "eCS2GC_QueryRankingRet"] = 5309;
+        values[valuesById[5310] = "eCS2GC_QueryChampionsRet"] = 5310;
+        values[valuesById[5111] = "eCS2GC_BuyChampionRet"] = 5111;
         values[valuesById[5400] = "eCS2DB_UpdateRank"] = 5400;
         values[valuesById[5401] = "eCS2DB_QueryRanking"] = 5401;
         values[valuesById[8000] = "eDB2LS_QueryAccountRet"] = 8000;
@@ -1573,6 +1577,7 @@ export const Protos = $root.Protos = (() => {
     Protos.G_UserInfo = (function() {
 
         function G_UserInfo(properties) {
+            this.champions = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -1584,6 +1589,10 @@ export const Protos = $root.Protos = (() => {
         G_UserInfo.prototype.avatar = "";
         G_UserInfo.prototype.gender = 0;
         G_UserInfo.prototype.rank = 0;
+        G_UserInfo.prototype.money = 0;
+        G_UserInfo.prototype.diamoned = 0;
+        G_UserInfo.prototype.exp = 0;
+        G_UserInfo.prototype.champions = $util.emptyArray;
 
         G_UserInfo.create = function create(properties) {
             return new G_UserInfo(properties);
@@ -1602,6 +1611,15 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(32).int32(message.gender);
             if (message.rank != null && message.hasOwnProperty("rank"))
                 writer.uint32(40).int32(message.rank);
+            if (message.money != null && message.hasOwnProperty("money"))
+                writer.uint32(48).int32(message.money);
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                writer.uint32(56).int32(message.diamoned);
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                writer.uint32(64).uint32(message.exp);
+            if (message.champions != null && message.champions.length)
+                for (let i = 0; i < message.champions.length; ++i)
+                    writer.uint32(74).string(message.champions[i]);
             return writer;
         };
 
@@ -1630,6 +1648,20 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 5:
                     message.rank = reader.int32();
+                    break;
+                case 6:
+                    message.money = reader.int32();
+                    break;
+                case 7:
+                    message.diamoned = reader.int32();
+                    break;
+                case 8:
+                    message.exp = reader.uint32();
+                    break;
+                case 9:
+                    if (!(message.champions && message.champions.length))
+                        message.champions = [];
+                    message.champions.push(reader.string());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1663,6 +1695,22 @@ export const Protos = $root.Protos = (() => {
             if (message.rank != null && message.hasOwnProperty("rank"))
                 if (!$util.isInteger(message.rank))
                     return "rank: integer expected";
+            if (message.money != null && message.hasOwnProperty("money"))
+                if (!$util.isInteger(message.money))
+                    return "money: integer expected";
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                if (!$util.isInteger(message.diamoned))
+                    return "diamoned: integer expected";
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                if (!$util.isInteger(message.exp))
+                    return "exp: integer expected";
+            if (message.champions != null && message.hasOwnProperty("champions")) {
+                if (!Array.isArray(message.champions))
+                    return "champions: array expected";
+                for (let i = 0; i < message.champions.length; ++i)
+                    if (!$util.isString(message.champions[i]))
+                        return "champions: string[] expected";
+            }
             return null;
         };
 
@@ -1687,6 +1735,19 @@ export const Protos = $root.Protos = (() => {
                 message.gender = object.gender | 0;
             if (object.rank != null)
                 message.rank = object.rank | 0;
+            if (object.money != null)
+                message.money = object.money | 0;
+            if (object.diamoned != null)
+                message.diamoned = object.diamoned | 0;
+            if (object.exp != null)
+                message.exp = object.exp >>> 0;
+            if (object.champions) {
+                if (!Array.isArray(object.champions))
+                    throw TypeError(".Protos.G_UserInfo.champions: array expected");
+                message.champions = [];
+                for (let i = 0; i < object.champions.length; ++i)
+                    message.champions[i] = String(object.champions[i]);
+            }
             return message;
         };
 
@@ -1694,6 +1755,8 @@ export const Protos = $root.Protos = (() => {
             if (!options)
                 options = {};
             let object = {};
+            if (options.arrays || options.defaults)
+                object.champions = [];
             if (options.defaults) {
                 if ($util.Long) {
                     let long = new $util.Long(0, 0, true);
@@ -1704,6 +1767,9 @@ export const Protos = $root.Protos = (() => {
                 object.avatar = "";
                 object.gender = 0;
                 object.rank = 0;
+                object.money = 0;
+                object.diamoned = 0;
+                object.exp = 0;
             }
             if (message.gcNID != null && message.hasOwnProperty("gcNID"))
                 if (typeof message.gcNID === "number")
@@ -1718,6 +1784,17 @@ export const Protos = $root.Protos = (() => {
                 object.gender = message.gender;
             if (message.rank != null && message.hasOwnProperty("rank"))
                 object.rank = message.rank;
+            if (message.money != null && message.hasOwnProperty("money"))
+                object.money = message.money;
+            if (message.diamoned != null && message.hasOwnProperty("diamoned"))
+                object.diamoned = message.diamoned;
+            if (message.exp != null && message.hasOwnProperty("exp"))
+                object.exp = message.exp;
+            if (message.champions && message.champions.length) {
+                object.champions = [];
+                for (let j = 0; j < message.champions.length; ++j)
+                    object.champions[j] = message.champions[j];
+            }
             return object;
         };
 
@@ -5167,6 +5244,268 @@ export const Protos = $root.Protos = (() => {
         return CS2GC_QueryRankingRet;
     })();
 
+    Protos.CS2GC_QueryChampionsRet = (function() {
+
+        function CS2GC_QueryChampionsRet(properties) {
+            this.cids = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_QueryChampionsRet.prototype.opts = null;
+        CS2GC_QueryChampionsRet.prototype.cids = $util.emptyArray;
+
+        CS2GC_QueryChampionsRet.create = function create(properties) {
+            return new CS2GC_QueryChampionsRet(properties);
+        };
+
+        CS2GC_QueryChampionsRet.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.cids != null && message.cids.length)
+                for (let i = 0; i < message.cids.length; ++i)
+                    writer.uint32(18).string(message.cids[i]);
+            return writer;
+        };
+
+        CS2GC_QueryChampionsRet.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_QueryChampionsRet.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_QueryChampionsRet();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    if (!(message.cids && message.cids.length))
+                        message.cids = [];
+                    message.cids.push(reader.string());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_QueryChampionsRet.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_QueryChampionsRet.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.cids != null && message.hasOwnProperty("cids")) {
+                if (!Array.isArray(message.cids))
+                    return "cids: array expected";
+                for (let i = 0; i < message.cids.length; ++i)
+                    if (!$util.isString(message.cids[i]))
+                        return "cids: string[] expected";
+            }
+            return null;
+        };
+
+        CS2GC_QueryChampionsRet.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_QueryChampionsRet)
+                return object;
+            let message = new $root.Protos.CS2GC_QueryChampionsRet();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2GC_QueryChampionsRet.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.cids) {
+                if (!Array.isArray(object.cids))
+                    throw TypeError(".Protos.CS2GC_QueryChampionsRet.cids: array expected");
+                message.cids = [];
+                for (let i = 0; i < object.cids.length; ++i)
+                    message.cids[i] = String(object.cids[i]);
+            }
+            return message;
+        };
+
+        CS2GC_QueryChampionsRet.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.arrays || options.defaults)
+                object.cids = [];
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.cids && message.cids.length) {
+                object.cids = [];
+                for (let j = 0; j < message.cids.length; ++j)
+                    object.cids[j] = message.cids[j];
+            }
+            return object;
+        };
+
+        CS2GC_QueryChampionsRet.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CS2GC_QueryChampionsRet;
+    })();
+
+    Protos.CS2GC_BuyChampionRet = (function() {
+
+        function CS2GC_BuyChampionRet(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        CS2GC_BuyChampionRet.prototype.opts = null;
+        CS2GC_BuyChampionRet.prototype.result = 0;
+
+        CS2GC_BuyChampionRet.create = function create(properties) {
+            return new CS2GC_BuyChampionRet(properties);
+        };
+
+        CS2GC_BuyChampionRet.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.result != null && message.hasOwnProperty("result"))
+                writer.uint32(16).int32(message.result);
+            return writer;
+        };
+
+        CS2GC_BuyChampionRet.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        CS2GC_BuyChampionRet.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.CS2GC_BuyChampionRet();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.result = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        CS2GC_BuyChampionRet.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        CS2GC_BuyChampionRet.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.result != null && message.hasOwnProperty("result"))
+                switch (message.result) {
+                default:
+                    return "result: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
+            return null;
+        };
+
+        CS2GC_BuyChampionRet.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.CS2GC_BuyChampionRet)
+                return object;
+            let message = new $root.Protos.CS2GC_BuyChampionRet();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.CS2GC_BuyChampionRet.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            switch (object.result) {
+            case "Success":
+            case 0:
+                message.result = 0;
+                break;
+            case "NotEnoughMoney":
+            case 1:
+                message.result = 1;
+                break;
+            case "NotEnoughDiamoned":
+            case 2:
+                message.result = 2;
+                break;
+            case "NotEnoughExp":
+            case 3:
+                message.result = 3;
+                break;
+            }
+            return message;
+        };
+
+        CS2GC_BuyChampionRet.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.result = options.enums === String ? "Success" : 0;
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = options.enums === String ? $root.Protos.CS2GC_BuyChampionRet.Result[message.result] : message.result;
+            return object;
+        };
+
+        CS2GC_BuyChampionRet.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        CS2GC_BuyChampionRet.Result = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "Success"] = 0;
+            values[valuesById[1] = "NotEnoughMoney"] = 1;
+            values[valuesById[2] = "NotEnoughDiamoned"] = 2;
+            values[valuesById[3] = "NotEnoughExp"] = 3;
+            return values;
+        })();
+
+        return CS2GC_BuyChampionRet;
+    })();
+
     Protos.CS2GS_GCLoginRet = (function() {
 
         function CS2GS_GCLoginRet(properties) {
@@ -7045,6 +7384,7 @@ export const Protos = $root.Protos = (() => {
         DB2LS_QueryLoginRet.prototype.diamoned = 0;
         DB2LS_QueryLoginRet.prototype.rank = 0;
         DB2LS_QueryLoginRet.prototype.exp = 0;
+        DB2LS_QueryLoginRet.prototype.champions = "";
 
         DB2LS_QueryLoginRet.create = function create(properties) {
             return new DB2LS_QueryLoginRet(properties);
@@ -7081,6 +7421,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(104).int32(message.rank);
             if (message.exp != null && message.hasOwnProperty("exp"))
                 writer.uint32(112).uint32(message.exp);
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                writer.uint32(122).string(message.champions);
             return writer;
         };
 
@@ -7136,6 +7478,9 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 14:
                     message.exp = reader.uint32();
+                    break;
+                case 15:
+                    message.champions = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -7223,6 +7568,9 @@ export const Protos = $root.Protos = (() => {
             if (message.exp != null && message.hasOwnProperty("exp"))
                 if (!$util.isInteger(message.exp))
                     return "exp: integer expected";
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                if (!$util.isString(message.champions))
+                    return "champions: string expected";
             return null;
         };
 
@@ -7313,6 +7661,8 @@ export const Protos = $root.Protos = (() => {
                 message.rank = object.rank | 0;
             if (object.exp != null)
                 message.exp = object.exp >>> 0;
+            if (object.champions != null)
+                message.champions = String(object.champions);
             return message;
         };
 
@@ -7335,6 +7685,7 @@ export const Protos = $root.Protos = (() => {
                 object.diamoned = 0;
                 object.rank = 0;
                 object.exp = 0;
+                object.champions = "";
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -7364,6 +7715,8 @@ export const Protos = $root.Protos = (() => {
                 object.rank = message.rank;
             if (message.exp != null && message.hasOwnProperty("exp"))
                 object.exp = message.exp;
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                object.champions = message.champions;
             return object;
         };
 
@@ -8903,6 +9256,205 @@ export const Protos = $root.Protos = (() => {
         })();
 
         return GC2CS_QueryRanking;
+    })();
+
+    Protos.GC2CS_QueryChampions = (function() {
+
+        function GC2CS_QueryChampions(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2CS_QueryChampions.prototype.opts = null;
+
+        GC2CS_QueryChampions.create = function create(properties) {
+            return new GC2CS_QueryChampions(properties);
+        };
+
+        GC2CS_QueryChampions.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            return writer;
+        };
+
+        GC2CS_QueryChampions.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2CS_QueryChampions.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2CS_QueryChampions();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2CS_QueryChampions.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2CS_QueryChampions.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            return null;
+        };
+
+        GC2CS_QueryChampions.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2CS_QueryChampions)
+                return object;
+            let message = new $root.Protos.GC2CS_QueryChampions();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.GC2CS_QueryChampions.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            return message;
+        };
+
+        GC2CS_QueryChampions.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.opts = null;
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            return object;
+        };
+
+        GC2CS_QueryChampions.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GC2CS_QueryChampions;
+    })();
+
+    Protos.GC2CS_BuyChampion = (function() {
+
+        function GC2CS_BuyChampion(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        GC2CS_BuyChampion.prototype.opts = null;
+        GC2CS_BuyChampion.prototype.cid = 0;
+
+        GC2CS_BuyChampion.create = function create(properties) {
+            return new GC2CS_BuyChampion(properties);
+        };
+
+        GC2CS_BuyChampion.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                $root.Protos.MsgOpts.encode(message.opts, writer.uint32(10).fork()).ldelim();
+            if (message.cid != null && message.hasOwnProperty("cid"))
+                writer.uint32(16).int32(message.cid);
+            return writer;
+        };
+
+        GC2CS_BuyChampion.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        GC2CS_BuyChampion.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protos.GC2CS_BuyChampion();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.opts = $root.Protos.MsgOpts.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.cid = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        GC2CS_BuyChampion.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        GC2CS_BuyChampion.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.opts != null && message.hasOwnProperty("opts")) {
+                let error = $root.Protos.MsgOpts.verify(message.opts);
+                if (error)
+                    return "opts." + error;
+            }
+            if (message.cid != null && message.hasOwnProperty("cid"))
+                if (!$util.isInteger(message.cid))
+                    return "cid: integer expected";
+            return null;
+        };
+
+        GC2CS_BuyChampion.fromObject = function fromObject(object) {
+            if (object instanceof $root.Protos.GC2CS_BuyChampion)
+                return object;
+            let message = new $root.Protos.GC2CS_BuyChampion();
+            if (object.opts != null) {
+                if (typeof object.opts !== "object")
+                    throw TypeError(".Protos.GC2CS_BuyChampion.opts: object expected");
+                message.opts = $root.Protos.MsgOpts.fromObject(object.opts);
+            }
+            if (object.cid != null)
+                message.cid = object.cid | 0;
+            return message;
+        };
+
+        GC2CS_BuyChampion.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.opts = null;
+                object.cid = 0;
+            }
+            if (message.opts != null && message.hasOwnProperty("opts"))
+                object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
+            if (message.cid != null && message.hasOwnProperty("cid"))
+                object.cid = message.cid;
+            return object;
+        };
+
+        GC2CS_BuyChampion.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GC2CS_BuyChampion;
     })();
 
     Protos.GC2GS_AskLogin = (function() {
@@ -10562,6 +11114,7 @@ export const Protos = $root.Protos = (() => {
         LS2CS_GCLogin.prototype.diamoned = 0;
         LS2CS_GCLogin.prototype.rank = 0;
         LS2CS_GCLogin.prototype.exp = 0;
+        LS2CS_GCLogin.prototype.champions = "";
 
         LS2CS_GCLogin.create = function create(properties) {
             return new LS2CS_GCLogin(properties);
@@ -10602,6 +11155,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(120).int32(message.rank);
             if (message.exp != null && message.hasOwnProperty("exp"))
                 writer.uint32(128).uint32(message.exp);
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                writer.uint32(138).string(message.champions);
             return writer;
         };
 
@@ -10663,6 +11218,9 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 16:
                     message.exp = reader.uint32();
+                    break;
+                case 17:
+                    message.champions = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -10751,6 +11309,9 @@ export const Protos = $root.Protos = (() => {
             if (message.exp != null && message.hasOwnProperty("exp"))
                 if (!$util.isInteger(message.exp))
                     return "exp: integer expected";
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                if (!$util.isString(message.champions))
+                    return "champions: string expected";
             return null;
         };
 
@@ -10844,6 +11405,8 @@ export const Protos = $root.Protos = (() => {
                 message.rank = object.rank | 0;
             if (object.exp != null)
                 message.exp = object.exp >>> 0;
+            if (object.champions != null)
+                message.champions = String(object.champions);
             return message;
         };
 
@@ -10872,6 +11435,7 @@ export const Protos = $root.Protos = (() => {
                 object.diamoned = 0;
                 object.rank = 0;
                 object.exp = 0;
+                object.champions = "";
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -10908,6 +11472,8 @@ export const Protos = $root.Protos = (() => {
                 object.rank = message.rank;
             if (message.exp != null && message.hasOwnProperty("exp"))
                 object.exp = message.exp;
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                object.champions = message.champions;
             return object;
         };
 
@@ -11051,6 +11617,7 @@ export const Protos = $root.Protos = (() => {
         LS2DB_QueryLogin.prototype.diamoned = 0;
         LS2DB_QueryLogin.prototype.rank = 0;
         LS2DB_QueryLogin.prototype.exp = 0;
+        LS2DB_QueryLogin.prototype.champions = "";
 
         LS2DB_QueryLogin.create = function create(properties) {
             return new LS2DB_QueryLogin(properties);
@@ -11093,6 +11660,8 @@ export const Protos = $root.Protos = (() => {
                 writer.uint32(128).int32(message.rank);
             if (message.exp != null && message.hasOwnProperty("exp"))
                 writer.uint32(136).uint32(message.exp);
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                writer.uint32(146).string(message.champions);
             return writer;
         };
 
@@ -11157,6 +11726,9 @@ export const Protos = $root.Protos = (() => {
                     break;
                 case 17:
                     message.exp = reader.uint32();
+                    break;
+                case 18:
+                    message.champions = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -11248,6 +11820,9 @@ export const Protos = $root.Protos = (() => {
             if (message.exp != null && message.hasOwnProperty("exp"))
                 if (!$util.isInteger(message.exp))
                     return "exp: integer expected";
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                if (!$util.isString(message.champions))
+                    return "champions: string expected";
             return null;
         };
 
@@ -11343,6 +11918,8 @@ export const Protos = $root.Protos = (() => {
                 message.rank = object.rank | 0;
             if (object.exp != null)
                 message.exp = object.exp >>> 0;
+            if (object.champions != null)
+                message.champions = String(object.champions);
             return message;
         };
 
@@ -11372,6 +11949,7 @@ export const Protos = $root.Protos = (() => {
                 object.diamoned = 0;
                 object.rank = 0;
                 object.exp = 0;
+                object.champions = "";
             }
             if (message.opts != null && message.hasOwnProperty("opts"))
                 object.opts = $root.Protos.MsgOpts.toObject(message.opts, options);
@@ -11410,6 +11988,8 @@ export const Protos = $root.Protos = (() => {
                 object.rank = message.rank;
             if (message.exp != null && message.hasOwnProperty("exp"))
                 object.exp = message.exp;
+            if (message.champions != null && message.hasOwnProperty("champions"))
+                object.champions = message.champions;
             return object;
         };
 

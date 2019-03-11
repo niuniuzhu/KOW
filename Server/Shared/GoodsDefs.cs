@@ -1,17 +1,16 @@
-﻿using Core.Misc;
-using Google.Protobuf;
-using System.Collections;
+﻿using System.Collections;
 using System.Text;
 using System.Text.RegularExpressions;
+using Core.Misc;
+using Google.Protobuf;
 
-namespace Shared.Battle
+namespace Shared
 {
-    public static class Defs
+    public static class GoodsDefs
     {
         private static readonly Regex REGEX = new Regex( @"/\*+[^\*]*\*+/" );
 
-        private const string DEFS_MAP_PREFIX = "m";
-        private const string DEFS_ENTITY_PREFIX = "e";
+        private const string DEFS_CHAMPION_PREFIX = "e";
 
         private static readonly Hashtable _defs = new Hashtable();
 
@@ -27,12 +26,8 @@ namespace Shared.Battle
             binary = ByteString.CopyFrom( json, Encoding.UTF8 );
         }
 
-        public static Hashtable GetMap( int id ) => _defs.GetMap( "map" ).GetMap( DEFS_MAP_PREFIX + id );
+	    public static Hashtable GetGlobal() => _defs.GetMap( "global" );
 
-        public static int GetMapCount() => _defs.GetMap( "map" ).Count;
-
-        public static Hashtable GetEntity( int id ) => _defs.GetMap( "entity" ).GetMap( DEFS_ENTITY_PREFIX + id );
-
-        public static int GetEntityCount() => _defs.GetMap( "entity" ).Count;
+        public static Hashtable GetChampion( int id ) => _defs.GetMap( "champions" ).GetMap( DEFS_CHAMPION_PREFIX + id );
     }
 }

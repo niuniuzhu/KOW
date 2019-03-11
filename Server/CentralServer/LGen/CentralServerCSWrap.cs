@@ -29,7 +29,7 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Dispose", _m_Dispose);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "UpdateAppropriateGSInfo", _m_UpdateAppropriateGSInfo);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "UpdateAppropriateBSInfo", _m_UpdateAppropriateBSInfo);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ReloadDefs", _m_ReloadDefs);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "LoadDefs", _m_ReloadDefs);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "config", _g_get_config);
@@ -271,7 +271,7 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                    __cl_gen_to_be_invoked.ReloadDefs(  );
+                    __cl_gen_to_be_invoked.LoadDefs(  );
                     
                     
                     

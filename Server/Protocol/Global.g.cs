@@ -36,43 +36,48 @@ namespace Protos {
             "bm5lbBIHCgNXZWIQABIKCgZXWE1pbmkQASIwCghQbGF0Zm9ybRIGCgJQQxAA",
             "EgsKB0FuZHJvaWQQARIHCgNJT1MQAhIGCgJXUBADIkAKB0Jyb3dzZXISCgoG",
             "Q2hyb21lEAASCwoHRmlyZWZveBABEgoKBlNhZmFpchACEggKBEVkZ2UQAxIG",
-            "CgJJRRAEIlsKCkdfVXNlckluZm8SDQoFZ2NOSUQYASABKAQSEAoIbmlja25h",
-            "bWUYAiABKAkSDgoGYXZhdGFyGAMgASgJEg4KBmdlbmRlchgEIAEoBRIMCgRy",
-            "YW5rGAUgASgFKoUMCgVNc2dJRBIMCghVbmRlZmluZRAAEg4KCmVHX0Fza1Bp",
-            "bmcQChIRCg1lR19Bc2tQaW5nUmV0EAsSFwoSZUdDMkxTX0Fza1JlZ2lzdGVy",
-            "EOgHEhQKD2VHQzJMU19Bc2tMb2dpbhDpBxIZChRlR0MyTFNfQXNrU21hcnRM",
-            "b2dpbhDqBxIWChFlR0MyTFNfQXNrV1hMb2dpbhDrBxIZChRlR0MyTENfVXBk",
-            "YXRlUHJvZmlsZRDsBxIUCg9lR0MyR1NfQXNrTG9naW4QzAgSFQoQZUdDMkdT",
-            "X0tlZXBBbGl2ZRDNCBIUCg9lR0MyQlNfQXNrTG9naW4QsAkSFQoQZUdDMkJT",
-            "X0tlZXBBbGl2ZRCxCRIbChZlR0MyQlNfUmVxdWVzdFNuYXBzaG90ELIJEhcK",
-            "EmVHQzJCU19GcmFtZUFjdGlvbhCzCRIfChplR0MyQlNfUmVxdWVzdEZyYW1l",
-            "QWN0aW9ucxC0CRIaChVlR0MyQlNfQ29tbWl0U25hcHNob3QQtQkSFQoQZUdD",
-            "MkJTX0VuZEJhdHRsZRC2CRIWChFlR0MyQ1NfQmVnaW5NYXRjaBCUChIXChJl",
-            "R0MyQ1NfQ2FuY2VsTWF0Y2gQlQoSGAoTZUdDMkNTX1F1ZXJ5UmFua2luZxCW",
-            "ChISCg1lTFMyR0NfR1NJbmZvENAPEhUKEGVMUzJHQ19Bc2tSZWdSZXQQ0Q8S",
-            "FwoSZUxTMkdDX0Fza0xvZ2luUmV0ENIPEhMKDmVMUzJDU19HQ0xvZ2luELQQ",
-            "EhgKE2VMUzJEQl9RdWVyeUFjY291bnQQmBESFgoRZUxTMkRCX1F1ZXJ5TG9n",
-            "aW4QmRESEAoLZUxTMkRCX0V4ZWMQmhESFwoSZUdTMkNTX1JlcG9ydFN0YXRl",
-            "ELgXEhYKEWVHUzJDU19HQ0Fza0xvZ2luELkXEhIKDWVHUzJDU19HQ0xvc3QQ",
-            "uhcSFAoPZUdTMkdDX0xvZ2luUmV0EJwYEhAKC2VHUzJHQ19LaWNrEJ0YEhIK",
-            "DWVHUzJHQ19DU0xvc3QQnhgSFwoSZUJTMkNTX1JlcG9ydFN0YXRlEKAfEhkK",
-            "FGVCUzJDU19CYXR0bGVJbmZvUmV0EKEfEhUKEGVCUzJDU19CYXR0bGVFbmQQ",
-            "oh8SFAoPZUJTMkNTX0tpY2tVc2VyEKMfEhQKD2VCUzJHQ19Mb2dpblJldBCE",
-            "IBIeChllQlMyR0NfUmVxdWVzdFNuYXBzaG90UmV0EIUgEhcKEmVCUzJHQ19G",
-            "cmFtZUFjdGlvbhCGIBIiCh1lQlMyR0NfUmVxdWVzdEZyYW1lQWN0aW9uc1Jl",
-            "dBCHIBIVChBlQlMyR0NfT3V0T2ZTeW5jEIggEhMKDmVDUzJMU19HU0luZm9z",
-            "EIgnEhIKDWVDUzJMU19HU0luZm8QiScSEgoNZUNTMkxTX0dTTG9zdBCKJxIW",
-            "ChFlQ1MyTFNfR0NMb2dpblJldBCLJxIWChFlQ1MyR1NfR0NMb2dpblJldBDs",
-            "JxISCg1lQ1MyR1NfS2lja0dDEO0nEhYKEWVDUzJCU19CYXR0bGVJbmZvENAo",
-            "EhgKE2VDUzJCU19CYXR0bGVFbmRSZXQQ0SgSGQoUZUNTMkdDX0JlZ2luTWF0",
-            "Y2hSZXQQtCkSFgoRZUNTMkdDX01hdGNoU3RhdGUQtykSFgoRZUNTMkdDX0Fk",
-            "ZFRvTWF0Y2gQuCkSGwoWZUNTMkdDX1JlbW92ZUZyb21NYXRjaBC5KRIXChJl",
-            "Q1MyR0NfRW50ZXJCYXR0bGUQuikSFQoQZUNTMkdDX0JhdHRsZUVuZBC7KRIS",
-            "Cg1lQ1MyR0NfQlNMb3NlELwpEhsKFmVDUzJHQ19RdWVyeVJhbmtpbmdSZXQQ",
-            "vSkSFgoRZUNTMkRCX1VwZGF0ZVJhbmsQmCoSGAoTZUNTMkRCX1F1ZXJ5UmFu",
-            "a2luZxCZKhIbChZlREIyTFNfUXVlcnlBY2NvdW50UmV0EMA+EhkKFGVEQjJM",
-            "U19RdWVyeUxvZ2luUmV0EME+EhMKDmVEQjJMU19FeGVjUmV0EMI+EhsKFmVE",
-            "QjJDU19RdWVyeVJhbmtpbmdSZXQQqEZiBnByb3RvMw=="));
+            "CgJJRRAEIpwBCgpHX1VzZXJJbmZvEg0KBWdjTklEGAEgASgEEhAKCG5pY2tu",
+            "YW1lGAIgASgJEg4KBmF2YXRhchgDIAEoCRIOCgZnZW5kZXIYBCABKAUSDAoE",
+            "cmFuaxgFIAEoBRINCgVtb25leRgGIAEoBRIQCghkaWFtb25lZBgHIAEoBRIL",
+            "CgNleHAYCCABKA0SEQoJY2hhbXBpb25zGAkgAygFKqoNCgVNc2dJRBIMCghV",
+            "bmRlZmluZRAAEg4KCmVHX0Fza1BpbmcQChIRCg1lR19Bc2tQaW5nUmV0EAsS",
+            "FwoSZUdDMkxTX0Fza1JlZ2lzdGVyEOgHEhQKD2VHQzJMU19Bc2tMb2dpbhDp",
+            "BxIZChRlR0MyTFNfQXNrU21hcnRMb2dpbhDqBxIWChFlR0MyTFNfQXNrV1hM",
+            "b2dpbhDrBxIZChRlR0MyTENfVXBkYXRlUHJvZmlsZRDsBxIUCg9lR0MyR1Nf",
+            "QXNrTG9naW4QzAgSFQoQZUdDMkdTX0tlZXBBbGl2ZRDNCBIUCg9lR0MyQlNf",
+            "QXNrTG9naW4QsAkSFQoQZUdDMkJTX0tlZXBBbGl2ZRCxCRIbChZlR0MyQlNf",
+            "UmVxdWVzdFNuYXBzaG90ELIJEhcKEmVHQzJCU19GcmFtZUFjdGlvbhCzCRIf",
+            "ChplR0MyQlNfUmVxdWVzdEZyYW1lQWN0aW9ucxC0CRIaChVlR0MyQlNfQ29t",
+            "bWl0U25hcHNob3QQtQkSFQoQZUdDMkJTX0VuZEJhdHRsZRC2CRIWChFlR0My",
+            "Q1NfQmVnaW5NYXRjaBCUChIXChJlR0MyQ1NfQ2FuY2VsTWF0Y2gQlQoSGAoT",
+            "ZUdDMkNTX1F1ZXJ5UmFua2luZxCWChIaChVlR0MyQ1NfUXVlcnlDaGFtcGlv",
+            "bnMQlwoSFwoSZUdDMkNTX0J1eUNoYW1waW9uEJgKEhIKDWVMUzJHQ19HU0lu",
+            "Zm8Q0A8SFQoQZUxTMkdDX0Fza1JlZ1JldBDRDxIXChJlTFMyR0NfQXNrTG9n",
+            "aW5SZXQQ0g8SEwoOZUxTMkNTX0dDTG9naW4QtBASGAoTZUxTMkRCX1F1ZXJ5",
+            "QWNjb3VudBCYERIWChFlTFMyREJfUXVlcnlMb2dpbhCZERIQCgtlTFMyREJf",
+            "RXhlYxCaERIXChJlR1MyQ1NfUmVwb3J0U3RhdGUQuBcSFgoRZUdTMkNTX0dD",
+            "QXNrTG9naW4QuRcSEgoNZUdTMkNTX0dDTG9zdBC6FxIUCg9lR1MyR0NfTG9n",
+            "aW5SZXQQnBgSEAoLZUdTMkdDX0tpY2sQnRgSEgoNZUdTMkdDX0NTTG9zdBCe",
+            "GBIXChJlQlMyQ1NfUmVwb3J0U3RhdGUQoB8SGQoUZUJTMkNTX0JhdHRsZUlu",
+            "Zm9SZXQQoR8SFQoQZUJTMkNTX0JhdHRsZUVuZBCiHxIUCg9lQlMyQ1NfS2lj",
+            "a1VzZXIQox8SFAoPZUJTMkdDX0xvZ2luUmV0EIQgEh4KGWVCUzJHQ19SZXF1",
+            "ZXN0U25hcHNob3RSZXQQhSASFwoSZUJTMkdDX0ZyYW1lQWN0aW9uEIYgEiIK",
+            "HWVCUzJHQ19SZXF1ZXN0RnJhbWVBY3Rpb25zUmV0EIcgEhUKEGVCUzJHQ19P",
+            "dXRPZlN5bmMQiCASEwoOZUNTMkxTX0dTSW5mb3MQiCcSEgoNZUNTMkxTX0dT",
+            "SW5mbxCJJxISCg1lQ1MyTFNfR1NMb3N0EIonEhYKEWVDUzJMU19HQ0xvZ2lu",
+            "UmV0EIsnEhYKEWVDUzJHU19HQ0xvZ2luUmV0EOwnEhIKDWVDUzJHU19LaWNr",
+            "R0MQ7ScSFgoRZUNTMkJTX0JhdHRsZUluZm8Q0CgSGAoTZUNTMkJTX0JhdHRs",
+            "ZUVuZFJldBDRKBIZChRlQ1MyR0NfQmVnaW5NYXRjaFJldBC0KRIWChFlQ1My",
+            "R0NfTWF0Y2hTdGF0ZRC3KRIWChFlQ1MyR0NfQWRkVG9NYXRjaBC4KRIbChZl",
+            "Q1MyR0NfUmVtb3ZlRnJvbU1hdGNoELkpEhcKEmVDUzJHQ19FbnRlckJhdHRs",
+            "ZRC6KRIVChBlQ1MyR0NfQmF0dGxlRW5kELspEhIKDWVDUzJHQ19CU0xvc2UQ",
+            "vCkSGwoWZUNTMkdDX1F1ZXJ5UmFua2luZ1JldBC9KRIdChhlQ1MyR0NfUXVl",
+            "cnlDaGFtcGlvbnNSZXQQvikSGgoVZUNTMkdDX0J1eUNoYW1waW9uUmV0EPcn",
+            "EhYKEWVDUzJEQl9VcGRhdGVSYW5rEJgqEhgKE2VDUzJEQl9RdWVyeVJhbmtp",
+            "bmcQmSoSFwoSZUNTMkRCX0J1eUNoYW1waW9uEJoqEhsKFmVEQjJMU19RdWVy",
+            "eUFjY291bnRSZXQQwD4SGQoUZURCMkxTX1F1ZXJ5TG9naW5SZXQQwT4SEwoO",
+            "ZURCMkxTX0V4ZWNSZXQQwj4SGwoWZURCMkNTX1F1ZXJ5UmFua2luZ1JldBCo",
+            "RhIaChVlREIyQ1NfQnV5Q2hhbXBpb25SZXQQqUZiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protos.MsgID), }, new pbr::GeneratedClrTypeInfo[] {
@@ -80,7 +85,7 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPing), global::Protos.G_AskPing.Parser, new[]{ "Opts", "Time" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_AskPingRet), global::Protos.G_AskPingRet.Parser, new[]{ "Opts", "Stime", "Time" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.Global), global::Protos.Global.Parser, null, null, new[]{ typeof(global::Protos.Global.Types.ECommon), typeof(global::Protos.Global.Types.Channel), typeof(global::Protos.Global.Types.Platform), typeof(global::Protos.Global.Types.Browser) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_UserInfo), global::Protos.G_UserInfo.Parser, new[]{ "GcNID", "Nickname", "Avatar", "Gender", "Rank" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.G_UserInfo), global::Protos.G_UserInfo.Parser, new[]{ "GcNID", "Nickname", "Avatar", "Gender", "Rank", "Money", "Diamoned", "Exp", "Champions" }, null, null, null)
           }));
     }
     #endregion
@@ -111,6 +116,8 @@ namespace Protos {
     [pbr::OriginalName("eGC2CS_BeginMatch")] EGc2CsBeginMatch = 1300,
     [pbr::OriginalName("eGC2CS_CancelMatch")] EGc2CsCancelMatch = 1301,
     [pbr::OriginalName("eGC2CS_QueryRanking")] EGc2CsQueryRanking = 1302,
+    [pbr::OriginalName("eGC2CS_QueryChampions")] EGc2CsQueryChampions = 1303,
+    [pbr::OriginalName("eGC2CS_BuyChampion")] EGc2CsBuyChampion = 1304,
     /// <summary>
     ///ls
     /// </summary>
@@ -161,8 +168,11 @@ namespace Protos {
     [pbr::OriginalName("eCS2GC_BattleEnd")] ECs2GcBattleEnd = 5307,
     [pbr::OriginalName("eCS2GC_BSLose")] ECs2GcBslose = 5308,
     [pbr::OriginalName("eCS2GC_QueryRankingRet")] ECs2GcQueryRankingRet = 5309,
+    [pbr::OriginalName("eCS2GC_QueryChampionsRet")] ECs2GcQueryChampionsRet = 5310,
+    [pbr::OriginalName("eCS2GC_BuyChampionRet")] ECs2GcBuyChampionRet = 5111,
     [pbr::OriginalName("eCS2DB_UpdateRank")] ECs2DbUpdateRank = 5400,
     [pbr::OriginalName("eCS2DB_QueryRanking")] ECs2DbQueryRanking = 5401,
+    [pbr::OriginalName("eCS2DB_BuyChampion")] ECs2DbBuyChampion = 5402,
     /// <summary>
     ///db
     /// </summary>
@@ -170,6 +180,7 @@ namespace Protos {
     [pbr::OriginalName("eDB2LS_QueryLoginRet")] EDb2LsQueryLoginRet = 8001,
     [pbr::OriginalName("eDB2LS_ExecRet")] EDb2LsExecRet = 8002,
     [pbr::OriginalName("eDB2CS_QueryRankingRet")] EDb2CsQueryRankingRet = 9000,
+    [pbr::OriginalName("eDB2CS_BuyChampionRet")] EDb2CsBuyChampionRet = 9001,
   }
 
   #endregion
@@ -216,7 +227,7 @@ namespace Protos {
     public const int FlagFieldNumber = 1;
     private uint flag_;
     /// <summary>
-    ///protobuf是变长编码的,数值在0-127就只会用花费一个byte
+    ///protobuf是变长编码的,数值在0-127就只会用占用一个byte
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public uint Flag {
@@ -941,6 +952,10 @@ namespace Protos {
       avatar_ = other.avatar_;
       gender_ = other.gender_;
       rank_ = other.rank_;
+      money_ = other.money_;
+      diamoned_ = other.diamoned_;
+      exp_ = other.exp_;
+      champions_ = other.champions_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1004,6 +1019,49 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "money" field.</summary>
+    public const int MoneyFieldNumber = 6;
+    private int money_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Money {
+      get { return money_; }
+      set {
+        money_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "diamoned" field.</summary>
+    public const int DiamonedFieldNumber = 7;
+    private int diamoned_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Diamoned {
+      get { return diamoned_; }
+      set {
+        diamoned_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "exp" field.</summary>
+    public const int ExpFieldNumber = 8;
+    private uint exp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Exp {
+      get { return exp_; }
+      set {
+        exp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "champions" field.</summary>
+    public const int ChampionsFieldNumber = 9;
+    private static readonly pb::FieldCodec<int> _repeated_champions_codec
+        = pb::FieldCodec.ForInt32(74);
+    private readonly pbc::RepeatedField<int> champions_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Champions {
+      get { return champions_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as G_UserInfo);
@@ -1022,6 +1080,10 @@ namespace Protos {
       if (Avatar != other.Avatar) return false;
       if (Gender != other.Gender) return false;
       if (Rank != other.Rank) return false;
+      if (Money != other.Money) return false;
+      if (Diamoned != other.Diamoned) return false;
+      if (Exp != other.Exp) return false;
+      if(!champions_.Equals(other.champions_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1033,6 +1095,10 @@ namespace Protos {
       if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
       if (Gender != 0) hash ^= Gender.GetHashCode();
       if (Rank != 0) hash ^= Rank.GetHashCode();
+      if (Money != 0) hash ^= Money.GetHashCode();
+      if (Diamoned != 0) hash ^= Diamoned.GetHashCode();
+      if (Exp != 0) hash ^= Exp.GetHashCode();
+      hash ^= champions_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1066,6 +1132,19 @@ namespace Protos {
         output.WriteRawTag(40);
         output.WriteInt32(Rank);
       }
+      if (Money != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(Money);
+      }
+      if (Diamoned != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(Diamoned);
+      }
+      if (Exp != 0) {
+        output.WriteRawTag(64);
+        output.WriteUInt32(Exp);
+      }
+      champions_.WriteTo(output, _repeated_champions_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1089,6 +1168,16 @@ namespace Protos {
       if (Rank != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Rank);
       }
+      if (Money != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Money);
+      }
+      if (Diamoned != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Diamoned);
+      }
+      if (Exp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Exp);
+      }
+      size += champions_.CalculateSize(_repeated_champions_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1115,6 +1204,16 @@ namespace Protos {
       if (other.Rank != 0) {
         Rank = other.Rank;
       }
+      if (other.Money != 0) {
+        Money = other.Money;
+      }
+      if (other.Diamoned != 0) {
+        Diamoned = other.Diamoned;
+      }
+      if (other.Exp != 0) {
+        Exp = other.Exp;
+      }
+      champions_.Add(other.champions_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1144,6 +1243,23 @@ namespace Protos {
           }
           case 40: {
             Rank = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            Money = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            Diamoned = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            Exp = input.ReadUInt32();
+            break;
+          }
+          case 74:
+          case 72: {
+            champions_.AddEntriesFrom(input, _repeated_champions_codec);
             break;
           }
         }

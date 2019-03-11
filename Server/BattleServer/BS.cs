@@ -5,7 +5,6 @@ using BattleServer.User;
 using Core.Misc;
 using Core.Net;
 using Shared;
-using Shared.Battle;
 using Shared.Net;
 using System.Collections;
 using System.IO;

@@ -6,7 +6,6 @@ using CentralServer.Match;
 using CentralServer.User;
 using Core.Misc;
 using Shared;
-using Shared.Battle;
 using Shared.Net;
 using BSInfo = Shared.BSInfo;
 

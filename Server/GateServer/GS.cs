@@ -3,7 +3,6 @@ using Core.Net;
 using GateServer.Biz;
 using GateServer.Net;
 using Shared;
-using Shared.Battle;
 using Shared.Net;
 using System;
 using System.Collections;

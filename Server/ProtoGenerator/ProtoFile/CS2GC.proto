@@ -95,3 +95,23 @@ message CS2GC_QueryRankingRet {
 	MsgOpts opts = 1;
 	repeated CS2GC_RankingInfo rankingInfos = 2;
 }
+
+message CS2GC_QueryChampionsRet {
+	MsgOpts opts = 1;
+	repeated int32 cids = 2;
+}
+
+message CS2GC_BuyChampionRet {
+	enum Result {
+		Success = 0;
+		NotEnoughMoney = 1;
+		NotEnoughDiamoned = 2;
+		NotEnoughExp = 3;
+		FAILED = 4;
+	}
+	MsgOpts opts = 1;
+	Result result = 2;
+	int32 money = 3;
+	int32 diamoned = 4;
+	repeated int32 cids = 5;
+}

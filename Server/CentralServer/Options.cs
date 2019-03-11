@@ -26,6 +26,12 @@ namespace CentralServer
 			HelpText = "Specify definition file." )]
 		public string defs { get; set; }
 
+		[Option( "goods",
+			Default = "",
+			SetName = "bycfg",
+			HelpText = "Specify goods file." )]
+		public string goods { get; set; }
+
 		[Option( "script_path",
 			Default = "./Scripts",
 			SetName = "bycfg",

@@ -1,0 +1,21 @@
+{
+    "global": {
+
+    },
+    "champions": {
+        "e0": {
+            "price": 2000,
+            "p_discount": 0,
+            "diamoned": 0,
+            "d_discount": 0,
+            "exp": 0
+        },
+        "e1": {
+            "price": 2000,
+            "p_discount": 0,
+            "diamoned": 0,
+            "d_discount": 0,
+            "exp": 0
+        }
+    }
+}

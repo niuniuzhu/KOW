@@ -5,7 +5,6 @@ using CentralServer.User;
 using Core.Misc;
 using Core.Net;
 using Shared;
-using Shared.Battle;
 using Shared.DB;
 using Shared.Net;
 using System.Collections;
@@ -82,6 +81,7 @@ namespace CentralServer
 #endif
 			this.config = new CSConfig();
 			this.config.defPath = opts.defs;
+			this.config.goodsPath = opts.goods;
 			if ( string.IsNullOrEmpty( opts.cfg ) )
 				this.config.CopyFromCLIOptions( opts );
 			else
@@ -89,7 +89,8 @@ namespace CentralServer
 
 			this.matchMgr.InitFromDefs( ( Hashtable )MiniJSON.JsonDecode( File.ReadAllText( this.config.matchDefs ) ) );
 
-			this.ReloadDefs();
+			this.LoadDefs();
+			this.LoadGoods();
 			return ErrorCode.Success;
 		}
 
@@ -192,6 +193,8 @@ namespace CentralServer
 			}
 		}
 
-		public void ReloadDefs() => Defs.Load( File.ReadAllText( this.config.defPath ) );
+		public void LoadDefs() => Defs.Load( File.ReadAllText( this.config.defPath ) );
+
+		public void LoadGoods() => Defs.Load( File.ReadAllText( this.config.goodsPath ) );
 	}
 }

@@ -3,9 +3,9 @@ using BattleServer.User;
 using Core.FMath;
 using Core.Misc;
 using Google.Protobuf;
-using Shared.Battle;
 using System;
 using System.Collections;
+using Shared;
 
 namespace BattleServer.Battle.Model
 {

@@ -6,6 +6,7 @@ using Core.Net;
 using Google.Protobuf;
 using Shared;
 using Shared.Net;
+using System.Collections;
 using BSInfo = Shared.BSInfo;
 using GSInfo = Shared.GSInfo;
 
@@ -103,8 +104,13 @@ namespace CentralServer.Biz
 					Nickname = user.nickname,
 					Avatar = user.avatar,
 					Gender = user.gender,
-					Rank = user.rank
+					Rank = user.rank,
+					Money = user.money,
+					Diamoned = user.diamoned,
+					Exp = user.exp,
 				};
+				response.UserInfo.Champions.AddRange( user.champions );
+
 				//检查玩家是否在战场
 				if ( user.isInBattle )
 				{
@@ -185,13 +191,16 @@ namespace CentralServer.Biz
 			ulong gcNID = request.Opts.Transid;
 			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 
-			Protos.CS2GC_QueryRankingRet resp = ProtoCreator.R_GC2CS_QueryRanking( request.Opts.Pid );
-			Protos.CS2DB_QueryRanking queryRanking = ProtoCreator.Q_CS2DB_QueryRanking();
-			queryRanking.SortType = ( Protos.CS2DB_QueryRanking.Types.SortType )request.SortType;
-			queryRanking.From = request.From;
-			queryRanking.Count = request.Count;
+			if ( user != null )
+			{
+				Protos.CS2GC_QueryRankingRet resp = ProtoCreator.R_GC2CS_QueryRanking( request.Opts.Pid );
+				Protos.CS2DB_QueryRanking queryRanking = ProtoCreator.Q_CS2DB_QueryRanking();
+				queryRanking.SortType = ( Protos.CS2DB_QueryRanking.Types.SortType )request.SortType;
+				queryRanking.From = request.From;
+				queryRanking.Count = request.Count;
 
-			CS.instance.netSessionMgr.Send( SessionType.ServerC2DB, queryRanking, RPCEntry.Pop( OnQueryRankingRet, user, resp ) );
+				CS.instance.netSessionMgr.Send( SessionType.ServerC2DB, queryRanking, RPCEntry.Pop( OnQueryRankingRet, user, resp ) );
+			}
 
 			return ErrorCode.Success;
 		}
@@ -214,6 +223,101 @@ namespace CentralServer.Biz
 				resp.RankingInfos.Add( rankingInfo );
 			}
 			user.Send( resp );
+		}
+
+		/// <summary>
+		/// 客户端请求查询英雄
+		/// </summary>
+		public ErrorCode OnGc2CsQueryChampions( NetSessionBase session, IMessage message )
+		{
+			Protos.GC2CS_QueryChampions request = ( Protos.GC2CS_QueryChampions )message;
+			ulong gcNID = request.Opts.Transid;
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+			if ( user != null )
+			{
+				Protos.CS2GC_QueryChampionsRet response = ProtoCreator.R_GC2CS_QueryChampions( request.Opts.Pid );
+				response.Cids.AddRange( user.champions );
+				user.Send( response );
+			}
+			return ErrorCode.Success;
+		}
+
+		/// <summary>
+		/// 客户端请求购买英雄
+		/// </summary>
+		public ErrorCode OnGc2CsBuyChampion( NetSessionBase session, IMessage message )
+		{
+			Protos.GC2CS_BuyChampion request = ( Protos.GC2CS_BuyChampion )message;
+			Protos.CS2GC_BuyChampionRet response = ProtoCreator.R_GC2CS_BuyChampion( request.Opts.Pid );
+			int id = request.Cid;
+			ulong gcNID = request.Opts.Transid;
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+			if ( user == null )
+				return ErrorCode.Success;
+
+			if ( user.champions.Contains( id ) )//已存在该英雄
+			{
+				response.Result = Protos.CS2GC_BuyChampionRet.Types.Result.Failed;
+				user.Send( response );
+				return ErrorCode.Success;
+			}
+			Hashtable defs = GoodsDefs.GetChampion( id );
+			int priceNeeded = ( int )( defs.GetInt( "price" ) * ( 1 + defs.GetFloat( "p_discount" ) ) );
+			if ( user.money < priceNeeded )//没有足够金钱
+			{
+				response.Result = Protos.CS2GC_BuyChampionRet.Types.Result.NotEnoughMoney;
+				user.Send( response );
+				return ErrorCode.Success;
+			}
+			int diamonedNeeded = ( int )( defs.GetInt( "diamoned" ) * ( 1 + defs.GetFloat( "d_discount" ) ) );
+			if ( user.diamoned < diamonedNeeded )
+			{
+				response.Result = Protos.CS2GC_BuyChampionRet.Types.Result.NotEnoughDiamoned;
+				user.Send( response );
+				return ErrorCode.Success;
+			}
+			int expNeeded = defs.GetInt( "exp" );
+			if ( user.exp < expNeeded )
+			{
+				response.Result = Protos.CS2GC_BuyChampionRet.Types.Result.NotEnoughExp;
+				user.Send( response );
+				return ErrorCode.Success;
+			}
+
+			int moneyResult = user.money - priceNeeded;
+			int diamonedResult = user.diamoned - diamonedNeeded;
+
+			Protos.CS2DB_BuyChampion request2 = ProtoCreator.Q_CS2DB_BuyChampion();
+			request2.Ukey = user.ukey;
+			request2.Money = moneyResult;
+			request2.Diamoned = diamonedResult;
+			request2.Cids.Add( request.Cid );
+			CS.instance.netSessionMgr.Send( SessionType.ServerC2DB, request2, RPCEntry.Pop( OnBuyChampion, user, moneyResult, diamonedResult, request.Cid, response ) );
+
+			return ErrorCode.Success;
+		}
+
+		private static void OnBuyChampion( NetSessionBase session, IMessage message, object[] args )
+		{
+			CSUser user = ( CSUser )args[0];
+			int moneyResult = ( int )args[1];
+			int diamonedResult = ( int )args[2];
+			int cid = ( int )args[3];
+			Protos.CS2GC_BuyChampionRet response = ( Protos.CS2GC_BuyChampionRet )args[4];
+			Protos.DB2CS_BuyChampionRet dbResponse = ( Protos.DB2CS_BuyChampionRet )message;
+			if ( dbResponse.Result == Protos.Global.Types.ECommon.Failed )
+				response.Result = Protos.CS2GC_BuyChampionRet.Types.Result.Failed;
+			else
+			{
+				user.money = moneyResult;
+				user.diamoned = diamonedResult;
+				user.champions.Add( cid );
+				response.Result = Protos.CS2GC_BuyChampionRet.Types.Result.Success;
+				response.Money = user.money;
+				response.Diamoned = user.diamoned;
+				response.Cids.AddRange( user.champions );
+			}
+			user.Send( response );
 		}
 	}
 }

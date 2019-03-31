@@ -1,6 +1,5 @@
 ﻿using Google.Protobuf;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CentralServer.User
 {
@@ -102,7 +101,7 @@ namespace CentralServer.User
 		/// <summary>
 		/// 当前拥有的英雄
 		/// </summary>
-		public List<int> champions { get; set; }
+		public readonly List<int> champions = new List<int>();
 
 		/// <summary>
 		/// 发送消息

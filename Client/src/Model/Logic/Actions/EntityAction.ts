@@ -68,7 +68,7 @@ export class EntityAction extends AbstractAction implements ISnapshotable {
 	protected OnUpdatePhysic(dt: number): void {
 	}
 
-	public Trigger(): void {
+	private Trigger(): void {
 		this._isTriggered = true;
 		this.OnTrigger();
 	}

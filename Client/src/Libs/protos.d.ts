@@ -239,10 +239,12 @@ export namespace Protos {
         eCS2GC_BuyChampionRet = 5111,
         eCS2DB_UpdateRank = 5400,
         eCS2DB_QueryRanking = 5401,
+        eCS2DB_BuyChampion = 5402,
         eDB2LS_QueryAccountRet = 8000,
         eDB2LS_QueryLoginRet = 8001,
         eDB2LS_ExecRet = 8002,
-        eDB2CS_QueryRankingRet = 9000
+        eDB2CS_QueryRankingRet = 9000,
+        eDB2CS_BuyChampionRet = 9001
     }
 
     interface IMsgOpts {
@@ -384,7 +386,7 @@ export namespace Protos {
         money?: (number|null);
         diamoned?: (number|null);
         exp?: (number|null);
-        champions?: (string[]|null);
+        champions?: (number[]|null);
     }
 
     class G_UserInfo implements IG_UserInfo {
@@ -397,7 +399,7 @@ export namespace Protos {
         public money: number;
         public diamoned: number;
         public exp: number;
-        public champions: string[];
+        public champions: number[];
         public static create(properties?: Protos.IG_UserInfo): Protos.G_UserInfo;
         public static encode(message: Protos.IG_UserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IG_UserInfo, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -721,6 +723,34 @@ export namespace Protos {
         }
     }
 
+    interface ICS2DB_BuyChampion {
+        opts?: (Protos.IMsgOpts|null);
+        result?: (Protos.Global.ECommon|null);
+        ukey?: (number|null);
+        money?: (number|null);
+        diamoned?: (number|null);
+        cids?: (number[]|null);
+    }
+
+    class CS2DB_BuyChampion implements ICS2DB_BuyChampion {
+        constructor(properties?: Protos.ICS2DB_BuyChampion);
+        public opts?: (Protos.IMsgOpts|null);
+        public result: Protos.Global.ECommon;
+        public ukey: number;
+        public money: number;
+        public diamoned: number;
+        public cids: number[];
+        public static create(properties?: Protos.ICS2DB_BuyChampion): Protos.CS2DB_BuyChampion;
+        public static encode(message: Protos.ICS2DB_BuyChampion, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2DB_BuyChampion, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2DB_BuyChampion;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2DB_BuyChampion;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2DB_BuyChampion;
+        public static toObject(message: Protos.CS2DB_BuyChampion, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
     interface ICS2GC_BeginMatchRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.CS2GC_BeginMatchRet.EResult|null);
@@ -995,13 +1025,13 @@ export namespace Protos {
 
     interface ICS2GC_QueryChampionsRet {
         opts?: (Protos.IMsgOpts|null);
-        cids?: (string[]|null);
+        cids?: (number[]|null);
     }
 
     class CS2GC_QueryChampionsRet implements ICS2GC_QueryChampionsRet {
         constructor(properties?: Protos.ICS2GC_QueryChampionsRet);
         public opts?: (Protos.IMsgOpts|null);
-        public cids: string[];
+        public cids: number[];
         public static create(properties?: Protos.ICS2GC_QueryChampionsRet): Protos.CS2GC_QueryChampionsRet;
         public static encode(message: Protos.ICS2GC_QueryChampionsRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_QueryChampionsRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1016,12 +1046,18 @@ export namespace Protos {
     interface ICS2GC_BuyChampionRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.CS2GC_BuyChampionRet.Result|null);
+        money?: (number|null);
+        diamoned?: (number|null);
+        cids?: (number[]|null);
     }
 
     class CS2GC_BuyChampionRet implements ICS2GC_BuyChampionRet {
         constructor(properties?: Protos.ICS2GC_BuyChampionRet);
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.CS2GC_BuyChampionRet.Result;
+        public money: number;
+        public diamoned: number;
+        public cids: number[];
         public static create(properties?: Protos.ICS2GC_BuyChampionRet): Protos.CS2GC_BuyChampionRet;
         public static encode(message: Protos.ICS2GC_BuyChampionRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_BuyChampionRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1039,7 +1075,8 @@ export namespace Protos {
             Success = 0,
             NotEnoughMoney = 1,
             NotEnoughDiamoned = 2,
-            NotEnoughExp = 3
+            NotEnoughExp = 3,
+            FAILED = 4
         }
     }
 
@@ -1351,6 +1388,26 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.DB2CS_QueryRankingRet;
         public static toObject(message: Protos.DB2CS_QueryRankingRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IDB2CS_BuyChampionRet {
+        opts?: (Protos.IMsgOpts|null);
+        result?: (Protos.Global.ECommon|null);
+    }
+
+    class DB2CS_BuyChampionRet implements IDB2CS_BuyChampionRet {
+        constructor(properties?: Protos.IDB2CS_BuyChampionRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public result: Protos.Global.ECommon;
+        public static create(properties?: Protos.IDB2CS_BuyChampionRet): Protos.DB2CS_BuyChampionRet;
+        public static encode(message: Protos.IDB2CS_BuyChampionRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IDB2CS_BuyChampionRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.DB2CS_BuyChampionRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.DB2CS_BuyChampionRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.DB2CS_BuyChampionRet;
+        public static toObject(message: Protos.DB2CS_BuyChampionRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

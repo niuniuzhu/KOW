@@ -40,8 +40,8 @@ export class EntityFSM extends FSM implements ISnapshotable {
 	public EncodeSnapshot(writer: $protobuf.Writer | $protobuf.BufferWriter): void {
 		writer.fork();
 		for (const state of this._states) {
-			const entityFSM = <EntityState>state;
-			entityFSM.EncodeSnapshot(writer);
+			const entityState = <EntityState>state;
+			entityState.EncodeSnapshot(writer);
 		}
 
 		if (this.globalEntityState != null) {

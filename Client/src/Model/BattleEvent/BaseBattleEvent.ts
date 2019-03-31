@@ -9,5 +9,5 @@ export abstract class BaseBattleEvent {
 		this.__type = value;
 	}
 
-	public abstract Release();
+	public abstract Release():void;
 }

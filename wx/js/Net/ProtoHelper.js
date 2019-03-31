@@ -24,6 +24,8 @@ export class ProtoCreator {
         ProtoCreator._TYPE2ID.set(Protos.GC2CS_BeginMatch, 1300);
         ProtoCreator._TYPE2ID.set(Protos.GC2CS_CancelMatch, 1301);
         ProtoCreator._TYPE2ID.set(Protos.GC2CS_QueryRanking, 1302);
+        ProtoCreator._TYPE2ID.set(Protos.GC2CS_QueryChampions, 1303);
+        ProtoCreator._TYPE2ID.set(Protos.GC2CS_BuyChampion, 1304);
         ProtoCreator._TYPE2ID.set(Protos.LS2GC_GSInfo, 2000);
         ProtoCreator._TYPE2ID.set(Protos.LS2GC_AskRegRet, 2001);
         ProtoCreator._TYPE2ID.set(Protos.LS2GC_AskLoginRet, 2002);
@@ -62,12 +64,16 @@ export class ProtoCreator {
         ProtoCreator._TYPE2ID.set(Protos.CS2GC_BattleEnd, 5307);
         ProtoCreator._TYPE2ID.set(Protos.CS2GC_BSLose, 5308);
         ProtoCreator._TYPE2ID.set(Protos.CS2GC_QueryRankingRet, 5309);
+        ProtoCreator._TYPE2ID.set(Protos.CS2GC_QueryChampionsRet, 5310);
+        ProtoCreator._TYPE2ID.set(Protos.CS2GC_BuyChampionRet, 5111);
         ProtoCreator._TYPE2ID.set(Protos.CS2DB_UpdateRank, 5400);
         ProtoCreator._TYPE2ID.set(Protos.CS2DB_QueryRanking, 5401);
+        ProtoCreator._TYPE2ID.set(Protos.CS2DB_BuyChampion, 5402);
         ProtoCreator._TYPE2ID.set(Protos.DB2LS_QueryAccountRet, 8000);
         ProtoCreator._TYPE2ID.set(Protos.DB2LS_QueryLoginRet, 8001);
         ProtoCreator._TYPE2ID.set(Protos.DB2LS_ExecRet, 8002);
         ProtoCreator._TYPE2ID.set(Protos.DB2CS_QueryRankingRet, 9000);
+        ProtoCreator._TYPE2ID.set(Protos.DB2CS_BuyChampionRet, 9001);
         ProtoCreator._ID2TYPE.set(10, Protos.G_AskPing);
         ProtoCreator._ID2TYPE.set(11, Protos.G_AskPingRet);
         ProtoCreator._ID2TYPE.set(1000, Protos.GC2LS_AskRegister);
@@ -87,6 +93,8 @@ export class ProtoCreator {
         ProtoCreator._ID2TYPE.set(1300, Protos.GC2CS_BeginMatch);
         ProtoCreator._ID2TYPE.set(1301, Protos.GC2CS_CancelMatch);
         ProtoCreator._ID2TYPE.set(1302, Protos.GC2CS_QueryRanking);
+        ProtoCreator._ID2TYPE.set(1303, Protos.GC2CS_QueryChampions);
+        ProtoCreator._ID2TYPE.set(1304, Protos.GC2CS_BuyChampion);
         ProtoCreator._ID2TYPE.set(2000, Protos.LS2GC_GSInfo);
         ProtoCreator._ID2TYPE.set(2001, Protos.LS2GC_AskRegRet);
         ProtoCreator._ID2TYPE.set(2002, Protos.LS2GC_AskLoginRet);
@@ -125,12 +133,16 @@ export class ProtoCreator {
         ProtoCreator._ID2TYPE.set(5307, Protos.CS2GC_BattleEnd);
         ProtoCreator._ID2TYPE.set(5308, Protos.CS2GC_BSLose);
         ProtoCreator._ID2TYPE.set(5309, Protos.CS2GC_QueryRankingRet);
+        ProtoCreator._ID2TYPE.set(5310, Protos.CS2GC_QueryChampionsRet);
+        ProtoCreator._ID2TYPE.set(5111, Protos.CS2GC_BuyChampionRet);
         ProtoCreator._ID2TYPE.set(5400, Protos.CS2DB_UpdateRank);
         ProtoCreator._ID2TYPE.set(5401, Protos.CS2DB_QueryRanking);
+        ProtoCreator._ID2TYPE.set(5402, Protos.CS2DB_BuyChampion);
         ProtoCreator._ID2TYPE.set(8000, Protos.DB2LS_QueryAccountRet);
         ProtoCreator._ID2TYPE.set(8001, Protos.DB2LS_QueryLoginRet);
         ProtoCreator._ID2TYPE.set(8002, Protos.DB2LS_ExecRet);
         ProtoCreator._ID2TYPE.set(9000, Protos.DB2CS_QueryRankingRet);
+        ProtoCreator._ID2TYPE.set(9001, Protos.DB2CS_BuyChampionRet);
     }
     static MakeTransMessage(msg, transTarget, transID) {
         msg.opts.flag |= 1 << 3;
@@ -239,6 +251,18 @@ export class ProtoCreator {
     }
     static Q_GC2CS_QueryRanking() {
         let msg = new Protos.GC2CS_QueryRanking();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        return msg;
+    }
+    static Q_GC2CS_QueryChampions() {
+        let msg = new Protos.GC2CS_QueryChampions();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        return msg;
+    }
+    static Q_GC2CS_BuyChampion() {
+        let msg = new Protos.GC2CS_BuyChampion();
         msg.opts = new Protos.MsgOpts();
         msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
         return msg;
@@ -440,6 +464,16 @@ export class ProtoCreator {
         msg.opts = new Protos.MsgOpts();
         return msg;
     }
+    static Q_CS2GC_QueryChampionsRet() {
+        let msg = new Protos.CS2GC_QueryChampionsRet();
+        msg.opts = new Protos.MsgOpts();
+        return msg;
+    }
+    static Q_CS2GC_BuyChampionRet() {
+        let msg = new Protos.CS2GC_BuyChampionRet();
+        msg.opts = new Protos.MsgOpts();
+        return msg;
+    }
     static Q_CS2DB_UpdateRank() {
         let msg = new Protos.CS2DB_UpdateRank();
         msg.opts = new Protos.MsgOpts();
@@ -447,6 +481,12 @@ export class ProtoCreator {
     }
     static Q_CS2DB_QueryRanking() {
         let msg = new Protos.CS2DB_QueryRanking();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
+        return msg;
+    }
+    static Q_CS2DB_BuyChampion() {
+        let msg = new Protos.CS2DB_BuyChampion();
         msg.opts = new Protos.MsgOpts();
         msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RPC;
         return msg;
@@ -471,6 +511,102 @@ export class ProtoCreator {
         msg.opts = new Protos.MsgOpts();
         return msg;
     }
+    static Q_DB2CS_BuyChampionRet() {
+        let msg = new Protos.DB2CS_BuyChampionRet();
+        msg.opts = new Protos.MsgOpts();
+        return msg;
+    }
+    static R_LS2CS_GCLogin(pid) {
+        let msg = new Protos.CS2LS_GCLoginRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2CS_QueryChampions(pid) {
+        let msg = new Protos.CS2GC_QueryChampionsRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2BS_RequestFrameActions(pid) {
+        let msg = new Protos.BS2GC_RequestFrameActionsRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2LS_AskRegister(pid) {
+        let msg = new Protos.LS2GC_AskRegRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GS2CS_GCAskLogin(pid) {
+        let msg = new Protos.CS2GS_GCLoginRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2BS_RequestSnapshot(pid) {
+        let msg = new Protos.BS2GC_RequestSnapshotRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_CS2DB_BuyChampion(pid) {
+        let msg = new Protos.DB2CS_BuyChampionRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_CS2DB_QueryRanking(pid) {
+        let msg = new Protos.DB2CS_QueryRankingRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2BS_AskLogin(pid) {
+        let msg = new Protos.BS2GC_LoginRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_BS2CS_BattleEnd(pid) {
+        let msg = new Protos.CS2BS_BattleEndRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2LS_AskWXLogin(pid) {
+        let msg = new Protos.LS2GC_AskLoginRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_LS2DB_QueryAccount(pid) {
+        let msg = new Protos.DB2LS_QueryAccountRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
+    static R_GC2CS_BuyChampion(pid) {
+        let msg = new Protos.CS2GC_BuyChampionRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
     static R_G_AskPing(pid) {
         let msg = new Protos.G_AskPingRet();
         msg.opts = new Protos.MsgOpts();
@@ -485,71 +621,8 @@ export class ProtoCreator {
         msg.opts.rpid = pid;
         return msg;
     }
-    static R_LS2DB_QueryAccount(pid) {
-        let msg = new Protos.DB2LS_QueryAccountRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_BS2CS_BattleEnd(pid) {
-        let msg = new Protos.CS2BS_BattleEndRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2BS_RequestFrameActions(pid) {
-        let msg = new Protos.BS2GC_RequestFrameActionsRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GS2CS_GCAskLogin(pid) {
-        let msg = new Protos.CS2GS_GCLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2LS_AskWXLogin(pid) {
-        let msg = new Protos.LS2GC_AskLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2LS_AskSmartLogin(pid) {
-        let msg = new Protos.LS2GC_AskLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2BS_AskLogin(pid) {
-        let msg = new Protos.BS2GC_LoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2LS_AskRegister(pid) {
-        let msg = new Protos.LS2GC_AskRegRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_LS2CS_GCLogin(pid) {
-        let msg = new Protos.CS2LS_GCLoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2CS_BeginMatch(pid) {
-        let msg = new Protos.CS2GC_BeginMatchRet();
+    static R_GC2GS_AskLogin(pid) {
+        let msg = new Protos.GS2GC_LoginRet();
         msg.opts = new Protos.MsgOpts();
         msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
         msg.opts.rpid = pid;
@@ -562,15 +635,8 @@ export class ProtoCreator {
         msg.opts.rpid = pid;
         return msg;
     }
-    static R_GC2BS_RequestSnapshot(pid) {
-        let msg = new Protos.BS2GC_RequestSnapshotRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_CS2DB_QueryRanking(pid) {
-        let msg = new Protos.DB2CS_QueryRankingRet();
+    static R_GC2LS_AskLogin(pid) {
+        let msg = new Protos.LS2GC_AskLoginRet();
         msg.opts = new Protos.MsgOpts();
         msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
         msg.opts.rpid = pid;
@@ -583,6 +649,13 @@ export class ProtoCreator {
         msg.opts.rpid = pid;
         return msg;
     }
+    static R_GC2CS_BeginMatch(pid) {
+        let msg = new Protos.CS2GC_BeginMatchRet();
+        msg.opts = new Protos.MsgOpts();
+        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
+        msg.opts.rpid = pid;
+        return msg;
+    }
     static R_CS2BS_BattleInfo(pid) {
         let msg = new Protos.BS2CS_BattleInfoRet();
         msg.opts = new Protos.MsgOpts();
@@ -590,14 +663,7 @@ export class ProtoCreator {
         msg.opts.rpid = pid;
         return msg;
     }
-    static R_GC2GS_AskLogin(pid) {
-        let msg = new Protos.GS2GC_LoginRet();
-        msg.opts = new Protos.MsgOpts();
-        msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
-        msg.opts.rpid = pid;
-        return msg;
-    }
-    static R_GC2LS_AskLogin(pid) {
+    static R_GC2LS_AskSmartLogin(pid) {
         let msg = new Protos.LS2GC_AskLoginRet();
         msg.opts = new Protos.MsgOpts();
         msg.opts.flag |= 1 << Protos.MsgOpts.Flag.RESP;
@@ -680,6 +746,14 @@ export class ProtoCreator {
             }
             case 1302: {
                 let msg = Protos.GC2CS_QueryRanking.decode(data, size);
+                return msg;
+            }
+            case 1303: {
+                let msg = Protos.GC2CS_QueryChampions.decode(data, size);
+                return msg;
+            }
+            case 1304: {
+                let msg = Protos.GC2CS_BuyChampion.decode(data, size);
                 return msg;
             }
             case 2000: {
@@ -834,12 +908,24 @@ export class ProtoCreator {
                 let msg = Protos.CS2GC_QueryRankingRet.decode(data, size);
                 return msg;
             }
+            case 5310: {
+                let msg = Protos.CS2GC_QueryChampionsRet.decode(data, size);
+                return msg;
+            }
+            case 5111: {
+                let msg = Protos.CS2GC_BuyChampionRet.decode(data, size);
+                return msg;
+            }
             case 5400: {
                 let msg = Protos.CS2DB_UpdateRank.decode(data, size);
                 return msg;
             }
             case 5401: {
                 let msg = Protos.CS2DB_QueryRanking.decode(data, size);
+                return msg;
+            }
+            case 5402: {
+                let msg = Protos.CS2DB_BuyChampion.decode(data, size);
                 return msg;
             }
             case 8000: {
@@ -856,6 +942,10 @@ export class ProtoCreator {
             }
             case 9000: {
                 let msg = Protos.DB2CS_QueryRankingRet.decode(data, size);
+                return msg;
+            }
+            case 9001: {
+                let msg = Protos.DB2CS_BuyChampionRet.decode(data, size);
                 return msg;
             }
         }
@@ -935,6 +1025,14 @@ export class ProtoCreator {
     }
     static D_GC2CS_QueryRanking(data, size) {
         let msg = Protos.GC2CS_QueryRanking.decode(data, size);
+        return msg;
+    }
+    static D_GC2CS_QueryChampions(data, size) {
+        let msg = Protos.GC2CS_QueryChampions.decode(data, size);
+        return msg;
+    }
+    static D_GC2CS_BuyChampion(data, size) {
+        let msg = Protos.GC2CS_BuyChampion.decode(data, size);
         return msg;
     }
     static D_LS2GC_GSInfo(data, size) {
@@ -1089,12 +1187,24 @@ export class ProtoCreator {
         let msg = Protos.CS2GC_QueryRankingRet.decode(data, size);
         return msg;
     }
+    static D_CS2GC_QueryChampionsRet(data, size) {
+        let msg = Protos.CS2GC_QueryChampionsRet.decode(data, size);
+        return msg;
+    }
+    static D_CS2GC_BuyChampionRet(data, size) {
+        let msg = Protos.CS2GC_BuyChampionRet.decode(data, size);
+        return msg;
+    }
     static D_CS2DB_UpdateRank(data, size) {
         let msg = Protos.CS2DB_UpdateRank.decode(data, size);
         return msg;
     }
     static D_CS2DB_QueryRanking(data, size) {
         let msg = Protos.CS2DB_QueryRanking.decode(data, size);
+        return msg;
+    }
+    static D_CS2DB_BuyChampion(data, size) {
+        let msg = Protos.CS2DB_BuyChampion.decode(data, size);
         return msg;
     }
     static D_DB2LS_QueryAccountRet(data, size) {
@@ -1111,6 +1221,10 @@ export class ProtoCreator {
     }
     static D_DB2CS_QueryRankingRet(data, size) {
         let msg = Protos.DB2CS_QueryRankingRet.decode(data, size);
+        return msg;
+    }
+    static D_DB2CS_BuyChampionRet(data, size) {
+        let msg = Protos.DB2CS_BuyChampionRet.decode(data, size);
         return msg;
     }
     static CreateMsgByID(msgID) {
@@ -1171,6 +1285,12 @@ export class ProtoCreator {
             }
             case 1302: {
                 return new Protos.GC2CS_QueryRanking();
+            }
+            case 1303: {
+                return new Protos.GC2CS_QueryChampions();
+            }
+            case 1304: {
+                return new Protos.GC2CS_BuyChampion();
             }
             case 2000: {
                 return new Protos.LS2GC_GSInfo();
@@ -1286,11 +1406,20 @@ export class ProtoCreator {
             case 5309: {
                 return new Protos.CS2GC_QueryRankingRet();
             }
+            case 5310: {
+                return new Protos.CS2GC_QueryChampionsRet();
+            }
+            case 5111: {
+                return new Protos.CS2GC_BuyChampionRet();
+            }
             case 5400: {
                 return new Protos.CS2DB_UpdateRank();
             }
             case 5401: {
                 return new Protos.CS2DB_QueryRanking();
+            }
+            case 5402: {
+                return new Protos.CS2DB_BuyChampion();
             }
             case 8000: {
                 return new Protos.DB2LS_QueryAccountRet();
@@ -1303,6 +1432,9 @@ export class ProtoCreator {
             }
             case 9000: {
                 return new Protos.DB2CS_QueryRankingRet();
+            }
+            case 9001: {
+                return new Protos.DB2CS_BuyChampionRet();
             }
         }
         return null;
@@ -1365,6 +1497,12 @@ export class ProtoCreator {
                 return message.opts;
             }
             case 1302: {
+                return message.opts;
+            }
+            case 1303: {
+                return message.opts;
+            }
+            case 1304: {
                 return message.opts;
             }
             case 2000: {
@@ -1481,10 +1619,19 @@ export class ProtoCreator {
             case 5309: {
                 return message.opts;
             }
+            case 5310: {
+                return message.opts;
+            }
+            case 5111: {
+                return message.opts;
+            }
             case 5400: {
                 return message.opts;
             }
             case 5401: {
+                return message.opts;
+            }
+            case 5402: {
                 return message.opts;
             }
             case 8000: {
@@ -1497,6 +1644,9 @@ export class ProtoCreator {
                 return message.opts;
             }
             case 9000: {
+                return message.opts;
+            }
+            case 9001: {
                 return message.opts;
             }
         }

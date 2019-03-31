@@ -27,8 +27,8 @@ export class EntityFSM extends FSM {
     EncodeSnapshot(writer) {
         writer.fork();
         for (const state of this._states) {
-            const entityFSM = state;
-            entityFSM.EncodeSnapshot(writer);
+            const entityState = state;
+            entityState.EncodeSnapshot(writer);
         }
         if (this.globalEntityState != null) {
             this.globalEntityState.EncodeSnapshot(writer);

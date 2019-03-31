@@ -52,11 +52,12 @@ export class Champion extends Entity {
         this._radius = Hashtable.GetNumber(defs, "radius");
         this._moveSpeed = Hashtable.GetNumber(defs, "move_speed");
         const skillsDef = Hashtable.GetNumberArray(defs, "skills");
-        if (skillsDef != null) { }
-        for (const sid of skillsDef) {
-            const skill = new Skill();
-            skill.Init(sid);
-            this._skills.push(skill);
+        if (skillsDef != null) {
+            for (const sid of skillsDef) {
+                const skill = new Skill();
+                skill.Init(sid);
+                this._skills.push(skill);
+            }
         }
         const statesDef = Hashtable.GetMap(defs, "states");
         if (statesDef != null) {
@@ -163,7 +164,7 @@ export class Champion extends Entity {
         writer.bool(this._fsm.currentState != null);
         if (this._fsm.currentState != null) {
             writer.int32(this._fsm.currentState.type);
-            writer.double(this._fsm.currentState.time);
+            writer.int32(this._fsm.currentState.time);
         }
     }
     HasSkill(id) {

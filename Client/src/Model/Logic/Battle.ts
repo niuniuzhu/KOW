@@ -24,14 +24,6 @@ import { SceneItem } from "./SceneItem";
 import { Team } from "./Team";
 
 export class Battle implements ISnapshotable {
-	private _frameRate: number = 0;
-	private _keyframeStep: number = 0;
-	private _snapshotStep: number = 0;
-	private _timeout: number = 0;
-	private _mapID: number = 0;
-	private _frame: number = 0;
-	private _random: FRandom;
-
 	/**
 	 * 帧率
 	 */
@@ -89,9 +81,16 @@ export class Battle implements ISnapshotable {
 	 */
 	public chase: boolean = false;
 
+	private _frameRate: number = 0;
+	private _keyframeStep: number = 0;
+	private _snapshotStep: number = 0;
+	private _frame: number = 0;
+	private _random: FRandom;
+	private _timeout: number = 0;
+	private _mapID: number = 0;
+
 	private _msPerFrame: number;
 	private _logicElapsed: number;
-	private _realElapsed: number;
 	private _nextKeyFrame: number;
 	private _bornPoses: FVec2[] = [];
 	private _bornDirs: FVec2[] = [];
@@ -173,7 +172,6 @@ export class Battle implements ISnapshotable {
 		this._frame = 0;
 		this._nextKeyFrame = 0;
 		this._logicElapsed = 0;
-		this._realElapsed = 0;
 		this._finished = false;
 
 		const defs = Defs.GetMap(this._mapID);
@@ -207,7 +205,6 @@ export class Battle implements ISnapshotable {
 	public Update(dt: number): void {
 		//追帧
 		this.Chase(this._frameActionGroups);
-		this._realElapsed = FMathUtils.Add(this._realElapsed, dt);
 		if (this.frame < this._nextKeyFrame) {
 			this._logicElapsed = FMathUtils.Add(this._logicElapsed, dt);
 
@@ -216,7 +213,6 @@ export class Battle implements ISnapshotable {
 					break;
 
 				this.UpdateLogic(this._msPerFrame);
-				this._realElapsed = 0;
 				this._logicElapsed = FMathUtils.Sub(this._logicElapsed, this._msPerFrame);
 			}
 		}

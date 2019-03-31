@@ -129,7 +129,13 @@ namespace CentralServer.User
 			this.diamoned = gcLogin.Diamoned;
 			this.rank = gcLogin.Rank;
 			this.exp = gcLogin.Exp;
-			this.champions = gcLogin.Champions.Split( '|' ).Cast<int>().ToList();
+			string[] pairs = gcLogin.Champions.Split( '|' );
+			int count = pairs.Length;
+			for ( int i = 0; i < count; i++ )
+			{
+				string pair = pairs[i];
+				this.champions.Add( int.Parse( pair ) );
+			}
 		}
 
 		/// <summary>

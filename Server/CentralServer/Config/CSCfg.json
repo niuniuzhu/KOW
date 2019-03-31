@@ -11,5 +11,6 @@
     "redisPort": 7000,
     "redisPwd": "159753",
     "sessionExpTime": 40000,
-    "matchDefs": "Config/matching.json"
+    "matchDefs": "Config/matching.json",
+    "goods": "Config/goods.json"
 }

@@ -36,6 +36,7 @@ namespace CentralServer
 			this.redisPwd = json.GetString( "redisPwd" );
 			this.sessionExpTime = json.GetLong( "sessionExpTime" );
 			this.matchDefs = json.GetString( "matchDefs" );
+			this.goodsPath = json.GetString( "goods" );
 		}
 
 		public void CopyFromCLIOptions( Options opts )
@@ -53,6 +54,7 @@ namespace CentralServer
 			this.redisPwd = opts.redisPwd;
 			this.sessionExpTime = opts.sessionExpTime;
 			this.matchDefs = opts.matchDefs;
+			this.goodsPath = opts.goods;
 		}
 	}
 }

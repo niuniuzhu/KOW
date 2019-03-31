@@ -134,7 +134,7 @@ namespace CentralServer.User
 			for ( int i = 0; i < count; i++ )
 			{
 				string pair = pairs[i];
-				this.champions.Add( int.Parse( pair ) );
+				this.champions.Add( pair == string.Empty ? -1 : int.Parse( pair ) );
 			}
 		}
 

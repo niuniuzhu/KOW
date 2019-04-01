@@ -195,6 +195,6 @@ namespace CentralServer
 
 		public void LoadDefs() => Defs.Load( File.ReadAllText( this.config.defPath ) );
 
-		public void LoadGoods() => Defs.Load( File.ReadAllText( this.config.goodsPath ) );
+		public void LoadGoods() => GoodsDefs.Load( File.ReadAllText( this.config.goodsPath ) );
 	}
 }

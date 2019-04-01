@@ -20,6 +20,12 @@ namespace Core.Net
 				result = null;
 				return -1;
 			}
+			if ( length < LENGTH_SIZE)//todo 这基本是不可能的
+			{
+				Logger.Warn( $"valid length:{length}" );
+				result = null;
+				return -1;
+			}
 			result = new byte[length - LENGTH_SIZE];
 			System.Buffer.BlockCopy( data, offset + LENGTH_SIZE, result, 0, length - LENGTH_SIZE );
 			return length;

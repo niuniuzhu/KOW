@@ -1993,13 +1993,17 @@ public static class ProtoCreator {
 
 	public static Protos.MsgID GetMsgID( this Google.Protobuf.IMessage message )
 	{
+        if ( message == null)
+            return Protos.MsgID.Undefine;
 		_TYPE2ID.TryGetValue( message.GetType(), out Protos.MsgID msgID );
 		return msgID;
 	}
 
 	public static Protos.MsgID GetMsgID<T>( this Google.Protobuf.IMessage<T> message ) where T : Google.Protobuf.IMessage<T>
-	{
-		_TYPE2ID.TryGetValue( message.GetType(), out Protos.MsgID msgID );
+    {
+        if (message == null)
+            return Protos.MsgID.Undefine;
+        _TYPE2ID.TryGetValue( message.GetType(), out Protos.MsgID msgID );
 		return msgID;
 	}
 	#endregion

@@ -56,7 +56,7 @@ export class Bullet extends Entity implements ISnapshotable {
 	public get type(): EntityType { return EntityType.Bullet; }
 
 	/**
-	 * 产生者3ID
+	 * 产生者ID
 	 */
 	public get casterID(): Long { return this._casterID; }
 
@@ -78,7 +78,7 @@ export class Bullet extends Entity implements ISnapshotable {
 	private _attrFilterOPs: AttrFilterOP[];
 	private _attrCompareValues: number[];
 
-	//runtie properties
+	//runtiem properties
 	private readonly _targets1: Champion[] = [];
 	private readonly _targets2: Champion[] = [];
 

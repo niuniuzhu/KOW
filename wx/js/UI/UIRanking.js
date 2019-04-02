@@ -34,5 +34,6 @@ export class UIRanking extends fairygui.Window {
         });
     }
     onHide() {
+        this._list.removeChildrenToPool();
     }
 }

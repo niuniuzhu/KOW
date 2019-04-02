@@ -14,7 +14,6 @@ export class Intersection {
 	 * @param radius0 移动圆的半径
 	 * @param center1 静止圆的中心位置
 	 * @param radius1 静止圆的半径
-	 * @param radius1 
 	 */
 	public static IntersectsCC(center0: FVec2, radius0: number, center1: FVec2, radius1: number): IntersectionType {
 		const a = FVec2.Sub(center1, center0).SqrMagnitude();

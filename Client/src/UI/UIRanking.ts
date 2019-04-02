@@ -40,6 +40,6 @@ export class UIRanking extends fairygui.Window {
 	}
 
 	protected onHide(): void {
-
+		this._list.removeChildrenToPool();
 	}
 }

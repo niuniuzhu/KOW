@@ -71,7 +71,7 @@ export class UIMain {
         Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
     }
     OnRankingBtnClick() {
-        this._ranking.show();
+        fairygui.GRoot.inst.showPopup(this._ranking);
     }
     OnFail(message, callback = null) {
         UIAlert.Show(message, callback);

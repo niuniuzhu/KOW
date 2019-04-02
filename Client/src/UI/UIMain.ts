@@ -99,7 +99,7 @@ export class UIMain implements IUIModule {
 	}
 
 	private OnRankingBtnClick(): void {
-		this._ranking.show();
+		fairygui.GRoot.inst.showPopup(this._ranking);
 	}
 
 	public OnFail(message: string, callback: () => void = null): void {

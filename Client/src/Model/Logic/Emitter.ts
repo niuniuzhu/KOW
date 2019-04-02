@@ -31,7 +31,7 @@ export class Emitter implements ISnapshotable {
 	/**
 	 * 半径
 	 */
-	private _raduis: number;
+	private _radius: number;
 	/**
 	 * 相对caster的偏移量
 	 */
@@ -64,8 +64,6 @@ export class Emitter implements ISnapshotable {
 	 * 销毁类型
 	 */
 	private _destroyType: DestroyType;
-	private _def: Hashtable;
-
 	/**
 	 * 产生者ID
 	 */
@@ -108,17 +106,17 @@ export class Emitter implements ISnapshotable {
 	 * 在初始化或解码快照后执行
 	 */
 	private OnInit(): void {
-		this._def = Defs.GetEmitter(this._id);
-		this._raduis = Hashtable.GetNumber(this._def, "radius");
-		const mOffset = Hashtable.GetVec2(this._def, "offset");
+		var def = Defs.GetEmitter(this._id);
+		this._radius = Hashtable.GetNumber(def, "radius");
+		const mOffset = Hashtable.GetVec2(def, "offset");
 		this._offset = new FVec2(mOffset.x, mOffset.y);
-		this._angle = Hashtable.GetNumber(this._def, "angle");
-		this._follow = Hashtable.GetBool(this._def, "follow");
-		this._frequency = Hashtable.GetNumber(this._def, "frequency");
-		this._maxBulletCount = Hashtable.GetNumber(this._def, "max_bullet_count", 1);
-		this._lifeTime = Hashtable.GetNumber(this._def, "life_time", -1);
-		this._emitType = Hashtable.GetNumber(this._def, "emit_type");
-		this._destroyType = Hashtable.GetNumber(this._def, "destroy_type");
+		this._angle = Hashtable.GetNumber(def, "angle");
+		this._follow = Hashtable.GetBool(def, "follow");
+		this._frequency = Hashtable.GetNumber(def, "frequency");
+		this._maxBulletCount = Hashtable.GetNumber(def, "max_bullet_count", 1);
+		this._lifeTime = Hashtable.GetNumber(def, "life_time", -1);
+		this._emitType = Hashtable.GetNumber(def, "emit_type");
+		this._destroyType = Hashtable.GetNumber(def, "destroy_type");
 	}
 
 	public Destroy(): void {

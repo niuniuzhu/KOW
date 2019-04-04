@@ -42,17 +42,17 @@ define(["require", "exports", "../../Libs/long", "../../RC/FMath/FMathUtils", ".
             }
         }
         OnInit() {
-            this._def = Defs_1.Defs.GetEmitter(this._id);
-            this._raduis = Hashtable_1.Hashtable.GetNumber(this._def, "radius");
-            const mOffset = Hashtable_1.Hashtable.GetVec2(this._def, "offset");
+            var def = Defs_1.Defs.GetEmitter(this._id);
+            this._radius = Hashtable_1.Hashtable.GetNumber(def, "radius");
+            const mOffset = Hashtable_1.Hashtable.GetVec2(def, "offset");
             this._offset = new FVec2_1.FVec2(mOffset.x, mOffset.y);
-            this._angle = Hashtable_1.Hashtable.GetNumber(this._def, "angle");
-            this._follow = Hashtable_1.Hashtable.GetBool(this._def, "follow");
-            this._frequency = Hashtable_1.Hashtable.GetNumber(this._def, "frequency");
-            this._maxBulletCount = Hashtable_1.Hashtable.GetNumber(this._def, "max_bullet_count", 1);
-            this._lifeTime = Hashtable_1.Hashtable.GetNumber(this._def, "life_time", -1);
-            this._emitType = Hashtable_1.Hashtable.GetNumber(this._def, "emit_type");
-            this._destroyType = Hashtable_1.Hashtable.GetNumber(this._def, "destroy_type");
+            this._angle = Hashtable_1.Hashtable.GetNumber(def, "angle");
+            this._follow = Hashtable_1.Hashtable.GetBool(def, "follow");
+            this._frequency = Hashtable_1.Hashtable.GetNumber(def, "frequency");
+            this._maxBulletCount = Hashtable_1.Hashtable.GetNumber(def, "max_bullet_count", 1);
+            this._lifeTime = Hashtable_1.Hashtable.GetNumber(def, "life_time", -1);
+            this._emitType = Hashtable_1.Hashtable.GetNumber(def, "emit_type");
+            this._destroyType = Hashtable_1.Hashtable.GetNumber(def, "destroy_type");
         }
         Destroy() {
         }

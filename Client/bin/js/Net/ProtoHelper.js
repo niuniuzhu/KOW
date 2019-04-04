@@ -518,126 +518,7 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts = new protos_1.Protos.MsgOpts();
             return msg;
         }
-        static R_LS2CS_GCLogin(pid) {
-            let msg = new protos_1.Protos.CS2LS_GCLoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2CS_QueryChampions(pid) {
-            let msg = new protos_1.Protos.CS2GC_QueryChampionsRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2BS_RequestFrameActions(pid) {
-            let msg = new protos_1.Protos.BS2GC_RequestFrameActionsRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2LS_AskRegister(pid) {
-            let msg = new protos_1.Protos.LS2GC_AskRegRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GS2CS_GCAskLogin(pid) {
-            let msg = new protos_1.Protos.CS2GS_GCLoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2BS_RequestSnapshot(pid) {
-            let msg = new protos_1.Protos.BS2GC_RequestSnapshotRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_CS2DB_BuyChampion(pid) {
-            let msg = new protos_1.Protos.DB2CS_BuyChampionRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_CS2DB_QueryRanking(pid) {
-            let msg = new protos_1.Protos.DB2CS_QueryRankingRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2BS_AskLogin(pid) {
-            let msg = new protos_1.Protos.BS2GC_LoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_BS2CS_BattleEnd(pid) {
-            let msg = new protos_1.Protos.CS2BS_BattleEndRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
         static R_GC2LS_AskWXLogin(pid) {
-            let msg = new protos_1.Protos.LS2GC_AskLoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_LS2DB_QueryAccount(pid) {
-            let msg = new protos_1.Protos.DB2LS_QueryAccountRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2CS_BuyChampion(pid) {
-            let msg = new protos_1.Protos.CS2GC_BuyChampionRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_G_AskPing(pid) {
-            let msg = new protos_1.Protos.G_AskPingRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_LS2DB_Exec(pid) {
-            let msg = new protos_1.Protos.DB2LS_ExecRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2GS_AskLogin(pid) {
-            let msg = new protos_1.Protos.GS2GC_LoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_LS2DB_QueryLogin(pid) {
-            let msg = new protos_1.Protos.DB2LS_QueryLoginRet();
-            msg.opts = new protos_1.Protos.MsgOpts();
-            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
-            msg.opts.rpid = pid;
-            return msg;
-        }
-        static R_GC2LS_AskLogin(pid) {
             let msg = new protos_1.Protos.LS2GC_AskLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
@@ -651,8 +532,127 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts.rpid = pid;
             return msg;
         }
+        static R_GC2LS_AskLogin(pid) {
+            let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2LS_AskRegister(pid) {
+            let msg = new protos_1.Protos.LS2GC_AskRegRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_LS2DB_Exec(pid) {
+            let msg = new protos_1.Protos.DB2LS_ExecRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_G_AskPing(pid) {
+            let msg = new protos_1.Protos.G_AskPingRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2CS_QueryChampions(pid) {
+            let msg = new protos_1.Protos.CS2GC_QueryChampionsRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_BS2CS_BattleEnd(pid) {
+            let msg = new protos_1.Protos.CS2BS_BattleEndRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_LS2DB_QueryLogin(pid) {
+            let msg = new protos_1.Protos.DB2LS_QueryLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
         static R_GC2CS_BeginMatch(pid) {
             let msg = new protos_1.Protos.CS2GC_BeginMatchRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_LS2DB_QueryAccount(pid) {
+            let msg = new protos_1.Protos.DB2LS_QueryAccountRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2GS_AskLogin(pid) {
+            let msg = new protos_1.Protos.GS2GC_LoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2BS_RequestSnapshot(pid) {
+            let msg = new protos_1.Protos.BS2GC_RequestSnapshotRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2CS_BuyChampion(pid) {
+            let msg = new protos_1.Protos.CS2GC_BuyChampionRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2BS_RequestFrameActions(pid) {
+            let msg = new protos_1.Protos.BS2GC_RequestFrameActionsRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_CS2DB_BuyChampion(pid) {
+            let msg = new protos_1.Protos.DB2CS_BuyChampionRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2LS_AskSmartLogin(pid) {
+            let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_LS2CS_GCLogin(pid) {
+            let msg = new protos_1.Protos.CS2LS_GCLoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_GC2BS_AskLogin(pid) {
+            let msg = new protos_1.Protos.BS2GC_LoginRet();
+            msg.opts = new protos_1.Protos.MsgOpts();
+            msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
+            msg.opts.rpid = pid;
+            return msg;
+        }
+        static R_CS2DB_QueryRanking(pid) {
+            let msg = new protos_1.Protos.DB2CS_QueryRankingRet();
             msg.opts = new protos_1.Protos.MsgOpts();
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;
@@ -665,8 +665,8 @@ define(["require", "exports", "../Libs/protos"], function (require, exports, pro
             msg.opts.rpid = pid;
             return msg;
         }
-        static R_GC2LS_AskSmartLogin(pid) {
-            let msg = new protos_1.Protos.LS2GC_AskLoginRet();
+        static R_GS2CS_GCAskLogin(pid) {
+            let msg = new protos_1.Protos.CS2GS_GCLoginRet();
             msg.opts = new protos_1.Protos.MsgOpts();
             msg.opts.flag |= 1 << protos_1.Protos.MsgOpts.Flag.RESP;
             msg.opts.rpid = pid;

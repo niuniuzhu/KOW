@@ -145,7 +145,7 @@ define(["require", "exports", "../../Global", "../../RC/Framework/FSM/FSM", "../
             if (reader.bool()) {
                 const stateType = reader.int32();
                 this._fsm.ChangeState(stateType, null);
-                this._fsm.currentState.time = reader.double();
+                this._fsm.currentState.time = reader.int32();
             }
             this._hud.OnDecodeSync();
         }

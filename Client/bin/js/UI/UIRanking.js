@@ -34,6 +34,7 @@ define(["require", "exports", "../Global", "../Net/ProtoHelper", "../Libs/protos
             });
         }
         onHide() {
+            this._list.removeChildrenToPool();
         }
     }
     exports.UIRanking = UIRanking;

@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIAlert", "./UIRanking"], function (require, exports, Consts_1, Global_1, protos_1, UIAlert_1, UIRanking_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIAlert", "./UIRanking", "../RC/Utils/Logger"], function (require, exports, Consts_1, Global_1, protos_1, UIAlert_1, UIRanking_1, Logger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
@@ -13,10 +13,12 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
             this._matchBtn2 = this._root.getChild("n13").asCom;
             this._matchBtn3 = this._root.getChild("n19").asCom;
             this._matchBtn4 = this._root.getChild("n15").asCom;
+            this._inviteBtn = this._root.getChild("n4").asCom;
             this._matchBtn.onClick(this, this.OnMatchBtnClick);
             this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
             this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
             this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
+            this._inviteBtn.onClick(this, this.OnInviteBtnClick);
             this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
         }
         Dispose() {
@@ -26,18 +28,19 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
         Enter(param) {
             this.SetMatchBtnEnable(true);
             Global_1.Global.graphic.uiRoot.addChild(this._root);
-            const userInfo = param;
-            if (userInfo != null) {
-                this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
-                this._root.getChild("nickname").asTextField.text = userInfo.nickname;
-                let r = userInfo.rank - userInfo.rank % Consts_1.Consts.RANK_STEP;
+            this._userInfo = param;
+            if (this._userInfo != null) {
+                this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = this._userInfo.avatar;
+                this._root.getChild("nickname").asTextField.text = this._userInfo.nickname;
+                let r = this._userInfo.rank - this._userInfo.rank % Consts_1.Consts.RANK_STEP;
                 r = r < Consts_1.Consts.RANK_START ? Consts_1.Consts.RANK_START : r;
                 this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
-                this._root.getChild("rank").asTextField.text = "" + (userInfo.rank < 0 ? 0 : userInfo.rank);
+                this._root.getChild("rank").asTextField.text = "" + (this._userInfo.rank < 0 ? 0 : this._userInfo.rank);
             }
         }
         Exit() {
             Global_1.Global.graphic.uiRoot.removeChild(this._root);
+            this._userInfo = null;
         }
         Update(dt) {
         }
@@ -68,8 +71,21 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
             this.SetMatchBtnEnable(false);
             Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T2P2);
         }
+        OnInviteBtnClick() {
+            if (Laya.Browser.onMiniGame) {
+                wx.shareAppMessage({
+                    title: "test share",
+                    imageUrl: "https://www.kow2019.com/g/res/basicprofile.png",
+                    query: "openID=" + this._userInfo.nickname,
+                    imageUrlId: null
+                });
+            }
+            else {
+                Logger_1.Logger.Log("wx function only");
+            }
+        }
         OnRankingBtnClick() {
-            this._ranking.show();
+            fairygui.GRoot.inst.showPopup(this._ranking);
         }
         OnFail(message, callback = null) {
             UIAlert_1.UIAlert.Show(message, callback);

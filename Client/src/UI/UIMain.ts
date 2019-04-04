@@ -4,9 +4,11 @@ import { Protos } from "../Libs/protos";
 import { IUIModule } from "./IUIModule";
 import { UIAlert } from "./UIAlert";
 import { UIRanking } from "./UIRanking";
+import { Logger } from "../RC/Utils/Logger";
 
 export class UIMain implements IUIModule {
 	private readonly _root: fairygui.GComponent;
+	private _userInfo: Protos.IG_UserInfo;
 
 	public get root(): fairygui.GComponent { return this._root; }
 
@@ -14,6 +16,7 @@ export class UIMain implements IUIModule {
 	private readonly _matchBtn2: fairygui.GComponent;
 	private readonly _matchBtn3: fairygui.GComponent;
 	private readonly _matchBtn4: fairygui.GComponent;
+	private readonly _inviteBtn: fairygui.GComponent;
 	private readonly _ranking: UIRanking;
 
 	constructor() {
@@ -28,10 +31,12 @@ export class UIMain implements IUIModule {
 		this._matchBtn2 = this._root.getChild("n13").asCom;
 		this._matchBtn3 = this._root.getChild("n19").asCom;
 		this._matchBtn4 = this._root.getChild("n15").asCom;
+		this._inviteBtn = this._root.getChild("n4").asCom;
 		this._matchBtn.onClick(this, this.OnMatchBtnClick);
 		this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
 		this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
 		this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
+		this._inviteBtn.onClick(this, this.OnInviteBtnClick);
 
 		this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
 	}
@@ -46,19 +51,20 @@ export class UIMain implements IUIModule {
 		Global.graphic.uiRoot.addChild(this._root);
 		// this._root.getTransition("t0").play();
 
-		const userInfo = <Protos.IG_UserInfo>param;
-		if (userInfo != null) {
-			this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
-			this._root.getChild("nickname").asTextField.text = userInfo.nickname;
-			let r = userInfo.rank - userInfo.rank % Consts.RANK_STEP;
+		this._userInfo = <Protos.IG_UserInfo>param;
+		if (this._userInfo != null) {
+			this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = this._userInfo.avatar;
+			this._root.getChild("nickname").asTextField.text = this._userInfo.nickname;
+			let r = this._userInfo.rank - this._userInfo.rank % Consts.RANK_STEP;
 			r = r < Consts.RANK_START ? Consts.RANK_START : r;
 			this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
-			this._root.getChild("rank").asTextField.text = "" + (userInfo.rank < 0 ? 0 : userInfo.rank);
+			this._root.getChild("rank").asTextField.text = "" + (this._userInfo.rank < 0 ? 0 : this._userInfo.rank);
 		}
 	}
 
 	public Exit(): void {
 		Global.graphic.uiRoot.removeChild(this._root);
+		this._userInfo = null;
 	}
 
 	public Update(dt: number): void {
@@ -96,6 +102,20 @@ export class UIMain implements IUIModule {
 	private OnMatchBtn4Click(): void {
 		this.SetMatchBtnEnable(false);
 		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
+	}
+
+	private OnInviteBtnClick(): void {
+		if (Laya.Browser.onMiniGame) {
+			wx.shareAppMessage({
+				title: "test share",
+				imageUrl: "https://www.kow2019.com/g/res/basicprofile.png",
+				query: "openID=" + this._userInfo.nickname,
+				imageUrlId: null
+			});
+		}
+		else {
+			Logger.Log("wx function only");
+		}
 	}
 
 	private OnRankingBtnClick(): void {

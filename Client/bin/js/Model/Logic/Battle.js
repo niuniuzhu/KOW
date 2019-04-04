@@ -3,13 +3,13 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
     Object.defineProperty(exports, "__esModule", { value: true });
     class Battle {
         constructor() {
+            this.chase = false;
             this._frameRate = 0;
             this._keyframeStep = 0;
             this._snapshotStep = 0;
+            this._frame = 0;
             this._timeout = 0;
             this._mapID = 0;
-            this._frame = 0;
-            this.chase = false;
             this._bornPoses = [];
             this._bornDirs = [];
             this._finished = false;
@@ -79,7 +79,6 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
             this._frame = 0;
             this._nextKeyFrame = 0;
             this._logicElapsed = 0;
-            this._realElapsed = 0;
             this._finished = false;
             const defs = Defs_1.Defs.GetMap(this._mapID);
             let arr = Hashtable_1.Hashtable.GetArray(defs, "born_pos");
@@ -104,14 +103,12 @@ define(["require", "exports", "../../Global", "../../Libs/long", "../../Libs/pro
         }
         Update(dt) {
             this.Chase(this._frameActionGroups);
-            this._realElapsed = FMathUtils_1.FMathUtils.Add(this._realElapsed, dt);
             if (this.frame < this._nextKeyFrame) {
                 this._logicElapsed = FMathUtils_1.FMathUtils.Add(this._logicElapsed, dt);
                 while (this._logicElapsed >= this._msPerFrame) {
                     if (this.frame >= this._nextKeyFrame)
                         break;
                     this.UpdateLogic(this._msPerFrame);
-                    this._realElapsed = 0;
                     this._logicElapsed = FMathUtils_1.FMathUtils.Sub(this._logicElapsed, this._msPerFrame);
                 }
             }

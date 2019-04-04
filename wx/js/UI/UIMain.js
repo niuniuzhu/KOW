@@ -3,6 +3,7 @@ import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { UIAlert } from "./UIAlert";
 import { UIRanking } from "./UIRanking";
+import { Logger } from "../RC/Utils/Logger";
 export class UIMain {
     get root() { return this._root; }
     constructor() {
@@ -15,10 +16,12 @@ export class UIMain {
         this._matchBtn2 = this._root.getChild("n13").asCom;
         this._matchBtn3 = this._root.getChild("n19").asCom;
         this._matchBtn4 = this._root.getChild("n15").asCom;
+        this._inviteBtn = this._root.getChild("n4").asCom;
         this._matchBtn.onClick(this, this.OnMatchBtnClick);
         this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
         this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
         this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
+        this._inviteBtn.onClick(this, this.OnInviteBtnClick);
         this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
     }
     Dispose() {
@@ -28,18 +31,19 @@ export class UIMain {
     Enter(param) {
         this.SetMatchBtnEnable(true);
         Global.graphic.uiRoot.addChild(this._root);
-        const userInfo = param;
-        if (userInfo != null) {
-            this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = userInfo.avatar;
-            this._root.getChild("nickname").asTextField.text = userInfo.nickname;
-            let r = userInfo.rank - userInfo.rank % Consts.RANK_STEP;
+        this._userInfo = param;
+        if (this._userInfo != null) {
+            this._root.getChild("image").asCom.getChild("loader").asCom.getChild("icon").asLoader.url = this._userInfo.avatar;
+            this._root.getChild("nickname").asTextField.text = this._userInfo.nickname;
+            let r = this._userInfo.rank - this._userInfo.rank % Consts.RANK_STEP;
             r = r < Consts.RANK_START ? Consts.RANK_START : r;
             this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
-            this._root.getChild("rank").asTextField.text = "" + (userInfo.rank < 0 ? 0 : userInfo.rank);
+            this._root.getChild("rank").asTextField.text = "" + (this._userInfo.rank < 0 ? 0 : this._userInfo.rank);
         }
     }
     Exit() {
         Global.graphic.uiRoot.removeChild(this._root);
+        this._userInfo = null;
     }
     Update(dt) {
     }
@@ -69,6 +73,19 @@ export class UIMain {
     OnMatchBtn4Click() {
         this.SetMatchBtnEnable(false);
         Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
+    }
+    OnInviteBtnClick() {
+        if (Laya.Browser.onMiniGame) {
+            wx.shareAppMessage({
+                title: "test share",
+                imageUrl: "https://www.kow2019.com/g/res/basicprofile.png",
+                query: "openID=" + this._userInfo.nickname,
+                imageUrlId: null
+            });
+        }
+        else {
+            Logger.Log("wx function only");
+        }
     }
     OnRankingBtnClick() {
         fairygui.GRoot.inst.showPopup(this._ranking);

@@ -7,7 +7,7 @@
 			"keyframe_step": 4,
 			"snapshot_step": 100,
 			"timeout": 120000,
-			"gladiator_timeout": 3000,
+			"gladiator_timeout": 10000,
 			"gladiator_pos": [
 				0,
 				0
@@ -59,7 +59,7 @@
 			"name": "熊",
 			"mhp": 1000,
 			"mmp": 100,
-			"mp_recover": 50,
+			"mp_recover": 5,
 			"atk": 0,
 			"def": 0,
 			"move_speed": 2.3,
@@ -279,9 +279,9 @@
 							"id": 6,
 							"speed": [
 								0,
-								33
+								18
 							],
-							"formula": "50+{0}*0.027" /*冲刺时间公式*/
+							"formula": "30+{0}*0.05" /*冲刺时间公式*/
 						},
 						{
 							"id": 100, /*计时中断*/

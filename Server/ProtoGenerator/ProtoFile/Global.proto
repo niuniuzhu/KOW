@@ -159,14 +159,15 @@ message Global{
 
 message G_UserInfo {
 	uint64 gcNID = 1;
-	string nickname = 2;
-	string avatar = 3;
-	int32 gender = 4;
-	int32 rank = 5;
-	int32 money = 6;
-	int32 diamoned = 7;
-	uint32 exp = 8;
-	repeated int32 champions = 9;
+	string openID = 2;
+	string nickname = 3;
+	string avatar = 4;
+	int32 gender = 5;
+	int32 rank = 6;
+	int32 money = 7;
+	int32 diamoned = 8;
+	uint32 exp = 9;
+	repeated int32 champions = 10;
 }
 
 /*

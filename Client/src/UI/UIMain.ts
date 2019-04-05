@@ -109,7 +109,7 @@ export class UIMain implements IUIModule {
 			wx.shareAppMessage({
 				title: "test share",
 				imageUrl: "https://www.kow2019.com/g/res/basicprofile.png",
-				query: "openID=" + this._userInfo.nickname,
+				query: "openID=" + this._userInfo.openID + "&action=invite",
 				imageUrlId: null
 			});
 		}

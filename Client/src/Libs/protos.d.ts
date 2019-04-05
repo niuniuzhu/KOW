@@ -379,6 +379,7 @@ export namespace Protos {
 
     interface IG_UserInfo {
         gcNID?: (Long|null);
+        openID?: (string|null);
         nickname?: (string|null);
         avatar?: (string|null);
         gender?: (number|null);
@@ -392,6 +393,7 @@ export namespace Protos {
     class G_UserInfo implements IG_UserInfo {
         constructor(properties?: Protos.IG_UserInfo);
         public gcNID: Long;
+        public openID: string;
         public nickname: string;
         public avatar: string;
         public gender: number;

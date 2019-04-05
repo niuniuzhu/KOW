@@ -215,7 +215,7 @@ namespace LoginServer.Biz
 			csLogin.Exp = context.exp;
 			csLogin.Champions = context.champions;
 			LS.instance.netSessionMgr.Send( SessionType.ServerL2CS, csLogin,
-											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, sid, gcNID ) );
+											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, sid, gcNID, context.id ) );
 		}
 
 		private static void OnGCLoginCSRet( NetSessionBase session, Google.Protobuf.IMessage message, object[] args )
@@ -223,12 +223,14 @@ namespace LoginServer.Biz
 			Protos.LS2GC_AskLoginRet gcLoginRet = ( Protos.LS2GC_AskLoginRet )args[0];
 			uint sid = ( uint )args[1];
 			ulong gcNID = ( ulong )args[2];
+			string openID = ( string )args[3];
 
 			Protos.CS2LS_GCLoginRet csLoginRet = ( Protos.CS2LS_GCLoginRet )message;
 			if ( csLoginRet.Result == Protos.CS2LS_GCLoginRet.Types.EResult.Success )
 			{
 				gcLoginRet.Result = Protos.LS2GC_AskLoginRet.Types.EResult.Success;
 				gcLoginRet.SessionID = gcNID;
+				gcLoginRet.OpenID = openID;
 				foreach ( KeyValuePair<uint, GSInfo> kv in LS.instance.gsInfos )
 				{
 					GSInfo info = kv.Value;

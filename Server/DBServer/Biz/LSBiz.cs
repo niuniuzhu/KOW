@@ -33,6 +33,7 @@ namespace DBServer.Biz
 						return ErrorCode.InvalidUname;
 					dataReader.Read();
 					queryLoginRet.Ukey = dataReader.GetUInt32( "id" );
+					queryLoginRet.Uname = dataReader.GetString( "uname" );
 					queryLoginRet.Channel = ( Protos.Global.Types.Channel )dataReader.GetByte( "channel" );
 					queryLoginRet.Browser = ( Protos.Global.Types.Browser )dataReader.GetByte( "browser" );
 					queryLoginRet.Platform = ( Protos.Global.Types.Platform )dataReader.GetByte( "platform" );
@@ -77,6 +78,7 @@ namespace DBServer.Biz
 					out _, out uint id );
 
 				queryLoginRet.Ukey = id;
+				queryLoginRet.Uname = queryLogin.Name;
 				queryLoginRet.Channel = queryLogin.Channel;
 				queryLoginRet.Browser = queryLogin.Browser;
 				queryLoginRet.Platform = queryLogin.Platform;

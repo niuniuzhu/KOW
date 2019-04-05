@@ -23,6 +23,8 @@ export class Main {
 			const cfgJson = JsonHelper.Parse(config);
 			Global.local = Hashtable.GetBool(cfgJson, "local");
 		}
+		Global.queryString = wx.getLaunchOptionsSync();
+		Logger.Log(Global.queryString);
 		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
 		Laya.stage.alignH = Laya.Stage.ALIGN_TOP;

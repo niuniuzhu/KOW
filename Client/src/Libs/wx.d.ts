@@ -833,23 +833,63 @@ interface _showShareMenuObject {
 	 */
 	complete: () => void;
 }
-interface _shareAppMessageObject{
+interface _shareAppMessageObject {
 	/**
 	 * 转发标题，不传则默认使用当前小游戏的昵称。
 	 */
-	title:string;
+	title: string;
 	/**
 	 * 转发显示图片的链接，可以是网络图片路径或本地图片文件路径或相对代码包根目录的图片文件路径。显示图片长宽比是 5:4
 	 */
-	imageUrl:string;
+	imageUrl: string;
 	/**
 	 * 查询字符串，从这条转发消息进入后，可通过 wx.getLaunchInfoSync() 或 wx.onShow() 获取启动参数中的 query。必须是 key1=val1&key2=val2 的格式。
 	 */
-	query:string;
+	query: string;
 	/**
 	 * 审核通过的图片 ID，详见 使用审核通过的转发图片
 	 */
-	imageUrlId:string;
+	imageUrlId: string;
+}
+interface _getLaunchOptionsSync {
+	/**
+	 * 启动小程序的路径
+	 */
+	path: string;
+	/**
+	 * 启动小程序的场景值
+	 */
+	scene: number;
+	/**
+	 * 启动小程序的 query 参数
+	 */
+	query: any;
+	/**
+	 * shareTicket，详见获取更多转发信息
+	 */
+	shareTicket: string;
+	/**
+	 * 来源信息。从另一个小程序、公众号或 App 进入小程序时返回。否则返回 {}。(参见后文注意)
+	 */
+	referrerInfo: _getLaunchOptionsSyncReferrerInfo;
+}
+interface _getLaunchOptionsSyncReferrerInfo {
+	appId: string;
+	extraData: any;
+}
+interface _exitMiniProgramObject {
+	/**
+	 * 接口调用成功的回调函数
+	 */
+	success: () => void;
+	/**
+	 * 接口调用失败的回调函数
+	 */
+	fail: () => void;
+	/**
+	 * 接口调用结束的回调函数（调用成功、失败都会执行）
+	 */
+	complete: () => void;
 }
 interface _showModalObject {
 	/**
@@ -5561,6 +5601,16 @@ declare namespace wx {
 	 * 主动拉起转发，进入选择通讯录界面
 	 */
 	export function shareAppMessage(object: _shareAppMessageObject): void;
+
+	/**
+	 * 获取小程序启动时的参数。与 App.onLaunch 的回调参数一致。
+	 */
+	export function getLaunchOptionsSync(): _getLaunchOptionsSync;
+
+	/**
+	 * 退出当前小游戏
+	 */
+	export function exitMiniProgram(object: _exitMiniProgramObject): void;
 
 	/**
 	 * 显示 tabBar

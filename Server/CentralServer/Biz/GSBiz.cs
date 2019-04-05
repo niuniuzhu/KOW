@@ -100,6 +100,7 @@ namespace CentralServer.Biz
 			{
 				response.UserInfo = new Protos.G_UserInfo
 				{
+					Ukey = user.ukey,
 					GcNID = user.gcNID,
 					OpenID = user.openID,
 					Nickname = user.nickname,

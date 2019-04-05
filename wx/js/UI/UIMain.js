@@ -17,11 +17,13 @@ export class UIMain {
         this._matchBtn3 = this._root.getChild("n19").asCom;
         this._matchBtn4 = this._root.getChild("n15").asCom;
         this._inviteBtn = this._root.getChild("n4").asCom;
+        this._closeBtn = this._root.getChild("close_btn").asCom;
         this._matchBtn.onClick(this, this.OnMatchBtnClick);
         this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
         this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
         this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
         this._inviteBtn.onClick(this, this.OnInviteBtnClick);
+        this._closeBtn.onClick(this, this.OnCloseBtnClick);
         this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
     }
     Dispose() {
@@ -77,7 +79,7 @@ export class UIMain {
     OnInviteBtnClick() {
         if (Laya.Browser.onMiniGame) {
             wx.shareAppMessage({
-                title: "test share",
+                title: `你的好友${this._userInfo.nickname}邀请你参与小游戏<角斗之王>的对战`,
                 imageUrl: "https://www.kow2019.com/g/res/basicprofile.png",
                 query: "openID=" + this._userInfo.openID + "&action=invite",
                 imageUrlId: null
@@ -86,6 +88,15 @@ export class UIMain {
         else {
             Logger.Log("wx function only");
         }
+    }
+    OnCloseBtnClick() {
+        wx.exitMiniProgram({
+            success: () => { },
+            fail: () => {
+                Logger.Log("exit program failed");
+            },
+            complete: () => { }
+        });
     }
     OnRankingBtnClick() {
         fairygui.GRoot.inst.showPopup(this._ranking);

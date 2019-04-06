@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using CentralServer.Match;
-using CentralServer.User;
+﻿using CentralServer.User;
 using Core.Misc;
 using Shared;
 using Shared.Net;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using BSInfo = Shared.BSInfo;
 
 namespace CentralServer.Match3
@@ -90,13 +89,12 @@ namespace CentralServer.Match3
 								else
 								{
 									CSUser user = CS.instance.userMgr.GetUser( matchUser.id );
-									MatchParams matchParams = ( MatchParams )matchUser.userdata;
 									Protos.CS2GC_PlayerInfo playerInfo = new Protos.CS2GC_PlayerInfo
 									{
 										Vaild = true,
 										GcNID = user.gcNID,
 										Team = i,
-										ActorID = matchParams.actorID,
+										ActorID = user.actorID,
 										Nickname = user.nickname,
 										Avatar = user.avatar,
 										Gender = user.gender,
@@ -124,7 +122,7 @@ namespace CentralServer.Match3
 		/// <param name="user">玩家实例</param>
 		/// <param name="matchParams">匹配参数</param>
 		/// <returns>是否创建成功</returns>
-		internal bool CreateUser( Protos.GC2CS_BeginMatch.Types.EMode mode, CSUser user, MatchParams matchParams )
+		internal bool CreateUser( Protos.GC2CS_BeginMatch.Types.EMode mode, CSUser user, BattleUserData matchParams )
 		{
 			if ( this._userToMatchUser.ContainsKey( user ) )
 				return false;
@@ -153,7 +151,6 @@ namespace CentralServer.Match3
 			if ( matchUser == null )
 				return false;
 
-			matchUser.userdata = matchParams;
 			this._userToMatchUser[user] = matchUser;
 			return true;
 		}
@@ -196,11 +193,10 @@ namespace CentralServer.Match3
 				{
 					MatchUser matchUser = matchUsers[j];
 					CSUser user = CS.instance.userMgr.GetUser( matchUser.id );
-					MatchParams matchParams = ( MatchParams )matchUser.userdata;
 					Protos.CS2BS_PlayerInfo pi = new Protos.CS2BS_PlayerInfo
 					{
 						GcNID = user.ukey | ( ulong )appropriateBSInfo.lid << 32,
-						ActorID = matchParams.actorID,
+						ActorID = user.actorID,
 						Avatar = user.avatar,
 						Nickname = user.nickname,
 						Gender = user.gender,

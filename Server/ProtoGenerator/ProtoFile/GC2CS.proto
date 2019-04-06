@@ -26,6 +26,25 @@ message GC2CS_CancelMatch {
 	MsgOpts opts = 1;
 }
 
+//创建房间
+message GC2CS_CreateRoom {
+	MsgOpts opts = 1;
+	int32 numTeam = 2;
+	int32 numPlayerPerTeam = 3;
+}
+
+//离开房间
+message GC2CS_LeaveRoom {
+	MsgOpts opts = 1;
+}
+
+//加入房间
+message GC2CS_JoinRoom {
+	MsgOpts opts = 1;
+	int32 roomID = 2;
+	int32 playerUkey = 3;
+}
+
 //查询排名
 message GC2CS_QueryRanking {
 	enum SortType{

@@ -30,6 +30,9 @@ enum MsgID {
 	eGC2CS_QueryRanking = 1302;
 	eGC2CS_QueryChampions = 1303;
 	eGC2CS_BuyChampion = 1304;
+	eGC2CS_CreateRoom = 1305;
+	eGC2CS_LeaveRoom = 1306;
+	eGC2CS_JoinRoom = 1307;
 	
 	//ls
 	eLS2GC_GSInfo = 2000;
@@ -85,6 +88,8 @@ enum MsgID {
 	eCS2GC_QueryRankingRet = 5309;
 	eCS2GC_QueryChampionsRet = 5310;
 	eCS2GC_BuyChampionRet = 5111;
+	eCS2GC_CreateRoomRet = 5112;
+	eCS2GC_JoinRoomRet = 5113;
 
 	eCS2DB_UpdateRank = 5400;
 	eCS2DB_QueryRanking = 5401;
@@ -196,7 +201,9 @@ message G_UserInfo {
 		"GC2CS_QueryRanking":"CS2GC_QueryRankingRet",
 		"GC2CS_QueryChampions":"CS2GC_QueryChampionsRet",
 		"GC2CS_BuyChampion":"CS2GC_BuyChampionRet",
-		"CS2DB_BuyChampion":"DB2CS_BuyChampionRet"
+		"CS2DB_BuyChampion":"DB2CS_BuyChampionRet",
+		"GC2CS_CreateRoom":"CS2GC_CreateRoomRet",
+		"GC2CS_JoinRoom":"CS2GC_JoinRoomRet"
 	}
 }
 </ext>

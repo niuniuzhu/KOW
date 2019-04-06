@@ -28,44 +28,50 @@ namespace Protos {
             "X0JlZ2luTWF0Y2hSZXQSHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRz",
             "EjMKBnJlc3VsdBgCIAEoDjIjLlByb3Rvcy5DUzJHQ19CZWdpbk1hdGNoUmV0",
             "LkVSZXN1bHQiNAoHRVJlc3VsdBILCgdTdWNjZXNzEAASCgoGRmFpbGVkEAES",
-            "EAoMVXNlckluQmF0dGxlEAIivQEKEENTMkdDX1BsYXllckluZm8SDQoFdmFp",
-            "bGQYASABKAgSDQoFZ2NOSUQYAiABKAQSDwoHYWN0b3JJRBgDIAEoBRIMCgR0",
-            "ZWFtGAQgASgFEhAKCG5pY2tuYW1lGAUgASgJEg4KBmF2YXRhchgGIAEoCRIO",
-            "CgZnZW5kZXIYByABKAUSDQoFbW9uZXkYCCABKAUSEAoIZGlhbW9uZWQYCSAB",
-            "KAUSDAoEcmFuaxgKIAEoBRILCgNleHAYCyABKA0iYAoQQ1MyR0NfTWF0Y2hT",
-            "dGF0ZRIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSLQoLcGxheWVy",
-            "SW5mb3MYAiADKAsyGC5Qcm90b3MuQ1MyR0NfUGxheWVySW5mbyIxChBDUzJH",
-            "Q19BZGRUb01hdGNoEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cyI2",
-            "ChVDUzJHQ19SZW1vdmVGcm9tTWF0Y2gSHQoEb3B0cxgBIAEoCzIPLlByb3Rv",
-            "cy5Nc2dPcHRzItgBChFDUzJHQ19FbnRlckJhdHRsZRIdCgRvcHRzGAEgASgL",
-            "Mg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NOSUQYAiABKAQSCgoCaXAYAyABKAkS",
-            "DAoEcG9ydBgEIAEoBRIwCgZyZXN1bHQYBSABKA4yIC5Qcm90b3MuQ1MyR0Nf",
-            "RW50ZXJCYXR0bGUuUmVzdWx0IkkKBlJlc3VsdBILCgdTdWNjZXNzEAASDgoK",
-            "QlNOb3RGb3VuZBABEgoKBkJTTG9zdBACEhYKEkJhdHRsZUNyZWF0ZUZhaWxl",
-            "ZBADIi0KDENTMkdDX0JTTG9zZRIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1z",
-            "Z09wdHMigwIKD0NTMkdDX0JhdHRsZUVuZBIdCgRvcHRzGAEgASgLMg8uUHJv",
-            "dG9zLk1zZ09wdHMSLgoGcmVzdWx0GAIgASgOMh4uUHJvdG9zLkNTMkdDX0Jh",
-            "dHRsZUVuZC5SZXN1bHQSDQoFZ1JhbmsYAyABKAUSDgoGZ01vbmV5GAQgASgF",
-            "EhEKCWdEaWFtb25lZBgFIAEoBRIMCgRnRXhwGAYgASgNEgwKBHJhbmsYByAB",
-            "KAUSDQoFbW9uZXkYCCABKAUSEAoIZGlhbW9uZWQYCSABKAUSCwoDZXhwGAog",
-            "ASgNIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3EAESCAoETG9zZRACIoEB",
-            "ChFDUzJHQ19SYW5raW5nSW5mbxIMCgR1a2V5GAEgASgNEgwKBG5hbWUYAiAB",
-            "KAkSDgoGZ2VuZGVyGAMgASgFEg4KBmF2YXRhchgEIAEoCRIVCg1sYXN0TG9n",
-            "aW5UaW1lGAUgASgDEgwKBHJhbmsYBiABKAUSCwoDZXhwGAcgASgFImcKFUNT",
-            "MkdDX1F1ZXJ5UmFua2luZ1JldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1z",
-            "Z09wdHMSLwoMcmFua2luZ0luZm9zGAIgAygLMhkuUHJvdG9zLkNTMkdDX1Jh",
-            "bmtpbmdJbmZvIkYKF0NTMkdDX1F1ZXJ5Q2hhbXBpb25zUmV0Eh0KBG9wdHMY",
-            "ASABKAsyDy5Qcm90b3MuTXNnT3B0cxIMCgRjaWRzGAIgAygFIvkBChRDUzJH",
-            "Q19CdXlDaGFtcGlvblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09w",
-            "dHMSMwoGcmVzdWx0GAIgASgOMiMuUHJvdG9zLkNTMkdDX0J1eUNoYW1waW9u",
-            "UmV0LlJlc3VsdBINCgVtb25leRgDIAEoBRIQCghkaWFtb25lZBgEIAEoBRIM",
-            "CgRjaWRzGAUgAygFIl4KBlJlc3VsdBILCgdTdWNjZXNzEAASEgoOTm90RW5v",
-            "dWdoTW9uZXkQARIVChFOb3RFbm91Z2hEaWFtb25lZBACEhAKDE5vdEVub3Vn",
-            "aEV4cBADEgoKBkZBSUxFRBAEYgZwcm90bzM="));
+            "EAoMVXNlckluQmF0dGxlEAIiXAoTQ1MyR0NfQ3JlYXRlUm9vbVJldBIdCgRv",
+            "cHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSJgoGcmVzdWx0GAIgASgOMhYu",
+            "UHJvdG9zLkdsb2JhbC5FQ29tbW9uIloKEUNTMkdDX0pvaW5Sb29tUmV0Eh0K",
+            "BG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxImCgZyZXN1bHQYAiABKA4y",
+            "Fi5Qcm90b3MuR2xvYmFsLkVDb21tb24ivQEKEENTMkdDX1BsYXllckluZm8S",
+            "DQoFdmFpbGQYASABKAgSDQoFZ2NOSUQYAiABKAQSDwoHYWN0b3JJRBgDIAEo",
+            "BRIMCgR0ZWFtGAQgASgFEhAKCG5pY2tuYW1lGAUgASgJEg4KBmF2YXRhchgG",
+            "IAEoCRIOCgZnZW5kZXIYByABKAUSDQoFbW9uZXkYCCABKAUSEAoIZGlhbW9u",
+            "ZWQYCSABKAUSDAoEcmFuaxgKIAEoBRILCgNleHAYCyABKA0iYAoQQ1MyR0Nf",
+            "TWF0Y2hTdGF0ZRIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSLQoL",
+            "cGxheWVySW5mb3MYAiADKAsyGC5Qcm90b3MuQ1MyR0NfUGxheWVySW5mbyIx",
+            "ChBDUzJHQ19BZGRUb01hdGNoEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNn",
+            "T3B0cyI2ChVDUzJHQ19SZW1vdmVGcm9tTWF0Y2gSHQoEb3B0cxgBIAEoCzIP",
+            "LlByb3Rvcy5Nc2dPcHRzItgBChFDUzJHQ19FbnRlckJhdHRsZRIdCgRvcHRz",
+            "GAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSDQoFZ2NOSUQYAiABKAQSCgoCaXAY",
+            "AyABKAkSDAoEcG9ydBgEIAEoBRIwCgZyZXN1bHQYBSABKA4yIC5Qcm90b3Mu",
+            "Q1MyR0NfRW50ZXJCYXR0bGUuUmVzdWx0IkkKBlJlc3VsdBILCgdTdWNjZXNz",
+            "EAASDgoKQlNOb3RGb3VuZBABEgoKBkJTTG9zdBACEhYKEkJhdHRsZUNyZWF0",
+            "ZUZhaWxlZBADIi0KDENTMkdDX0JTTG9zZRIdCgRvcHRzGAEgASgLMg8uUHJv",
+            "dG9zLk1zZ09wdHMigwIKD0NTMkdDX0JhdHRsZUVuZBIdCgRvcHRzGAEgASgL",
+            "Mg8uUHJvdG9zLk1zZ09wdHMSLgoGcmVzdWx0GAIgASgOMh4uUHJvdG9zLkNT",
+            "MkdDX0JhdHRsZUVuZC5SZXN1bHQSDQoFZ1JhbmsYAyABKAUSDgoGZ01vbmV5",
+            "GAQgASgFEhEKCWdEaWFtb25lZBgFIAEoBRIMCgRnRXhwGAYgASgNEgwKBHJh",
+            "bmsYByABKAUSDQoFbW9uZXkYCCABKAUSEAoIZGlhbW9uZWQYCSABKAUSCwoD",
+            "ZXhwGAogASgNIiUKBlJlc3VsdBIHCgNXaW4QABIICgREcmF3EAESCAoETG9z",
+            "ZRACIoEBChFDUzJHQ19SYW5raW5nSW5mbxIMCgR1a2V5GAEgASgNEgwKBG5h",
+            "bWUYAiABKAkSDgoGZ2VuZGVyGAMgASgFEg4KBmF2YXRhchgEIAEoCRIVCg1s",
+            "YXN0TG9naW5UaW1lGAUgASgDEgwKBHJhbmsYBiABKAUSCwoDZXhwGAcgASgF",
+            "ImcKFUNTMkdDX1F1ZXJ5UmFua2luZ1JldBIdCgRvcHRzGAEgASgLMg8uUHJv",
+            "dG9zLk1zZ09wdHMSLwoMcmFua2luZ0luZm9zGAIgAygLMhkuUHJvdG9zLkNT",
+            "MkdDX1JhbmtpbmdJbmZvIkYKF0NTMkdDX1F1ZXJ5Q2hhbXBpb25zUmV0Eh0K",
+            "BG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIMCgRjaWRzGAIgAygFIvkB",
+            "ChRDUzJHQ19CdXlDaGFtcGlvblJldBIdCgRvcHRzGAEgASgLMg8uUHJvdG9z",
+            "Lk1zZ09wdHMSMwoGcmVzdWx0GAIgASgOMiMuUHJvdG9zLkNTMkdDX0J1eUNo",
+            "YW1waW9uUmV0LlJlc3VsdBINCgVtb25leRgDIAEoBRIQCghkaWFtb25lZBgE",
+            "IAEoBRIMCgRjaWRzGAUgAygFIl4KBlJlc3VsdBILCgdTdWNjZXNzEAASEgoO",
+            "Tm90RW5vdWdoTW9uZXkQARIVChFOb3RFbm91Z2hEaWFtb25lZBACEhAKDE5v",
+            "dEVub3VnaEV4cBADEgoKBkZBSUxFRBAEYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_BeginMatchRet), global::Protos.CS2GC_BeginMatchRet.Parser, new[]{ "Opts", "Result" }, null, new[]{ typeof(global::Protos.CS2GC_BeginMatchRet.Types.EResult) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_CreateRoomRet), global::Protos.CS2GC_CreateRoomRet.Parser, new[]{ "Opts", "Result" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_JoinRoomRet), global::Protos.CS2GC_JoinRoomRet.Parser, new[]{ "Opts", "Result" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_PlayerInfo), global::Protos.CS2GC_PlayerInfo.Parser, new[]{ "Vaild", "GcNID", "ActorID", "Team", "Nickname", "Avatar", "Gender", "Money", "Diamoned", "Rank", "Exp" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_MatchState), global::Protos.CS2GC_MatchState.Parser, new[]{ "Opts", "PlayerInfos" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.CS2GC_AddToMatch), global::Protos.CS2GC_AddToMatch.Parser, new[]{ "Opts" }, null, null, null),
@@ -262,6 +268,338 @@ namespace Protos {
 
   }
 
+  /// <summary>
+  ///创建房间回应
+  /// </summary>
+  public sealed partial class CS2GC_CreateRoomRet : pb::IMessage<CS2GC_CreateRoomRet> {
+    private static readonly pb::MessageParser<CS2GC_CreateRoomRet> _parser = new pb::MessageParser<CS2GC_CreateRoomRet>(() => new CS2GC_CreateRoomRet());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2GC_CreateRoomRet> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_CreateRoomRet() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_CreateRoomRet(CS2GC_CreateRoomRet other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      result_ = other.result_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_CreateRoomRet Clone() {
+      return new CS2GC_CreateRoomRet(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 2;
+    private global::Protos.Global.Types.ECommon result_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.ECommon Result {
+      get { return result_; }
+      set {
+        result_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2GC_CreateRoomRet);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2GC_CreateRoomRet other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Result != other.Result) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Result != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) Result);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2GC_CreateRoomRet other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Result != 0) {
+        Result = other.Result;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///加入房间回应
+  /// </summary>
+  public sealed partial class CS2GC_JoinRoomRet : pb::IMessage<CS2GC_JoinRoomRet> {
+    private static readonly pb::MessageParser<CS2GC_JoinRoomRet> _parser = new pb::MessageParser<CS2GC_JoinRoomRet>(() => new CS2GC_JoinRoomRet());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CS2GC_JoinRoomRet> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_JoinRoomRet() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_JoinRoomRet(CS2GC_JoinRoomRet other) : this() {
+      opts_ = other.opts_ != null ? other.opts_.Clone() : null;
+      result_ = other.result_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CS2GC_JoinRoomRet Clone() {
+      return new CS2GC_JoinRoomRet(this);
+    }
+
+    /// <summary>Field number for the "opts" field.</summary>
+    public const int OptsFieldNumber = 1;
+    private global::Protos.MsgOpts opts_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.MsgOpts Opts {
+      get { return opts_; }
+      set {
+        opts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 2;
+    private global::Protos.Global.Types.ECommon result_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protos.Global.Types.ECommon Result {
+      get { return result_; }
+      set {
+        result_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CS2GC_JoinRoomRet);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CS2GC_JoinRoomRet other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Opts, other.Opts)) return false;
+      if (Result != other.Result) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (opts_ != null) hash ^= Opts.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (opts_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Opts);
+      }
+      if (Result != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) Result);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (opts_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
+      }
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CS2GC_JoinRoomRet other) {
+      if (other == null) {
+        return;
+      }
+      if (other.opts_ != null) {
+        if (opts_ == null) {
+          opts_ = new global::Protos.MsgOpts();
+        }
+        Opts.MergeFrom(other.Opts);
+      }
+      if (other.Result != 0) {
+        Result = other.Result;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (opts_ == null) {
+              opts_ = new global::Protos.MsgOpts();
+            }
+            input.ReadMessage(opts_);
+            break;
+          }
+          case 16: {
+            result_ = (global::Protos.Global.Types.ECommon) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   public sealed partial class CS2GC_PlayerInfo : pb::IMessage<CS2GC_PlayerInfo> {
     private static readonly pb::MessageParser<CS2GC_PlayerInfo> _parser = new pb::MessageParser<CS2GC_PlayerInfo>(() => new CS2GC_PlayerInfo());
     private pb::UnknownFieldSet _unknownFields;
@@ -270,7 +608,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -691,7 +1029,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -849,7 +1187,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -984,7 +1322,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1122,7 +1460,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1404,7 +1742,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1542,7 +1880,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1942,7 +2280,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2239,7 +2577,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[9]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2394,7 +2732,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[10]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2550,7 +2888,7 @@ namespace Protos {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[11]; }
+      get { return global::Protos.CS2GCReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

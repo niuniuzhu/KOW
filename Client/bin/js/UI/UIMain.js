@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIAlert", "./UIRanking", "../RC/Utils/Logger"], function (require, exports, Consts_1, Global_1, protos_1, UIAlert_1, UIRanking_1, Logger_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC/Crypto/MD5", "../RC/Utils/Base64 ", "../RC/Utils/Logger", "./UIAlert", "./UIRanking"], function (require, exports, Consts_1, Global_1, protos_1, MD5_1, Base64_1, Logger_1, UIAlert_1, UIRanking_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
@@ -14,11 +14,13 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
             this._matchBtn3 = this._root.getChild("n19").asCom;
             this._matchBtn4 = this._root.getChild("n15").asCom;
             this._inviteBtn = this._root.getChild("n4").asCom;
+            this._closeBtn = this._root.getChild("close_btn").asCom;
             this._matchBtn.onClick(this, this.OnMatchBtnClick);
             this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
             this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
             this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
             this._inviteBtn.onClick(this, this.OnInviteBtnClick);
+            this._closeBtn.onClick(this, this.OnCloseBtnClick);
             this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
         }
         Dispose() {
@@ -73,16 +75,28 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "./UIA
         }
         OnInviteBtnClick() {
             if (Laya.Browser.onMiniGame) {
+                const base64 = new Base64_1.Base64();
+                const eQuery = `{"ukey"=${this._userInfo.ukey},"openID"=${this._userInfo.openID},action=invite}`;
+                const crypto = MD5_1.Md5.hashStr(eQuery);
                 wx.shareAppMessage({
-                    title: "test share",
+                    title: `你的好友${this._userInfo.nickname}邀请你参与小游戏<角斗之王>的对战`,
                     imageUrl: "https://www.kow2019.com/g/res/basicprofile.png",
-                    query: "openID=" + this._userInfo.nickname,
+                    query: `q=${base64.encode(eQuery)}&s=${crypto}`,
                     imageUrlId: null
                 });
             }
             else {
                 Logger_1.Logger.Log("wx function only");
             }
+        }
+        OnCloseBtnClick() {
+            wx.exitMiniProgram({
+                success: () => { },
+                fail: () => {
+                    Logger_1.Logger.Log("exit program failed");
+                },
+                complete: () => { }
+            });
         }
         OnRankingBtnClick() {
             fairygui.GRoot.inst.showPopup(this._ranking);

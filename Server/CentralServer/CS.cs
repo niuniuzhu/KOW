@@ -1,6 +1,7 @@
 ﻿using CentralServer.Biz;
 using CentralServer.Match;
 using CentralServer.Net;
+using CentralServer.Rooms;
 using CentralServer.User;
 using Core.Misc;
 using Core.Net;
@@ -37,9 +38,17 @@ namespace CentralServer
 		/// </summary>
 		public readonly CSUserMgr userMgr = new CSUserMgr();
 		/// <summary>
-		/// 匹配器
+		/// 匹配管理器
 		/// </summary>
 		public readonly MatchManager matchMgr = new MatchManager();
+		/// <summary>
+		/// 房间管理器
+		/// </summary>
+		public readonly RoomManager roomMgr = new RoomManager();
+		/// <summary>
+		/// 战场入口
+		/// </summary>
+		public readonly BattleEntry battleEntry = new BattleEntry();
 		/// <summary>
 		/// 战场暂存区
 		/// </summary>

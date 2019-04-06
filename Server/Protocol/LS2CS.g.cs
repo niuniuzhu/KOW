@@ -24,7 +24,7 @@ namespace Protos {
     static LS2CSReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtMUzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8i+gIKDUxTMkNT",
+            "CgtMUzJDUy5wcm90bxIGUHJvdG9zGgxHbG9iYWwucHJvdG8iiwMKDUxTMkNT",
             "X0dDTG9naW4SHQoEb3B0cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEg0KBWdj",
             "TklEGAIgASgEEgoKAmlkGAMgASgJEgwKBHVrZXkYBCABKA0SJwoHY2hhbm5l",
             "bBgFIAEoDjIWLlByb3Rvcy5HbG9iYWwuQ2hhbm5lbBInCgdicm93c2VyGAYg",
@@ -33,11 +33,11 @@ namespace Protos {
             "Eg8KB3VuaW9uSUQYCSABKAkSEAoIbmlja25hbWUYCiABKAkSDgoGYXZhdGFy",
             "GAsgASgJEg4KBmdlbmRlchgMIAEoBRINCgVtb25leRgNIAEoBRIQCghkaWFt",
             "b25lZBgOIAEoBRIMCgRyYW5rGA8gASgFEgsKA2V4cBgQIAEoDRIRCgljaGFt",
-            "cGlvbnMYESABKAliBnByb3RvMw=="));
+            "cGlvbnMYESABKAkSDwoHYWN0b3JJRBgSIAEoBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2CS_GCLogin), global::Protos.LS2CS_GCLogin.Parser, new[]{ "Opts", "GcNID", "Id", "Ukey", "Channel", "Browser", "Platform", "SessionKey", "UnionID", "Nickname", "Avatar", "Gender", "Money", "Diamoned", "Rank", "Exp", "Champions" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.LS2CS_GCLogin), global::Protos.LS2CS_GCLogin.Parser, new[]{ "Opts", "GcNID", "Id", "Ukey", "Channel", "Browser", "Platform", "SessionKey", "UnionID", "Nickname", "Avatar", "Gender", "Money", "Diamoned", "Rank", "Exp", "Champions", "ActorID" }, null, null, null)
           }));
     }
     #endregion
@@ -89,6 +89,7 @@ namespace Protos {
       rank_ = other.rank_;
       exp_ = other.exp_;
       champions_ = other.champions_;
+      actorID_ = other.actorID_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -284,6 +285,17 @@ namespace Protos {
       }
     }
 
+    /// <summary>Field number for the "actorID" field.</summary>
+    public const int ActorIDFieldNumber = 18;
+    private int actorID_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ActorID {
+      get { return actorID_; }
+      set {
+        actorID_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as LS2CS_GCLogin);
@@ -314,6 +326,7 @@ namespace Protos {
       if (Rank != other.Rank) return false;
       if (Exp != other.Exp) return false;
       if (Champions != other.Champions) return false;
+      if (ActorID != other.ActorID) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -337,6 +350,7 @@ namespace Protos {
       if (Rank != 0) hash ^= Rank.GetHashCode();
       if (Exp != 0) hash ^= Exp.GetHashCode();
       if (Champions.Length != 0) hash ^= Champions.GetHashCode();
+      if (ActorID != 0) hash ^= ActorID.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -418,6 +432,10 @@ namespace Protos {
         output.WriteRawTag(138, 1);
         output.WriteString(Champions);
       }
+      if (ActorID != 0) {
+        output.WriteRawTag(144, 1);
+        output.WriteInt32(ActorID);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -476,6 +494,9 @@ namespace Protos {
       }
       if (Champions.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(Champions);
+      }
+      if (ActorID != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(ActorID);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -541,6 +562,9 @@ namespace Protos {
       }
       if (other.Champions.Length != 0) {
         Champions = other.Champions;
+      }
+      if (other.ActorID != 0) {
+        ActorID = other.ActorID;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -622,6 +646,10 @@ namespace Protos {
           }
           case 138: {
             Champions = input.ReadString();
+            break;
+          }
+          case 144: {
+            ActorID = input.ReadInt32();
             break;
           }
         }

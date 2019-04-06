@@ -45,6 +45,7 @@ namespace DBServer.Biz
 					queryLoginRet.Rank = dataReader.GetInt32( "ranking" );
 					queryLoginRet.Exp = dataReader.GetUInt32( "exp" );
 					queryLoginRet.Champions = dataReader.GetString( "champions" );
+					queryLoginRet.ActorID = dataReader.GetInt32( "actorID" );
 
 					ErrorCode QueryError = ErrorCode.Success;
 					if ( queryLogin.VertPwd )

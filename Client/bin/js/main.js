@@ -1,4 +1,4 @@
-define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Model/CDefs", "./Model/View/SoundManager", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager"], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, CDefs_1, SoundManager_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1) {
+define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs/long", "./Libs/protobufjs", "./Model/CDefs", "./Model/View/SoundManager", "./RC/Crypto/MD5", "./RC/Utils/Hashtable", "./RC/Utils/JsonHelper", "./RC/Utils/Logger", "./Scene/SceneManager", "./RC/Utils/Base64 "], function (require, exports, AssetsManager_1, Consts_1, Global_1, Long, $protobuf, CDefs_1, SoundManager_1, MD5_1, Hashtable_1, JsonHelper_1, Logger_1, SceneManager_1, Base64_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Main {
@@ -8,6 +8,17 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
             if (config != null) {
                 const cfgJson = JsonHelper_1.JsonHelper.Parse(config);
                 Global_1.Global.local = Hashtable_1.Hashtable.GetBool(cfgJson, "local");
+            }
+            Global_1.Global.queryString = wx.getLaunchOptionsSync();
+            Logger_1.Logger.Log(Global_1.Global.queryString);
+            const queryObject = Global_1.Global.queryString.query;
+            if (queryObject.q != null) {
+                const base64 = new Base64_1.Base64();
+                const eQuery = base64.decode(queryObject.q);
+                const crypto = MD5_1.Md5.hashStr(eQuery);
+                if (crypto != queryObject.s) {
+                    Logger_1.Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+                }
             }
             Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);
             Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;

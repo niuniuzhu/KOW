@@ -197,6 +197,9 @@ export namespace Protos {
         eGC2CS_QueryRanking = 1302,
         eGC2CS_QueryChampions = 1303,
         eGC2CS_BuyChampion = 1304,
+        eGC2CS_CreateRoom = 1305,
+        eGC2CS_LeaveRoom = 1306,
+        eGC2CS_JoinRoom = 1307,
         eLS2GC_GSInfo = 2000,
         eLS2GC_AskRegRet = 2001,
         eLS2GC_AskLoginRet = 2002,
@@ -237,6 +240,8 @@ export namespace Protos {
         eCS2GC_QueryRankingRet = 5309,
         eCS2GC_QueryChampionsRet = 5310,
         eCS2GC_BuyChampionRet = 5111,
+        eCS2GC_CreateRoomRet = 5112,
+        eCS2GC_JoinRoomRet = 5113,
         eCS2DB_UpdateRank = 5400,
         eCS2DB_QueryRanking = 5401,
         eCS2DB_BuyChampion = 5402,
@@ -782,6 +787,46 @@ export namespace Protos {
             Failed = 1,
             UserInBattle = 2
         }
+    }
+
+    interface ICS2GC_CreateRoomRet {
+        opts?: (Protos.IMsgOpts|null);
+        result?: (Protos.Global.ECommon|null);
+    }
+
+    class CS2GC_CreateRoomRet implements ICS2GC_CreateRoomRet {
+        constructor(properties?: Protos.ICS2GC_CreateRoomRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public result: Protos.Global.ECommon;
+        public static create(properties?: Protos.ICS2GC_CreateRoomRet): Protos.CS2GC_CreateRoomRet;
+        public static encode(message: Protos.ICS2GC_CreateRoomRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_CreateRoomRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_CreateRoomRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_CreateRoomRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_CreateRoomRet;
+        public static toObject(message: Protos.CS2GC_CreateRoomRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface ICS2GC_JoinRoomRet {
+        opts?: (Protos.IMsgOpts|null);
+        result?: (Protos.Global.ECommon|null);
+    }
+
+    class CS2GC_JoinRoomRet implements ICS2GC_JoinRoomRet {
+        constructor(properties?: Protos.ICS2GC_JoinRoomRet);
+        public opts?: (Protos.IMsgOpts|null);
+        public result: Protos.Global.ECommon;
+        public static create(properties?: Protos.ICS2GC_JoinRoomRet): Protos.CS2GC_JoinRoomRet;
+        public static encode(message: Protos.ICS2GC_JoinRoomRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.ICS2GC_JoinRoomRet, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.CS2GC_JoinRoomRet;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.CS2GC_JoinRoomRet;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.CS2GC_JoinRoomRet;
+        public static toObject(message: Protos.CS2GC_JoinRoomRet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
     }
 
     interface ICS2GC_PlayerInfo {
@@ -1725,6 +1770,68 @@ export namespace Protos {
         public static verify(message: { [k: string]: any }): (string|null);
         public static fromObject(object: { [k: string]: any }): Protos.GC2CS_CancelMatch;
         public static toObject(message: Protos.GC2CS_CancelMatch, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2CS_CreateRoom {
+        opts?: (Protos.IMsgOpts|null);
+        numTeam?: (number|null);
+        numPlayerPerTeam?: (number|null);
+    }
+
+    class GC2CS_CreateRoom implements IGC2CS_CreateRoom {
+        constructor(properties?: Protos.IGC2CS_CreateRoom);
+        public opts?: (Protos.IMsgOpts|null);
+        public numTeam: number;
+        public numPlayerPerTeam: number;
+        public static create(properties?: Protos.IGC2CS_CreateRoom): Protos.GC2CS_CreateRoom;
+        public static encode(message: Protos.IGC2CS_CreateRoom, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2CS_CreateRoom, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2CS_CreateRoom;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2CS_CreateRoom;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2CS_CreateRoom;
+        public static toObject(message: Protos.GC2CS_CreateRoom, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2CS_LeaveRoom {
+        opts?: (Protos.IMsgOpts|null);
+    }
+
+    class GC2CS_LeaveRoom implements IGC2CS_LeaveRoom {
+        constructor(properties?: Protos.IGC2CS_LeaveRoom);
+        public opts?: (Protos.IMsgOpts|null);
+        public static create(properties?: Protos.IGC2CS_LeaveRoom): Protos.GC2CS_LeaveRoom;
+        public static encode(message: Protos.IGC2CS_LeaveRoom, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2CS_LeaveRoom, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2CS_LeaveRoom;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2CS_LeaveRoom;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2CS_LeaveRoom;
+        public static toObject(message: Protos.GC2CS_LeaveRoom, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public toJSON(): { [k: string]: any };
+    }
+
+    interface IGC2CS_JoinRoom {
+        opts?: (Protos.IMsgOpts|null);
+        roomID?: (number|null);
+        playerUkey?: (number|null);
+    }
+
+    class GC2CS_JoinRoom implements IGC2CS_JoinRoom {
+        constructor(properties?: Protos.IGC2CS_JoinRoom);
+        public opts?: (Protos.IMsgOpts|null);
+        public roomID: number;
+        public playerUkey: number;
+        public static create(properties?: Protos.IGC2CS_JoinRoom): Protos.GC2CS_JoinRoom;
+        public static encode(message: Protos.IGC2CS_JoinRoom, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static encodeDelimited(message: Protos.IGC2CS_JoinRoom, writer?: $protobuf.Writer): $protobuf.Writer;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Protos.GC2CS_JoinRoom;
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Protos.GC2CS_JoinRoom;
+        public static verify(message: { [k: string]: any }): (string|null);
+        public static fromObject(object: { [k: string]: any }): Protos.GC2CS_JoinRoom;
+        public static toObject(message: Protos.GC2CS_JoinRoom, options?: $protobuf.IConversionOptions): { [k: string]: any };
         public toJSON(): { [k: string]: any };
     }
 

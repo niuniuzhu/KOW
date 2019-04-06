@@ -70,7 +70,7 @@ namespace MatchingTest
 			{
 				case "a":
 					{
-						RoomUser user = new RoomUser( GuidHash.GetUInt64(), int.Parse( pairs[1] ) );
+						MatchRoomUser user = new MatchRoomUser( GuidHash.GetUInt64(), int.Parse( pairs[1] ) );
 						_matchingSystems[0].Join( user );
 					}
 					break;
@@ -86,7 +86,7 @@ namespace MatchingTest
 							ulong id = GuidHash.GetUInt64();
 							int rank = _rnd.Next( 0, 1000 );
 							//Console.WriteLine( $"add id:{id}, rank:{rank}" );
-							RoomUser user = new RoomUser( id, rank );
+							MatchRoomUser user = new MatchRoomUser( id, rank );
 							_matchingSystems[0].Join( user );
 						}
 					}

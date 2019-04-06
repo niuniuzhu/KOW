@@ -11,10 +11,6 @@
 		/// </summary>
 		public int rank { get; }
 		/// <summary>
-		/// 自定义数据
-		/// </summary>
-		public object userdata;
-		/// <summary>
 		/// 所属分段
 		/// </summary>
 		internal Grading grading;

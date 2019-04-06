@@ -102,6 +102,10 @@ namespace CentralServer.User
 		/// 当前拥有的英雄
 		/// </summary>
 		public readonly List<int> champions = new List<int>();
+		/// <summary>
+		/// 使用的角色ID
+		/// </summary>
+		public int actorID { get; set; }
 
 		/// <summary>
 		/// 发送消息
@@ -135,6 +139,7 @@ namespace CentralServer.User
 				string pair = pairs[i];
 				this.champions.Add( pair == string.Empty ? -1 : int.Parse( pair ) );
 			}
+			this.actorID = gcLogin.ActorID;
 		}
 
 		/// <summary>

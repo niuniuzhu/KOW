@@ -1,5 +1,4 @@
-﻿using CentralServer.Match;
-using CentralServer.Net;
+﻿using CentralServer.Net;
 using CentralServer.User;
 using Core.Misc;
 using Core.Net;
@@ -150,6 +149,9 @@ namespace CentralServer.Biz
 			return ErrorCode.Success;
 		}
 
+		/// <summary>
+		/// 玩家请求开始匹配
+		/// </summary>
 		public ErrorCode OnGc2CsBeginMatch( NetSessionBase session, IMessage message )
 		{
 			Protos.GC2CS_BeginMatch request = ( Protos.GC2CS_BeginMatch )message;
@@ -162,11 +164,7 @@ namespace CentralServer.Biz
 				response.Result = Protos.CS2GC_BeginMatchRet.Types.EResult.UserInBattle;
 			else
 			{
-				MatchParams @params = new MatchParams
-				{
-					actorID = request.ActorID
-				};
-				response.Result = CS.instance.matchMgr.Join( request.Mode, user, @params ) ?
+				response.Result = CS.instance.matchMgr.Join( request.Mode, user ) ?
 									  Protos.CS2GC_BeginMatchRet.Types.EResult.Success :
 									  Protos.CS2GC_BeginMatchRet.Types.EResult.Failed;
 			}
@@ -174,6 +172,9 @@ namespace CentralServer.Biz
 			return ErrorCode.Success;
 		}
 
+		/// <summary>
+		/// 玩家请求取消匹配
+		/// </summary>
 		public ErrorCode OnGc2CsCancelMatch( NetSessionBase session, IMessage message )
 		{
 			Protos.GC2CS_CancelMatch request = ( Protos.GC2CS_CancelMatch )message;
@@ -187,6 +188,57 @@ namespace CentralServer.Biz
 			return ErrorCode.Success;
 		}
 
+		/// <summary>
+		/// 玩家请求创建房间
+		/// </summary>
+		public ErrorCode OnGc2CsCreateRoom( NetSessionBase session, IMessage message )
+		{
+			Protos.GC2CS_CreateRoom request = ( Protos.GC2CS_CreateRoom )message;
+			Protos.CS2GC_CreateRoomRet response = ProtoCreator.R_GC2CS_CreateRoom( request.Opts.Pid );
+
+			ulong gcNID = request.Opts.Transid;
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+
+			if ( user.isInBattle )
+				response.Result = Protos.Global.Types.ECommon.Failed;
+			else
+			{
+				response.Result = CS.instance.roomMgr.Create( user, request.NumTeam, request.NumPlayerPerTeam ) ?
+									   Protos.Global.Types.ECommon.Success :
+									  Protos.Global.Types.ECommon.Failed;
+			}
+			user.Send( response );
+			return ErrorCode.Success;
+		}
+
+		/// <summary>
+		/// 玩家请求离开房间
+		/// </summary>
+		public ErrorCode OnGc2CsLeaveRoom( NetSessionBase session, IMessage message )
+		{
+			Protos.GC2CS_LeaveRoom request = ( Protos.GC2CS_LeaveRoom )message;
+
+			ulong gcNID = request.Opts.Transid;
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+
+			if ( !CS.instance.roomMgr.Leave( user ) )
+				return ErrorCode.Failed;
+
+			return ErrorCode.Success;
+		}
+
+		/// <summary>
+		/// 玩家请求加入房间
+		/// </summary>
+		public ErrorCode OnGc2CsJoinRoom( NetSessionBase session, IMessage message )
+		{
+			Protos.GC2CS_JoinRoom request = ( Protos.GC2CS_JoinRoom )message;
+			return ErrorCode.Success;
+		}
+
+		/// <summary>
+		/// 玩家请求查询排行榜
+		/// </summary>
 		public ErrorCode OnGc2CsQueryRanking( NetSessionBase session, IMessage message )
 		{
 			Protos.GC2CS_QueryRanking request = ( Protos.GC2CS_QueryRanking )message;

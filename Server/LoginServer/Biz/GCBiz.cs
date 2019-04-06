@@ -28,6 +28,7 @@ namespace LoginServer.Biz
 			public int rank;
 			public uint exp;
 			public string champions;
+			public int actorID;
 		}
 
 		public ErrorCode OnGc2LsAskWxlogin( NetSessionBase session, Google.Protobuf.IMessage message )
@@ -180,6 +181,7 @@ namespace LoginServer.Biz
 				context.rank = queryLoginRet.Rank;
 				context.exp = queryLoginRet.Exp;
 				context.champions = queryLoginRet.Champions;
+				context.actorID = queryLoginRet.ActorID;
 				HandleLoginSuccess( gcLoginRet, sid, context );
 			}
 			else
@@ -214,6 +216,7 @@ namespace LoginServer.Biz
 			csLogin.Rank = context.rank;
 			csLogin.Exp = context.exp;
 			csLogin.Champions = context.champions;
+			csLogin.ActorID = context.actorID;
 			LS.instance.netSessionMgr.Send( SessionType.ServerL2CS, csLogin,
 											RPCEntry.Pop( OnGCLoginCSRet, gcLoginRet, sid, gcNID ) );
 		}

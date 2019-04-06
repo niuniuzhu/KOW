@@ -5,10 +5,12 @@ import * as Long from "./Libs/long";
 import * as $protobuf from "./Libs/protobufjs";
 import { CDefs } from "./Model/CDefs";
 import { SoundManager } from "./Model/View/SoundManager";
+import { Md5 } from "./RC/Crypto/MD5";
 import { Hashtable } from "./RC/Utils/Hashtable";
 import { JsonHelper } from "./RC/Utils/JsonHelper";
 import { Logger } from "./RC/Utils/Logger";
 import { SceneManager } from "./Scene/SceneManager";
+import { Base64 } from "./RC/Utils/Base64 ";
 
 export class Main {
 	private static _instance: Main;
@@ -23,8 +25,19 @@ export class Main {
 			const cfgJson = JsonHelper.Parse(config);
 			Global.local = Hashtable.GetBool(cfgJson, "local");
 		}
+
 		Global.queryString = wx.getLaunchOptionsSync();
 		Logger.Log(Global.queryString);
+		const queryObject = Global.queryString.query;
+		if (queryObject.q != null) {
+			const base64 = new Base64();
+			const eQuery = base64.decode(queryObject.q);
+			const crypto = Md5.hashStr(eQuery);
+			if (crypto != queryObject.s) {
+				Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+			}
+		}
+
 		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
 		Laya.stage.alignH = Laya.Stage.ALIGN_TOP;

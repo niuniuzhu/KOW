@@ -14,6 +14,18 @@ message CS2GC_BeginMatchRet {
 	EResult result = 2;
 }
 
+//创建房间回应
+message CS2GC_CreateRoomRet {
+	MsgOpts opts = 1;
+	Global.ECommon result = 2;
+}
+
+//加入房间回应
+message CS2GC_JoinRoomRet {
+	MsgOpts opts = 1;
+	Global.ECommon result = 2;
+}
+
 message CS2GC_PlayerInfo {
 	bool vaild = 1;
 	uint64 gcNID = 2;//玩家网络id

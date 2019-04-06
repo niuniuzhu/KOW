@@ -22,4 +22,5 @@ message LS2CS_GCLogin{
 	int32 rank = 15;
 	uint32 exp = 16;
 	string champions = 17;
+	int32 actorID = 18;
 }

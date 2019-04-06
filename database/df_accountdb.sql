@@ -22,6 +22,7 @@ CREATE TABLE `account_user` (
   `ranking` int DEFAULT 0 NOT NULL,
   `exp` int unsigned DEFAULT 0 NOT NULL,
   `champions` varchar(128) DEFAULT '' NOT NULL,
+  `actorID` tinyint DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nickname_check` (`nickname`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;

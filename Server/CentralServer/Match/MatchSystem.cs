@@ -6,9 +6,40 @@ using System.Text;
 
 namespace CentralServer.Match
 {
+	static class MatchRoomPool
+	{
+		private static readonly Dictionary<byte, Queue<MatchRoom>> POOL = new Dictionary<byte, Queue<MatchRoom>>();
+		private const int INC = 10;
+
+		internal static MatchRoom Pop( MatchSystem system )
+		{
+			Queue<MatchRoom> rooms;
+			if ( !POOL.TryGetValue( system.mode, out rooms ) )
+			{
+				rooms = new Queue<MatchRoom>();
+				POOL[system.mode] = rooms;
+			}
+			if ( rooms.Count == 0 )
+			{
+				for ( int i = 0; i < INC; i++ )
+					rooms.Enqueue( new MatchRoom( system ) );
+			}
+			MatchRoom room = rooms.Dequeue();
+			return room;
+		}
+
+		internal static void Push( MatchRoom room )
+		{
+			if ( !POOL.TryGetValue( room.mode, out Queue<MatchRoom> rooms ) )
+				return;
+			room.Clear();
+			rooms.Enqueue( room );
+		}
+	}
+
 	public class MatchSystem
 	{
-		public Action<MatchEvent.Type, RoomUser, RoomInfo> eventHandler;
+		public Action<MatchEvent.Type, MatchRoomUser, BattleUserInfo> eventHandler;
 		/// <summary>
 		/// 模式(高4位代表队伍数量,低4位代表每个队伍的玩家数量)
 		/// </summary>
@@ -42,7 +73,7 @@ namespace CentralServer.Match
 		/// </summary>
 		public int maxExtendCount { get; private set; }
 
-		private readonly List<Room> _rooms = new List<Room>();
+		private readonly List<MatchRoom> _rooms = new List<MatchRoom>();
 		//private long _checkRoomInterval;
 
 		public void InitFromDefs( Hashtable json )
@@ -61,14 +92,14 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 玩家加入房间
 		/// </summary>
-		public bool Join( RoomUser user )
+		public bool Join( MatchRoomUser user )
 		{
-			Room room = null;
+			MatchRoom room = null;
 			//搜索房间
 			int count = this._rooms.Count;
 			for ( int i = 0; i < count; i++ )
 			{
-				Room r = this._rooms[i];
+				MatchRoom r = this._rooms[i];
 				if ( user.rank >= r.from &&
 					 user.rank < r.to )
 				{
@@ -79,7 +110,7 @@ namespace CentralServer.Match
 			if ( room == null )
 			{
 				//创建房间
-				room = RoomPool.Pop( this );
+				room = MatchRoomPool.Pop( this );
 				room.from = user.rank - this.extendRange;
 				room.to = user.rank + this.extendRange;
 				this._rooms.Add( room );
@@ -91,7 +122,7 @@ namespace CentralServer.Match
 			this.eventHandler( MatchEvent.Type.RoomInfo, null, room.GetRoomInfo() );
 
 			if ( room.isFull )
-				this.FullRoom( room );
+				this.OnRoomFull( room );
 
 			return true;
 		}
@@ -99,9 +130,9 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 玩家离开房间
 		/// </summary>
-		public bool Leave( RoomUser user )
+		public bool Leave( MatchRoomUser user )
 		{
-			Room room = user.room;
+			MatchRoom room = user.room;
 			if ( room == null )
 				return false;
 			if ( !room.RemoveUser( user ) )
@@ -111,7 +142,7 @@ namespace CentralServer.Match
 			if ( room.isEmpty )
 			{
 				this._rooms.Remove( room );
-				RoomPool.Push( room );
+				MatchRoomPool.Push( room );
 			}
 			return true;
 		}
@@ -128,13 +159,13 @@ namespace CentralServer.Match
 			//检查每个房间是否有可合并的玩家
 			for ( int i = 0; i < this._rooms.Count - 1; i++ )
 			{
-				Room cur = this._rooms[i];
+				MatchRoom cur = this._rooms[i];
 				for ( int j = i + 1; j < this._rooms.Count; j++ )
 				{
-					Room nxt = this._rooms[j];
+					MatchRoom nxt = this._rooms[j];
 					//先检查两个房间是否有重叠的分数区域
 					//按from的大小排序
-					Room r0, r1;
+					MatchRoom r0, r1;
 					if ( cur.from < nxt.from )
 					{
 						r0 = cur;
@@ -152,7 +183,7 @@ namespace CentralServer.Match
 					//搜索房间玩家,符合范围的会被抢到当前房间
 					for ( int k = 0; k < nxt.numUsers; ++k )
 					{
-						RoomUser user = nxt.GetUserAt( k );
+						MatchRoomUser user = nxt.GetUserAt( k );
 						if ( user == null )
 							continue;
 						//检查玩家分数是否在范围内
@@ -169,13 +200,13 @@ namespace CentralServer.Match
 					if ( nxt.isEmpty )
 					{
 						this._rooms.RemoveAt( j );
-						RoomPool.Push( nxt );
+						MatchRoomPool.Push( nxt );
 						--j;
 					}
 					//如果满员则不用继续往下搜索了
 					if ( cur.isFull )
 					{
-						this.FullRoom( cur );
+						this.OnRoomFull( cur );
 						--i;
 						break;
 					}
@@ -183,16 +214,16 @@ namespace CentralServer.Match
 			}
 		}
 
-		private void FullRoom( Room room )
+		private void OnRoomFull( MatchRoom room )
 		{
-			RoomInfo roomInfo = room.GetRoomInfo();
+			BattleUserInfo roomInfo = room.GetRoomInfo();
 			for ( int i = 0; i < room.numUsers; ++i )
 			{
-				RoomUser user = room.GetUserAt( i );
+				MatchRoomUser user = room.GetUserAt( i );
 				room.RemoveUser( user );
 			}
 			this._rooms.Remove( room );
-			RoomPool.Push( room );
+			MatchRoomPool.Push( room );
 			this.eventHandler( MatchEvent.Type.MatchSuccess, null, roomInfo );
 		}
 

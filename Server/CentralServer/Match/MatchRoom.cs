@@ -1,42 +1,10 @@
 ﻿using Core.Misc;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace CentralServer.Match
 {
-	public static class RoomPool
-	{
-		private static readonly Dictionary<byte, Queue<Room>> POOL = new Dictionary<byte, Queue<Room>>();
-		private const int INC = 10;
-
-		internal static Room Pop( MatchSystem system )
-		{
-			Queue<Room> rooms;
-			if ( !POOL.TryGetValue( system.mode, out rooms ) )
-			{
-				rooms = new Queue<Room>();
-				POOL[system.mode] = rooms;
-			}
-			if ( rooms.Count == 0 )
-			{
-				for ( int i = 0; i < INC; i++ )
-					rooms.Enqueue( new Room( system ) );
-			}
-			Room room = rooms.Dequeue();
-			return room;
-		}
-
-		internal static void Push( Room room )
-		{
-			if ( !POOL.TryGetValue( room.mode, out Queue<Room> rooms ) )
-				return;
-			room.Clear();
-			rooms.Enqueue( room );
-		}
-	}
-
-	public class Room : IPoolObject
+	public class MatchRoom : IPoolObject
 	{
 		/// <summary>
 		/// 所属系统
@@ -84,14 +52,14 @@ namespace CentralServer.Match
 		public int currUserCount { get; private set; }
 
 		private int _from;
-		private readonly RoomUser[] _users;
+		private readonly MatchRoomUser[] _users;
 		private int _extendCount;
 		private long _time;
 
-		internal Room( MatchSystem system )
+		internal MatchRoom( MatchSystem system )
 		{
 			this.system = system;
-			this._users = new RoomUser[this.numTeam * this.numUserPerTeam];
+			this._users = new MatchRoomUser[this.numTeam * this.numUserPerTeam];
 		}
 
 		public void Clear()
@@ -107,7 +75,7 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 把玩家添加到等候室,已存在的将会忽略并返回失败
 		/// </summary>
-		internal bool AddUser( RoomUser user )
+		internal bool AddUser( MatchRoomUser user )
 		{
 			if ( user.room != null )
 				return false;
@@ -123,7 +91,7 @@ namespace CentralServer.Match
 		/// <summary>
 		/// 从等候室中移除玩家
 		/// </summary>
-		internal bool RemoveUser( RoomUser user )
+		internal bool RemoveUser( MatchRoomUser user )
 		{
 			if ( user.room == null )
 				return false;
@@ -138,11 +106,11 @@ namespace CentralServer.Match
 
 		internal bool RemoveUserAt( int index ) => this.RemoveUser( this._users[index] );
 
-		internal RoomUser GetUserAt( int index ) => this._users[index];
+		internal MatchRoomUser GetUserAt( int index ) => this._users[index];
 
-		internal RoomInfo GetRoomInfo()
+		internal BattleUserInfo GetRoomInfo()
 		{
-			RoomInfo roomInfo = new RoomInfo( this.numTeam, this.numUserPerTeam, this._users );
+			BattleUserInfo roomInfo = new BattleUserInfo( this.numTeam, this.numUserPerTeam, this._users );
 			return roomInfo;
 		}
 
@@ -172,44 +140,7 @@ namespace CentralServer.Match
 			int count = this._users.Length;
 			for ( int i = 0; i < count; i++ )
 			{
-				RoomUser user = this._users[i];
-				if ( user == null )
-					continue;
-				sb.AppendLine( $"#{i}" );
-				sb.AppendLine( user.Dump() );
-			}
-			return sb.ToString();
-		}
-	}
-
-	public class RoomInfo
-	{
-		internal RoomUser[] users;
-		internal RoomUser[][] tUsers;
-
-		internal RoomInfo( int numTeam, int numUserPerTeam, RoomUser[] users )
-		{
-			int numUsers = numTeam * numUserPerTeam;
-			this.users = new RoomUser[numUsers];
-			Array.Copy( users, this.users, numUsers );
-			this.tUsers = new RoomUser[numTeam][];
-			//每个队伍获得的玩家数量
-			for ( int i = 0, k = 0; i < numTeam; i++ )
-			{
-				this.tUsers[i] = new RoomUser[numUserPerTeam];
-				//分配玩家
-				for ( int j = 0; j < numUserPerTeam; j++, k++ )
-					this.tUsers[i][j] = this.users[k];
-			}
-		}
-
-		public string Dump()
-		{
-			StringBuilder sb = new StringBuilder();
-			int count = this.users.Length;
-			for ( int i = 0; i < count; i++ )
-			{
-				RoomUser user = this.users[i];
+				MatchRoomUser user = this._users[i];
 				if ( user == null )
 					continue;
 				sb.AppendLine( $"#{i}" );

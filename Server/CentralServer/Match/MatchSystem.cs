@@ -119,7 +119,7 @@ namespace CentralServer.Match
 				return false;
 
 			this.eventHandler( MatchEvent.Type.AddToRoom, user, null );
-			this.eventHandler( MatchEvent.Type.RoomInfo, null, room.GetRoomInfo() );
+			this.eventHandler( MatchEvent.Type.RoomInfo, null, room.GetBattleUserInfo() );
 
 			if ( room.isFull )
 				this.OnRoomFull( room );
@@ -138,7 +138,7 @@ namespace CentralServer.Match
 			if ( !room.RemoveUser( user ) )
 				return false;
 			this.eventHandler( MatchEvent.Type.RemoveFromRoom, user, null );
-			this.eventHandler( MatchEvent.Type.RoomInfo, null, room.GetRoomInfo() );
+			this.eventHandler( MatchEvent.Type.RoomInfo, null, room.GetBattleUserInfo() );
 			if ( room.isEmpty )
 			{
 				this._rooms.Remove( room );
@@ -192,7 +192,7 @@ namespace CentralServer.Match
 						{
 							System.Diagnostics.Debug.Assert( nxt.RemoveUser( user ) );
 							System.Diagnostics.Debug.Assert( cur.AddUser( user ) );
-							this.eventHandler( MatchEvent.Type.RoomInfo, null, cur.GetRoomInfo() );
+							this.eventHandler( MatchEvent.Type.RoomInfo, null, cur.GetBattleUserInfo() );
 							if ( nxt.isEmpty || cur.isFull )
 								break;
 						}
@@ -216,7 +216,7 @@ namespace CentralServer.Match
 
 		private void OnRoomFull( MatchRoom room )
 		{
-			BattleUserInfo roomInfo = room.GetRoomInfo();
+			BattleUserInfo roomInfo = room.GetBattleUserInfo();
 			for ( int i = 0; i < room.numUsers; ++i )
 			{
 				MatchRoomUser user = room.GetUserAt( i );

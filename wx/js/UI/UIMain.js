@@ -1,8 +1,6 @@
 import { Consts } from "../Consts";
 import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
-import { Md5 } from "../RC/Crypto/MD5";
-import { Base64 } from "../RC/Utils/Base64 ";
 import { Logger } from "../RC/Utils/Logger";
 import { UIAlert } from "./UIAlert";
 import { UIRanking } from "./UIRanking";
@@ -62,6 +60,9 @@ export class UIMain {
         this._matchBtn2.enabled = value;
         this._matchBtn4.enabled = value;
     }
+    CloseModalWait() {
+        fairygui.GRoot.inst.closeModalWait();
+    }
     OnMatchBtnClick() {
         this.SetMatchBtnEnable(false);
         Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P1);
@@ -80,15 +81,8 @@ export class UIMain {
     }
     OnInviteBtnClick() {
         if (Laya.Browser.onMiniGame) {
-            const base64 = new Base64();
-            const eQuery = `{"ukey"=${this._userInfo.ukey},"openID"=${this._userInfo.openID},action=invite}`;
-            const crypto = Md5.hashStr(eQuery);
-            wx.shareAppMessage({
-                title: `你的好友${this._userInfo.nickname}邀请你参与小游戏<角斗之王>的对战`,
-                imageUrl: "https://www.kow2019.com/g/res/basicprofile.png",
-                query: `q=${base64.encode(eQuery)}&s=${crypto}`,
-                imageUrlId: null
-            });
+            fairygui.GRoot.inst.showModalWait();
+            Global.sceneManager.main.InviteFriend();
         }
         else {
             Logger.Log("wx function only");

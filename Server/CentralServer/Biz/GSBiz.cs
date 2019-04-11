@@ -199,13 +199,19 @@ namespace CentralServer.Biz
 			ulong gcNID = request.Opts.Transid;
 			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 
-			if ( user.isInBattle )
+			if ( user == null )
 				response.Result = Protos.Global.Types.ECommon.Failed;
 			else
 			{
-				response.Result = CS.instance.roomMgr.Create( user, request.NumTeam, request.NumPlayerPerTeam ) ?
-									   Protos.Global.Types.ECommon.Success :
-									  Protos.Global.Types.ECommon.Failed;
+				if ( user.isInBattle )
+					response.Result = Protos.Global.Types.ECommon.Failed;
+				else
+				{
+					response.Result = CS.instance.roomMgr.Create( user, request.NumTeam, request.NumPlayerPerTeam, out uint roomID ) ?
+										   Protos.Global.Types.ECommon.Success :
+										  Protos.Global.Types.ECommon.Failed;
+					response.RoomID = roomID;
+				}
 			}
 			user.Send( response );
 			return ErrorCode.Success;
@@ -221,8 +227,11 @@ namespace CentralServer.Biz
 			ulong gcNID = request.Opts.Transid;
 			CSUser user = CS.instance.userMgr.GetUser( gcNID );
 
-			if ( !CS.instance.roomMgr.Leave( user ) )
-				return ErrorCode.Failed;
+			if ( user != null )
+			{
+				if ( !CS.instance.roomMgr.Leave( user ) )
+					return ErrorCode.Failed;
+			}
 
 			return ErrorCode.Success;
 		}
@@ -233,6 +242,20 @@ namespace CentralServer.Biz
 		public ErrorCode OnGc2CsJoinRoom( NetSessionBase session, IMessage message )
 		{
 			Protos.GC2CS_JoinRoom request = ( Protos.GC2CS_JoinRoom )message;
+			Protos.CS2GC_JoinRoomRet response = ProtoCreator.R_GC2CS_JoinRoom( request.Opts.Pid );
+
+			ulong gcNID = request.Opts.Transid;
+			CSUser user = CS.instance.userMgr.GetUser( gcNID );
+
+			if ( user == null )
+				response.Result = Protos.Global.Types.ECommon.Failed;
+			else
+			{
+				response.Result = CS.instance.roomMgr.Join( user, request.RoomID ) ?
+									   Protos.Global.Types.ECommon.Success :
+									  Protos.Global.Types.ECommon.Failed;
+			}
+
 			return ErrorCode.Success;
 		}
 

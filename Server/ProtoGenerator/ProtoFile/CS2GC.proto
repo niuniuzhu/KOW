@@ -18,6 +18,7 @@ message CS2GC_BeginMatchRet {
 message CS2GC_CreateRoomRet {
 	MsgOpts opts = 1;
 	Global.ECommon result = 2;
+	uint32 roomID = 3;
 }
 
 //加入房间回应

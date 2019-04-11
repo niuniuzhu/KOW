@@ -108,7 +108,7 @@ namespace CentralServer.Match
 
 		internal MatchRoomUser GetUserAt( int index ) => this._users[index];
 
-		internal BattleUserInfo GetRoomInfo()
+		internal BattleUserInfo GetBattleUserInfo()
 		{
 			BattleUserInfo roomInfo = new BattleUserInfo( this.numTeam, this.numUserPerTeam, this._users );
 			return roomInfo;

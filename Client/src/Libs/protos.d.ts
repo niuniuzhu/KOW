@@ -792,12 +792,14 @@ export namespace Protos {
     interface ICS2GC_CreateRoomRet {
         opts?: (Protos.IMsgOpts|null);
         result?: (Protos.Global.ECommon|null);
+        roomID?: (number|null);
     }
 
     class CS2GC_CreateRoomRet implements ICS2GC_CreateRoomRet {
         constructor(properties?: Protos.ICS2GC_CreateRoomRet);
         public opts?: (Protos.IMsgOpts|null);
         public result: Protos.Global.ECommon;
+        public roomID: number;
         public static create(properties?: Protos.ICS2GC_CreateRoomRet): Protos.CS2GC_CreateRoomRet;
         public static encode(message: Protos.ICS2GC_CreateRoomRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ICS2GC_CreateRoomRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1496,6 +1498,7 @@ export namespace Protos {
         rank?: (number|null);
         exp?: (number|null);
         champions?: (string|null);
+        actorID?: (number|null);
     }
 
     class DB2LS_QueryLoginRet implements IDB2LS_QueryLoginRet {
@@ -1515,6 +1518,7 @@ export namespace Protos {
         public rank: number;
         public exp: number;
         public champions: string;
+        public actorID: number;
         public static create(properties?: Protos.IDB2LS_QueryLoginRet): Protos.DB2LS_QueryLoginRet;
         public static encode(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IDB2LS_QueryLoginRet, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -1816,14 +1820,12 @@ export namespace Protos {
     interface IGC2CS_JoinRoom {
         opts?: (Protos.IMsgOpts|null);
         roomID?: (number|null);
-        playerUkey?: (number|null);
     }
 
     class GC2CS_JoinRoom implements IGC2CS_JoinRoom {
         constructor(properties?: Protos.IGC2CS_JoinRoom);
         public opts?: (Protos.IMsgOpts|null);
         public roomID: number;
-        public playerUkey: number;
         public static create(properties?: Protos.IGC2CS_JoinRoom): Protos.GC2CS_JoinRoom;
         public static encode(message: Protos.IGC2CS_JoinRoom, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.IGC2CS_JoinRoom, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -2175,6 +2177,7 @@ export namespace Protos {
         rank?: (number|null);
         exp?: (number|null);
         champions?: (string|null);
+        actorID?: (number|null);
     }
 
     class LS2CS_GCLogin implements ILS2CS_GCLogin {
@@ -2196,6 +2199,7 @@ export namespace Protos {
         public rank: number;
         public exp: number;
         public champions: string;
+        public actorID: number;
         public static create(properties?: Protos.ILS2CS_GCLogin): Protos.LS2CS_GCLogin;
         public static encode(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;
         public static encodeDelimited(message: Protos.ILS2CS_GCLogin, writer?: $protobuf.Writer): $protobuf.Writer;

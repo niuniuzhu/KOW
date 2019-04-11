@@ -19,15 +19,17 @@ export class Main {
             const cfgJson = JsonHelper.Parse(config);
             Global.local = Hashtable.GetBool(cfgJson, "local");
         }
-        Global.queryString = wx.getLaunchOptionsSync();
-        Logger.Log(Global.queryString);
-        const queryObject = Global.queryString.query;
-        if (queryObject.q != null) {
-            const base64 = new Base64();
-            const eQuery = base64.decode(queryObject.q);
-            const crypto = Md5.hashStr(eQuery);
-            if (crypto != queryObject.s) {
-                Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+        if (Laya.Browser.onWeiXin) {
+            Global.queryString = wx.getLaunchOptionsSync();
+            Logger.Log(Global.queryString);
+            const queryObject = Global.queryString.query;
+            if (queryObject.q != null) {
+                const base64 = new Base64();
+                const eQuery = base64.decode(queryObject.q);
+                const crypto = Md5.hashStr(eQuery);
+                if (crypto != queryObject.s) {
+                    Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+                }
             }
         }
         Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);

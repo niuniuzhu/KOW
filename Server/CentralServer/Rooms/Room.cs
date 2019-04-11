@@ -1,20 +1,27 @@
-﻿using CentralServer.User;
-using Core.Misc;
-using System.Collections.Generic;
+﻿using Core.Misc;
+using System;
 
 namespace CentralServer.Rooms
 {
 	public class Room : IPoolObject
 	{
+		private static uint _rid;
+
 		private RoomManager _manager;
 		private int _numTeams;
-		private int _numPlayerPerTeam;
-		private readonly List<CSUser> _users = new List<CSUser>();
+		private int _numUserPerTeam;
+		private BattleUser[] _users;
 
-		public int maxPlayers => this._numTeams * this._numPlayerPerTeam;
-		public int numPlayers => this._users.Count;
-		public bool isFull => this.numPlayers >= this.maxPlayers;
-		public bool isEmpty => this.numPlayers == 0;
+		public readonly uint id;
+		public int maxPlayers => this._numTeams * this._numUserPerTeam;
+		public int currUserCount { get; private set; }
+		public bool isFull => this.currUserCount >= this.maxPlayers;
+		public bool isEmpty => this.currUserCount == 0;
+
+		public Room()
+		{
+			this.id = _rid++;
+		}
 
 		public void Init( RoomManager manager )
 		{
@@ -24,30 +31,42 @@ namespace CentralServer.Rooms
 		public void Clear()
 		{
 			this._numTeams = 0;
-			this._numPlayerPerTeam = 0;
-			this._users.Clear();
+			this._numUserPerTeam = 0;
+			this._users = null;
 			this._manager = null;
 		}
 
-		public void Setup( int numTeams, int numPlayerPerTeam )
+		internal void Setup( int numTeams, int numUserPerTeam )
 		{
 			this._numTeams = numTeams;
-			this._numPlayerPerTeam = numPlayerPerTeam;
+			this._numUserPerTeam = numUserPerTeam;
+			this._users = new BattleUser[numTeams * numUserPerTeam];
 		}
 
-		public bool AddUser( CSUser user )
+		internal bool AddUser( BattleUser user )
 		{
-			if ( this._users.Contains( user ) )
+			int index = Array.IndexOf( this._users, null );
+			if ( index < 0 )
 				return false;
-			this._users.Add( user );
+			this._users[index] = user;
+			++this.currUserCount;
 			return true;
 		}
 
-		public bool RemoveUser( CSUser user )
+		internal bool RemoveUser( BattleUser user )
 		{
-			if ( !this._users.Remove( user ) )
+			int index = Array.IndexOf( this._users, user );
+			if ( index < 0 )
 				return false;
+			this._users[index] = null;
+			--this.currUserCount;
 			return true;
+		}
+
+		internal BattleUserInfo GetBattleUserInfo()
+		{
+			BattleUserInfo roomInfo = new BattleUserInfo( this._numTeams, this._numUserPerTeam, this._users );
+			return roomInfo;
 		}
 	}
 }

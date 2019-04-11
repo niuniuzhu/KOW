@@ -33,16 +33,15 @@ namespace Protos {
             "Eh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cyJcChBHQzJDU19DcmVh",
             "dGVSb29tEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cxIPCgdudW1U",
             "ZWFtGAIgASgFEhgKEG51bVBsYXllclBlclRlYW0YAyABKAUiMAoPR0MyQ1Nf",
-            "TGVhdmVSb29tEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cyJTCg5H",
+            "TGVhdmVSb29tEh0KBG9wdHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cyI/Cg5H",
             "QzJDU19Kb2luUm9vbRIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMS",
-            "DgoGcm9vbUlEGAIgASgFEhIKCnBsYXllclVrZXkYAyABKAUinQEKEkdDMkNT",
-            "X1F1ZXJ5UmFua2luZxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMS",
-            "NQoIc29ydFR5cGUYAiABKA4yIy5Qcm90b3MuR0MyQ1NfUXVlcnlSYW5raW5n",
-            "LlNvcnRUeXBlEgwKBGZyb20YAyABKAUSDQoFY291bnQYBCABKAUiFAoIU29y",
-            "dFR5cGUSCAoEUmFuaxAAIjUKFEdDMkNTX1F1ZXJ5Q2hhbXBpb25zEh0KBG9w",
-            "dHMYASABKAsyDy5Qcm90b3MuTXNnT3B0cyI/ChFHQzJDU19CdXlDaGFtcGlv",
-            "bhIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1zZ09wdHMSCwoDY2lkGAIgASgF",
-            "YgZwcm90bzM="));
+            "DgoGcm9vbUlEGAIgASgNIp0BChJHQzJDU19RdWVyeVJhbmtpbmcSHQoEb3B0",
+            "cxgBIAEoCzIPLlByb3Rvcy5Nc2dPcHRzEjUKCHNvcnRUeXBlGAIgASgOMiMu",
+            "UHJvdG9zLkdDMkNTX1F1ZXJ5UmFua2luZy5Tb3J0VHlwZRIMCgRmcm9tGAMg",
+            "ASgFEg0KBWNvdW50GAQgASgFIhQKCFNvcnRUeXBlEggKBFJhbmsQACI1ChRH",
+            "QzJDU19RdWVyeUNoYW1waW9ucxIdCgRvcHRzGAEgASgLMg8uUHJvdG9zLk1z",
+            "Z09wdHMiPwoRR0MyQ1NfQnV5Q2hhbXBpb24SHQoEb3B0cxgBIAEoCzIPLlBy",
+            "b3Rvcy5Nc2dPcHRzEgsKA2NpZBgCIAEoBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protos.GlobalReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -50,7 +49,7 @@ namespace Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_CancelMatch), global::Protos.GC2CS_CancelMatch.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_CreateRoom), global::Protos.GC2CS_CreateRoom.Parser, new[]{ "Opts", "NumTeam", "NumPlayerPerTeam" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_LeaveRoom), global::Protos.GC2CS_LeaveRoom.Parser, new[]{ "Opts" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_JoinRoom), global::Protos.GC2CS_JoinRoom.Parser, new[]{ "Opts", "RoomID", "PlayerUkey" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_JoinRoom), global::Protos.GC2CS_JoinRoom.Parser, new[]{ "Opts", "RoomID" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_QueryRanking), global::Protos.GC2CS_QueryRanking.Parser, new[]{ "Opts", "SortType", "From", "Count" }, null, new[]{ typeof(global::Protos.GC2CS_QueryRanking.Types.SortType) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_QueryChampions), global::Protos.GC2CS_QueryChampions.Parser, new[]{ "Opts" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protos.GC2CS_BuyChampion), global::Protos.GC2CS_BuyChampion.Parser, new[]{ "Opts", "Cid" }, null, null, null)
@@ -779,7 +778,6 @@ namespace Protos {
     public GC2CS_JoinRoom(GC2CS_JoinRoom other) : this() {
       opts_ = other.opts_ != null ? other.opts_.Clone() : null;
       roomID_ = other.roomID_;
-      playerUkey_ = other.playerUkey_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -801,23 +799,12 @@ namespace Protos {
 
     /// <summary>Field number for the "roomID" field.</summary>
     public const int RoomIDFieldNumber = 2;
-    private int roomID_;
+    private uint roomID_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int RoomID {
+    public uint RoomID {
       get { return roomID_; }
       set {
         roomID_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "playerUkey" field.</summary>
-    public const int PlayerUkeyFieldNumber = 3;
-    private int playerUkey_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int PlayerUkey {
-      get { return playerUkey_; }
-      set {
-        playerUkey_ = value;
       }
     }
 
@@ -836,7 +823,6 @@ namespace Protos {
       }
       if (!object.Equals(Opts, other.Opts)) return false;
       if (RoomID != other.RoomID) return false;
-      if (PlayerUkey != other.PlayerUkey) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -845,7 +831,6 @@ namespace Protos {
       int hash = 1;
       if (opts_ != null) hash ^= Opts.GetHashCode();
       if (RoomID != 0) hash ^= RoomID.GetHashCode();
-      if (PlayerUkey != 0) hash ^= PlayerUkey.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -865,11 +850,7 @@ namespace Protos {
       }
       if (RoomID != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(RoomID);
-      }
-      if (PlayerUkey != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(PlayerUkey);
+        output.WriteUInt32(RoomID);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -883,10 +864,7 @@ namespace Protos {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Opts);
       }
       if (RoomID != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoomID);
-      }
-      if (PlayerUkey != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerUkey);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(RoomID);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -908,9 +886,6 @@ namespace Protos {
       if (other.RoomID != 0) {
         RoomID = other.RoomID;
       }
-      if (other.PlayerUkey != 0) {
-        PlayerUkey = other.PlayerUkey;
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -930,11 +905,7 @@ namespace Protos {
             break;
           }
           case 16: {
-            RoomID = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            PlayerUkey = input.ReadInt32();
+            RoomID = input.ReadUInt32();
             break;
           }
         }

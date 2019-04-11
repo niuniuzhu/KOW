@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC/Crypto/MD5", "../RC/Utils/Base64 ", "../RC/Utils/Logger", "./UIAlert", "./UIRanking"], function (require, exports, Consts_1, Global_1, protos_1, MD5_1, Base64_1, Logger_1, UIAlert_1, UIRanking_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC/Utils/Logger", "./UIAlert", "./UIRanking"], function (require, exports, Consts_1, Global_1, protos_1, Logger_1, UIAlert_1, UIRanking_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
@@ -57,6 +57,9 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
             this._matchBtn2.enabled = value;
             this._matchBtn4.enabled = value;
         }
+        CloseModalWait() {
+            fairygui.GRoot.inst.closeModalWait();
+        }
         OnMatchBtnClick() {
             this.SetMatchBtnEnable(false);
             Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T2P1);
@@ -75,15 +78,8 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
         }
         OnInviteBtnClick() {
             if (Laya.Browser.onMiniGame) {
-                const base64 = new Base64_1.Base64();
-                const eQuery = `{"ukey"=${this._userInfo.ukey},"openID"=${this._userInfo.openID},action=invite}`;
-                const crypto = MD5_1.Md5.hashStr(eQuery);
-                wx.shareAppMessage({
-                    title: `你的好友${this._userInfo.nickname}邀请你参与小游戏<角斗之王>的对战`,
-                    imageUrl: "https://www.kow2019.com/g/res/basicprofile.png",
-                    query: `q=${base64.encode(eQuery)}&s=${crypto}`,
-                    imageUrlId: null
-                });
+                fairygui.GRoot.inst.showModalWait();
+                Global_1.Global.sceneManager.main.InviteFriend();
             }
             else {
                 Logger_1.Logger.Log("wx function only");

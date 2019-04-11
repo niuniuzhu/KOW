@@ -4,7 +4,7 @@ namespace Core.Misc
 {
 	public class ObjectPool<T> where T : IPoolObject, new()
 	{
-		private readonly Queue<T> _pool = new Queue<T>();
+		protected readonly Queue<T> _pool = new Queue<T>();
 
 		public bool isEmpty => this._pool.Count == 0;
 
@@ -18,7 +18,7 @@ namespace Core.Misc
 				this._pool.Enqueue( new T() );
 		}
 
-		public T Pop()
+		public virtual T Pop()
 		{
 			if ( this._pool.Count == 0 )
 			{
@@ -28,7 +28,7 @@ namespace Core.Misc
 			return this._pool.Dequeue();
 		}
 
-		public void Push( T obj )
+		public virtual void Push( T obj )
 		{
 			obj.Clear();
 			this._pool.Enqueue( obj );

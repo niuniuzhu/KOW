@@ -41,8 +41,7 @@ message GC2CS_LeaveRoom {
 //加入房间
 message GC2CS_JoinRoom {
 	MsgOpts opts = 1;
-	int32 roomID = 2;
-	int32 playerUkey = 3;
+	uint32 roomID = 2;
 }
 
 //查询排名

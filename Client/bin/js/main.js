@@ -9,15 +9,17 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
                 const cfgJson = JsonHelper_1.JsonHelper.Parse(config);
                 Global_1.Global.local = Hashtable_1.Hashtable.GetBool(cfgJson, "local");
             }
-            Global_1.Global.queryString = wx.getLaunchOptionsSync();
-            Logger_1.Logger.Log(Global_1.Global.queryString);
-            const queryObject = Global_1.Global.queryString.query;
-            if (queryObject.q != null) {
-                const base64 = new Base64_1.Base64();
-                const eQuery = base64.decode(queryObject.q);
-                const crypto = MD5_1.Md5.hashStr(eQuery);
-                if (crypto != queryObject.s) {
-                    Logger_1.Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+            if (Laya.Browser.onWeiXin) {
+                Global_1.Global.queryString = wx.getLaunchOptionsSync();
+                Logger_1.Logger.Log(Global_1.Global.queryString);
+                const queryObject = Global_1.Global.queryString.query;
+                if (queryObject.q != null) {
+                    const base64 = new Base64_1.Base64();
+                    const eQuery = base64.decode(queryObject.q);
+                    const crypto = MD5_1.Md5.hashStr(eQuery);
+                    if (crypto != queryObject.s) {
+                        Logger_1.Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+                    }
                 }
             }
             Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);

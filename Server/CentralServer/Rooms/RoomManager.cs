@@ -1,6 +1,5 @@
 ﻿using CentralServer.User;
 using Core.Misc;
-using System;
 using System.Collections.Generic;
 
 namespace CentralServer.Rooms
@@ -24,40 +23,60 @@ namespace CentralServer.Rooms
 
 	public class RoomManager
 	{
-		private Dictionary<CSUser, Room> _userToRoom = new Dictionary<CSUser, Room>();
+		private Dictionary<uint, Room> _idToRoom = new Dictionary<uint, Room>();
+		private Dictionary<ulong, Room> _userToRoom = new Dictionary<ulong, Room>();
+		private readonly Dictionary<ulong, BattleUser> _userIDToBattleUser = new Dictionary<ulong, BattleUser>();
 
-		public bool Create( CSUser user, int numTeams, int numPlayerPerTeam )
+		public bool Create( CSUser user, int numTeams, int numPlayerPerTeam, out uint roomID )
 		{
+			roomID = 0;
+
 			//是否已在房间
-			if ( this._userToRoom.ContainsKey( user ) )
+			if ( this._userIDToBattleUser.ContainsKey( user.gcNID ) )
 				return false;
 
 			var room = RoomPool.Pop( this );
 			room.Setup( numTeams, numPlayerPerTeam );
-			room.AddUser( user );
-			this._userToRoom[user] = room;
+
+			BattleUser battleUser = new BattleUser( user.gcNID );
+			if ( !room.AddUser( battleUser ) )
+			{
+				RoomPool.Push( room );
+				return false;
+			}
+			this._userIDToBattleUser[user.gcNID] = battleUser;
+			this._userToRoom[user.gcNID] = room;
+			this._idToRoom[room.id] = room;
 			this.CheckRoom( room );
+			roomID = room.id;
 			return true;
 		}
 
-		public bool Join( CSUser user, CSUser userInRoom )
+		public bool Join( CSUser user, uint roomID )
 		{
-			if ( !this._userToRoom.TryGetValue( userInRoom, out Room room ) )
+			if ( !this._idToRoom.TryGetValue( roomID, out Room room ) )
 				return false;
-			if ( !room.AddUser( user ) )
+
+			BattleUser battleUser = new BattleUser( user.gcNID );
+			if ( !room.AddUser( battleUser ) )
 				return false;
-			this._userToRoom[user] = room;
+
+			this._userIDToBattleUser[user.gcNID] = battleUser;
+			this._userToRoom[user.gcNID] = room;
 			this.CheckRoom( room );
 			return true;
 		}
 
 		public bool Leave( CSUser user )
 		{
-			if ( !this._userToRoom.TryGetValue( user, out Room room ) )
+			if ( !this._userToRoom.TryGetValue( user.gcNID, out Room room ) )
 				return false;
-			if ( !room.RemoveUser( user ) )
+			if ( !this._userIDToBattleUser.TryGetValue( user.gcNID, out BattleUser battleUser ) )
 				return false;
-			this._userToRoom.Remove( user );
+			if ( !room.RemoveUser( battleUser ) )
+				return false;
+			this._userIDToBattleUser.Remove( user.gcNID );
+			this._userToRoom.Remove( user.gcNID );
 			if ( room.isEmpty )
 				RoomPool.Push( room );
 			return true;
@@ -67,6 +86,10 @@ namespace CentralServer.Rooms
 		{
 			if ( !room.isFull )
 				return;
+			var battleUserInfo = room.GetBattleUserInfo();
+			RoomPool.Push( room );
+
+			CS.instance.battleEntry.BeginBattle( battleUserInfo.users, battleUserInfo.tUsers );
 		}
 	}
 }

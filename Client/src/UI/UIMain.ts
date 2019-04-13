@@ -44,6 +44,10 @@ export class UIMain implements IUIModule {
 		this._inviteBtn.onClick(this, this.OnInviteBtnClick);
 		this._closeBtn.onClick(this, this.OnCloseBtnClick);
 
+		if ( !Laya.Browser.onWeiXin ){
+			this._closeBtn.visible = false;
+		}
+
 		this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
 	}
 
@@ -97,7 +101,7 @@ export class UIMain implements IUIModule {
 		fairygui.GRoot.inst.showModalWait();
 	}
 
-	public CloseModalWait():void{
+	public CloseModalWait(): void {
 		fairygui.GRoot.inst.closeModalWait();
 	}
 
@@ -112,13 +116,12 @@ export class UIMain implements IUIModule {
 	}
 
 	private OnMatchBtn3Click(): void {
-		this.SetMatchBtnEnable(false);
 		fairygui.GRoot.inst.showModalWait();
 		Global.sceneManager.main.TestCreateRoom();
 	}
 
 	private OnMatchBtn4Click(): void {
-		this.SetMatchBtnEnable(false);
+		Global.sceneManager.main.TestJoinRoom(Number.parseInt(this._root.getChild("n56").asTextInput.text));
 	}
 
 	private OnInviteBtnClick(): void {
@@ -143,6 +146,7 @@ export class UIMain implements IUIModule {
 
 	private OnRankingBtnClick(): void {
 		fairygui.GRoot.inst.showPopup(this._ranking);
+		this._ranking.center();
 	}
 
 	public OnFail(message: string, callback: () => void = null): void {
@@ -150,12 +154,14 @@ export class UIMain implements IUIModule {
 	}
 
 	public ShowInvating(): void {
-		this._invating.getController("c1").selectedIndex = 0;
 		fairygui.GRoot.inst.showPopup(this._invating);
+		this._invating.center();
+		this._invating.contentPane.getController("c1").selectedIndex = 0;
 	}
 
 	public Showjoining(): void {
-		this._invating.getController("c1").selectedIndex = 1;
 		fairygui.GRoot.inst.showPopup(this._invating);
+		this._invating.center();
+		this._invating.contentPane.getController("c1").selectedIndex = 1;
 	}
 }

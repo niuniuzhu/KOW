@@ -26,6 +26,9 @@ export class UIMain {
         this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
         this._inviteBtn.onClick(this, this.OnInviteBtnClick);
         this._closeBtn.onClick(this, this.OnCloseBtnClick);
+        if (!Laya.Browser.onWeiXin) {
+            this._closeBtn.visible = false;
+        }
         this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
     }
     Dispose() {
@@ -80,12 +83,11 @@ export class UIMain {
         Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T1P1);
     }
     OnMatchBtn3Click() {
-        this.SetMatchBtnEnable(false);
         fairygui.GRoot.inst.showModalWait();
         Global.sceneManager.main.TestCreateRoom();
     }
     OnMatchBtn4Click() {
-        this.SetMatchBtnEnable(false);
+        Global.sceneManager.main.TestJoinRoom(Number.parseInt(this._root.getChild("n56").asTextInput.text));
     }
     OnInviteBtnClick() {
         if (Laya.Browser.onMiniGame) {
@@ -107,16 +109,19 @@ export class UIMain {
     }
     OnRankingBtnClick() {
         fairygui.GRoot.inst.showPopup(this._ranking);
+        this._ranking.center();
     }
     OnFail(message, callback = null) {
         UIAlert.Show(message, callback);
     }
     ShowInvating() {
-        this._invating.getController("c1").selectedIndex = 0;
         fairygui.GRoot.inst.showPopup(this._invating);
+        this._invating.center();
+        this._invating.contentPane.getController("c1").selectedIndex = 0;
     }
     Showjoining() {
-        this._invating.getController("c1").selectedIndex = 1;
         fairygui.GRoot.inst.showPopup(this._invating);
+        this._invating.center();
+        this._invating.contentPane.getController("c1").selectedIndex = 1;
     }
 }

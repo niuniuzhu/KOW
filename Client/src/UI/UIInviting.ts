@@ -12,10 +12,6 @@ export class UIInviting extends fairygui.Window {
 		this._cancelBtn.onClick(this, this.OnCancelBtnClick);
 	}
 
-	protected onShown(): void {
-		this.center();
-	}
-
 	private OnCancelBtnClick(): void {
 		const request = ProtoCreator.Q_GC2CS_LeaveRoom();
 		Global.connector.SendToCS(Protos.GC2CS_LeaveRoom, request);

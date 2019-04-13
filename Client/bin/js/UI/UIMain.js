@@ -22,6 +22,9 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
             this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
             this._inviteBtn.onClick(this, this.OnInviteBtnClick);
             this._closeBtn.onClick(this, this.OnCloseBtnClick);
+            if (!Laya.Browser.onWeiXin) {
+                this._closeBtn.visible = false;
+            }
             this._root.getChild("n22").asCom.onClick(this, this.OnRankingBtnClick);
         }
         Dispose() {
@@ -76,12 +79,11 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
             Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T1P1);
         }
         OnMatchBtn3Click() {
-            this.SetMatchBtnEnable(false);
             fairygui.GRoot.inst.showModalWait();
             Global_1.Global.sceneManager.main.TestCreateRoom();
         }
         OnMatchBtn4Click() {
-            this.SetMatchBtnEnable(false);
+            Global_1.Global.sceneManager.main.TestJoinRoom(Number.parseInt(this._root.getChild("n56").asTextInput.text));
         }
         OnInviteBtnClick() {
             if (Laya.Browser.onMiniGame) {
@@ -103,17 +105,20 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
         }
         OnRankingBtnClick() {
             fairygui.GRoot.inst.showPopup(this._ranking);
+            this._ranking.center();
         }
         OnFail(message, callback = null) {
             UIAlert_1.UIAlert.Show(message, callback);
         }
         ShowInvating() {
-            this._invating.getController("c1").selectedIndex = 0;
             fairygui.GRoot.inst.showPopup(this._invating);
+            this._invating.center();
+            this._invating.contentPane.getController("c1").selectedIndex = 0;
         }
         Showjoining() {
-            this._invating.getController("c1").selectedIndex = 1;
             fairygui.GRoot.inst.showPopup(this._invating);
+            this._invating.center();
+            this._invating.contentPane.getController("c1").selectedIndex = 1;
         }
     }
     exports.UIMain = UIMain;

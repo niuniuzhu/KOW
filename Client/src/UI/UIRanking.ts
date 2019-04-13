@@ -17,7 +17,6 @@ export class UIRanking extends fairygui.Window {
 	}
 
 	protected onShown(): void {
-		this.center();
 		this.showModalWait();
 		const request = ProtoCreator.Q_GC2CS_QueryRanking();
 		request.sortType = Protos.GC2CS_QueryRanking.SortType.Rank;

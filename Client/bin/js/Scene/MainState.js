@@ -43,6 +43,23 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/ProtoHelper
                 }
             });
         }
+        TestJoinRoom(roomID) {
+            const request = ProtoHelper_1.ProtoCreator.Q_GC2CS_JoinRoom();
+            request.roomID = roomID;
+            this._ui.ShowModalWait();
+            Global_1.Global.connector.SendToCS(protos_1.Protos.GC2CS_JoinRoom, request, message => {
+                this._ui.CloseModalWait();
+                const resp = message;
+                switch (resp.result) {
+                    case protos_1.Protos.Global.ECommon.Success:
+                        this._ui.Showjoining();
+                        break;
+                    case protos_1.Protos.Global.ECommon.Failed:
+                        this._ui.OnFail("进入房间失败", () => { });
+                        break;
+                }
+            });
+        }
         InviteFriend() {
             const request = ProtoHelper_1.ProtoCreator.Q_GC2CS_CreateRoom();
             request.numTeam = 2;

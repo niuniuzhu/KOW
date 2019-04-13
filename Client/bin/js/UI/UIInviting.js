@@ -8,9 +8,6 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/ProtoHelper
             this._cancelBtn = this.contentPane.getChild("cancel_btn").asCom;
             this._cancelBtn.onClick(this, this.OnCancelBtnClick);
         }
-        onShown() {
-            this.center();
-        }
         OnCancelBtnClick() {
             const request = ProtoHelper_1.ProtoCreator.Q_GC2CS_LeaveRoom();
             Global_1.Global.connector.SendToCS(protos_1.Protos.GC2CS_LeaveRoom, request);

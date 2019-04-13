@@ -12,7 +12,6 @@ define(["require", "exports", "../Global", "../Net/ProtoHelper", "../Libs/protos
             this._list = this.contentPane.getChild("n13").asList;
         }
         onShown() {
-            this.center();
             this.showModalWait();
             const request = ProtoHelper_1.ProtoCreator.Q_GC2CS_QueryRanking();
             request.sortType = protos_1.Protos.GC2CS_QueryRanking.SortType.Rank;

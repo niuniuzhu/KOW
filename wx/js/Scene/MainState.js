@@ -50,6 +50,23 @@ export class MainState extends SceneState {
             }
         });
     }
+    TestJoinRoom(roomID) {
+        const request = ProtoCreator.Q_GC2CS_JoinRoom();
+        request.roomID = roomID;
+        this._ui.ShowModalWait();
+        Global.connector.SendToCS(Protos.GC2CS_JoinRoom, request, message => {
+            this._ui.CloseModalWait();
+            const resp = message;
+            switch (resp.result) {
+                case Protos.Global.ECommon.Success:
+                    this._ui.Showjoining();
+                    break;
+                case Protos.Global.ECommon.Failed:
+                    this._ui.OnFail("进入房间失败", () => { });
+                    break;
+            }
+        });
+    }
     InviteFriend() {
         const request = ProtoCreator.Q_GC2CS_CreateRoom();
         request.numTeam = 2;

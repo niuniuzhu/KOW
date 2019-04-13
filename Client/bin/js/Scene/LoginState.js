@@ -244,7 +244,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
                                 }
                             }
                             else {
-                                Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main, resp.userInfo);
+                                this.EnterMain(resp);
                             }
                             break;
                         case protos_1.Protos.GS2GC_LoginRet.EResult.SessionExpire:
@@ -260,6 +260,9 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Model/CDefs", "
             else {
                 connector.Connect(ip, port);
             }
+        }
+        EnterMain(resp) {
+            Global_1.Global.sceneManager.ChangeState(SceneManager_1.SceneManager.State.Main, resp.userInfo);
         }
     }
     exports.LoginState = LoginState;

@@ -19,7 +19,7 @@ export class Global {
 	public static get battleManager(): BattleManager { return this._battleManager; }
 
 	public static local: boolean;
-	public static queryString: _getLaunchOptionsSync;
+	public static queryString: string;
 
 	public static Init() {
 		ProtoCreator.Init();

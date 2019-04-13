@@ -1,4 +1,4 @@
-define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC/Utils/Logger", "./UIAlert", "./UIRanking"], function (require, exports, Consts_1, Global_1, protos_1, Logger_1, UIAlert_1, UIRanking_1) {
+define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC/Utils/Logger", "./UIAlert", "./UIInviting", "./UIRanking"], function (require, exports, Consts_1, Global_1, protos_1, Logger_1, UIAlert_1, UIInviting_1, UIRanking_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class UIMain {
@@ -9,10 +9,11 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
             this._root.setSize(Global_1.Global.graphic.uiRoot.width, Global_1.Global.graphic.uiRoot.height);
             this._root.addRelation(Global_1.Global.graphic.uiRoot, fairygui.RelationType.Size);
             this._ranking = new UIRanking_1.UIRanking();
+            this._invating = new UIInviting_1.UIInviting();
             this._matchBtn = this._root.getChild("n3").asCom;
             this._matchBtn2 = this._root.getChild("n13").asCom;
-            this._matchBtn3 = this._root.getChild("n19").asCom;
-            this._matchBtn4 = this._root.getChild("n15").asCom;
+            this._matchBtn3 = this._root.getChild("n54").asCom;
+            this._matchBtn4 = this._root.getChild("n55").asCom;
             this._inviteBtn = this._root.getChild("n4").asCom;
             this._closeBtn = this._root.getChild("close_btn").asCom;
             this._matchBtn.onClick(this, this.OnMatchBtnClick);
@@ -25,6 +26,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
         }
         Dispose() {
             this._ranking.dispose();
+            this._invating.dispose();
             this._root.dispose();
         }
         Enter(param) {
@@ -41,6 +43,7 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
             }
         }
         Exit() {
+            fairygui.GRoot.inst.hidePopup(this._invating);
             Global_1.Global.graphic.uiRoot.removeChild(this._root);
             this._userInfo = null;
         }
@@ -55,7 +58,11 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
         SetMatchBtnEnable(value) {
             this._matchBtn.enabled = value;
             this._matchBtn2.enabled = value;
+            this._matchBtn3.enabled = value;
             this._matchBtn4.enabled = value;
+        }
+        ShowModalWait() {
+            fairygui.GRoot.inst.showModalWait();
         }
         CloseModalWait() {
             fairygui.GRoot.inst.closeModalWait();
@@ -70,11 +77,11 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
         }
         OnMatchBtn3Click() {
             this.SetMatchBtnEnable(false);
-            Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T4P1);
+            fairygui.GRoot.inst.showModalWait();
+            Global_1.Global.sceneManager.main.TestCreateRoom();
         }
         OnMatchBtn4Click() {
             this.SetMatchBtnEnable(false);
-            Global_1.Global.sceneManager.main.BeginMatch(protos_1.Protos.GC2CS_BeginMatch.EMode.T2P2);
         }
         OnInviteBtnClick() {
             if (Laya.Browser.onMiniGame) {
@@ -99,6 +106,14 @@ define(["require", "exports", "../Consts", "../Global", "../Libs/protos", "../RC
         }
         OnFail(message, callback = null) {
             UIAlert_1.UIAlert.Show(message, callback);
+        }
+        ShowInvating() {
+            this._invating.getController("c1").selectedIndex = 0;
+            fairygui.GRoot.inst.showPopup(this._invating);
+        }
+        Showjoining() {
+            this._invating.getController("c1").selectedIndex = 1;
+            fairygui.GRoot.inst.showPopup(this._invating);
         }
     }
     exports.UIMain = UIMain;

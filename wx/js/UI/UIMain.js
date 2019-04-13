@@ -3,6 +3,7 @@ import { Global } from "../Global";
 import { Protos } from "../Libs/protos";
 import { Logger } from "../RC/Utils/Logger";
 import { UIAlert } from "./UIAlert";
+import { UIInviting } from "./UIInviting";
 import { UIRanking } from "./UIRanking";
 export class UIMain {
     get root() { return this._root; }
@@ -12,10 +13,11 @@ export class UIMain {
         this._root.setSize(Global.graphic.uiRoot.width, Global.graphic.uiRoot.height);
         this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
         this._ranking = new UIRanking();
+        this._invating = new UIInviting();
         this._matchBtn = this._root.getChild("n3").asCom;
         this._matchBtn2 = this._root.getChild("n13").asCom;
-        this._matchBtn3 = this._root.getChild("n19").asCom;
-        this._matchBtn4 = this._root.getChild("n15").asCom;
+        this._matchBtn3 = this._root.getChild("n54").asCom;
+        this._matchBtn4 = this._root.getChild("n55").asCom;
         this._inviteBtn = this._root.getChild("n4").asCom;
         this._closeBtn = this._root.getChild("close_btn").asCom;
         this._matchBtn.onClick(this, this.OnMatchBtnClick);
@@ -28,6 +30,7 @@ export class UIMain {
     }
     Dispose() {
         this._ranking.dispose();
+        this._invating.dispose();
         this._root.dispose();
     }
     Enter(param) {
@@ -44,6 +47,7 @@ export class UIMain {
         }
     }
     Exit() {
+        fairygui.GRoot.inst.hidePopup(this._invating);
         Global.graphic.uiRoot.removeChild(this._root);
         this._userInfo = null;
     }
@@ -58,7 +62,11 @@ export class UIMain {
     SetMatchBtnEnable(value) {
         this._matchBtn.enabled = value;
         this._matchBtn2.enabled = value;
+        this._matchBtn3.enabled = value;
         this._matchBtn4.enabled = value;
+    }
+    ShowModalWait() {
+        fairygui.GRoot.inst.showModalWait();
     }
     CloseModalWait() {
         fairygui.GRoot.inst.closeModalWait();
@@ -73,11 +81,11 @@ export class UIMain {
     }
     OnMatchBtn3Click() {
         this.SetMatchBtnEnable(false);
-        Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T4P1);
+        fairygui.GRoot.inst.showModalWait();
+        Global.sceneManager.main.TestCreateRoom();
     }
     OnMatchBtn4Click() {
         this.SetMatchBtnEnable(false);
-        Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
     }
     OnInviteBtnClick() {
         if (Laya.Browser.onMiniGame) {
@@ -102,5 +110,13 @@ export class UIMain {
     }
     OnFail(message, callback = null) {
         UIAlert.Show(message, callback);
+    }
+    ShowInvating() {
+        this._invating.getController("c1").selectedIndex = 0;
+        fairygui.GRoot.inst.showPopup(this._invating);
+    }
+    Showjoining() {
+        this._invating.getController("c1").selectedIndex = 1;
+        fairygui.GRoot.inst.showPopup(this._invating);
     }
 }

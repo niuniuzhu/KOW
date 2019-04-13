@@ -317,8 +317,7 @@ export class LoginState extends SceneState {
 							}
 						}
 						else {
-							//进去主界面
-							Global.sceneManager.ChangeState(SceneManager.State.Main, resp.userInfo);
+							this.EnterMain(resp);
 						}
 						break;
 					case Protos.GS2GC_LoginRet.EResult.SessionExpire:
@@ -333,5 +332,12 @@ export class LoginState extends SceneState {
 		} else {
 			connector.Connect(ip, port);
 		}
+	}
+
+	/**
+	 * 进主界面
+	 */
+	private EnterMain(resp: Protos.GS2GC_LoginRet): void {
+		Global.sceneManager.ChangeState(SceneManager.State.Main, resp.userInfo);
 	}
 }

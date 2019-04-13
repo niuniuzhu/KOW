@@ -4,6 +4,7 @@ import { Protos } from "../Libs/protos";
 import { Logger } from "../RC/Utils/Logger";
 import { IUIModule } from "./IUIModule";
 import { UIAlert } from "./UIAlert";
+import { UIInviting } from "./UIInviting";
 import { UIRanking } from "./UIRanking";
 
 export class UIMain implements IUIModule {
@@ -19,6 +20,7 @@ export class UIMain implements IUIModule {
 	private readonly _inviteBtn: fairygui.GComponent;
 	private readonly _closeBtn: fairygui.GComponent;
 	private readonly _ranking: UIRanking;
+	private readonly _invating: UIInviting;
 
 	constructor() {
 		fairygui.UIPackage.addPackage("res/ui/main");
@@ -27,11 +29,12 @@ export class UIMain implements IUIModule {
 		this._root.addRelation(Global.graphic.uiRoot, fairygui.RelationType.Size);
 
 		this._ranking = new UIRanking();
+		this._invating = new UIInviting();
 
 		this._matchBtn = this._root.getChild("n3").asCom;
 		this._matchBtn2 = this._root.getChild("n13").asCom;
-		this._matchBtn3 = this._root.getChild("n19").asCom;
-		this._matchBtn4 = this._root.getChild("n15").asCom;
+		this._matchBtn3 = this._root.getChild("n54").asCom;
+		this._matchBtn4 = this._root.getChild("n55").asCom;
 		this._inviteBtn = this._root.getChild("n4").asCom;
 		this._closeBtn = this._root.getChild("close_btn").asCom;
 		this._matchBtn.onClick(this, this.OnMatchBtnClick);
@@ -46,6 +49,7 @@ export class UIMain implements IUIModule {
 
 	public Dispose(): void {
 		this._ranking.dispose();
+		this._invating.dispose();
 		this._root.dispose();
 	}
 
@@ -66,6 +70,7 @@ export class UIMain implements IUIModule {
 	}
 
 	public Exit(): void {
+		fairygui.GRoot.inst.hidePopup(this._invating);
 		Global.graphic.uiRoot.removeChild(this._root);
 		this._userInfo = null;
 	}
@@ -84,7 +89,12 @@ export class UIMain implements IUIModule {
 	public SetMatchBtnEnable(value: boolean): void {
 		this._matchBtn.enabled = value;
 		this._matchBtn2.enabled = value;
+		this._matchBtn3.enabled = value;
 		this._matchBtn4.enabled = value;
+	}
+
+	public ShowModalWait(): void {
+		fairygui.GRoot.inst.showModalWait();
 	}
 
 	public CloseModalWait():void{
@@ -103,12 +113,12 @@ export class UIMain implements IUIModule {
 
 	private OnMatchBtn3Click(): void {
 		this.SetMatchBtnEnable(false);
-		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T4P1);
+		fairygui.GRoot.inst.showModalWait();
+		Global.sceneManager.main.TestCreateRoom();
 	}
 
 	private OnMatchBtn4Click(): void {
 		this.SetMatchBtnEnable(false);
-		Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P2);
 	}
 
 	private OnInviteBtnClick(): void {
@@ -137,5 +147,15 @@ export class UIMain implements IUIModule {
 
 	public OnFail(message: string, callback: () => void = null): void {
 		UIAlert.Show(message, callback);
+	}
+
+	public ShowInvating(): void {
+		this._invating.getController("c1").selectedIndex = 0;
+		fairygui.GRoot.inst.showPopup(this._invating);
+	}
+
+	public Showjoining(): void {
+		this._invating.getController("c1").selectedIndex = 1;
+		fairygui.GRoot.inst.showPopup(this._invating);
 	}
 }

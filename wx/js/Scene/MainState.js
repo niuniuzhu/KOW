@@ -3,6 +3,8 @@ import { Protos } from "../Libs/protos";
 import { ProtoCreator } from "../Net/ProtoHelper";
 import { Md5 } from "../RC/Crypto/MD5";
 import { Base64 } from "../RC/Utils/Base64 ";
+import { Hashtable } from "../RC/Utils/Hashtable";
+import { JsonHelper } from "../RC/Utils/JsonHelper";
 import { Logger } from "../RC/Utils/Logger";
 import { SceneManager } from "./SceneManager";
 import { SceneState } from "./SceneState";
@@ -14,6 +16,15 @@ export class MainState extends SceneState {
     OnEnter(param) {
         this._userInfo = param;
         super.OnEnter(param);
+        if (Global.queryString != null) {
+            const args = JsonHelper.Parse(Global.queryString);
+            const action = Hashtable.GetString(args, "action");
+            switch (action) {
+                case "invite":
+                    this.ProcessInvite(args);
+                    break;
+            }
+        }
     }
     OnExit() {
         this._userInfo = null;
@@ -21,6 +32,23 @@ export class MainState extends SceneState {
     }
     UpdateRank(delta) {
         this._ui.UpdateRank(delta);
+    }
+    TestCreateRoom() {
+        const request = ProtoCreator.Q_GC2CS_CreateRoom();
+        request.numTeam = 2;
+        request.numPlayerPerTeam = 1;
+        Global.connector.SendToCS(Protos.GC2CS_CreateRoom, request, message => {
+            this._ui.CloseModalWait();
+            const resp = message;
+            switch (resp.result) {
+                case Protos.Global.ECommon.Success:
+                    this._ui.ShowInvating();
+                    break;
+                case Protos.Global.ECommon.Failed:
+                    this._ui.OnFail("无法邀请好友", () => { });
+                    break;
+            }
+        });
     }
     InviteFriend() {
         const request = ProtoCreator.Q_GC2CS_CreateRoom();
@@ -40,6 +68,7 @@ export class MainState extends SceneState {
                         query: `q=${base64.encode(eQuery)}&s=${crypto}`,
                         imageUrlId: null
                     });
+                    this._ui.ShowInvating();
                     break;
                 case Protos.Global.ECommon.Failed:
                     this._ui.OnFail("无法邀请好友", () => { });
@@ -48,10 +77,10 @@ export class MainState extends SceneState {
         });
     }
     BeginMatch(mode) {
-        const beginMatch = ProtoCreator.Q_GC2CS_BeginMatch();
-        beginMatch.mode = mode;
-        beginMatch.actorID = 0;
-        Global.connector.SendToCS(Protos.GC2CS_BeginMatch, beginMatch, message => {
+        const request = ProtoCreator.Q_GC2CS_BeginMatch();
+        request.mode = mode;
+        request.actorID = 0;
+        Global.connector.SendToCS(Protos.GC2CS_BeginMatch, request, message => {
             this._ui.SetMatchBtnEnable(true);
             const resp = message;
             switch (resp.result) {
@@ -64,6 +93,24 @@ export class MainState extends SceneState {
                     break;
                 case Protos.CS2GC_BeginMatchRet.EResult.UserInBattle:
                     this._ui.OnFail("玩家已在战场中", () => { });
+                    break;
+            }
+        });
+    }
+    ProcessInvite(args) {
+        const roomID = Hashtable.GetNumber(args, "roomID");
+        const request = ProtoCreator.Q_GC2CS_JoinRoom();
+        request.roomID = roomID;
+        this._ui.ShowModalWait();
+        Global.connector.SendToCS(Protos.GC2CS_JoinRoom, request, message => {
+            this._ui.CloseModalWait();
+            const resp = message;
+            switch (resp.result) {
+                case Protos.Global.ECommon.Success:
+                    this._ui.Showjoining();
+                    break;
+                case Protos.Global.ECommon.Failed:
+                    this._ui.OnFail("进入房间失败", () => { });
                     break;
             }
         });

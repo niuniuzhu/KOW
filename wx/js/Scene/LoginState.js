@@ -253,7 +253,7 @@ export class LoginState extends SceneState {
                             }
                         }
                         else {
-                            Global.sceneManager.ChangeState(SceneManager.State.Main, resp.userInfo);
+                            this.EnterMain(resp);
                         }
                         break;
                     case Protos.GS2GC_LoginRet.EResult.SessionExpire:
@@ -269,5 +269,8 @@ export class LoginState extends SceneState {
         else {
             connector.Connect(ip, port);
         }
+    }
+    EnterMain(resp) {
+        Global.sceneManager.ChangeState(SceneManager.State.Main, resp.userInfo);
     }
 }

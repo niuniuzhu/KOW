@@ -27,15 +27,18 @@ export class Main {
 		}
 
 		if (Laya.Browser.onWeiXin) {
-			Global.queryString = wx.getLaunchOptionsSync();
+			const queryString = wx.getLaunchOptionsSync();
 			Logger.Log(Global.queryString);
-			const queryObject = Global.queryString.query;
+			const queryObject = queryString.query;
 			if (queryObject.q != null) {
 				const base64 = new Base64();
 				const eQuery = base64.decode(queryObject.q);
 				const crypto = Md5.hashStr(eQuery);
 				if (crypto != queryObject.s) {
 					Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+				}
+				else{
+					Global.queryString = eQuery;
 				}
 			}
 		}

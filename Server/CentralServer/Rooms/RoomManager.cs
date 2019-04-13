@@ -52,7 +52,7 @@ namespace CentralServer.Rooms
 			return true;
 		}
 
-		public bool Join( CSUser user, uint roomID )
+		public bool Join( CSUser user, uint roomID, System.Action successHandler )
 		{
 			if ( !this._idToRoom.TryGetValue( roomID, out Room room ) )
 				return false;
@@ -63,6 +63,7 @@ namespace CentralServer.Rooms
 
 			this._userIDToBattleUser[user.gcNID] = battleUser;
 			this._userToRoom[user.gcNID] = room;
+			successHandler();
 			this.CheckRoom( room );
 			return true;
 		}

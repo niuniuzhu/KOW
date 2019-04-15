@@ -52,14 +52,20 @@ namespace CentralServer.Rooms
 			return true;
 		}
 
-		public bool Join( CSUser user, uint roomID, System.Action successHandler )
+		public bool Join( CSUser user, uint roomID, System.Action successHandler, System.Action failedHandler )
 		{
 			if ( !this._idToRoom.TryGetValue( roomID, out Room room ) )
+			{
+				failedHandler();
 				return false;
+			}
 
 			BattleUser battleUser = new BattleUser( user.gcNID );
 			if ( !room.AddUser( battleUser ) )
+			{
+				failedHandler();
 				return false;
+			}
 
 			this._userIDToBattleUser[user.gcNID] = battleUser;
 			this._userToRoom[user.gcNID] = room;
@@ -79,7 +85,10 @@ namespace CentralServer.Rooms
 			this._userIDToBattleUser.Remove( user.gcNID );
 			this._userToRoom.Remove( user.gcNID );
 			if ( room.isEmpty )
+			{
+				this._idToRoom.Remove( room.id );
 				RoomPool.Push( room );
+			}
 			return true;
 		}
 
@@ -88,6 +97,14 @@ namespace CentralServer.Rooms
 			if ( !room.isFull )
 				return;
 			var battleUserInfo = room.GetBattleUserInfo();
+			while ( room.currUserCount > 0 )
+			{
+				var user = room.GetUserAt( room.currUserCount - 1 );
+				room.RemoveUserAt( room.currUserCount - 1 );
+				this._userIDToBattleUser.Remove( user.id );
+				this._userToRoom.Remove( user.id );
+			}
+			this._idToRoom.Remove( room.id );
 			RoomPool.Push( room );
 
 			CS.instance.battleEntry.BeginBattle( battleUserInfo.users, battleUserInfo.tUsers );

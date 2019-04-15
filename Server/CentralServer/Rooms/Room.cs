@@ -63,6 +63,14 @@ namespace CentralServer.Rooms
 			return true;
 		}
 
+		internal void RemoveUserAt( int index )
+		{
+			this._users[index] = null;
+			--this.currUserCount;
+		}
+
+		internal BattleUser GetUserAt( int index ) => this._users[index];
+
 		internal BattleUserInfo GetBattleUserInfo()
 		{
 			BattleUserInfo roomInfo = new BattleUserInfo( this._numTeams, this._numUserPerTeam, this._users );

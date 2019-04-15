@@ -149,6 +149,7 @@ namespace CentralServer.User
 			Logger.Info( $"user:{user.gcNID}({user.gsLID}) offline" );
 			//从匹配系统中移除
 			CS.instance.matchMgr.Leave( user );
+			CS.instance.roomMgr.Leave( user );
 			//玩家下线
 			user.Offline();
 		}

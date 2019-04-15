@@ -251,9 +251,15 @@ namespace CentralServer.Biz
 				response.Result = Protos.Global.Types.ECommon.Failed;
 			else
 			{
-				response.Result = CS.instance.roomMgr.Join( user, request.RoomID, () => user.Send( response ) ) ?
-									   Protos.Global.Types.ECommon.Success :
-									  Protos.Global.Types.ECommon.Failed;
+				CS.instance.roomMgr.Join( user, request.RoomID, () =>
+			   {
+				   response.Result = Protos.Global.Types.ECommon.Success;
+				   user.Send( response );
+			   }, () =>
+				{
+					response.Result = Protos.Global.Types.ECommon.Failed;
+					user.Send( response );
+				} );
 			}
 
 			return ErrorCode.Success;

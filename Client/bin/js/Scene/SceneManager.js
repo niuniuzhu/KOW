@@ -17,8 +17,8 @@ define(["require", "exports", "../RC/Framework/FSM/FSM", "./MainState", "./Login
         get loading() { return this._loading; }
         get battle() { return this._battle; }
         Init() {
-            this._main = new MainState_1.MainState(State.Main);
             this._login = new LoginState_1.LoginState(State.Login);
+            this._main = new MainState_1.MainState(State.Main);
             this._matching = new MatchingState_1.MatchingState(State.Matching);
             this._loading = new LoadingState_1.LoadingState(State.Loading);
             this._battle = new BattleState_1.BattleState(State.Battle);

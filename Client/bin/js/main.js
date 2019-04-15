@@ -9,27 +9,28 @@ define(["require", "exports", "./AssetsManager", "./Consts", "./Global", "./Libs
                 const cfgJson = JsonHelper_1.JsonHelper.Parse(config);
                 Global_1.Global.local = Hashtable_1.Hashtable.GetBool(cfgJson, "local");
             }
-            if (Laya.Browser.onWeiXin) {
-                const queryString = wx.getLaunchOptionsSync();
-                Logger_1.Logger.Log(Global_1.Global.queryString);
-                const queryObject = queryString.query;
-                if (queryObject.q != null) {
-                    const base64 = new Base64_1.Base64();
-                    const eQuery = base64.decode(queryObject.q);
-                    const crypto = MD5_1.Md5.hashStr(eQuery);
-                    if (crypto != queryObject.s) {
-                        Logger_1.Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
-                    }
-                    else {
-                        Global_1.Global.queryString = eQuery;
-                    }
-                }
-            }
             Laya.init(Consts_1.Consts.SCREEN_WIDTH, Consts_1.Consts.SCREEN_HEIGHT);
             Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
             Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
             Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
             Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
+            if (Laya.Browser.onWeiXin) {
+                const queryObject = wx.getLaunchOptionsSync();
+                const queryString = queryObject.query;
+                Logger_1.Logger.Debug(`queryString:${queryString}`);
+                if (queryString.q != null) {
+                    const base64 = new Base64_1.Base64();
+                    const eQuery = base64.decode(queryString.q);
+                    const crypto = MD5_1.Md5.hashStr(eQuery);
+                    if (crypto != queryString.s) {
+                        Logger_1.Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+                    }
+                    else {
+                        Logger_1.Logger.Log(`my queryString:${eQuery}`);
+                        Global_1.Global.queryString = eQuery;
+                    }
+                }
+            }
             this.ShowLogo();
         }
         ShowLogo() {

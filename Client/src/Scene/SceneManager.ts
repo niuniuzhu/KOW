@@ -33,8 +33,8 @@ export class SceneManager {
 	private _battle: BattleState;
 
 	public Init(): void {
-		this._main = new MainState(State.Main);
 		this._login = new LoginState(State.Login);
+		this._main = new MainState(State.Main);
 		this._matching = new MatchingState(State.Matching);
 		this._loading = new LoadingState(State.Loading);
 		this._battle = new BattleState(State.Battle);

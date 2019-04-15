@@ -26,28 +26,30 @@ export class Main {
 			Global.local = Hashtable.GetBool(cfgJson, "local");
 		}
 
-		if (Laya.Browser.onWeiXin) {
-			const queryString = wx.getLaunchOptionsSync();
-			Logger.Log(Global.queryString);
-			const queryObject = queryString.query;
-			if (queryObject.q != null) {
-				const base64 = new Base64();
-				const eQuery = base64.decode(queryObject.q);
-				const crypto = Md5.hashStr(eQuery);
-				if (crypto != queryObject.s) {
-					Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
-				}
-				else{
-					Global.queryString = eQuery;
-				}
-			}
-		}
-
 		Laya.init(Consts.SCREEN_WIDTH, Consts.SCREEN_HEIGHT);
 		Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_HEIGHT;
 		Laya.stage.alignH = Laya.Stage.ALIGN_TOP;
 		Laya.stage.alignV = Laya.Stage.ALIGN_LEFT;
 		Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
+
+		if (Laya.Browser.onWeiXin) {
+			const queryObject = wx.getLaunchOptionsSync();
+			const queryString = queryObject.query;
+			Logger.Debug(`queryString:${queryString}`);
+			if (queryString.q != null) {
+				const base64 = new Base64();
+				const eQuery = base64.decode(queryString.q);
+				const crypto = Md5.hashStr(eQuery);
+				if (crypto != queryString.s) {
+					Logger.Warn(`Inconsistent parameter signatures, q is ${eQuery}`);
+				}
+				else {
+					Logger.Log(`my queryString:${eQuery}`);
+					Global.queryString = eQuery;
+				}
+			}
+		}
+
 		// laya.utils.Stat.show(0, 0);
 		this.ShowLogo();
 	}

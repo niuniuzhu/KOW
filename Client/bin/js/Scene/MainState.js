@@ -14,6 +14,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/ProtoHelper
                 const action = Hashtable_1.Hashtable.GetString(args, "action");
                 switch (action) {
                     case "invite":
+                        Global_1.Global.queryString = null;
                         this.ProcessInvite(args);
                         break;
                 }
@@ -70,7 +71,7 @@ define(["require", "exports", "../Global", "../Libs/protos", "../Net/ProtoHelper
                 switch (resp.result) {
                     case protos_1.Protos.Global.ECommon.Success:
                         const base64 = new Base64_1.Base64();
-                        const eQuery = `{"roomID"=${resp.roomID},"openID"=${this._userInfo.openID},action=invite}`;
+                        const eQuery = `{"roomID":${resp.roomID},"openID":"${this._userInfo.openID}","action":"invite"}`;
                         const crypto = MD5_1.Md5.hashStr(eQuery);
                         wx.shareAppMessage({
                             title: `你的好友${this._userInfo.nickname}邀请你参与小游戏<角斗之王>的对战`,

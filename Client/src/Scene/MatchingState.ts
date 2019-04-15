@@ -14,7 +14,7 @@ export class MatchingState extends SceneState {
 	/**
 	 * 构造函数
 	 */
-	constructor(type: number) {
+constructor(type: number) {
 		super(type);
 		this.__ui = this._ui = Global.uiManager.matching;
 

@@ -28,6 +28,7 @@ export class MainState extends SceneState {
 			const action = Hashtable.GetString(args, "action");
 			switch (action) {
 				case "invite":
+					Global.queryString = null;
 					this.ProcessInvite(args);
 					break;
 			}
@@ -92,7 +93,7 @@ export class MainState extends SceneState {
 			switch (resp.result) {
 				case Protos.Global.ECommon.Success:
 					const base64 = new Base64();
-					const eQuery = `{"roomID"=${resp.roomID},"openID"=${this._userInfo.openID},action=invite}`;
+					const eQuery = `{"roomID":${resp.roomID},"openID":"${this._userInfo.openID}","action":"invite"}`;
 					const crypto = Md5.hashStr(eQuery);
 					wx.shareAppMessage({
 						title: `你的好友${this._userInfo.nickname}邀请你参与小游戏<角斗之王>的对战`,

@@ -63,7 +63,6 @@ export class UIBattle {
                     let r = player.rank - player.rank % Consts.RANK_STEP;
                     r = r < Consts.RANK_START ? Consts.RANK_START : r;
                     this._root.getChild("rank_icon").asLoader.url = fairygui.UIPackage.getItemURL("main", "r" + r);
-                    this._root.getChild("rank").asTextField.text = "" + (player.rank < 0 ? 0 : player.rank);
                     break;
                 }
             }

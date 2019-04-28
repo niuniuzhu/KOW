@@ -15,15 +15,11 @@ export class UIMain {
         this._ranking = new UIRanking();
         this._invating = new UIInviting();
         this._matchBtn = this._root.getChild("n3").asCom;
-        this._matchBtn2 = this._root.getChild("n13").asCom;
-        this._matchBtn3 = this._root.getChild("n54").asCom;
-        this._matchBtn4 = this._root.getChild("n55").asCom;
+        this._matchBtn3 = this._root.getChild("n19").asCom;
         this._inviteBtn = this._root.getChild("n4").asCom;
         this._closeBtn = this._root.getChild("close_btn").asCom;
         this._matchBtn.onClick(this, this.OnMatchBtnClick);
-        this._matchBtn2.onClick(this, this.OnMatchBtn2Click);
         this._matchBtn3.onClick(this, this.OnMatchBtn3Click);
-        this._matchBtn4.onClick(this, this.OnMatchBtn4Click);
         this._inviteBtn.onClick(this, this.OnInviteBtnClick);
         this._closeBtn.onClick(this, this.OnCloseBtnClick);
         if (!Laya.Browser.onWeiXin) {
@@ -64,9 +60,7 @@ export class UIMain {
     }
     SetMatchBtnEnable(value) {
         this._matchBtn.enabled = value;
-        this._matchBtn2.enabled = value;
         this._matchBtn3.enabled = value;
-        this._matchBtn4.enabled = value;
     }
     ShowModalWait() {
         fairygui.GRoot.inst.showModalWait();
@@ -78,16 +72,9 @@ export class UIMain {
         this.SetMatchBtnEnable(false);
         Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T2P1);
     }
-    OnMatchBtn2Click() {
-        this.SetMatchBtnEnable(false);
-        Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T1P1);
-    }
     OnMatchBtn3Click() {
-        fairygui.GRoot.inst.showModalWait();
-        Global.sceneManager.main.TestCreateRoom();
-    }
-    OnMatchBtn4Click() {
-        Global.sceneManager.main.TestJoinRoom(Number.parseInt(this._root.getChild("n56").asTextInput.text));
+        this.SetMatchBtnEnable(false);
+        Global.sceneManager.main.BeginMatch(Protos.GC2CS_BeginMatch.EMode.T4P1);
     }
     OnInviteBtnClick() {
         if (Laya.Browser.onMiniGame) {

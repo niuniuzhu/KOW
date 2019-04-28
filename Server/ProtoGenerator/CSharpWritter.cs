@@ -118,6 +118,8 @@ namespace ProtoGenerator
 			sb.AppendLine( "\t#region get message options static functions" );
 			//Get options
 			sb.AppendLine( $"\tpublic static {ns}.MsgOpts GetMsgOpts( this Google.Protobuf.IMessage message ) {{" );
+			sb.AppendLine( "\t\tif ( message == null )" );
+			sb.AppendLine( "\t\t\treturn null;" );
 			sb.AppendLine( "\t\tvar msgID = message.GetMsgID();" );
 			sb.AppendLine( "\t\tif ( msgID == Protos.MsgID.Undefine )" );
 			sb.AppendLine( "\t\t\treturn null;" );
